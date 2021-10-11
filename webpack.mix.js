@@ -21,4 +21,5 @@ mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
 // ppic
 mix.js('resources/js/ppic/gbmp/app.js', 'public/native/js/ppic/gbmp.js').vue()
 mix.js('resources/js/ppic/jadwal/app.js', 'public/native/js/ppic/jadwal.js').vue()
+mix.js('resources/js/gbj/stok/app.js', 'public/native/js/gbj/stok.js').vue()
 

@@ -34,3 +34,11 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/gbmp', 'spa.ppic.gbmp');
     Route::view('/schedule/{any}', 'spa.ppic.jadwal');
 });
+
+Route::middleware('auth')->prefix('/gbj')->group(function () {
+    Route::view('/stok', 'page.gbj.stok');
+});
+
+// Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
+//     Route::view('/stok', 'page.gbj.stok_show');
+// });
