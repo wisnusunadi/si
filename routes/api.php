@@ -20,4 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('/ppic')->group(function () {
     Route::get('part', [App\Http\Controllers\PpicController::class, 'getPart']);
+    Route::get('schedule/{status}', [App\Http\Controllers\PpicController::class, 'getEvent']);
 });
