@@ -29,4 +29,5 @@ Route::prefix('/ppic')->group(function () {
     Route::post('/send-bppb', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
 
     Route::get('/bppb/{id}', [App\Http\Controllers\PpicController::class, 'findSeriesBppb']);
+    Route::get('/reset', [App\Http\Controllers\PpicController::class, 'resetConfirmation']);
 });

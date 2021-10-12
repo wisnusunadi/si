@@ -116,8 +116,21 @@ class PpicController extends Controller
             $data->konfirmasi = $request->confirmation;
             $data->save();
 
-            $this->addBppb($event);
+            $this->addBppb($data);
         }
+
+        return $this->getEvent("penyusunan");
+    }
+
+    public function resetConfirmation()
+    {
+        $event = Event::where('status', 'penyusunan')->get();
+        foreach ($event as $data) {
+            $data->konfirmasi = 0;
+            $data->save();
+        }
+
+        return "success";
     }
 
     public function addBppb($event)
@@ -131,8 +144,7 @@ class PpicController extends Controller
         Bppb::create([
             'no_bppb' => $no_bppb,
             'detail_produk_id' => $event->detail_produk_id,
-            'versi_bom' => $event->versi_bom,
-            'divisi_id' => Auth::user()->Divisi->id,
+            'divisi_id' => 24, //PPIC id
             'tanggal_bppb' => $today,
             'jumlah' => $event->jumlah_produksi
         ]);

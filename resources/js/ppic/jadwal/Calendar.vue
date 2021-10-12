@@ -38,6 +38,8 @@ export default {
 
       confirmationMessage: "",
       deleteJadwal: false,
+
+      event_ref: null,
     };
   },
 
@@ -109,8 +111,7 @@ export default {
 
     konfirmasi: function () {
       let jadwal = this.$store.state.jadwal;
-      console.log(jadwal[0]);
-      if (status === "penyusunan") {
+      if (this.status === "penyusunan") {
         if (jadwal.length > 0 && jadwal[0].konfirmasi == 1) return true;
         return false;
       }
@@ -149,6 +150,7 @@ export default {
       let obj = clickEventInfo.event._def;
       this.confirmationMessage = this.message[obj.publicId];
       this.deleteJadwal = true;
+      this.event_ref = clickEventInfo;
 
       $("#confirmation").modal("show");
     },
@@ -220,15 +222,19 @@ export default {
       if (this.deleteJadwal) {
         axios
           .post("http://localhost:8000/api/ppic/delete-event", {
-            id: clickEventInfo.event._def.publicId,
+            id: this.event_ref.event._def.publicId,
           })
           .then((response) => {
             this.$store.commit("updateJadwal", response.data);
           });
       } else {
-        axios.post("http://localhost:8000/api/ppic/send-bppb", {
-          confirmation: 1,
-        });
+        axios
+          .post("http://localhost:8000/api/ppic/send-bppb", {
+            confirmation: 1,
+          })
+          .then((response) => {
+            console.log(response.data);
+          });
       }
 
       $("#confirmation").modal("hide");

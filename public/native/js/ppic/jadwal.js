@@ -16024,7 +16024,8 @@ __webpack_require__.r(__webpack_exports__);
       color: "#6c757d",
       colors: ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"],
       confirmationMessage: "",
-      deleteJadwal: false
+      deleteJadwal: false,
+      event_ref: null
     };
   },
   computed: {
@@ -16086,9 +16087,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     konfirmasi: function konfirmasi() {
       var jadwal = this.$store.state.jadwal;
-      console.log(jadwal[0]);
 
-      if (status === "penyusunan") {
+      if (this.status === "penyusunan") {
         if (jadwal.length > 0 && jadwal[0].konfirmasi == 1) return true;
         return false;
       }
@@ -16126,6 +16126,7 @@ __webpack_require__.r(__webpack_exports__);
       var obj = clickEventInfo.event._def;
       this.confirmationMessage = this.message[obj.publicId];
       this.deleteJadwal = true;
+      this.event_ref = clickEventInfo;
       $("#confirmation").modal("show");
     },
     disableEdit: function disableEdit() {
@@ -16190,13 +16191,15 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.deleteJadwal) {
         axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:8000/api/ppic/delete-event", {
-          id: clickEventInfo.event._def.publicId
+          id: this.event_ref.event._def.publicId
         }).then(function (response) {
           _this5.$store.commit("updateJadwal", response.data);
         });
       } else {
         axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:8000/api/ppic/send-bppb", {
           confirmation: 1
+        }).then(function (response) {
+          console.log(response.data);
         });
       }
 
