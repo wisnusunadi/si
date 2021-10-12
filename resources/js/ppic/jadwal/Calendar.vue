@@ -1,6 +1,8 @@
 <script>
+// import library
 import axios from "axios";
 
+// import component
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -12,19 +14,18 @@ export default {
 
   data: function () {
     return {
-      jadwal: [],
       start_date_str: "",
       end_date_str: "",
       status: this.$route.params.status,
 
       // modal
-      produks: null,
-      produkSelect: "",
-      bomSelect: "",
+      produk: [],
+      produkValue: "",
+      versi: [],
+      versiValue: "",
       quantity: 0,
-
-      produkBom: [],
       maxQuantity: 0,
+      quantityError: false,
       color: "#6c757d",
       colors: [
         "#007bff",
@@ -35,15 +36,16 @@ export default {
         "#17a2b8",
       ],
 
-      quantityError: false,
+      confirmationMessage: "",
+      deleteJadwal: false,
     };
   },
 
   computed: {
     event: function () {
-      if (this.jadwal.length == 0) return [];
+      if (this.$store.state.jadwal.length == 0) return [];
       else
-        return this.jadwal.map((data) => ({
+        return this.$store.state.jadwal.map((data) => ({
           id: data.id,
           title: data.detail_produk.nama,
           start: data.tanggal_mulai,
@@ -66,47 +68,67 @@ export default {
         selectable: true,
 
         events:
-          this.jadwal.length == 0
+          this.$store.state.jadwal.length == 0
             ? []
-            : this.jadwal.map((data) => ({
+            : this.$store.state.jadwal.map((data) => ({
                 id: data.id,
                 title: data.detail_produk.nama,
                 start: data.tanggal_mulai,
                 end: data.tanggal_selesai,
                 backgroundColor: data.warna,
                 borderColor: data.warna,
+                jumlah: data.jumlah,
               })),
 
         select: this.handleSelect,
         eventClick: this.handleEventClick,
       };
     },
-  },
 
-  created: function () {
-    axios
-      .get(
-        "http://localhost:8000/api/ppic/schedule/" + this.$route.params.status
-      )
-      .then((response) => {
-        this.jadwal = response.data;
-      });
+    options: function () {
+      this.produk.map((item) => ({
+        text: item.nama,
+        value: item.id,
+      }));
+    },
+
+    message: function () {
+      let result = {};
+      let jadwal = this.$store.state.jadwal;
+      for (let i = 0; i < jadwal.length; i++) {
+        result[jadwal[i].id] = `
+          produk: ${jadwal[i].detail_produk.nama} <br />
+          Jumlah: ${jadwal[i].jumlah_produksi} <br />
+          <br />
+          Apakah Anda ingin menghapus produk ini dari jadwal?
+        `;
+      }
+
+      return result;
+    },
+
+    konfirmasi: function () {
+      let jadwal = this.$store.state.jadwal;
+      console.log(jadwal[0]);
+      if (status === "penyusunan") {
+        if (jadwal.length > 0 && jadwal[0].konfirmasi == 1) return true;
+        return false;
+      }
+      return true;
+    },
   },
 
   mounted: function () {
     let api = this.$refs.fullCalendar.getApi();
     if (this.status == "penyusunan") {
-      // if (this.konfirmasi != 0) this.disableEdit();
-      // else this.enableEdit();
       api.next();
     }
-    if (this.status == "pelaksanaan") {
-      // this.disableEdit();
-    }
     if (this.status == "selesai") {
-      // this.disableEdit();
       api.prev();
     }
+
+    if (!this.konfirmasi) this.enableEdit();
+    else this.disableEdit();
   },
 
   methods: {
@@ -117,57 +139,103 @@ export default {
       this.start_date_str = selectInfo.startStr;
       this.end_date_str = selectInfo.endStr;
 
-      console.log(this.start_date_str, this.end_date_str);
-      $("#exampleModal").modal("show");
+      axios.get("http://localhost:8000/api/ppic/product").then((response) => {
+        this.produk = response.data;
+        $("#exampleModal").modal("show");
+      });
+    },
+
+    handleEventClick: function (clickEventInfo) {
+      let obj = clickEventInfo.event._def;
+      this.confirmationMessage = this.message[obj.publicId];
+      this.deleteJadwal = true;
+
+      $("#confirmation").modal("show");
+    },
+
+    disableEdit() {
+      this.calendarOptions.selectable = false;
+    },
+
+    enableEdit() {
+      this.calendarOptions.selectable = true;
     },
 
     // modal
     handleClick(event) {
-      console.log(event.target.style["bakground-color"]);
-      // this.color = event.originalTarget.className;
+      this.color = event.target.style.backgroundColor;
     },
 
-    changeProduct() {
-      // console.log("/api/ppic/version-bom-product/" + this.produkSelect);
-      axios
-        .get("/api/ppic/version-bom-product/" + this.produkSelect)
-        .then((response) => {
-          this.produkBom = response.data.produk_bill_of_material;
-          this.maxQuantity = 0;
-          this.bomSelect = "";
-          this.quantity = 0;
-        });
+    changeProduk() {
+      axios.get("/api/ppic/version/" + this.produkValue).then((response) => {
+        this.versi = response.data.produk_bill_of_material;
+        this.versiValue = "";
+
+        this.quantity = 0;
+        this.maxQuantity = 0;
+      });
     },
 
-    changeBom() {
+    changeVersi() {
       axios
-        .get("/api/ppic/get-max-quantity/" + this.bomSelect)
+        .get("/api/ppic/max-quantity/" + this.versiValue)
         .then((response) => {
           this.maxQuantity = response.data;
         });
     },
 
     handleSubmit() {
-      if (!this.produkSelect || !this.bomSelect || !this.quantity) {
+      if (!this.produkValue || !this.versiValue || !this.quantity) {
         alert("form tidak lengkap");
         return;
       }
 
       axios
         .post("/api/ppic/add-event", {
-          detail_produk_id: this.produkSelect,
-          produk_bill_of_material_id: this.bomSelect,
+          detail_produk_id: this.produkValue,
+          produk_bill_of_material_id: this.versiValue,
           jumlah_produksi: this.quantity,
-          tanggal_mulai: dateFormat(this.startDate, "yyyy-mm-dd"),
-          tanggal_selesai: dateFormat(this.endDate, "yyyy-mm-dd"),
-          status: this.status,
+          tanggal_mulai: this.start_date_str,
+          tanggal_selesai: this.end_date_str,
+          status: this.$route.params.status,
           warna: this.color,
         })
         .then((response) => {
-          let data = response.data;
-          let data_last = data[data.length - 1];
-          this.$emit("hide-product-modal", data, data_last);
+          this.$store.commit("updateJadwal", response.data);
+          $("#exampleModal").modal("hide");
+          this.produkValue = "";
+          this.versiValue = "";
+          this.quantity = 0;
         });
+    },
+
+    sendBppb: function () {
+      this.confirmationMessage = `Apakah Anda yakin ingin mengirim permintaan BPPB?`;
+      this.deleteJadwal = false;
+
+      $("#confirmation").modal("show");
+    },
+
+    handleButtonYes: function () {
+      if (this.deleteJadwal) {
+        axios
+          .post("http://localhost:8000/api/ppic/delete-event", {
+            id: clickEventInfo.event._def.publicId,
+          })
+          .then((response) => {
+            this.$store.commit("updateJadwal", response.data);
+          });
+      } else {
+        axios.post("http://localhost:8000/api/ppic/send-bppb", {
+          confirmation: 1,
+        });
+      }
+
+      $("#confirmation").modal("hide");
+    },
+
+    handleButtonNo: function () {
+      $("#confirmation").modal("hide");
     },
   },
 
@@ -205,7 +273,7 @@ export default {
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in jadwal" :key="item.id">
+              <tr v-for="item in this.$store.state.jadwal" :key="item.id">
                 <td>{{ item.detail_produk.nama }}</td>
                 <td>{{ item.jumlah_produksi }}</td>
               </tr>
@@ -213,6 +281,14 @@ export default {
           </table>
         </div>
       </div>
+
+      <button
+        v-if="event.length > 0 && !konfirmasi"
+        class="btn btn-block btn-info"
+        @click="sendBppb"
+      >
+        BPPB
+      </button>
     </div>
 
     <!-- Modal -->
@@ -221,13 +297,8 @@ export default {
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Produk Modal</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
             </button>
           </div>
           <div class="modal-body">
@@ -237,6 +308,7 @@ export default {
                 v-for="col in colors"
                 :key="col"
                 v-on:click="handleClick"
+                class="btn"
                 :style="{
                   padding: '20px',
                   margin: '8px',
@@ -245,20 +317,15 @@ export default {
                 }"
               ></button>
             </div>
-            <!-- <div class="form-group">
+            <div class="form-group">
               <label>Produk:</label>
               <select
                 class="form-control"
-                data-placeholder="Pilih produk"
-                v-on:change="changeProduct"
-                v-model="produkSelect"
+                v-on:change="changeProduk"
+                v-model="produkValue"
               >
-                <option
-                  v-for="produk in produks"
-                  :key="produk.id"
-                  :value="produk.id"
-                >
-                  {{ produk.nama }}
+                <option v-for="item in produk" :key="item.id" :value="item.id">
+                  {{ item.nama }}
                 </option>
               </select>
             </div>
@@ -267,16 +334,11 @@ export default {
                 <label>Versi BOM:</label>
                 <select
                   class="form-control"
-                  data-placeholder="Pilih versi BOM"
-                  v-on:change="changeBom"
-                  v-model="bomSelect"
+                  v-on:change="changeVersi"
+                  v-model="versiValue"
                 >
-                  <option
-                    v-for="bom in produkBom"
-                    :key="bom.id"
-                    :value="bom.id"
-                  >
-                    {{ bom.versi }}
+                  <option v-for="item in versi" :key="item.id" :value="item.id">
+                    {{ item.versi }}
                   </option>
                 </select>
               </div>
@@ -296,17 +358,33 @@ export default {
                   >max: {{ maxQuantity }}</small
                 >
               </div>
-              <b-button
-                class="mt-3"
-                block
-                :style="{ backgroundColor: color, borderColor: color }"
-                v-on:click="handleSubmit"
-                >Submit</b-button
-              >
-            </div> -->
+            </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button
+              type="button"
+              class="btn"
+              :style="{ backgroundColor: color, borderColor: color }"
+              @click="handleSubmit"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="confirmation">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div v-html="confirmationMessage"></div>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <button class="btn btn-primary" @click="handleButtonYes">
+              Yes
+            </button>
+            <button class="btn btn-danger" @click="handleButtonNo">No</button>
           </div>
         </div>
       </div>

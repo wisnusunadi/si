@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="btn-group">
+    <div class="btn-group mb-3">
       <button class="btn btn-primary" @click="changeView('calendar')">
         Kalender
       </button>

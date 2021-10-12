@@ -140,11 +140,6 @@
             $('#loader').fadeOut();
         }, 100);
 
-        $('.select2').select2({
-            placeholder: "Pilih Data",
-            allowClear: false,
-        });
-
         OverlayScrollbars(document.getElementsByTagName('body'), {
             className: "os-theme-dark",
             resize: "both",
