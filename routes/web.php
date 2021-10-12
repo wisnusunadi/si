@@ -36,7 +36,12 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
 });
 
 Route::middleware('auth')->prefix('/gbj')->group(function () {
-    Route::view('/stok', 'page.gbj.stok');
+    Route::view('/stok/{any?}', 'page.gbj.stok');
+});
+
+
+Route::get('/test/{name?}', function ($name = null) {
+    return $name;
 });
 
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {

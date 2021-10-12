@@ -2,7 +2,7 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 
 import Show from './Show.vue'
-import Create from './Create.vue'
+import Edit from './Edit.vue'
 
 Vue.use(VueRouter)
 
@@ -11,13 +11,13 @@ const router = new VueRouter({
     routes: [
         {
             name: 'show',
-            path: '/gbj/stok',
+            path: '/gbj/penjualan',
             component: Show
         },
         {
             name: 'create',
-            path: '/gbj/stok/create',
-            component: Create
+            path: '/gbj/penjualan/edit',
+            component: Edit
         }
     ]
 })

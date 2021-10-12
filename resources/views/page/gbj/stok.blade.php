@@ -15,5 +15,6 @@
 @stop
 
 @section('adminlte_js')
+<!-- <script src="{{ asset('native/js/ppic/gbmp.js') }}"></script> -->
 <script src="{{ asset('native/js/gbj/stok.js') }}"></script>
 @stop
