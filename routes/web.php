@@ -35,3 +35,17 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/schedule/{any}', 'spa.ppic.jadwal');
     Route::view('/bppb/{any}', 'spa.ppic.bppb');
 });
+
+Route::middleware('auth')->prefix('/gbj')->group(function () {
+    Route::view('/stok/{any?}', 'page.gbj.stok');
+    Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
+});
+
+
+Route::get('/test/{name?}', function ($name = null) {
+    return $name;
+});
+
+// Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
+//     Route::view('/stok', 'page.gbj.stok_show');
+// });
