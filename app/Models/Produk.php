@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\DetailProduk;
 
 class Produk extends Model
 {
-    protected $fillable = ['kelompok_produk_id', 'kategori_id', 'merk', 'tipe', 'nama', 'kode_barcode', 'nama_coo', 'no_akd', 'keterangan', 'kalibrasi', 'ppic_id'];
+    protected $table = 'produk';
+    protected $fillable = ['kelompok_produk_id', 'merk', 'tipe', 'nama', 'nama_coo', 'satuan', 'no_akd', 'ket', 'status'];
 
-    public function DetailProduk()
+    public function DetailPenjualanProduk()
     {
-        return $this->hasMany(DetailProduk::class);
+        return $this->hasMany(DetailPenjualanProduk::class);
+    }
+    public function KelompokProduk()
+    {
+        return $this->belongsTo(KelompokProduk::class, 'kelompok_produk_id');
     }
 }

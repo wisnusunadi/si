@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
     return view('home');
-});
+})->middleware('auth');
 
 // Route::get('/ppic/{any}', function () {
 //     return view('test');
