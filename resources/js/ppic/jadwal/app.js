@@ -10,9 +10,11 @@ import App from './App.vue'
 // Vue.component('Select2', Select2)
 Vue.component('apexchart', VueApexCharts)
 
-new Vue({
+const vue = new Vue({
     router,
     store,
     el: '#app',
     render: h => h(App),
 })
+
+console.log(vue)

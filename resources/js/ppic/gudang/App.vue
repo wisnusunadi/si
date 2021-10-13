@@ -33,16 +33,21 @@ export default {
 
 <template>
   <div>
-    <table id="table" class="table table-hover styled-table table-striped">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Kode</th>
-          <th>Nama</th>
-          <th>Jumlah</th>
-          <th>Layout</th>
-        </tr>
-      </thead>
-    </table>
+    <div v-if="this.$route.path === '/ppic/gudang/gbmp'">
+      <table id="table" class="table table-hover styled-table table-striped">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Kode</th>
+            <th>Nama</th>
+            <th>Jumlah</th>
+            <th>Layout</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div v-else>
+      <p>Data not available</p>
+    </div>
   </div>
 </template>

@@ -16283,6 +16283,8 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
+    console.log("ViewContainer");
+    console.log(this.$route);
     axios.get("http://localhost:8000/api/ppic/schedule/" + this.$route.params.status).then(function (response) {
       _this.$store.commit("updateJadwal", response.data);
     });
@@ -35138,7 +35140,7 @@ __webpack_require__.r(__webpack_exports__);
 // Vue.component('Select2', Select2)
 
 vue__WEBPACK_IMPORTED_MODULE_4__["default"].component('apexchart', (vue_apexcharts__WEBPACK_IMPORTED_MODULE_0___default()));
-new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
+var vue = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
   router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
   store: _store__WEBPACK_IMPORTED_MODULE_2__["default"],
   el: '#app',
@@ -35146,6 +35148,7 @@ new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
     return h(_App_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
   }
 });
+console.log(vue);
 })();
 
 /******/ })()

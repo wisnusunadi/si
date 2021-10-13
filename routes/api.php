@@ -27,6 +27,7 @@ Route::prefix('/ppic')->group(function () {
     Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
     Route::post('/delete-event', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
     Route::post('/send-bppb', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
+    Route::get('/bppb/{status}', [App\Http\Controllers\PpicController::class, 'getBppb']);
 
     Route::get('/bppb/{id}', [App\Http\Controllers\PpicController::class, 'findSeriesBppb']);
     Route::get('/reset', [App\Http\Controllers\PpicController::class, 'resetConfirmation']);

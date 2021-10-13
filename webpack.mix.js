@@ -19,6 +19,7 @@ const mix = require('laravel-mix');
 mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
 
 // ppic
-mix.js('resources/js/ppic/gbmp/app.js', 'public/native/js/ppic/gbmp.js').vue()
+mix.js('resources/js/ppic/gudang/app.js', 'public/native/js/ppic/gudang.js').vue()
 mix.js('resources/js/ppic/jadwal/app.js', 'public/native/js/ppic/jadwal.js').vue()
+mix.js('resources/js/ppic/bppb/app.js', 'public/native/js/ppic/bppb.js').vue()
 

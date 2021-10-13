@@ -245,17 +245,17 @@ return [
                 [
                     'text'  =>  'GBMP',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/gbmp'
+                    'url'   =>  '/ppic/gudang/gbmp'
                 ],
                 [
                     'text'  =>  'GBJ',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
+                    'url'   =>  '/ppic/gudang/gbj'
                 ],
                 [
                     'text'  =>  'GK',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
+                    'url'   =>  '/ppic/gudang/gk'
                 ],
             ]
         ],
@@ -340,17 +340,17 @@ return [
                 [
                     'text'  =>  'Penyusunan',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/bppb/?penyusunan=true'
+                    'url'   =>  '/ppic/bppb/penyusunan'
                 ],
                 [
                     'text'  =>  'Pelaksanaan',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/bppb/?pelaksanaan=true',
+                    'url'   =>  '/ppic/bppb/pelaksanaan',
                 ],
                 [
                     'text'  =>  'Selesai',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/bppb/?selesai=true'
+                    'url'   =>  '/ppic/bppb/selesai'
                 ],
             ]
         ],

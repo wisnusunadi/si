@@ -163,4 +163,23 @@ class PpicController extends Controller
 
         return $code;
     }
+
+    public function getBppb($status)
+    {
+        $month = date('m');
+        $year = date('Y');
+        $bppb = Bppb::with('DetailProduk', 'Divisi')->orderBy('tanggal_bppb', 'asc');
+
+        if ($status == "pelaksanaan") {
+            $bppb = $bppb->whereYear('tanggal_bppb', $year)->whereMonth('tanggal_bppb', $month)->get();
+        } else if ($status == "penyusunan") {
+            $month += 1;
+            $bppb = $bppb->where('tanggal_bppb', '>=', "$year-$month-01")->get();
+        } else {
+            $bppb = $bppb->where('tanggal_bppb', '<', "$year-$month-01")->get();
+        }
+
+        // return $bppb;
+        return DataTables::of($bppb)->addIndexColumn()->make(true);
+    }
 }

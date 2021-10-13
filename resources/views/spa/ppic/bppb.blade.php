@@ -3,7 +3,7 @@
 @section('title', 'PPIC App')
 
 @section('content_header')
-<h1 class="m-0 text-dark">PPIC Data GBMP</h1>
+<h1 class="m-0 text-dark">PPIC Data BPPB</h1>
 @stop
 
 @section('content')
@@ -19,5 +19,5 @@
 @stop
 
 @section('adminlte_js')
-<script src="{{ asset('native/js/ppic/gudang.js') }}"></script>
+<script src="{{ asset('native/js/ppic/bppb.js') }}"></script>
 @stop

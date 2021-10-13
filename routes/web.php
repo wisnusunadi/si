@@ -33,4 +33,5 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/dashboard', 'spa.ppic.dashboard');
     Route::view('/gudang/{any}', 'spa.ppic.gudang');
     Route::view('/schedule/{any}', 'spa.ppic.jadwal');
+    Route::view('/bppb/{any}', 'spa.ppic.bppb');
 });
