@@ -338,11 +338,6 @@ return [
             'auth' => [24],
             'submenu'   =>  [
                 [
-                    'text'  =>  'Penyusunan',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/bppb/penyusunan'
-                ],
-                [
                     'text'  =>  'Pelaksanaan',
                     'icon'  =>  'far fa-circle',
                     'url'   =>  '/ppic/bppb/pelaksanaan',

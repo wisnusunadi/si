@@ -9,8 +9,6 @@ export default {
   },
 
   created: function () {
-    console.log("ViewContainer");
-    console.log(this.$route);
     axios
       .get(
         "http://localhost:8000/api/ppic/schedule/" + this.$route.params.status

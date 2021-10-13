@@ -5,7 +5,13 @@
         Kalender
       </button>
       <button class="btn btn-info" @click="changeView('table')">Tabel</button>
-      <!-- <button type="button" data-view="list" class="btn btn-warning">Daftar</button> -->
+    </div>
+    <div
+      v-if="this.$store.state.konfirmasi"
+      class="alert alert-warning"
+      role="alert"
+    >
+      <i class="fas fa-bell"></i> Menunggu persetujuan dari manager
     </div>
     <router-view></router-view>
   </div>
@@ -13,6 +19,8 @@
 
 <script>
 export default {
+  props: [auth],
+
   methods: {
     changeView: function (view) {
       this.$store.commit("changeView", view);

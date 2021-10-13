@@ -40,6 +40,7 @@ export default {
       deleteJadwal: false,
 
       event_ref: null,
+      selectable: true,
     };
   },
 
@@ -66,8 +67,7 @@ export default {
         },
         weekends: false,
         showNonCurrentDates: false,
-        editable: true,
-        selectable: true,
+        selectable: this.selectable,
 
         events:
           this.$store.state.jadwal.length == 0
@@ -111,11 +111,13 @@ export default {
 
     konfirmasi: function () {
       let jadwal = this.$store.state.jadwal;
-      if (this.status === "penyusunan") {
-        if (jadwal.length > 0 && jadwal[0].konfirmasi == 1) return true;
-        return false;
+      for (let i = 0; i < jadwal.length; i++) {
+        if (jadwal[i].konfirmasi === 1 || jadwal[i].konfirmasi === 3) {
+          return true;
+        }
       }
-      return true;
+
+      return false;
     },
   },
 
@@ -128,7 +130,7 @@ export default {
       api.prev();
     }
 
-    if (!this.konfirmasi) this.enableEdit();
+    if (this.status == "penyusunan") this.enableEdit();
     else this.disableEdit();
   },
 
@@ -156,11 +158,11 @@ export default {
     },
 
     disableEdit() {
-      this.calendarOptions.selectable = false;
+      this.selectable = false;
     },
 
     enableEdit() {
-      this.calendarOptions.selectable = true;
+      this.selectable = true;
     },
 
     // modal
@@ -226,6 +228,7 @@ export default {
           })
           .then((response) => {
             this.$store.commit("updateJadwal", response.data);
+            $("#confirmation").modal("hide");
           });
       } else {
         axios
@@ -233,11 +236,15 @@ export default {
             confirmation: 1,
           })
           .then((response) => {
-            console.log(response.data);
+            this.$store.commit("updateJadwal", response.data);
+
+            $("#confirmation").modal("hide");
+            this.$swal({
+              icon: "success",
+              text: "Berhasil mengirim permintaan",
+            });
           });
       }
-
-      $("#confirmation").modal("hide");
     },
 
     handleButtonNo: function () {
@@ -256,7 +263,7 @@ export default {
 
 <template>
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-xl-9">
       <div class="card">
         <full-calendar
           ref="fullCalendar"
@@ -264,8 +271,15 @@ export default {
           :options="calendarOptions"
         />
       </div>
+      <button
+        v-if="status === 'penyusunan' && !konfirmasi"
+        class="btn btn-block btn-info mb-3"
+        @click="sendBppb"
+      >
+        Minta Persetujuan
+      </button>
     </div>
-    <div class="col-md-3">
+    <div class="col-xl-3">
       <div class="card">
         <div class="card-header">
           <h5 class="text-center">Daftar Produksi</h5>
@@ -287,14 +301,6 @@ export default {
           </table>
         </div>
       </div>
-
-      <button
-        v-if="event.length > 0 && !konfirmasi"
-        class="btn btn-block btn-info"
-        @click="sendBppb"
-      >
-        BPPB
-      </button>
     </div>
 
     <!-- Modal -->

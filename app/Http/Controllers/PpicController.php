@@ -116,7 +116,7 @@ class PpicController extends Controller
             $data->konfirmasi = $request->confirmation;
             $data->save();
 
-            $this->addBppb($data);
+            // $this->addBppb($data);
         }
 
         return $this->getEvent("penyusunan");
@@ -172,9 +172,6 @@ class PpicController extends Controller
 
         if ($status == "pelaksanaan") {
             $bppb = $bppb->whereYear('tanggal_bppb', $year)->whereMonth('tanggal_bppb', $month)->get();
-        } else if ($status == "penyusunan") {
-            $month += 1;
-            $bppb = $bppb->where('tanggal_bppb', '>=', "$year-$month-01")->get();
         } else {
             $bppb = $bppb->where('tanggal_bppb', '<', "$year-$month-01")->get();
         }
