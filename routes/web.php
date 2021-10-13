@@ -37,6 +37,7 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
 
 Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
+    Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
 });
 
 

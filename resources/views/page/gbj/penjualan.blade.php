@@ -3,7 +3,7 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Stok GBJ</h1>
+<h1 class="m-0 text-dark">Penjualan</h1>
 @stop
 
 @section('content')
@@ -15,5 +15,5 @@
 @stop
 
 @section('adminlte_js')
-<script src="{{ asset('native/js/gbj/stok.js') }}"></script>
+<script src="{{ asset('native/js/gbj/penjualan.js') }}"></script>
 @stop

@@ -48,26 +48,6 @@
                 >
                     <div class="row">
                         <div class="col-lg-12">
-                            <span
-                                class="btn-group  float-right"
-                                role="group"
-                                aria-label="Button group with nested dropdown"
-                            >
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info active"
-                                    id="tablebtn"
-                                >
-                                    <i class="fas fa-list"></i>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info"
-                                    id="gridbtn"
-                                >
-                                    <i class="fas fa-th"></i>
-                                </button>
-                            </span>
                             <span class="float-right">
                                 <router-link :to="{ name: 'create' }"
                                     ><button type="button" class="btn btn-info">
@@ -157,8 +137,7 @@
                         <div class="col-lg-12">
                             <div class="table-responsive">
                                 <table
-                                    id="semuaproduk"
-                                    class="table table-hover table-striped"
+                                    class="table table-hover semuaproduk"
                                     width="100%"
                                 >
                                     <thead
@@ -175,7 +154,38 @@
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tbodies"></tbody>
+                                    <tbody id="tbodies">
+                                        <tr>
+                                            <td>1</td>
+                                            <td>BJAA01NB001</td>
+                                            <td>Elitech</td>
+                                            <td>Anesthesia Nebulizer Promist 1</td>
+                                            <td><span class="badge blue-text">Alat Kesehatan</span></td>
+                                            <td><span class="float-right" style="color:green;">1000</span></td>
+                                            <td>unit</td>
+                                            <td><i class="fas fa-search"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>BJOZ03G0001</td>
+                                            <td>Elitech</td>
+                                            <td>Ozone Generator OZ - 3G</td>
+                                            <td><span class="badge orange-text">Sarana Kesehatan</span></td>
+                                            <td><span class="float-right" style="color:red;">5</span></td>
+                                            <td>unit</td>
+                                            <td><i class="fas fa-search"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>BJZZ03T0010</td>
+                                            <td>Elitech</td>
+                                            <td>Trolley Get 388UO</td>
+                                            <td><span class="badge purple-text">Aksesoris</span></td>
+                                            <td><span class="float-right" style="color:rgba(0, 0, 0, 0.4);">0</span></td>
+                                            <td>unit</td>
+                                            <td><i class="fas fa-search"></i></td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -193,16 +203,16 @@
                                 <div class="form-group row">
                                     <label
                                         for="produk"
-                                        class="col-sm-4 col-form-label"
+                                        class="col-sm-5 col-form-label"
                                         style="text-align:right;"
                                         >Cari Produk</label
                                     >
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         <div class="select2-info">
                                             <select
-                                                class="select2 custom-select form-control @error('produk') is-invalid @enderror produk"
+                                                class="select2 custom-select form-control produk"
                                                 data-dropdown-css-class="select2-info"
-                                                style="width: 50%;"
+                                                style="width:40%;"
                                                 name="produk"
                                                 id="produk"
                                             >
@@ -219,26 +229,6 @@
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <span
-                                class="btn-group  float-right"
-                                role="group"
-                                aria-label="Button group with nested dropdown"
-                            >
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info active"
-                                    id="tablebtn"
-                                >
-                                    <i class="fas fa-list"></i>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info"
-                                    id="gridbtn"
-                                >
-                                    <i class="fas fa-th"></i>
-                                </button>
-                            </span>
                             <span
                                 class="dropdown float-right"
                                 id="filter"
@@ -320,14 +310,32 @@
                     <div class="row" style="margin-top:5px;">
                         <div class="col-lg-3">
                             <div class="card">
-                                <div class="card-body"></div>
+                                <div class="card-body">
+                                    <div class="form-horizontal">
+                                    <div class="form-group row">
+                                        <span class="col-form-label"><h4>Info</h4></span>
+                                        <span class="float-right success-text"><b>Tersedia</b></span>
+                                    </div>
+                                    <div class="form-group row">
+                                        <span class="text-muted">Nama Produk</span>
+                                        <span class="float-right">FOX-BABY</span>
+                                    </div>
+                                    <div class="form-group row">
+                                        <span class="text-muted">Kelompok Produk</span>
+                                        <span class="float-right">Alat Kesehatan</span>
+                                    </div>
+                                    <div class="form-group row">
+                                        <span class="text-muted">Stok Terakhir</span>
+                                        <span class="float-right">FOX-BABY</span>
+                                    </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-9">
                             <div class="table-responsive">
                                 <table
-                                    id="semuaproduk"
-                                    class="table table-hover table-striped"
+                                    class="table table-hover table-striped perproduk"
                                     width="100%"
                                 >
                                     <thead
@@ -403,26 +411,6 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <span
-                                class="btn-group  float-right"
-                                role="group"
-                                aria-label="Button group with nested dropdown"
-                            >
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info active"
-                                    id="tablebtn"
-                                >
-                                    <i class="fas fa-list"></i>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info"
-                                    id="gridbtn"
-                                >
-                                    <i class="fas fa-th"></i>
-                                </button>
-                            </span>
-                            <span
                                 class="dropdown float-right"
                                 id="filter"
                                 style="margin-right:5px;"
@@ -473,8 +461,7 @@
                         <div class="col-lg-12">
                             <div class="table-responsive">
                                 <table
-                                    id="tanggalproduk"
-                                    class="table table-hover"
+                                    class="table table-hover pertanggal"
                                     width="100%"
                                 >
                                     <thead
@@ -551,3 +538,26 @@
         </div>
     </div>
 </template>
+<style lang="scss">
+thead{ text-align: center; }
+.semuaproduk { 
+    td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(5), td:nth-child(7), td:nth-child(8) { 
+        text-align: center; 
+    }
+}
+
+.perproduk { 
+    td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(6) { 
+        text-align: center; 
+    }
+}
+
+.pertanggal { 
+    td:nth-child(1), td:nth-child(2), td:nth-child(4), td:nth-child(7) { 
+        text-align: center; 
+    }
+}
+
+
+.center{width:80%; margin-left:auto;margin-right:auto;}
+</style>
