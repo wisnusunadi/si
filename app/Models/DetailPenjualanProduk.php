@@ -12,10 +12,10 @@ class DetailPenjualanProduk extends Model
 
    public function Produk()
    {
-      return $this->belongsTo(Produk::class, 'produk_id');
+      return $this->belongsToMany(Produk::class, 'produk_id');
    }
    public function PenjualanProduk()
    {
-      return $this->belongsTo(PenjualanProduk::class, 'penjualan_produk_id');
+      return $this->belongsToMany(PenjualanProduk::class, 'penjualan_produk_id');
    }
 }
