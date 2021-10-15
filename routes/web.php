@@ -40,6 +40,9 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
 });
 
+Route::middleware('auth')->prefix('/penjualan')->group(function () {
+    Route::view('/produk/{any?}', 'page.penjualan.produk');
+});
 
 Route::get('/test/{name?}', function ($name = null) {
     return $name;

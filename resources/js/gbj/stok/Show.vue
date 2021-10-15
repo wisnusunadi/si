@@ -332,13 +332,8 @@
                     <div class="row" style="margin-top:5px;">
                         <div class="col-lg-12">
                             <div class="table-responsive">
-                                <table
-                                    class="table table-hover pertanggal"
-                                    width="100%"
-                                >
-                                    <thead
-                                        style="text-align: center; font-size: 15px; "
-                                    >
+                                <table class="table table-hover pertanggal" width="100%">
+                                    <thead style="text-align: center; font-size: 15px;">
                                         <tr>
                                             <th>No</th>
                                             <th>Tanggal</th>
