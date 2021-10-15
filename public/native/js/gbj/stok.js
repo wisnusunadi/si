@@ -2211,6 +2211,563 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/gbj/stok/Show.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/gbj/stok/Show.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {},
+  methods: {
+    semuaproduk: function semuaproduk(status) {
+      $('.semuaproduk').DataTable({
+        ajax: "http://localhost:8000/api/gbj/stok/all_produk/" + status,
+        columns: [{
+          data: "DT_RowIndex",
+          orderable: false,
+          searchable: false
+        }, {
+          data: "kode_produk",
+          name: "kode_produk"
+        }, {
+          data: "merk",
+          name: "merk"
+        }, {
+          data: "nama_produk",
+          name: "nama_produk"
+        }, {
+          data: null,
+          render: function render(data) {
+            if (data.kelompok_produk == "Alat Kesehatan") {
+              return '<span class="badge blue-text">' + data.kelompok_produk + '</span>';
+            } else if (data.kelompok_produk == "Sarana Kesehatan") {
+              return '<span class="badge blue-text">' + data.kelompok_produk + '</span>';
+            } else if (data.kelompok_produk == "Aksesori") {
+              return '<span class="badge purple-text">' + data.kelompok_produk + '</span>';
+            }
+          }
+        }, {
+          data: satuan,
+          nama: satuan,
+          orderable: false,
+          searchable: false
+        }, {
+          data: null,
+          render: function render(data) {
+            return "<div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n                                <router-link :to=\"{ path: '/gbj/stok/no_seri/" + data.id + "' }\"><button class=\"dropdown-item\" type=\"button\"><i class=\"fas fa-search\"></i> No Seri</button></router-link>\n                                <router-link :to=\"{ path: '/gbj/stok/mutasi/" + data.id + "' }\"><button class=\"dropdown-item\" type=\"button\"><i class=\"fas fa-search\"></i> Mutasi</button></router-link>\n                            </div>";
+          },
+          orderable: false,
+          searchable: false
+        }]
+      });
+    },
+    perproduk: function perproduk(produk_id) {
+      $('.perproduk').DataTable({
+        ajax: "http://localhost:8000/api/gbj/stok/perproduk/" + produk_id,
+        columns: [{
+          data: "DT_RowIndex",
+          orderable: false,
+          searchable: false
+        }, {
+          data: "tanggal",
+          name: "tanggal"
+        }, {
+          data: "divisi_id",
+          name: "divisi_id"
+        }, {
+          data: "keterangan",
+          name: "keterangan"
+        }, {
+          data: null,
+          render: function render(data) {
+            if (data.jumlah_masuk > 0) {
+              return '<span style="color:green;"><i class="fas fa-plus"></i><span class="float-right">' + data.jumlah_masuk + '</span></span>';
+            } else if (data.jumlah_keluar > 0) {
+              return '<span style="color:red;"><i class="fas fa-minus"></i><span class="float-right">' + data.jumlah_keluar + '</span></span>';
+            }
+          }
+        }, {
+          data: null,
+          render: function render(data) {
+            return "<div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n                                <router-link :to=\"{ path: '/gbj/stok/no_seri/" + data.id + "' }\"><button class=\"dropdown-item\" type=\"button\"><i class=\"fas fa-search\"></i> No Seri</button></router-link>\n                                <router-link :to=\"{ path: '/gbj/stok/mutasi/" + data.id + "' }\"><button class=\"dropdown-item\" type=\"button\"><i class=\"fas fa-search\"></i> Mutasi</button></router-link>\n                            </div>";
+          },
+          orderable: false,
+          searchable: false
+        }]
+      });
+    },
+    pertanggal: function pertanggal(tanggal) {
+      $('.perproduk').DataTable({
+        ajax: "http://localhost:8000/api/gbj/stok/pertanggal/" + tanggal,
+        columns: [{
+          data: "DT_RowIndex",
+          orderable: false,
+          searchable: false
+        }, {
+          data: "tanggal",
+          name: "tanggal"
+        }, {
+          data: "nama_produk",
+          name: "nama_produk"
+        }, {
+          data: "divisi_id",
+          name: "divisi_id"
+        }, {
+          data: "keterangan",
+          name: "keterangan"
+        }, {
+          data: null,
+          render: function render(data) {
+            if (data.jumlah_masuk > 0) {
+              return '<span style="color:green;"><i class="fas fa-plus"></i><span class="float-right">' + data.jumlah_masuk + '</span></span>';
+            } else if (data.jumlah_keluar > 0) {
+              return '<span style="color:red;"><i class="fas fa-minus"></i><span class="float-right">' + data.jumlah_keluar + '</span></span>';
+            }
+          }
+        }, {
+          data: null,
+          render: function render(data) {
+            return "<div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n                                <router-link :to=\"{ path: '/gbj/stok/no_seri/" + data.id + "' }\"><button class=\"dropdown-item\" type=\"button\"><i class=\"fas fa-search\"></i> No Seri</button></router-link>\n                                <router-link :to=\"{ path: '/gbj/stok/mutasi/" + data.id + "' }\"><button class=\"dropdown-item\" type=\"button\"><i class=\"fas fa-search\"></i> Mutasi</button></router-link>\n                            </div>";
+          },
+          orderable: false,
+          searchable: false
+        }]
+      });
+    },
+    changeProduk: function changeProduk(produk_id) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://localhost:8000/api/gbj/stok/" + produk_id).then(function (res) {
+        $('#nama_produk').value(res.nama_produk);
+        $('#kelompok_produk').value(res.kelompok_produk);
+      });
+    }
+  },
+  mounted: function mounted() {}
+});
+
+/***/ }),
+
 /***/ "./resources/js/gbj/stok/router.js":
 /*!*****************************************!*\
   !*** ./resources/js/gbj/stok/router.js ***!
@@ -2264,7 +2821,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "thead {\n  text-align: center;\n}\n.semuaproduk td:nth-child(1), .semuaproduk td:nth-child(2), .semuaproduk td:nth-child(3), .semuaproduk td:nth-child(5), .semuaproduk td:nth-child(7), .semuaproduk td:nth-child(8) {\n  text-align: center;\n}\n.perproduk td:nth-child(1), .perproduk td:nth-child(2), .perproduk td:nth-child(3), .perproduk td:nth-child(6) {\n  text-align: center;\n}\n.pertanggal td:nth-child(1), .pertanggal td:nth-child(2), .pertanggal td:nth-child(4), .pertanggal td:nth-child(7) {\n  text-align: center;\n}\n.center {\n  width: 80%;\n  margin-left: auto;\n  margin-right: auto;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "thead {\n  text-align: center;\n}\n.semuaproduk td:nth-child(1), .semuaproduk td:nth-child(2), .semuaproduk td:nth-child(3), .semuaproduk td:nth-child(5), .semuaproduk td:nth-child(7), .semuaproduk td:nth-child(8) {\n  text-align: center;\n}\n.perproduk td:nth-child(1), .perproduk td:nth-child(2), .perproduk td:nth-child(3), .perproduk td:nth-child(6) {\n  text-align: center;\n}\n.pertanggal td:nth-child(1), .pertanggal td:nth-child(2), .pertanggal td:nth-child(4), .pertanggal td:nth-child(7) {\n  text-align: center;\n}\n.list-group li {\n  border: 0;\n}\n.center {\n  width: 80%;\n  margin-left: auto;\n  margin-right: auto;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2938,17 +3495,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Show_vue_vue_type_template_id_1ab5247e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Show.vue?vue&type=template&id=1ab5247e& */ "./resources/js/gbj/stok/Show.vue?vue&type=template&id=1ab5247e&");
-/* harmony import */ var _Show_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Show.vue?vue&type=style&index=0&lang=scss& */ "./resources/js/gbj/stok/Show.vue?vue&type=style&index=0&lang=scss&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Show.vue?vue&type=script&lang=js& */ "./resources/js/gbj/stok/Show.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Show_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Show.vue?vue&type=style&index=0&lang=scss& */ "./resources/js/gbj/stok/Show.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 ;
 
 
 /* normalize component */
 
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  script,
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _Show_vue_vue_type_template_id_1ab5247e___WEBPACK_IMPORTED_MODULE_0__.render,
   _Show_vue_vue_type_template_id_1ab5247e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
@@ -2978,6 +3537,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/gbj/stok/Create.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/gbj/stok/Show.vue?vue&type=script&lang=js&":
+/*!*****************************************************************!*\
+  !*** ./resources/js/gbj/stok/Show.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/gbj/stok/Show.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -3530,7 +4105,7 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fas fa-plus" }),
-                            _vm._v(" Tambah\n                                ")
+                            _vm._v(" Tambah")
                           ]
                         )
                       ])
@@ -3628,7 +4203,7 @@ var staticRenderFns = [
       {
         staticClass: "dropdown float-right",
         staticStyle: { "margin-right": "5px" },
-        attrs: { id: "filter" }
+        attrs: { id: "semuaprodukfilter" }
       },
       [
         _c(
@@ -3637,7 +4212,7 @@ var staticRenderFns = [
             staticClass: " btn btn-outline-info dropdown-toggle",
             attrs: {
               type: "button",
-              id: "dropdownFilter",
+              id: "semuaprodukfilter",
               "data-toggle": "dropdown",
               "aria-haspopup": "true",
               "aria-expanded": "false"
@@ -3651,82 +4226,194 @@ var staticRenderFns = [
         ),
         _vm._v(" "),
         _c(
-          "ul",
+          "div",
           {
-            staticClass: "dropdown-menu dropdown-menu-right",
-            attrs: { id: "filter_dd", "aria-labelledby": "dropdownFilter" }
+            staticClass: "dropdown-menu p-3 text-nowrap",
+            attrs: { "aria-labelledby": "semuaprodukfilter" }
           },
           [
-            _c("li", [
-              _c("span", { staticClass: "dropdown-header" }, [
-                _vm._v("Kelompok Produk")
+            _c("div", { staticClass: "dropdown-header" }, [
+              _vm._v("Kelompok Produk")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "sp_kelompok",
+                    value: "alat_kesehatan"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "sp_kelompok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                            Alat Kesehatan\n                                        "
+                    )
+                  ]
+                )
               ])
             ]),
             _vm._v(" "),
-            _c("li", [
-              _c(
-                "span",
-                {
-                  staticClass: "dropdown-item jenis_po po_online",
-                  attrs: { id: "jenis_po", name: "jenis_po" }
-                },
-                [
-                  _c("input", {
-                    attrs: { type: "checkbox", value: "alat_kesehatan" }
-                  }),
-                  _vm._v(
-                    "\n                                        Alat Kesehatan"
-                  )
-                ]
-              )
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "sp_kelompok",
+                    value: "sarana_kesehatan"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "sp_kelompok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                            Sarana Kesehatan\n                                        "
+                    )
+                  ]
+                )
+              ])
             ]),
             _vm._v(" "),
-            _c("li", [
-              _c(
-                "span",
-                {
-                  staticClass: "dropdown-item jenis_po po_offline",
-                  attrs: { id: "jenis_po", name: "jenis_po" }
-                },
-                [
-                  _c("input", {
-                    attrs: { type: "checkbox", value: "sarana_kesehatan" }
-                  }),
-                  _vm._v(
-                    "\n                                        Sarana Kesehatan"
-                  )
-                ]
-              )
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "sp_kelompok",
+                    value: "aksesoris"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "sp_kelompok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                            Aksesoris\n                                        "
+                    )
+                  ]
+                )
+              ])
             ]),
             _vm._v(" "),
-            _c("li", [
-              _c(
-                "span",
-                {
-                  staticClass: "dropdown-item jenis_po po_offline",
-                  attrs: { id: "jenis_po", name: "jenis_po" }
-                },
-                [
-                  _c("input", {
-                    attrs: { type: "checkbox", value: "aksesoris" }
-                  }),
-                  _vm._v("\n                                        Aksesoris")
-                ]
-              )
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "sp_kelompok", value: "lain" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "sp_kelompok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                            Lain-lain\n                                        "
+                    )
+                  ]
+                )
+              ])
             ]),
             _vm._v(" "),
-            _c("li", [
-              _c(
-                "span",
-                {
-                  staticClass: "dropdown-item jenis_po po_offline",
-                  attrs: { id: "jenis_po", name: "jenis_po" }
-                },
-                [
-                  _c("input", { attrs: { type: "checkbox", value: "lain" } }),
-                  _vm._v("\n                                        Lain-lain")
-                ]
-              )
+            _c("div", { staticClass: "dropdown-header" }, [
+              _vm._v("Ketersediaan Stok")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "sp_stok", value: "tersedia" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "sp_stok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                            Tersedia\n                                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "sp_stok",
+                    value: "hampir_habis"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "sp_stok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                            Hampir Habis\n                                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "sp_stok", value: "kosong" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "sp_stok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                            Kosong\n                                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("button", { staticClass: "btn btn-primary float-right" }, [
+                _vm._v("Cari")
+              ])
             ])
           ]
         )
@@ -3776,7 +4463,7 @@ var staticRenderFns = [
                   ]
                 ),
                 _vm._v(" "),
-                _c("tbody", { attrs: { id: "tbodies" } }, [
+                _c("tbody", [
                   _c("tr", [
                     _c("td", [_vm._v("1")]),
                     _vm._v(" "),
@@ -3896,16 +4583,6 @@ var staticRenderFns = [
           _c("div", { staticClass: "col-lg-12" }, [
             _c("div", { staticClass: "form-horizontal" }, [
               _c("div", { staticClass: "form-group row" }, [
-                _c(
-                  "label",
-                  {
-                    staticClass: "col-sm-5 col-form-label",
-                    staticStyle: { "text-align": "right" },
-                    attrs: { for: "produk" }
-                  },
-                  [_vm._v("Cari Produk")]
-                ),
-                _vm._v(" "),
                 _c("div", { staticClass: "col-sm-7" }, [
                   _c("div", { staticClass: "select2-info" }, [
                     _c(
@@ -3942,7 +4619,7 @@ var staticRenderFns = [
               {
                 staticClass: "dropdown float-right",
                 staticStyle: { "margin-right": "5px" },
-                attrs: { id: "filter" }
+                attrs: { id: "perprodukfilter" }
               },
               [
                 _c(
@@ -3951,7 +4628,7 @@ var staticRenderFns = [
                     staticClass: " btn btn-outline-info dropdown-toggle",
                     attrs: {
                       type: "button",
-                      id: "dropdownFilter",
+                      id: "perprodukfilter",
                       "data-toggle": "dropdown",
                       "aria-haspopup": "true",
                       "aria-expanded": "false"
@@ -3965,93 +4642,50 @@ var staticRenderFns = [
                 ),
                 _vm._v(" "),
                 _c(
-                  "ul",
+                  "div",
                   {
-                    staticClass: "dropdown-menu dropdown-menu-right",
-                    attrs: {
-                      id: "filter_dd",
-                      "aria-labelledby": "dropdownFilter"
-                    }
+                    staticClass: "dropdown-menu p-3 text-nowrap",
+                    attrs: { "aria-labelledby": "perprodukfilter" }
                   },
                   [
-                    _c("li", [
-                      _c("span", { staticClass: "dropdown-header" }, [
-                        _vm._v("Asal / Tujuan")
-                      ])
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "p_tanggal" } }, [
+                        _vm._v("Tanggal")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "date",
+                          id: "p_tanggal",
+                          placeholder: ""
+                        }
+                      })
                     ]),
                     _vm._v(" "),
-                    _c("li", [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "p_divisiid" } }, [
+                        _vm._v("Asal/Tujuan")
+                      ]),
+                      _vm._v(" "),
                       _c(
-                        "span",
+                        "select",
                         {
-                          staticClass: "dropdown-item jenis_po po_online",
-                          attrs: { id: "jenis_po", name: "jenis_po" }
+                          staticClass: "form-control",
+                          attrs: { name: "p_divisiid", id: "p_divisiid" }
                         },
-                        [
-                          _c("input", {
-                            attrs: { type: "checkbox", value: "alat_kesehatan" }
-                          }),
-                          _vm._v(
-                            "\n                                        Produksi"
-                          )
-                        ]
+                        [_c("option", { attrs: { value: "" } })]
                       )
                     ]),
                     _vm._v(" "),
-                    _c("li", [
-                      _c(
-                        "span",
-                        {
-                          staticClass: "dropdown-item jenis_po po_offline",
-                          attrs: { id: "jenis_po", name: "jenis_po" }
-                        },
-                        [
-                          _c("input", {
-                            attrs: {
-                              type: "checkbox",
-                              value: "sarana_kesehatan"
-                            }
-                          }),
-                          _vm._v("\n                                        QC")
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c(
-                        "span",
-                        {
-                          staticClass: "dropdown-item jenis_po po_offline",
-                          attrs: { id: "jenis_po", name: "jenis_po" }
-                        },
-                        [
-                          _c("input", {
-                            attrs: { type: "checkbox", value: "aksesoris" }
-                          }),
-                          _vm._v(
-                            "\n                                        Sarana Kesehatan"
-                          )
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c(
-                        "span",
-                        {
-                          staticClass: "dropdown-item jenis_po po_offline",
-                          attrs: { id: "jenis_po", name: "jenis_po" }
-                        },
-                        [
-                          _c("input", {
-                            attrs: { type: "checkbox", value: "lain" }
-                          }),
-                          _vm._v(
-                            "\n                                        Teknik"
-                          )
-                        ]
-                      )
-                    ])
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Cari")]
+                    )
                   ]
                 )
               ]
@@ -4063,55 +4697,55 @@ var staticRenderFns = [
           "div",
           { staticClass: "row", staticStyle: { "margin-top": "5px" } },
           [
-            _c("div", { staticClass: "col-lg-3" }, [
+            _c("div", { staticClass: "col-3 col-md-3 col-sm-3" }, [
               _c("div", { staticClass: "card" }, [
                 _c("div", { staticClass: "card-body" }, [
-                  _c("div", { staticClass: "form-horizontal" }, [
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c("span", { staticClass: "col-form-label" }, [
-                        _c("h4", [_vm._v("Info")])
+                  _c("ul", { staticClass: "list-group" }, [
+                    _c("li", { staticClass: "list-group-item" }, [
+                      _c("span", { staticStyle: { "font-size": "24px" } }, [
+                        _c("b", [_vm._v("Info")])
                       ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "float-right success-text" }, [
-                        _c("b", [_vm._v("Tersedia")])
-                      ])
+                      _c(
+                        "span",
+                        {
+                          staticClass: "float-right green-text col-form-label"
+                        },
+                        [_c("b", [_vm._v("Tersedia")])]
+                      )
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c("span", { staticClass: "text-muted" }, [
-                        _vm._v("Nama Produk")
+                    _c("li", { staticClass: "list-group-item" }, [
+                      _c("a", [_vm._v("Nama Produk")]),
+                      _c("span", { attrs: { id: "nama_produk" } }, [
+                        _vm._v("tes1")
                       ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "float-right" }, [
+                      _c("b", { staticClass: "float-right" }, [
                         _vm._v("FOX-BABY")
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c("span", { staticClass: "text-muted" }, [
-                        _vm._v("Kelompok Produk")
+                    _c("li", { staticClass: "list-group-item" }, [
+                      _c("a", [_vm._v("Kelompok Produk")]),
+                      _c("span", { attrs: { id: "kelompok_produk" } }, [
+                        _vm._v("tes2")
                       ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "float-right" }, [
+                      _c("b", { staticClass: "float-right" }, [
                         _vm._v("Alat Kesehatan")
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c("span", { staticClass: "text-muted" }, [
-                        _vm._v("Stok Terakhir")
-                      ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "float-right" }, [
-                        _vm._v("FOX-BABY")
-                      ])
+                    _c("li", { staticClass: "list-group-item" }, [
+                      _c("a", [_vm._v("Stok Terakhir")]),
+                      _c("span", { attrs: { id: "stok" } }),
+                      _vm._v("tes3"),
+                      _c("b", { staticClass: "float-right" }, [_vm._v("1000")])
                     ])
                   ])
                 ])
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-lg-9" }, [
+            _c("div", { staticClass: "col-9 col-md-9 col-sm-9" }, [
               _c("div", { staticClass: "table-responsive" }, [
                 _c(
                   "table",
@@ -4231,16 +4865,16 @@ var staticRenderFns = [
               {
                 staticClass: "dropdown float-right",
                 staticStyle: { "margin-right": "5px" },
-                attrs: { id: "filter" }
+                attrs: { id: "pertanggalfilter" }
               },
               [
                 _c(
                   "button",
                   {
-                    staticClass: " btn btn-outline-info dropdown-toggle",
+                    staticClass: "btn btn-outline-info dropdown-toggle",
                     attrs: {
                       type: "button",
-                      id: "dropdownFilter",
+                      id: "pertanggalfilter",
                       "data-toggle": "dropdown",
                       "aria-haspopup": "true",
                       "aria-expanded": "false"
@@ -4254,48 +4888,33 @@ var staticRenderFns = [
                 ),
                 _vm._v(" "),
                 _c(
-                  "ul",
+                  "div",
                   {
-                    staticClass: "dropdown-menu dropdown-menu-right",
-                    attrs: {
-                      id: "filter_dd",
-                      "aria-labelledby": "dropdownFilter"
-                    }
+                    staticClass:
+                      "dropdown-menu dropdown-menu-right text-nowrap p-3 ",
+                    attrs: { "aria-labelledby": "pertanggalfilter" }
                   },
                   [
-                    _c("li", [
-                      _c("span", { staticClass: "dropdown-header" }, [
-                        _vm._v("Pilih Produk")
-                      ])
+                    _c("div", { staticClass: "dropdown-header" }, [
+                      _vm._v("Asal / Tujuan")
                     ]),
                     _vm._v(" "),
-                    _c("li", [
+                    _c("div", { staticClass: "form-group" }, [
                       _c(
-                        "span",
+                        "select",
                         {
-                          staticClass: "dropdown-item jenis_po po_online",
-                          attrs: { id: "jenis_po", name: "jenis_po" }
+                          staticClass: "form-control custom-select",
+                          attrs: { name: "divisi_id", id: "" }
                         },
-                        [
-                          _c(
-                            "select",
-                            {
-                              staticClass:
-                                "select2 custom-select form-control @error('produk') is-invalid @enderror produk",
-                              staticStyle: { width: "50%" },
-                              attrs: {
-                                "data-dropdown-css-class": "select2-info",
-                                name: "produk",
-                                id: "produk"
-                              }
-                            },
-                            [
-                              _c("option", { attrs: { value: "Tes" } }, [
-                                _vm._v("Tes")
-                              ])
-                            ]
-                          )
-                        ]
+                        [_c("option", { attrs: { value: "" } })]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "button",
+                        { staticClass: "btn btn-primary float-right" },
+                        [_vm._v("Cari")]
                       )
                     ])
                   ]
