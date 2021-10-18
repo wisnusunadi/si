@@ -94,8 +94,7 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-lg-1"></div>
+                                    <div class="row d-flex ">
                                         <div class="col-lg-4">
                                             <div class="row">Elitech Pulse Oximeter FOX-Baby</div>
                                             <div class="row">Alat Kesehatan</div>

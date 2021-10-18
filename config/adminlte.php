@@ -927,8 +927,8 @@ return [
             'auth' => [13],
         ],
         [
-            'text' => 'Mutasi Stok',
-            'url' => '/gudang_produk_gbj',
+            'text' => 'Stok',
+            'url' => '/gbj/stok',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
@@ -937,8 +937,8 @@ return [
             'auth' => [13]
         ],
         [
-            'text' => 'PO Penjualan',
-            'url' => '/purchase_order',
+            'text' => 'Penjualan',
+            'url' => '/gbj/penjualan',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
