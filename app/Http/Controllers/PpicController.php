@@ -14,6 +14,7 @@ use App\Models\DetailProduk;
 use App\Models\BillOfMaterial;
 use App\Models\Bppb;
 use App\Models\Produk;
+use App\Models\GudangBarangJadi;
 
 class PpicController extends Controller
 {
@@ -178,5 +179,12 @@ class PpicController extends Controller
 
         // return $bppb;
         return DataTables::of($bppb)->addIndexColumn()->make(true);
+    }
+
+    public function getGbj()
+    {
+        $query = GudangBarangJadi::with('produk', 'noseri')->get();
+
+        return $query;
     }
 }
