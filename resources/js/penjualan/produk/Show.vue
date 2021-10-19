@@ -496,7 +496,14 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="modaledit" aria-hidden="true">
+        <div
+            class="modal fade"
+            id="modaledit"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="modaledit"
+            aria-hidden="true"
+        >
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header bg-warning"><h4>Edit</h4></div>
@@ -510,15 +517,36 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group row">
-                                                        <label for="nama_produk" class="col-4 col-form-label" style="text-align: right;">Nama Paket</label>
+                                                        <label
+                                                            for="nama_produk"
+                                                            class="col-4 col-form-label"
+                                                            style="text-align: right;"
+                                                            >Nama Paket</label
+                                                        >
                                                         <div class="col-6">
-                                                            <input type="text" class="form-control" placeholder="Masukkan Nama Paket" v-model="nama_paket"/>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                placeholder="Masukkan Nama Paket"
+                                                                v-model="
+                                                                    nama_paket
+                                                                "
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="nama_produk" class=" col-4 col-form-label" style="text-align: right;">Harga</label>
-                                                        <div class="input-group col-5">
-                                                            <div class="input-group-prepend">
+                                                        <label
+                                                            for="nama_produk"
+                                                            class=" col-4 col-form-label"
+                                                            style="text-align: right;"
+                                                            >Harga</label
+                                                        >
+                                                        <div
+                                                            class="input-group col-5"
+                                                        >
+                                                            <div
+                                                                class="input-group-prepend"
+                                                            >
                                                                 <span
                                                                     class="
                                                                         input-group-text
@@ -535,7 +563,9 @@
                                                                 value=""
                                                                 data-type="currency"
                                                                 placeholder="Masukkan Harga"
-                                                                v-model="hargaedit"
+                                                                v-model="
+                                                                    hargaedit
+                                                                "
                                                             />
                                                         </div>
                                                     </div>
@@ -595,14 +625,13 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr
-                                                                v-for="(
-                                                                    row, index
-                                                                ) in rowsedit"
+                                                                v-for="(row,
+                                                                index) in rowsedit"
                                                             >
                                                                 <td>
                                                                     {{
                                                                         index +
-                                                                        1
+                                                                            1
                                                                     }}
                                                                 </td>
                                                                 <td>
@@ -715,22 +744,24 @@
 export default {
     data() {
         return {
+            hargaedit: "",
             rowsedit: [
                 {
-                    hargaedit:"",
                     produk_id: "",
                     kelompok_produk: "",
                     jumlah: "",
                     produk_iderror: false,
                     kelompok_produkerror: false,
-                    jumlaherror: false,
-                },
-            ],
+                    jumlaherror: false
+                }
+            ]
         };
     },
-    watch:{
+    watch: {
         hargaedit: function(newValue) {
-            const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            const result = newValue
+                .replace(/\D/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             this.harga = result;
         }
     }

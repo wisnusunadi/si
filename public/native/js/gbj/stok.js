@@ -2638,6 +2638,226 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2645,7 +2865,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {},
   methods: {
     semuaproduk: function semuaproduk(status) {
-      $('.semuaproduk').DataTable({
+      $(".semuaproduk").DataTable({
         ajax: "http://localhost:8000/api/gbj/stok/all_produk/" + status,
         columns: [{
           data: "DT_RowIndex",
@@ -2664,11 +2884,11 @@ __webpack_require__.r(__webpack_exports__);
           data: null,
           render: function render(data) {
             if (data.kelompok_produk == "Alat Kesehatan") {
-              return '<span class="badge blue-text">' + data.kelompok_produk + '</span>';
+              return '<span class="badge blue-text">' + data.kelompok_produk + "</span>";
             } else if (data.kelompok_produk == "Sarana Kesehatan") {
-              return '<span class="badge blue-text">' + data.kelompok_produk + '</span>';
+              return '<span class="badge blue-text">' + data.kelompok_produk + "</span>";
             } else if (data.kelompok_produk == "Aksesori") {
-              return '<span class="badge purple-text">' + data.kelompok_produk + '</span>';
+              return '<span class="badge purple-text">' + data.kelompok_produk + "</span>";
             }
           }
         }, {
@@ -2687,7 +2907,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     perproduk: function perproduk(produk_id) {
-      $('.perproduk').DataTable({
+      $(".perproduk").DataTable({
         ajax: "http://localhost:8000/api/gbj/stok/perproduk/" + produk_id,
         columns: [{
           data: "DT_RowIndex",
@@ -2706,9 +2926,9 @@ __webpack_require__.r(__webpack_exports__);
           data: null,
           render: function render(data) {
             if (data.jumlah_masuk > 0) {
-              return '<span style="color:green;"><i class="fas fa-plus"></i><span class="float-right">' + data.jumlah_masuk + '</span></span>';
+              return '<span style="color:green;"><i class="fas fa-plus"></i><span class="float-right">' + data.jumlah_masuk + "</span></span>";
             } else if (data.jumlah_keluar > 0) {
-              return '<span style="color:red;"><i class="fas fa-minus"></i><span class="float-right">' + data.jumlah_keluar + '</span></span>';
+              return '<span style="color:red;"><i class="fas fa-minus"></i><span class="float-right">' + data.jumlah_keluar + "</span></span>";
             }
           }
         }, {
@@ -2722,7 +2942,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     pertanggal: function pertanggal(tanggal) {
-      $('.perproduk').DataTable({
+      $(".perproduk").DataTable({
         ajax: "http://localhost:8000/api/gbj/stok/pertanggal/" + tanggal,
         columns: [{
           data: "DT_RowIndex",
@@ -2744,9 +2964,9 @@ __webpack_require__.r(__webpack_exports__);
           data: null,
           render: function render(data) {
             if (data.jumlah_masuk > 0) {
-              return '<span style="color:green;"><i class="fas fa-plus"></i><span class="float-right">' + data.jumlah_masuk + '</span></span>';
+              return '<span style="color:green;"><i class="fas fa-plus"></i><span class="float-right">' + data.jumlah_masuk + "</span></span>";
             } else if (data.jumlah_keluar > 0) {
-              return '<span style="color:red;"><i class="fas fa-minus"></i><span class="float-right">' + data.jumlah_keluar + '</span></span>';
+              return '<span style="color:red;"><i class="fas fa-minus"></i><span class="float-right">' + data.jumlah_keluar + "</span></span>";
             }
           }
         }, {
@@ -2761,8 +2981,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     changeProduk: function changeProduk(produk_id) {
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://localhost:8000/api/gbj/stok/" + produk_id).then(function (res) {
-        $('#nama_produk').value(res.nama_produk);
-        $('#kelompok_produk').value(res.kelompok_produk);
+        $("#nama_produk").value(res.nama_produk);
+        $("#kelompok_produk").value(res.kelompok_produk);
       });
     }
   },
@@ -2824,7 +3044,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "thead {\n  text-align: center;\n}\n.semuaproduk td:nth-child(1), .semuaproduk td:nth-child(2), .semuaproduk td:nth-child(3), .semuaproduk td:nth-child(5), .semuaproduk td:nth-child(7), .semuaproduk td:nth-child(8) {\n  text-align: center;\n}\n.perproduk td:nth-child(1), .perproduk td:nth-child(2), .perproduk td:nth-child(3), .perproduk td:nth-child(6) {\n  text-align: center;\n}\n.pertanggal td:nth-child(1), .pertanggal td:nth-child(2), .pertanggal td:nth-child(4), .pertanggal td:nth-child(7) {\n  text-align: center;\n}\n.list-group li {\n  border: 0;\n}\n.center {\n  width: 80%;\n  margin-left: auto;\n  margin-right: auto;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "thead {\n  text-align: center;\n}\n.semuaproduk td:nth-child(1),\n.semuaproduk td:nth-child(2),\n.semuaproduk td:nth-child(3),\n.semuaproduk td:nth-child(5),\n.semuaproduk td:nth-child(7),\n.semuaproduk td:nth-child(8) {\n  text-align: center;\n}\n.perproduk td:nth-child(1),\n.perproduk td:nth-child(2),\n.perproduk td:nth-child(3),\n.perproduk td:nth-child(6) {\n  text-align: center;\n}\n.pertanggal td:nth-child(1),\n.pertanggal td:nth-child(2),\n.pertanggal td:nth-child(4),\n.pertanggal td:nth-child(7) {\n  text-align: center;\n}\n.list-group li {\n  border: 0;\n}\n.center {\n  width: 80%;\n  margin-left: auto;\n  margin-right: auto;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -21255,7 +21475,7 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fas fa-plus" }),
-                            _vm._v(" Tambah")
+                            _vm._v(" Tambah\n                                ")
                           ]
                         )
                       ])
@@ -21383,7 +21603,9 @@ var staticRenderFns = [
           },
           [
             _c("div", { staticClass: "dropdown-header" }, [
-              _vm._v("Kelompok Produk")
+              _vm._v(
+                "\n                                    Kelompok Produk\n                                "
+              )
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -21487,7 +21709,9 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "dropdown-header" }, [
-              _vm._v("Ketersediaan Stok")
+              _vm._v(
+                "\n                                    Ketersediaan Stok\n                                "
+              )
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -21562,7 +21786,9 @@ var staticRenderFns = [
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c("button", { staticClass: "btn btn-primary float-right" }, [
-                _vm._v("Cari")
+                _vm._v(
+                  "\n                                        Cari\n                                    "
+                )
               ])
             ])
           ]
@@ -21621,7 +21847,11 @@ var staticRenderFns = [
                     _vm._v(" "),
                     _c("td", [_vm._v("Elitech")]),
                     _vm._v(" "),
-                    _c("td", [_vm._v("Anesthesia Nebulizer Promist 1")]),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                            Anesthesia Nebulizer Promist 1\n                                        "
+                      )
+                    ]),
                     _vm._v(" "),
                     _c("td", [
                       _c("span", { staticClass: "badge blue-text" }, [
@@ -21853,7 +22083,11 @@ var staticRenderFns = [
                         staticClass: "btn btn-primary",
                         attrs: { type: "submit" }
                       },
-                      [_vm._v("Cari")]
+                      [
+                        _vm._v(
+                          "\n                                    Cari\n                                "
+                        )
+                      ]
                     )
                   ]
                 )
@@ -22065,7 +22299,9 @@ var staticRenderFns = [
                   },
                   [
                     _c("div", { staticClass: "dropdown-header" }, [
-                      _vm._v("Asal / Tujuan")
+                      _vm._v(
+                        "\n                                    Asal / Tujuan\n                                "
+                      )
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
@@ -22083,7 +22319,11 @@ var staticRenderFns = [
                       _c(
                         "button",
                         { staticClass: "btn btn-primary float-right" },
-                        [_vm._v("Cari")]
+                        [
+                          _vm._v(
+                            "\n                                        Cari\n                                    "
+                          )
+                        ]
                       )
                     ])
                   ]

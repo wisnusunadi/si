@@ -933,11 +933,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      hargaedit: "",
       rowsedit: [{
-        hargaedit: "",
         produk_id: "",
         kelompok_produk: "",
         jumlah: "",
@@ -2225,7 +2254,8 @@ var render = function() {
                                             name: "model",
                                             rawName: "v-model",
                                             value: _vm.nama_paket,
-                                            expression: "nama_paket"
+                                            expression:
+                                              "\n                                                                nama_paket\n                                                            "
                                           }
                                         ],
                                         staticClass: "form-control",
@@ -2269,7 +2299,8 @@ var render = function() {
                                               name: "model",
                                               rawName: "v-model",
                                               value: _vm.hargaedit,
-                                              expression: "hargaedit"
+                                              expression:
+                                                "\n                                                                hargaedit\n                                                            "
                                             }
                                           ],
                                           staticClass:

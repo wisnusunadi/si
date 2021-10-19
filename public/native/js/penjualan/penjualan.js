@@ -184,10 +184,115 @@ var staticRenderFns = [
     return _c("div", { staticClass: "content" }, [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-12" }, [
+          _c(
+            "ul",
+            {
+              staticClass: "nav nav-tabs",
+              attrs: { id: "myTab", role: "tablist" }
+            },
+            [
+              _c(
+                "li",
+                { staticClass: "nav-item", attrs: { role: "presentation" } },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link active",
+                      attrs: {
+                        id: "semua-penjualan-tab",
+                        "data-toggle": "tab",
+                        href: "#semua-penjualan",
+                        role: "tab",
+                        "aria-controls": "semua-penjualan",
+                        "aria-selected": "true"
+                      }
+                    },
+                    [_vm._v("Penjualan")]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                { staticClass: "nav-item", attrs: { role: "presentation" } },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link",
+                      attrs: {
+                        id: "ekatalog-tab",
+                        "data-toggle": "tab",
+                        href: "#ekatalog",
+                        role: "tab",
+                        "aria-controls": "ekatalog",
+                        "aria-selected": "false"
+                      }
+                    },
+                    [_vm._v("E-Catalogue")]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                { staticClass: "nav-item", attrs: { role: "presentation" } },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link",
+                      attrs: {
+                        id: "spa-tab",
+                        "data-toggle": "tab",
+                        href: "#spa",
+                        role: "tab",
+                        "aria-controls": "spa",
+                        "aria-selected": "false"
+                      }
+                    },
+                    [_vm._v("SPA")]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                { staticClass: "nav-item", attrs: { role: "presentation" } },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link",
+                      attrs: {
+                        id: "spb-tab",
+                        "data-toggle": "tab",
+                        href: "#spb",
+                        role: "tab",
+                        "aria-controls": "spb",
+                        "aria-selected": "false"
+                      }
+                    },
+                    [_vm._v("SPB")]
+                  )
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
           _c("div", { staticClass: "card" }, [
             _c("div", { staticClass: "card-body" }, [
               _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-12" })
+                _c("div", { staticClass: "col-12" }, [
+                  _c("span", { staticClass: "float-right" }, [
+                    _c("button", { staticClass: "btn btn-outline-secondary" }, [
+                      _vm._v(
+                        "\n                                    Filter\n                                "
+                      )
+                    ])
+                  ])
+                ])
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
@@ -202,6 +307,8 @@ var staticRenderFns = [
                         _c("th", [_vm._v("Customer")]),
                         _vm._v(" "),
                         _c("th", [_vm._v("Jenis")]),
+                        _vm._v(" "),
+                        _c("th", [_vm._v("Nomor AKN")]),
                         _vm._v(" "),
                         _c("th", [_vm._v("Nomor PO")]),
                         _vm._v(" "),
@@ -220,6 +327,8 @@ var staticRenderFns = [
                         _c("td", [_vm._v("RS Soeryadi Kendal")]),
                         _vm._v(" "),
                         _c("td", [_vm._v("E-Catalogue")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("AKN1-79479274207")]),
                         _vm._v(" "),
                         _c("td", [_vm._v("PO/ON/51/10/21")]),
                         _vm._v(" "),
@@ -243,11 +352,13 @@ var staticRenderFns = [
                         _vm._v(" "),
                         _c("td", [_vm._v("SPB")]),
                         _vm._v(" "),
+                        _c("td", [_vm._v("-")]),
+                        _vm._v(" "),
                         _c("td", [_vm._v("PO/ON/45/10/21")]),
                         _vm._v(" "),
                         _c("td", [
                           _c("span", { staticClass: "green-text badge" }, [
-                            _vm._v("Sepakat")
+                            _vm._v("Pengiriman")
                           ])
                         ]),
                         _vm._v(" "),
@@ -265,11 +376,13 @@ var staticRenderFns = [
                         _vm._v(" "),
                         _c("td", [_vm._v("SPA")]),
                         _vm._v(" "),
+                        _c("td", [_vm._v("-")]),
+                        _vm._v(" "),
                         _c("td", [_vm._v("PO/ON/37/10/21")]),
                         _vm._v(" "),
                         _c("td", [
                           _c("span", { staticClass: "yellow-text badge" }, [
-                            _vm._v("Negosiasi")
+                            _vm._v("Gudang")
                           ])
                         ]),
                         _vm._v(" "),
