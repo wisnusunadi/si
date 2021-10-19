@@ -781,8 +781,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      hargaedit: "",
       rowsedit: [{
-        hargaedit: "",
         produk_id: "",
         kelompok_produk: "",
         jumlah: "",

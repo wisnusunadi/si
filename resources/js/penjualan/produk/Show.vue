@@ -590,9 +590,9 @@ export default {
   },
   data() {
     return {
+      hargaedit: "",
       rowsedit: [
         {
-          hargaedit: "",
           produk_id: "",
           kelompok_produk: "",
           jumlah: "",
