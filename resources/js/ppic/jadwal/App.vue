@@ -19,8 +19,6 @@
 
 <script>
 export default {
-  props: [auth],
-
   methods: {
     changeView: function (view) {
       this.$store.commit("changeView", view);

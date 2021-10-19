@@ -15954,7 +15954,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: [auth],
   methods: {
     changeView: function changeView(view) {
       this.$store.commit("changeView", view);
@@ -16094,16 +16093,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     handleSelect: function handleSelect(selectInfo) {
-      var _this = this;
-
       var calendarApi = selectInfo.view.calendar;
       calendarApi.unselect();
       this.start_date_str = selectInfo.startStr;
-      this.end_date_str = selectInfo.endStr;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://localhost:8000/api/ppic/product").then(function (response) {
-        _this.produk = response.data;
-        $("#exampleModal").modal("show");
-      });
+      this.end_date_str = selectInfo.endStr; // axios.get("http://localhost:8000/api/ppic/product").then((response) => {
+      //   this.produk = response.data;
+      //   $("#exampleModal").modal("show");
+      // });
+
+      $("#exampleModal").modal("show");
     },
     handleEventClick: function handleEventClick(clickEventInfo) {
       var obj = clickEventInfo.event._def;
@@ -16123,24 +16121,24 @@ __webpack_require__.r(__webpack_exports__);
       this.color = event.target.style.backgroundColor;
     },
     changeProduk: function changeProduk() {
-      var _this2 = this;
+      var _this = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/ppic/version/" + this.produkValue).then(function (response) {
-        _this2.versi = response.data.produk_bill_of_material;
-        _this2.versiValue = "";
-        _this2.quantity = 0;
-        _this2.maxQuantity = 0;
+        _this.versi = response.data.produk_bill_of_material;
+        _this.versiValue = "";
+        _this.quantity = 0;
+        _this.maxQuantity = 0;
       });
     },
     changeVersi: function changeVersi() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/ppic/max-quantity/" + this.versiValue).then(function (response) {
-        _this3.maxQuantity = response.data;
+        _this2.maxQuantity = response.data;
       });
     },
     handleSubmit: function handleSubmit() {
-      var _this4 = this;
+      var _this3 = this;
 
       if (!this.produkValue || !this.versiValue || !this.quantity) {
         alert("form tidak lengkap");
@@ -16156,12 +16154,12 @@ __webpack_require__.r(__webpack_exports__);
         status: this.$route.params.status,
         warna: this.color
       }).then(function (response) {
-        _this4.$store.commit("updateJadwal", response.data);
+        _this3.$store.commit("updateJadwal", response.data);
 
         $("#exampleModal").modal("hide");
-        _this4.produkValue = "";
-        _this4.versiValue = "";
-        _this4.quantity = 0;
+        _this3.produkValue = "";
+        _this3.versiValue = "";
+        _this3.quantity = 0;
       });
     },
     sendBppb: function sendBppb() {
@@ -16170,13 +16168,13 @@ __webpack_require__.r(__webpack_exports__);
       $("#confirmation").modal("show");
     },
     handleButtonYes: function handleButtonYes() {
-      var _this5 = this;
+      var _this4 = this;
 
       if (this.deleteJadwal) {
         axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:8000/api/ppic/delete-event", {
           id: this.event_ref.event._def.publicId
         }).then(function (response) {
-          _this5.$store.commit("updateJadwal", response.data);
+          _this4.$store.commit("updateJadwal", response.data);
 
           $("#confirmation").modal("hide");
         });
@@ -16184,11 +16182,11 @@ __webpack_require__.r(__webpack_exports__);
         axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:8000/api/ppic/send-bppb", {
           confirmation: 1
         }).then(function (response) {
-          _this5.$store.commit("updateJadwal", response.data);
+          _this4.$store.commit("updateJadwal", response.data);
 
           $("#confirmation").modal("hide");
 
-          _this5.$swal({
+          _this4.$swal({
             icon: "success",
             text: "Berhasil mengirim permintaan"
           });
@@ -35874,7 +35872,9 @@ new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
   router: _router__WEBPACK_IMPORTED_MODULE_2__["default"],
   store: _store__WEBPACK_IMPORTED_MODULE_3__["default"],
   el: '#app',
-  components: [_App_vue__WEBPACK_IMPORTED_MODULE_4__["default"]]
+  components: {
+    "calendar": _App_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+  }
 });
 })();
 

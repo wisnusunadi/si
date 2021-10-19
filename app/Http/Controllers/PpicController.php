@@ -181,10 +181,17 @@ class PpicController extends Controller
         return DataTables::of($bppb)->addIndexColumn()->make(true);
     }
 
-    public function getGbj()
+    public function getGbjQuery()
     {
         $query = GudangBarangJadi::with('produk', 'noseri')->get();
 
         return $query;
+    }
+
+    public function getGbjDatatable()
+    {
+        $query = $this->getGbjQuery();
+
+        return DataTables::of($query)->addIndexColumn()->make(true);
     }
 }

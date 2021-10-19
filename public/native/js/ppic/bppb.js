@@ -23,7 +23,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#table").DataTable({
-      ajax: "http://localhost:8000/api/ppic/bppb/" + this.$route.params.status,
+      ajax: "/api/ppic/bppb/" + this.$route.params.status,
       columns: [{
         data: "DT_RowIndex",
         orderable: false,

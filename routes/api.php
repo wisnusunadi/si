@@ -34,7 +34,8 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/part-schedule/{id}', [App\Http\Controllers\PpicController::class, 'getPartFromSchedule']);
     // Route::prefix('/ppic')->group(function () {
     //     Route::get('part', [App\Http\Controllers\PpicController::class, 'getPart']);
-    Route::get('/get-gbj', [App\Http\Controllers\PpicController::class, 'getGbj']);
+    Route::get('/get-gbj-query', [App\Http\Controllers\PpicController::class, 'getGbjQuery']);
+    Route::get('/get-gbj-datatable', [App\Http\Controllers\PpicController::class, 'getGbjDatatable']);
 });
 
 Route::prefix('/customer')->group(function () {

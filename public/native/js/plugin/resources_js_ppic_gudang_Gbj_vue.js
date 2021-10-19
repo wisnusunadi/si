@@ -1,23 +1,72 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_ppic_gudang_Gbj_vue"],{
 
-/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss&":
-/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss& ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var datatables_net_bs4_css_dataTables_bootstrap4_min_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! datatables.net-bs4/css/dataTables.bootstrap4.min.css */ "./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css");
+ // import axios from "axios";
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      data_stok: []
+    };
+  },
+  mounted: function mounted() {
+    var table = $("#table").DataTable({
+      ajax: "/api/ppic/get-gbj-datatable",
+      processing: true,
+      serverSide: true,
+      columns: [{
+        data: "DT_RowIndex",
+        orderable: false,
+        searchable: false
+      }, {
+        data: "produk.nama"
+      }, {
+        data: "stok"
+      }, {
+        data: function data() {
+          return "<button class='btn btn-primary'><i class='fas fa-search' /></button>";
+        }
+      }]
+    });
+    var vue = this;
+    $("#table tbody").on("click", "button", function () {
+      var data = table.row($(this).parents("tr")).data();
+      vue.data_stok = data.noseri;
+      $("#modal").modal("show");
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css ***!
+  \***********************************************************************************************************************************************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
 // Imports
 
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "thead {\n  text-align: center;\n}\n.semuaproduk td:nth-child(1),\n.semuaproduk td:nth-child(2),\n.semuaproduk td:nth-child(3),\n.semuaproduk td:nth-child(5),\n.semuaproduk td:nth-child(7),\n.semuaproduk td:nth-child(8) {\n  text-align: center;\n}\n.perproduk td:nth-child(1),\n.perproduk td:nth-child(2),\n.perproduk td:nth-child(3),\n.perproduk td:nth-child(6) {\n  text-align: center;\n}\n.pertanggal td:nth-child(1),\n.pertanggal td:nth-child(2),\n.pertanggal td:nth-child(4),\n.pertanggal td:nth-child(7) {\n  text-align: center;\n}\n.center {\n  width: 80%;\n  margin-left: auto;\n  margin-right: auto;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "td.dt-control{background:url(\"https://www.datatables.net/examples/resources/details_open.png\") no-repeat center center;cursor:pointer}tr.dt-hasChild td.dt-control{background:url(\"https://www.datatables.net/examples/resources/details_close.png\") no-repeat center center}table.dataTable th.dt-left,table.dataTable td.dt-left{text-align:left}table.dataTable th.dt-center,table.dataTable td.dt-center,table.dataTable td.dataTables_empty{text-align:center}table.dataTable th.dt-right,table.dataTable td.dt-right{text-align:right}table.dataTable th.dt-justify,table.dataTable td.dt-justify{text-align:justify}table.dataTable th.dt-nowrap,table.dataTable td.dt-nowrap{white-space:nowrap}table.dataTable thead th.dt-head-left,table.dataTable thead td.dt-head-left,table.dataTable tfoot th.dt-head-left,table.dataTable tfoot td.dt-head-left{text-align:left}table.dataTable thead th.dt-head-center,table.dataTable thead td.dt-head-center,table.dataTable tfoot th.dt-head-center,table.dataTable tfoot td.dt-head-center{text-align:center}table.dataTable thead th.dt-head-right,table.dataTable thead td.dt-head-right,table.dataTable tfoot th.dt-head-right,table.dataTable tfoot td.dt-head-right{text-align:right}table.dataTable thead th.dt-head-justify,table.dataTable thead td.dt-head-justify,table.dataTable tfoot th.dt-head-justify,table.dataTable tfoot td.dt-head-justify{text-align:justify}table.dataTable thead th.dt-head-nowrap,table.dataTable thead td.dt-head-nowrap,table.dataTable tfoot th.dt-head-nowrap,table.dataTable tfoot td.dt-head-nowrap{white-space:nowrap}table.dataTable tbody th.dt-body-left,table.dataTable tbody td.dt-body-left{text-align:left}table.dataTable tbody th.dt-body-center,table.dataTable tbody td.dt-body-center{text-align:center}table.dataTable tbody th.dt-body-right,table.dataTable tbody td.dt-body-right{text-align:right}table.dataTable tbody th.dt-body-justify,table.dataTable tbody td.dt-body-justify{text-align:justify}table.dataTable tbody th.dt-body-nowrap,table.dataTable tbody td.dt-body-nowrap{white-space:nowrap}table.dataTable{clear:both;margin-top:6px !important;margin-bottom:6px !important;max-width:none !important;border-collapse:separate !important;border-spacing:0}table.dataTable td,table.dataTable th{box-sizing:content-box}table.dataTable td.dataTables_empty,table.dataTable th.dataTables_empty{text-align:center}table.dataTable.nowrap th,table.dataTable.nowrap td{white-space:nowrap}div.dataTables_wrapper div.dataTables_length label{font-weight:normal;text-align:left;white-space:nowrap}div.dataTables_wrapper div.dataTables_length select{width:auto;display:inline-block}div.dataTables_wrapper div.dataTables_filter{text-align:right}div.dataTables_wrapper div.dataTables_filter label{font-weight:normal;white-space:nowrap;text-align:left}div.dataTables_wrapper div.dataTables_filter input{margin-left:.5em;display:inline-block;width:auto}div.dataTables_wrapper div.dataTables_info{padding-top:.85em}div.dataTables_wrapper div.dataTables_paginate{margin:0;white-space:nowrap;text-align:right}div.dataTables_wrapper div.dataTables_paginate ul.pagination{margin:2px 0;white-space:nowrap;justify-content:flex-end}div.dataTables_wrapper div.dataTables_processing{position:absolute;top:50%;left:50%;width:200px;margin-left:-100px;margin-top:-26px;text-align:center;padding:1em 0}table.dataTable>thead>tr>th:active,table.dataTable>thead>tr>td:active{outline:none}table.dataTable>thead>tr>th:not(.sorting_disabled),table.dataTable>thead>tr>td:not(.sorting_disabled){padding-right:30px}table.dataTable>thead .sorting,table.dataTable>thead .sorting_asc,table.dataTable>thead .sorting_desc,table.dataTable>thead .sorting_asc_disabled,table.dataTable>thead .sorting_desc_disabled{cursor:pointer;position:relative}table.dataTable>thead .sorting:before,table.dataTable>thead .sorting:after,table.dataTable>thead .sorting_asc:before,table.dataTable>thead .sorting_asc:after,table.dataTable>thead .sorting_desc:before,table.dataTable>thead .sorting_desc:after,table.dataTable>thead .sorting_asc_disabled:before,table.dataTable>thead .sorting_asc_disabled:after,table.dataTable>thead .sorting_desc_disabled:before,table.dataTable>thead .sorting_desc_disabled:after{position:absolute;bottom:.9em;display:block;opacity:.3}table.dataTable>thead .sorting:before,table.dataTable>thead .sorting_asc:before,table.dataTable>thead .sorting_desc:before,table.dataTable>thead .sorting_asc_disabled:before,table.dataTable>thead .sorting_desc_disabled:before{right:1em;content:\"↑\"}table.dataTable>thead .sorting:after,table.dataTable>thead .sorting_asc:after,table.dataTable>thead .sorting_desc:after,table.dataTable>thead .sorting_asc_disabled:after,table.dataTable>thead .sorting_desc_disabled:after{right:.5em;content:\"↓\"}table.dataTable>thead .sorting_asc:before,table.dataTable>thead .sorting_desc:after{opacity:1}table.dataTable>thead .sorting_asc_disabled:before,table.dataTable>thead .sorting_desc_disabled:after{opacity:0}div.dataTables_scrollHead table.dataTable{margin-bottom:0 !important}div.dataTables_scrollBody>table{border-top:none;margin-top:0 !important;margin-bottom:0 !important}div.dataTables_scrollBody>table>thead .sorting:before,div.dataTables_scrollBody>table>thead .sorting_asc:before,div.dataTables_scrollBody>table>thead .sorting_desc:before,div.dataTables_scrollBody>table>thead .sorting:after,div.dataTables_scrollBody>table>thead .sorting_asc:after,div.dataTables_scrollBody>table>thead .sorting_desc:after{display:none}div.dataTables_scrollBody>table>tbody tr:first-child th,div.dataTables_scrollBody>table>tbody tr:first-child td{border-top:none}div.dataTables_scrollFoot>.dataTables_scrollFootInner{box-sizing:content-box}div.dataTables_scrollFoot>.dataTables_scrollFootInner>table{margin-top:0 !important;border-top:none}@media screen and (max-width: 767px){div.dataTables_wrapper div.dataTables_length,div.dataTables_wrapper div.dataTables_filter,div.dataTables_wrapper div.dataTables_info,div.dataTables_wrapper div.dataTables_paginate{text-align:center}div.dataTables_wrapper div.dataTables_paginate ul.pagination{justify-content:center !important}}table.dataTable.table-sm>thead>tr>th:not(.sorting_disabled){padding-right:20px}table.dataTable.table-sm .sorting:before,table.dataTable.table-sm .sorting_asc:before,table.dataTable.table-sm .sorting_desc:before{top:5px;right:.85em}table.dataTable.table-sm .sorting:after,table.dataTable.table-sm .sorting_asc:after,table.dataTable.table-sm .sorting_desc:after{top:5px}table.table-bordered.dataTable{border-right-width:0}table.table-bordered.dataTable th,table.table-bordered.dataTable td{border-left-width:0}table.table-bordered.dataTable th:last-child,table.table-bordered.dataTable th:last-child,table.table-bordered.dataTable td:last-child,table.table-bordered.dataTable td:last-child{border-right-width:1px}table.table-bordered.dataTable tbody th,table.table-bordered.dataTable tbody td{border-bottom-width:0}div.dataTables_scrollHead table.table-bordered{border-bottom-width:0}div.table-responsive>div.dataTables_wrapper>div.row{margin:0}div.table-responsive>div.dataTables_wrapper>div.row>div[class^=col-]:first-child{padding-left:0}div.table-responsive>div.dataTables_wrapper>div.row>div[class^=col-]:last-child{padding-right:0}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -99,19 +148,19 @@ module.exports = function (cssWithMappingToString) {
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss&":
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss& ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css":
+/*!***************************************************************************!*\
+  !*** ./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css ***!
+  \***************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Gbj_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Gbj.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _css_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_2_dataTables_bootstrap4_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!../../postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./dataTables.bootstrap4.min.css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css");
 
             
 
@@ -120,11 +169,11 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Gbj_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_css_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_2_dataTables_bootstrap4_min_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Gbj_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_css_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_2_dataTables_bootstrap4_min_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -417,17 +466,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Gbj_vue_vue_type_template_id_1e3d30ab___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Gbj.vue?vue&type=template&id=1e3d30ab& */ "./resources/js/ppic/gudang/Gbj.vue?vue&type=template&id=1e3d30ab&");
-/* harmony import */ var _Gbj_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Gbj.vue?vue&type=style&index=0&lang=scss& */ "./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _Gbj_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Gbj.vue?vue&type=script&lang=js& */ "./resources/js/ppic/gudang/Gbj.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
-;
+
+
 
 
 /* normalize component */
-
+;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  script,
+  _Gbj_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _Gbj_vue_vue_type_template_id_1e3d30ab___WEBPACK_IMPORTED_MODULE_0__.render,
   _Gbj_vue_vue_type_template_id_1e3d30ab___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
@@ -444,15 +493,18 @@ component.options.__file = "resources/js/ppic/gudang/Gbj.vue"
 
 /***/ }),
 
-/***/ "./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss&":
-/*!****************************************************************************!*\
-  !*** ./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss& ***!
-  \****************************************************************************/
+/***/ "./resources/js/ppic/gudang/Gbj.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/ppic/gudang/Gbj.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_11_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Gbj_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Gbj.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-11[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=style&index=0&lang=scss&");
-
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Gbj_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Gbj.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/ppic/gudang/Gbj.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Gbj_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -487,949 +539,70 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "modal fade", attrs: { id: "modal" } }, [
+      _c("div", { staticClass: "modal-dialog" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "modal-body" },
+            _vm._l(_vm.data_stok, function(data) {
+              return _c("ul", { key: data.id }, [
+                _c("li", [_vm._v(_vm._s(data.noseri))])
+              ])
+            }),
+            0
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-lg-12" }, [
-        _c(
-          "ul",
-          {
-            staticClass: "nav nav-tabs",
-            attrs: { id: "myTab", role: "tablist" }
-          },
-          [
-            _c(
-              "li",
-              { staticClass: "nav-item", attrs: { role: "presentation" } },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link active",
-                    attrs: {
-                      id: "semua-produk-tab",
-                      "data-toggle": "tab",
-                      href: "#semua-produk",
-                      role: "tab",
-                      "aria-controls": "semua-produk",
-                      "aria-selected": "true"
-                    }
-                  },
-                  [_vm._v("Semua Produk")]
-                )
-              ]
-            ),
+    return _c(
+      "table",
+      {
+        staticClass: "table table-hover styled-table table-striped",
+        attrs: { id: "table" }
+      },
+      [
+        _c("thead", [
+          _c("tr", [
+            _c("th", [_vm._v("No")]),
             _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item", attrs: { role: "presentation" } },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link",
-                    attrs: {
-                      id: "produk-tab",
-                      "data-toggle": "tab",
-                      href: "#produk",
-                      role: "tab",
-                      "aria-controls": "produk",
-                      "aria-selected": "false"
-                    }
-                  },
-                  [_vm._v("Per Produk")]
-                )
-              ]
-            ),
+            _c("th", [_vm._v("Nama")]),
             _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item", attrs: { role: "presentation" } },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link",
-                    attrs: {
-                      id: "tanggal-tab",
-                      "data-toggle": "tab",
-                      href: "#tanggal",
-                      role: "tab",
-                      "aria-controls": "tanggal",
-                      "aria-selected": "false"
-                    }
-                  },
-                  [_vm._v("Per Tanggal")]
-                )
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "tab-content card", attrs: { id: "myTabContent" } },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "tab-pane fade show active card-body",
-                attrs: {
-                  id: "semua-produk",
-                  role: "tabpanel",
-                  "aria-labelledby": "semua-produk-tab"
-                }
-              },
-              [
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-lg-12" }, [
-                    _c(
-                      "span",
-                      {
-                        staticClass: "dropdown float-right",
-                        staticStyle: { "margin-right": "5px" },
-                        attrs: { id: "filter" }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-outline-info dropdown-toggle",
-                            attrs: {
-                              type: "button",
-                              id: "dropdownFilter",
-                              "data-toggle": "dropdown",
-                              "aria-haspopup": "true",
-                              "aria-expanded": "false"
-                            }
-                          },
-                          [_vm._v("\n                Filter\n              ")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "ul",
-                          {
-                            staticClass: "dropdown-menu dropdown-menu-right",
-                            attrs: {
-                              id: "filter_dd",
-                              "aria-labelledby": "dropdownFilter"
-                            }
-                          },
-                          [
-                            _c("li", [
-                              _c("span", { staticClass: "dropdown-header" }, [
-                                _vm._v("Kelompok Produk")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_online",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c("input", {
-                                    attrs: {
-                                      type: "checkbox",
-                                      value: "alat_kesehatan"
-                                    }
-                                  }),
-                                  _vm._v(" Alat\n                    Kesehatan")
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_offline",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c("input", {
-                                    attrs: {
-                                      type: "checkbox",
-                                      value: "sarana_kesehatan"
-                                    }
-                                  }),
-                                  _vm._v(
-                                    " Sarana\n                    Kesehatan"
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_offline",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c("input", {
-                                    attrs: {
-                                      type: "checkbox",
-                                      value: "aksesoris"
-                                    }
-                                  }),
-                                  _vm._v("\n                    Aksesoris")
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_offline",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c("input", {
-                                    attrs: { type: "checkbox", value: "lain" }
-                                  }),
-                                  _vm._v(" Lain-lain")
-                                ]
-                              )
-                            ])
-                          ]
-                        )
-                      ]
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "row", staticStyle: { "margin-top": "5px" } },
-                  [
-                    _c("div", { staticClass: "col-lg-12" }, [
-                      _c("div", { staticClass: "table-responsive" }, [
-                        _c(
-                          "table",
-                          {
-                            staticClass: "table table-hover semuaproduk",
-                            attrs: { width: "100%" }
-                          },
-                          [
-                            _c(
-                              "thead",
-                              {
-                                staticStyle: {
-                                  "text-align": "center",
-                                  "font-size": "15px"
-                                }
-                              },
-                              [
-                                _c("tr", [
-                                  _c("th", [_vm._v("No")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Kode Produk")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Merk")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Nama Produk")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Kelompok Produk")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Stok")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Satuan")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Aksi")])
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c("tbody", { attrs: { id: "tbodies" } }, [
-                              _c("tr", [
-                                _c("td", [_vm._v("1")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("BJAA01NB001")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Elitech")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v("Anesthesia Nebulizer Promist 1")
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    { staticClass: "badge blue-text" },
-                                    [_vm._v("Alat Kesehatan")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    {
-                                      staticClass: "float-right",
-                                      staticStyle: { color: "green" }
-                                    },
-                                    [_vm._v("1000")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("unit")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("i", { staticClass: "fas fa-search" })
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("tr", [
-                                _c("td", [_vm._v("2")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("BJOZ03G0001")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Elitech")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Ozone Generator OZ - 3G")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    { staticClass: "badge orange-text" },
-                                    [_vm._v("Sarana Kesehatan")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    {
-                                      staticClass: "float-right",
-                                      staticStyle: { color: "red" }
-                                    },
-                                    [_vm._v("5")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("unit")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("i", { staticClass: "fas fa-search" })
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("tr", [
-                                _c("td", [_vm._v("3")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("BJZZ03T0010")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Elitech")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Trolley Get 388UO")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    { staticClass: "badge purple-text" },
-                                    [_vm._v("Aksesoris")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    {
-                                      staticClass: "float-right",
-                                      staticStyle: {
-                                        color: "rgba(0, 0, 0, 0.4)"
-                                      }
-                                    },
-                                    [_vm._v("0")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("unit")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("i", { staticClass: "fas fa-search" })
-                                ])
-                              ])
-                            ])
-                          ]
-                        )
-                      ])
-                    ])
-                  ]
-                )
-              ]
-            ),
+            _c("th", [_vm._v("Stok")]),
             _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "tab-pane fade card-body",
-                attrs: {
-                  id: "produk",
-                  role: "tabpanel",
-                  "aria-labelledby": "produk-tab"
-                }
-              },
-              [
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-lg-12" }, [
-                    _c("div", { staticClass: "form-horizontal" }, [
-                      _c("div", { staticClass: "form-group row" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass: "col-sm-5 col-form-label",
-                            staticStyle: { "text-align": "right" },
-                            attrs: { for: "produk" }
-                          },
-                          [_vm._v("Cari Produk")]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "col-sm-7" }, [
-                          _c("div", { staticClass: "select2-info" }, [
-                            _c(
-                              "select",
-                              {
-                                staticClass:
-                                  "select2 custom-select form-control produk",
-                                staticStyle: { width: "40%" },
-                                attrs: {
-                                  "data-dropdown-css-class": "select2-info",
-                                  name: "produk",
-                                  id: "produk"
-                                }
-                              },
-                              [
-                                _c("option", { attrs: { value: "" } }, [
-                                  _vm._v("Tes")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "" } }, [
-                                  _vm._v("ERP")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "" } }, [
-                                  _vm._v("SPA")
-                                ])
-                              ]
-                            )
-                          ])
-                        ])
-                      ])
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-lg-12" }, [
-                    _c(
-                      "span",
-                      {
-                        staticClass: "dropdown float-right",
-                        staticStyle: { "margin-right": "5px" },
-                        attrs: { id: "filter" }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-outline-info dropdown-toggle",
-                            attrs: {
-                              type: "button",
-                              id: "dropdownFilter",
-                              "data-toggle": "dropdown",
-                              "aria-haspopup": "true",
-                              "aria-expanded": "false"
-                            }
-                          },
-                          [_vm._v("\n                Filter\n              ")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "ul",
-                          {
-                            staticClass: "dropdown-menu dropdown-menu-right",
-                            attrs: {
-                              id: "filter_dd",
-                              "aria-labelledby": "dropdownFilter"
-                            }
-                          },
-                          [
-                            _c("li", [
-                              _c("span", { staticClass: "dropdown-header" }, [
-                                _vm._v("Asal / Tujuan")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_online",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c("input", {
-                                    attrs: {
-                                      type: "checkbox",
-                                      value: "alat_kesehatan"
-                                    }
-                                  }),
-                                  _vm._v("\n                    Produksi")
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_offline",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c("input", {
-                                    attrs: {
-                                      type: "checkbox",
-                                      value: "sarana_kesehatan"
-                                    }
-                                  }),
-                                  _vm._v("\n                    QC")
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_offline",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c("input", {
-                                    attrs: {
-                                      type: "checkbox",
-                                      value: "aksesoris"
-                                    }
-                                  }),
-                                  _vm._v(
-                                    " Sarana\n                    Kesehatan"
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_offline",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c("input", {
-                                    attrs: { type: "checkbox", value: "lain" }
-                                  }),
-                                  _vm._v(" Teknik")
-                                ]
-                              )
-                            ])
-                          ]
-                        )
-                      ]
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "row", staticStyle: { "margin-top": "5px" } },
-                  [
-                    _c("div", { staticClass: "col-lg-3" }, [
-                      _c("div", { staticClass: "card" }, [
-                        _c("div", { staticClass: "card-body" }, [
-                          _c("div", { staticClass: "form-horizontal" }, [
-                            _c("div", { staticClass: "form-group row" }, [
-                              _c("span", { staticClass: "col-form-label" }, [
-                                _c("h4", [_vm._v("Info")])
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "span",
-                                { staticClass: "float-right success-text" },
-                                [_c("b", [_vm._v("Tersedia")])]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "form-group row" }, [
-                              _c("span", { staticClass: "text-muted" }, [
-                                _vm._v("Nama Produk")
-                              ]),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "float-right" }, [
-                                _vm._v("FOX-BABY")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "form-group row" }, [
-                              _c("span", { staticClass: "text-muted" }, [
-                                _vm._v("Kelompok Produk")
-                              ]),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "float-right" }, [
-                                _vm._v("Alat Kesehatan")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "form-group row" }, [
-                              _c("span", { staticClass: "text-muted" }, [
-                                _vm._v("Stok Terakhir")
-                              ]),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "float-right" }, [
-                                _vm._v("FOX-BABY")
-                              ])
-                            ])
-                          ])
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-lg-9" }, [
-                      _c("div", { staticClass: "table-responsive" }, [
-                        _c(
-                          "table",
-                          {
-                            staticClass:
-                              "table table-hover table-striped perproduk",
-                            attrs: { width: "100%" }
-                          },
-                          [
-                            _c(
-                              "thead",
-                              {
-                                staticStyle: {
-                                  "text-align": "center",
-                                  "font-size": "15px"
-                                }
-                              },
-                              [
-                                _c("tr", [
-                                  _c("th", [_vm._v("No")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Tanggal")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Asal / Tujuan")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Keterangan")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Jumlah")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Aksi")])
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c("tbody", { attrs: { id: "tbodies" } }, [
-                              _c("tr", [
-                                _c("td", [_vm._v("1")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("24-09-2021")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Produksi")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v("Ref Hasil Produksi 0001/BPPB/09/21")
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    { staticStyle: { color: "green" } },
-                                    [
-                                      _c("i", { staticClass: "fas fa-plus" }),
-                                      _c(
-                                        "span",
-                                        { staticClass: "float-right" },
-                                        [_vm._v("1000")]
-                                      )
-                                    ]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("a", { attrs: { href: "" } }, [
-                                    _c("i", { staticClass: "fas fa-search" })
-                                  ])
-                                ])
-                              ])
-                            ])
-                          ]
-                        )
-                      ])
-                    ])
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "tab-pane fade card-body",
-                attrs: {
-                  id: "tanggal",
-                  role: "tabpanel",
-                  "aria-labelledby": "tanggal-tab"
-                }
-              },
-              [
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-lg-12" }, [
-                    _c("div", { staticClass: "form-horizontal" }, [
-                      _c("div", { staticClass: "form-group row" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass: "col-sm-5 col-form-label",
-                            staticStyle: { "text-align": "right" },
-                            attrs: { for: "detail_produk_id" }
-                          },
-                          [_vm._v("Tanggal")]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "col-sm-2" }, [
-                          _c("input", {
-                            staticClass: "form-control",
-                            attrs: { type: "date" }
-                          })
-                        ])
-                      ])
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-lg-12" }, [
-                    _c(
-                      "span",
-                      {
-                        staticClass: "dropdown float-right",
-                        staticStyle: { "margin-right": "5px" },
-                        attrs: { id: "filter" }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-outline-info dropdown-toggle",
-                            attrs: {
-                              type: "button",
-                              id: "dropdownFilter",
-                              "data-toggle": "dropdown",
-                              "aria-haspopup": "true",
-                              "aria-expanded": "false"
-                            }
-                          },
-                          [_vm._v("\n                Filter\n              ")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "ul",
-                          {
-                            staticClass: "dropdown-menu dropdown-menu-right",
-                            attrs: {
-                              id: "filter_dd",
-                              "aria-labelledby": "dropdownFilter"
-                            }
-                          },
-                          [
-                            _c("li", [
-                              _c("span", { staticClass: "dropdown-header" }, [
-                                _vm._v("Pilih Produk")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "dropdown-item jenis_po po_online",
-                                  attrs: { id: "jenis_po", name: "jenis_po" }
-                                },
-                                [
-                                  _c(
-                                    "select",
-                                    {
-                                      staticClass:
-                                        "\n                        select2\n                        custom-select\n                        form-control\n                        @error('produk')\n                        is-invalid\n                        @enderror\n                        produk\n                      ",
-                                      staticStyle: { width: "50%" },
-                                      attrs: {
-                                        "data-dropdown-css-class":
-                                          "select2-info",
-                                        name: "produk",
-                                        id: "produk"
-                                      }
-                                    },
-                                    [
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "Tes" } },
-                                        [_vm._v("Tes")]
-                                      )
-                                    ]
-                                  )
-                                ]
-                              )
-                            ])
-                          ]
-                        )
-                      ]
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "row", staticStyle: { "margin-top": "5px" } },
-                  [
-                    _c("div", { staticClass: "col-lg-12" }, [
-                      _c("div", { staticClass: "table-responsive" }, [
-                        _c(
-                          "table",
-                          {
-                            staticClass: "table table-hover pertanggal",
-                            attrs: { width: "100%" }
-                          },
-                          [
-                            _c(
-                              "thead",
-                              {
-                                staticStyle: {
-                                  "text-align": "center",
-                                  "font-size": "15px"
-                                }
-                              },
-                              [
-                                _c("tr", [
-                                  _c("th", [_vm._v("No")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Tanggal")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Nama Produk")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Asal / Tujuan")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Keterangan")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Jumlah")]),
-                                  _vm._v(" "),
-                                  _c("th", [_vm._v("Aksi")])
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c("tbody", { attrs: { id: "tbodies" } }, [
-                              _c("tr", [
-                                _c("td", [_vm._v("1")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("24-09-2021")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("FOX-BABY")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Produksi")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v("Ref Hasil Produksi 0001/BPPB/09/21")
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    { staticStyle: { color: "green" } },
-                                    [
-                                      _c("i", { staticClass: "fas fa-plus" }),
-                                      _c(
-                                        "span",
-                                        { staticClass: "float-right" },
-                                        [_vm._v("1000")]
-                                      )
-                                    ]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("a", { attrs: { href: "" } }, [
-                                    _c("i", { staticClass: "fas fa-search" })
-                                  ])
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("tr", [
-                                _c("td", [_vm._v("2")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("24-09-2021")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("CMS-600 PLUS")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Produksi")]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v("Ref Hasil Produksi 0001/BPPB/09/21")
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "span",
-                                    { staticStyle: { color: "red" } },
-                                    [
-                                      _c("i", { staticClass: "fas fa-plus" }),
-                                      _c(
-                                        "span",
-                                        { staticClass: "float-right" },
-                                        [_vm._v("10")]
-                                      )
-                                    ]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c("a", { attrs: { href: "" } }, [
-                                    _c("i", { staticClass: "fas fa-search" })
-                                  ])
-                                ])
-                              ])
-                            ])
-                          ]
-                        )
-                      ])
-                    ])
-                  ]
-                )
-              ]
-            )
-          ]
-        )
-      ])
+            _c("th", [_vm._v("Detail")])
+          ])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Nomer Seri")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_c("span", [_vm._v("×")])]
+      )
     ])
   }
 ]

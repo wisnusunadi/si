@@ -13,7 +13,7 @@ new Vue({
     router,
     store,
     el: '#app',
-    components: [
-        App,
-    ]
+    components: {
+        "calendar": App
+    }
 })

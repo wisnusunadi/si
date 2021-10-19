@@ -142,10 +142,11 @@ export default {
       this.start_date_str = selectInfo.startStr;
       this.end_date_str = selectInfo.endStr;
 
-      axios.get("http://localhost:8000/api/ppic/product").then((response) => {
-        this.produk = response.data;
-        $("#exampleModal").modal("show");
-      });
+      // axios.get("http://localhost:8000/api/ppic/product").then((response) => {
+      //   this.produk = response.data;
+      //   $("#exampleModal").modal("show");
+      // });
+      $("#exampleModal").modal("show");
     },
 
     handleEventClick: function (clickEventInfo) {
