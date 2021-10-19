@@ -1,7 +1,8 @@
 {
     "/native/js/plugin.js": "/native/js/plugin.js",
-    "/native/js/ppic/gbmp.js": "/native/js/ppic/gbmp.js",
+    "/native/js/ppic/gudang.js": "/native/js/ppic/gudang.js",
     "/native/js/ppic/jadwal.js": "/native/js/ppic/jadwal.js",
+    "/native/js/ppic/bppb.js": "/native/js/ppic/bppb.js",
     "/native/js/gbj/stok.js": "/native/js/gbj/stok.js",
     "/native/js/gbj/penjualan.js": "/native/js/gbj/penjualan.js",
     "/native/js/penjualan/produk.js": "/native/js/penjualan/produk.js"

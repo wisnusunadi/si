@@ -1000,16 +1000,16 @@ return [
             ],
         ],
         // dependecies plugins
-        // 'DataTables' => [
-        //     'js' => [
-        //         'vendor/datatables/jquery.dataTables.min.js',
-        //         'vendor/datatables/dataTables.bootstrap4.min.js',
-        //         'vendor/datatables/dataTables.responsive.min.js',
-        //     ],
-        //     'css' => [
-        //         'vendor/datatables/dataTables.bootstrap4.min.css',
-        //     ],
-        // ],
+        'DataTables' => [
+            'js' => [
+                'vendor/datatables/jquery.dataTables.min.js',
+                'vendor/datatables/dataTables.bootstrap4.min.js',
+                'vendor/datatables/dataTables.responsive.min.js',
+            ],
+            'css' => [
+                'vendor/datatables/dataTables.bootstrap4.min.css',
+            ],
+        ],
         'overlayScrollbars' => [
             'js' => [
                 'vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js',
