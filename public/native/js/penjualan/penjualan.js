@@ -281,121 +281,158 @@ var staticRenderFns = [
             ]
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-12" }, [
-                  _c("span", { staticClass: "float-right" }, [
-                    _c("button", { staticClass: "btn btn-outline-secondary" }, [
-                      _vm._v(
-                        "\n                                    Filter\n                                "
-                      )
+          _c(
+            "div",
+            { staticClass: "tab-content card", attrs: { id: "myTabContent" } },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "tab-pane fade show active card-body",
+                  attrs: {
+                    id: "semua-penjualan",
+                    role: "tabpanel",
+                    "aria-labelledby": "semua-penjualan-tab"
+                  }
+                },
+                [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-12" }, [
+                      _c("span", { staticClass: "float-right" }, [
+                        _c(
+                          "button",
+                          { staticClass: "btn btn-outline-secondary" },
+                          [
+                            _vm._v(
+                              "\n                                    Filter\n                                "
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-12" }, [
+                      _c("table", { staticClass: "table" }, [
+                        _c("thead", [
+                          _c("tr", [
+                            _c("th", [_vm._v("No")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Tanggal")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Customer")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Jenis")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Nomor AKN")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Nomor PO")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Status")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Aksi")])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("td", [_vm._v("1")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("28-10-2021")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("RS Soeryadi Kendal")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("E-Catalogue")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("AKN1-79479274207")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("PO/ON/51/10/21")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("span", { staticClass: "red-text badge" }, [
+                                _vm._v("Batal")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("i", { staticClass: "fas fa-ellipsis-v" })
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v("2")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("28-10-2021")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("Pak Amin Pasuruan")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("SPB")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("-")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("PO/ON/45/10/21")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("span", { staticClass: "green-text badge" }, [
+                                _vm._v("Pengiriman")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("i", { staticClass: "fas fa-ellipsis-v" })
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("td", [_vm._v("3")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("13-10-2021")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("PT Emiindo Jakarta")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("SPA")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("-")]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v("PO/ON/37/10/21")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("span", { staticClass: "yellow-text badge" }, [
+                                _vm._v("Gudang")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("i", { staticClass: "fas fa-ellipsis-v" })
+                            ])
+                          ])
+                        ])
+                      ])
                     ])
                   ])
-                ])
-              ]),
+                ]
+              ),
               _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-12" }, [
-                  _c("table", { staticClass: "table" }, [
-                    _c("thead", [
-                      _c("tr", [
-                        _c("th", [_vm._v("No")]),
-                        _vm._v(" "),
-                        _c("th", [_vm._v("Tanggal")]),
-                        _vm._v(" "),
-                        _c("th", [_vm._v("Customer")]),
-                        _vm._v(" "),
-                        _c("th", [_vm._v("Jenis")]),
-                        _vm._v(" "),
-                        _c("th", [_vm._v("Nomor AKN")]),
-                        _vm._v(" "),
-                        _c("th", [_vm._v("Nomor PO")]),
-                        _vm._v(" "),
-                        _c("th", [_vm._v("Status")]),
-                        _vm._v(" "),
-                        _c("th", [_vm._v("Aksi")])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tbody", [
-                      _c("tr", [
-                        _c("td", [_vm._v("1")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("28-10-2021")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("RS Soeryadi Kendal")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("E-Catalogue")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("AKN1-79479274207")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("PO/ON/51/10/21")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("span", { staticClass: "red-text badge" }, [
-                            _vm._v("Batal")
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("i", { staticClass: "fas fa-ellipsis-v" })
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("2")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("28-10-2021")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("Pak Amin Pasuruan")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("SPB")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("-")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("PO/ON/45/10/21")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("span", { staticClass: "green-text badge" }, [
-                            _vm._v("Pengiriman")
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("i", { staticClass: "fas fa-ellipsis-v" })
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("3")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("13-10-2021")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("PT Emiindo Jakarta")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("SPA")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("-")]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v("PO/ON/37/10/21")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("span", { staticClass: "yellow-text badge" }, [
-                            _vm._v("Gudang")
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("i", { staticClass: "fas fa-ellipsis-v" })
-                        ])
-                      ])
-                    ])
-                  ])
-                ])
-              ])
-            ])
-          ])
+              _c("div", {
+                staticClass: "tab-pane fade show active card-body",
+                attrs: {
+                  id: "semua-penjualan",
+                  role: "tabpanel",
+                  "aria-labelledby": "semua-penjualan-tab"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", {
+            staticClass: "tab-pane fade show active card-body",
+            attrs: {
+              id: "ekatalog",
+              role: "tabpanel",
+              "aria-labelledby": "ekatalog-tab"
+            }
+          })
         ])
       ])
     ])

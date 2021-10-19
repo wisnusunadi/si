@@ -52,8 +52,13 @@
                         >
                     </li>
                 </ul>
-                <div class="card">
-                    <div class="card-body">
+                <div class="tab-content card" id="myTabContent">
+                    <div
+                        class="tab-pane fade show active card-body"
+                        id="semua-penjualan"
+                        role="tabpanel"
+                        aria-labelledby="semua-penjualan-tab"
+                    >
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right">
@@ -138,7 +143,19 @@
                             </div>
                         </div>
                     </div>
+                    <div
+                        class="tab-pane fade show active card-body"
+                        id="semua-penjualan"
+                        role="tabpanel"
+                        aria-labelledby="semua-penjualan-tab"
+                    ></div>
                 </div>
+                <div
+                    class="tab-pane fade show active card-body"
+                    id="ekatalog"
+                    role="tabpanel"
+                    aria-labelledby="ekatalog-tab"
+                ></div>
             </div>
         </div>
     </div>
