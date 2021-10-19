@@ -79,14 +79,110 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      nama_customer: '',
-      jenis: '',
-      keterangan: '',
-      telepon: '',
-      alamat: ''
+      nama_customer: "",
+      jenis: "",
+      keterangan: "",
+      telepon: "",
+      alamat: ""
     };
   }
 });
@@ -103,6 +199,656 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -664,14 +1410,14 @@ var render = function() {
                               type: "radio",
                               name: "jenis",
                               id: "jenis1",
-                              value: "ekatalog"
+                              value: "distributor"
                             },
                             domProps: {
-                              checked: _vm._q(_vm.jenis, "ekatalog")
+                              checked: _vm._q(_vm.jenis, "distributor")
                             },
                             on: {
                               change: function($event) {
-                                _vm.jenis = "ekatalog"
+                                _vm.jenis = "distributor"
                               }
                             }
                           }),
@@ -708,12 +1454,14 @@ var render = function() {
                               type: "radio",
                               name: "jenis",
                               id: "jenis2",
-                              value: "spa"
+                              value: "perseorangan"
                             },
-                            domProps: { checked: _vm._q(_vm.jenis, "spa") },
+                            domProps: {
+                              checked: _vm._q(_vm.jenis, "perseorangan")
+                            },
                             on: {
                               change: function($event) {
-                                _vm.jenis = "spa"
+                                _vm.jenis = "perseorangan"
                               }
                             }
                           }),
@@ -724,7 +1472,7 @@ var render = function() {
                               staticClass: "form-check-label",
                               attrs: { for: "jenis2" }
                             },
-                            [_vm._v("Pelanggan")]
+                            [_vm._v("Perseorangan")]
                           )
                         ]
                       ),
@@ -733,7 +1481,7 @@ var render = function() {
                         "div",
                         {
                           staticClass:
-                            "form-check form-check-inline  col-form-label"
+                            "form-check form-check-inline col-form-label"
                         },
                         [
                           _c("input", {
@@ -750,12 +1498,14 @@ var render = function() {
                               type: "radio",
                               name: "jenis",
                               id: "jenis3",
-                              value: "spb"
+                              value: "supplier"
                             },
-                            domProps: { checked: _vm._q(_vm.jenis, "spb") },
+                            domProps: {
+                              checked: _vm._q(_vm.jenis, "supplier")
+                            },
                             on: {
                               change: function($event) {
-                                _vm.jenis = "spb"
+                                _vm.jenis = "supplier"
                               }
                             }
                           }),
@@ -766,7 +1516,7 @@ var render = function() {
                               staticClass: "form-check-label",
                               attrs: { for: "jenis3" }
                             },
-                            [_vm._v("Vendor")]
+                            [_vm._v("Supplier")]
                           )
                         ]
                       )
@@ -902,7 +1652,11 @@ var render = function() {
                 _c(
                   "button",
                   { staticClass: "btn btn-danger", attrs: { type: "button" } },
-                  [_vm._v("Batal")]
+                  [
+                    _vm._v(
+                      "\n                            Batal\n                        "
+                    )
+                  ]
                 )
               ])
             ]),
@@ -922,7 +1676,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "float-right" }, [
       _c("button", { staticClass: "btn btn-info", attrs: { type: "button" } }, [
-        _vm._v("Tambah")
+        _vm._v("\n                        Tambah\n                    ")
       ])
     ])
   }
@@ -948,401 +1702,158 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "content" }, [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c(
-              "div",
-              { staticClass: "row", staticStyle: { "margin-bottom": "10px" } },
-              [
-                _c("div", { staticClass: "col-12" }, [
-                  _c(
-                    "span",
-                    { staticClass: "float-right" },
-                    [
-                      _c("router-link", { attrs: { to: { name: "create" } } }, [
-                        _c("button", { staticClass: "btn btn-outline-info" }, [
-                          _vm._v("Tambah")
-                        ])
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _vm._m(0)
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _vm._m(1)
-          ])
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "modaledit",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "modaledit",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
-          [
-            _c(
-              "div",
-              { staticClass: "modal-content", staticStyle: { margin: "10px" } },
-              [
-                _vm._m(2),
-                _vm._v(" "),
-                _c("div", { staticClass: "modal-body" }, [
-                  _c("form", { attrs: { action: "" } }, [
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-lg-12" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "tab-content card", attrs: { id: "myTabContent" } },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "tab-pane fade show active card-body",
+              attrs: {
+                id: "semua-penjualan",
+                role: "tabpanel",
+                "aria-labelledby": "semua-penjualan-tab"
+              }
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "row",
+                  staticStyle: { "margin-bottom": "10px" }
+                },
+                [
+                  _c("div", { staticClass: "col-12" }, [
                     _c(
-                      "div",
-                      { staticClass: "row d-flex justify-content-center" },
+                      "span",
+                      { staticClass: "float-right" },
                       [
-                        _c("div", { staticClass: "col-11" }, [
-                          _c("div", { staticClass: "card" }, [
-                            _c("div", { staticClass: "card-body" }, [
-                              _c("div", { staticClass: "row" }, [
-                                _c("div", { staticClass: "col-12" }, [
-                                  _c("div", { staticClass: "form-group row" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "col-4 col-form-label",
-                                        staticStyle: { "text-align": "right" },
-                                        attrs: { for: "nama_produk" }
-                                      },
-                                      [_vm._v("Nama Customer")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "col-6" }, [
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.nama_customer,
-                                            expression: "nama_customer"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: {
-                                          type: "text",
-                                          placeholder: "Masukkan Nama Customer"
-                                        },
-                                        domProps: { value: _vm.nama_customer },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.nama_customer =
-                                              $event.target.value
-                                          }
-                                        }
-                                      })
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "form-group row" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "col-4 col-form-label",
-                                        staticStyle: { "text-align": "right" },
-                                        attrs: { for: "nama_produk" }
-                                      },
-                                      [_vm._v("Jenis")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "col-8" }, [
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "form-check form-check-inline  col-form-label"
-                                        },
-                                        [
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: _vm.jenis,
-                                                expression: "jenis"
-                                              }
-                                            ],
-                                            staticClass: "form-check-input",
-                                            attrs: {
-                                              type: "radio",
-                                              name: "jenis",
-                                              id: "jenis1",
-                                              value: "ekatalog"
-                                            },
-                                            domProps: {
-                                              checked: _vm._q(
-                                                _vm.jenis,
-                                                "ekatalog"
-                                              )
-                                            },
-                                            on: {
-                                              change: function($event) {
-                                                _vm.jenis = "ekatalog"
-                                              }
-                                            }
-                                          }),
-                                          _vm._v(" "),
-                                          _c(
-                                            "label",
-                                            {
-                                              staticClass: "form-check-label",
-                                              attrs: { for: "jenis1" }
-                                            },
-                                            [_vm._v("Distributor")]
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "form-check form-check-inline  col-form-label"
-                                        },
-                                        [
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: _vm.jenis,
-                                                expression: "jenis"
-                                              }
-                                            ],
-                                            staticClass: "form-check-input",
-                                            attrs: {
-                                              type: "radio",
-                                              name: "jenis",
-                                              id: "jenis2",
-                                              value: "spa"
-                                            },
-                                            domProps: {
-                                              checked: _vm._q(_vm.jenis, "spa")
-                                            },
-                                            on: {
-                                              change: function($event) {
-                                                _vm.jenis = "spa"
-                                              }
-                                            }
-                                          }),
-                                          _vm._v(" "),
-                                          _c(
-                                            "label",
-                                            {
-                                              staticClass: "form-check-label",
-                                              attrs: { for: "jenis2" }
-                                            },
-                                            [_vm._v("Pelanggan")]
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "form-check form-check-inline  col-form-label"
-                                        },
-                                        [
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: _vm.jenis,
-                                                expression: "jenis"
-                                              }
-                                            ],
-                                            staticClass: "form-check-input",
-                                            attrs: {
-                                              type: "radio",
-                                              name: "jenis",
-                                              id: "jenis3",
-                                              value: "spb"
-                                            },
-                                            domProps: {
-                                              checked: _vm._q(_vm.jenis, "spb")
-                                            },
-                                            on: {
-                                              change: function($event) {
-                                                _vm.jenis = "spb"
-                                              }
-                                            }
-                                          }),
-                                          _vm._v(" "),
-                                          _c(
-                                            "label",
-                                            {
-                                              staticClass: "form-check-label",
-                                              attrs: { for: "jenis3" }
-                                            },
-                                            [_vm._v("Vendor")]
-                                          )
-                                        ]
-                                      )
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "form-group row" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "col-4 col-form-label",
-                                        staticStyle: { "text-align": "right" },
-                                        attrs: { for: "alamat" }
-                                      },
-                                      [_vm._v("Alamat")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "col-8" }, [
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.alamat,
-                                            expression: "alamat"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: {
-                                          type: "text",
-                                          placeholder: "Masukkan Alamat"
-                                        },
-                                        domProps: { value: _vm.alamat },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.alamat = $event.target.value
-                                          }
-                                        }
-                                      })
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "form-group row" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "col-4 col-form-label",
-                                        staticStyle: { "text-align": "right" },
-                                        attrs: { for: "telepon" }
-                                      },
-                                      [_vm._v("No Telp")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "col-5" }, [
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.telepon,
-                                            expression: "telepon"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: {
-                                          type: "text",
-                                          pattern: "[7-9]{1}[0-9]{9}",
-                                          value: "",
-                                          placeholder: "Masukkan Telepon"
-                                        },
-                                        domProps: { value: _vm.telepon },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.telepon = $event.target.value
-                                          }
-                                        }
-                                      })
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "form-group row" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "col-4 col-form-label",
-                                        staticStyle: { "text-align": "right" },
-                                        attrs: { for: "telepon" }
-                                      },
-                                      [_vm._v("Keterangan")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "col-5" }, [
-                                      _c("textarea", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.keterangan,
-                                            expression: "keterangan"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: {
-                                          name: "keterangan",
-                                          id: "keterangan"
-                                        },
-                                        domProps: { value: _vm.keterangan },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.keterangan = $event.target.value
-                                          }
-                                        }
-                                      })
-                                    ])
-                                  ])
-                                ])
-                              ])
-                            ])
-                          ])
-                        ])
-                      ]
-                    )
+                        _c(
+                          "router-link",
+                          { attrs: { to: { name: "create" } } },
+                          [
+                            _c(
+                              "button",
+                              { staticClass: "btn btn-outline-info" },
+                              [
+                                _vm._v(
+                                  "\n                                    Tambah\n                                "
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _vm._m(1)
                   ])
-                ]),
-                _vm._v(" "),
-                _vm._m(3)
-              ]
-            )
-          ]
-        )
-      ]
-    )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(2)
+            ]
+          ),
+          _vm._v(" "),
+          _vm._m(3),
+          _vm._v(" "),
+          _vm._m(4),
+          _vm._v(" "),
+          _vm._m(5)
+        ]
+      )
+    ])
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "ul",
+      { staticClass: "nav nav-tabs", attrs: { id: "myTab", role: "tablist" } },
+      [
+        _c("li", { staticClass: "nav-item", attrs: { role: "presentation" } }, [
+          _c(
+            "a",
+            {
+              staticClass: "nav-link active",
+              attrs: {
+                id: "semua-penjualan-tab",
+                "data-toggle": "tab",
+                href: "#semua-penjualan",
+                role: "tab",
+                "aria-controls": "semua-penjualan",
+                "aria-selected": "true"
+              }
+            },
+            [_vm._v("Penjualan")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "nav-item", attrs: { role: "presentation" } }, [
+          _c(
+            "a",
+            {
+              staticClass: "nav-link",
+              attrs: {
+                id: "ekatalog-tab",
+                "data-toggle": "tab",
+                href: "#ekatalog",
+                role: "tab",
+                "aria-controls": "ekatalog",
+                "aria-selected": "false"
+              }
+            },
+            [_vm._v("E-Catalogue")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "nav-item", attrs: { role: "presentation" } }, [
+          _c(
+            "a",
+            {
+              staticClass: "nav-link",
+              attrs: {
+                id: "spa-tab",
+                "data-toggle": "tab",
+                href: "#spa",
+                role: "tab",
+                "aria-controls": "spa",
+                "aria-selected": "false"
+              }
+            },
+            [_vm._v("SPA")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "nav-item", attrs: { role: "presentation" } }, [
+          _c(
+            "a",
+            {
+              staticClass: "nav-link",
+              attrs: {
+                id: "spb-tab",
+                "data-toggle": "tab",
+                href: "#spb",
+                role: "tab",
+                "aria-controls": "spb",
+                "aria-selected": "false"
+              }
+            },
+            [_vm._v("SPB")]
+          )
+        ])
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -1356,159 +1867,342 @@ var staticRenderFns = [
             type: "button",
             "data-toggle": "dropdown",
             "aria-haspopup": "true",
-            "aria-expanded": "false"
+            "aria-expanded": "false",
+            id: "filterpenjualan"
           }
         },
-        [_vm._v("Filter")]
+        [
+          _vm._v(
+            "\n                                Filter\n                            "
+          )
+        ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "dropdown-menu" }, [
+      _c(
+        "div",
+        {
+          staticClass: "dropdown-menu",
+          attrs: { "aria-labelledby": "filterpenjualan" }
+        },
+        [
+          _c(
+            "form",
+            { staticClass: "px-4", staticStyle: { "white-space": "nowrap" } },
+            [
+              _c("div", { staticClass: "dropdown-header" }, [
+                _vm._v(
+                  "\n                                        Jenis\n                                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", id: "dropdownJenis" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "dropdownJenis" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                                Distributor\n                                            "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", id: "dropdownJenis" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "dropdownJenis" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                                Perseorangan\n                                            "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", id: "dropdownJenis" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "dropdownJenis" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                                Supplier\n                                            "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "dropdown-header" }, [
+                _vm._v(
+                  "\n                                        Status\n                                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", id: "dropdownStatus" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "dropdownStatus" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                                E-Catalogue\n                                            "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", id: "dropdownStatus" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "dropdownStatus" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                                SPA\n                                            "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", id: "dropdownStatus" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "dropdownStatus" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                                SPB\n                                            "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c(
+                  "button",
+                  { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                  [
+                    _vm._v(
+                      "\n                                            Cari\n                                        "
+                    )
+                  ]
+                )
+              ])
+            ]
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12" }, [
         _c(
-          "form",
-          { staticClass: "px-4", staticStyle: { "white-space": "nowrap" } },
+          "table",
+          { staticClass: "table table-hover", attrs: { id: "penjualantable" } },
           [
-            _c("div", { staticClass: "dropdown-header" }, [_vm._v("Jenis")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "form-check" }, [
-                _c("input", {
-                  staticClass: "form-check-input",
-                  attrs: { type: "checkbox", id: "dropdownJenis" }
-                }),
+            _c("thead", { staticStyle: { "text-align": "center" } }, [
+              _c("tr", [
+                _c("th", [_vm._v("No")]),
                 _vm._v(" "),
-                _c(
-                  "label",
-                  {
-                    staticClass: "form-check-label",
-                    attrs: { for: "dropdownJenis" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                                                Distributor\n                                            "
-                    )
-                  ]
-                )
+                _c("th", [_vm._v("Nama")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Alamat")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Telp")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Keterangan")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Aksi")])
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "form-check" }, [
-                _c("input", {
-                  staticClass: "form-check-input",
-                  attrs: { type: "checkbox", id: "dropdownJenis" }
-                }),
+            _c("tbody", [
+              _c("tr", [
+                _c("td", [_vm._v("1")]),
                 _vm._v(" "),
-                _c(
-                  "label",
-                  {
-                    staticClass: "form-check-label",
-                    attrs: { for: "dropdownJenis" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                                                Pelanggan\n                                            "
-                    )
-                  ]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "form-check" }, [
-                _c("input", {
-                  staticClass: "form-check-input",
-                  attrs: { type: "checkbox", id: "dropdownJenis" }
-                }),
+                _c("td", [_vm._v("PT Dakai")]),
                 _vm._v(" "),
-                _c(
-                  "label",
-                  {
-                    staticClass: "form-check-label",
-                    attrs: { for: "dropdownJenis" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                                                Vendor\n                                            "
-                    )
-                  ]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "dropdown-header" }, [_vm._v("Status")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "form-check" }, [
-                _c("input", {
-                  staticClass: "form-check-input",
-                  attrs: { type: "checkbox", id: "dropdownStatus" }
-                }),
+                _c("td", [
+                  _vm._v(
+                    "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                  )
+                ]),
                 _vm._v(" "),
-                _c(
-                  "label",
-                  {
-                    staticClass: "form-check-label",
-                    attrs: { for: "dropdownStatus" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                                                E-Catalogue\n                                            "
-                    )
-                  ]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "form-check" }, [
-                _c("input", {
-                  staticClass: "form-check-input",
-                  attrs: { type: "checkbox", id: "dropdownStatus" }
-                }),
+                _c("td", [_vm._v("08181828384")]),
                 _vm._v(" "),
-                _c(
-                  "label",
-                  {
-                    staticClass: "form-check-label",
-                    attrs: { for: "dropdownStatus" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                                                SPA\n                                            "
-                    )
-                  ]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "form-check" }, [
-                _c("input", {
-                  staticClass: "form-check-input",
-                  attrs: { type: "checkbox", id: "dropdownStatus" }
-                }),
+                _c("td", [_vm._v("-")]),
                 _vm._v(" "),
-                _c(
-                  "label",
-                  {
-                    staticClass: "form-check-label",
-                    attrs: { for: "dropdownStatus" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                                                SPB\n                                            "
-                    )
-                  ]
-                )
+                _c("td", [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "dropdown-toggle",
+                      attrs: {
+                        "data-toggle": "dropdown",
+                        id: "dropdownMenuButton",
+                        "aria-haspopup": "true",
+                        "aria-expanded": "false"
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "dropdown-menu",
+                      attrs: { "aria-labelledby": "dropdownMenuButton" }
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          attrs: {
+                            "data-toggle": "modal",
+                            "data-target": "#modaldetail"
+                          }
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { type: "button" }
+                            },
+                            [
+                              _c("i", { staticClass: "fas fa-search" }),
+                              _vm._v(
+                                "\n                                                    Detail\n                                                "
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: {
+                            "data-toggle": "modal",
+                            "data-target": "#modaledit"
+                          }
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { type: "button" }
+                            },
+                            [
+                              _c("i", { staticClass: "fas fa-pencil-alt" }),
+                              _vm._v(
+                                "\n                                                    Edit\n                                                "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("td", [_vm._v("2")]),
+                _vm._v(" "),
+                _c("td", [_vm._v("PT Dakai")]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v("08181828384")]),
+                _vm._v(" "),
+                _c("td", [_vm._v("-")]),
+                _vm._v(" "),
+                _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("td", [_vm._v("3")]),
+                _vm._v(" "),
+                _c("td", [_vm._v("PT Dakai")]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v("08181828384")]),
+                _vm._v(" "),
+                _c("td", [_vm._v("-")]),
+                _vm._v(" "),
+                _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
               ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "button",
-                { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-                [_vm._v("Cari")]
-              )
             ])
           ]
         )
@@ -1519,205 +2213,914 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _c("table", { staticClass: "table table-hover" }, [
-          _c("thead", { staticStyle: { "text-align": "center" } }, [
-            _c("tr", [
-              _c("th", [_vm._v("No")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Nama")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Jenis")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Alamat")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Telp")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Keterangan")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Status")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Aksi")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v("1")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("PT Dakai")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Distributor")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Jl. Tambak Osowilangun A7 Benowo")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("08181828384")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("-")]),
-              _vm._v(" "),
-              _c("td", [
-                _c("span", { staticClass: "badge blue-text" }, [
-                  _vm._v("E-Catalogue")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("td", [
+    return _c(
+      "div",
+      {
+        staticClass: "tab-pane fade card-body",
+        attrs: {
+          id: "ekatalog",
+          role: "tabpanel",
+          "aria-labelledby": "ekatalog-tab"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "row", staticStyle: { "margin-bottom": "10px" } },
+          [
+            _c("div", { staticClass: "col-12" }, [
+              _c("span", { staticClass: "dropdown float-right" }, [
                 _c(
-                  "div",
+                  "button",
                   {
-                    staticClass: "dropdown-toggle",
+                    staticClass: "btn btn-outline-secondary dropdown-toggle",
                     attrs: {
+                      type: "button",
                       "data-toggle": "dropdown",
-                      id: "dropdownMenuButton",
                       "aria-haspopup": "true",
-                      "aria-expanded": "false"
+                      "aria-expanded": "false",
+                      id: "filterekatalog"
                     }
                   },
-                  [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                  [
+                    _vm._v(
+                      "\n                                Filter\n                            "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c(
                   "div",
                   {
                     staticClass: "dropdown-menu",
-                    attrs: { "aria-labelledby": "dropdownMenuButton" }
+                    attrs: { "aria-labelledby": "filterekatalog" }
                   },
                   [
                     _c(
-                      "a",
+                      "form",
                       {
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#modaldetail"
-                        }
+                        staticClass: "px-4",
+                        staticStyle: { "white-space": "nowrap" }
                       },
                       [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { type: "button" }
-                          },
-                          [
-                            _c("i", { staticClass: "fas fa-search" }),
-                            _vm._v(
-                              " Detail\n                                                    "
+                        _c("div", { staticClass: "dropdown-header" }, [
+                          _vm._v(
+                            "\n                                        Jenis\n                                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Distributor\n                                            "
+                                )
+                              ]
                             )
-                          ]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#modaledit"
-                        }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { type: "button" }
-                          },
-                          [
-                            _c("i", { staticClass: "fas fa-pencil-alt" }),
-                            _vm._v(
-                              " Edit\n                                                    "
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Perseorangan\n                                            "
+                                )
+                              ]
                             )
-                          ]
-                        )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Supplier\n                                            "
+                                )
+                              ]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "submit" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                            Cari\n                                        "
+                              )
+                            ]
+                          )
+                        ])
                       ]
                     )
                   ]
                 )
               ])
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("td", [_vm._v("2")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("PT Dakai")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Distributor")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Jl. Tambak Osowilangun A7 Benowo")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("08181828384")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("-")]),
-              _vm._v(" "),
-              _c("td", [
-                _c("span", { staticClass: "badge purple-text" }, [
-                  _vm._v("SPA")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("td", [_vm._v("3")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("PT Dakai")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Distributor")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Jl. Tambak Osowilangun A7 Benowo")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("08181828384")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("-")]),
-              _vm._v(" "),
-              _c("td", [
-                _c("span", { staticClass: "badge orange-text" }, [
-                  _vm._v("SPB")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
             ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12" }, [
+            _c(
+              "table",
+              {
+                staticClass: "table table-hover",
+                attrs: { id: "ekatalogtable" }
+              },
+              [
+                _c("thead", { staticStyle: { "text-align": "center" } }, [
+                  _c("tr", [
+                    _c("th", [_vm._v("No")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Nama")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Alamat")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Telp")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Keterangan")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Aksi")])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tbody", [
+                  _c("tr", [
+                    _c("td", [_vm._v("1")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-toggle",
+                          attrs: {
+                            "data-toggle": "dropdown",
+                            id: "dropdownMenuButton",
+                            "aria-haspopup": "true",
+                            "aria-expanded": "false"
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu",
+                          attrs: { "aria-labelledby": "dropdownMenuButton" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                "data-toggle": "modal",
+                                "data-target": "#modaldetail"
+                              }
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: { type: "button" }
+                                },
+                                [
+                                  _c("i", { staticClass: "fas fa-search" }),
+                                  _vm._v(
+                                    "\n                                                    Detail\n                                                "
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                "data-toggle": "modal",
+                                "data-target": "#modaledit"
+                              }
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: { type: "button" }
+                                },
+                                [
+                                  _c("i", { staticClass: "fas fa-pencil-alt" }),
+                                  _vm._v(
+                                    "\n                                                    Edit\n                                                "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("2")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("3")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
+                  ])
+                ])
+              ]
+            )
           ])
         ])
-      ])
-    ])
+      ]
+    )
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header bg-warning" }, [
-      _c("h4", [_vm._v("Edit")])
-    ])
+    return _c(
+      "div",
+      {
+        staticClass: "tab-pane fade card-body",
+        attrs: { id: "spa", role: "tabpanel", "aria-labelledby": "spa-tab" }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "row", staticStyle: { "margin-bottom": "10px" } },
+          [
+            _c("div", { staticClass: "col-12" }, [
+              _c("span", { staticClass: "dropdown float-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-secondary dropdown-toggle",
+                    attrs: {
+                      type: "button",
+                      "data-toggle": "dropdown",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false",
+                      id: "filterspa"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                Filter\n                            "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-menu",
+                    attrs: { "aria-labelledby": "filterspa" }
+                  },
+                  [
+                    _c(
+                      "form",
+                      {
+                        staticClass: "px-4",
+                        staticStyle: { "white-space": "nowrap" }
+                      },
+                      [
+                        _c("div", { staticClass: "dropdown-header" }, [
+                          _vm._v(
+                            "\n                                        Jenis\n                                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Distributor\n                                            "
+                                )
+                              ]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Perseorangan\n                                            "
+                                )
+                              ]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Supplier\n                                            "
+                                )
+                              ]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "submit" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                            Cari\n                                        "
+                              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12" }, [
+            _c(
+              "table",
+              { staticClass: "table table-hover", attrs: { id: "spatable" } },
+              [
+                _c("thead", { staticStyle: { "text-align": "center" } }, [
+                  _c("tr", [
+                    _c("th", [_vm._v("No")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Nama")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Alamat")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Telp")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Keterangan")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Aksi")])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tbody", [
+                  _c("tr", [
+                    _c("td", [_vm._v("1")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-toggle",
+                          attrs: {
+                            "data-toggle": "dropdown",
+                            id: "dropdownMenuButton",
+                            "aria-haspopup": "true",
+                            "aria-expanded": "false"
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu",
+                          attrs: { "aria-labelledby": "dropdownMenuButton" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                "data-toggle": "modal",
+                                "data-target": "#modaldetail"
+                              }
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: { type: "button" }
+                                },
+                                [
+                                  _c("i", { staticClass: "fas fa-search" }),
+                                  _vm._v(
+                                    "\n                                                    Detail\n                                                "
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                "data-toggle": "modal",
+                                "data-target": "#modaledit"
+                              }
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: { type: "button" }
+                                },
+                                [
+                                  _c("i", { staticClass: "fas fa-pencil-alt" }),
+                                  _vm._v(
+                                    "\n                                                    Edit\n                                                "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("2")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("3")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
+                  ])
+                ])
+              ]
+            )
+          ])
+        ])
+      ]
+    )
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c("span", { staticClass: "float-left" }, [
+    return _c(
+      "div",
+      {
+        staticClass: "tab-pane fade card-body",
+        attrs: { id: "spb", role: "tabpanel", "aria-labelledby": "spb-tab" }
+      },
+      [
         _c(
-          "button",
-          {
-            staticClass: "btn btn-danger",
-            attrs: { type: "button", "data-dismiss": "modal" }
-          },
-          [_vm._v("Batal")]
-        )
-      ]),
-      _vm._v(" "),
-      _c("span", { staticClass: "float-right" }, [
-        _c(
-          "button",
-          { staticClass: "btn btn-warning", attrs: { type: "button" } },
-          [_vm._v("Simpan")]
-        )
-      ])
-    ])
+          "div",
+          { staticClass: "row", staticStyle: { "margin-bottom": "10px" } },
+          [
+            _c("div", { staticClass: "col-12" }, [
+              _c("span", { staticClass: "dropdown float-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-secondary dropdown-toggle",
+                    attrs: {
+                      type: "button",
+                      "data-toggle": "dropdown",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false",
+                      id: "filterspb"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                                Filter\n                            "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-menu",
+                    attrs: { "aria-labelledby": "filterspb" }
+                  },
+                  [
+                    _c(
+                      "form",
+                      {
+                        staticClass: "px-4",
+                        staticStyle: { "white-space": "nowrap" }
+                      },
+                      [
+                        _c("div", { staticClass: "dropdown-header" }, [
+                          _vm._v(
+                            "\n                                        Jenis\n                                    "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Distributor\n                                            "
+                                )
+                              ]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Perseorangan\n                                            "
+                                )
+                              ]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("div", { staticClass: "form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox", id: "dropdownJenis" }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-check-label",
+                                attrs: { for: "dropdownJenis" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                                Supplier\n                                            "
+                                )
+                              ]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "submit" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                            Cari\n                                        "
+                              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12" }, [
+            _c(
+              "table",
+              { staticClass: "table table-hover", attrs: { id: "spbtable" } },
+              [
+                _c("thead", { staticStyle: { "text-align": "center" } }, [
+                  _c("tr", [
+                    _c("th", [_vm._v("No")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Nama")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Alamat")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Telp")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Keterangan")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Aksi")])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tbody", [
+                  _c("tr", [
+                    _c("td", [_vm._v("1")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-toggle",
+                          attrs: {
+                            "data-toggle": "dropdown",
+                            id: "dropdownMenuButton",
+                            "aria-haspopup": "true",
+                            "aria-expanded": "false"
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu",
+                          attrs: { "aria-labelledby": "dropdownMenuButton" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                "data-toggle": "modal",
+                                "data-target": "#modaldetail"
+                              }
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: { type: "button" }
+                                },
+                                [
+                                  _c("i", { staticClass: "fas fa-search" }),
+                                  _vm._v(
+                                    "\n                                                    Detail\n                                                "
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                "data-toggle": "modal",
+                                "data-target": "#modaledit"
+                              }
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: { type: "button" }
+                                },
+                                [
+                                  _c("i", { staticClass: "fas fa-pencil-alt" }),
+                                  _vm._v(
+                                    "\n                                                    Edit\n                                                "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("2")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("3")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("PT Dakai")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                                        Jl. Tambak Osowilangun A7 Benowo\n                                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("08181828384")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("-")]),
+                    _vm._v(" "),
+                    _c("td", [_c("i", { staticClass: "fas fa-ellipsis-v" })])
+                  ])
+                ])
+              ]
+            )
+          ])
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true
