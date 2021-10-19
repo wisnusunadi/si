@@ -101,17 +101,45 @@
                       </label>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="sp_kelompok"
-                        value="aksesoris"
-                      />
-                      <label class="form-check-label" for="sp_kelompok">
-                        Aksesoris
-                      </label>
+                  <div
+                    class="tab-pane fade card-body"
+                    id="produk"
+                    role="tabpanel"
+                    aria-labelledby="produk-tab"
+                  >
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="form-horizontal">
+                          <div class="form-group row">
+                            <div
+                              class="col-sm-5 col-form-label"
+                              style="text-align: right"
+                            >
+                              Produk
+                            </div>
+                            <div class="col-sm-7">
+                              <div class="select2-info">
+                                <select
+                                  class="
+                                    select2
+                                    custom-select
+                                    form-control
+                                    produk
+                                  "
+                                  data-dropdown-css-class="select2-info"
+                                  style="width: 40%"
+                                  name="produk"
+                                  id="produk"
+                                >
+                                  <option value="tes">Tes</option>
+                                  <option value="erp">ERP</option>
+                                  <option value="spa">SPA</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group">
@@ -465,6 +493,8 @@
 <script>
 import axios from "axios";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import "select2";
+import "select2/dist/css/select2.css";
 
 export default {
   mounted: function () {

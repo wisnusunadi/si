@@ -23,17 +23,6 @@
                                             <input type="text" class="form-control" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="Masukkan Harga" v-model="harga">
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="foto" class="col-4 col-form-label" style="text-align:right;">Gambar</label>
-                                        <div class="col-6">
-                                            <div class="row">
-                                            <input type="file" class="form-control" placeholder="Masukkan Foto" accept="image/jpeg" @change="uploadgambar">
-                                            </div>
-                                            <div class="row">
-                                                <img src="previewImage" class="uploading-image" />
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
