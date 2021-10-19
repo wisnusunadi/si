@@ -135,6 +135,96 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     $("#table").DataTable({
@@ -150,9 +240,9 @@ __webpack_require__.r(__webpack_exports__);
         data: null,
         render: function render(data) {
           if (data.batas_kontrak > 3) {
-            return '<span style="color:#FFC700;"><b>' + data.batas_kontrak + ' Hari Lagi</b></span>';
+            return '<span style="color:#FFC700;"><b>' + data.batas_kontrak + " Hari Lagi</b></span>";
           } else if (data.batas_kontrak <= 3) {
-            return '<span style="color:red;"><b>' + data.batas_kontrak + ' Hari Lagi</b></span>';
+            return '<span style="color:red;"><b>' + data.batas_kontrak + " Hari Lagi</b></span>";
           } else {
             return data.batas_kontrak;
           }
@@ -169,11 +259,11 @@ __webpack_require__.r(__webpack_exports__);
         data: null,
         render: function render(data) {
           if (data.status_no_seri == "selesai") {
-            return '<span class="badge green-text">' + data.status_no_seri + '</span>';
+            return '<span class="badge green-text">' + data.status_no_seri + "</span>";
           } else if (data.status_no_seri == "sebagian diinput") {
-            return '<span class="badge yellow-text">' + data.status_no_seri + '</span>';
+            return '<span class="badge yellow-text">' + data.status_no_seri + "</span>";
           } else if (data.status_no_seri == "belum diinput") {
-            return '<span class="badge red-text">' + data.status_no_seri + '</span>';
+            return '<span class="badge red-text">' + data.status_no_seri + "</span>";
           }
         },
         orderable: false,
@@ -2349,7 +2439,7 @@ var render = function() {
                                   },
                                   [
                                     _c("i", { staticClass: "fas fa-search" }),
-                                    _vm._v(" Detail")
+                                    _vm._v(" Detail\n                        ")
                                   ]
                                 )
                               ]
@@ -2399,7 +2489,7 @@ var render = function() {
                                   },
                                   [
                                     _c("i", { staticClass: "fas fa-search" }),
-                                    _vm._v(" Detail")
+                                    _vm._v(" Detail\n                        ")
                                   ]
                                 )
                               ]
@@ -2449,7 +2539,7 @@ var render = function() {
                                   },
                                   [
                                     _c("i", { staticClass: "fas fa-search" }),
-                                    _vm._v(" Detail")
+                                    _vm._v(" Detail\n                        ")
                                   ]
                                 )
                               ]
@@ -2492,11 +2582,7 @@ var staticRenderFns = [
                   "aria-expanded": "false"
                 }
               },
-              [
-                _vm._v(
-                  "\n                                Filter\n                            "
-                )
-              ]
+              [_vm._v("\n                Filter\n              ")]
             ),
             _vm._v(" "),
             _c(
@@ -2530,7 +2616,7 @@ var staticRenderFns = [
                       },
                       [
                         _vm._v(
-                          "\n                                            Selesai\n                                        "
+                          "\n                      Selesai\n                    "
                         )
                       ]
                     )
@@ -2556,7 +2642,7 @@ var staticRenderFns = [
                       },
                       [
                         _vm._v(
-                          "\n                                            Sebagian diinput\n                                        "
+                          "\n                      Sebagian diinput\n                    "
                         )
                       ]
                     )
@@ -2582,7 +2668,7 @@ var staticRenderFns = [
                       },
                       [
                         _vm._v(
-                          "\n                                            Belum diinput\n                                        "
+                          "\n                      Belum diinput\n                    "
                         )
                       ]
                     )
@@ -2612,7 +2698,7 @@ var staticRenderFns = [
                       },
                       [
                         _vm._v(
-                          "\n                                            Lebih dari 3 Hari\n                                        "
+                          "\n                      Lebih dari 3 Hari\n                    "
                         )
                       ]
                     )
@@ -2638,7 +2724,7 @@ var staticRenderFns = [
                       },
                       [
                         _vm._v(
-                          "\n                                            Kurang dari 3 Hari\n                                        "
+                          "\n                      Kurang dari 3 Hari\n                    "
                         )
                       ]
                     )
@@ -2720,7 +2806,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("td", [
-      _c("span", { staticStyle: { color: "#FFC700" } }, [
+      _c("span", { staticStyle: { color: "#ffc700" } }, [
         _c("b", [_vm._v("17-10-2021")])
       ])
     ])

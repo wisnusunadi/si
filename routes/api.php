@@ -38,7 +38,7 @@ Route::prefix('/ppic')->group(function () {
 
 Route::prefix('/customer')->group(function () {
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
-    Route::get('create', [App\Http\Controllers\MasterController::class, 'create_customer']);
+    Route::post('create', [App\Http\Controllers\MasterController::class, 'create_customer']);
     Route::get('update', [App\Http\Controllers\MasterController::class, 'update_customer']);
     Route::get('delete', [App\Http\Controllers\MasterController::class, 'delete_customer']);
     Route::get('delete', [App\Http\Controllers\MasterController::class, 'delete_customer']);
