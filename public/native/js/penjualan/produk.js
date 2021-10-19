@@ -220,6 +220,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var datatables_net_bs4_css_dataTables_bootstrap4_min_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! datatables.net-bs4/css/dataTables.bootstrap4.min.css */ "./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css");
 //
 //
 //
@@ -743,226 +744,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  mounted: function mounted() {
+    this.semuaproduk();
+  },
+  methods: {
+    semuaproduk: function semuaproduk() {
+      $("#penjualan_produk").DataTable({
+        ajax: "/api/penjualan_produk/data",
+        processing: true,
+        serverSide: true,
+        columns: [{
+          data: "DT_RowIndex",
+          orderable: false,
+          searchable: false
+        }, {
+          data: "nama"
+        }, {
+          data: "nama"
+        }, {
+          data: "harga",
+          render: $.fn.dataTable.render.number(",", ".", 2),
+          orderable: false,
+          searchable: false
+        }, {
+          data: null,
+          render: function render(data) {
+            return "<div\n                          class=\"dropdown-toggle\"\n                          data-toggle=\"dropdown\"\n                          id=\"dropdownMenuButton\"\n                          aria-haspopup=\"true\"\n                          aria-expanded=\"false\"\n                        >\n                          <i class=\"fas fa-ellipsis-v\"></i>\n                        </div>\n                        <div\n                          class=\"dropdown-menu\"\n                          aria-labelledby=\"dropdownMenuButton\"\n                        >\n                          <a data-toggle=\"modal\" data-target=\"#modaldetail\"\n                            ><button class=\"dropdown-item\" type=\"button\">\n                              <i class=\"fas fa-search\"></i>\n                              Detail\n                            </button></a\n                          >\n                          <a data-toggle=\"modal\" data-target=\"#modaledit\"\n                            ><button class=\"dropdown-item\" type=\"button\">\n                              <i class=\"fas fa-pencil-alt\"></i>\n                              Edit\n                            </button></a\n                          >\n                        </div>";
+          },
+          orderable: false,
+          searchable: false
+        }]
+      });
+    }
+  },
   data: function data() {
     return {
       hargaedit: "",
@@ -1033,6 +849,29 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]({
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css ***!
+  \***********************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "td.dt-control{background:url(\"https://www.datatables.net/examples/resources/details_open.png\") no-repeat center center;cursor:pointer}tr.dt-hasChild td.dt-control{background:url(\"https://www.datatables.net/examples/resources/details_close.png\") no-repeat center center}table.dataTable th.dt-left,table.dataTable td.dt-left{text-align:left}table.dataTable th.dt-center,table.dataTable td.dt-center,table.dataTable td.dataTables_empty{text-align:center}table.dataTable th.dt-right,table.dataTable td.dt-right{text-align:right}table.dataTable th.dt-justify,table.dataTable td.dt-justify{text-align:justify}table.dataTable th.dt-nowrap,table.dataTable td.dt-nowrap{white-space:nowrap}table.dataTable thead th.dt-head-left,table.dataTable thead td.dt-head-left,table.dataTable tfoot th.dt-head-left,table.dataTable tfoot td.dt-head-left{text-align:left}table.dataTable thead th.dt-head-center,table.dataTable thead td.dt-head-center,table.dataTable tfoot th.dt-head-center,table.dataTable tfoot td.dt-head-center{text-align:center}table.dataTable thead th.dt-head-right,table.dataTable thead td.dt-head-right,table.dataTable tfoot th.dt-head-right,table.dataTable tfoot td.dt-head-right{text-align:right}table.dataTable thead th.dt-head-justify,table.dataTable thead td.dt-head-justify,table.dataTable tfoot th.dt-head-justify,table.dataTable tfoot td.dt-head-justify{text-align:justify}table.dataTable thead th.dt-head-nowrap,table.dataTable thead td.dt-head-nowrap,table.dataTable tfoot th.dt-head-nowrap,table.dataTable tfoot td.dt-head-nowrap{white-space:nowrap}table.dataTable tbody th.dt-body-left,table.dataTable tbody td.dt-body-left{text-align:left}table.dataTable tbody th.dt-body-center,table.dataTable tbody td.dt-body-center{text-align:center}table.dataTable tbody th.dt-body-right,table.dataTable tbody td.dt-body-right{text-align:right}table.dataTable tbody th.dt-body-justify,table.dataTable tbody td.dt-body-justify{text-align:justify}table.dataTable tbody th.dt-body-nowrap,table.dataTable tbody td.dt-body-nowrap{white-space:nowrap}table.dataTable{clear:both;margin-top:6px !important;margin-bottom:6px !important;max-width:none !important;border-collapse:separate !important;border-spacing:0}table.dataTable td,table.dataTable th{box-sizing:content-box}table.dataTable td.dataTables_empty,table.dataTable th.dataTables_empty{text-align:center}table.dataTable.nowrap th,table.dataTable.nowrap td{white-space:nowrap}div.dataTables_wrapper div.dataTables_length label{font-weight:normal;text-align:left;white-space:nowrap}div.dataTables_wrapper div.dataTables_length select{width:auto;display:inline-block}div.dataTables_wrapper div.dataTables_filter{text-align:right}div.dataTables_wrapper div.dataTables_filter label{font-weight:normal;white-space:nowrap;text-align:left}div.dataTables_wrapper div.dataTables_filter input{margin-left:.5em;display:inline-block;width:auto}div.dataTables_wrapper div.dataTables_info{padding-top:.85em}div.dataTables_wrapper div.dataTables_paginate{margin:0;white-space:nowrap;text-align:right}div.dataTables_wrapper div.dataTables_paginate ul.pagination{margin:2px 0;white-space:nowrap;justify-content:flex-end}div.dataTables_wrapper div.dataTables_processing{position:absolute;top:50%;left:50%;width:200px;margin-left:-100px;margin-top:-26px;text-align:center;padding:1em 0}table.dataTable>thead>tr>th:active,table.dataTable>thead>tr>td:active{outline:none}table.dataTable>thead>tr>th:not(.sorting_disabled),table.dataTable>thead>tr>td:not(.sorting_disabled){padding-right:30px}table.dataTable>thead .sorting,table.dataTable>thead .sorting_asc,table.dataTable>thead .sorting_desc,table.dataTable>thead .sorting_asc_disabled,table.dataTable>thead .sorting_desc_disabled{cursor:pointer;position:relative}table.dataTable>thead .sorting:before,table.dataTable>thead .sorting:after,table.dataTable>thead .sorting_asc:before,table.dataTable>thead .sorting_asc:after,table.dataTable>thead .sorting_desc:before,table.dataTable>thead .sorting_desc:after,table.dataTable>thead .sorting_asc_disabled:before,table.dataTable>thead .sorting_asc_disabled:after,table.dataTable>thead .sorting_desc_disabled:before,table.dataTable>thead .sorting_desc_disabled:after{position:absolute;bottom:.9em;display:block;opacity:.3}table.dataTable>thead .sorting:before,table.dataTable>thead .sorting_asc:before,table.dataTable>thead .sorting_desc:before,table.dataTable>thead .sorting_asc_disabled:before,table.dataTable>thead .sorting_desc_disabled:before{right:1em;content:\"↑\"}table.dataTable>thead .sorting:after,table.dataTable>thead .sorting_asc:after,table.dataTable>thead .sorting_desc:after,table.dataTable>thead .sorting_asc_disabled:after,table.dataTable>thead .sorting_desc_disabled:after{right:.5em;content:\"↓\"}table.dataTable>thead .sorting_asc:before,table.dataTable>thead .sorting_desc:after{opacity:1}table.dataTable>thead .sorting_asc_disabled:before,table.dataTable>thead .sorting_desc_disabled:after{opacity:0}div.dataTables_scrollHead table.dataTable{margin-bottom:0 !important}div.dataTables_scrollBody>table{border-top:none;margin-top:0 !important;margin-bottom:0 !important}div.dataTables_scrollBody>table>thead .sorting:before,div.dataTables_scrollBody>table>thead .sorting_asc:before,div.dataTables_scrollBody>table>thead .sorting_desc:before,div.dataTables_scrollBody>table>thead .sorting:after,div.dataTables_scrollBody>table>thead .sorting_asc:after,div.dataTables_scrollBody>table>thead .sorting_desc:after{display:none}div.dataTables_scrollBody>table>tbody tr:first-child th,div.dataTables_scrollBody>table>tbody tr:first-child td{border-top:none}div.dataTables_scrollFoot>.dataTables_scrollFootInner{box-sizing:content-box}div.dataTables_scrollFoot>.dataTables_scrollFootInner>table{margin-top:0 !important;border-top:none}@media screen and (max-width: 767px){div.dataTables_wrapper div.dataTables_length,div.dataTables_wrapper div.dataTables_filter,div.dataTables_wrapper div.dataTables_info,div.dataTables_wrapper div.dataTables_paginate{text-align:center}div.dataTables_wrapper div.dataTables_paginate ul.pagination{justify-content:center !important}}table.dataTable.table-sm>thead>tr>th:not(.sorting_disabled){padding-right:20px}table.dataTable.table-sm .sorting:before,table.dataTable.table-sm .sorting_asc:before,table.dataTable.table-sm .sorting_desc:before{top:5px;right:.85em}table.dataTable.table-sm .sorting:after,table.dataTable.table-sm .sorting_asc:after,table.dataTable.table-sm .sorting_desc:after{top:5px}table.table-bordered.dataTable{border-right-width:0}table.table-bordered.dataTable th,table.table-bordered.dataTable td{border-left-width:0}table.table-bordered.dataTable th:last-child,table.table-bordered.dataTable th:last-child,table.table-bordered.dataTable td:last-child,table.table-bordered.dataTable td:last-child{border-right-width:1px}table.table-bordered.dataTable tbody th,table.table-bordered.dataTable tbody td{border-bottom-width:0}div.dataTables_scrollHead table.table-bordered{border-bottom-width:0}div.table-responsive>div.dataTables_wrapper>div.row{margin:0}div.table-responsive>div.dataTables_wrapper>div.row>div[class^=col-]:first-child{padding-left:0}div.table-responsive>div.dataTables_wrapper>div.row>div[class^=col-]:last-child{padding-right:0}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/penjualan/produk/Create.vue?vue&type=style&index=0&lang=css&":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/penjualan/produk/Create.vue?vue&type=style&index=0&lang=css& ***!
@@ -1072,7 +911,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ntd:nth-child(1),\r\ntd:nth-child(6) {\r\n    text-align: center;\n}\ntd:nth-child(1),\r\ntd:nth-child(4),\r\ntd:nth-child(5),\r\ntd:nth-child(6) {\r\n    white-space: nowrap;\n}\n.list-group li {\r\n    border: 0;\r\n    font-size: 14px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ntd:nth-child(1),\r\ntd:nth-child(6) {\r\n  text-align: center;\n}\ntd:nth-child(1),\r\ntd:nth-child(4),\r\ntd:nth-child(5),\r\ntd:nth-child(6) {\r\n  white-space: nowrap;\n}\n.list-group li {\r\n  border: 0;\r\n  font-size: 14px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1151,6 +990,35 @@ module.exports = function (cssWithMappingToString) {
 
   return list;
 };
+
+/***/ }),
+
+/***/ "./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css":
+/*!***************************************************************************!*\
+  !*** ./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _css_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_2_dataTables_bootstrap4_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!../../postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./dataTables.bootstrap4.min.css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-8[0].rules[0].use[2]!./node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_css_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_2_dataTables_bootstrap4_min_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_css_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_8_0_rules_0_use_2_dataTables_bootstrap4_min_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -2163,7 +2031,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "content" }, [
     _c("div", { staticClass: "row d-flex justify-content-center" }, [
-      _c("div", { staticClass: "col-11" }, [
+      _c("div", { staticClass: "col-12" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c(
@@ -2178,9 +2046,7 @@ var render = function() {
                       _c("router-link", { attrs: { to: { name: "create" } } }, [
                         _c("button", { staticClass: "btn btn-info" }, [
                           _c("i", { staticClass: "fas fa-plus" }),
-                          _vm._v(
-                            " Tambah\n                                    "
-                          )
+                          _vm._v(" Tambah\n                  ")
                         ])
                       ])
                     ],
@@ -2225,115 +2091,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "modal-body" }, [
                   _c("form", { attrs: { action: "" } }, [
-                    _c(
-                      "div",
-                      { staticClass: "row d-flex justify-content-center" },
-                      [
-                        _c("div", { staticClass: "col-11" }, [
-                          _c("h5", [_vm._v("Info Umum Paket")]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "card" }, [
-                            _c("div", { staticClass: "card-body" }, [
-                              _c("div", { staticClass: "row" }, [
-                                _c("div", { staticClass: "col-12" }, [
-                                  _c("div", { staticClass: "form-group row" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: "col-4 col-form-label",
-                                        staticStyle: { "text-align": "right" },
-                                        attrs: { for: "nama_produk" }
-                                      },
-                                      [_vm._v("Nama Paket")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "col-6" }, [
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.nama_paket,
-                                            expression:
-                                              "\n                                                                nama_paket\n                                                            "
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: {
-                                          type: "text",
-                                          placeholder: "Masukkan Nama Paket"
-                                        },
-                                        domProps: { value: _vm.nama_paket },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.nama_paket = $event.target.value
-                                          }
-                                        }
-                                      })
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "form-group row" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        staticClass: " col-4 col-form-label",
-                                        staticStyle: { "text-align": "right" },
-                                        attrs: { for: "nama_produk" }
-                                      },
-                                      [_vm._v("Harga")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "input-group col-5" },
-                                      [
-                                        _vm._m(4),
-                                        _vm._v(" "),
-                                        _c("input", {
-                                          directives: [
-                                            {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value: _vm.hargaedit,
-                                              expression:
-                                                "\n                                                                hargaedit\n                                                            "
-                                            }
-                                          ],
-                                          staticClass:
-                                            "\n                                                                form-control\n                                                            ",
-                                          attrs: {
-                                            type: "text",
-                                            pattern:
-                                              "^\\$\\d{1,3}(,\\d{3})*(\\.\\d+)?$",
-                                            value: "",
-                                            "data-type": "currency",
-                                            placeholder: "Masukkan Harga"
-                                          },
-                                          domProps: { value: _vm.hargaedit },
-                                          on: {
-                                            input: function($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.hargaedit =
-                                                $event.target.value
-                                            }
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ])
-                                ])
-                              ])
-                            ])
-                          ])
-                        ])
-                      ]
-                    ),
+                    _vm._m(4),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -2364,7 +2122,7 @@ var render = function() {
                                                 "button",
                                                 {
                                                   staticClass:
-                                                    "\n                                                                        btn\n                                                                        btn-primary\n                                                                        float-right\n                                                                    ",
+                                                    "btn btn-primary float-right",
                                                   attrs: { type: "button" },
                                                   on: {
                                                     click: function($event) {
@@ -2374,11 +2132,10 @@ var render = function() {
                                                 },
                                                 [
                                                   _c("i", {
-                                                    staticClass:
-                                                      "\n                                                                            fas\n                                                                            fa-plus\n                                                                        "
+                                                    staticClass: "fas fa-plus"
                                                   }),
                                                   _vm._v(
-                                                    "\n                                                                    Produk\n                                                                "
+                                                    "\n                                  Produk\n                                "
                                                   )
                                                 ]
                                               )
@@ -2395,22 +2152,19 @@ var render = function() {
                                           row,
                                           index
                                         ) {
-                                          return _c("tr", [
+                                          return _c("tr", { key: index }, [
                                             _c("td", [
                                               _vm._v(
-                                                "\n                                                                " +
+                                                "\n                                " +
                                                   _vm._s(index + 1) +
-                                                  "\n                                                            "
+                                                  "\n                              "
                                               )
                                             ]),
                                             _vm._v(" "),
                                             _c("td", [
                                               _c(
                                                 "div",
-                                                {
-                                                  staticClass:
-                                                    "\n                                                                        form-group\n                                                                    "
-                                                },
+                                                { staticClass: "form-group" },
                                                 [
                                                   _c(
                                                     "select",
@@ -2421,11 +2175,11 @@ var render = function() {
                                                           rawName: "v-model",
                                                           value: row.produk_id,
                                                           expression:
-                                                            "\n                                                                            row.produk_id\n                                                                        "
+                                                            "row.produk_id"
                                                         }
                                                       ],
                                                       staticClass:
-                                                        "\n                                                                            form-control\n                                                                            custom-select\n                                                                        ",
+                                                        "form-control custom-select",
                                                       on: {
                                                         change: function(
                                                           $event
@@ -2464,7 +2218,7 @@ var render = function() {
                                                         },
                                                         [
                                                           _vm._v(
-                                                            "\n                                                                            Anesthesia\n                                                                            Medical\n                                                                            Nebulizer\n                                                                            Promist\n                                                                            1\n                                                                        "
+                                                            "\n                                      Anesthesia Medical Nebulizer Promist 1\n                                    "
                                                           )
                                                         ]
                                                       )
@@ -2476,9 +2230,8 @@ var render = function() {
                                             _vm._v(" "),
                                             _c("td", [
                                               _vm._v(
-                                                "\n                                                                " +
-                                                  _vm._s(row.kelompok_produk) +
-                                                  "Alat\n                                                                Kesehatan\n                                                            "
+                                                _vm._s(row.kelompok_produk) +
+                                                  "Alat Kesehatan"
                                               )
                                             ]),
                                             _vm._v(" "),
@@ -2487,7 +2240,7 @@ var render = function() {
                                                 "div",
                                                 {
                                                   staticClass:
-                                                    "\n                                                                        form-group\n                                                                        d-flex\n                                                                        justify-content-center\n                                                                    "
+                                                    "\n                                    form-group\n                                    d-flex\n                                    justify-content-center\n                                  "
                                                 },
                                                 [
                                                   _c("input", {
@@ -2496,12 +2249,10 @@ var render = function() {
                                                         name: "model",
                                                         rawName: "v-model",
                                                         value: row.jumlah,
-                                                        expression:
-                                                          "\n                                                                            row.jumlah\n                                                                        "
+                                                        expression: "row.jumlah"
                                                       }
                                                     ],
-                                                    staticClass:
-                                                      "\n                                                                            form-control\n                                                                        ",
+                                                    staticClass: "form-control",
                                                     staticStyle: {
                                                       width: "50%"
                                                     },
@@ -2543,8 +2294,7 @@ var render = function() {
                                                 },
                                                 [
                                                   _c("i", {
-                                                    staticClass:
-                                                      "\n                                                                            fas\n                                                                            fa-minus\n                                                                        ",
+                                                    staticClass: "fas fa-minus",
                                                     staticStyle: {
                                                       color: "red"
                                                     }
@@ -2589,8 +2339,7 @@ var staticRenderFns = [
         _c(
           "button",
           {
-            staticClass:
-              "\n                                        btn btn-outline-info\n                                        dropdown-toggle\n                                    ",
+            staticClass: "btn btn-outline-info dropdown-toggle",
             attrs: {
               "data-toggle": "dropdown",
               "aria-haspopup": "true",
@@ -2599,208 +2348,191 @@ var staticRenderFns = [
           },
           [
             _c("i", { staticClass: "fas fa-filter" }),
-            _vm._v(" Filter\n                                ")
+            _vm._v(" Filter\n                ")
           ]
         ),
         _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass:
-              "\n                                        dropdown-menu dropdown-menu-right\n                                    "
-          },
-          [
-            _c("form", { staticClass: "px-4 py-3", attrs: { action: "" } }, [
-              _c("div", { staticClass: "dropdown-header" }, [
-                _vm._v(
-                  "\n                                            Kelompok Produk\n                                        "
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    staticClass: "form-check-input",
-                    attrs: {
-                      type: "checkbox",
-                      id: "dropdownkelompokproduk",
-                      value: "alat_kesehatan"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "dropdownkelompokproduk" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                                    Alat Kesehatan\n                                                "
-                      )
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    staticClass: "form-check-input",
-                    attrs: {
-                      type: "checkbox",
-                      id: "dropdownkelompokproduk",
-                      value: "sarana_kesehatan"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "dropdownkelompokproduk" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                                    Sarana Kesehatan\n                                                "
-                      )
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    staticClass: "form-check-input",
-                    attrs: {
-                      type: "checkbox",
-                      id: "dropdownkelompokproduk",
-                      value: "aksesoris"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "dropdownkelompokproduk" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                                    Aksesoris\n                                                "
-                      )
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    staticClass: "form-check-input",
-                    attrs: {
-                      type: "checkbox",
-                      id: "dropdownkelompokproduk",
-                      value: "lain"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "dropdownkelompokproduk" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                                    Lain - lain\n                                                "
-                      )
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "dropdown-header" }, [
-                _vm._v(
-                  "\n                                            Stok\n                                        "
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    staticClass: "form-check-input",
-                    attrs: { type: "checkbox", id: "dropdownstok" }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "dropdownstok" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                                    Tersedia\n                                                "
-                      )
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    staticClass: "form-check-input",
-                    attrs: { type: "checkbox", id: "dropdownstok" }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "dropdownstok" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                                    Hampir Habis\n                                                "
-                      )
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    staticClass: "form-check-input",
-                    attrs: { type: "checkbox", id: "dropdownstok" }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-check-label",
-                      attrs: { for: "dropdownstok" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                                    Habis\n                                                "
-                      )
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("button", { staticClass: "btn btn-primary" }, [
-                _vm._v(
-                  "\n                                            Cari\n                                        "
+        _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
+          _c("form", { staticClass: "px-4 py-3", attrs: { action: "" } }, [
+            _c("div", { staticClass: "dropdown-header" }, [
+              _vm._v("Kelompok Produk")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "dropdownkelompokproduk",
+                    value: "alat_kesehatan"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownkelompokproduk" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Alat Kesehatan\n                        "
+                    )
+                  ]
                 )
               ])
-            ])
-          ]
-        )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "dropdownkelompokproduk",
+                    value: "sarana_kesehatan"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownkelompokproduk" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Sarana Kesehatan\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "dropdownkelompokproduk",
+                    value: "aksesoris"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownkelompokproduk" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Aksesoris\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "dropdownkelompokproduk",
+                    value: "lain"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownkelompokproduk" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Lain - lain\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-header" }, [_vm._v("Stok")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "dropdownstok" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownstok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Tersedia\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "dropdownstok" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownstok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Hampir Habis\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "dropdownstok" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownstok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Habis\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Cari")])
+          ])
+        ])
       ]
     )
   },
@@ -2810,299 +2542,27 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
-        _c("table", { staticClass: "table" }, [
-          _c("thead", { staticStyle: { "text-align": "center" } }, [
-            _c("tr", [
-              _c("th", [_vm._v("No")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Nama Produk")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Kelompok Produk")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Harga")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Stok")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Aksi")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v("1")]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "\n                                                    d-flex\n                                                    align-items-center\n                                                "
-                  },
-                  [
-                    _c("div", { staticClass: "symbol" }, [
-                      _c("img", {
-                        staticClass:
-                          "\n                                                            rounded-circle\n                                                        ",
-                        staticStyle: { width: "30px", height: "30px" },
-                        attrs: { src: "https://picsum.photos/200/200", alt: "" }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "\n                                                        d-flex\n                                                        justify-content-start\n                                                        flex-column\n                                                    ",
-                        staticStyle: { "margin-left": "10px" }
-                      },
-                      [
-                        _vm._v(
-                          "\n                                                    Anesthesia Nebulizer\n                                                    Promist 1\n                                                "
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td"),
-              _vm._v(" "),
-              _c("td", [
-                _c("span", [_vm._v("Rp.")]),
-                _c("span", { staticClass: "float-right" }, [_vm._v("1000000")])
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c("span", { staticClass: "float-right" }, [_vm._v("100")])
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-toggle",
-                    attrs: {
-                      "data-toggle": "dropdown",
-                      id: "dropdownMenuButton",
-                      "aria-haspopup": "true",
-                      "aria-expanded": "false"
-                    }
-                  },
-                  [
-                    _c("i", {
-                      staticClass:
-                        "\n                                                        fas\n                                                        fa-ellipsis-v\n                                                    "
-                    })
-                  ]
-                ),
+        _c(
+          "table",
+          { staticClass: "table", attrs: { id: "penjualan_produk" } },
+          [
+            _c("thead", { staticStyle: { "text-align": "center" } }, [
+              _c("tr", [
+                _c("th", [_vm._v("No")]),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-menu",
-                    attrs: { "aria-labelledby": "dropdownMenuButton" }
-                  },
-                  [
-                    _c(
-                      "a",
-                      {
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#modaldetail"
-                        }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "\n                                                            dropdown-item\n                                                        ",
-                            attrs: { type: "button" }
-                          },
-                          [
-                            _c("i", {
-                              staticClass:
-                                "\n                                                                fas\n                                                                fa-search\n                                                            "
-                            }),
-                            _vm._v(
-                              "\n                                                        Detail\n                                                    "
-                            )
-                          ]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#modaledit"
-                        }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "\n                                                            dropdown-item\n                                                        ",
-                            attrs: { type: "button" }
-                          },
-                          [
-                            _c("i", {
-                              staticClass:
-                                "\n                                                                fas\n                                                                fa-pencil-alt\n                                                            "
-                            }),
-                            _vm._v(
-                              "\n                                                        Edit\n                                                    "
-                            )
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
+                _c("th", [_vm._v("Kelompok Produk")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Nama Produk")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Harga")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("Aksi")])
               ])
             ]),
             _vm._v(" "),
-            _c("tr", [
-              _c("td", [_vm._v("2")]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "\n                                                    d-flex\n                                                    align-items-center\n                                                "
-                  },
-                  [
-                    _c("div", { staticClass: "symbol" }, [
-                      _c("img", {
-                        staticClass:
-                          "\n                                                            rounded-circle\n                                                        ",
-                        staticStyle: { width: "30px", height: "30px" },
-                        attrs: { src: "https://picsum.photos/200/200", alt: "" }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "\n                                                        d-flex\n                                                        justify-content-start\n                                                        flex-column\n                                                    ",
-                        staticStyle: { "margin-left": "10px" }
-                      },
-                      [
-                        _vm._v(
-                          "\n                                                    Anesthesia Nebulizer\n                                                    Promist 1\n                                                "
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td"),
-              _vm._v(" "),
-              _c("td", [
-                _c("span", [_vm._v("Rp.")]),
-                _c("span", { staticClass: "float-right" }, [_vm._v("1000000")])
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c("span", { staticClass: "float-right" }, [_vm._v("100")])
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-toggle",
-                    attrs: {
-                      "data-toggle": "dropdown",
-                      id: "dropdownMenuButton",
-                      "aria-haspopup": "true",
-                      "aria-expanded": "false"
-                    }
-                  },
-                  [
-                    _c("i", {
-                      staticClass:
-                        "\n                                                        fas\n                                                        fa-ellipsis-v\n                                                    "
-                    })
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-menu",
-                    attrs: { "aria-labelledby": "dropdownMenuButton" }
-                  },
-                  [
-                    _c(
-                      "a",
-                      {
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#modaldetail"
-                        }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "\n                                                            dropdown-item\n                                                        ",
-                            attrs: { type: "button" }
-                          },
-                          [
-                            _c("i", {
-                              staticClass:
-                                "\n                                                                fas\n                                                                fa-search\n                                                            "
-                            }),
-                            _vm._v(
-                              "\n                                                        Detail\n                                                    "
-                            )
-                          ]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#modaledit"
-                        }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "\n                                                            dropdown-item\n                                                        ",
-                            attrs: { type: "button" }
-                          },
-                          [
-                            _c("i", {
-                              staticClass:
-                                "\n                                                                fas\n                                                                fa-pencil-alt\n                                                            "
-                            }),
-                            _vm._v(
-                              "\n                                                        Edit\n                                                    "
-                            )
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ])
-            ])
-          ])
-        ])
+            _c("tbody")
+          ]
+        )
       ])
     ])
   },
@@ -3168,7 +2628,7 @@ var staticRenderFns = [
                                 "span",
                                 {
                                   staticClass:
-                                    "\n                                                    float-right\n                                                    green-text\n                                                    col-form-label\n                                                "
+                                    "float-right green-text col-form-label"
                                 },
                                 [_c("b", [_vm._v("Tersedia")])]
                               )
@@ -3266,15 +2726,71 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-prepend" }, [
-      _c(
-        "span",
-        {
-          staticClass:
-            "\n                                                                    input-group-text\n                                                                "
-        },
-        [_vm._v("Rp")]
-      )
+    return _c("div", { staticClass: "row d-flex justify-content-center" }, [
+      _c("div", { staticClass: "col-11" }, [
+        _c("h5", [_vm._v("Info Umum Paket")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-12" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-4 col-form-label",
+                      staticStyle: { "text-align": "right" },
+                      attrs: { for: "nama_produk" }
+                    },
+                    [_vm._v("Nama Paket")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-6" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Masukkan Nama Paket"
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-4 col-form-label",
+                      staticStyle: { "text-align": "right" },
+                      attrs: { for: "nama_produk" }
+                    },
+                    [_vm._v("Harga")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group col-5" }, [
+                    _c("div", { staticClass: "input-group-prepend" }, [
+                      _c("span", { staticClass: "input-group-text" }, [
+                        _vm._v("Rp")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        pattern: "^\\$\\d{1,3}(,\\d{3})*(\\.\\d+)?$",
+                        value: "",
+                        "data-type": "currency",
+                        placeholder: "Masukkan Harga"
+                      }
+                    })
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
     ])
   },
   function() {
@@ -3286,11 +2802,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Nama")]),
       _vm._v(" "),
-      _c("th", [
-        _vm._v(
-          "\n                                                                Kelompok\n                                                            "
-        )
-      ]),
+      _c("th", [_vm._v("Kelompok")]),
       _vm._v(" "),
       _c("th", [_vm._v("Jumlah")]),
       _vm._v(" "),
@@ -3309,11 +2821,7 @@ var staticRenderFns = [
             staticClass: "btn btn-danger",
             attrs: { type: "button", "data-dismiss": "modal" }
           },
-          [
-            _vm._v(
-              "\n                            Batal\n                        "
-            )
-          ]
+          [_vm._v("\n              Batal\n            ")]
         )
       ]),
       _vm._v(" "),
@@ -3321,11 +2829,7 @@ var staticRenderFns = [
         _c(
           "button",
           { staticClass: "btn btn-warning", attrs: { type: "button" } },
-          [
-            _vm._v(
-              "\n                            Simpan\n                        "
-            )
-          ]
+          [_vm._v("\n              Simpan\n            ")]
         )
       ])
     ])

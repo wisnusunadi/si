@@ -16,7 +16,6 @@ export default {
         vm.$emit("input", this.value);
       });
   },
-
   watch: {},
 };
 </script>
