@@ -26,7 +26,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // library
 import "bootstrap/dist/js/bootstrap.bundle"
 import "datatables.net-bs4/js/dataTables.bootstrap4.min";
-window.select2 = require('select2')
 window.OverlayScrollbars = require('overlayscrollbars')
 
 /**

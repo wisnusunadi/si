@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/ppic')->group(function () {
     Route::get('/part', [App\Http\Controllers\PpicController::class, 'getPart']);
     Route::get('/schedule/{status}', [App\Http\Controllers\PpicController::class, 'getEvent']);
-    Route::get('/product', [App\Http\Controllers\PpicController::class, 'getDetailProduk']);
+    Route::get('/product', [App\Http\Controllers\PpicController::class, 'getProduk']);
     Route::get('/version/{id}', [App\Http\Controllers\PpicController::class, 'getVersionDetailProduk']);
     Route::get('/max-quantity/{id}', [App\Http\Controllers\PpicController::class, 'getMaxQuantity']);
     Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
@@ -36,6 +36,7 @@ Route::prefix('/ppic')->group(function () {
     //     Route::get('part', [App\Http\Controllers\PpicController::class, 'getPart']);
     Route::get('/get-gbj-query', [App\Http\Controllers\PpicController::class, 'getGbjQuery']);
     Route::get('/get-gbj-datatable', [App\Http\Controllers\PpicController::class, 'getGbjDatatable']);
+    Route::get('/jadwal', [App\Http\Controllers\PpicController::class, 'getJadwalPerakitan']);
 });
 
 Route::prefix('/customer')->group(function () {

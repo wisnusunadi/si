@@ -1,7 +1,7 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 
-import ViewContainer from './ViewContainer.vue'
+import Container from './Container.vue'
 
 Vue.use(VueRouter)
 
@@ -10,7 +10,7 @@ const router = new VueRouter({
     routes: [
         {
             path: '/ppic/schedule/:status',
-            component: ViewContainer
+            component: Container
         }
     ]
 })
