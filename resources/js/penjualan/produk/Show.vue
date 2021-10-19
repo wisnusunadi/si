@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="row d-flex justify-content-center">
-      <div class="col-11">
+      <div class="col-12">
         <div class="card">
           <div class="card-body">
             <div class="row" style="margin-bottom: 5px">
@@ -135,19 +135,18 @@
             </div>
             <div class="row">
               <div class="col-12">
-                <table class="table">
+                <table class="table" id="penjualan_produk">
                   <thead style="text-align: center">
                     <tr>
                       <th>No</th>
-                      <th>Nama Produk</th>
                       <th>Kelompok Produk</th>
+                      <th>Nama Produk</th>
                       <th>Harga</th>
-                      <th>Stok</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <!-- <tr>
                       <td>1</td>
                       <td>
                         <div class="d-flex align-items-center">
@@ -258,7 +257,7 @@
                           >
                         </div>
                       </td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -267,7 +266,6 @@
         </div>
       </div>
     </div>
-
     <div
       class="modal fade"
       id="modaldetail"
@@ -386,7 +384,6 @@
                                 type="text"
                                 class="form-control"
                                 placeholder="Masukkan Nama Paket"
-                                v-model="nama_paket"
                               />
                             </div>
                           </div>
@@ -408,7 +405,6 @@
                                 value=""
                                 data-type="currency"
                                 placeholder="Masukkan Harga"
-                                v-model="hargaedit"
                               />
                             </div>
                           </div>
@@ -525,9 +521,73 @@
     </div>
   </div>
 </template>
-
 <script>
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 export default {
+  mounted: function () {
+    this.semuaproduk();
+  },
+  methods: {
+    semuaproduk: function () {
+      $("#penjualan_produk").DataTable({
+        ajax: "/api/penjualan_produk/data",
+        processing: true,
+        serverSide: true,
+        columns: [
+          {
+            data: "DT_RowIndex",
+            orderable: false,
+            searchable: false,
+          },
+          {
+            data: "nama",
+          },
+          {
+            data: "nama",
+          },
+          {
+            data: "harga",
+            render: $.fn.dataTable.render.number(",", ".", 2),
+            orderable: false,
+            searchable: false,
+          },
+          {
+            data: null,
+            render: function (data) {
+              return `<div
+                          class="dropdown-toggle"
+                          data-toggle="dropdown"
+                          id="dropdownMenuButton"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                        >
+                          <i class="fas fa-ellipsis-v"></i>
+                        </div>
+                        <div
+                          class="dropdown-menu"
+                          aria-labelledby="dropdownMenuButton"
+                        >
+                          <a data-toggle="modal" data-target="#modaldetail"
+                            ><button class="dropdown-item" type="button">
+                              <i class="fas fa-search"></i>
+                              Detail
+                            </button></a
+                          >
+                          <a data-toggle="modal" data-target="#modaledit"
+                            ><button class="dropdown-item" type="button">
+                              <i class="fas fa-pencil-alt"></i>
+                              Edit
+                            </button></a
+                          >
+                        </div>`;
+            },
+            orderable: false,
+            searchable: false,
+          },
+        ],
+      });
+    },
+  },
   data() {
     return {
       rowsedit: [
