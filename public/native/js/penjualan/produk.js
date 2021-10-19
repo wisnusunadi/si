@@ -748,416 +748,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2353,8 +1943,1087 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render),
 /* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function () {}
-var staticRenderFns = []
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "content" }, [
+    _c("div", { staticClass: "row d-flex justify-content-center" }, [
+      _c("div", { staticClass: "col-11" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "div",
+              { staticClass: "row", staticStyle: { "margin-bottom": "5px" } },
+              [
+                _c("div", { staticClass: "col-12" }, [
+                  _c(
+                    "span",
+                    { staticClass: "float-right" },
+                    [
+                      _c("router-link", { attrs: { to: { name: "create" } } }, [
+                        _c("button", { staticClass: "btn btn-info" }, [
+                          _c("i", { staticClass: "fas fa-plus" }),
+                          _vm._v(" Tambah\n                  ")
+                        ])
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _vm._m(1)
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(2),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "modaledit",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "modaledit",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c(
+              "div",
+              { staticClass: "modal-content", staticStyle: { margin: "10px" } },
+              [
+                _vm._m(3),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("form", { attrs: { action: "" } }, [
+                    _c(
+                      "div",
+                      { staticClass: "row d-flex justify-content-center" },
+                      [
+                        _c("div", { staticClass: "col-11" }, [
+                          _c("h5", [_vm._v("Info Umum Paket")]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "card" }, [
+                            _c("div", { staticClass: "card-body" }, [
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-12" }, [
+                                  _c("div", { staticClass: "form-group row" }, [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "col-4 col-form-label",
+                                        staticStyle: { "text-align": "right" },
+                                        attrs: { for: "nama_produk" }
+                                      },
+                                      [_vm._v("Nama Paket")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-6" }, [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.nama_paket,
+                                            expression: "nama_paket"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          type: "text",
+                                          placeholder: "Masukkan Nama Paket"
+                                        },
+                                        domProps: { value: _vm.nama_paket },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.nama_paket = $event.target.value
+                                          }
+                                        }
+                                      })
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "form-group row" }, [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "col-4 col-form-label",
+                                        staticStyle: { "text-align": "right" },
+                                        attrs: { for: "nama_produk" }
+                                      },
+                                      [_vm._v("Harga")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "input-group col-5" },
+                                      [
+                                        _vm._m(4),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.hargaedit,
+                                              expression: "hargaedit"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            pattern:
+                                              "^\\$\\d{1,3}(,\\d{3})*(\\.\\d+)?$",
+                                            value: "",
+                                            "data-type": "currency",
+                                            placeholder: "Masukkan Harga"
+                                          },
+                                          domProps: { value: _vm.hargaedit },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.hargaedit =
+                                                $event.target.value
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ])
+                                ])
+                              ])
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row d-flex justify-content-center" },
+                      [
+                        _c("div", { staticClass: "col-11" }, [
+                          _c("h5", [_vm._v("Detail Produk Paket")]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "card" }, [
+                            _c("div", { staticClass: "card-body" }, [
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-12" }, [
+                                  _c(
+                                    "table",
+                                    {
+                                      staticClass: "table",
+                                      staticStyle: { "text-align": "center" },
+                                      attrs: { id: "edittable" }
+                                    },
+                                    [
+                                      _c("thead", [
+                                        _c("tr", [
+                                          _c(
+                                            "th",
+                                            { attrs: { colspan: "5" } },
+                                            [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-primary float-right",
+                                                  attrs: { type: "button" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.addRow()
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass: "fas fa-plus"
+                                                  }),
+                                                  _vm._v(
+                                                    "\n                                  Produk\n                                "
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _vm._m(5)
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "tbody",
+                                        _vm._l(_vm.rowsedit, function(
+                                          row,
+                                          index
+                                        ) {
+                                          return _c("tr", { key: index }, [
+                                            _c("td", [
+                                              _vm._v(
+                                                "\n                                " +
+                                                  _vm._s(index + 1) +
+                                                  "\n                              "
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _c(
+                                                "div",
+                                                { staticClass: "form-group" },
+                                                [
+                                                  _c(
+                                                    "select",
+                                                    {
+                                                      directives: [
+                                                        {
+                                                          name: "model",
+                                                          rawName: "v-model",
+                                                          value: row.produk_id,
+                                                          expression:
+                                                            "row.produk_id"
+                                                        }
+                                                      ],
+                                                      staticClass:
+                                                        "form-control custom-select",
+                                                      on: {
+                                                        change: function(
+                                                          $event
+                                                        ) {
+                                                          var $$selectedVal = Array.prototype.filter
+                                                            .call(
+                                                              $event.target
+                                                                .options,
+                                                              function(o) {
+                                                                return o.selected
+                                                              }
+                                                            )
+                                                            .map(function(o) {
+                                                              var val =
+                                                                "_value" in o
+                                                                  ? o._value
+                                                                  : o.value
+                                                              return val
+                                                            })
+                                                          _vm.$set(
+                                                            row,
+                                                            "produk_id",
+                                                            $event.target
+                                                              .multiple
+                                                              ? $$selectedVal
+                                                              : $$selectedVal[0]
+                                                          )
+                                                        }
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "option",
+                                                        {
+                                                          attrs: { value: "" }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                      Anesthesia Medical Nebulizer Promist 1\n                                    "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _vm._v(
+                                                _vm._s(row.kelompok_produk) +
+                                                  "Alat Kesehatan"
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "\n                                    form-group\n                                    d-flex\n                                    justify-content-center\n                                  "
+                                                },
+                                                [
+                                                  _c("input", {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value: row.jumlah,
+                                                        expression: "row.jumlah"
+                                                      }
+                                                    ],
+                                                    staticClass: "form-control",
+                                                    staticStyle: {
+                                                      width: "50%"
+                                                    },
+                                                    attrs: { type: "number" },
+                                                    domProps: {
+                                                      value: row.jumlah
+                                                    },
+                                                    on: {
+                                                      input: function($event) {
+                                                        if (
+                                                          $event.target
+                                                            .composing
+                                                        ) {
+                                                          return
+                                                        }
+                                                        _vm.$set(
+                                                          row,
+                                                          "jumlah",
+                                                          $event.target.value
+                                                        )
+                                                      }
+                                                    }
+                                                  })
+                                                ]
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _c(
+                                                "a",
+                                                {
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.removeRow(
+                                                        index
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass: "fas fa-minus",
+                                                    staticStyle: {
+                                                      color: "red"
+                                                    }
+                                                  })
+                                                ]
+                                              )
+                                            ])
+                                          ])
+                                        }),
+                                        0
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
+                            ])
+                          ])
+                        ])
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(6)
+              ]
+            )
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "span",
+      { staticClass: "float-right", staticStyle: { "margin-right": "5px" } },
+      [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-outline-info dropdown-toggle",
+            attrs: {
+              "data-toggle": "dropdown",
+              "aria-haspopup": "true",
+              "aria-expanded": "false"
+            }
+          },
+          [
+            _c("i", { staticClass: "fas fa-filter" }),
+            _vm._v(" Filter\n                ")
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
+          _c("form", { staticClass: "px-4 py-3", attrs: { action: "" } }, [
+            _c("div", { staticClass: "dropdown-header" }, [
+              _vm._v("Kelompok Produk")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "dropdownkelompokproduk",
+                    value: "alat_kesehatan"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownkelompokproduk" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Alat Kesehatan\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "dropdownkelompokproduk",
+                    value: "sarana_kesehatan"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownkelompokproduk" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Sarana Kesehatan\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "dropdownkelompokproduk",
+                    value: "aksesoris"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownkelompokproduk" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Aksesoris\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    id: "dropdownkelompokproduk",
+                    value: "lain"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownkelompokproduk" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Lain - lain\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-header" }, [_vm._v("Stok")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "dropdownstok" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownstok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Tersedia\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "dropdownstok" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownstok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Hampir Habis\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "dropdownstok" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "dropdownstok" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          Habis\n                        "
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Cari")])
+          ])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12" }, [
+        _c("table", { staticClass: "table" }, [
+          _c("thead", { staticStyle: { "text-align": "center" } }, [
+            _c("tr", [
+              _c("th", [_vm._v("No")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Nama Produk")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Kelompok Produk")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Harga")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Stok")]),
+              _vm._v(" "),
+              _c("th", [_vm._v("Aksi")])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("tbody", [
+            _c("tr", [
+              _c("td", [_vm._v("1")]),
+              _vm._v(" "),
+              _c("td", [
+                _c("div", { staticClass: "d-flex align-items-center" }, [
+                  _c("div", { staticClass: "symbol" }, [
+                    _c("img", {
+                      staticClass: "rounded-circle",
+                      staticStyle: { width: "30px", height: "30px" },
+                      attrs: { src: "https://picsum.photos/200/200", alt: "" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "d-flex justify-content-start flex-column",
+                      staticStyle: { "margin-left": "10px" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                          Anesthesia Nebulizer Promist 1\n                        "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td", [
+                _c("span", [_vm._v("Rp.")]),
+                _c("span", { staticClass: "float-right" }, [_vm._v("1000000")])
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("span", { staticClass: "float-right" }, [_vm._v("100")])
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-toggle",
+                    attrs: {
+                      "data-toggle": "dropdown",
+                      id: "dropdownMenuButton",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false"
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-menu",
+                    attrs: { "aria-labelledby": "dropdownMenuButton" }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#modaldetail"
+                        }
+                      },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { type: "button" }
+                          },
+                          [
+                            _c("i", { staticClass: "fas fa-search" }),
+                            _vm._v(
+                              "\n                            Detail\n                          "
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#modaledit"
+                        }
+                      },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { type: "button" }
+                          },
+                          [
+                            _c("i", { staticClass: "fas fa-pencil-alt" }),
+                            _vm._v(
+                              "\n                            Edit\n                          "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td", [_vm._v("2")]),
+              _vm._v(" "),
+              _c("td", [
+                _c("div", { staticClass: "d-flex align-items-center" }, [
+                  _c("div", { staticClass: "symbol" }, [
+                    _c("img", {
+                      staticClass: "rounded-circle",
+                      staticStyle: { width: "30px", height: "30px" },
+                      attrs: { src: "https://picsum.photos/200/200", alt: "" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "d-flex justify-content-start flex-column",
+                      staticStyle: { "margin-left": "10px" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                          Anesthesia Nebulizer Promist 1\n                        "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("td"),
+              _vm._v(" "),
+              _c("td", [
+                _c("span", [_vm._v("Rp.")]),
+                _c("span", { staticClass: "float-right" }, [_vm._v("1000000")])
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("span", { staticClass: "float-right" }, [_vm._v("100")])
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-toggle",
+                    attrs: {
+                      "data-toggle": "dropdown",
+                      id: "dropdownMenuButton",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false"
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-menu",
+                    attrs: { "aria-labelledby": "dropdownMenuButton" }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#modaldetail"
+                        }
+                      },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { type: "button" }
+                          },
+                          [
+                            _c("i", { staticClass: "fas fa-search" }),
+                            _vm._v(
+                              "\n                            Detail\n                          "
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#modaledit"
+                        }
+                      },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { type: "button" }
+                          },
+                          [
+                            _c("i", { staticClass: "fas fa-pencil-alt" }),
+                            _vm._v(
+                              "\n                            Edit\n                          "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "modaldetail",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "modaldetail",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-xl", attrs: { role: "document" } },
+          [
+            _c(
+              "div",
+              { staticClass: "modal-content", staticStyle: { margin: "10px" } },
+              [
+                _c("div", { staticClass: "modal-header bg-success" }, [
+                  _c("h4", { staticClass: "modal-title" }, [_vm._v("Detail")]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: {
+                        type: "button",
+                        "data-dismiss": "modal",
+                        "aria-label": "Close"
+                      }
+                    },
+                    [
+                      _c("span", { attrs: { "aria-hidden": "true" } }, [
+                        _vm._v("×")
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-4" }, [
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("ul", { staticClass: "list-group" }, [
+                            _c("li", { staticClass: "list-group-item" }, [
+                              _c(
+                                "span",
+                                { staticStyle: { "font-size": "24px" } },
+                                [_c("b", [_vm._v("Info")])]
+                              ),
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "float-right green-text col-form-label"
+                                },
+                                [_c("b", [_vm._v("Tersedia")])]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("li", { staticClass: "list-group-item" }, [
+                              _c("a", [_vm._v("Nama Produk")]),
+                              _c("span", { attrs: { id: "nama_produk" } }),
+                              _c("b", { staticClass: "float-right" }, [
+                                _vm._v("FOX-BABY + Case")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("li", { staticClass: "list-group-item" }, [
+                              _c("a", [_vm._v("Harga")]),
+                              _c("span", { attrs: { id: "kelompok_produk" } }),
+                              _c("b", { staticClass: "float-right" }, [
+                                _vm._v("Rp. 1.000.000,00")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("li", { staticClass: "list-group-item" }, [
+                              _c("a", [_vm._v("Stok")]),
+                              _c("span", { attrs: { id: "stok" } }),
+                              _c("b", { staticClass: "float-right" }, [
+                                _vm._v("100")
+                              ])
+                            ])
+                          ])
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-8" }, [
+                      _c("h5", [_vm._v("Detail Produk")]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("table", { staticClass: "table" }, [
+                            _c("thead", [
+                              _c("tr", [
+                                _c("th", [_vm._v("No")]),
+                                _vm._v(" "),
+                                _c("th", [_vm._v("Produk")]),
+                                _vm._v(" "),
+                                _c("th", [_vm._v("Kelompok")]),
+                                _vm._v(" "),
+                                _c("th", [_vm._v("Jumlah")])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("tbody", [
+                              _c("tr", [
+                                _c("td", [_vm._v("1.")]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v("FOX-BABY")]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v("Alat Kesehatan")]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v("1")])
+                              ]),
+                              _vm._v(" "),
+                              _c("tr", [
+                                _c("td", [_vm._v("2.")]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v("Case")]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v("Aksesori")]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v("1")])
+                              ])
+                            ])
+                          ])
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              ]
+            )
+          ]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header bg-warning" }, [
+      _c("h4", [_vm._v("Edit")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("Rp")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("No")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Nama")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Kelompok")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Jumlah")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Aksi")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c("span", { staticClass: "float-left" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-danger",
+            attrs: { type: "button", "data-dismiss": "modal" }
+          },
+          [_vm._v("\n              Batal\n            ")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("span", { staticClass: "float-right" }, [
+        _c(
+          "button",
+          { staticClass: "btn btn-warning", attrs: { type: "button" } },
+          [_vm._v("\n              Simpan\n            ")]
+        )
+      ])
+    ])
+  }
+]
+render._withStripped = true
 
 
 
