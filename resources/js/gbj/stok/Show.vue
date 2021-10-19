@@ -74,36 +74,6 @@
                   class="dropdown-menu p-3 text-nowrap"
                   aria-labelledby="semuaprodukfilter"
                 >
-<<<<<<< HEAD
-                  <div class="dropdown-header">Kelompok Produk</div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="sp_kelompok"
-                        value="alat_kesehatan"
-                      />
-                      <label class="form-check-label" for="sp_kelompok">
-                        Alat Kesehatan
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="sp_kelompok"
-                        value="sarana_kesehatan"
-                      />
-                      <label class="form-check-label" for="sp_kelompok">
-                        Sarana Kesehatan
-                      </label>
-                    </div>
-                  </div>
-                  <div
-=======
                     <div class="row">
                         <div class="col-lg-12">
                             <span class="float-right">
@@ -359,23 +329,10 @@
                     </div>
                 </div>
                 <div
->>>>>>> 81bc4cb3863630795e262f1597c82f2d0dd077be
                     class="tab-pane fade card-body"
                     id="produk"
                     role="tabpanel"
                     aria-labelledby="produk-tab"
-<<<<<<< HEAD
-                  >
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="form-horizontal">
-                          <div class="form-group row">
-                            <div
-                              class="col-sm-5 col-form-label"
-                              style="text-align: right"
-                            >
-                              Produk
-=======
                 >
                     <div class="row">
                         <div class="col-lg-12">
@@ -403,7 +360,6 @@
                                         </div>
                                     </div>
                                 </div>
->>>>>>> 81bc4cb3863630795e262f1597c82f2d0dd077be
                             </div>
                             <div class="col-sm-7">
                               <div class="select2-info">
@@ -429,47 +385,6 @@
                         </div>
                       </div>
                     </div>
-<<<<<<< HEAD
-                  </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="sp_kelompok"
-                        value="lain"
-                      />
-                      <label class="form-check-label" for="sp_kelompok">
-                        Lain-lain
-                      </label>
-                    </div>
-                  </div>
-                  <div class="dropdown-header">Ketersediaan Stok</div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="sp_stok"
-                        value="tersedia"
-                      />
-                      <label class="form-check-label" for="sp_stok">
-                        Tersedia
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="sp_stok"
-                        value="hampir_habis"
-                      />
-                      <label class="form-check-label" for="sp_stok">
-                        Hampir Habis
-                      </label>
-=======
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -522,7 +437,6 @@
                                 </div>
                             </span>
                         </div>
->>>>>>> 81bc4cb3863630795e262f1597c82f2d0dd077be
                     </div>
                   </div>
                   <div class="form-group">
@@ -546,52 +460,6 @@
             </div>
           </div>
 
-<<<<<<< HEAD
-          <div class="row" style="margin-top: 5px">
-            <div class="col-lg-12">
-              <div class="table-responsive">
-                <table
-                  id="test-table"
-                  class="table table-hover semuaproduk"
-                  width="100%"
-                >
-                  <thead style="text-align: center; font-size: 15px">
-                    <tr>
-                      <th>No</th>
-                      <th>Kelompok Produk</th>
-                      <th>Merk</th>
-                      <th>Tipe Produk</th>
-                      <th>Stok</th>
-                      <th>Satuan</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="tab-pane fade card-body"
-          id="produk"
-          role="tabpanel"
-          aria-labelledby="produk-tab"
-        >
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="form-horizontal">
-                <div class="form-group row">
-                  <div class="col-sm-7">
-                    <div class="select2-info">
-                      <select
-                        class="select2 custom-select form-control produk"
-                        data-dropdown-css-class="select2-info"
-                        style="width: 40%"
-                        name="produk"
-                        id="produk"
-                      ></select>
-=======
                     <div class="row" style="margin-top:5px;">
                         <div class="col-3 col-md-3 col-sm-3">
                             <div class="card">
@@ -676,7 +544,6 @@
                                 </table>
                             </div>
                         </div>
->>>>>>> 81bc4cb3863630795e262f1597c82f2d0dd077be
                     </div>
                   </div>
                 </div>
@@ -730,134 +597,6 @@
             </div>
           </div>
 
-<<<<<<< HEAD
-          <div class="row" style="margin-top: 5px">
-            <div class="col-3 col-md-3 col-sm-3">
-              <div class="card">
-                <div class="card-body">
-                  <ul class="list-group">
-                    <li class="list-group-item">
-                      <span style="font-size: 24px"><b>Info</b></span
-                      ><span class="float-right green-text col-form-label"
-                        ><b>Tersedia</b></span
-                      >
-                    </li>
-                    <li class="list-group-item">
-                      <a>Nama Produk</a><span id="nama_produk">tes1</span
-                      ><b class="float-right">FOX-BABY</b>
-                    </li>
-                    <li class="list-group-item">
-                      <a>Kelompok Produk</a
-                      ><span id="kelompok_produk">tes2</span
-                      ><b class="float-right">Alat Kesehatan</b>
-                    </li>
-                    <li class="list-group-item">
-                      <a>Stok Terakhir</a><span id="stok"></span>tes3<b
-                        class="float-right"
-                        >1000</b
-                      >
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="col-9 col-md-9 col-sm-9">
-              <div class="table-responsive">
-                <table
-                  class="table table-hover table-striped perproduk"
-                  width="100%"
-                >
-                  <thead style="text-align: center; font-size: 15px">
-                    <tr>
-                      <th>No</th>
-                      <th>Tanggal</th>
-                      <th>Asal / Tujuan</th>
-                      <th>Keterangan</th>
-                      <th>Jumlah</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tbodies">
-                    <tr>
-                      <td>1</td>
-                      <td>24-09-2021</td>
-                      <td>Produksi</td>
-                      <td>Ref Hasil Produksi 0001/BPPB/09/21</td>
-                      <td>
-                        <span style="color: green"
-                          ><i class="fas fa-plus"></i
-                          ><span class="float-right">1000</span></span
-                        >
-                      </td>
-                      <td>
-                        <a href=""><i class="fas fa-search"></i></a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="tab-pane fade card-body"
-          id="tanggal"
-          role="tabpanel"
-          aria-labelledby="tanggal-tab"
-        >
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="form-horizontal">
-                <div class="form-group row">
-                  <label
-                    for="detail_produk_id"
-                    class="col-sm-5 col-form-label"
-                    style="text-align: right"
-                    >Tanggal</label
-                  >
-                  <div class="col-sm-2">
-                    <input type="date" class="form-control" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-12">
-              <span
-                class="dropdown float-right"
-                id="pertanggalfilter"
-                style="margin-right: 5px"
-              >
-                <button
-                  class="btn btn-outline-info dropdown-toggle"
-                  type="button"
-                  id="pertanggalfilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Filter
-                </button>
-                <div
-                  class="dropdown-menu dropdown-menu-right text-nowrap p-3"
-                  aria-labelledby="pertanggalfilter"
-                >
-                  <div class="dropdown-header">Asal / Tujuan</div>
-                  <div class="form-group">
-                    <select
-                      name="divisi_id"
-                      class="form-control custom-select"
-                      id=""
-                    >
-                      <option value=""></option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <button class="btn btn-primary float-right">Cari</button>
-                  </div>
-=======
                     <div class="row">
                         <div class="col-lg-12">
                             <span
@@ -979,7 +718,6 @@
                             </div>
                         </div>
                     </div>
->>>>>>> 81bc4cb3863630795e262f1597c82f2d0dd077be
                 </div>
               </span>
             </div>
@@ -1046,208 +784,10 @@
 
 <script>
 import axios from "axios";
-<<<<<<< HEAD
-import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
-=======
->>>>>>> 81bc4cb3863630795e262f1597c82f2d0dd077be
 import "select2";
 import "select2/dist/css/select2.css";
 
 export default {
-<<<<<<< HEAD
-  mounted: function () {
-    this.semuaproduk();
-  },
-
-  methods: {
-    semuaproduk: function () {
-      $("#test-table").DataTable({
-        ajax: "/api/gbj/data",
-        processing: true,
-        serverSide: true,
-        columns: [
-          {
-            data: "DT_RowIndex",
-            orderable: false,
-            searchable: false,
-          },
-          {
-            data: "kelompok",
-          },
-          {
-            data: "merk",
-          },
-          {
-            data: "nama",
-          },
-          {
-            data: "stok",
-          },
-          {
-            data: "satuan",
-            orderable: false,
-            searchable: false,
-          },
-          {
-            data: null,
-            render: function (data) {
-              return (
-                `<div
-                          class="dropdown-toggle"
-                          data-toggle="dropdown"
-                          id="dropdownMenuButton"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                        >
-                          <i class="fas fa-ellipsis-v"></i>
-                        </div>'<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <router-link :to="{ path: '/gbj/stok/no_seri/` +
-                data.id +
-                `' }"><button class="dropdown-item" type="button"><i class="fas fa-search"></i> No Seri</button></router-link>
-                                <router-link :to="{ path: '/gbj/stok/mutasi/` +
-                data.id +
-                `' }"><button class="dropdown-item" type="button"><i class="fas fa-search"></i> Mutasi</button></router-link>
-                            </div>`
-              );
-            },
-            orderable: false,
-            searchable: false,
-          },
-        ],
-      });
-    },
-    perproduk: function (produk_id) {
-      $(".perproduk").DataTable({
-        ajax: "http://localhost:8000/api/gbj/stok/perproduk/" + produk_id,
-        columns: [
-          {
-            data: "DT_RowIndex",
-            orderable: false,
-            searchable: false,
-          },
-          {
-            data: "tanggal",
-            name: "tanggal",
-          },
-          {
-            data: "divisi_id",
-            name: "divisi_id",
-          },
-          {
-            data: "keterangan",
-            name: "keterangan",
-          },
-          {
-            data: null,
-            render: function (data) {
-              if (data.jumlah_masuk > 0) {
-                return (
-                  '<span style="color:green;"><i class="fas fa-plus"></i><span class="float-right">' +
-                  data.jumlah_masuk +
-                  "</span></span>"
-                );
-              } else if (data.jumlah_keluar > 0) {
-                return (
-                  '<span style="color:red;"><i class="fas fa-minus"></i><span class="float-right">' +
-                  data.jumlah_keluar +
-                  "</span></span>"
-                );
-              }
-            },
-          },
-          {
-            data: null,
-            render: function (data) {
-              return (
-                `<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <router-link :to="{ path: '/gbj/stok/no_seri/` +
-                data.id +
-                `' }"><button class="dropdown-item" type="button"><i class="fas fa-search"></i> No Seri</button></router-link>
-                                <router-link :to="{ path: '/gbj/stok/mutasi/` +
-                data.id +
-                `' }"><button class="dropdown-item" type="button"><i class="fas fa-search"></i> Mutasi</button></router-link>
-                            </div>`
-              );
-            },
-            orderable: false,
-            searchable: false,
-          },
-        ],
-      });
-    },
-    pertanggal: function (tanggal) {
-      $(".perproduk").DataTable({
-        ajax: "http://localhost:8000/api/gbj/stok/pertanggal/" + tanggal,
-        columns: [
-          {
-            data: "DT_RowIndex",
-            orderable: false,
-            searchable: false,
-          },
-          {
-            data: "tanggal",
-            name: "tanggal",
-          },
-          {
-            data: "nama_produk",
-            name: "nama_produk",
-          },
-          {
-            data: "divisi_id",
-            name: "divisi_id",
-          },
-          {
-            data: "keterangan",
-            name: "keterangan",
-          },
-          {
-            data: null,
-            render: function (data) {
-              if (data.jumlah_masuk > 0) {
-                return (
-                  '<span style="color:green;"><i class="fas fa-plus"></i><span class="float-right">' +
-                  data.jumlah_masuk +
-                  "</span></span>"
-                );
-              } else if (data.jumlah_keluar > 0) {
-                return (
-                  '<span style="color:red;"><i class="fas fa-minus"></i><span class="float-right">' +
-                  data.jumlah_keluar +
-                  "</span></span>"
-                );
-              }
-            },
-          },
-          {
-            data: null,
-            render: function (data) {
-              return (
-                `<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <router-link :to="{ path: '/gbj/stok/no_seri/` +
-                data.id +
-                `' }"><button class="dropdown-item" type="button"><i class="fas fa-search"></i> No Seri</button></router-link>
-                                <router-link :to="{ path: '/gbj/stok/mutasi/` +
-                data.id +
-                `' }"><button class="dropdown-item" type="button"><i class="fas fa-search"></i> Mutasi</button></router-link>
-                            </div>`
-              );
-            },
-            orderable: false,
-            searchable: false,
-          },
-        ],
-      });
-    },
-    changeProduk: function (produk_id) {
-      axios
-        .get(`http://localhost:8000/api/gbj/stok/` + produk_id)
-        .then((res) => {
-          $("#nama_produk").value(res.nama_produk);
-          $("#kelompok_produk").value(res.kelompok_produk);
-        });
-    },
-  },
-=======
     data() {},
     methods: {
         semuaproduk: function(status) {
@@ -1457,53 +997,11 @@ export default {
         }
     },
     mounted() {}
->>>>>>> 81bc4cb3863630795e262f1597c82f2d0dd077be
 };
 </script>
 
 <style lang="scss">
 thead {
-<<<<<<< HEAD
-  text-align: center;
-}
-.semuaproduk {
-  td:nth-child(1),
-  td:nth-child(2),
-  td:nth-child(3),
-  td:nth-child(5),
-  td:nth-child(7),
-  td:nth-child(8) {
-    text-align: center;
-  }
-}
-
-.perproduk {
-  td:nth-child(1),
-  td:nth-child(2),
-  td:nth-child(3),
-  td:nth-child(6) {
-    text-align: center;
-  }
-}
-
-.pertanggal {
-  td:nth-child(1),
-  td:nth-child(2),
-  td:nth-child(4),
-  td:nth-child(7) {
-    text-align: center;
-  }
-}
-
-.list-group li {
-  border: 0;
-}
-
-.center {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-=======
     text-align: center;
 }
 .semuaproduk {
@@ -1543,6 +1041,5 @@ thead {
     width: 80%;
     margin-left: auto;
     margin-right: auto;
->>>>>>> 81bc4cb3863630795e262f1597c82f2d0dd077be
 }
 </style>
