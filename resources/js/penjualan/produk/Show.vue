@@ -35,6 +35,74 @@
                                     >
                                         <form action="" class="px-4 py-3">
                                             <div class="dropdown-header">
+                                                Kelompok Produk
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-check-input"
+                                                        id="dropdownkelompokproduk"
+                                                        value="alat_kesehatan"
+                                                    />
+                                                    <label
+                                                        class="form-check-label"
+                                                        for="dropdownkelompokproduk"
+                                                    >
+                                                        Alat Kesehatan
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-check-input"
+                                                        id="dropdownkelompokproduk"
+                                                        value="sarana_kesehatan"
+                                                    />
+                                                    <label
+                                                        class="form-check-label"
+                                                        for="dropdownkelompokproduk"
+                                                    >
+                                                        Sarana Kesehatan
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-check-input"
+                                                        id="dropdownkelompokproduk"
+                                                        value="aksesoris"
+                                                    />
+                                                    <label
+                                                        class="form-check-label"
+                                                        for="dropdownkelompokproduk"
+                                                    >
+                                                        Aksesoris
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-check-input"
+                                                        id="dropdownkelompokproduk"
+                                                        value="lain"
+                                                    />
+                                                    <label
+                                                        class="form-check-label"
+                                                        for="dropdownkelompokproduk"
+                                                    >
+                                                        Lain - lain
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="dropdown-header">
                                                 Stok
                                             </div>
                                             <div class="form-group">
@@ -42,11 +110,11 @@
                                                     <input
                                                         type="checkbox"
                                                         class="form-check-input"
-                                                        id="dropdownCheck"
+                                                        id="dropdownstok"
                                                     />
                                                     <label
                                                         class="form-check-label"
-                                                        for="dropdownCheck"
+                                                        for="dropdownstok"
                                                     >
                                                         Tersedia
                                                     </label>
@@ -57,11 +125,11 @@
                                                     <input
                                                         type="checkbox"
                                                         class="form-check-input"
-                                                        id="dropdownCheck"
+                                                        id="dropdownstok"
                                                     />
                                                     <label
                                                         class="form-check-label"
-                                                        for="dropdownCheck"
+                                                        for="dropdownstok"
                                                     >
                                                         Hampir Habis
                                                     </label>
@@ -72,11 +140,11 @@
                                                     <input
                                                         type="checkbox"
                                                         class="form-check-input"
-                                                        id="dropdownCheck"
+                                                        id="dropdownstok"
                                                     />
                                                     <label
                                                         class="form-check-label"
-                                                        for="dropdownCheck"
+                                                        for="dropdownstok"
                                                     >
                                                         Habis
                                                     </label>
@@ -97,7 +165,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama Produk</th>
-                                            <th>No AKD</th>
+                                            <th>Kelompok Produk</th>
                                             <th>Harga</th>
                                             <th>Stok</th>
                                             <th>Aksi</th>
@@ -428,14 +496,7 @@
             </div>
         </div>
 
-        <div
-            class="modal fade"
-            id="modaledit"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="modaledit"
-            aria-hidden="true"
-        >
+        <div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="modaledit" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header bg-warning"><h4>Edit</h4></div>
@@ -449,53 +510,15 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group row">
-                                                        <label
-                                                            for="nama_produk"
-                                                            class="
-                                                                col-4
-                                                                col-form-label
-                                                            "
-                                                            style="
-                                                                text-align: right;
-                                                            "
-                                                            >Nama Paket</label
-                                                        >
+                                                        <label for="nama_produk" class="col-4 col-form-label" style="text-align: right;">Nama Paket</label>
                                                         <div class="col-6">
-                                                            <input
-                                                                type="text"
-                                                                class="
-                                                                    form-control
-                                                                "
-                                                                placeholder="Masukkan Nama Paket"
-                                                                v-model="
-                                                                    nama_paket
-                                                                "
-                                                            />
+                                                            <input type="text" class="form-control" placeholder="Masukkan Nama Paket" v-model="nama_paket"/>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label
-                                                            for="nama_produk"
-                                                            class="
-                                                                col-4
-                                                                col-form-label
-                                                            "
-                                                            style="
-                                                                text-align: right;
-                                                            "
-                                                            >Harga</label
-                                                        >
-                                                        <div
-                                                            class="
-                                                                input-group
-                                                                col-5
-                                                            "
-                                                        >
-                                                            <div
-                                                                class="
-                                                                    input-group-prepend
-                                                                "
-                                                            >
+                                                        <label for="nama_produk" class=" col-4 col-form-label" style="text-align: right;">Harga</label>
+                                                        <div class="input-group col-5">
+                                                            <div class="input-group-prepend">
                                                                 <span
                                                                     class="
                                                                         input-group-text
@@ -512,44 +535,8 @@
                                                                 value=""
                                                                 data-type="currency"
                                                                 placeholder="Masukkan Harga"
-                                                                v-model="harga"
+                                                                v-model="hargaedit"
                                                             />
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label
-                                                            for="foto"
-                                                            class="
-                                                                col-4
-                                                                col-form-label
-                                                            "
-                                                            style="
-                                                                text-align: right;
-                                                            "
-                                                            >Gambar</label
-                                                        >
-                                                        <div class="col-6">
-                                                            <div class="row">
-                                                                <input
-                                                                    type="file"
-                                                                    class="
-                                                                        form-control
-                                                                    "
-                                                                    placeholder="Masukkan Foto"
-                                                                    accept="image/jpeg"
-                                                                    @change="
-                                                                        uploadgambar
-                                                                    "
-                                                                />
-                                                            </div>
-                                                            <div class="row">
-                                                                <img
-                                                                    src="previewImage"
-                                                                    class="
-                                                                        uploading-image
-                                                                    "
-                                                                />
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -610,7 +597,7 @@
                                                             <tr
                                                                 v-for="(
                                                                     row, index
-                                                                ) in rows"
+                                                                ) in rowsedit"
                                                             >
                                                                 <td>
                                                                     {{
@@ -728,8 +715,9 @@
 export default {
     data() {
         return {
-            rows: [
+            rowsedit: [
                 {
+                    hargaedit:"",
                     produk_id: "",
                     kelompok_produk: "",
                     jumlah: "",
@@ -740,13 +728,25 @@ export default {
             ],
         };
     },
+    watch:{
+        hargaedit: function(newValue) {
+            const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            this.harga = result;
+        }
+    }
 };
 </script>
 
 <style>
 td:nth-child(1),
-td:nth-child(5) {
+td:nth-child(6) {
     text-align: center;
+}
+td:nth-child(1),
+td:nth-child(4),
+td:nth-child(5),
+td:nth-child(6) {
+    white-space: nowrap;
 }
 .list-group li {
     border: 0;

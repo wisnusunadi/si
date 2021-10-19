@@ -252,6 +252,10 @@ export default {
     },
   },
 
+  updated: function(){
+    console.log("data berubah")
+  },
+
   watch: {
     quantity: function (val) {
       if (val > this.maxQuantity) this.quantityError = true;

@@ -182,12 +182,15 @@
                         <div class="col-lg-12">
                             <div class="form-horizontal">
                                 <div class="form-group row">
+                                    <div class="col-sm-5 col-form-label" style="text-align:right;">
+                                        Produk
+                                    </div>
                                     <div class="col-sm-7">
                                         <div class="select2-info">
                                             <select class="select2 custom-select form-control produk" data-dropdown-css-class="select2-info" style="width:40%;" name="produk" id="produk">
-                                                <option value="">Tes</option>
-                                                <option value="">ERP</option>
-                                                <option value="">SPA</option>
+                                                <option value="tes">Tes</option>
+                                                <option value="erp">ERP</option>
+                                                <option value="spa">SPA</option>
                                             </select>
                                         </div>
                                     </div>
@@ -408,6 +411,9 @@
 
 <script>
 import axios from "axios";
+import 'select2';
+import 'select2/dist/css/select2.css';
+
 export default {
     data(){
     },
