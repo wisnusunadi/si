@@ -3,12 +3,12 @@
 @inject('LayoutHelper', 'App\Helpers\LayoutHelper')
 
 @section('master_css')
-<link rel="stylesheet" href="{{asset('native/css/table.css')}}">
-<link rel="stylesheet" href="{{asset('native/css/text.css')}}">
-<link rel="stylesheet" href="{{asset('native/css/image.css')}}">
-<link rel="stylesheet" href="{{asset('native/css/calendar.css')}}">
-<link rel="stylesheet" href="{{asset('native/css/background.css')}}">
-<link rel="stylesheet" href="{{asset('native/css/button.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/table.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/text.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/image.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/calendar.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/background.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/button.css')}}">
 <style>
     #loader {
         position: fixed;

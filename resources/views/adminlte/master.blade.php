@@ -23,8 +23,8 @@
     @yield('adminlte_css_pre')
 
     {{-- Configured Stylesheets --}}
-    <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/adminlte.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
 
     {{-- Custom Stylesheets (post AdminLTE) --}}
     @yield('master_css')
@@ -62,7 +62,7 @@
 
     {{-- Configured Scripts --}}
     <script src="{{ asset('native/js/plugin.js') }}"></script>
-    <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
 
     {{-- Custom Scripts --}}
     @yield('master_js')
