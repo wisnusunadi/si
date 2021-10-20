@@ -356,7 +356,25 @@ return [
         // penjualan (26)
         [
             'text' => 'Penjualan Produk',
-            'url'  => '/penjualan_produk',
+            'url'  => '/penjualan/produk',
+            'icon' => 'fas fa-table',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Penjualan',
+            'url'  => '/penjualan/penjualan',
+            'icon' => 'fas fa-table',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Customer',
+            'url'  => '/penjualan/customer',
+            'icon' => 'fas fa-table',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'AKN',
+            'url'  => '/penjualan/akn',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
@@ -1000,16 +1018,16 @@ return [
             ],
         ],
         // dependecies plugins
-        // 'DataTables' => [
-        //     'js' => [
-        //         'vendor/datatables/jquery.dataTables.min.js',
-        //         'vendor/datatables/dataTables.bootstrap4.min.js',
-        //         'vendor/datatables/dataTables.responsive.min.js',
-        //     ],
-        //     'css' => [
-        //         'vendor/datatables/dataTables.bootstrap4.min.css',
-        //     ],
-        // ],
+        'DataTables' => [
+            'js' => [
+                'vendor/datatables/jquery.dataTables.min.js',
+                'vendor/datatables/dataTables.bootstrap4.min.js',
+                'vendor/datatables/dataTables.responsive.min.js',
+            ],
+            'css' => [
+                'vendor/datatables/dataTables.bootstrap4.min.css',
+            ],
+        ],
         'overlayScrollbars' => [
             'js' => [
                 'vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js',

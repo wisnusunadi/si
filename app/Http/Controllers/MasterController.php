@@ -22,7 +22,11 @@ class MasterController extends Controller
     }
     public function get_data_penjualan_produk()
     {
-        return datatables()->of(PenjualanProduk::select())->toJson();
+        $data = PenjualanProduk::select();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->make(true);
     }
     public function get_data_detail_penjualan_produk($id)
     {
