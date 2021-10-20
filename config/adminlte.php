@@ -356,7 +356,13 @@ return [
         // penjualan (26)
         [
             'text' => 'Penjualan Produk',
-            'url'  => '/penjualan_produk',
+            'url'  => '/penjualan/produk',
+            'icon' => 'fas fa-table',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Customer',
+            'url'  => '/penjualan/customer',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
@@ -927,8 +933,8 @@ return [
             'auth' => [13],
         ],
         [
-            'text' => 'Mutasi Stok',
-            'url' => '/gudang_produk_gbj',
+            'text' => 'Stok',
+            'url' => '/gbj/stok',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
@@ -937,8 +943,8 @@ return [
             'auth' => [13]
         ],
         [
-            'text' => 'PO Penjualan',
-            'url' => '/purchase_order',
+            'text' => 'Penjualan',
+            'url' => '/gbj/penjualan',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
@@ -1000,16 +1006,16 @@ return [
             ],
         ],
         // dependecies plugins
-        // 'DataTables' => [
-        //     'js' => [
-        //         'vendor/datatables/jquery.dataTables.min.js',
-        //         'vendor/datatables/dataTables.bootstrap4.min.js',
-        //         'vendor/datatables/dataTables.responsive.min.js',
-        //     ],
-        //     'css' => [
-        //         'vendor/datatables/dataTables.bootstrap4.min.css',
-        //     ],
-        // ],
+        'DataTables' => [
+            'js' => [
+                'vendor/datatables/jquery.dataTables.min.js',
+                'vendor/datatables/dataTables.bootstrap4.min.js',
+                'vendor/datatables/dataTables.responsive.min.js',
+            ],
+            'css' => [
+                'vendor/datatables/dataTables.bootstrap4.min.css',
+            ],
+        ],
         'overlayScrollbars' => [
             'js' => [
                 'vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js',

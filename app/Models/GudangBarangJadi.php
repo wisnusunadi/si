@@ -13,6 +13,7 @@ class GudangBarangJadi extends Model
     use HasFactory;
 
     protected $table = "gdg_barang_jadi";
+    protected $fillable = ['produk_id', 'variasi', 'stok'];
 
     public function noseri()
     {

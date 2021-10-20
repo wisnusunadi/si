@@ -14,6 +14,10 @@ class Produk extends Model
     {
         return $this->hasMany(DetailPenjualanProduk::class);
     }
+    public function GudangBarangJadi()
+    {
+        return $this->hasMany(GudangBarangJadi::class);
+    }
     public function KelompokProduk()
     {
         return $this->belongsTo(KelompokProduk::class, 'kelompok_produk_id');

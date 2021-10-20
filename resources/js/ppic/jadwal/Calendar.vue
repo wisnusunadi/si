@@ -209,6 +209,7 @@ export default {
     },
   },
 
+<<<<<<< HEAD
   mounted: function () {
     let api = this.$refs.fullCalendar.getApi();
     if (this.status == "penyusunan") {
@@ -225,6 +226,17 @@ export default {
 
   updated: function () {
     console.log(this.produkValue);
+=======
+  updated: function(){
+    console.log("data berubah")
+  },
+
+  watch: {
+    quantity: function (val) {
+      if (val > this.maxQuantity) this.quantityError = true;
+      else this.quantityError = false;
+    },
+>>>>>>> wisnu
   },
 };
 </script>
