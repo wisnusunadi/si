@@ -3,7 +3,7 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Produk</h1>
+<h1 class="m-0 text-dark">Penjualan</h1>
 @stop
 
 @section('content')

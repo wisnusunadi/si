@@ -361,8 +361,20 @@ return [
             'auth' => [26]
         ],
         [
+            'text' => 'Penjualan',
+            'url'  => '/penjualan/penjualan',
+            'icon' => 'fas fa-table',
+            'auth' => [26]
+        ],
+        [
             'text' => 'Customer',
             'url'  => '/penjualan/customer',
+            'icon' => 'fas fa-table',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'AKN',
+            'url'  => '/penjualan/akn',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
