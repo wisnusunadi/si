@@ -677,8 +677,6 @@
 
 <script>
 import axios from "axios";
-import "select2";
-import "select2/dist/css/select2.css";
 
 export default {
   data() {},
