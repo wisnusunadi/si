@@ -1,11 +1,45 @@
 <template>
     <div class="content">
-        <form action="">
+        <form @submit.prevent="handleSubmit">
             <div class="row d-flex justify-content-center">
                 <div class="col-8">
                     <h5>Info Customer</h5>
                     <div class="card">
                         <div class="card-body">
+                            <div v-if="afterSubmit == 'error'">
+                                <div
+                                    class="alert alert-danger alert-dismissible fade show"
+                                    role="alert"
+                                >
+                                    <strong>Gagal menambahkan!</strong> Periksa
+                                    kembali data yang diinput
+                                    <button
+                                        type="button"
+                                        class="close"
+                                        data-dismiss="alert"
+                                        aria-label="Close"
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div v-else-if="afterSubmit == 'success'">
+                                <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                >
+                                    <strong>Berhasil menambahkan data</strong>,
+                                    Terima kasih
+                                    <button
+                                        type="button"
+                                        class="close"
+                                        data-dismiss="alert"
+                                        aria-label="Close"
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group row">
@@ -21,67 +55,41 @@
                                                 class="form-control"
                                                 placeholder="Masukkan Nama Customer"
                                                 v-model="nama_customer"
+                                                v-bind:class="{
+                                                    'is-invalid': nama_customerer
+                                                }"
                                             />
+                                            <div
+                                                class="invalid-feedback"
+                                                v-if="msg.nama_customer"
+                                            >
+                                                {{ msg.nama_customer }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label
-                                            for="nama_produk"
+                                            for="npwp"
                                             class="col-4 col-form-label"
                                             style="text-align:right;"
-                                            >Jenis</label
+                                            >NPWP</label
                                         >
-                                        <div class="col-8">
+                                        <div class="col-5">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                value=""
+                                                placeholder="Masukkan NPWP"
+                                                v-model="npwp"
+                                                v-bind:class="{
+                                                    'is-invalid': npwper
+                                                }"
+                                            />
                                             <div
-                                                class="form-check form-check-inline  col-form-label"
+                                                class="invalid-feedback"
+                                                v-if="msg.npwp"
                                             >
-                                                <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    v-model="jenis"
-                                                    name="jenis"
-                                                    id="jenis1"
-                                                    value="distributor"
-                                                />
-                                                <label
-                                                    class="form-check-label"
-                                                    for="jenis1"
-                                                    >Distributor</label
-                                                >
-                                            </div>
-                                            <div
-                                                class="form-check form-check-inline  col-form-label"
-                                            >
-                                                <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    v-model="jenis"
-                                                    name="jenis"
-                                                    id="jenis2"
-                                                    value="perseorangan"
-                                                />
-                                                <label
-                                                    class="form-check-label"
-                                                    for="jenis2"
-                                                    >Perseorangan</label
-                                                >
-                                            </div>
-                                            <div
-                                                class="form-check form-check-inline col-form-label"
-                                            >
-                                                <input
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    v-model="jenis"
-                                                    name="jenis"
-                                                    id="jenis3"
-                                                    value="supplier"
-                                                />
-                                                <label
-                                                    class="form-check-label"
-                                                    for="jenis3"
-                                                    >Supplier</label
-                                                >
+                                                {{ msg.npwp }}
                                             </div>
                                         </div>
                                     </div>
@@ -98,7 +106,16 @@
                                                 class="form-control"
                                                 placeholder="Masukkan Alamat"
                                                 v-model="alamat"
+                                                v-bind:class="{
+                                                    'is-invalid': alamater
+                                                }"
                                             />
+                                            <div
+                                                class="invalid-feedback"
+                                                v-if="msg.alamat"
+                                            >
+                                                {{ msg.alamat }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -112,11 +129,19 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                pattern="[7-9]{1}[0-9]{9}"
                                                 value=""
                                                 placeholder="Masukkan Telepon"
                                                 v-model="telepon"
+                                                v-bind:class="{
+                                                    'is-invalid': teleponer
+                                                }"
                                             />
+                                            <div
+                                                class="invalid-feedback"
+                                                v-if="msg.telepon"
+                                            >
+                                                {{ msg.telepon }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -151,7 +176,11 @@
                         ></router-link
                     >
                     <span class="float-right"
-                        ><button type="button" class="btn btn-info">
+                        ><button
+                            type="submit"
+                            class="btn btn-info"
+                            v-bind:class="{ disabled: btndis }"
+                        >
                             Tambah
                         </button></span
                     >
@@ -162,15 +191,157 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     data() {
         return {
+            msg: [],
             nama_customer: "",
-            jenis: "",
+            npwp: "",
             keterangan: "",
             telepon: "",
-            alamat: ""
+            alamat: "",
+            afterSubmit: "",
+
+            nama_customerer: false,
+            npwper: false,
+            keteranganer: false,
+            teleponer: false,
+            alamater: false,
+            btndis: true
         };
+    },
+    methods: {
+        checkNamaCust: function(value) {
+            axios.get(`tesapi`).then(res => {
+                return res;
+            });
+        },
+        checkNpwp: function(value) {
+            axios.get(`tesapi`).then(res => {
+                return res;
+            });
+        },
+        checkTelepon: function(value) {
+            axios.get(`tesapi`).then(res => {
+                return res;
+            });
+        },
+        handleSubmit: function() {
+            this.afterSubmit = "success";
+            console.log("test");
+        }
+    },
+    watch: {
+        nama_customer: function() {
+            if (this.nama_customer == "") {
+                this.msg["nama_customer"] = "Nama tidak boleh kosong";
+                this.nama_customerer = true;
+                this.btndis = true;
+            } else if (this.nama_customer != "") {
+                // if (checkNpwp(this.nama_customerer).value >= 1) {
+                //     this.msg["nama_customer"] = "Nama sudah terpakai";
+                //     this.nama_customerer = true;
+                //     this.btndis = true;
+                // } else {
+                //     this.msg["nama_customer"] = "";
+                //     this.nama_customerer = false;
+                //     this.btndis = false;
+                // }
+                this.msg["nama_customer"] = "";
+                this.nama_customerer = false;
+                if (
+                    this.telepon != "" &&
+                    this.npwp != "" &&
+                    this.alamat != ""
+                ) {
+                    this.btndis = false;
+                } else {
+                    this.btndis = true;
+                }
+            }
+        },
+        npwp: function() {
+            if (this.npwp == "") {
+                this.msg["npwp"] = "NPWP tidak boleh kosong";
+                this.npwper = true;
+                this.btndis = true;
+            } else if (this.npwp != "") {
+                // if (checkNpwp(this.npwper).value >= 1) {
+                //     this.msg["npwp"] = "NPWP sudah terpakai";
+                //     this.npwper = true;
+                //     this.btndis = true;
+                // } else {
+                //     this.msg["npwp"] = "";
+                //     this.npwper = false;
+                //     this.btndis = false;
+                // }
+                this.msg["npwp"] = "";
+                this.npwper = false;
+                if (
+                    this.nama_customer != "" &&
+                    this.telepon != "" &&
+                    this.alamat != ""
+                ) {
+                    this.btndis = false;
+                } else {
+                    this.btndis = true;
+                }
+            }
+        },
+        telepon: function() {
+            if (this.telepon == "") {
+                this.msg["telepon"] = "Telepon tidak boleh kosong";
+                this.teleponer = true;
+                this.btndis = true;
+            } else if (this.telepon != "") {
+                if (!/^[0-9]+$/.test(this.telepon)) {
+                    this.msg["telepon"] = "Isi nomor telepon dengan angka";
+                    this.teleponer = true;
+                    this.btndis = true;
+                } else {
+                    // if (checkTelepon(this.teleponer).value >= 1) {
+                    //     this.msg["telepon"] = "Nomor Telepon sudah terpakai";
+                    //     this.teleponer = true;
+                    //     this.btndis = true;
+                    // } else {
+                    //     this.msg["telepon"] = "";
+                    //     this.teleponer = false;
+                    //     this.btndis = false;
+                    // }
+                    this.msg["telepon"] = "";
+                    this.teleponer = false;
+                    if (
+                        this.nama_customer != "" &&
+                        this.npwp != "" &&
+                        this.alamat != ""
+                    ) {
+                        this.btndis = false;
+                    } else {
+                        this.btndis = true;
+                    }
+                }
+            }
+        },
+        alamat: function() {
+            if (this.alamat == "") {
+                this.msg["alamat"] = "Alamat tidak boleh kosong";
+                this.alamater = true;
+                this.btndis = true;
+            } else if (this.alamat != "") {
+                this.msg["alamat"] = "";
+                this.alamater = false;
+                if (
+                    this.nama_customer != "" &&
+                    this.npwp != "" &&
+                    this.telepon != ""
+                ) {
+                    this.btndis = false;
+                } else {
+                    this.btndis = true;
+                }
+            }
+        }
     }
 };
 </script>
