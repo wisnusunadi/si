@@ -18,7 +18,11 @@ class MasterController extends Controller
     }
     public function get_data_customer()
     {
-        return datatables()->of(Customer::select())->toJson();
+        $data = Customer::select();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->make(true);
     }
     public function get_data_penjualan_produk()
     {
@@ -67,20 +71,18 @@ class MasterController extends Controller
         $this->validate(
             $request,
             [
-                'jenis' => 'required',
                 'nama' => 'required|unique:customer',
 
             ],
             [
-                'jenis.required' => 'Jenis Customer harus di isi',
                 'nama.required|unique:customer' => 'Nama Customer harus di isi',
             ]
         );
         Customer::create([
-            'jenis' => $request->jenis,
             'nama' => $request->nama,
             'telp' => $request->telp,
             'alamat' => $request->alamat,
+            'npwp' => '43443',
             'ket' => $request->ket,
         ]);
     }

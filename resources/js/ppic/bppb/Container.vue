@@ -6,7 +6,7 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 export default {
   mounted() {
     $("#table").DataTable({
-      ajax: "http://localhost:8000/api/ppic/bppb/" + this.$route.params.status,
+      ajax: "/api/ppic/bppb/" + this.$route.params.status,
       columns: [
         {
           data: "DT_RowIndex",

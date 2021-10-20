@@ -10,7 +10,9 @@
 @stop
 
 @section('content')
-<div id="app" auth={{ Auth::user() }}></div>
+<div id="app">
+    <calendar />
+</div>
 @stop
 
 @section('adminlte_js')

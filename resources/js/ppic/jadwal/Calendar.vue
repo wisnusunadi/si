@@ -14,18 +14,14 @@ export default {
 
   data: function () {
     return {
+      status: this.$route.params.status,
       start_date_str: "",
       end_date_str: "",
-      status: this.$route.params.status,
 
       // modal
       produk: [],
       produkValue: "",
-      versi: [],
-      versiValue: "",
       quantity: 0,
-      maxQuantity: 0,
-      quantityError: false,
       color: "#6c757d",
       colors: [
         "#007bff",
@@ -46,16 +42,7 @@ export default {
 
   computed: {
     event: function () {
-      if (this.$store.state.jadwal.length == 0) return [];
-      else
-        return this.$store.state.jadwal.map((data) => ({
-          id: data.id,
-          title: data.detail_produk.nama,
-          start: data.tanggal_mulai,
-          end: data.tanggal_selesai,
-          backgroundColor: data.warna,
-          borderColor: data.warna,
-        }));
+      return this.convertJadwal(this.$store.state.jadwal);
     },
     calendarOptions: function () {
       return {
@@ -69,18 +56,7 @@ export default {
         showNonCurrentDates: false,
         selectable: this.selectable,
 
-        events:
-          this.$store.state.jadwal.length == 0
-            ? []
-            : this.$store.state.jadwal.map((data) => ({
-                id: data.id,
-                title: data.detail_produk.nama,
-                start: data.tanggal_mulai,
-                end: data.tanggal_selesai,
-                backgroundColor: data.warna,
-                borderColor: data.warna,
-                jumlah: data.jumlah,
-              })),
+        events: this.convertJadwal(this.$store.state.jadwal),
 
         select: this.handleSelect,
         eventClick: this.handleEventClick,
@@ -88,9 +64,9 @@ export default {
     },
 
     options: function () {
-      this.produk.map((item) => ({
-        text: item.nama,
-        value: item.id,
+      return this.produk.map((data) => ({
+        label: data.nama,
+        value: data.id,
       }));
     },
 
@@ -99,8 +75,8 @@ export default {
       let jadwal = this.$store.state.jadwal;
       for (let i = 0; i < jadwal.length; i++) {
         result[jadwal[i].id] = `
-          produk: ${jadwal[i].detail_produk.nama} <br />
-          Jumlah: ${jadwal[i].jumlah_produksi} <br />
+          produk: ${jadwal[i].produk.nama} <br />
+          Jumlah: ${jadwal[i].jumlah}  <br />
           <br />
           Apakah Anda ingin menghapus produk ini dari jadwal?
         `;
@@ -121,20 +97,20 @@ export default {
     },
   },
 
-  mounted: function () {
-    let api = this.$refs.fullCalendar.getApi();
-    if (this.status == "penyusunan") {
-      api.next();
-    }
-    if (this.status == "selesai") {
-      api.prev();
-    }
-
-    if (this.status == "penyusunan") this.enableEdit();
-    else this.disableEdit();
-  },
-
   methods: {
+    convertJadwal: function (jadwal) {
+      return jadwal.length == 0
+        ? []
+        : jadwal.map((data) => ({
+            id: data.id,
+            title: data.produk.nama,
+            start: data.tanggal_mulai,
+            end: data.tanggal_selesai,
+            backgroundColor: data.warna,
+            borderColor: data.warna,
+          }));
+    },
+
     handleSelect: function (selectInfo) {
       let calendarApi = selectInfo.view.calendar;
       calendarApi.unselect();
@@ -142,10 +118,11 @@ export default {
       this.start_date_str = selectInfo.startStr;
       this.end_date_str = selectInfo.endStr;
 
-      axios.get("http://localhost:8000/api/ppic/product").then((response) => {
+      axios.get("/api/ppic/product").then((response) => {
         this.produk = response.data;
         $("#exampleModal").modal("show");
       });
+      $("#exampleModal").modal("show");
     },
 
     handleEventClick: function (clickEventInfo) {
@@ -170,35 +147,16 @@ export default {
       this.color = event.target.style.backgroundColor;
     },
 
-    changeProduk() {
-      axios.get("/api/ppic/version/" + this.produkValue).then((response) => {
-        this.versi = response.data.produk_bill_of_material;
-        this.versiValue = "";
-
-        this.quantity = 0;
-        this.maxQuantity = 0;
-      });
-    },
-
-    changeVersi() {
-      axios
-        .get("/api/ppic/max-quantity/" + this.versiValue)
-        .then((response) => {
-          this.maxQuantity = response.data;
-        });
-    },
-
     handleSubmit() {
-      if (!this.produkValue || !this.versiValue || !this.quantity) {
-        alert("form tidak lengkap");
+      if (!this.produkValue || Number(this.quantity) <= 0) {
+        alert("input error");
         return;
       }
 
       axios
         .post("/api/ppic/add-event", {
-          detail_produk_id: this.produkValue,
-          produk_bill_of_material_id: this.versiValue,
-          jumlah_produksi: this.quantity,
+          produk_id: this.produkValue,
+          jumlah: this.quantity,
           tanggal_mulai: this.start_date_str,
           tanggal_selesai: this.end_date_str,
           status: this.$route.params.status,
@@ -208,7 +166,6 @@ export default {
           this.$store.commit("updateJadwal", response.data);
           $("#exampleModal").modal("hide");
           this.produkValue = "";
-          this.versiValue = "";
           this.quantity = 0;
         });
     },
@@ -252,6 +209,24 @@ export default {
     },
   },
 
+<<<<<<< HEAD
+  mounted: function () {
+    let api = this.$refs.fullCalendar.getApi();
+    if (this.status == "penyusunan") {
+      this.headerToolbar = "";
+      api.next();
+    }
+    if (this.status == "selesai") {
+      api.prev();
+    }
+
+    if (this.status == "penyusunan") this.enableEdit();
+    else this.disableEdit();
+  },
+
+  updated: function () {
+    console.log(this.produkValue);
+=======
   updated: function(){
     console.log("data berubah")
   },
@@ -261,6 +236,7 @@ export default {
       if (val > this.maxQuantity) this.quantityError = true;
       else this.quantityError = false;
     },
+>>>>>>> wisnu
   },
 };
 </script>
@@ -269,12 +245,27 @@ export default {
   <div class="row">
     <div class="col-xl-9">
       <div class="card">
-        <full-calendar
-          ref="fullCalendar"
-          id="calendar"
-          :options="calendarOptions"
-        />
+        <div
+          :class="[
+            'card-header',
+            'text-center',
+            { 'bg-warning': status === 'penyusunan' },
+            { 'bg-info': status === 'pelaksanaan' },
+            { 'bg-success': status === 'selesai' },
+          ]"
+        >
+          {{ status.toUpperCase() }}
+        </div>
+        <div class="card-body">
+          <full-calendar
+            ref="fullCalendar"
+            id="calendar"
+            :options="calendarOptions"
+          />
+        </div>
       </div>
+    </div>
+    <div class="col-xl-3">
       <button
         v-if="status === 'penyusunan' && !konfirmasi"
         class="btn btn-block btn-info mb-3"
@@ -282,12 +273,8 @@ export default {
       >
         Minta Persetujuan
       </button>
-    </div>
-    <div class="col-xl-3">
       <div class="card">
-        <div class="card-header">
-          <h5 class="text-center">Daftar Produksi</h5>
-        </div>
+        <div class="card-header text-center">Daftar Produksi</div>
         <div class="card-body" style="max-height: 500px">
           <table class="table table-hover styled-table table-striped">
             <thead>
@@ -298,8 +285,8 @@ export default {
             </thead>
             <tbody>
               <tr v-for="item in this.$store.state.jadwal" :key="item.id">
-                <td>{{ item.detail_produk.nama }}</td>
-                <td>{{ item.jumlah_produksi }}</td>
+                <td>{{ item.produk.nama }}</td>
+                <td>{{ item.jumlah }}</td>
               </tr>
             </tbody>
           </table>
@@ -309,7 +296,7 @@ export default {
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Produk Modal</h5>
@@ -335,44 +322,21 @@ export default {
             </div>
             <div class="form-group">
               <label>Produk:</label>
-              <select
-                class="form-control"
-                v-on:change="changeProduk"
+              <v-select
+                :options="options"
+                :reduce="(nama) => nama.value"
                 v-model="produkValue"
-              >
-                <option v-for="item in produk" :key="item.id" :value="item.id">
-                  {{ item.nama }}
-                </option>
-              </select>
+              />
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label>Versi BOM:</label>
-                <select
-                  class="form-control"
-                  v-on:change="changeVersi"
-                  v-model="versiValue"
-                >
-                  <option v-for="item in versi" :key="item.id" :value="item.id">
-                    {{ item.versi }}
-                  </option>
-                </select>
+                <label>Stok:</label>
+                <div>GBJ: -</div>
+                <div>GK : -</div>
               </div>
               <div class="form-group col-md-6">
                 <label>Jumlah Produk:</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  v-model="quantity"
-                  :max="maxQuantity"
-                />
-                <small
-                  :class="[
-                    'form-text',
-                    quantityError ? 'text-danger' : 'text-muted',
-                  ]"
-                  >max: {{ maxQuantity }}</small
-                >
+                <input type="number" class="form-control" v-model="quantity" />
               </div>
             </div>
           </div>
@@ -391,7 +355,7 @@ export default {
     </div>
 
     <div class="modal fade" id="confirmation">
-      <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
           <div class="modal-body">
             <div v-html="confirmationMessage"></div>

@@ -4,7 +4,10 @@
       <button class="btn btn-primary" @click="changeView('calendar')">
         Kalender
       </button>
-      <button class="btn btn-info" @click="changeView('table')">Tabel</button>
+      <button class="btn btn-info" @click="changeView('chart')">Chart</button>
+      <button class="btn btn-warning" @click="changeView('table')">
+        Tabel
+      </button>
     </div>
     <div
       v-if="this.$store.state.konfirmasi"
@@ -19,8 +22,6 @@
 
 <script>
 export default {
-  props: [auth],
-
   methods: {
     changeView: function (view) {
       this.$store.commit("changeView", view);
