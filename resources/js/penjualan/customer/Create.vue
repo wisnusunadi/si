@@ -165,60 +165,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                <label
-                    for="alamat"
-                    class="col-4 col-form-label"
-                    style="text-align: right"
-                    >Alamat</label
-                >
+            </div>
+            <div class="row d-flex justify-content-center">
                 <div class="col-8">
-                    <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Masukkan Alamat"
-                    v-model="alamat"
-                    />
-                </div>
-                </div>
-                <div class="form-group row">
-                <label
-                    for="telepon"
-                    class="col-4 col-form-label"
-                    style="text-align: right"
-                    >No Telp</label
-                >
-                <span class="float-right"
-                    ><button
-                        type="submit"
-                        class="btn btn-info"
-                        v-bind:class="{ disabled: btndis }"
+                    <router-link :to="{ name: 'show' }"
+                        ><span class="float-left"
+                            ><button type="button" class="btn btn-danger">
+                                Batal
+                            </button></span
+                        ></router-link
                     >
-                        Tambah
-                    </button></span
-                >
-                <div class="col-5">
-                    <textarea
-                    class="form-control"
-                    name="keterangan"
-                    id="keterangan"
-                    v-model="keterangan"
-                    ></textarea>
-                </div>
+                    <span class="float-right"
+                        ><button type="submit" class="btn btn-info">
+                            Tambah
+                        </button></span
+                    >
                 </div>
             </div>
-        <div class="row d-flex justify-content-center">
-        <div class="col-8">
-          <router-link :to="{ name: 'show' }"
-            ><span class="float-left"
-              ><button type="button" class="btn btn-danger">Batal</button></span
-            ></router-link
-          >
-          <span class="float-right"
-            ><button type="submit" class="btn btn-info">Tambah</button></span
-          >
-        </div>
-      </div>
         </form>
     </div>
 </template>

@@ -11,12 +11,12 @@ const router = new VueRouter({
     routes: [
         {
             name: 'show',
-            path: '/penjualan/penjualan',
+            path: '/penjualan/po',
             component: Show
         },
         {
             name: 'create',
-            path: '/penjualan/penjualan/create',
+            path: '/penjualan/po/create',
             component: Create
         },
     ]

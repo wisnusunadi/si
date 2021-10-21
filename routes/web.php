@@ -45,6 +45,7 @@ Route::middleware('auth')->prefix('/penjualan')->group(function () {
     Route::view('/produk/{any?}', 'page.penjualan.produk');
     Route::view('/customer/{any?}', 'page.penjualan.customer');
     Route::view('/penjualan/{any?}', 'page.penjualan.penjualan');
+    Route::view('/po/{any?}', 'page.penjualan.po');
 });
 
 Route::get('/test/{name?}', function ($name = null) {
