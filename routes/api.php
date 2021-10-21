@@ -53,6 +53,7 @@ Route::prefix('/produk')->group(function () {
     Route::post('update', [App\Http\Controllers\MasterController::class, 'update_produk']);
     Route::delete('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_produk']);
     Route::get('check/{id}', [App\Http\Controllers\MasterController::class, 'check_produk']);
+    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_produk']);
 });
 Route::prefix('/penjualan_produk')->group(function () {
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_penjualan_produk']);
@@ -64,4 +65,14 @@ Route::prefix('/penjualan_produk')->group(function () {
 });
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
+});
+Route::prefix('/ekatalog')->group(function () {
+    Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
+    Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_ekatalog']);
+    Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog']);
+    Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_ekatalog']);
+    Route::get('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_ekatalog']);
+});
+Route::prefix('/spa')->group(function () {
+    Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
 });

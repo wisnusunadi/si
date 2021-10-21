@@ -83,9 +83,7 @@
                         <td>{{ index + 1 }}</td>
                         <td>
                           <div class="form-group">
-                            <v-select
-                              :options="[{ label: 'Canada', code: 'ca' }]"
-                            ></v-select>
+                            <v-select :options="produk_options"></v-select>
                           </div>
                         </td>
                         <td>{{ row.kelompok_produk }}Alat Kesehatan</td>
@@ -128,11 +126,12 @@
     </form>
   </div>
 </template>
-
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
+      produk_options: [],
       nama_paket: "",
       harga: "",
       previewImage: null,
@@ -149,14 +148,17 @@ export default {
     };
   },
 
+  mounted: function () {
+    axios
+      .get("/api/produk/select")
+      .then((response) => {
+        this.produk_options = response.data.map((data) => data.tipe);
+      })
+      .catch((err) => console.log(err));
+  },
+
   methods: {
-    handleSubmit: function () {
-      console.log({
-        nama_paket: this.nama_paket,
-        harga: this.harga,
-      });
-      alert("ok");
-    },
+    pullProduk() {},
     addRow: function () {
       this.rows.push({
         produk_id: "",

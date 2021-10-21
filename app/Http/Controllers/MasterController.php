@@ -19,7 +19,6 @@ class MasterController extends Controller
     public function get_data_customer()
     {
         $data = Customer::select();
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->make(true);
@@ -108,7 +107,6 @@ class MasterController extends Controller
             'harga' => $request->harga
         ]);
 
-
         for ($i = 0; $i < count($request->produk_id); $i++) {
             DetailPenjualanProduk::create([
                 'produk_id' => $request->produk_id[$i],
@@ -145,13 +143,6 @@ class MasterController extends Controller
         $produk->status = $request->status;
         $produk->save();
     }
-
-    //Delete
-    public function delete_customer($id)
-    {
-        $produk = Customer::findOrFail($id);
-        $produk->delete();
-    }
     public function delete_produk($id)
     {
         $produk = Produk::findOrFail($id);
@@ -183,6 +174,13 @@ class MasterController extends Controller
     public function check_penjualan_produk($value)
     {
         $data = PenjualanProduk::where('nama', $value)->get();
+        echo json_encode($data);
+    }
+
+    //Select
+    public function select_produk()
+    {
+        $data = Produk::all();
         echo json_encode($data);
     }
 }
