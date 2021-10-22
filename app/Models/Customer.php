@@ -14,6 +14,10 @@ class Customer extends Model
     {
         return $this->hasMany(Spa::class);
     }
+    public function Spb()
+    {
+        return $this->hasMany(Spb::class);
+    }
     public function Ekatalog()
     {
         return $this->hasMany(Ekatalog::class);

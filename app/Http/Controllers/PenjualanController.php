@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailEkatalog;
+use App\Models\DetailSpa;
+use App\Models\DetailSpb;
 use App\Models\Ekatalog;
 use App\Models\Spa;
+use App\Models\Spb;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -14,7 +17,25 @@ class PenjualanController extends Controller
     public function get_data_detail_ekatalog($value)
     {
         $data  = DetailEkatalog::with('Penjualan_produk', 'Ekatalog')
-            ->where('penjualan_id', $value)
+            ->where('ekatalog', $value)
+            ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->make(true);
+    }
+    public function get_data_detail_spa($value)
+    {
+        $data  = DetailSpa::with('Penjualan_produk', 'Spa')
+            ->where('spa_id', $value)
+            ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->make(true);
+    }
+    public function get_data_detail_spb($value)
+    {
+        $data  = DetailSpa::with('Penjualan_produk', 'Spb')
+            ->where('spb_id', $value)
             ->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -34,6 +55,14 @@ class PenjualanController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
+    public function get_data_spb()
+    {
+        $data  = Spb::select();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
     //Create
     public function create_ekatalog(Request $request)
     {
@@ -43,7 +72,7 @@ class PenjualanController extends Controller
                 'no_paket' => 'required',
                 'customer_id' => 'required',
                 'status' => 'required',
-                'tgl_kontrak' => 'required'
+                'tgl_kontrak' => 'required',
                 'jumlah.*' => 'required',
                 'penjualan_produk_id.*' => 'required'
             ],
@@ -67,9 +96,73 @@ class PenjualanController extends Controller
             'tgl_buat' => $request->tgl_buat,
             'ket' => $request->ket
         ]);
-        for ($i = 0; $i < count($request->produk_id); $i++) {
+        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
             DetailEkatalog::create([
-                'penjualan_id' => $Ekatalog->id,
+                'ekatalog_id' => $Ekatalog->id,
+                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                'jumlah' => $request->jumlah[$i],
+                'harga' => $request->harga[$i],
+                'ongkir' => $request->ongkir[$i],
+            ]);
+        }
+    }
+    public function create_spa(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'customer_id' => 'required',
+                'status' => 'required',
+                'jumlah.*' => 'required',
+                'penjualan_produk_id.*' => 'required'
+            ],
+            [
+                'customer_id.required' => 'Customer harus di isi',
+                'status.required' => 'Status harus di pilih',
+                'jumlah.required' => 'Jumlah Produk harus di isi',
+                'penjualan_produk_id.required' => 'Produk harus di pilih',
+            ]
+        );
+        $Spa = Spa::create([
+            'customer_id' => $request->customer_id,
+            'status' => $request->status,
+            'ket' => $request->ket
+        ]);
+        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+            DetailSpa::create([
+                'spa_id' => $Spa->id,
+                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                'jumlah' => $request->jumlah[$i],
+                'harga' => $request->harga[$i],
+                'ongkir' => $request->ongkir[$i],
+            ]);
+        }
+    }
+    public function create_spb(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'customer_id' => 'required',
+                'status' => 'required',
+                'jumlah.*' => 'required',
+                'penjualan_produk_id.*' => 'required'
+            ],
+            [
+                'customer_id.required' => 'Customer harus di isi',
+                'status.required' => 'Status harus di pilih',
+                'jumlah.required' => 'Jumlah Produk harus di isi',
+                'penjualan_produk_id.required' => 'Produk harus di pilih',
+            ]
+        );
+        $Spb = Spb::create([
+            'customer_id' => $request->customer_id,
+            'status' => $request->status,
+            'ket' => $request->ket
+        ]);
+        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+            DetailSpb::create([
+                'spb_id' => $Spb->id,
                 'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                 'jumlah' => $request->jumlah[$i],
                 'harga' => $request->harga[$i],
@@ -91,9 +184,29 @@ class PenjualanController extends Controller
         $detail_ekatalog = DetailEkatalog::findOrFail($id);
         $detail_ekatalog->delete();
     }
+    public function delete_detail_spa($id)
+    {
+        $detail_spa = DetailSpa::findOrFail($id);
+        $detail_spa->delete();
+    }
+    public function delete_detail_spb($id)
+    {
+        $detail_spb = DetailSpb::findOrFail($id);
+        $detail_spb->delete();
+    }
     public function delete_ekatalog($id)
     {
         $ekatalog = Ekatalog::findOrFail($id);
+        $ekatalog->delete();
+    }
+    public function delete_spa($id)
+    {
+        $ekatalog = Spa::findOrFail($id);
+        $ekatalog->delete();
+    }
+    public function delete_spb($id)
+    {
+        $ekatalog = Spb::findOrFail($id);
         $ekatalog->delete();
     }
 }

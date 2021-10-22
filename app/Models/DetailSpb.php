@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetailEkatalog extends Model
+class DetailSpb extends Model
 {
-    protected $table = 'detail_ekatalog';
-    protected $fillable = ['ekatalog_id', 'penjualan_produk_id', 'jumlah', 'harga', 'ongkir'];
+    protected $table = 'detail_spb';
+    protected $fillable = ['spb_id', 'penjualan_produk_id', 'jumlah', 'harga', 'ongkir'];
 
-    public function Ekatalog()
+    public function Spb()
     {
-        return $this->belongsTo(Ekatalog::class, 'penjualan_id');
+        return $this->belongsTo(Spb::class, 'spb_id');
     }
     public function PenjualanProduk()
     {

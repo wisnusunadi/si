@@ -156,7 +156,6 @@ export default {
       })
       .catch((err) => console.log(err));
   },
-
   methods: {
     pullProduk() {},
     addRow: function () {

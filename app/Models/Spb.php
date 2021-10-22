@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Spa extends Model
+class Spb extends Model
 {
-    protected $table = 'spa';
+    protected $table = 'spb';
     protected $fillable = ['customer_id', 'pesanan_id', 'status', 'ket'];
 
     public function Customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
-    public function DetailSpa()
+    public function DetailSpb()
     {
-        return $this->hasMany(DetailSpa::class);
+        return $this->hasMany(DetailSpb::class);
     }
     public function Pesanan()
     {

@@ -18,4 +18,12 @@ class PenjualanProduk extends Model
     {
         return $this->hasMany(DetailEkatalog::class);
     }
+    public function DetailSpa()
+    {
+        return $this->hasMany(DetailSpa::class);
+    }
+    public function DetailSpb()
+    {
+        return $this->hasMany(DetailSpb::class);
+    }
 }
