@@ -28,9 +28,9 @@
 
     {{-- Custom Stylesheets (post AdminLTE) --}}
     @yield('master_css')
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400, 300">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="vendor/select2/css/select2.min.css" rel="stylesheet" />
 
     {{-- Favicon --}}
     @if(config('adminlte.use_ico_only'))
@@ -63,6 +63,7 @@
     {{-- Configured Scripts --}}
     <script src="{{ asset('native/js/plugin.js') }}"></script>
     <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
+    <script src="vendor/select2/js/select2.min.js"></script>
 
     {{-- Custom Scripts --}}
     @yield('master_js')

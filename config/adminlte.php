@@ -373,8 +373,8 @@ return [
             'auth' => [26]
         ],
         [
-            'text' => 'AKN',
-            'url'  => '/penjualan/akn',
+            'text' => 'PO',
+            'url'  => '/penjualan/po',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
@@ -1039,6 +1039,7 @@ return [
         'Select2' => [
             'js' => [
                 'vendor/select2/js/select2.full.min.js',
+
             ],
             'css' => [
                 'vendor/select2/css/select2.min.css',
