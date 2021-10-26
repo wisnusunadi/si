@@ -7,6 +7,7 @@ const store = new Vuex.Store({
     state: {
         view: "calendar",
         konfirmasi: false,
+        proses_konfirmasi: false,
         jadwal: []
     },
 
@@ -15,12 +16,23 @@ const store = new Vuex.Store({
             state.view = view
         },
 
-        changeKonfirmasi: function (state, konfirmasi) {
-            state.konfirmasi = konfirmasi
-        },
-
         updateJadwal: function (state, jadwal) {
             state.jadwal = jadwal
+            for (let i = 0; i < jadwal.length; i++)
+                if (jadwal[i].konfirmasi === 1)
+                    state.konfirmasi = true
+                else {
+                    state.konfirmasi = false
+                    break
+                }
+
+            for (let i = 0; i < jadwal.length; i++)
+                if (jadwal[i].proses_konfirmasi === 1)
+                    state.proses_konfirmasi = true
+                else {
+                    state.proses_konfirmasi = false
+                    break
+                }
         }
     }
 })

@@ -15,7 +15,7 @@ use App\Models\GudangBarangJadi;
 class PpicController extends Controller
 {
     // API
-    public function getEvent($status)
+    public function getEvent($status, Request $request)
     {
         $month = date('m');
         $year = date('Y');
@@ -57,7 +57,7 @@ class PpicController extends Controller
         ];
         JadwalPerakitan::create($data);
 
-        return $this->getEvent($request->status);
+        return $this->getEvent($request->status, $request);
     }
 
     public function deleteEvent(Request $request)
@@ -76,22 +76,23 @@ class PpicController extends Controller
 
     public function updateConfirmation(Request $request)
     {
-        $event = JadwalPerakitan::where('status', 'penyusunan')->get();
+        $event = JadwalPerakitan::where('status', $request->status)->get();
         foreach ($event as $data) {
-            $data->konfirmasi = $request->confirmation;
+            if (isset($request->proses_konfirmasi)) $data->proses_konfirmasi = $request->proses_konfirmasi;
+            if (isset($request->konfirmasi)) $data->konfirmasi = $request->konfirmasi;
             $data->save();
-
-            // $this->addBppb($data);
         }
 
-        return $this->getEvent("penyusunan");
+        return $this->getEvent($request->status, $request);
     }
 
     public function resetConfirmation()
     {
-        $event = JadwalPerakitan::where('status', 'penyusunan')->get();
+        $event = JadwalPerakitan::all();
         foreach ($event as $data) {
-            $data->konfirmasi = 0;
+            if ($data->status == "penyusunan") $data->konfirmasi = 0;
+            else if ($data->status == "pelaksanaan") $data->konfirmasi = 1;
+            $data->proses_konfirmasi = 0;
             $data->save();
         }
 

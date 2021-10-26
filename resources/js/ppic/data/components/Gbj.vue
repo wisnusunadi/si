@@ -47,16 +47,20 @@ export default {
 
 <template>
   <div>
-    <table id="table" class="table table-hover styled-table table-striped">
-      <thead style="text-align: center; font-size: 15px">
-        <tr>
-          <th>No</th>
-          <th>Nama</th>
-          <th>Stok</th>
-          <th>Detail</th>
-        </tr>
-      </thead>
-    </table>
+    <div class="card">
+      <div class="card-body">
+        <table id="table" class="table table-hover styled-table table-striped">
+          <thead style="text-align: center; font-size: 15px">
+            <tr>
+              <th>No</th>
+              <th>Nama</th>
+              <th>Stok</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="modal">

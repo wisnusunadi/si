@@ -36,7 +36,7 @@ export default {
       deleteJadwal: false,
 
       event_ref: null,
-      selectable: true,
+      editable: true,
     };
   },
 
@@ -54,7 +54,7 @@ export default {
         },
         weekends: false,
         showNonCurrentDates: false,
-        selectable: this.selectable,
+        selectable: this.editable,
 
         events: this.convertJadwal(this.$store.state.jadwal),
 
@@ -84,21 +84,11 @@ export default {
 
       return result;
     },
-
-    konfirmasi: function () {
-      let jadwal = this.$store.state.jadwal;
-      for (let i = 0; i < jadwal.length; i++) {
-        if (jadwal[i].konfirmasi === 1 || jadwal[i].konfirmasi === 3) {
-          return true;
-        }
-      }
-
-      return false;
-    },
   },
 
   methods: {
     convertJadwal: function (jadwal) {
+      console.log(jadwal);
       return jadwal.length == 0
         ? []
         : jadwal.map((data) => ({
@@ -112,42 +102,46 @@ export default {
     },
 
     handleSelect: function (selectInfo) {
-      let calendarApi = selectInfo.view.calendar;
-      calendarApi.unselect();
+      if (this.editable) {
+        let calendarApi = selectInfo.view.calendar;
+        calendarApi.unselect();
 
-      this.start_date_str = selectInfo.startStr;
-      this.end_date_str = selectInfo.endStr;
+        this.start_date_str = selectInfo.startStr;
+        this.end_date_str = selectInfo.endStr;
 
-      axios.get("/api/ppic/product").then((response) => {
-        this.produk = response.data;
+        axios.get("/api/ppic/product").then((response) => {
+          this.produk = response.data;
+          $("#exampleModal").modal("show");
+        });
         $("#exampleModal").modal("show");
-      });
-      $("#exampleModal").modal("show");
+      }
     },
 
     handleEventClick: function (clickEventInfo) {
-      let obj = clickEventInfo.event._def;
-      this.confirmationMessage = this.message[obj.publicId];
-      this.deleteJadwal = true;
-      this.event_ref = clickEventInfo;
+      if (this.editable) {
+        let obj = clickEventInfo.event._def;
+        this.confirmationMessage = this.message[obj.publicId];
+        this.deleteJadwal = true;
+        this.event_ref = clickEventInfo;
 
-      $("#confirmation").modal("show");
+        $("#confirmation").modal("show");
+      }
     },
 
-    disableEdit() {
-      this.selectable = false;
+    disableEdit: function () {
+      this.editable = false;
     },
 
-    enableEdit() {
-      this.selectable = true;
+    enableEdit: function () {
+      this.editable = true;
     },
 
     // modal
-    handleClick(event) {
+    handleClick: function (event) {
       this.color = event.target.style.backgroundColor;
     },
 
-    handleSubmit() {
+    handleSubmit: function () {
       if (!this.produkValue || Number(this.quantity) <= 0) {
         alert("input error");
         return;
@@ -170,8 +164,8 @@ export default {
         });
     },
 
-    sendBppb: function () {
-      this.confirmationMessage = `Apakah Anda yakin ingin mengirim permintaan BPPB?`;
+    sendToManager: function () {
+      this.confirmationMessage = `Apakah Anda yakin ingin mengirim permintaan?`;
       this.deleteJadwal = false;
 
       $("#confirmation").modal("show");
@@ -180,7 +174,7 @@ export default {
     handleButtonYes: function () {
       if (this.deleteJadwal) {
         axios
-          .post("http://localhost:8000/api/ppic/delete-event", {
+          .post("/api/ppic/delete-event", {
             id: this.event_ref.event._def.publicId,
           })
           .then((response) => {
@@ -189,8 +183,9 @@ export default {
           });
       } else {
         axios
-          .post("http://localhost:8000/api/ppic/send-bppb", {
-            confirmation: 1,
+          .post("/api/ppic/update-event", {
+            proses_konfirmasi: 1,
+            status: this.status,
           })
           .then((response) => {
             this.$store.commit("updateJadwal", response.data);
@@ -211,16 +206,24 @@ export default {
 
   mounted: function () {
     let api = this.$refs.fullCalendar.getApi();
+
     if (this.status == "penyusunan") {
       this.headerToolbar = "";
       api.next();
-    }
-    if (this.status == "selesai") {
-      api.prev();
+      if (this.$store.state.proses_konfirmasi) this.disableEdit();
+      else this.enableEdit();
     }
 
-    if (this.status == "penyusunan") this.enableEdit();
-    else this.disableEdit();
+    if (this.status === "pelaksanaan") {
+      this.disableEdit();
+    }
+  },
+
+  updated: function () {
+    if (this.status === "penyusunan") {
+      if (this.$store.state.proses_konfirmasi) this.disableEdit();
+      else this.enableEdit();
+    }
   },
 };
 </script>
@@ -233,9 +236,8 @@ export default {
           :class="[
             'card-header',
             'text-center',
-            { 'bg-warning': status === 'penyusunan' },
-            { 'bg-info': status === 'pelaksanaan' },
-            { 'bg-success': status === 'selesai' },
+            { 'bg-primary': status === 'penyusunan' },
+            { 'bg-secondary': status === 'pelaksanaan' },
           ]"
         >
           {{ status.toUpperCase() }}
@@ -251,11 +253,18 @@ export default {
     </div>
     <div class="col-xl-4">
       <button
-        v-if="status === 'penyusunan' && !konfirmasi"
+        v-if="status === 'penyusunan' && !this.$store.state.proses_konfirmasi"
         class="btn btn-block btn-info mb-3"
-        @click="sendBppb"
+        @click="sendToManager"
       >
-        Minta Persetujuan
+        Permintaan Persetujuan
+      </button>
+      <button
+        v-if="status === 'pelaksanaan' && !this.$store.state.proses_konfirmasi"
+        class="btn btn-block btn-info mb-3"
+        @click="sendToManager"
+      >
+        Permintaan Perubahan Jadwal
       </button>
       <div class="card">
         <div class="card-header text-center">Daftar Produksi</div>

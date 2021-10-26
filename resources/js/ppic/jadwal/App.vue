@@ -9,6 +9,7 @@ export default {
   props: {
     auth: String,
   },
+
   data: function () {
     return {
       user: JSON.parse(this.auth),

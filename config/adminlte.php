@@ -243,11 +243,6 @@ return [
             'auth'  => [24],
             'submenu'   =>  [
                 [
-                    'text'  =>  'GBMP',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/data/gbmp'
-                ],
-                [
                     'text'  =>  'GBJ',
                     'icon'  =>  'far fa-circle',
                     'url'   =>  '/ppic/data/gbj'
@@ -329,13 +324,13 @@ return [
         [
             'text' => 'Persetujuan Manager',
             'url'  => '/ppic/manager',
-            'icon' => 'fas fa-list-alt',
+            'icon' => 'fas fa-circle',
             'auth' => [24]
         ],
         [
             'text' => 'BOM',
             'url'  => '/ppic/bom',
-            'icon' => 'fas fa-list-alt',
+            'icon' => 'fas fa-circle',
             'auth' => [24]
         ],
         [

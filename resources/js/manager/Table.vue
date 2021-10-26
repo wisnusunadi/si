@@ -5,8 +5,35 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 export default {
   data: function () {
     return {
-      jadwal: this.$store.state.jadwal,
+      jadwal: [],
+      checkedData: [],
     };
+  },
+
+  mounted: function () {
+    axios({
+      method: "get",
+      url: "/api/ppic/schedule/penyusunan",
+      data: {
+        proses_konfirmasi: 1,
+      },
+    }).then((response) => {
+      this.jadwal = response.data;
+    });
+  },
+
+  methods: {
+    clickSetuju: function () {
+      $("#modal").modal("show");
+    },
+
+    handleButtonYes: function () {
+      $("#modal").modal("hide");
+    },
+
+    handleButtonNo: function () {
+      $("#modal").modal("hide");
+    },
   },
 };
 </script>
@@ -25,7 +52,7 @@ export default {
       <tbody>
         <tr v-for="data in jadwal" :key="data.id">
           <td>
-            <input type="checkbox" />
+            <input type="checkbox" :value="data" v-model="checkedData" />
             {{ data.produk.nama }}
           </td>
           <td>{{ data.jumlah }}</td>
@@ -35,8 +62,42 @@ export default {
       </tbody>
     </table>
     <div class="btn-group btn-block">
-      <button class="btn btn-success">Yes</button>
-      <button class="btn btn-danger">No</button>
+      <button class="btn btn-success" @click="clickSetuju">Setuju</button>
+    </div>
+
+    <div class="modal fade" id="modal">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Detail</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-hover text-center">
+              <thead>
+                <tr>
+                  <th>Produk</th>
+                  <th>Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="data in checkedData" :key="data.id">
+                  <td>{{ data.produk.nama }}</td>
+                  <td>{{ data.jumlah }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <button class="btn btn-primary" @click="handleButtonYes">
+              Yes
+            </button>
+            <button class="btn btn-danger" @click="handleButtonNo">No</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
