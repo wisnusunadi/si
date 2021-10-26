@@ -10,7 +10,7 @@ export default {
 
 <template>
   <div class="table-responsive">
-    <table class="table table-hover text-center semuaproduk" width="100%">
+    <table class="table table-hover text-center" width="100%">
       <thead style="text-align: center; font-size: 15px">
         <tr>
           <th>No</th>
@@ -23,9 +23,9 @@ export default {
         <tr>
           <td>1</td>
           <td>BJAA01NB001</td>
-          <td><span class="float-right" style="color: green">1000</span></td>
+          <td><span style="color: green">1000</span></td>
           <td>
-            <button class="btn btn-primary" @click="handleClick">
+            <button class="btn btn-outline-primary btn-sm" @click="handleClick">
               <i class="fas fa-search"></i>
             </button>
           </td>
@@ -33,9 +33,9 @@ export default {
         <tr>
           <td>2</td>
           <td>BJOZ03G0001</td>
-          <td><span class="float-right" style="color: red">5</span></td>
+          <td><span style="color: red">5</span></td>
           <td>
-            <button class="btn btn-primary" @click="handleClick">
+            <button class="btn btn-outline-primary btn-sm" @click="handleClick">
               <i class="fas fa-search"></i>
             </button>
           </td>
@@ -44,10 +44,10 @@ export default {
           <td>3</td>
           <td>BJZZ03T0010</td>
           <td>
-            <span class="float-right" style="color: rgba(0, 0, 0, 0.4)">0</span>
+            <span style="color: rgba(0, 0, 0, 0.4)">0</span>
           </td>
           <td>
-            <button class="btn btn-primary" @click="handleClick">
+            <button class="btn btn-outline-primary btn-sm" @click="handleClick">
               <i class="fas fa-search"></i>
             </button>
           </td>
@@ -92,42 +92,3 @@ export default {
     </div>
   </div>
 </template>
-<style lang="scss">
-thead {
-  text-align: center;
-}
-.semuaproduk {
-  td:nth-child(1),
-  td:nth-child(2),
-  td:nth-child(3),
-  td:nth-child(5),
-  td:nth-child(7),
-  td:nth-child(8) {
-    text-align: center;
-  }
-}
-
-.perproduk {
-  td:nth-child(1),
-  td:nth-child(2),
-  td:nth-child(3),
-  td:nth-child(6) {
-    text-align: center;
-  }
-}
-
-.pertanggal {
-  td:nth-child(1),
-  td:nth-child(2),
-  td:nth-child(4),
-  td:nth-child(7) {
-    text-align: center;
-  }
-}
-
-.center {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>

@@ -19,5 +19,5 @@
 @stop
 
 @section('adminlte_js')
-<script src="{{ asset('native/js/ppic/gudang.js') }}"></script>
+<script src="{{ asset('native/js/ppic/manager.js') }}"></script>
 @stop

@@ -31,9 +31,12 @@ Route::get('/home', function () {
 
 Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/dashboard', 'spa.ppic.dashboard');
-    Route::view('/gudang/{any}', 'spa.ppic.gudang');
-    Route::view('/schedule/{any}', 'spa.ppic.jadwal');
+    Route::view('/manager', 'spa.ppic.manager');
+    Route::view('/data/{any}', 'spa.ppic.data');
+    Route::view('/jadwal/{any}', 'spa.ppic.jadwal');
+    //test
     Route::view('/bppb/{any}', 'spa.ppic.bppb');
+    Route::view('/test', 'spa.ppic');
 });
 
 Route::middleware('auth')->prefix('/gbj')->group(function () {

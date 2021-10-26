@@ -209,7 +209,6 @@ export default {
     },
   },
 
-<<<<<<< HEAD
   mounted: function () {
     let api = this.$refs.fullCalendar.getApi();
     if (this.status == "penyusunan") {
@@ -223,27 +222,12 @@ export default {
     if (this.status == "penyusunan") this.enableEdit();
     else this.disableEdit();
   },
-
-  updated: function () {
-    console.log(this.produkValue);
-=======
-  updated: function(){
-    console.log("data berubah")
-  },
-
-  watch: {
-    quantity: function (val) {
-      if (val > this.maxQuantity) this.quantityError = true;
-      else this.quantityError = false;
-    },
->>>>>>> wisnu
-  },
 };
 </script>
 
 <template>
   <div class="row">
-    <div class="col-xl-9">
+    <div class="col-xl-8">
       <div class="card">
         <div
           :class="[
@@ -265,7 +249,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="col-xl-3">
+    <div class="col-xl-4">
       <button
         v-if="status === 'penyusunan' && !konfirmasi"
         class="btn btn-block btn-info mb-3"
@@ -275,21 +259,23 @@ export default {
       </button>
       <div class="card">
         <div class="card-header text-center">Daftar Produksi</div>
-        <div class="card-body" style="max-height: 500px">
-          <table class="table table-hover styled-table table-striped">
-            <thead>
-              <tr>
-                <th>Nama</th>
-                <th>Jumlah</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in this.$store.state.jadwal" :key="item.id">
-                <td>{{ item.produk.nama }}</td>
-                <td>{{ item.jumlah }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover styled-table table-striped">
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in this.$store.state.jadwal" :key="item.id">
+                  <td>{{ item.produk.nama }}</td>
+                  <td>{{ item.jumlah }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

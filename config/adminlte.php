@@ -245,17 +245,17 @@ return [
                 [
                     'text'  =>  'GBMP',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/gudang/gbmp'
+                    'url'   =>  '/ppic/data/gbmp'
                 ],
                 [
                     'text'  =>  'GBJ',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/gudang/gbj'
+                    'url'   =>  '/ppic/data/gbj'
                 ],
                 [
                     'text'  =>  'GK',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/gudang/gk'
+                    'url'   =>  '/ppic/data/gk'
                 ],
             ]
         ],
@@ -300,30 +300,37 @@ return [
             ]
         ],
         [
+            'text' => 'Perakitan',
+            'url'  => '/ppic/data/perakitan',
+            'icon' => 'fas fa-list-alt',
+            'auth' => [24]
+        ],
+        [
             'header' => 'PPIC',
             'auth' => [24]
         ],
         [
-            'text' => 'Jadwal Produksi',
+            'text' => 'Jadwal Perakitan',
             'icon' => 'fas fa-calendar-alt',
             'auth' => [24],
             'submenu'   =>  [
                 [
-                    'text'  =>  'Penyusunan',
+                    'text'  =>  'Rencana',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/schedule/penyusunan'
+                    'url'   =>  '/ppic/jadwal/penyusunan'
                 ],
                 [
                     'text'  =>  'Pelaksanaan',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/schedule/pelaksanaan',
-                ],
-                [
-                    'text'  =>  'Selesai',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/schedule/selesai'
+                    'url'   =>  '/ppic/jadwal/pelaksanaan',
                 ],
             ]
+        ],
+        [
+            'text' => 'Persetujuan Manager',
+            'url'  => '/ppic/manager',
+            'icon' => 'fas fa-list-alt',
+            'auth' => [24]
         ],
         [
             'text' => 'BOM',

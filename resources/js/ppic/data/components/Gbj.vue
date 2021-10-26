@@ -28,7 +28,7 @@ export default {
         },
         {
           data: function () {
-            return "<button class='btn btn-primary'><i class='fas fa-search' /></button>";
+            return "<button class='btn btn-outline-primary btn-sm'><i class='fas fa-search' /></button>";
           },
         },
       ],
@@ -48,7 +48,7 @@ export default {
 <template>
   <div>
     <table id="table" class="table table-hover styled-table table-striped">
-      <thead>
+      <thead style="text-align: center; font-size: 15px">
         <tr>
           <th>No</th>
           <th>Nama</th>

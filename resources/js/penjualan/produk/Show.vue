@@ -530,7 +530,13 @@ export default {
   methods: {
     semuaproduk: function () {
       $("#penjualan_produk").DataTable({
-        ajax: "/api/penjualan_produk/data",
+        ajax: {
+          url: "/api/penjualan_produk/data",
+          error: function (xhr, status, err) {
+            alert(status);
+            alert(err);
+          },
+        },
         processing: true,
         serverSide: true,
         columns: [

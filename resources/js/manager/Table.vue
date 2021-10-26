@@ -24,7 +24,10 @@ export default {
       </thead>
       <tbody>
         <tr v-for="data in jadwal" :key="data.id">
-          <td>{{ data.produk.nama }}</td>
+          <td>
+            <input type="checkbox" />
+            {{ data.produk.nama }}
+          </td>
           <td>{{ data.jumlah }}</td>
           <td>{{ data.tanggal_mulai }}</td>
           <td>{{ data.tanggal_selesai }}</td>

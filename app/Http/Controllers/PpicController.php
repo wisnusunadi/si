@@ -50,14 +50,14 @@ class PpicController extends Controller
             'jumlah' => $request->jumlah,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
-            'status' => "penyusunan",
+            'status' => $request->status,
             'warna' => $request->warna,
             'konfirmasi' => 0,
             'proses_konfirmasi' => 0
         ];
         JadwalPerakitan::create($data);
 
-        return JadwalPerakitan::with("Produk")->get();
+        return $this->getEvent($request->status);
     }
 
     public function deleteEvent(Request $request)

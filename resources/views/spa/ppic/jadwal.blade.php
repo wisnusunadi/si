@@ -5,13 +5,12 @@
 @section('content_header')
 <div class="d-flex justify-content-between">
     <h1 class="m-0 text-dark">PPIC Jadwal Produksi</h1>
-    <button-header />
 </div>
 @stop
 
 @section('content')
 <div id="app">
-    <calendar />
+    <calendar auth="{{ Auth::user() }}" />
 </div>
 @stop
 
