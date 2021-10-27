@@ -6,6 +6,26 @@
 <h1 class="m-0 text-dark">Produk</h1>
 @stop
 
+@section('adminlte_css')
+<style>
+    .nowrap-text{
+        white-space: nowrap;
+    }
+    .align-center{
+        text-align:center;
+    }
+    .align-right{
+        text-align:right;
+    }
+    .money{
+        font-family:'Varela Round';
+    }
+    .inline{
+        display:inline-block;
+    }
+</style>
+@stop
+
 @section('content')
 <div class="row">
     <div class="col-12">
@@ -102,11 +122,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
+                                    <div class="table-responsive">
                                     <table class="table table-hover" id="showtable">
                                         <thead style="text-align: center;">
                                             <tr>
                                                 <th>No</th>
-                                                <th>Kelompok Produk</th>
                                                 <th>Nama Produk</th>
                                                 <th>Harga</th>
                                                 <th>Aksi</th>
@@ -116,6 +136,7 @@
 
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -141,13 +162,13 @@
                                                     <span style="font-size: 24px"><b>Info</b></span><span class="float-right green-text col-form-label"><b>Tersedia</b></span>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <a>Nama Produk</a><span id="nama_produk"></span><b class="float-right">FOX-BABY + Case</b>
+                                                    <a>Nama Produk</a><span></span><b class="float-right" id="nama_produk"></b>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <a>Harga</a><span id="kelompok_produk"></span><b class="float-right">Rp. 1.000.000,00</b>
+                                                    <a>Harga</a><span></span><b class="float-right" id="harga_produk"></b>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <a>Stok</a><span id="stok"></span><b class="float-right">100</b>
+                                                    <a>Stok</a><span id="stok"></span><b class="float-right">-</b>
                                                 </li>
                                             </ul>
                                         </div>
@@ -158,7 +179,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                            <table class="table table-responsive">
+                                            <table class="table" id="showdetailtable" width="100%">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
@@ -168,18 +189,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1.</td>
-                                                        <td>FOX-BABY</td>
-                                                        <td>Alat Kesehatan</td>
-                                                        <td>1</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2.</td>
-                                                        <td>Case</td>
-                                                        <td>Aksesori</td>
-                                                        <td>1</td>
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                             </div>
@@ -191,23 +200,14 @@
                     </div>
                 </div>
             </div>
-
-            <div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="modaledit" aria-hidden="true">
+            <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-warning">
                             <h4>Edit</h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" id="edit">
 
-                        </div>
-                        <div class="modal-footer">
-                            <span class="float-left"><button type="button" class="btn btn-danger" data-dismiss="modal">
-                                    Batal
-                                </button></span>
-                            <span class="float-right"><button type="button" class="btn btn-warning">
-                                    Simpan
-                                </button></span>
                         </div>
                     </div>
                 </div>
@@ -220,9 +220,223 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#showtable').DataTable({
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan_produk/data',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
 
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nama'
+                },
+                {
+                    data: null,
+                    className: 'nowrap-text',
+                    render: function(data){
+                        return '<div class="align-right">Rp. '+(data.harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");+'</div>';
+                    },
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'button',
+                    className:'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
         });
-    })
+        $('#showtable tbody').on('click', '#showmodal', function() {
+            var rows = showtable.rows($(this).parents('tr')).data();
+            $('#nama_produk').text(rows[0].nama);
+            var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            $('#harga_produk').text('Rp ' + x);
+
+            var showdetailtable = $('#showdetailtable').DataTable({
+                processing: true,
+                destroy: true,
+                serverSide: true,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: '/api/penjualan_produk/detail/' + rows[0].id,
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama'
+
+                    },
+                    {
+                        data: 'kelompok'
+
+                    },
+                    {
+                        data: 'jumlah'
+
+                    },
+                ],
+            });
+            $('#modaldetail').modal('show');
+        });
+
+        
+
+        $(document).on('click', '.editmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
+            $.ajax({
+                url: "/api/produk/update_modal/" + id,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#editmodal').modal("show");
+                    $('#edit').html(result).show();
+                    console.log(id);
+                    // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+
+        select_data();
+
+        function numberRows($t) {
+            var c = 0 - 2;
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
+                $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
+                $(el).find('.produk_id').attr('id', j);
+                select_data();
+            });
+        }
+
+        $(document).on('click', '#addrow', function() {
+            $('#createtable tr:last').after(`<tr>
+            <td></td>
+            <td>
+                <div class="form-group">
+                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0">
+                    </select>
+                </div>
+            </td>
+            <td><span class="badge" id="kelompok_produk"></span></td>
+            <td>
+                <div class="form-group d-flex justify-content-center">
+                    <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
+                </div>
+            </td>
+            <td>
+                <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+            </td>
+            </tr>`);
+            numberRows($("#createtable"));
+        });
+
+        $('#createtable').on('click', '#removerow', function(e) {
+            $(this).closest('tr').remove();
+            numberRows($("#createtable"));
+        });
+
+        $(document).on('keyup change', '#harga', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+
+            if ($(this).val() != "") {
+                $('#msgharga').text("");
+                $('#harga').removeClass("is-invalid");
+                console.log($("#createtable tbody").length);
+                if ($('#nama_paket').val() != "" && $("#createtable tbody").length > 0) {
+                    $('#btntambah').removeClass('disabled');
+                } else {
+                    $('#btntambah').addClass('disabled');
+                }
+            } else if ($(this).val() == "") {
+                $('#msgharga').text("Harga Harus diisi");
+                $('#harga').addClass("is-invalid");
+                $('#btntambah').addClass('disabled');
+            }
+        });
+
+        $(document).on('keyup change', '#nama_paket', function() {
+            if ($(this).val() != "") {
+                $('#msgnama_paket').text("");
+                $('#nama_paket').removeClass("is-invalid");
+                console.log($("#createtable tbody").length);
+                if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
+                    $('#btntambah').removeClass('disabled');
+                } else {
+                    $('#btntambah').addClass('disabled');
+                }
+            } else if ($(this).val() == "") {
+                $('#msgnama_paket').text("Nama Paket Harus diisi");
+                $('#nama_paket').addClass("is-invalid");
+                $('#btntambah').addClass('disabled');
+            }
+        });
+
+        function select_data() {
+            $('.produk_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/produk/select/',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.tipe
+                                };
+                            })
+                        };
+                    },
+                }
+            }).change(function() {
+
+            });
+        }
+
+    });
+
 </script>
 @endsection

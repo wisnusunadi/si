@@ -32,23 +32,24 @@
                             </li>
                             <li class="list-group-item">
                                 <a>Nama</a>
-                                <b class="float-right" id="nama_customer"></b>
+                                <b class="float-right" id="nama_customer">{{$customer->nama}}</b>
+                                <input class="d-none" id="id">{{$customer->nama}}</b>
                             </li>
                             <li class="list-group-item">
                                 <a>Alamat</a>
-                                <b class="float-right" id="alamat"></b>
+                                <b class="float-right" id="alamat">{{$customer->alamat}}</b>
                             </li>
                             <li class="list-group-item">
                                 <a>Telepon</a>
-                                <b class="float-right" id="telepon"></b>
+                                <b class="float-right" id="telepon">{{$customer->telp}}</b>
                             </li>
                             <li class="list-group-item">
                                 <a>NPWP</a>
-                                <b class="float-right" id="npwp"></b>
+                                <b class="float-right" id="npwp">{{$customer->npwp}}</b>
                             </li>
                             <li class="list-group-item">
                                 <a>Keterangan</a>
-                                <b class="float-right" id="keterangan"></b>
+                                <b class="float-right" id="keterangan">{{$customer->ket}}</b>
                             </li>
                         </ul>
                     </div>
@@ -58,7 +59,7 @@
                 <h5>Histori Penjualan</h5>
                 <div class="card">
                     <div class="card-body">
-                        <table class="table" id="historitabel">
+                        <table class="table" id="showtable" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -70,7 +71,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <td>1</td>
                                     <td>SO-SPA10210001</td>
                                     <td>PO/ON/10/21/0001</td>
@@ -93,7 +94,7 @@
                                     <td>02-08-2021</td>
                                     <td>SPB</td>
                                     <td><span class="badge red-text">PO</span></td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -106,6 +107,43 @@
 
 @section('adminlte_js')
 <script>
+    $(function() {
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/customer/detail/' + 1,
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
 
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex'
+                },
+                {
+                    data: 'DT_RowIndex',
+
+                },
+                {
+                    data: 'DT_RowIndex',
+
+                },
+                {
+                    data: 'DT_RowIndex',
+
+                }
+            ]
+        });
+    });
 </script>
 @stop

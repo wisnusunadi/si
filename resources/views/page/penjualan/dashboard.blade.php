@@ -84,7 +84,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                            <table class="table table-hover" id="pengirimantable" style="width:100%;">
+                                <div class="table-responsive">
+                                <table class="table table-hover" id="pengirimantable" style="width:100%;">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -123,6 +124,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                             </div>
                             </div>
                         </div>

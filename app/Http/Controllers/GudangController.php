@@ -10,8 +10,7 @@ class GudangController extends Controller
 {
     public function get_data_barang_jadi()
     {
-        $data = GudangBarangJadi::whereHas('produk')
-            ->get();
+        $data = GudangBarangJadi::with('produk')->select();
 
         return datatables()->of($data)
             ->addIndexColumn()

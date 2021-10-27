@@ -83,7 +83,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" id="customertable">
+                                    <table class="table table-hover" id="showtable">
                                         <thead style="text-align:center;">
                                             <tr>
                                                 <th>No</th>
@@ -97,7 +97,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>PT Dakai</td>
                                                 <td>
@@ -154,7 +154,7 @@
                                                 <td>
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -184,11 +184,66 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/customer/data',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nama'
+                },
+                {
+                    data: 'alamat',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'email',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'telp',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'npwp',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'npwp',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
             $.ajax({
-                url: "{{route('penjualan.customer.edit')}}",
+                url: "/api/customer/update_modal/" + id,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -196,7 +251,8 @@
                 success: function(result) {
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    $("#editform").attr("action", href);
+                    console.log(id);
+                    // $("#editform").attr("action", href);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -234,7 +290,6 @@
                 }
             }
         })
-
 
         $('input[name="nama_customer"]').on('keyup change', function() {
 

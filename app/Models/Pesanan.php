@@ -9,4 +9,17 @@ class Pesanan extends Model
 {
     protected $table = 'pesanan';
     protected $fillable = ['no_po', 'tgl_po', 'no_do', 'tgl_do', 'ket'];
+
+    public function Ekatalog()
+    {
+        return $this->hasOne(Ekatalog::class);
+    }
+    public function Spa()
+    {
+        return $this->hasOne(Spa::class);
+    }
+    public function Spb()
+    {
+        return $this->hasOne(Spb::class);
+    }
 }

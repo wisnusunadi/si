@@ -35,7 +35,7 @@
         </div>
         @endif
         <div class="content">
-            <form>
+            <form method="post" action="/api/penjualan/create">
                 <div class="row d-flex justify-content-center">
                     <div class="col-10">
                         <h4>Info Customer</h4>
@@ -45,9 +45,9 @@
                                     <div class="form-group row">
                                         <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
                                         <div class="col-5">
-                                            <select name="customer_id" id="customer_id" class="form-control custom-select @error('customer_id') is-invalid @enderror">
-                                                <option value=""></option>
+                                            <select name="customer_id" id="customer_id" class="form-control custom-select customer_id @error('customer_id') is-invalid @enderror">
                                             </select>
+
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -112,7 +112,7 @@
                                         <label for="" class="col-form-label col-5" style="text-align: right">No Paket</label>
                                         <div class="col-5 input-group">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text" id="no_paket">AK1</span>
+                                                <span class="input-group-text" id="no_paket">AK1-</span>
                                             </div>
                                             <input type="text" class="form-control col-form-label @error('nomor_paket') is-invalid @enderror" name="no_paket" id="no_paket" />
                                             <div class="invalid-feedback" id="msgno_paket">
@@ -141,7 +141,7 @@
                                     <div class="form-group row">
                                         <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
                                         <div class="col-5">
-                                            <textarea class="form-control col-form-label" v-model="keterangan"></textarea>
+                                            <textarea class="form-control col-form-label" name="keterangan"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -258,7 +258,7 @@
                                                         <td>1</td>
                                                         <td>
                                                             <div class="form-group">
-                                                                <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="form-control custom-select @error('penjualan_produk_id') is-invalid @enderror">
+                                                                <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror">
                                                                     <option value=""></option>
                                                                 </select>
                                                             </div>
@@ -272,7 +272,7 @@
                                                         </td>
                                                         <td>
                                                             <div class="form-group d-flex justify-content-center">
-                                                                <input type="number" class="form-control" id="produk_jumlah" name="produk_jumlah" style="width: 50%" />
+                                                                <input type="number" class="form-control" id="produk_jumlah" name="produk_jumlah[]" style="width: 50%" />
                                                             </div>
                                                         </td>
                                                         <td>
@@ -371,21 +371,21 @@
 @stop
 
 @section('adminlte_js')
+
 <script>
     $(function() {
-        $('#customer_id').on('keyup change', function() {
-            if ($(this).val() != "") {
-                $('#msgcustomer_id').text("");
-                $('#customer_id').removeClass('is-invalid');
-                var value = getCustomer($(this).val());
-                $('#alamat').val(value.alamat);
-                $('#telepon').val(value.telepon);
-            } else if ($(this).val() == "") {
-                $('#msgcustomer_id').text("Silahkan Pilih Customer");
-                $('#customer_id').addClass('is-invalid');
-            }
-        });
-
+        // $('#customer_id').on('keyup change', function() {
+        //     if ($(this).val() != "") {
+        //         $('#msgcustomer_id').text("");
+        //         $('#customer_id').removeClass('is-invalid');
+        //         // var value = getCustomer($(this).val());
+        //         $('#alamat').val(value.alamat);
+        //         $('#telepon').val(value.telepon);
+        //     } else if ($(this).val() == "") {
+        //         $('#msgcustomer_id').text("Silahkan Pilih Customer");
+        //         $('#customer_id').addClass('is-invalid');
+        //     }
+        // });
         $('#tanggal_pemesanan').on('keyup', function() {
             if ($(this).val() != "") {
                 $("#msgtanggal_pemesanan").text("");
@@ -395,7 +395,6 @@
                 $("#tanggal_pemesanan").addClass('is-invalid');
             }
         });
-
         $('input[type="radio"][name="jenis_penjualan"]').on('change', function() {
             if ($(this).val() == "ekatalog") {
                 $("#datapart").addClass("hide");
@@ -488,6 +487,67 @@
                 $("#tanggal_po").addClass('is-invalid');
             }
         });
+
+
+        $('.customer_id').select2({
+            ajax: {
+                tags: [],
+                dataType: 'json',
+                delay: 250,
+                type: 'GET',
+                url: '/api/customer/select/',
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        }).change(function() {
+            var id = $(this).val();
+            $.ajax({
+                url: '/api/customer/select/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    $('#alamat').val(data[0].alamat);
+                    $('#telepon').val(data[0].telp);
+                }
+            });
+        });
+
+
+        $('.penjualan_produk_id').select2({
+            ajax: {
+                placeholder: "Pilih Customer",
+                dataType: 'json',
+                delay: 250,
+                type: 'GET',
+                url: '/api/penjualan_produk/select/',
+                data: function(params) {
+                    return {
+                        searchTerm: params.term
+                    }
+                },
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
 
         function numberRowsProduk($t) {
             var c = 0 - 2;

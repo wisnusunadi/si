@@ -9,8 +9,9 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        <form action="">
+        <form action="/api/penjualan_produk/create" method="post">
             <div class="row d-flex justify-content-center">
+
                 <div class="col-11">
                     <h5>Info Umum Paket</h5>
                     <div class="card">
@@ -68,7 +69,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Nama Produk</th>
+                                                    <th width="15%">Nama Produk</th>
                                                     <th>Kelompok</th>
                                                     <th>Jumlah</th>
                                                     <th>Aksi</th>
@@ -78,11 +79,11 @@
                                                 <tr>
                                                     <td>1</td>
                                                     <td>
-                                                        <div class="form-group">
-                                                            <select class="select-info form-control custom-select produk_id" name="produk_id[]" id="produk_id[]">
-                                                                <option value="">Tes</option>
-                                                                <option value="">Tes</option>
-                                                            </select>
+                                                        <div class="form-group row">
+                                                            <div class="col-12">
+                                                                <select class="select-info form-control produk_id " name="produk_id[]" id="0">
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td><span class="badge" id="kelompok_produk"></span></td>
@@ -121,7 +122,9 @@
 
 @section('adminlte_js')
 <script>
-    $(function() {
+    $(document).ready(function() {
+        select_data();
+
         function numberRows($t) {
             var c = 0 - 2;
             $t.find("tr").each(function(ind, el) {
@@ -129,8 +132,8 @@
                 var j = c - 1;
                 $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
                 $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
-                $(el).find('.produk_id').attr('id', 'produk_id' + j);
-                // $('.produk_id').select2();
+                $(el).find('.produk_id').attr('id', j);
+                select_data();
             });
         }
 
@@ -139,8 +142,7 @@
             <td></td>
             <td>
                 <div class="form-group">
-                    <select class="select-info form-control custom-select produk_id" name="produk_id[]" id="produk_id">
-                        <option value=""></option>
+                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0">
                     </select>
                 </div>
             </td>
@@ -198,6 +200,38 @@
                 $('#btntambah').addClass('disabled');
             }
         });
+
+        function select_data() {
+            $('.produk_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/produk/select/',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.tipe
+                                };
+                            })
+                        };
+                    },
+                }
+            }).change(function() {
+
+            });
+        }
     });
 </script>
 @endsection

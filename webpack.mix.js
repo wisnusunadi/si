@@ -17,6 +17,7 @@ const mix = require('laravel-mix');
 
 // plugin library
 mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
+mix.sass('resources/css/bootstrap.scss', 'public/native/css/plugin.css')
 
 // ppic
 mix.js('resources/js/gbj/stok/app.js', 'public/native/js/gbj/stok.js').vue()

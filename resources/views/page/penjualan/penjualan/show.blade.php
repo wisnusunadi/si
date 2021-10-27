@@ -46,13 +46,16 @@
     }
 
     @media screen and (max-width: 1440px) {
-        .row{
+        label, .row{
             font-size:12px;
         }
         h4{
             font-size:20px;
         }
         #detailmodal{
+            font-size:12px;
+        }
+        .btn{
             font-size:12px;
         }
     }

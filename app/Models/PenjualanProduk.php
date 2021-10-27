@@ -14,4 +14,20 @@ class PenjualanProduk extends Model
     {
         return $this->hasMany(DetailPenjualanProduk::class);
     }
+    public function DetailEkatalog()
+    {
+        return $this->hasMany(DetailEkatalog::class);
+    }
+    public function DetailSpa()
+    {
+        return $this->hasMany(DetailSpa::class);
+    }
+    public function DetailSpb()
+    {
+        return $this->hasMany(DetailSpb::class);
+    }
+    public function Produk()
+    {
+        return $this->belongsToMany(Produk::class);
+    }
 }
