@@ -15,81 +15,107 @@
 @section('content')
 <div class="row">
     <div class="col-12">
+
         <div class="content">
-            <form @submit.prevent="handleSubmit">
+            <form action="">
                 <div class="row d-flex justify-content-center">
                     <div class="col-8">
                         <h5>Info Customer</h5>
                         <div class="card">
                             <div class="card-body">
-                                <div v-if="afterSubmit == 'error'">
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <strong>Gagal menambahkan!</strong> Periksa
-                                        kembali data yang diinput
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div v-else-if="afterSubmit == 'success'">
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        <strong>Berhasil menambahkan data</strong>,
-                                        Terima kasih
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                </div>
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group row">
+                                            @if(session()->has('error') || count($errors) > 0 )
+                                            <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+                                                <strong>Gagal menambahkan!</strong> Periksa
+                                                kembali data yang diinput
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            @elseif(session()->has('success'))
+                                            <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+                                                <strong>Berhasil menambahkan data</strong>,
+                                                Terima kasih
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="nama_produk" class="col-4 col-form-label" style="text-align:right;">Nama Customer</label>
                                             <div class="col-6">
-                                                <input type="text" class="form-control" placeholder="Masukkan Nama Customer" v-model="nama_customer" v-bind:class="{
-                                                    'is-invalid': nama_customerer
-                                                }" />
-                                                <div class="invalid-feedback" v-if="msg.nama_customer">
-                                                    {{ msg.nama_customer }}
+                                                <input type="text" class="form-control @error('nama_customer') is-invalid @enderror" placeholder="Masukkan Nama Customer" id="nama_customer" name="nama_customer" />
+                                                <div class="invalid-feedback" id="msgnama_customer">
+                                                    @if($errors->has('nama_customer'))
+                                                    {{ $errors->first('nama_customer')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="npwp" class="col-4 col-form-label" style="text-align:right;">NPWP</label>
                                             <div class="col-5">
-                                                <input type="text" class="form-control" value="" placeholder="Masukkan NPWP" v-model="npwp" v-bind:class="{
-                                                    'is-invalid': npwper
-                                                }" />
-                                                <div class="invalid-feedback" v-if="msg.npwp">
-                                                    {{ msg.npwp }}
+                                                <input type="text" class="form-control @error('npwp') is-invalid @enderror" value="" placeholder="Masukkan NPWP" id="npwp" name="npwp" />
+                                                <div class="invalid-feedback" id="msgnpwp">
+                                                    @if($errors->has('npwp'))
+                                                    {{ $errors->first('npwp')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="alamat" class="col-4 col-form-label" style="text-align:right;">Alamat</label>
                                             <div class="col-8">
-                                                <input type="text" class="form-control" placeholder="Masukkan Alamat" v-model="alamat" v-bind:class="{
-                                                    'is-invalid': alamater
-                                                }" />
-                                                <div class="invalid-feedback" v-if="msg.alamat">
-                                                    {{ msg.alamat }}
+                                                <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" />
+                                                <div class="invalid-feedback" id="msgalamat">
+                                                    @if($errors->has('alamat'))
+                                                    {{ $errors->first('alamat')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="provinsi" class="col-4 col-form-label" style="text-align:right;">provinsi</label>
+                                            <div class="col-8">
+                                                <select class="select2 select-info form-control custom-select" name="provinsi" id="provinsi">
+
+                                                </select>
+                                                <div class="invalid-feedback" id="msgprovinsi">
+                                                    @if($errors->has('provinsi'))
+                                                    {{ $errors->first('provinsi')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="email" class="col-4 col-form-label" style="text-align:right;">Email</label>
+                                            <div class="col-8">
+                                                <input type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
+                                                <div class="invalid-feedback" id="msgemail">
+                                                    @if($errors->has('email'))
+                                                    {{ $errors->first('email')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="telepon" class="col-4 col-form-label" style="text-align:right;">No Telp</label>
                                             <div class="col-5">
-                                                <input type="text" class="form-control" value="" placeholder="Masukkan Telepon" v-model="telepon" v-bind:class="{
-                                                    'is-invalid': teleponer
-                                                }" />
-                                                <div class="invalid-feedback" v-if="msg.telepon">
-                                                    {{ msg.telepon }}
+                                                <input type="text" class="form-control @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
+                                                <div class="invalid-feedback" id="msgtelepon">
+                                                    @if($errors->has('telepon'))
+                                                    {{ $errors->first('telepon')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="telepon" class="col-4 col-form-label" style="text-align:right;">Keterangan</label>
                                             <div class="col-5">
-                                                <textarea class="form-control" name="keterangan" id="keterangan" v-model="keterangan"></textarea>
+                                                <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -100,12 +126,18 @@
                 </div>
                 <div class="row d-flex justify-content-center">
                     <div class="col-8">
-                        <router-link :to="{ name: 'show' }"><span class="float-left"><button type="button" class="btn btn-danger">
+                        <a href="{{route('penjualan.customer.show')}}">
+                            <span class="float-left">
+                                <button type="button" class="btn btn-danger">
                                     Batal
-                                </button></span></router-link>
-                        <span class="float-right"><button type="submit" class="btn btn-info">
+                                </button>
+                            </span>
+                        </a>
+                        <span class="float-right">
+                            <button type="submit" class="btn btn-info" id="btntambah" disabled>
                                 Tambah
-                            </button></span>
+                            </button>
+                        </span>
                     </div>
                 </div>
             </form>
@@ -115,5 +147,126 @@
 @stop
 
 @section('adminlte_js')
+<script>
+    $(function() {
+        $('input[name="nama_customer"]').on('keyup change', function() {
+            if ($(this).val() == "") {
+                $("#msgnama_customer").text("Nama tidak boleh kosong");
+                $('#nama_customer').addClass('is-invalid');
+            } else if ($(this).val() != "") {
+                // if (checkCustomer($('#nama_customer').val()) >= 1) {
+                //     $("#msgnama_customer").text("Nama sudah terpakai");
+                //     $('#nama_customer").addClass('is-invalid');
+                //     $("#btntambah").attr("disabled", true);
+                // } else {
+                //     $("#msgnama_customer").text("");
+                //     $('#nama_customer").removeClass('is-invalid');
+                //     $("#btntambah").removeAttr("disabled");
+                // }
+                $("#msgnama_customer").val("");
+                $('#nama_customer').removeClass('is-invalid');
+                if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "") {
+                    $("#btntambah").removeAttr("disabled");
+                } else {
+                    $("#btntambah").attr("disabled", true);
+                }
+            }
+        });
 
+        $('input[name="telepon"]').on('keyup change', function() {
+            if ($(this).val() == "") {
+                $("#msgtelepon").text("Telepon tidak boleh kosong");
+                $("#telepon").addClass('is-invalid');
+                $("#btntambah").attr('disabled', true);
+            } else if ($(this).val() != "") {
+                if (!/^[0-9]+$/.test($(this).val())) {
+                    $("#msgtelepon").text("Isi nomor telepon dengan angka");
+                    $("#telepon").addClass('is-invalid');
+                    $("#btntambah").attr('disabled', true);
+                } else {
+                    // if (checkTelepon(this.teleponer).value >= 1) {
+                    //     this.msg["telepon"] = "Nomor Telepon sudah terpakai";
+                    //     this.teleponer = true;
+                    //     this.btndis = true;
+                    // } else {
+                    //     this.msg["telepon"] = "";
+                    //     this.teleponer = false;
+                    //     this.btndis = false;
+                    // }
+                    $("#msgtelepon").text("");
+                    $("#telepon").removeClass('is-invalid');
+                    $("#btntambah").removeAttr('disabled');
+                    if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#alamat").val() != "") {
+                        $("#btntambah").removeAttr('disabled');
+                    } else {
+                        $("#btntambah").attr('disabled', true);
+                    }
+                }
+            }
+        })
+
+        $('input[name="alamat"]').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $('#msgalamat').text("");
+                $('#alamat').removeClass("is-invalid");
+                if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "") {
+                    $("#btntambah").removeAttr('disabled');
+                } else {
+                    $("#btntambah").attr('disabled', true);
+                }
+            } else {
+                $('#msgalamat').text("Alamat tidak boleh kosong");
+                $('#alamat').addClass("is-invalid");
+                $("#btntambah").attr('disabled', true);
+            }
+        });
+
+        $('input[name="npwp"]').on('keyup change', function() {
+            if ($(this).val() == "") {
+                $("#msgnpwp").text("Nama tidak boleh kosong");
+                $('#npwp').addClass('is-invalid');
+            } else if ($(this).val() != "") {
+                // if (checkCustomer($('#npwp').val()) >= 1) {
+                //     $("#msgnpwp").text("Nama sudah terpakai");
+                //     $('#npwp").addClass('is-invalid');
+                //     $("#btntambah").attr("disabled", true);
+                // } else {
+                //     $("#msgnpwp").text("");
+                //     $('#npwp").removeClass('is-invalid');
+                //     $("#btntambah").removeAttr("disabled");
+                // }
+                $("#msgnpwp").val("");
+                $('#npwp').removeClass('is-invalid');
+                if ($('#telepon').val() != "" && $('#nama_customer').val() != "" && $('#alamat').val() != "") {
+                    $("#btntambah").removeAttr("disabled");
+                } else {
+                    $("#btntambah").attr("disabled", true);
+                }
+            }
+        });
+
+        $('input[name="email"]').on('keyup change', function() {
+            var errorhandling = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+            if ($(this).val() != "") {
+                if (!errorhandling.test($(this).val())) {
+                    $('#msgemail').text("Masukkan email dengan benar");
+                    $('#email').addClass("is-invalid");
+                    $("#btntambah").attr('disabled', true);
+                } else {
+                    $('#msgemail').text("");
+                    $('#email').removeClass("is-invalid");
+                    if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "") {
+                        $("#btntambah").removeAttr('disabled');
+                    }
+                }
+            } else {
+                $('#msgemail').text("");
+                $('#email').removeClass("is-invalid");
+                if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "") {
+                    $("#btntambah").removeAttr('disabled');
+                }
+            }
+        })
+    })
+</script>
 @stop

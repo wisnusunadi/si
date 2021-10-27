@@ -6,6 +6,14 @@
 <h1 class="m-0 text-dark">Penjualan</h1>
 @stop
 
+@section('adminlte_css')
+<style>
+    .filter {
+        margin: 5px;
+    }
+</style>
+@stop
+
 @section('content')
 <div class="row">
     <div class="col-12">
@@ -30,10 +38,10 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
-                                    <router-link :to="{ name: 'create' }"><button class="btn btn-outline-info">
+                                    <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
                                             <i class="fas fa-plus"></i> Tambah
                                         </button>
-                                    </router-link>
+                                    </a>
                                 </span>
                                 <span class="float-right filter">
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -182,10 +190,16 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </div>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('penjualan.so.create')}}">
+                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1])}}">
+                                                        <button class="dropdown-item" type="button">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                            Edit
+                                                        </button>
+                                                    </a>
+                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
                                                         <button class="dropdown-item" type="button">
                                                             <i class="fas fa-search"></i>
-                                                            Tambah PO
+                                                            Detail
                                                         </button>
                                                     </a>
                                                 </div>
@@ -641,9 +655,49 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" style="margin: 10px">
+                <div class="modal-header bg-warning">
+                    <h4>Detail</h4>
+                </div>
+                <div class="modal-body" id="detail">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @stop
 
 @section('adminlte_js')
-
+<script>
+    $(function() {
+        $(document).on('click', '.detailmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            $.ajax({
+                url: "{{route('penjualan.penjualan.detail', ['id' => 2])}}",
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#detailmodal').modal("show");
+                    $('#detail').html(result).show();
+                    $("#detailform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+    });
+</script>
 @stop

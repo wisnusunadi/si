@@ -2,6 +2,19 @@
 
 @section('title', 'ERP')
 
+
+@section('adminlte_css')
+<style>
+    li.list-group-item {
+        border: 0 none;
+    }
+
+    #historitabel {
+        text-align: center;
+    }
+</style>
+@stop
+
 @section('content_header')
 <h1 class="m-0 text-dark">Customer</h1>
 @stop
@@ -18,7 +31,8 @@
                                 <span style="font-size: 24px"><b>Info</b></span>
                             </li>
                             <li class="list-group-item">
-                                <a>Nama</a><b class="float-right" id="nama_customer"></b>
+                                <a>Nama</a>
+                                <b class="float-right" id="nama_customer"></b>
                             </li>
                             <li class="list-group-item">
                                 <a>Alamat</a>
@@ -48,13 +62,39 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Jenis</th>
+                                    <th>No SO</th>
                                     <th>No PO</th>
                                     <th>Tanggal PO</th>
+                                    <th>Jenis</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>SO-SPA10210001</td>
+                                    <td>PO/ON/10/21/0001</td>
+                                    <td>09-10-2021</td>
+                                    <td>SPA</td>
+                                    <td><span class="badge orange-text">QC</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>SO-EKAT08210005</td>
+                                    <td>PO/ON/08/21/0005</td>
+                                    <td>02-08-2021</td>
+                                    <td>E-Catalogue</td>
+                                    <td><span class="badge green-text">Selesai</span></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>SO-SPB08210005</td>
+                                    <td>PO/ON/08/21/0005</td>
+                                    <td>02-08-2021</td>
+                                    <td>SPB</td>
+                                    <td><span class="badge red-text">PO</span></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -65,5 +105,7 @@
 @stop
 
 @section('adminlte_js')
+<script>
 
+</script>
 @stop

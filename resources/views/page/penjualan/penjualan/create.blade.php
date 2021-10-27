@@ -17,8 +17,25 @@
 @section('content')
 <div class="row">
     <div class="col-12">
+        @if(session()->has('error') || count($errors) > 0 )
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Gagal menambahkan!</strong> Periksa
+            kembali data yang diinput
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @elseif(session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Berhasil menambahkan data</strong>,
+            Terima kasih
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
         <div class="content">
-            <form @submit.prevent="handleSubmit">
+            <form>
                 <div class="row d-flex justify-content-center">
                     <div class="col-10">
                         <h4>Info Customer</h4>
@@ -471,6 +488,101 @@
                 $("#tanggal_po").addClass('is-invalid');
             }
         });
+
+        function numberRowsProduk($t) {
+            var c = 0 - 2;
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.penjualan_produk_id').attr('name', 'penjualan_produk_id[' + j + ']');
+                $(el).find('.penjualan_produk_id').attr('id', 'penjualan_produk_id' + j);
+                $(el).find('.variasi').attr('name', 'variasi[' + j + ']');
+                $(el).find('.variasi').attr('id', 'variasi' + j);
+                $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
+                // $('.produk_id').select2();
+            });
+        }
+
+        $('#addrowproduk').on('click', function() {
+            $('#produktable tr:last').after(`<tr>
+                <td></td>
+                <td>
+                    <div class="form-group">
+                        <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="form-control custom-select @error('penjualan_produk_id') is-invalid @enderror">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <select name="variasi[]" id="variasi" class="form-control custom-select @error('variasi') is-invalid @enderror">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control" id="produk_jumlah" name="produk_jumlah" style="width: 50%" />
+                    </div>
+                </td>
+                <td>
+                    <span class="badge" id="produk_ketersediaan"></span>
+                </td>
+                <td>
+                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                </td>
+            </tr>`);
+            numberRowsProduk($("#produktable"));
+        });
+
+        $('#produktable').on('click', '#removerowproduk', function(e) {
+            $(this).closest('tr').remove();
+            numberRowsProduk($("#produktable"));
+        });
+
+        function numberRowsPart($t) {
+            var c = 0 - 2;
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.part_id').attr('name', 'part_id[' + j + ']');
+                $(el).find('.part_id').attr('id', 'part_id' + j);
+                $(el).find('input[id="part_jumlah"]').attr('name', 'part_jumlah[' + j + ']');
+                // $('.produk_id').select2();
+            });
+        }
+
+        $('#addrowpart').on('click', function() {
+            $('#parttable tr:last').after(`
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-group">
+                        <select class="select2 form-control custom-select" name="part_id" id="part_id">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control" id="part_jumlah" style="width: 50%" />
+                    </div>
+                </td>
+                <td>
+                    <span class="badge" id="part_ketersediaan"></span>
+                </td>
+                <td>
+                    <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
+                </td>
+                </tr>`);
+            numberRowsPart($("#parttable"));
+        });
+
+        $('#parttable').on('click', '#removerowpart', function(e) {
+            $(this).closest('tr').remove();
+            numberRowsPart($("#parttable"));
+        });
+
     });
 </script>
 @stop
