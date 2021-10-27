@@ -157,7 +157,8 @@
                                     <h5>Detail Produk</h5>
                                     <div class="card">
                                         <div class="card-body">
-                                            <table class="table">
+                                            <div class="table-responsive">
+                                            <table class="table table-responsive">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
@@ -181,6 +182,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

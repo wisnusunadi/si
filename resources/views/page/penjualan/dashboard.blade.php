@@ -18,7 +18,7 @@
         white-space: nowrap;
     }
 
-    #pengirimantable td:nth-child(4), td:nth-child(6){
+    #pengirimantable td:nth-child(1), td:nth-child(4), td:nth-child(6){
         text-align:center;
         white-space: nowrap;
     }
