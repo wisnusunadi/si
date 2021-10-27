@@ -65,9 +65,6 @@
     {{-- Configured Scripts --}}
     <script src="{{ asset('native/js/plugin.js') }}"></script>
     <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
-    <script src="{{ asset('assets/css/select2/select2.full.min.js') }}"></script>
-
-    <!-- @include('adminlte.plugins', ['type' => 'js']) -->
 
     {{-- Custom Scripts --}}
     @yield('master_js')

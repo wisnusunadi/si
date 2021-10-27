@@ -59,12 +59,14 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
         Route::view('/create', 'page.penjualan.customer.create')->name('penjualan.customer.create');
         Route::view('/edit', 'page.penjualan.customer.edit')->name('penjualan.customer.edit');
+        Route::view('/detail/{id}', 'page.penjualan.customer.detail')->name('penjualan.customer.detail');
     });
 
     Route::group(['prefix' => '/penjualan'], function () {
         Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
         Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
-        Route::view('/edit', 'page.penjualan.penjualan.edit')->name('penjualan.penjualan.edit');
+        Route::view('/detail/{id}', 'page.penjualan.penjualan.detail')->name('penjualan.penjualan.detail');
+        Route::view('/edit/{id}', 'page.penjualan.penjualan.edit')->name('penjualan.penjualan.edit');
     });
 
     Route::group(['prefix' => '/so'], function () {
@@ -76,6 +78,8 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     // Route::get('/dashboard', 'digidocu\DocumentsController@dashboard')->name('dc.dashboard');
     // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
+
+Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 
 Route::get('/test/{name?}', function ($name = null) {
     return $name;
