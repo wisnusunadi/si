@@ -49,6 +49,8 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
 // });
 
 Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.penjualan.dashboard')->name('penjualan.dashboard');
+
     Route::group(['prefix' => '/produk'], function () {
         Route::view('/show', 'page.penjualan.produk.show')->name('penjualan.produk.show');
         Route::view('/create', 'page.penjualan.produk.create')->name('penjualan.produk.create');
@@ -65,7 +67,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
         Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
         Route::view('/detail/{id}', 'page.penjualan.penjualan.detail')->name('penjualan.penjualan.detail');
-        Route::view('/edit/{id}', 'page.penjualan.penjualan.edit')->name('penjualan.penjualan.edit');
+        Route::view('/edit/{id}/{jenis}', 'page.penjualan.penjualan.edit')->name('penjualan.penjualan.edit');
     });
 
     Route::group(['prefix' => '/so'], function () {

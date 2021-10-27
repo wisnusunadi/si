@@ -231,6 +231,7 @@ return [
             'text'        => 'Beranda',
             'url'         => '',
             'icon'        => 'nav-icon fa fa-home',
+            'auth'        => [24]
         ],
         // PPIC (24)
         [
@@ -350,6 +351,12 @@ return [
             ]
         ],
         [
+            'text' => 'Beranda',
+            'url'  => '/penjualan/dashboard',
+            'icon' => 'fas fa-home',
+            'auth' => [26]
+        ],
+        [
             'header' => 'DATA',
             'auth' => [14, 17, 26, 23]
         ],
@@ -373,8 +380,8 @@ return [
             'auth' => [26]
         ],
         [
-            'text' => 'PO',
-            'url'  => '/penjualan/po',
+            'text' => 'Sales Order',
+            'url'  => '/penjualan/so/show',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
