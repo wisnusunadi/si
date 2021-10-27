@@ -10,10 +10,8 @@ export default {
     auth: String,
   },
 
-  data: function () {
-    return {
-      user: JSON.parse(this.auth),
-    };
+  mounted: function () {
+    this.$store.commit("updateUser", JSON.parse(this.auth));
   },
 };
 </script>

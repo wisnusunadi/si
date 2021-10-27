@@ -8,7 +8,8 @@ const store = new Vuex.Store({
         view: "calendar",
         konfirmasi: false,
         proses_konfirmasi: false,
-        jadwal: []
+        jadwal: [],
+        user: {},
     },
 
     mutations: {
@@ -33,6 +34,10 @@ const store = new Vuex.Store({
                     state.proses_konfirmasi = false
                     break
                 }
+        },
+
+        updateUser: function (state, user) {
+            state.user = user
         }
     }
 })

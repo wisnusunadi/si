@@ -21,6 +21,10 @@ const router = new VueRouter({
         {
             path: '/ppic/data/perakitan',
             component: () => import('./components/Perakitan.vue')
+        },
+        {
+            path: '/ppic/data/so',
+            component: () => import('./components/SO.vue')
         }
     ]
 })

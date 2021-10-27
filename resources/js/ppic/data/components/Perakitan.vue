@@ -27,15 +27,12 @@ export default {
   <div>
     <div>
       <div class="dropdown show">
-        <a
+        <button
           class="btn btn-outline-primary dropdown-toggle mb-3"
-          href="#"
-          role="button"
-          id="dropdownMenuLink"
           data-toggle="dropdown"
         >
           Filter
-        </a>
+        </button>
 
         <div class="dropdown-menu p-3">
           <div class="form-check">
@@ -67,10 +64,10 @@ export default {
               class="form-check-input"
               type="checkbox"
               value="selesai"
-              id="defaultCheck2"
+              id="defaultCheck3"
               v-model="filterData"
             />
-            <label class="form-check-label" for="defaultCheck2">
+            <label class="form-check-label" for="defaultCheck3">
               Selesai
             </label>
           </div>

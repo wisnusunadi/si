@@ -301,6 +301,12 @@ return [
             'auth' => [24]
         ],
         [
+            'text' => 'SO',
+            'url'  => '/ppic/data/so',
+            'icon' => 'fas fa-database',
+            'auth' => [24]
+        ],
+        [
             'header' => 'PPIC',
             'auth' => [24]
         ],
@@ -322,15 +328,9 @@ return [
             ]
         ],
         [
-            'text' => 'Persetujuan Manager',
-            'url'  => '/ppic/manager',
-            'icon' => 'fas fa-circle',
-            'auth' => [24]
-        ],
-        [
             'text' => 'BOM',
             'url'  => '/ppic/bom',
-            'icon' => 'fas fa-circle',
+            'icon' => 'fas fa-list',
             'auth' => [24]
         ],
         [
@@ -351,6 +351,53 @@ return [
                 ],
             ]
         ],
+
+        // Manager Teknik
+        [
+            'header' => 'Data',
+            'auth' => [3]
+        ],
+        [
+            'text' => 'Perakitan',
+            'url'  => '/ppic/data/perakitan',
+            'icon' => 'fas fa-list-alt',
+            'auth' => [3]
+        ],
+        [
+            'text' => 'SO',
+            'url'  => '/ppic/data/so',
+            'icon' => 'fas fa-database',
+            'auth' => [3]
+        ],
+        [
+            'header' => 'PPIC',
+            'auth' => [3]
+        ],
+        [
+            'text' => 'Jadwal Perakitan',
+            'icon' => 'fas fa-calendar-alt',
+            'auth' => [3],
+            'submenu'   =>  [
+                [
+                    'text'  =>  'Rencana',
+                    'icon'  =>  'far fa-circle',
+                    'url'   =>  '/ppic/jadwal/penyusunan'
+                ],
+                [
+                    'text'  =>  'Pelaksanaan',
+                    'icon'  =>  'far fa-circle',
+                    'url'   =>  '/ppic/jadwal/pelaksanaan',
+                ],
+            ]
+        ],
+        [
+            'text' => 'Persetujuan Manager',
+            'url'  => '/manager-teknik/persetujuan_jadwal',
+            'icon' => 'fas fa-circle',
+            'auth' => [3]
+        ],
+
+        // other
         [
             'header' => 'DATA',
             'auth' => [14, 17, 26, 23]
@@ -686,13 +733,6 @@ return [
             'auth' => [11],
             'icon' =>  'fas fa-boxes',
             'url' => '/gbmp/bppb_view'
-        ],
-        // Manager Teknik (3)
-        [
-            'text' => 'Jadwal Produksi',
-            'icon' => 'fas fa-calendar-alt',
-            'auth' => [3],
-            'url'   =>  '/ppic/schedule/penyusunan',
         ],
         // Produksi (17)
         [

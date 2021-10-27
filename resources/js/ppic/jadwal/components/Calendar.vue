@@ -17,6 +17,7 @@ export default {
       status: this.$route.params.status,
       start_date_str: "",
       end_date_str: "",
+      event_ref: null,
 
       // modal
       produk: [],
@@ -34,8 +35,6 @@ export default {
 
       confirmationMessage: "",
       deleteJadwal: false,
-
-      event_ref: null,
       editable: true,
     };
   },
@@ -60,6 +59,8 @@ export default {
 
         select: this.handleSelect,
         eventClick: this.handleEventClick,
+        eventMouseEnter: this.handleEventMouseEnter,
+        eventMouseLeave: this.handleEventMouseLeave,
       };
     },
 
@@ -88,7 +89,6 @@ export default {
 
   methods: {
     convertJadwal: function (jadwal) {
-      console.log(jadwal);
       return jadwal.length == 0
         ? []
         : jadwal.map((data) => ({
@@ -126,6 +126,20 @@ export default {
 
         $("#confirmation").modal("show");
       }
+    },
+
+    handleEventMouseEnter: function (eventInfo) {
+      let $ref = this.$refs["sample-ref-" + eventInfo.event._def.publicId][0];
+
+      $ref.style.backgroundColor = "yellow";
+      eventInfo.event.setProp("borderColor", "yellow");
+    },
+
+    handleEventMouseLeave: function (eventInfo) {
+      let $ref = this.$refs["sample-ref-" + eventInfo.event._def.publicId][0];
+
+      $ref.style.backgroundColor = "";
+      eventInfo.event.setProp("borderColor", eventInfo.event.backgroundColor);
     },
 
     disableEdit: function () {
@@ -217,6 +231,10 @@ export default {
     if (this.status === "pelaksanaan") {
       this.disableEdit();
     }
+
+    if (this.$store.state.user.divisi_id === 3) {
+      this.disableEdit();
+    }
   },
 
   updated: function () {
@@ -252,20 +270,25 @@ export default {
       </div>
     </div>
     <div class="col-xl-4">
-      <button
-        v-if="status === 'penyusunan' && !this.$store.state.proses_konfirmasi"
-        class="btn btn-block btn-info mb-3"
-        @click="sendToManager"
-      >
-        Permintaan Persetujuan
-      </button>
-      <button
-        v-if="status === 'pelaksanaan' && !this.$store.state.proses_konfirmasi"
-        class="btn btn-block btn-info mb-3"
-        @click="sendToManager"
-      >
-        Permintaan Perubahan Jadwal
-      </button>
+      <div v-if="$store.state.user.divisi_id === 24">
+        <button
+          v-if="status === 'penyusunan' && !this.$store.state.proses_konfirmasi"
+          class="btn btn-block btn-info mb-3"
+          @click="sendToManager"
+        >
+          Permintaan Persetujuan
+        </button>
+        <button
+          v-if="
+            status === 'pelaksanaan' && !this.$store.state.proses_konfirmasi
+          "
+          class="btn btn-block btn-info mb-3"
+          @click="sendToManager"
+        >
+          Permintaan Perubahan Jadwal
+        </button>
+      </div>
+
       <div class="card">
         <div class="card-header text-center">Daftar Produksi</div>
         <div class="card-body">
@@ -278,8 +301,35 @@ export default {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in this.$store.state.jadwal" :key="item.id">
-                  <td>{{ item.produk.nama }}</td>
+                <tr
+                  v-for="item in this.$store.state.jadwal"
+                  :key="item.id"
+                  :ref="'sample-ref-' + item.id"
+                >
+                  <td>
+                    <i
+                      v-if="$store.state.user.divisi_id === 24"
+                      :class="[
+                        { 'far fa-hourglass': item.proses_konfirmasi === 1 },
+                        {
+                          'far fa-check-circle':
+                            item.proses_konfirmasi === 2 &&
+                            item.konfirmasi_rencana === 1,
+                        },
+                        {
+                          'far fa-times-circle':
+                            item.proses_konfirmasi === 2 &&
+                            item.konfirmasi_rencana === 0,
+                        },
+                      ]"
+                      :style="
+                        item.proses_konfirmasi === 2
+                          ? { color: 'blue' }
+                          : { color: 'red' }
+                      "
+                    ></i>
+                    {{ item.produk.nama }}
+                  </td>
                   <td>{{ item.jumlah }}</td>
                 </tr>
               </tbody>
