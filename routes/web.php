@@ -49,6 +49,8 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
 // });
 
 Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.penjualan.dashboard')->name('penjualan.dashboard');
+
     Route::group(['prefix' => '/produk'], function () {
         Route::view('/show', 'page.penjualan.produk.show')->name('penjualan.produk.show');
         Route::view('/create', 'page.penjualan.produk.create')->name('penjualan.produk.create');
