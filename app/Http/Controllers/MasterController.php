@@ -7,6 +7,7 @@ use App\Models\DetailPenjualanProduk;
 use App\Models\GudangBarangJadi;
 use App\Models\KelompokProduk;
 use App\Models\PenjualanProduk;
+use App\Models\Pesanan;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -26,14 +27,18 @@ class MasterController extends Controller
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button class="dropdown-item" type="button" id="showmodal">
+                <a href="' . route('penjualan.customer.detail', $data->id) . '">
+                <button class="dropdown-item" type="button">
                               <i class="fas fa-search"></i>
                               Detail
                             </button>
-                            <button class="dropdown-item" type="button" id="#editshow">
+                            </a>
+                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
+                            <button class="dropdown-item" type="button" >
                               <i class="fas fa-pencil-alt"></i>
                               Edit
                             </button>
+                            </a>
                 </div>';
             })
             ->rawColumns(['button'])
@@ -89,6 +94,13 @@ class MasterController extends Controller
                 return Produk::find($data->produk_id)->KelompokProduk->nama;
             })
 
+            ->make(true);
+    }
+    public function get_data_pesanan($id)
+    {
+        $data  = Pesanan::where('id', $id);
+        return datatables()->of($data)
+            ->addIndexColumn()
             ->make(true);
     }
     //Create
@@ -173,16 +185,22 @@ class MasterController extends Controller
         }
     }
     //Update
-    public function update_customer(Request $request)
+    public function update_customer(Request $request, $id)
     {
-        $id = $request->id;
-        $produk = Customer::find($id);
-        $produk->jenis = $request->jenis;
-        $produk->nama = $request->nama;
-        $produk->telp = $request->telp;
-        $produk->alamat = $request->alamat;
-        $produk->ket = $request->ket;
-        $produk->save();
+        $customer = Customer::find($id);
+        $customer->nama = $request->nama_customer;
+        $customer->npwp = $request->npwp;
+        $customer->email = $request->email;
+        $customer->telp = $request->telepon;
+        $customer->alamat = $request->alamat;
+        $customer->ket = $request->keterangan;
+        $customer->save();
+
+        if ($customer) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
     }
 
     public function update_produk(Request $request)
@@ -233,6 +251,24 @@ class MasterController extends Controller
         $data = PenjualanProduk::where('nama', $value)->get();
         echo json_encode($data);
     }
+
+    //Show Modal 
+
+    public function update_customer_modal($id)
+    {
+        $customer = Customer::find($id);
+        return view("page.penjualan.customer.edit", ['customer' => $customer]);
+    }
+
+
+    //Show Detail
+
+    public function detail_customer($id)
+    {
+        $customer = Customer::find($id);
+        return view('page.penjualan.customer.detail', ['customer' => $customer]);
+    }
+
 
     //Select
     public function select_produk()

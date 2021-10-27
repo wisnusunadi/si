@@ -58,8 +58,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/customer'], function () {
         Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
         Route::view('/create', 'page.penjualan.customer.create')->name('penjualan.customer.create');
-        Route::view('/edit', 'page.penjualan.customer.edit')->name('penjualan.customer.edit');
-        Route::view('/detail/{id}', 'page.penjualan.customer.detail')->name('penjualan.customer.detail');
+        Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
     });
 
     Route::group(['prefix' => '/penjualan'], function () {

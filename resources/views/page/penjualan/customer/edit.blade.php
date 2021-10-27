@@ -1,4 +1,6 @@
-<form action="">
+<form action="/api/customer/update/{{$customer->id}}" method="post">
+    {{ csrf_field() }}
+    {{ method_field('PUT') }}
     <div class="row d-flex justify-content-center">
         <div class="col-11">
             <h5>Info Customer</h5>
@@ -7,102 +9,57 @@
                     <div class="row">
                         <div class="col-11">
                             <div class="form-group row">
-                                @if(session()->has('error') || count($errors) > 0 )
-                                <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
-                                    <strong>Gagal menambahkan!</strong> Periksa
-                                    kembali data yang diinput
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                @elseif(session()->has('success'))
-                                <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
-                                    <strong>Berhasil menambahkan data</strong>,
-                                    Terima kasih
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="form-group row">
                                 <label for="nama_produk" class="col-4 col-form-label" style="text-align:right;">Nama Customer</label>
                                 <div class="col-6">
-                                    <input type="text" class="form-control @error('nama_customer') is-invalid @enderror" placeholder="Masukkan Nama Customer" id="nama_customer" name="nama_customer" />
+                                    <input type="text" class="form-control " placeholder="Masukkan Nama Customer" id="nama_customer" name="nama_customer" value="{{$customer->nama}}" />
                                     <div class="invalid-feedback" id="msgnama_customer">
-                                        @if($errors->has('nama_customer'))
-                                        {{ $errors->first('nama_customer')}}
-                                        @endif
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="npwp" class="col-4 col-form-label" style="text-align:right;">NPWP</label>
                                 <div class="col-5">
-                                    <input type="text" class="form-control @error('npwp') is-invalid @enderror" value="" placeholder="Masukkan NPWP" id="npwp" name="npwp" />
-                                    <div class="invalid-feedback" id="msgnpwp">
-                                        @if($errors->has('npwp'))
-                                        {{ $errors->first('npwp')}}
-                                        @endif
-                                    </div>
+                                    <input type="text" class="form-control" placeholder="Masukkan NPWP" id="npwp" name="npwp" value="{{$customer->npwp}}" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="alamat" class="col-4 col-form-label" style="text-align:right;">Alamat</label>
                                 <div class="col-8">
-                                    <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" />
-                                    <div class="invalid-feedback" id="msgalamat">
-                                        @if($errors->has('alamat'))
-                                        {{ $errors->first('alamat')}}
-                                        @endif
-                                    </div>
+                                    <input type="text" class="form-control" placeholder="Masukkan Alamat" id="alamat" name="alamat" value="{{$customer->alamat}}" />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="provinsi" class="col-4 col-form-label" style="text-align:right;">provinsi</label>
+                                <label for="provinsi" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
                                 <div class="col-8">
                                     <select class="select2 select-info form-control custom-select" name="provinsi" id="provinsi">
 
                                     </select>
-                                    <div class="invalid-feedback" id="msgprovinsi">
-                                        @if($errors->has('provinsi'))
-                                        {{ $errors->first('provinsi')}}
-                                        @endif
-                                    </div>
+
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="email" class="col-4 col-form-label" style="text-align:right;">Email</label>
                                 <div class="col-8">
-                                    <input type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
-                                    <div class="invalid-feedback" id="msgemail">
-                                        @if($errors->has('email'))
-                                        {{ $errors->first('email')}}
-                                        @endif
-                                    </div>
+                                    <input type="text" class="form-control" placeholder="Masukkan Email" id="email" name="email" value="{{$customer->email}}" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="telepon" class="col-4 col-form-label" style="text-align:right;">No Telp</label>
                                 <div class="col-5">
-                                    <input type="text" class="form-control @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
-                                    <div class="invalid-feedback" id="msgtelepon">
-                                        @if($errors->has('telepon'))
-                                        {{ $errors->first('telepon')}}
-                                        @endif
-                                    </div>
+                                    <input type="text" class="form-control" placeholder="Masukkan Telepon" id="telepon" name="telepon" value="{{$customer->telp}}" />
+
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="telepon" class="col-4 col-form-label" style="text-align:right;">Keterangan</label>
                                 <div class="col-5">
-                                    <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
+                                    <textarea class="form-control" name="keterangan" id="keterangan">{{$customer->ket}}</textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer"><span class="float-right filter"><button type="submit" class="btn btn-warning" disabled>
+                <div class="card-footer"><span class="float-right filter"><button type="submit" class="btn btn-warning">
                             Simpan
                         </button></span>
                     <span class="float-right filter"><button type="button" class="btn btn-danger" data-dismiss="modal" id="btnsimpan">

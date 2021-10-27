@@ -211,6 +211,11 @@
                     searchable: false
                 },
                 {
+                    data: 'email',
+                    orderable: false,
+                    searchable: false
+                },
+                {
                     data: 'telp',
                     orderable: false,
                     searchable: false
@@ -236,8 +241,9 @@
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
             $.ajax({
-                url: "{{route('penjualan.customer.edit')}}",
+                url: "/api/customer/update_modal/" + id,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -245,7 +251,8 @@
                 success: function(result) {
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    $("#editform").attr("action", href);
+                    console.log(id);
+                    // $("#editform").attr("action", href);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -283,7 +290,6 @@
                 }
             }
         })
-
 
         $('input[name="nama_customer"]').on('keyup change', function() {
 

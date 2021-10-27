@@ -38,11 +38,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
-<<<<<<< HEAD
-                                    <a href="{{route('penjualan.penjualan.create')}}"><button class=" btn btn-outline-info">
-=======
                                     <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
->>>>>>> 6f04733eaf172b758ecea890d8d65ad969734b0e
                                             <i class="fas fa-plus"></i> Tambah
                                         </button>
                                     </a>

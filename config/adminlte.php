@@ -356,19 +356,19 @@ return [
         // penjualan (26)
         [
             'text' => 'Penjualan Produk',
-            'url'  => '/penjualan/produk',
+            'url'  => '/penjualan/produk/show',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
         [
             'text' => 'Penjualan',
-            'url'  => '/penjualan/penjualan',
+            'url'  => '/penjualan/penjualan/show',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
         [
             'text' => 'Customer',
-            'url'  => '/penjualan/customer',
+            'url'  => '/penjualan/customer/show',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
