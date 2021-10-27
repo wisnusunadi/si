@@ -190,7 +190,7 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </div>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1])}}">
+                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
                                                         <button class="dropdown-item" type="button">
                                                             <i class="fas fa-pencil-alt"></i>
                                                             Edit
