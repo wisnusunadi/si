@@ -26,4 +26,8 @@ class PenjualanProduk extends Model
     {
         return $this->hasMany(DetailSpb::class);
     }
+    public function Produk()
+    {
+        return $this->belongsToMany(Produk::class);
+    }
 }

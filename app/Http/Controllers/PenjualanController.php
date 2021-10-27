@@ -64,6 +64,54 @@ class PenjualanController extends Controller
     }
 
     //Create
+
+
+    public function create_penjualan(Request $request)
+    {
+        if ($request->jenis_penjualan == 'ekatalog') {
+            $this->validate(
+                $request,
+                [
+                    'no_paket' => 'required',
+                    'customer_id' => 'required',
+                    'status' => 'required',
+                    'tgl_kontrak' => 'required',
+                    'jumlah.*' => 'required',
+                    'penjualan_produk_id.*' => 'required'
+                ],
+                [
+                    'no_paket.required' => 'No Paket harus di isi',
+                    'customer_id.required' => 'Customer harus di isi',
+                    'status.required' => 'Status harus di pilih',
+                    'tgl_kontrak.required' => 'Tg; Kontrak harus di isi',
+                    'jumlah.required' => 'Jumlah Produk harus di isi',
+                    'penjualan_produk_id.required' => 'Produk harus di pilih',
+                ]
+            );
+            $Ekatalog = Ekatalog::create([
+                'customer_id' => $request->customer_id,
+                'no_paket' => 'AK1-' . $request->no_paket,
+                'deskripsi' => $request->deskripsi,
+                'instansi' => $request->instansi,
+                'satuan' => $request->satuan,
+                'status' => $request->status,
+                'tgl_kontrak' => $request->tgl_kontrak,
+                'tgl_buat' => $request->tgl_buat,
+                'ket' => $request->ket
+            ]);
+            for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                DetailEkatalog::create([
+                    'ekatalog_id' => $Ekatalog->id,
+                    'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                    'jumlah' => $request->jumlah[$i],
+                    'harga' => $request->harga[$i],
+                    'ongkir' => $request->ongkir[$i],
+                ]);
+            }
+        } elseif ($request->jenis_penjualan == 'spa') {
+        } else {
+        }
+    }
     public function create_ekatalog(Request $request)
     {
         $this->validate(

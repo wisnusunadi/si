@@ -30,10 +30,10 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
-                                    <router-link :to="{ name: 'create' }"><button class="btn btn-outline-info">
+                                    <a href="{{route('penjualan.penjualan.create')}}"><button class=" btn btn-outline-info">
                                             <i class="fas fa-plus"></i> Tambah
                                         </button>
-                                    </router-link>
+                                    </a>
                                 </span>
                                 <span class="float-right filter">
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -72,7 +72,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" id="customertable">
+                                    <table class="table table-hover" id="showtable">
                                         <thead style="text-align:center;">
                                             <tr>
                                                 <th>No</th>
@@ -85,7 +85,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>PT Dakai</td>
                                                 <td>
@@ -139,7 +139,7 @@
                                                 <td>
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -175,5 +175,56 @@
 @stop
 
 @section('adminlte_js')
-
+<script>
+    $(function() {
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/customer/data',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nama'
+                },
+                {
+                    data: 'alamat',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'telp',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'npwp',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'npwp',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+    });
+</script>
 @stop

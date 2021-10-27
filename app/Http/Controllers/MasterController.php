@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\DetailPenjualanProduk;
+use App\Models\GudangBarangJadi;
+use App\Models\KelompokProduk;
 use App\Models\PenjualanProduk;
 use App\Models\Produk;
 use Illuminate\Http\Request;
@@ -21,20 +23,73 @@ class MasterController extends Controller
         $data = Customer::select();
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('button', function ($data) {
+                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="dropdown-item" type="button" id="showmodal">
+                              <i class="fas fa-search"></i>
+                              Detail
+                            </button>
+                            <button class="dropdown-item" type="button" id="#editshow">
+                              <i class="fas fa-pencil-alt"></i>
+                              Edit
+                            </button>
+                </div>';
+            })
+            ->rawColumns(['button'])
             ->make(true);
     }
     public function get_data_penjualan_produk()
     {
         $data = PenjualanProduk::select();
-
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('button', function ($data) {
+                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="dropdown-item" type="button" id="showmodal">
+                              <i class="fas fa-search"></i>
+                              Detail
+                            </button>
+                            <button class="dropdown-item" type="button" id="#editshow">
+                              <i class="fas fa-pencil-alt"></i>
+                              Edit
+                            </button>
+                </div>';
+            })
+            ->rawColumns(['button'])
             ->make(true);
     }
+    // public function get_data_detail_penjualan_produk($id)
+    // {
+    //     $data = DetailPenjualanProduk::where('penjualan_produk_id', $id)->get();
+    //     $where = [49, 129];
+
+    //     $detail_data = GudangBarangJadi::whereIn('produk_id', $where)->get();
+    //     return datatables()->of($detail_data)
+    //         ->addIndexColumn()
+    //         ->addColumn('nama', function ($detail_data) {
+    //             return $detail_data->produk->nama . ' - <b>' . $detail_data->variasi . '</b>';
+    //         })
+    //         ->addColumn('kelompok', function ($detail_data) {
+    //             return $detail_data->produk->KelompokProduk->nama;
+    //         })
+    //         ->rawColumns(['nama'])
+    //         ->make(true);
+    // }
     public function get_data_detail_penjualan_produk($id)
     {
-        return datatables()->of(DetailPenjualanProduk::with('Produk', 'PenjualanProduk')
-            ->where('penjualan_produk_id', $id))->toJson();
+        $data = DetailPenjualanProduk::where('penjualan_produk_id', $id);
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('nama', function ($data) {
+                return Produk::find($data->produk_id)->nama;
+            })
+            ->addColumn('kelompok', function ($data) {
+                return Produk::find($data->produk_id)->KelompokProduk->nama;
+            })
+
+            ->make(true);
     }
     //Create
     public function create_produk(Request $request)
@@ -87,24 +142,26 @@ class MasterController extends Controller
     }
     public function create_penjualan_produk(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'nama' => 'required|unique:penjualan_produk',
-                'harga' => 'required',
-                'produk_id.*' => 'required',
-                'jumlah.*' => 'required'
-            ],
-            [
-                'nama.required' => 'Nama Produk harus di isi',
-                'harga.required' => 'Harga Produk harus di isi',
-                'produk_id.required' => 'Produk harus di pilih',
-                'jumlah.required' => 'Jumlah Produk harus di isi',
-            ]
-        );
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'nama_paket' => 'required|unique:penjualan_produk',
+        //         'harga' => 'required',
+        //         'produk_id.*' => 'required',
+        //         'jumlah.*' => 'required'
+        //     ],
+        //     [
+        //         'nama_paket.required' => 'Nama Produk harus di isi',
+        //         'harga.required' => 'Harga Produk harus di isi',
+        //         'produk_id.required' => 'Produk harus di pilih',
+        //         'jumlah.required' => 'Jumlah Produk harus di isi',
+        //     ]
+        // );
+
+        $harga_convert =  str_replace('.', "", $request->harga);
         $PenjualanProduk = PenjualanProduk::create([
-            'nama' => $request->nama,
-            'harga' => $request->harga
+            'nama' => $request->nama_paket,
+            'harga' => $harga_convert
         ]);
 
         for ($i = 0; $i < count($request->produk_id); $i++) {
@@ -180,7 +237,28 @@ class MasterController extends Controller
     //Select
     public function select_produk()
     {
-        $data = Produk::all();
+        $data = Produk::orderby('tipe', 'ASC')->get();
+        echo json_encode($data);
+    }
+    public function select_produk_id($id)
+    {
+        $data = Produk::with('KelompokProduk')
+            ->where('id', $id)->get();
+        echo json_encode($data);
+    }
+    public function select_customer()
+    {
+        $data = Customer::orderby('nama', 'ASC')->get();
+        echo json_encode($data);
+    }
+    public function select_customer_id($id)
+    {
+        $data = Customer::where('id', $id)->orderby('nama', 'ASC')->get();
+        echo json_encode($data);
+    }
+    public function select_penjualan_produk()
+    {
+        $data = PenjualanProduk::select()->get();
         echo json_encode($data);
     }
 }

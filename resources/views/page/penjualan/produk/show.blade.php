@@ -106,7 +106,6 @@
                                         <thead style="text-align: center;">
                                             <tr>
                                                 <th>No</th>
-                                                <th>Kelompok Produk</th>
                                                 <th>Nama Produk</th>
                                                 <th>Harga</th>
                                                 <th>Aksi</th>
@@ -141,13 +140,13 @@
                                                     <span style="font-size: 24px"><b>Info</b></span><span class="float-right green-text col-form-label"><b>Tersedia</b></span>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <a>Nama Produk</a><span id="nama_produk"></span><b class="float-right">FOX-BABY + Case</b>
+                                                    <a>Nama Produk</a><span></span><b class="float-right" id="nama_produk"></b>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <a>Harga</a><span id="kelompok_produk"></span><b class="float-right">Rp. 1.000.000,00</b>
+                                                    <a>Harga</a><span></span><b class="float-right" id="harga_produk"></b>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <a>Stok</a><span id="stok"></span><b class="float-right">100</b>
+                                                    <a>Stok</a><span id="stok"></span><b class="float-right">-</b>
                                                 </li>
                                             </ul>
                                         </div>
@@ -157,28 +156,17 @@
                                     <h5>Detail Produk</h5>
                                     <div class="card">
                                         <div class="card-body">
-                                            <table class="table">
+                                            <table class="table" id="showdetailtable" width="100%">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Produk</th>
                                                         <th>Kelompok</th>
                                                         <th>Jumlah</th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1.</td>
-                                                        <td>FOX-BABY</td>
-                                                        <td>Alat Kesehatan</td>
-                                                        <td>1</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2.</td>
-                                                        <td>Case</td>
-                                                        <td>Aksesori</td>
-                                                        <td>1</td>
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -189,7 +177,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="modal fade" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="modaledit" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
@@ -218,9 +205,76 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#showtable').DataTable({
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan_produk/data',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
 
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nama'
+                },
+                {
+                    data: 'harga',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
         });
-    })
+        $('#showtable tbody').on('click', '#showmodal', function() {
+            var rows = showtable.rows($(this).parents('tr')).data();
+            $('#nama_produk').text(rows[0].nama);
+            var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            $('#harga_produk').text('Rp ' + x);
+
+            var showdetailtable = $('#showdetailtable').DataTable({
+                processing: true,
+                destroy: true,
+                serverSide: true,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: '/api/penjualan_produk/detail/' + rows[0].id,
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama'
+
+                    },
+                    {
+                        data: 'kelompok'
+
+                    },
+                    {
+                        data: 'jumlah'
+
+                    },
+                ],
+            });
+            $('#modaldetail').modal('show');
+        });
+    });
 </script>
 @endsection
