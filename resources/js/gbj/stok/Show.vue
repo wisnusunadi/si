@@ -219,6 +219,7 @@
                       <th>Tipe Produk</th>
                       <th>Stok</th>
                       <th>Satuan</th>
+                      <th>Layout</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
@@ -534,6 +535,11 @@ export default {
           },
           {
             data: "satuan",
+            orderable: false,
+            searchable: false,
+          },
+           {
+            data: "layout",
             orderable: false,
             searchable: false,
           },

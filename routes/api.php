@@ -65,6 +65,19 @@ Route::prefix('/penjualan_produk')->group(function () {
 });
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
+    Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
+    Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
+    Route::get('/get/{id}', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
+});
+
+Route::prefix('/tfp')->group(function () {
+    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
+});
+
+Route::prefix('/noseri')->group(function () {
+    Route::post('/edit/{id}', [App\Http\Controllers\NoseriController::class, 'UpdateNoSeri']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\NoseriController::class, 'DestroyNoSeri']);
 });
 Route::prefix('/ekatalog')->group(function () {
     Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
