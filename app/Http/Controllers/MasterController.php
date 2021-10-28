@@ -9,6 +9,7 @@ use App\Models\KelompokProduk;
 use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
 use App\Models\Produk;
+use App\Models\Provinsi;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -134,22 +135,24 @@ class MasterController extends Controller
     }
     public function create_customer(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'nama' => 'required|unique:customer',
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'nama' => 'required|unique:customer',
 
-            ],
-            [
-                'nama.required|unique:customer' => 'Nama Customer harus di isi',
-            ]
-        );
+        //     ],
+        //     [
+        //         'nama.required|unique:customer' => 'Nama Customer harus di isi',
+        //     ]
+        // );
         Customer::create([
-            'nama' => $request->nama,
-            'telp' => $request->telp,
+            'nama' => $request->nama_customer,
+            'telp' => $request->telepon,
             'alamat' => $request->alamat,
-            'npwp' => '43443',
-            'ket' => $request->ket,
+            'email' => $request->email,
+            'id_provinsi' => $request->provinsi,
+            'npwp' => $request->npwp,
+            'ket' => $request->keterangan,
         ]);
     }
     public function create_penjualan_produk(Request $request)
@@ -188,6 +191,7 @@ class MasterController extends Controller
     public function update_customer(Request $request, $id)
     {
         $customer = Customer::find($id);
+        $customer->id_provinsi = $request->id_provinsi;
         $customer->nama = $request->nama_customer;
         $customer->npwp = $request->npwp;
         $customer->email = $request->email;
@@ -285,6 +289,12 @@ class MasterController extends Controller
     public function select_customer()
     {
         $data = Customer::orderby('nama', 'ASC')->get();
+        echo json_encode($data);
+    }
+    public function select_provinsi(Request $request)
+    {
+        $data = Provinsi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
     public function select_customer_id($id)

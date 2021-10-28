@@ -222,7 +222,7 @@
                             results: $.map(data, function(obj) {
                                 return {
                                     id: obj.id,
-                                    text: obj.tipe
+                                    text: obj.nama
                                 };
                             })
                         };

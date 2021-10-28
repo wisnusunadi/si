@@ -164,7 +164,7 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+            <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-warning">
@@ -184,6 +184,10 @@
 @section('adminlte_js')
 <script>
     $(function() {
+
+
+
+
         var showtable = $('#showtable').DataTable({
             processing: true,
             serverSide: true,
@@ -238,7 +242,10 @@
             ]
         });
 
+
+
         $(document).on('click', '.editmodal', function(event) {
+
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
@@ -249,6 +256,7 @@
                 },
                 // return the result
                 success: function(result) {
+
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     console.log(id);

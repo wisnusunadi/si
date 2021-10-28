@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     protected $table = 'customer';
-    protected $fillable = ['nama', 'telp', 'email', 'alamat', 'npwp', 'ket'];
+    protected $fillable = ['id_provinsi', 'nama', 'telp', 'email', 'alamat', 'npwp', 'ket'];
 
     public function Spa()
     {

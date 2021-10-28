@@ -38,7 +38,9 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/get-gbj-datatable', [App\Http\Controllers\PpicController::class, 'getGbjDatatable']);
     Route::get('/jadwal', [App\Http\Controllers\PpicController::class, 'getJadwalPerakitan']);
 });
-
+Route::prefix('/provinsi')->group(function () {
+    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
+});
 Route::prefix('/customer')->group(function () {
     Route::post('data', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
     Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_pesanan']);
