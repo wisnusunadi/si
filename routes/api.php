@@ -79,7 +79,7 @@ Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
 });
 Route::prefix('/ekatalog')->group(function () {
-    Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
+    Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
     Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_ekatalog']);
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_ekatalog']);

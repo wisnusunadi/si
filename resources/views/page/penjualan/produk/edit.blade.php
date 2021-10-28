@@ -1,6 +1,5 @@
 <div class="row">
     <div class="col-12">
-        <div hidden id="alert">HI</div>
         @if(session()->has('error'))
         <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
             <strong>Gagal mengubah!</strong> Periksa
@@ -30,7 +29,7 @@
                                     <div class="form-group row">
                                         <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Nama Paket</label>
                                         <div class="col-6">
-                                            <input type="text" class="form-control" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" />
+                                            <input type="text" class="form-control" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" value="{{$penjualanproduk->nama}}" />
                                             <div class="invalid-feedback" id="msgnama_paket">
 
                                             </div>
@@ -42,7 +41,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Rp</span>
                                             </div>
-                                            <input type="text" class="form-control" name="harga" id="harga" placeholder="Masukkan Harga" />
+                                            <input type="text" class="form-control" name="harga" id="harga" placeholder="Masukkan Harga" value="{{ number_format($penjualanproduk->harga)}}" />
                                             <div class="invalid-feedback" id="msgharga">
 
                                             </div>
@@ -81,12 +80,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+
+
                                                 <tr>
-                                                    <td>1</td>
+                                                    <td></td>
                                                     <td>
                                                         <div class="form-group row">
                                                             <div class="col-12">
                                                                 <select class="select-info select2 form-control produk_id" name="produk_id[]" id="produk_id">
+                                                                    <option value=""></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -101,6 +103,7 @@
                                                         <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
                                                     </td>
                                                 </tr>
+
                                             </tbody>
                                         </table>
                                     </div>
