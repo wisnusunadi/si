@@ -30,4 +30,5 @@ mix.js('resources/js/gbj/penjualan/app.js', 'public/native/js/gbj/penjualan.js')
 mix.js('resources/js/penjualan/produk/app.js', 'public/native/js/penjualan/produk.js').vue()
 mix.js('resources/js/penjualan/customer/app.js', 'public/native/js/penjualan/customer.js').vue()
 mix.js('resources/js/penjualan/penjualan/app.js', 'public/native/js/penjualan/penjualan.js').vue()
+mix.js('resources/js/penjualan/po/app.js', 'public/native/js/penjualan/po.js').vue()
 
