@@ -11,6 +11,10 @@
     .hide {
         display: none !important;
     }
+
+    .align-right {
+        text-align: right;
+    }
 </style>
 @stop
 
@@ -109,6 +113,15 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
+                                        <div class="col-7">
+                                            <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
+                                            <div class="invalid-feedback" id="msgsatuan_kerja">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="" class="col-form-label col-5" style="text-align: right">No Paket</label>
                                         <div class="col-5 input-group">
                                             <div class="input-group-prepend">
@@ -199,7 +212,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-group row hide" id="do_detail_no">
                                     <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
                                     <div class="col-4">
@@ -245,12 +257,12 @@
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>Nama Paket</th>
-                                                        <th>Variasi</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Ketersediaan</th>
-                                                        <th>Aksi</th>
+                                                        <th width="5%">No</th>
+                                                        <th width="35%">Nama Paket</th>
+                                                        <th width="15%">Jumlah</th>
+                                                        <th width="20%">Harga</th>
+                                                        <th width="20%">Subtotal</th>
+                                                        <th width="5%">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -258,31 +270,43 @@
                                                         <td>1</td>
                                                         <td>
                                                             <div class="form-group">
-                                                                <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror">
-                                                                    <option value=""></option>
-                                                                </select>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="form-group">
-                                                                <select name="variasi[]" id="variasi" class="form-control custom-select @error('variasi') is-invalid @enderror">
+                                                                <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                     <option value=""></option>
                                                                 </select>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="form-group d-flex justify-content-center">
-                                                                <input type="number" class="form-control" id="produk_jumlah" name="produk_jumlah[]" style="width: 50%" />
+                                                                <div class="input-group">
+                                                                    <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text" id="produk_satuan">pcs</span>
+                                                                    </div>
+                                                                </div>
+                                                                <small id="produk_ketersediaan"></small>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <span class="badge" id="produk_ketersediaan"></span>
+                                                            <div class="form-group d-flex justify-content-center">
+                                                                <input type="number" class="form-control produk_harga" id="produk_harga" name="produk_harga[]" style="width:100%;" />
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group d-flex justify-content-center">
+                                                                <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" />
+                                                            </div>
                                                         </td>
                                                         <td>
                                                             <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                        <th id="totalhargaprd" class="align-right">Rp. 0</th>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -310,11 +334,12 @@
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>Nama Part</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Ketersediaan</th>
-                                                        <th>Aksi</th>
+                                                        <th width="5%">No</th>
+                                                        <th width="35%">Nama Part</th>
+                                                        <th width="15%">Jumlah</th>
+                                                        <th width="20%">Subtotal</th>
+                                                        <th width="20%">Harga</th>
+                                                        <th width="5%">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -322,24 +347,43 @@
                                                         <td>1</td>
                                                         <td>
                                                             <div class="form-group">
-                                                                <select class="select2 form-control custom-select" name="part_id" id="part_id">
+                                                                <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
                                                                     <option value=""></option>
                                                                 </select>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="form-group d-flex justify-content-center">
-                                                                <input type="number" class="form-control" id="part_jumlah" style="width: 50%" />
+                                                                <div class="input-group">
+                                                                    <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah" style="width:100%;">
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text" id="part_satuan">pcs</span>
+                                                                    </div>
+                                                                </div>
+                                                                <small id="part_ketersediaan"></small>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <span class="badge" id="part_ketersediaan"></span>
+                                                            <div class="form-group d-flex justify-content-center">
+                                                                <input type="number" class="form-control part_harga" id="part_harga" name="part_harga[]" style="width:100%;" />
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group d-flex justify-content-center">
+                                                                <input type="number" class="form-control part_subtotal" id="part_subtotal" name="part_subtotal[]" style="width:100%;" />
+                                                            </div>
                                                         </td>
                                                         <td>
                                                             <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                        <th id="totalhargapart" class="align-right">Rp. 0</th>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -549,6 +593,24 @@
             }
         })
 
+        function totalhargaprd() {
+            var totalharga = 0;
+            $('#produktable').find('tr .produk_subtotal').each(function() {
+                var subtotal = $(this).val();
+                totalharga = parseInt(totalharga) + parseInt(subtotal);
+                $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
+            })
+        }
+
+        function totalhargapart() {
+            var totalharga = 0;
+            $('#parttable').find('tr .part_subtotal').each(function() {
+                var subtotal = $(this).val();
+                totalharga = parseInt(totalharga) + parseInt(subtotal);
+                $("#totalhargapart").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
+            })
+        }
+
         function numberRowsProduk($t) {
             var c = 0 - 2;
             $t.find("tr").each(function(ind, el) {
@@ -559,37 +621,64 @@
                 $(el).find('.variasi').attr('name', 'variasi[' + j + ']');
                 $(el).find('.variasi').attr('id', 'variasi' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
-                // $('.produk_id').select2();
+                $('.produk_id').select2();
             });
         }
 
+        $("#produktable").on('keyup change', '.produk_jumlah', function() {
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var harga = $(this).closest('tr').find('.produk_harga').val();
+            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+
+            if (jumlah != "" && harga != "") {
+                subtotal.val(jumlah * harga);
+                totalhargaprd();
+            }
+        });
+
+        $("#produktable").on('keyup change', '.produk_harga', function() {
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var harga = $(this).closest('tr').find('.produk_harga').val();
+            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+            if (jumlah != "" && harga != "") {
+                subtotal.val(jumlah * harga);
+                totalhargaprd();
+            }
+        });
+
         $('#addrowproduk').on('click', function() {
-            $('#produktable tr:last').after(`<tr>
+            $('#produktable tbody tr:last').after(`<tr>
                 <td></td>
                 <td>
                     <div class="form-group">
-                        <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="form-control custom-select @error('penjualan_produk_id') is-invalid @enderror">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <select name="variasi[]" id="variasi" class="form-control custom-select @error('variasi') is-invalid @enderror">
+                        <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control" id="produk_jumlah" name="produk_jumlah" style="width: 50%" />
+                        <div class="input-group">
+                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="produk_satuan">pcs</span>
+                            </div>
+                        </div>
+                        <small id="produk_ketersediaan"></small>
                     </div>
                 </td>
                 <td>
-                    <span class="badge" id="produk_ketersediaan"></span>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control produk_harga" id="produk_harga" name="produk_harga[]" style="width:100%;" />
+                    </div>
                 </td>
                 <td>
-                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" />
+                    </div>
+                </td>
+                <td>
+                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
             </tr>`);
             numberRowsProduk($("#produktable"));
@@ -598,6 +687,7 @@
         $('#produktable').on('click', '#removerowproduk', function(e) {
             $(this).closest('tr').remove();
             numberRowsProduk($("#produktable"));
+            totalhargaprd();
         });
 
         function numberRowsPart($t) {
@@ -613,29 +703,63 @@
         }
 
         $('#addrowpart').on('click', function() {
-            $('#parttable tr:last').after(`
+            $('#parttable tbody tr:last').after(`
             <tr>
                 <td></td>
                 <td>
                     <div class="form-group">
-                        <select class="select2 form-control custom-select" name="part_id" id="part_id">
+                        <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
                             <option value=""></option>
                         </select>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control" id="part_jumlah" style="width: 50%" />
+                        <div class="input-group">
+                            <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah" style="width:100%;">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="part_satuan">pcs</span>
+                            </div>
+                        </div>
+                        <small id="part_ketersediaan"></small>
                     </div>
                 </td>
                 <td>
-                    <span class="badge" id="part_ketersediaan"></span>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control part_harga" id="part_harga" name="part_harga[]" style="width:100%;" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control part_subtotal" id="part_subtotal" name="part_subtotal[]" style="width:100%;" />
+                    </div>
                 </td>
                 <td>
                     <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
                 </td>
-                </tr>`);
+            </tr>`);
             numberRowsPart($("#parttable"));
+        });
+
+        $("#parttable").on('keyup change', '.part_jumlah', function() {
+            var jumlah = $(this).closest('tr').find('.part_jumlah').val();
+            var harga = $(this).closest('tr').find('.part_harga').val();
+            var subtotal = $(this).closest('tr').find('.part_subtotal');
+
+            if (jumlah != "" && harga != "") {
+                subtotal.val(jumlah * harga);
+                totalhargaprd();
+            }
+        });
+
+        $("#parttable").on('keyup change', '.part_harga', function() {
+            var jumlah = $(this).closest('tr').find('.part_jumlah').val();
+            var harga = $(this).closest('tr').find('.part_harga').val();
+            var subtotal = $(this).closest('tr').find('.part_subtotal');
+            if (jumlah != "" && harga != "") {
+                subtotal.val(jumlah * harga);
+                totalhargaprd();
+            }
         });
 
         $('#parttable').on('click', '#removerowpart', function(e) {

@@ -11,55 +11,59 @@
     .filter {
         margin: 5px;
     }
-    thead
-    {
-        text-align:center;
+
+    thead {
+        text-align: center;
     }
 
-    td{
-        text-align:center;
+    td {
+        text-align: center;
         white-space: nowrap;
     }
 
-    #urgent{
-        color:red;
+    #urgent {
+        color: red;
     }
 
-    #warning{
-        color:#FFC700;
+    #warning {
+        color: #FFC700;
     }
-    
-    .minimizechar{
-        display:inline-block;
+
+    .minimizechar {
+        display: inline-block;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 13ch;
     }
 
-    .dropdown-toggle:hover{
-        color:#4682B4;
+    .dropdown-toggle:hover {
+        color: #4682B4;
     }
 
-    .dropdown-toggle:active{
-        color:#C0C0C0;
+    .dropdown-toggle:active {
+        color: #C0C0C0;
     }
 
     @media screen and (max-width: 1440px) {
-        label, .row{
-            font-size:12px;
+
+        label,
+        .row {
+            font-size: 12px;
         }
-        h4{
-            font-size:20px;
+
+        h4 {
+            font-size: 20px;
         }
-        #detailmodal{
-            font-size:12px;
+
+        #detailmodal {
+            font-size: 12px;
         }
-        .btn{
-            font-size:12px;
+
+        .btn {
+            font-size: 12px;
         }
     }
-
 </style>
 @stop
 
@@ -207,125 +211,125 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                <table class="table table-hover" id="penjualantable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>No SO</th>
-                                            <th>Nomor AKN</th>
-                                            <th>Nomor PO</th>
-                                            <th>Tanggal Order</th>
-                                            <th>Batas Kontrak</th>
-                                            <th>Customer</th>
-                                            <th>Jenis</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>SOEKAT090202101</td>
-                                            <td>AKN1-79479274207</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>05-10-2021</td>
-                                            <td>
-                                                <span class="urgent">19-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
-                                            <td>E-Catalogue</td>
-                                            <td>
-                                                <span class="red-text badge">Batal</span>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </div>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-pencil-alt"></i>
-                                                            Edit
-                                                        </button>
-                                                    </a>
-                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-search"></i>
-                                                            Detail
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>SOSPB090202101</td>
-                                            <td>-</td>
-                                            <td>PO/ON/45/10/21</td>
-                                            <td>14-10-2021</td>
-                                            <td>
-                                                <span class="warning">28-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">Pak Amin Pasuruan</span></td>
-                                            <td>SPB</td>
-                                            <td>
-                                                <span class="green-text badge">Pengiriman</span>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </div>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spb'])}}">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-pencil-alt"></i>
-                                                            Edit
-                                                        </button>
-                                                    </a>
-                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-search"></i>
-                                                            Detail
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>SOSPA090202101</td>
-                                            <td>-</td>
-                                            <td>PO/ON/37/10/21</td>
-                                            <td>15-10-2021</td>
-                                            <td>29-10-2021</td>
-                                            <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
-                                            <td>SPA</td>
-                                            
-                                            <td>
-                                                <span class="yellow-text badge">Gudang</span>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </div>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spa'])}}">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-pencil-alt"></i>
-                                                            Edit
-                                                        </button>
-                                                    </a>
-                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-search"></i>
-                                                            Detail
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table class="table table-hover" id="penjualantable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>No SO</th>
+                                                <th>Nomor AKN</th>
+                                                <th>Nomor PO</th>
+                                                <th>Tanggal Order</th>
+                                                <th>Batas Kontrak</th>
+                                                <th>Customer</th>
+                                                <th>Jenis</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>SOEKAT090202101</td>
+                                                <td>AKN1-79479274207</td>
+                                                <td>PO/ON/51/10/21</td>
+                                                <td>05-10-2021</td>
+                                                <td>
+                                                    <span class="urgent">19-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
+                                                <td>E-Catalogue</td>
+                                                <td>
+                                                    <span class="red-text badge">Batal</span>
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>SOSPB090202101</td>
+                                                <td>-</td>
+                                                <td>PO/ON/45/10/21</td>
+                                                <td>14-10-2021</td>
+                                                <td>
+                                                    <span class="warning">28-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">Pak Amin Pasuruan</span></td>
+                                                <td>SPB</td>
+                                                <td>
+                                                    <span class="green-text badge">Pengiriman</span>
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spb'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>SOSPA090202101</td>
+                                                <td>-</td>
+                                                <td>PO/ON/37/10/21</td>
+                                                <td>15-10-2021</td>
+                                                <td>29-10-2021</td>
+                                                <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
+                                                <td>SPA</td>
+
+                                                <td>
+                                                    <span class="yellow-text badge">Gudang</span>
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spa'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -421,73 +425,95 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                <table class="table table-hover" id="ekatalogtable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nomor SO</th>
-                                            <th>Nomor AKN</th>
-                                            <th>Nomor PO</th>
-                                            <th>Tanggal Order</th>
-                                            <th>Batas Kontrak</th>
-                                            <th>Customer</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>SOEKAT090202101</td>
-                                            <td>AKN1-79479274207</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>05-10-2021</td>
-                                            <td>
-                                                <span class="urgent">19-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
-                                            <td>
-                                                <span class="red-text badge">Batal</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>SOEKAT090202101</td>
-                                            <td>AKN1-79479274207</td>
-                                            <td>PO/ON/45/10/21</td>
-                                            <td>14-10-2021</td>
-                                            <td>
-                                                <span class="warning">28-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">PT Cipta Medika Pasuruan</span></td>
-                                            
-                                            <td>
-                                                <span class="green-text badge">Sepakat</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>SOEKAT090202101</td>
-                                            <td>AKN1-79479274207</td>
-                                            <td>PO/ON/45/10/21</td>
-                                            <td>15-10-2021</td>
-                                            <td>29-10-2021</td>
-                                            <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
-                                            <td>
-                                                <span class="yellow-text badge">Negosiasi</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table class="table table-hover" id="ekatalogtable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nomor SO</th>
+                                                <th>Nomor AKN</th>
+                                                <th>Nomor PO</th>
+                                                <th>Tanggal Order</th>
+                                                <th>Batas Kontrak</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>-</td>
+                                                <td>AKN1-79479274207</td>
+                                                <td>-</td>
+                                                <td>05-10-2021</td>
+                                                <td>
+                                                    <span class="urgent">19-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
+                                                <td>
+                                                    <span class="red-text badge">Batal</span>
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('penjualan.so.create')}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-plus"></i>
+                                                                Tambah PO
+                                                            </button>
+                                                        </a>
+                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>SOEKAT090202101</td>
+                                                <td>AKN1-79479274207</td>
+                                                <td>PO/ON/45/10/21</td>
+                                                <td>14-10-2021</td>
+                                                <td>
+                                                    <span class="warning">28-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">PT Cipta Medika Pasuruan</span></td>
+
+                                                <td>
+                                                    <span class="green-text badge">Sepakat</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>SOEKAT090202101</td>
+                                                <td>AKN1-79479274207</td>
+                                                <td>PO/ON/45/10/21</td>
+                                                <td>15-10-2021</td>
+                                                <td>29-10-2021</td>
+                                                <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
+                                                <td>
+                                                    <span class="yellow-text badge">Negosiasi</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -559,68 +585,68 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                <table class="table table-hover" id="spatable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nomor SO</th>
-                                            <th>Nomor PO</th>
-                                            <th>Tanggal Order</th>
-                                            <th>Batas Kontrak</th>
-                                            <th>Customer</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>SOSPA0902012910</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>05-10-2021</td>
-                                            <td>
-                                                <span class="urgent">19-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
-                                            <td>
-                                                <span class="red-text badge">PO</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>SOSPA0902012910</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>14-10-2021</td>
-                                            <td>
-                                                <span class="warning">28-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">PT Cipta Medika Pasuruan</span></td>
-                                            <td>
-                                                <span class="yellow-text badge">Gudang</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>SOSPA0902012910</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>15-10-2021</td>
-                                            <td>29-10-2021</td>
-                                            <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
-                                            <td>
-                                                <span class="green-text badge">Pengiriman</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table class="table table-hover" id="spatable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nomor SO</th>
+                                                <th>Nomor PO</th>
+                                                <th>Tanggal Order</th>
+                                                <th>Batas Kontrak</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>SOSPA0902012910</td>
+                                                <td>PO/ON/51/10/21</td>
+                                                <td>05-10-2021</td>
+                                                <td>
+                                                    <span class="urgent">19-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
+                                                <td>
+                                                    <span class="red-text badge">PO</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>SOSPA0902012910</td>
+                                                <td>PO/ON/51/10/21</td>
+                                                <td>14-10-2021</td>
+                                                <td>
+                                                    <span class="warning">28-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">PT Cipta Medika Pasuruan</span></td>
+                                                <td>
+                                                    <span class="yellow-text badge">Gudang</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>SOSPA0902012910</td>
+                                                <td>PO/ON/51/10/21</td>
+                                                <td>15-10-2021</td>
+                                                <td>29-10-2021</td>
+                                                <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
+                                                <td>
+                                                    <span class="green-text badge">Pengiriman</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -692,68 +718,68 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                <table class="table table-hover" id="spbtable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nomor SO</th>
-                                            <th>Nomor PO</th>
-                                            <th>Tanggal Order</th>
-                                            <th>Batas Kontrak</th>
-                                            <th>Customer</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>SOSPB0902012910</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>05-10-2021</td>
-                                            <td>
-                                                <span class="urgent">19-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
-                                            <td>
-                                                <span class="yellow-text badge">Gudang</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>SOSPB0902012910</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>14-10-2021</td>
-                                            <td>
-                                                <span class="warning">28-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">PT Cipta Medika Pasuruan</span></td>
-                                            <td>
-                                                <span class="yellow-text badge">Gudang</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>SOSPB0902012910</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>15-10-2021</td>
-                                            <td>29-10-2021</td>
-                                            <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
-                                            <td>
-                                                <span class="green-text badge">Pengiriman</span>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table class="table table-hover" id="spbtable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nomor SO</th>
+                                                <th>Nomor PO</th>
+                                                <th>Tanggal Order</th>
+                                                <th>Batas Kontrak</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>SOSPB0902012910</td>
+                                                <td>PO/ON/51/10/21</td>
+                                                <td>05-10-2021</td>
+                                                <td>
+                                                    <span class="urgent">19-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
+                                                <td>
+                                                    <span class="yellow-text badge">Gudang</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>SOSPB0902012910</td>
+                                                <td>PO/ON/51/10/21</td>
+                                                <td>14-10-2021</td>
+                                                <td>
+                                                    <span class="warning">28-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">PT Cipta Medika Pasuruan</span></td>
+                                                <td>
+                                                    <span class="yellow-text badge">Gudang</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>SOSPB0902012910</td>
+                                                <td>PO/ON/51/10/21</td>
+                                                <td>15-10-2021</td>
+                                                <td>29-10-2021</td>
+                                                <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
+                                                <td>
+                                                    <span class="green-text badge">Pengiriman</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
