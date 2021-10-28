@@ -286,9 +286,10 @@ class MasterController extends Controller
             ->where('id', $id)->get();
         echo json_encode($data);
     }
-    public function select_customer()
+    public function select_customer(Request $request)
     {
-        $data = Customer::orderby('nama', 'ASC')->get();
+        $data = Customer::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
     public function select_provinsi(Request $request)
@@ -302,9 +303,11 @@ class MasterController extends Controller
         $data = Customer::where('id', $id)->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
-    public function select_penjualan_produk()
+    public function select_penjualan_produk(Request $request)
     {
-        $data = PenjualanProduk::select()->get();
+        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')
+            ->get();
         echo json_encode($data);
     }
 }

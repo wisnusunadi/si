@@ -491,11 +491,18 @@
 
         $('.customer_id').select2({
             ajax: {
-                tags: [],
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
                 dataType: 'json',
+                theme: "bootstrap",
                 delay: 250,
                 type: 'GET',
                 url: '/api/customer/select/',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
                 processResults: function(data) {
                     console.log(data);
                     return {
@@ -522,17 +529,18 @@
             });
         });
 
-
         $('.penjualan_produk_id').select2({
             ajax: {
-                placeholder: "Pilih Customer",
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
                 dataType: 'json',
+                theme: "bootstrap",
                 delay: 250,
                 type: 'GET',
                 url: '/api/penjualan_produk/select/',
                 data: function(params) {
                     return {
-                        searchTerm: params.term
+                        term: params.term
                     }
                 },
                 processResults: function(data) {
