@@ -17,414 +17,420 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        @if(session()->has('error') || count($errors) > 0 )
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Gagal mengubah data!</strong> Periksa
-            kembali data yang diinput
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        @elseif(session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Berhasil mengubah data</strong>,
-            Terima kasih
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        @endif
-        <div class="content">
-            <form>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-10">
-                        <h4>Info Customer</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="form-horizontal">
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
-                                        <div class="col-5">
-                                            <select name="customer_id" id="customer_id" class="form-control custom-select @error('customer_id') is-invalid @enderror">
-                                                <option value=""></option>
-                                            </select>
-                                            <div class="invalid-feedback" id="msgcustomer_id">
-                                                @if($errors->has('customer_id'))
-                                                {{ $errors->first('customer_id')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
-                                        <div class="col-7">
-                                            <input type="text" class="form-control col-form-label" name="alamat" id="alamat" readonly />
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
-                                        <div class="col-5">
-                                            <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="card">
+            <div class="card-header bg-warning">
+                <div class="card-title">Form Ubah Data</div>
+            </div>
+            <div class="card-body">
+                @if(session()->has('error') || count($errors) > 0 )
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Gagal mengubah data!</strong> Periksa
+                    kembali data yang diinput
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="row d-flex justify-content-center hide" id="akn">
-                    <div class="col-10">
-                        <h4>Info AKN</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="form-horizontal">
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Sales Order</label>
-                                        <div class="col-4">
-                                            <input type="text" class="form-control col-form-label @error('no_soakn') is-invalid @enderror" id="no_so_akn" name="no_so_akn" />
-                                            <div class="invalid-feedback" id="msgno_so_akn">
-                                                @if($errors->has('no_so_akn'))
-                                                {{ $errors->first('no_so_akn')}}
-                                                @endif
+                @elseif(session()->has('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Berhasil mengubah data</strong>,
+                    Terima kasih
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
+                <div class="content">
+                    <form>
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-10">
+                                <h4>Info Customer</h4>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-horizontal">
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
+                                                <div class="col-5">
+                                                    <select name="customer_id" id="customer_id" class="form-control custom-select @error('customer_id') is-invalid @enderror">
+                                                        <option value=""></option>
+                                                    </select>
+                                                    <div class="invalid-feedback" id="msgcustomer_id">
+                                                        @if($errors->has('customer_id'))
+                                                        {{ $errors->first('customer_id')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">No Paket</label>
-                                        <div class="col-5 input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="no_paket">AK1</span>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
+                                                <div class="col-7">
+                                                    <input type="text" class="form-control col-form-label" name="alamat" id="alamat" readonly />
+                                                </div>
                                             </div>
-                                            <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" />
-                                            <div class="invalid-feedback" id="msgno_paket">
-                                                @if($errors->has('no_paket'))
-                                                {{ $errors->first('no_paket')}}
-                                                @endif
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
+                                                <div class="col-5">
+                                                    <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
-                                        <div class="col-4">
-                                            <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
-                                            <div class="invalid-feedback" id="msgtanggal_pemesanan">
-                                                @if($errors->has('tanggal_pemesanan'))
-                                                {{ $errors->first('tanggal_pemesanan')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
-                                        <div class="col-4">
-                                            <input type="text" class="form-control col-form-label @error('no_po_akn') is-invalid @enderror" id="no_po_akn" name="no_po_akn" />
-                                            <div class="invalid-feedback" id="msgno_po_akn">
-                                                @if($errors->has('no_po_akn'))
-                                                {{ $errors->first('no_po_akn')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
-                                        <div class="col-4">
-                                            <input type="date" class="form-control col-form-label @error('tanggal_po_akn') is-invalid @enderror" id="tanggal_po_akn" name="tanggal_po_akn" />
-                                            <div class="invalid-feedback" id="msgtanggal_po_akn">
-                                                @if($errors->has('no_po_akn'))
-                                                {{ $errors->first('no_po_akn')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
-                                        <div class="col-5 col-form-label">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="do_akn" id="yes" value="yes" />
-                                                <label class="form-check-label" for="yes">Tersedia</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="do_akn" id="no" value="no" />
-                                                <label class="form-check-label" for="no">Tidak tersedia</label>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="form-group row hide" id="do_detail_no_akn">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
-                                        <div class="col-4">
-                                            <input type="text" class="form-control col-form-label @error('no_do_akn') is-invalid @enderror" id="no_do_akn" name="no_do_akn" />
-                                            <div class="invalid-feedback" id="msgno_do_akn">
-                                                @if($errors->has('no_do_akn'))
-                                                {{ $errors->first('no_do_akn')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row hide" id="do_detail_tgl_akn">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
-                                        <div class="col-4">
-                                            <input type="date" class="form-control col-form-label @error('tanggal_do_akn') is-invalid @enderror" id="tanggal_do_akn" name="tanggal_do_akn" />
-                                            <div class="invalid-feedback" id="msgtanggal_do_akn">
-                                                @if($errors->has('tanggal_do_akn'))
-                                                {{ $errors->first('tanggal_do_akn')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
-                                        <div class="col-5 col-form-label">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="ekatalog" />
-                                                <label class="form-check-label" for="status_akn1">Sepakat</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="spa" />
-                                                <label class="form-check-label" for="status_akn2">Negosiasi</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="spb" />
-                                                <label class="form-check-label" for="status_akn3">Batal</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
-                                        <div class="col-7">
-                                            <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
-                                            <div class="invalid-feedback" id="msginstansi">
-                                                @if($errors->has('instansi'))
-                                                {{ $errors->first('instansi')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Batas Kontrak</label>
-                                        <div class="col-4">
-                                            <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
-                                            <div class="invalid-feedback" id="msgbatas_kontrak">
-                                                @if($errors->has('batas_kontrak'))
-                                                {{ $errors->first('batas_kontrak')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
-                                        <div class="col-5">
-                                            <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
-                                            <div class="invalid-feedback" id="msgdeskripsi">
-                                                @if($errors->has('deskripsi'))
-                                                {{ $errors->first('deskripsi')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                        <div class="col-5">
-                                            <textarea class="form-control col-form-label" v-model="keterangan"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row d-flex justify-content-center hide" id="nonakn">
-                    <div class="col-10">
-                        <h4>Info Penjualan</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
-                                    <div class="col-4">
-                                        <input type="date" class="form-control col-form-label @error('nontanggal_pemesanan') is-invalid @enderror" id="nontanggal_pemesanan" name="nontanggal_pemesanan" />
-                                        <div class="invalid-feedback" id="msgnontanggal_pemesanan">
-                                            @if($errors->has('nontanggal_pemesanan'))
-                                            {{ $errors->first('nontanggal_pemesanan')}}
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Sales Order</label>
-                                    <div class="col-4">
-                                        <input type="text" class="form-control col-form-label @error('no_so') is-invalid @enderror" id="no_so" name="no_so" />
-                                        <div class="invalid-feedback" id="msgno_so">
-                                            @if($errors->has('no_so'))
-                                            {{ $errors->first('no_so')}}
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
-                                    <div class="col-4">
-                                        <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
-                                        <div class="invalid-feedback" id="msgno_po">
-                                            @if($errors->has('no_po'))
-                                            {{ $errors->first('no_po')}}
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
-                                    <div class="col-4">
-                                        <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
-                                        <div class="invalid-feedback" id="msgtanggal_po">
-                                            @if($errors->has('tanggal_po'))
-                                            {{ $errors->first('tanggal_po')}}
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
-                                    <div class="col-5 col-form-label">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="do" id="yes" value="yes" />
-                                            <label class="form-check-label" for="yes">Tersedia</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="do" id="no" value="no" />
-                                            <label class="form-check-label" for="no">Tidak tersedia</label>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="row d-flex justify-content-center hide" id="akn">
+                            <div class="col-10">
+                                <h4>Info AKN</h4>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-horizontal">
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Sales Order</label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control col-form-label @error('no_soakn') is-invalid @enderror" id="no_so_akn" name="no_so_akn" />
+                                                    <div class="invalid-feedback" id="msgno_so_akn">
+                                                        @if($errors->has('no_so_akn'))
+                                                        {{ $errors->first('no_so_akn')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">No Paket</label>
+                                                <div class="col-5 input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="no_paket">AK1</span>
+                                                    </div>
+                                                    <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" />
+                                                    <div class="invalid-feedback" id="msgno_paket">
+                                                        @if($errors->has('no_paket'))
+                                                        {{ $errors->first('no_paket')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
+                                                <div class="col-4">
+                                                    <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
+                                                    <div class="invalid-feedback" id="msgtanggal_pemesanan">
+                                                        @if($errors->has('tanggal_pemesanan'))
+                                                        {{ $errors->first('tanggal_pemesanan')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control col-form-label @error('no_po_akn') is-invalid @enderror" id="no_po_akn" name="no_po_akn" />
+                                                    <div class="invalid-feedback" id="msgno_po_akn">
+                                                        @if($errors->has('no_po_akn'))
+                                                        {{ $errors->first('no_po_akn')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
+                                                <div class="col-4">
+                                                    <input type="date" class="form-control col-form-label @error('tanggal_po_akn') is-invalid @enderror" id="tanggal_po_akn" name="tanggal_po_akn" />
+                                                    <div class="invalid-feedback" id="msgtanggal_po_akn">
+                                                        @if($errors->has('no_po_akn'))
+                                                        {{ $errors->first('no_po_akn')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
+                                                <div class="col-5 col-form-label">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="do_akn" id="yes" value="yes" />
+                                                        <label class="form-check-label" for="yes">Tersedia</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="do_akn" id="no" value="no" />
+                                                        <label class="form-check-label" for="no">Tidak tersedia</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <div class="form-group row hide" id="do_detail_no">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
-                                    <div class="col-4">
-                                        <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
-                                        <div class="invalid-feedback" id="msgno_do">
-                                            @if($errors->has('no_do'))
-                                            {{ $errors->first('no_do')}}
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row hide" id="do_detail_tgl">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
-                                    <div class="col-4">
-                                        <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
-                                        <div class="invalid-feedback" id="msgtanggal_po">
-                                            @if($errors->has('tanggal_po'))
-                                            {{ $errors->first('tanggal_po')}}
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                    <div class="col-5">
-                                        <textarea class="form-control col-form-label" id="nonketerangan"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row d-flex justify-content-center hide" id="dataproduk">
-                    <div class="col-10">
-                        <h4>Data Produk</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="table-responsive">
-                                            <table class="table" style="text-align: center;" id="produktable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Nama Paket</th>
-                                                        <th>Variasi</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Ketersediaan</th>
-                                                        <th>Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <a id="removerowproduk"><i class="fas fa-times" style="color: red"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row d-flex justify-content-center hide" id="datapart">
-                    <div class="col-10">
-                        <h4>Data Part</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="table-responsive">
-                                            <table class="table" style="text-align: center;" id="parttable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Nama Part</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Ketersediaan</th>
-                                                        <th>Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <a id="removerowpart"><i class="fas fa-times" style="color: red"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <div class="form-group row hide" id="do_detail_no_akn">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control col-form-label @error('no_do_akn') is-invalid @enderror" id="no_do_akn" name="no_do_akn" />
+                                                    <div class="invalid-feedback" id="msgno_do_akn">
+                                                        @if($errors->has('no_do_akn'))
+                                                        {{ $errors->first('no_do_akn')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row hide" id="do_detail_tgl_akn">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
+                                                <div class="col-4">
+                                                    <input type="date" class="form-control col-form-label @error('tanggal_do_akn') is-invalid @enderror" id="tanggal_do_akn" name="tanggal_do_akn" />
+                                                    <div class="invalid-feedback" id="msgtanggal_do_akn">
+                                                        @if($errors->has('tanggal_do_akn'))
+                                                        {{ $errors->first('tanggal_do_akn')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
+                                                <div class="col-5 col-form-label">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="ekatalog" />
+                                                        <label class="form-check-label" for="status_akn1">Sepakat</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="spa" />
+                                                        <label class="form-check-label" for="status_akn2">Negosiasi</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="spb" />
+                                                        <label class="form-check-label" for="status_akn3">Batal</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
+                                                <div class="col-7">
+                                                    <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
+                                                    <div class="invalid-feedback" id="msginstansi">
+                                                        @if($errors->has('instansi'))
+                                                        {{ $errors->first('instansi')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Batas Kontrak</label>
+                                                <div class="col-4">
+                                                    <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
+                                                    <div class="invalid-feedback" id="msgbatas_kontrak">
+                                                        @if($errors->has('batas_kontrak'))
+                                                        {{ $errors->first('batas_kontrak')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
+                                                <div class="col-5">
+                                                    <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
+                                                    <div class="invalid-feedback" id="msgdeskripsi">
+                                                        @if($errors->has('deskripsi'))
+                                                        {{ $errors->first('deskripsi')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
+                                                <div class="col-5">
+                                                    <textarea class="form-control col-form-label" v-model="keterangan"></textarea>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="row d-flex justify-content-center hide" id="nonakn">
+                            <div class="col-10">
+                                <h4>Info Penjualan</h4>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
+                                            <div class="col-4">
+                                                <input type="date" class="form-control col-form-label @error('nontanggal_pemesanan') is-invalid @enderror" id="nontanggal_pemesanan" name="nontanggal_pemesanan" />
+                                                <div class="invalid-feedback" id="msgnontanggal_pemesanan">
+                                                    @if($errors->has('nontanggal_pemesanan'))
+                                                    {{ $errors->first('nontanggal_pemesanan')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Sales Order</label>
+                                            <div class="col-4">
+                                                <input type="text" class="form-control col-form-label @error('no_so') is-invalid @enderror" id="no_so" name="no_so" />
+                                                <div class="invalid-feedback" id="msgno_so">
+                                                    @if($errors->has('no_so'))
+                                                    {{ $errors->first('no_so')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
+                                            <div class="col-4">
+                                                <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
+                                                <div class="invalid-feedback" id="msgno_po">
+                                                    @if($errors->has('no_po'))
+                                                    {{ $errors->first('no_po')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
+                                            <div class="col-4">
+                                                <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
+                                                <div class="invalid-feedback" id="msgtanggal_po">
+                                                    @if($errors->has('tanggal_po'))
+                                                    {{ $errors->first('tanggal_po')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
+                                            <div class="col-5 col-form-label">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="do" id="yes" value="yes" />
+                                                    <label class="form-check-label" for="yes">Tersedia</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="do" id="no" value="no" />
+                                                    <label class="form-check-label" for="no">Tidak tersedia</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row hide" id="do_detail_no">
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
+                                            <div class="col-4">
+                                                <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
+                                                <div class="invalid-feedback" id="msgno_do">
+                                                    @if($errors->has('no_do'))
+                                                    {{ $errors->first('no_do')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row hide" id="do_detail_tgl">
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
+                                            <div class="col-4">
+                                                <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
+                                                <div class="invalid-feedback" id="msgtanggal_po">
+                                                    @if($errors->has('tanggal_po'))
+                                                    {{ $errors->first('tanggal_po')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
+                                            <div class="col-5">
+                                                <textarea class="form-control col-form-label" id="nonketerangan"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-center hide" id="dataproduk">
+                            <div class="col-10">
+                                <h4>Data Produk</h4>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table" style="text-align: center;" id="produktable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Nama Paket</th>
+                                                                <th>Variasi</th>
+                                                                <th>Jumlah</th>
+                                                                <th>Ketersediaan</th>
+                                                                <th>Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>1</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>
+                                                                    <a id="removerowproduk"><i class="fas fa-times" style="color: red"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-center hide" id="datapart">
+                            <div class="col-10">
+                                <h4>Data Part</h4>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table" style="text-align: center;" id="parttable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Nama Part</th>
+                                                                <th>Jumlah</th>
+                                                                <th>Ketersediaan</th>
+                                                                <th>Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>1</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>
+                                                                    <a id="removerowpart"><i class="fas fa-times" style="color: red"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-10">
+                                <span>
+                                    <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
+                                        Batal
+                                    </a>
+                                </span>
+                                <span class="float-right">
+                                    <button type="submit" class="btn btn-warning" id="btnsimpan">
+                                        Simpan
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-10">
-                        <span>
-                            <a href="{{route('penjualan.penjualan.show')}}">
-                                <button class="btn btn-danger">
-                                    Batal
-                                </button>
-                            </a>
-                        </span>
-                        <span class="float-right">
-                            <button type="submit" class="btn btn-warning" id="btnsimpan">
-                                Simpan
-                            </button>
-                        </span>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
