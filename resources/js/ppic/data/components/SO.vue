@@ -48,9 +48,9 @@ export default {
             <tbody>
               <tr>
                 <td>1</td>
-                <td>BJAA01NB001</td>
-                <td>1</td>
-                <td>BJAA01NB001</td>
+                <td>123</td>
+                <td>SPA</td>
+                <td>2021-10-10</td>
                 <td>
                   <button
                     class="btn btn-outline-primary btn-sm"
@@ -62,9 +62,9 @@ export default {
               </tr>
               <tr>
                 <td>2</td>
-                <td>BJOZ03G0001</td>
-                <td>2</td>
-                <td>BJOZ03G0001</td>
+                <td>234</td>
+                <td>SPA</td>
+                <td>2021-11-11</td>
                 <td>
                   <button
                     class="btn btn-outline-primary btn-sm"
@@ -76,9 +76,9 @@ export default {
               </tr>
               <tr>
                 <td>3</td>
-                <td>BJZZ03T0010</td>
-                <td>3</td>
-                <td>BJZZ03T0010</td>
+                <td>345</td>
+                <td>SPA</td>
+                <td>2021-12-12</td>
                 <td>
                   <button
                     class="btn btn-outline-primary btn-sm"

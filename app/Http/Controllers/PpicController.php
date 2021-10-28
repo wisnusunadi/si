@@ -54,7 +54,8 @@ class PpicController extends Controller
             'tanggal_selesai' => $request->tanggal_selesai,
             'status' => $request->status,
             'warna' => $request->warna,
-            'konfirmasi' => 0,
+            'konfirmasi_rencana' => 0,
+            'konfirmasi_perubahan' => 0,
             'proses_konfirmasi' => 0
         ];
         JadwalPerakitan::create($data);

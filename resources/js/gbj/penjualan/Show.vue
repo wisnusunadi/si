@@ -215,7 +215,7 @@
 export default {
   mounted() {
     $("#table").DataTable({
-      ajax: "http://localhost:8000/api/gbj/penjualan",
+      ajax: "/api/gbj/penjualan",
       columns: [
         {
           data: "DT_RowIndex",

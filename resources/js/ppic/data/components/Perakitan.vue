@@ -84,6 +84,7 @@ export default {
                 <th rowspan="2">Nama Produk</th>
                 <th rowspan="2">Jumlah</th>
                 <th colspan="2">Waktu</th>
+                <th rowspan="2">Progres</th>
                 <th rowspan="2">Status</th>
               </tr>
               <tr>
@@ -99,6 +100,19 @@ export default {
                 <td>2021-09-01</td>
                 <td>2021-09-03</td>
                 <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="0"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                  <small> 0% Complete </small>
+                </td>
+                <td>
                   <span class="badge badge-pill badge-warning"
                     >Perencanaan</span
                   >
@@ -110,6 +124,19 @@ export default {
                 <td>100</td>
                 <td>2021-09-04</td>
                 <td>2021-09-07</td>
+                <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="0"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                  <small> 0% Complete </small>
+                </td>
                 <td>
                   <span class="badge badge-pill badge-warning"
                     >Perencanaan</span
@@ -123,6 +150,19 @@ export default {
                 <td>2021-09-08</td>
                 <td>2021-09-10</td>
                 <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="0"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                  <small> 0% Complete </small>
+                </td>
+                <td>
                   <span class="badge badge-pill badge-warning"
                     >Perencanaan</span
                   >
@@ -135,6 +175,19 @@ export default {
                 <td>2021-10-01</td>
                 <td>2021-10-03</td>
                 <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="50"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 50%"
+                    ></div>
+                  </div>
+                  <small> 50% Complete </small>
+                </td>
+                <td>
                   <span class="badge badge-pill badge-info">Pelaksanaan</span>
                 </td>
               </tr>
@@ -144,6 +197,19 @@ export default {
                 <td>100</td>
                 <td>2021-10-04</td>
                 <td>2021-10-07</td>
+                <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="50"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 50%"
+                    ></div>
+                  </div>
+                  <small> 50% Complete </small>
+                </td>
                 <td>
                   <span class="badge badge-pill badge-info">Pelaksanaan</span>
                 </td>
@@ -155,6 +221,19 @@ export default {
                 <td>2021-10-08</td>
                 <td>2021-10-10</td>
                 <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="50"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 50%"
+                    ></div>
+                  </div>
+                  <small> 50% Complete </small>
+                </td>
+                <td>
                   <span class="badge badge-pill badge-info">Pelaksanaan</span>
                 </td>
               </tr>
@@ -164,6 +243,19 @@ export default {
                 <td>200</td>
                 <td>2021-11-01</td>
                 <td>2021-11-03</td>
+                <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="100"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 100%"
+                    ></div>
+                  </div>
+                  <small> 100% Complete </small>
+                </td>
                 <td>
                   <span class="badge badge-pill badge-success">Selesai</span>
                 </td>
@@ -175,6 +267,19 @@ export default {
                 <td>2021-11-04</td>
                 <td>2021-11-07</td>
                 <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="100"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 100%"
+                    ></div>
+                  </div>
+                  <small> 100% Complete </small>
+                </td>
+                <td>
                   <span class="badge badge-pill badge-success">Selesai</span>
                 </td>
               </tr>
@@ -184,6 +289,19 @@ export default {
                 <td>50</td>
                 <td>2021-11-08</td>
                 <td>2021-11-10</td>
+                <td>
+                  <div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="100"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 100%"
+                    ></div>
+                  </div>
+                  <small> 100% Complete </small>
+                </td>
                 <td>
                   <span class="badge badge-pill badge-success">Selesai</span>
                 </td>
