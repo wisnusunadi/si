@@ -8,48 +8,51 @@
 
 @section('adminlte_css')
 <style lang="scss">
-    #pengirimantable thead
-    {
-        text-align:center;
+    #pengirimantable thead {
+        text-align: center;
     }
 
-    #pengirimantable td:nth-child(5){
-        text-align:right;
+    #pengirimantable td:nth-child(5) {
+        text-align: right;
         white-space: nowrap;
     }
 
-    #pengirimantable td:nth-child(4), td:nth-child(6){
-        text-align:center;
+    #pengirimantable td:nth-child(1),
+    td:nth-child(4),
+    td:nth-child(6) {
+        text-align: center;
         white-space: nowrap;
     }
 
-    #urgent{
-        color:red;
+    #urgent {
+        color: red;
     }
 
-    #warning{
-        color:#FFC700;
+    #warning {
+        color: #FFC700;
     }
 
-    .fa-search:hover{
-        color:#4682B4;
+    .fa-search:hover {
+        color: #4682B4;
     }
 
-    .fa-search:active{
-        color:#C0C0C0;
+    .fa-search:active {
+        color: #C0C0C0;
     }
-    @media screen and (min-width: 700px) {
-        #pengirimantable{
-            font-size:12px;
+
+    @media screen and (max-width: 1440px) {
+        #pengirimantable {
+            font-size: 12px;
         }
-        h4{
-            font-size:20px;
+
+        h4 {
+            font-size: 20px;
         }
-        #detailmodal{
-            font-size:12px;
+
+        #detailmodal {
+            font-size: 12px;
         }
     }
-
 </style>
 @stop
 
@@ -61,13 +64,13 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                            <h4>Penjualan 2021</h4>
-                            </div>
-                            <div class="chart">
-                  <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>Penjualan 2021</h4>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -78,52 +81,55 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                            <div class="col-12">
-                            <h4>Batas Pengiriman</h4>
-                            </div>
+                                <div class="col-12">
+                                    <h4>Batas Pengiriman</h4>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                            <table class="table table-hover" id="pengirimantable" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>No SO</th>
-                                        <th>No PO</th>
-                                        <th>Status</th>
-                                        <th>Batas Pengiriman</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>SOSPA102100001</td>
-                                        <td>PO/ON/SPA/10/21/001</td>
-                                        <td><span class="badge yellow-text">Logistik</span></td>
-                                        <td>
-                                            <hgroup>
-                                                <p>30-10-2021</p>
-                                                <small id="urgent">3 Hari Lagi</small>
-                                            </hgroup>
-                                        </td>
-                                        <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>SOSPA102100001</td>
-                                        <td>PO/ON/SPA/10/21/001</td>
-                                        <td><span class="badge orange-text">QC</span></td>
-                                        <td><hgroup>
-                                                <p>04-11-2021</p>
-                                                <small id="warning">7 Hari Lagi</small>
-                                            </hgroup>
-                                        </td>
-                                        <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="pengirimantable" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>No PO</th>
+                                                    <th>Status</th>
+                                                    <th>Batas Pengiriman</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>SOSPA102100001</td>
+                                                    <td>PO/ON/SPA/10/21/001</td>
+                                                    <td><span class="badge yellow-text">Logistik</span></td>
+                                                    <td>
+                                                        <hgroup>
+                                                            <p>30-10-2021</p>
+                                                            <small id="urgent">3 Hari Lagi</small>
+                                                        </hgroup>
+                                                    </td>
+                                                    <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>SOSPA102100001</td>
+                                                    <td>PO/ON/SPA/10/21/001</td>
+                                                    <td><span class="badge orange-text">QC</span></td>
+                                                    <td>
+                                                        <hgroup>
+                                                            <p>04-11-2021</p>
+                                                            <small id="warning">7 Hari Lagi</small>
+                                                        </hgroup>
+                                                    </td>
+                                                    <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

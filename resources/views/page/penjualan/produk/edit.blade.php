@@ -1,16 +1,26 @@
-@extends('adminlte.page')
-
-@section('title', 'ERP')
-
-@section('content_header')
-<h1 class="m-0 text-dark">Produk</h1>
-@stop
-
-@section('content')
 <div class="row">
     <div class="col-12">
-        <form action="">
+        <div hidden id="alert">HI</div>
+        @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+            <strong>Gagal mengubah!</strong> Periksa
+            kembali data yang diinput
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @elseif(session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+            <strong>Berhasil mengubah data</strong>,
+            Terima kasih
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+        <form action="" method="post">
             <div class="row d-flex justify-content-center">
+
                 <div class="col-11">
                     <h5>Info Umum Paket</h5>
                     <div class="card">
@@ -20,7 +30,10 @@
                                     <div class="form-group row">
                                         <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Nama Paket</label>
                                         <div class="col-6">
-                                            <input type="text" class="form-control" placeholder="Masukkan Nama Paket" />
+                                            <input type="text" class="form-control" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" />
+                                            <div class="invalid-feedback" id="msgnama_paket">
+
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -29,7 +42,10 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Rp</span>
                                             </div>
-                                            <input type="text" class="form-control" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="Masukkan Harga" />
+                                            <input type="text" class="form-control" name="harga" id="harga" placeholder="Masukkan Harga" />
+                                            <div class="invalid-feedback" id="msgharga">
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -45,65 +61,65 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <table class="table" style="text-align: center" id="edittable">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="5">
-                                                    <button type="button" class="btn btn-primary float-right" @click="
-                                                                            addRow()
-                                                                        ">
-                                                        <i class="fas fa-plus"></i>
-                                                        Produk
-                                                    </button>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama</th>
-                                                <th>
-                                                    Kelompok
-                                                </th>
-                                                <th>Jumlah</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <select class="form-control custom-select" name="produk_id">
-                                                            <option value=""></option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                                <td>
-                                                    <div class="form-group d-flex justify-content-center">
-                                                        <input type="number" class="form-control" name="jumlah" style="width: 50%" />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a @click="
-                                                                            removeRow(
-                                                                                index
-                                                                            )
-                                                                        "><i class="fas fa-minus" style="color: red"></i></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table" style="text-align: center;" id="createtable">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="5">
+                                                        <button type="button" class="btn btn-primary float-right" id="addrow">
+                                                            <i class="fas fa-plus"></i>
+                                                            Produk
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Kelompok</th>
+                                                    <th>Jumlah</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>
+                                                        <div class="form-group row">
+                                                            <div class="col-12">
+                                                                <select class="select-info select2 form-control produk_id" name="produk_id[]" id="produk_id">
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td><span class="badge" id="kelompok_produk"></span></td>
+                                                    <td>
+                                                        <div class="form-group d-flex justify-content-center">
+                                                            <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row d-flex justify-content-center">
+                <div class="col-11">
+                    <span>
+                        <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
+                    </span>
+                    <span class="float-right">
+                        <button type="submit" class="btn btn-warning float-right disabled" id="btnsimpan">Simpan</button>
+                    </span>
+                </div>
+            </div>
         </form>
     </div>
 </div>
-@endsection
-
-@section('adminlte_js')
-
-@endsection

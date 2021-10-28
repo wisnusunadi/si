@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
         <div class="row">
-            <div class="col-4">
+            <div class="col-5">
                 <div class="card">
                     <div class="card-body">
                         <ul class="list-group">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-7">
                 <h5>Histori Penjualan</h5>
                 <div class="card">
                     <div class="card-body">

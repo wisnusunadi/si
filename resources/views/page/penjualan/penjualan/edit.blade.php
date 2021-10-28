@@ -49,7 +49,7 @@
                                                 <option value=""></option>
                                             </select>
                                             <div class="invalid-feedback" id="msgcustomer_id">
-                                            @if($errors->has('customer_id'))
+                                                @if($errors->has('customer_id'))
                                                 {{ $errors->first('customer_id')}}
                                                 @endif
                                             </div>
@@ -67,7 +67,7 @@
                                             <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                                             </div>
                                             <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" />
                                             <div class="invalid-feedback" id="msgno_paket">
-                                            @if($errors->has('no_paket'))
+                                                @if($errors->has('no_paket'))
                                                 {{ $errors->first('no_paket')}}
                                                 @endif
                                             </div>
@@ -109,72 +109,72 @@
                                         <div class="col-4">
                                             <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
                                             <div class="invalid-feedback" id="msgtanggal_pemesanan">
-                                            @if($errors->has('tanggal_pemesanan'))
+                                                @if($errors->has('tanggal_pemesanan'))
                                                 {{ $errors->first('tanggal_pemesanan')}}
                                                 @endif
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
-                                    <div class="col-4">
-                                        <input type="text" class="form-control col-form-label @error('no_po_akn') is-invalid @enderror" id="no_po_akn" name="no_po_akn" />
-                                        <div class="invalid-feedback" id="msgno_po_akn">
-                                        @if($errors->has('no_po_akn'))
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
+                                        <div class="col-4">
+                                            <input type="text" class="form-control col-form-label @error('no_po_akn') is-invalid @enderror" id="no_po_akn" name="no_po_akn" />
+                                            <div class="invalid-feedback" id="msgno_po_akn">
+                                                @if($errors->has('no_po_akn'))
                                                 {{ $errors->first('no_po_akn')}}
                                                 @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
-                                    <div class="col-4">
-                                        <input type="date" class="form-control col-form-label @error('tanggal_po_akn') is-invalid @enderror" id="tanggal_po_akn" name="tanggal_po_akn" />
-                                        <div class="invalid-feedback" id="msgtanggal_po_akn">
-                                        @if($errors->has('no_po_akn'))
+                                    <div class="form-group row">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
+                                        <div class="col-4">
+                                            <input type="date" class="form-control col-form-label @error('tanggal_po_akn') is-invalid @enderror" id="tanggal_po_akn" name="tanggal_po_akn" />
+                                            <div class="invalid-feedback" id="msgtanggal_po_akn">
+                                                @if($errors->has('no_po_akn'))
                                                 {{ $errors->first('no_po_akn')}}
                                                 @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
-                                    <div class="col-5 col-form-label">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="do_akn" id="yes" value="yes" />
-                                            <label class="form-check-label" for="yes">Tersedia</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="do_akn" id="no" value="no" />
-                                            <label class="form-check-label" for="no">Tidak tersedia</label>
+                                    <div class="form-group row">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
+                                        <div class="col-5 col-form-label">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="do_akn" id="yes" value="yes" />
+                                                <label class="form-check-label" for="yes">Tersedia</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="do_akn" id="no" value="no" />
+                                                <label class="form-check-label" for="no">Tidak tersedia</label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group row hide" id="do_detail_no_akn">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
-                                    <div class="col-4">
-                                        <input type="text" class="form-control col-form-label @error('no_do_akn') is-invalid @enderror" id="no_do_akn" name="no_do_akn" />
-                                        <div class="invalid-feedback" id="msgno_do_akn">
-                                        @if($errors->has('no_do_akn'))
+                                    <div class="form-group row hide" id="do_detail_no_akn">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
+                                        <div class="col-4">
+                                            <input type="text" class="form-control col-form-label @error('no_do_akn') is-invalid @enderror" id="no_do_akn" name="no_do_akn" />
+                                            <div class="invalid-feedback" id="msgno_do_akn">
+                                                @if($errors->has('no_do_akn'))
                                                 {{ $errors->first('no_do_akn')}}
                                                 @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group row hide" id="do_detail_tgl_akn">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
-                                    <div class="col-4">
-                                        <input type="date" class="form-control col-form-label @error('tanggal_do_akn') is-invalid @enderror" id="tanggal_do_akn" name="tanggal_do_akn" />
-                                        <div class="invalid-feedback" id="msgtanggal_do_akn">
-                                        @if($errors->has('tanggal_do_akn'))
+                                    <div class="form-group row hide" id="do_detail_tgl_akn">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
+                                        <div class="col-4">
+                                            <input type="date" class="form-control col-form-label @error('tanggal_do_akn') is-invalid @enderror" id="tanggal_do_akn" name="tanggal_do_akn" />
+                                            <div class="invalid-feedback" id="msgtanggal_do_akn">
+                                                @if($errors->has('tanggal_do_akn'))
                                                 {{ $errors->first('tanggal_do_akn')}}
                                                 @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                    
+
                                     <div class="form-group row">
                                         <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
                                         <div class="col-5 col-form-label">
@@ -197,19 +197,19 @@
                                         <div class="col-7">
                                             <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
                                             <div class="invalid-feedback" id="msginstansi">
-                                            @if($errors->has('instansi'))
+                                                @if($errors->has('instansi'))
                                                 {{ $errors->first('instansi')}}
                                                 @endif
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group row">
                                         <label for="" class="col-form-label col-5" style="text-align: right">Batas Kontrak</label>
                                         <div class="col-4">
                                             <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
                                             <div class="invalid-feedback" id="msgbatas_kontrak">
-                                            @if($errors->has('batas_kontrak'))
+                                                @if($errors->has('batas_kontrak'))
                                                 {{ $errors->first('batas_kontrak')}}
                                                 @endif
                                             </div>
@@ -220,7 +220,7 @@
                                         <div class="col-5">
                                             <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
                                             <div class="invalid-feedback" id="msgdeskripsi">
-                                            @if($errors->has('deskripsi'))
+                                                @if($errors->has('deskripsi'))
                                                 {{ $errors->first('deskripsi')}}
                                                 @endif
                                             </div>
@@ -247,9 +247,9 @@
                                     <div class="col-4">
                                         <input type="date" class="form-control col-form-label @error('nontanggal_pemesanan') is-invalid @enderror" id="nontanggal_pemesanan" name="nontanggal_pemesanan" />
                                         <div class="invalid-feedback" id="msgnontanggal_pemesanan">
-                                        @if($errors->has('nontanggal_pemesanan'))
-                                                {{ $errors->first('nontanggal_pemesanan')}}
-                                                @endif
+                                            @if($errors->has('nontanggal_pemesanan'))
+                                            {{ $errors->first('nontanggal_pemesanan')}}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -258,9 +258,9 @@
                                     <div class="col-4">
                                         <input type="text" class="form-control col-form-label @error('no_so') is-invalid @enderror" id="no_so" name="no_so" />
                                         <div class="invalid-feedback" id="msgno_so">
-                                        @if($errors->has('no_so'))
-                                                {{ $errors->first('no_so')}}
-                                                @endif
+                                            @if($errors->has('no_so'))
+                                            {{ $errors->first('no_so')}}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -269,9 +269,9 @@
                                     <div class="col-4">
                                         <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
                                         <div class="invalid-feedback" id="msgno_po">
-                                        @if($errors->has('no_po'))
-                                                {{ $errors->first('no_po')}}
-                                                @endif
+                                            @if($errors->has('no_po'))
+                                            {{ $errors->first('no_po')}}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -280,9 +280,9 @@
                                     <div class="col-4">
                                         <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
                                         <div class="invalid-feedback" id="msgtanggal_po">
-                                        @if($errors->has('tanggal_po'))
-                                                {{ $errors->first('tanggal_po')}}
-                                                @endif
+                                            @if($errors->has('tanggal_po'))
+                                            {{ $errors->first('tanggal_po')}}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -305,9 +305,9 @@
                                     <div class="col-4">
                                         <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
                                         <div class="invalid-feedback" id="msgno_do">
-                                        @if($errors->has('no_do'))
-                                                {{ $errors->first('no_do')}}
-                                                @endif
+                                            @if($errors->has('no_do'))
+                                            {{ $errors->first('no_do')}}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -316,9 +316,9 @@
                                     <div class="col-4">
                                         <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
                                         <div class="invalid-feedback" id="msgtanggal_po">
-                                        @if($errors->has('tanggal_po'))
-                                                {{ $errors->first('tanggal_po')}}
-                                                @endif
+                                            @if($errors->has('tanggal_po'))
+                                            {{ $errors->first('tanggal_po')}}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -433,7 +433,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var jenis = "{{jenis}}";
+        var jenis = "ekatalog";
         jenis_penjualan(jenis);
         $('#customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
@@ -458,7 +458,7 @@
             }
         });
 
-        function jenis_penjualan(jenis_penjualan){
+        function jenis_penjualan(jenis_penjualan) {
             if (jenis_penjualan == "ekatalog") {
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");

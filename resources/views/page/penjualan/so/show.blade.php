@@ -16,11 +16,6 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
-                                    <a href="{{route('penjualan.so.create')}}"><button class="btn btn-outline-info">
-                                            <i class="fas fa-plus"></i> Tambah
-                                        </button></a>
-                                </span>
-                                <span class="float-right filter">
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
@@ -79,7 +74,7 @@
                                             <th>DO</th>
                                             <th>Tanggal DO</th>
                                             <th>Keterangan</th>
-                                            <th>Aksi</th>
+                                            <th>Status</th>
                                         </thead>
                                         <tbody>
                                             <tr>
