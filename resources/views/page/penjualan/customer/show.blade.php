@@ -8,13 +8,12 @@
 
 @section('adminlte_css')
 <style>
-    #customertable td:nth-child(1),
-    td:nth-child(2),
-    td:nth-child(4),
-    td:nth-child(5),
-    td:nth-child(6),
-    td:nth-child(8) {
+    .align-center {
         text-align: center;
+    }
+
+    .nowrap-text {
+        white-space: nowrap;
     }
 
     .filter {
@@ -184,10 +183,6 @@
 @section('adminlte_js')
 <script>
     $(function() {
-
-
-
-
         var showtable = $('#showtable').DataTable({
             processing: true,
             serverSide: true,
@@ -203,11 +198,13 @@
             },
             columns: [{
                     data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
                     orderable: false,
                     searchable: false
                 },
                 {
-                    data: 'nama'
+                    data: 'nama',
+                    className: 'nowrap-text',
                 },
                 {
                     data: 'alamat',
@@ -216,16 +213,19 @@
                 },
                 {
                     data: 'email',
+                    className: 'align-center nowrap-text',
                     orderable: false,
                     searchable: false
                 },
                 {
                     data: 'telp',
+                    className: 'align-center nowrap-text',
                     orderable: false,
                     searchable: false
                 },
                 {
                     data: 'npwp',
+                    className: 'align-center nowrap-text',
                     orderable: false,
                     searchable: false
                 },
@@ -236,6 +236,7 @@
                 },
                 {
                     data: 'button',
+                    className: 'align-center nowrap-text',
                     orderable: false,
                     searchable: false
                 }
@@ -261,6 +262,7 @@
                     $('#edit').html(result).show();
                     console.log(id);
                     // $("#editform").attr("action", href);
+                    select_data();
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -397,6 +399,36 @@
                 }
             }
         })
+
+        function select_data() {
+            $('.provinsi').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/provinsi/select',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            })
+        }
     })
 </script>
 @stop

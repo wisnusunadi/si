@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col-12">
+        <div hidden id="alert">HI</div>
         @if(session()->has('error'))
         <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
             <strong>Gagal mengubah!</strong> Periksa
@@ -115,7 +116,7 @@
                         <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
                     </span>
                     <span class="float-right">
-                        <button type="submit" class="btn btn-warning float-right disabled" id="btnsubmit">Simpan</button>
+                        <button type="submit" class="btn btn-warning float-right disabled" id="btnsimpan">Simpan</button>
                     </span>
                 </div>
             </div>

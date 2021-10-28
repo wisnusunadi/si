@@ -6,7 +6,7 @@
             <h5>Info Customer</h5>
             <div class="card">
                 <div class="card-body">
-                    @if(session()->has('error') || count($errors) > 0 )
+                    @if(session()->has('error'))
                     <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
                         <strong>Gagal menambahkan!</strong> Periksa
                         kembali data yang diinput
@@ -30,9 +30,6 @@
                                 <div class="col-6">
                                     <input type="text" class="form-control " placeholder="Masukkan Nama Customer" id="nama_customer" name="nama_customer" value="{{$customer->nama}}" />
                                     <div class="invalid-feedback" id="msgnama_customer">
-                                        @if($errors->has('nama_customer'))
-                                        {{ $errors->first('nama_customer')}}
-                                        @endif
                                     </div>
                                 </div>
                             </div>

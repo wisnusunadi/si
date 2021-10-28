@@ -204,7 +204,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+            <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-warning">
@@ -304,6 +304,7 @@
 
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
+
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
             $.ajax({
@@ -317,6 +318,7 @@
                     $('#edit').html(result).show();
                     console.log(result);
                     $("#editform").attr("action", href);
+                    select_data();
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -363,10 +365,6 @@
             numberRows($("#createtable"));
         });
 
-        $(document).on('load', '.produk_id', function() {
-
-        });
-
         $(document).on('click', '#createtable #removerow', function(e) {
             $(this).closest('tr').remove();
             numberRows($("#createtable"));
@@ -381,14 +379,14 @@
                 $('#harga').removeClass("is-invalid");
                 console.log($("#createtable tbody").length);
                 if ($('#nama_paket').val() != "" && $("#createtable tbody").length > 0) {
-                    $('#btn_simpan').removeClass('disabled');
+                    $('#btnsimpan').removeClass('disabled');
                 } else {
-                    $('#btn_simpan').addClass('disabled');
+                    $('#btnsimpan').addClass('disabled');
                 }
             } else if ($(this).val() == "") {
                 $('#msgharga').text("Harga Harus diisi");
                 $('#harga').addClass("is-invalid");
-                $('#btn_simpan').addClass('disabled');
+                $('#btnsimpan').addClass('disabled');
             }
         });
 
@@ -424,21 +422,20 @@
             });
         }
 
-
         $(document).on('keyup change', '#nama_paket', function() {
             if ($(this).val() != "") {
                 $('#msgnama_paket').text("");
                 $('#nama_paket').removeClass("is-invalid");
                 console.log($("#createtable tbody").length);
                 if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
-                    $('#btn_simpan').removeClass('disabled');
+                    $('#btnsimpan').removeClass('disabled');
                 } else {
-                    $('#btn_simpan').addClass('disabled');
+                    $('#btnsimpan').addClass('disabled');
                 }
             } else if ($(this).val() == "") {
                 $('#msgnama_paket').text("Nama Paket Harus diisi");
                 $('#nama_paket').addClass("is-invalid");
-                $('#btntambah').addClass('disabled');
+                $('#btnsimpan').addClass('disabled');
             }
         });
     });
