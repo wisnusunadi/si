@@ -9,6 +9,23 @@
 @section('content')
 <div class="row">
     <div class="col-12">
+        @if(session()->has('error') || count($errors) > 0 )
+        <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+            <strong>Gagal menambahkan!</strong> Periksa
+            kembali data yang diinput
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @elseif(session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+            <strong>Berhasil menambahkan data</strong>,
+            Terima kasih
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
         <form action="/api/penjualan_produk/create" method="post">
             <div class="row d-flex justify-content-center">
 

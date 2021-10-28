@@ -126,13 +126,13 @@
                 </div>
                 <div class="row d-flex justify-content-center">
                     <div class="col-8">
-                        <a href="{{route('penjualan.customer.show')}}">
-                            <span class="float-left">
-                                <button type="button" class="btn btn-danger">
-                                    Batal
-                                </button>
-                            </span>
-                        </a>
+
+                        <span class="float-left">
+                            <a type="button" class="btn btn-danger" href="{{route('penjualan.customer.show')}}">
+                                Batal
+                            </a>
+                        </span>
+
                         <span class="float-right">
                             <button type="submit" class="btn btn-info" id="btntambah" disabled>
                                 Tambah

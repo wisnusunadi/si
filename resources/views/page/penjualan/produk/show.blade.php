@@ -8,20 +8,24 @@
 
 @section('adminlte_css')
 <style>
-    .nowrap-text{
+    .nowrap-text {
         white-space: nowrap;
     }
-    .align-center{
-        text-align:center;
+
+    .align-center {
+        text-align: center;
     }
-    .align-right{
-        text-align:right;
+
+    .align-right {
+        text-align: right;
     }
-    .money{
-        font-family:'Varela Round';
+
+    .money {
+        font-family: 'Varela Round';
     }
-    .inline{
-        display:inline-block;
+
+    .inline {
+        display: inline-block;
     }
 </style>
 @stop
@@ -123,19 +127,19 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="table-responsive">
-                                    <table class="table table-hover" id="showtable">
-                                        <thead style="text-align: center;">
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama Produk</th>
-                                                <th>Harga</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                        <table class="table table-hover" id="showtable">
+                                            <thead style="text-align: center;">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Harga</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
 
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -179,18 +183,18 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                            <table class="table" id="showdetailtable" width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Produk</th>
-                                                        <th>Kelompok</th>
-                                                        <th>Jumlah</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
+                                                <table class="table" id="showdetailtable" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Produk</th>
+                                                            <th>Kelompok</th>
+                                                            <th>Jumlah</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -246,15 +250,15 @@
                 {
                     data: null,
                     className: 'nowrap-text',
-                    render: function(data){
-                        return '<div class="align-right">Rp. '+(data.harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");+'</div>';
+                    render: function(data) {
+                        return '<div class="align-right">Rp. ' + (data.harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); + '</div>';
                     },
                     orderable: false,
                     searchable: false
                 },
                 {
                     data: 'button',
-                    className:'nowrap-text align-center',
+                    className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
                 }
@@ -296,14 +300,14 @@
             $('#modaldetail').modal('show');
         });
 
-        
+
 
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
             $.ajax({
-                url: "/api/produk/update_modal/" + id,
+                url: "/api/penjualan_produk/update_modal/" + id,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -311,8 +315,8 @@
                 success: function(result) {
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    console.log(id);
-                    // $("#editform").attr("action", href);
+                    console.log(result);
+                    $("#editform").attr("action", href);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -326,8 +330,6 @@
             })
         });
 
-        select_data();
-
         function numberRows($t) {
             var c = 0 - 2;
             $t.find("tr").each(function(ind, el) {
@@ -336,7 +338,6 @@
                 $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
                 $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                 $(el).find('.produk_id').attr('id', j);
-                select_data();
             });
         }
 
@@ -362,7 +363,11 @@
             numberRows($("#createtable"));
         });
 
-        $('#createtable').on('click', '#removerow', function(e) {
+        $(document).on('load', '.produk_id', function() {
+
+        });
+
+        $(document).on('click', '#createtable #removerow', function(e) {
             $(this).closest('tr').remove();
             numberRows($("#createtable"));
         });
@@ -376,31 +381,14 @@
                 $('#harga').removeClass("is-invalid");
                 console.log($("#createtable tbody").length);
                 if ($('#nama_paket').val() != "" && $("#createtable tbody").length > 0) {
-                    $('#btntambah').removeClass('disabled');
+                    $('#btn_simpan').removeClass('disabled');
                 } else {
-                    $('#btntambah').addClass('disabled');
+                    $('#btn_simpan').addClass('disabled');
                 }
             } else if ($(this).val() == "") {
                 $('#msgharga').text("Harga Harus diisi");
                 $('#harga').addClass("is-invalid");
-                $('#btntambah').addClass('disabled');
-            }
-        });
-
-        $(document).on('keyup change', '#nama_paket', function() {
-            if ($(this).val() != "") {
-                $('#msgnama_paket').text("");
-                $('#nama_paket').removeClass("is-invalid");
-                console.log($("#createtable tbody").length);
-                if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
-                    $('#btntambah').removeClass('disabled');
-                } else {
-                    $('#btntambah').addClass('disabled');
-                }
-            } else if ($(this).val() == "") {
-                $('#msgnama_paket').text("Nama Paket Harus diisi");
-                $('#nama_paket').addClass("is-invalid");
-                $('#btntambah').addClass('disabled');
+                $('#btn_simpan').addClass('disabled');
             }
         });
 
@@ -436,7 +424,23 @@
             });
         }
 
-    });
 
+        $(document).on('keyup change', '#nama_paket', function() {
+            if ($(this).val() != "") {
+                $('#msgnama_paket').text("");
+                $('#nama_paket').removeClass("is-invalid");
+                console.log($("#createtable tbody").length);
+                if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
+                    $('#btn_simpan').removeClass('disabled');
+                } else {
+                    $('#btn_simpan').addClass('disabled');
+                }
+            } else if ($(this).val() == "") {
+                $('#msgnama_paket').text("Nama Paket Harus diisi");
+                $('#nama_paket').addClass("is-invalid");
+                $('#btntambah').addClass('disabled');
+            }
+        });
+    });
 </script>
 @endsection

@@ -28,17 +28,17 @@ class MasterController extends Controller
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="' . route('penjualan.customer.detail', $data->id) . '">
-                <button class="dropdown-item" type="button">
-                              <i class="fas fa-search"></i>
-                              Detail
-                            </button>
-                            </a>
-                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
-                            <button class="dropdown-item" type="button" >
-                              <i class="fas fa-pencil-alt"></i>
-                              Edit
-                            </button>
-                            </a>
+                    <button class="dropdown-item" type="button">
+                      <i class="fas fa-search"></i>
+                      Detail
+                    </button>
+                </a>
+                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
+                    <button class="dropdown-item" type="button" >
+                      <i class="fas fa-pencil-alt"></i>
+                      Edit
+                    </button>
+                </a>
                 </div>';
             })
             ->rawColumns(['button'])
@@ -52,14 +52,16 @@ class MasterController extends Controller
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button class="dropdown-item" type="button" id="showmodal">
-                              <i class="fas fa-search"></i>
-                              Detail
-                            </button>
-                            <button class="dropdown-item" type="button" data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
-                              <i class="fas fa-pencil-alt"></i>
-                              Edit
-                            </button>
+                    <button class="dropdown-item" type="button" id="showmodal">
+                        <i class="fas fa-search"></i>
+                        Detail
+                    </button>
+                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
+                    </button>
+                    </a>
                 </div>';
             })
             ->rawColumns(['button'])
@@ -184,6 +186,14 @@ class MasterController extends Controller
             ]);
         }
     }
+
+    public function update_penjualan_produk_modal($id)
+    {
+        $produk = PenjualanProduk::find($id);
+        return view("page.penjualan.produk.edit", ['produk' => $produk]);
+    }
+
+
     //Update
     public function update_customer(Request $request, $id)
     {
