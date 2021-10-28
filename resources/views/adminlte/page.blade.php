@@ -141,10 +141,10 @@
         }, 100);
 
 
-        $('.select2').select2({
-            placeholder: "Pilih Data",
-            allowClear: true
-        });
+        // $('.select2').select2({
+        //     placeholder: "Pilih Data",
+        //     allowClear: true
+        // });
 
         OverlayScrollbars(document.getElementsByTagName('body'), {
             className: "os-theme-dark",

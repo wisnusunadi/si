@@ -15,9 +15,8 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-
         <div class="content">
-            <form action="">
+            <form action="/api/customer/create" method="post">
                 <div class="row d-flex justify-content-center">
                     <div class="col-8">
                         <h5>Info Customer</h5>
@@ -78,9 +77,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="provinsi" class="col-4 col-form-label" style="text-align:right;">provinsi</label>
+                                            <label for="provinsi" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
                                             <div class="col-8">
-                                                <select class="select2 select-info form-control custom-select" name="provinsi" id="provinsi">
+                                                <select class="select-info form-control custom-select provinsi" name="provinsi" id="provinsi">
 
                                                 </select>
                                                 <div class="invalid-feedback" id="msgprovinsi">
@@ -267,6 +266,35 @@
                 }
             }
         })
+
+        $('.provinsi').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/provinsi/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
+
     })
 </script>
 @stop
