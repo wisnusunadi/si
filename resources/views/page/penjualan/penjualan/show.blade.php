@@ -252,7 +252,7 @@
                                                                 Edit
                                                             </button>
                                                         </a>
-                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('penjualan.penjualan.detail.ekatalog', ['id' => 2])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-search"></i>
                                                                 Detail
@@ -286,7 +286,7 @@
                                                                 Edit
                                                             </button>
                                                         </a>
-                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('penjualan.penjualan.detail.spb', ['id' => 2])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-search"></i>
                                                                 Detail
@@ -319,8 +319,8 @@
                                                                 Edit
                                                             </button>
                                                         </a>
-                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
-                                                            <button class="dropdown-item" type="button">
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('penjualan.penjualan.detail.spa', ['id' => 2])}}">
+                                                            <button class=" dropdown-item" type="button">
                                                                 <i class="fas fa-search"></i>
                                                                 Detail
                                                             </button>
@@ -810,7 +810,7 @@
             event.preventDefault();
             var href = $(this).attr('data-attr');
             $.ajax({
-                url: "{{route('penjualan.penjualan.detail', ['id' => 2])}}",
+                url: href,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -818,7 +818,6 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    $("#detailform").attr("action", href);
                 },
                 complete: function() {
                     $('#loader').hide();

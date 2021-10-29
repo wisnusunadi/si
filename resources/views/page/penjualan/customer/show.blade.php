@@ -169,7 +169,6 @@
                     data: 'alamat',
                     className: 'minimizechar',
                     orderable: false,
-                    searchable: false
                 },
                 {
                     data: null,
