@@ -19,7 +19,8 @@ class NoseriController extends Controller
 
     function DestroyNoSeri($id){
         $noseri = NoseriBarangJadi::find($id);
-        $noseri->delete();
+        $noseri->is_aktif = 0;
+        $noseri->save();
 
         return response()->json(['msg' => 'Data berhasil dihapus']);
     }
