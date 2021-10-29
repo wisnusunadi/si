@@ -63,7 +63,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table" style="text-align:center;">
+                                    <table class="table" style="text-align:center;" id="showtable">
                                         <thead>
                                             <th>No</th>
                                             <th>No SO</th>
@@ -77,7 +77,7 @@
                                             <th>Status</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>SO-EKAT000001</td>
                                                 <td>PO/ON/10/2021/0001</td>
@@ -118,7 +118,7 @@
                                                 <td>31-10-2021</td>
                                                 <td>-</td>
                                                 <td></td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -131,6 +131,11 @@
     </div>
 </div>
 @stop
-
 @section('adminlte_js')
+<script>
+    $(function() {
+        var showtable = $('#showtable').DataTable({})
+
+    })
+</script>
 @stop

@@ -171,7 +171,7 @@
                     orderable: false,
                 },
                 {
-                    data: null,
+                    data: "prov",
                     className: 'align-center nowrap-text',
                     orderable: false,
                     searchable: false
@@ -229,6 +229,8 @@
                     console.log(id);
                     // $("#editform").attr("action", href);
                     select_data();
+
+
                 },
                 complete: function() {
                     $('#loader').hide();

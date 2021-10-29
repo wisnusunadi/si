@@ -56,7 +56,6 @@
                                                 <div class="col-5">
                                                     <select name="customer_id" id="customer_id" class="form-control custom-select customer_id @error('customer_id') is-invalid @enderror">
                                                     </select>
-
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -86,6 +85,11 @@
                                                         <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan3" value="spb" />
                                                         <label class="form-check-label" for="jenis_penjualan3">SPB</label>
                                                     </div>
+                                                    <div class="invalid-feedback" id="msgjenis_penjualan">
+                                                        @if($errors->has('jenis_penjualan'))
+                                                        {{ $errors->first('jenis_penjualan')}}
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -104,7 +108,9 @@
                                                 <div class="col-4">
                                                     <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
                                                     <div class="invalid-feedback" id="msgtanggal_pemesanan">
-
+                                                        @if($errors->has('tanggal_pemesanan'))
+                                                        {{ $errors->first('tanggal_pemesanan')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -113,7 +119,9 @@
                                                 <div class="col-7">
                                                     <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
                                                     <div class="invalid-feedback" id="msginstansi">
-
+                                                        @if($errors->has('instansi'))
+                                                        {{ $errors->first('instansi')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -122,7 +130,9 @@
                                                 <div class="col-7">
                                                     <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
                                                     <div class="invalid-feedback" id="msgsatuan_kerja">
-
+                                                        @if($errors->has('satuan_kerja'))
+                                                        {{ $errors->first('satuan_kerja')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -143,7 +153,9 @@
                                                         <label class="form-check-label" for="satuan3">Batal</label>
                                                     </div>
                                                     <div class="invalid-feedback" id="msgstatus">
-
+                                                        @if($errors->has('status'))
+                                                        {{ $errors->first('status')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,7 +168,9 @@
                                                     </div>
                                                     <input type="text" class="form-control col-form-label @error('nomor_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
                                                     <div class="invalid-feedback" id="msgno_paket">
-
+                                                        @if($errors->has('no_paket'))
+                                                        {{ $errors->first('no_paket')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -165,7 +179,9 @@
                                                 <div class="col-4">
                                                     <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
                                                     <div class="invalid-feedback" id="msgbatas_kontrak">
-
+                                                        @if($errors->has('batas_kontrak'))
+                                                        {{ $errors->first('batas_kontrak')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -174,7 +190,9 @@
                                                 <div class="col-5">
                                                     <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
                                                     <div class="invalid-feedback" id="msgdeskripsi">
-
+                                                        @if($errors->has('deskripsi'))
+                                                        {{ $errors->first('deskripsi')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -199,6 +217,9 @@
                                             <div class="col-4">
                                                 <input type="date" class="form-control col-form-label @error('nontanggal_pemesanan') is-invalid @enderror" id="nontanggal_pemesanan" name="nontanggal_pemesanan" />
                                                 <div class="invalid-feedback" id="msgnontanggal_pemesanan">
+                                                    @if($errors->has('nontanggal_pemesanan'))
+                                                    {{ $errors->first('nontanggal_pemesanan')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -207,6 +228,9 @@
                                             <div class="col-4">
                                                 <input type="text" class="form-control col-form-label @error('no_so') is-invalid @enderror" id="no_so" name="no_so" />
                                                 <div class="invalid-feedback" id="msgno_so">
+                                                    @if($errors->has('no_so'))
+                                                    {{ $errors->first('no_so')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -215,6 +239,9 @@
                                             <div class="col-4">
                                                 <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
                                                 <div class="invalid-feedback" id="msgno_po">
+                                                    @if($errors->has('no_po'))
+                                                    {{ $errors->first('no_po')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -223,6 +250,9 @@
                                             <div class="col-4">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
                                                 <div class="invalid-feedback" id="msgtanggal_po">
+                                                    @if($errors->has('tanggal_po'))
+                                                    {{ $errors->first('tanggal_po')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -237,6 +267,7 @@
                                                     <input class="form-check-input" type="radio" name="do" id="no" value="no" />
                                                     <label class="form-check-label" for="no">Tidak tersedia</label>
                                                 </div>
+
                                             </div>
                                         </div>
                                         <div class="form-group row hide" id="do_detail_no">
@@ -244,6 +275,9 @@
                                             <div class="col-4">
                                                 <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
                                                 <div class="invalid-feedback" id="msgno_do">
+                                                    @if($errors->has('no_do'))
+                                                    {{ $errors->first('no_do')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -251,7 +285,10 @@
                                             <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
                                             <div class="col-4">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
-                                                <div class="invalid-feedback" id="msgtanggal_po">
+                                                <div class="invalid-feedback" id="msgtanggal_do">
+                                                    @if($errors->has('tanggal_do'))
+                                                    {{ $errors->first('tanggal_do')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -297,7 +334,7 @@
                                                                 <td>1</td>
                                                                 <td>
                                                                     <div class="form-group">
-                                                                        <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                                                        <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                             <option value=""></option>
                                                                         </select>
                                                                     </div>
@@ -315,7 +352,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
-                                                                        <input type="number" class="form-control produk_harga" id="produk_harga" name="produk_harga[]" style="width:100%;" />
+                                                                        <input type="number" class="form-control produk_harga" id="produk_harga0" name="produk_harga[]" style="width:100%;" />
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -445,6 +482,7 @@
 
 <script>
     $(function() {
+        select_data();
         // $('#customer_id').on('keyup change', function() {
         //     if ($(this).val() != "") {
         //         $('#msgcustomer_id').text("");
@@ -733,11 +771,18 @@
 
         $('.customer_id').select2({
             ajax: {
-                tags: [],
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
                 dataType: 'json',
+                theme: "bootstrap",
                 delay: 250,
                 type: 'GET',
                 url: '/api/customer/select/',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
                 processResults: function(data) {
                     console.log(data);
                     return {
@@ -764,32 +809,49 @@
             });
         });
 
-
-        $('.penjualan_produk_id').select2({
-            ajax: {
-                placeholder: "Pilih Customer",
-                dataType: 'json',
-                delay: 250,
-                type: 'GET',
-                url: '/api/penjualan_produk/select/',
-                data: function(params) {
-                    return {
-                        searchTerm: params.term
+        function select_data() {
+            $('.penjualan_produk_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/penjualan_produk/select/',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            }).change(function(i) {
+                var index = $(this).attr('id');
+                var id = $(this).val();
+                $.ajax({
+                    url: '/api/penjualan_produk/select/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#produk_harga' + index).val(data[0].harga);
                     }
-                },
-                processResults: function(data) {
-                    console.log(data);
-                    return {
-                        results: $.map(data, function(obj) {
-                            return {
-                                id: obj.id,
-                                text: obj.nama
-                            };
-                        })
-                    };
-                },
-            }
-        })
+                });
+            });
+
+        }
+
 
         function totalhargaprd() {
             var totalharga = 0;
@@ -815,14 +877,25 @@
                 $(el).find("td:eq(0)").html(++c);
                 var j = c - 1;
                 $(el).find('.penjualan_produk_id').attr('name', 'penjualan_produk_id[' + j + ']');
-                $(el).find('.penjualan_produk_id').attr('id', 'penjualan_produk_id' + j);
+                $(el).find('.penjualan_produk_id').attr('id', j);
                 $(el).find('.variasi').attr('name', 'variasi[' + j + ']');
                 $(el).find('.variasi').attr('id', 'variasi' + j);
+                $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
-                $('.produk_id').select2();
+                select_data();
             });
         }
 
+        $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var harga = $(this).closest('tr').find('.produk_harga').val();
+            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+
+            if (jumlah != "" && harga != "") {
+                subtotal.val(jumlah * harga);
+                totalhargaprd();
+            }
+        });
         $("#produktable").on('keyup change', '.produk_jumlah', function() {
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
@@ -849,7 +922,7 @@
                 <td></td>
                 <td>
                     <div class="form-group">
-                        <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                        <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
                     </div>
@@ -867,7 +940,7 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control produk_harga" id="produk_harga" name="produk_harga[]" style="width:100%;" />
+                        <input type="number" class="form-control produk_harga" id="produk_harga0" name="produk_harga[]" style="width:100%;" />
                     </div>
                 </td>
                 <td>
@@ -896,7 +969,6 @@
                 $(el).find('.part_id').attr('name', 'part_id[' + j + ']');
                 $(el).find('.part_id').attr('id', 'part_id' + j);
                 $(el).find('input[id="part_jumlah"]').attr('name', 'part_jumlah[' + j + ']');
-                // $('.produk_id').select2();
             });
         }
 
@@ -963,6 +1035,7 @@
         $('#parttable').on('click', '#removerowpart', function(e) {
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
+            totalhargapart();
         });
 
     });

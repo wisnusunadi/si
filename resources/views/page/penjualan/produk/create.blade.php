@@ -125,7 +125,10 @@
             <div class="row d-flex justify-content-center">
                 <div class="col-11">
                     <span>
-                        <button class="btn btn-danger float-left">Batal</button>
+
+                        <a type="button" class="btn btn-danger" href="{{route('penjualan.produk.show')}}">
+                            Batal
+                        </a>
                     </span>
                     <span class="float-right">
                         <button type="submit" class="btn btn-info float-right disabled" id="btntambah">Tambah</button>
@@ -239,7 +242,7 @@
                             results: $.map(data, function(obj) {
                                 return {
                                     id: obj.id,
-                                    text: obj.nama
+                                    text: obj.tipe
                                 };
                             })
                         };

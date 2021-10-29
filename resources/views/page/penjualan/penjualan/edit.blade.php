@@ -61,13 +61,15 @@
         </div>
         <div class="card hide" id="nonekatalog">
             <div class="card-body">
-                <h4 class="margin-xs">Data Penjualan <small class="text-muted">(SOEKAT4918401)</small></h4>
+                <div class="row margin-xs">
+                    <h4>Data Penjualan <small class="text-muted">(SOEKAT4918401)</small></h4>
+                </div>
                 <div class="row margin-xs">
                     <div class="col-12">
                         <div class="row">
                             <div class="col-5">
                                 <div>
-                                    <b>Info Customer</b>
+                                    <small><b>Info Customer</b></small>
                                 </div>
                                 <div id="nama_customer">Nama Distributor</div>
                                 <div id="alamat">Alamat</div>
@@ -76,7 +78,7 @@
                             </div>
                             <div class="col-4">
                                 <div>
-                                    <b>PO & DO</b>
+                                    <small><b>PO & DO</b></small>
                                 </div>
                                 <div id="no_po">No PO</div>
                                 <div id="tanggal_po">Tanggal PO</div>
@@ -85,7 +87,7 @@
                             </div>
                             <div class="col-3">
                                 <div>
-                                    <b>Status</b>
+                                    <small><b>Status</b></small>
                                 </div>
                                 <div id="status" class="badge orange-text">Gudang</div>
                             </div>
@@ -775,11 +777,13 @@
                 subtotal.val(jumlah * harga);
                 totalhargapart();
             }
+
         });
 
         $('#parttable').on('click', '#removerowpart', function(e) {
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
+            totalhargapart();
         });
 
     });
