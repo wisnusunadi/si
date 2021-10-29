@@ -25,6 +25,9 @@ class MasterController extends Controller
         $data = Customer::select();
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('prov', function ($data) {
+                return $data->provinsi->nama;
+            })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -202,7 +205,7 @@ class MasterController extends Controller
     public function update_customer(Request $request, $id)
     {
         $customer = Customer::find($id);
-        $customer->id_provinsi = $request->id_provinsi;
+        $customer->id_provinsi = $request->provinsi;
         $customer->nama = $request->nama_customer;
         $customer->npwp = $request->npwp;
         $customer->email = $request->email;
@@ -319,6 +322,12 @@ class MasterController extends Controller
     {
         $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
             ->orderby('nama', 'ASC')
+            ->get();
+        echo json_encode($data);
+    }
+    public function select_penjualan_produk_id($id)
+    {
+        $data = PenjualanProduk::where('id', $id)
             ->get();
         echo json_encode($data);
     }

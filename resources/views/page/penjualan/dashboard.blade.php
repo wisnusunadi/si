@@ -4,6 +4,7 @@
 
 @section('content_header')
 <h1 class="m-0 text-dark">Dashboard</h1>
+
 @stop
 
 @section('adminlte_css')
@@ -69,7 +70,7 @@
                                     <h4>Penjualan 2021</h4>
                                 </div>
                                 <div class="chart">
-                                    <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -100,7 +101,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA102100001</td>
                                                     <td>PO/ON/SPA/10/21/001</td>
@@ -125,7 +126,7 @@
                                                         </hgroup>
                                                     </td>
                                                     <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -155,6 +156,61 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var pengirimantable = $('#pengirimantable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/ekatalog/pengiriman/data/',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'batas_kontrak',
+                    className: 'nowrap-text align-center',
+
+                },
+                {
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+            ]
+        })
+    })
+</script>
+<script>
+    $(function() {
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
@@ -182,4 +238,68 @@
         });
     });
 </script>
+<script>
+    // var ctx = document.getElementById("areaChart");
+    // var tensi_sistolik_chart = new Chart(ctx, {
+    //     type: 'line',
+    //     data: {
+    //         labels: [],
+    //         datasets: [{
+    //             label: 'Sistolik',
+    //             data: [],
+    //             borderWidth: 2,
+    //             backgroundColor: 'transparent',
+    //             borderColor: 'red',
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             xAxes: [],
+    //             yAxes: [{
+    //                 ticks: {
+    //                     beginAtZero: true
+    //                 }
+    //             }]
+    //         }
+    //     }
+    // });
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
 @stop

@@ -19,6 +19,21 @@
     .filter {
         margin: 5px;
     }
+
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 25ch;
+    }
+
+    .dropdown-toggle:hover {
+        color: #4682B4;
+    }
+
+    .dropdown-toggle:active {
+        color: #C0C0C0;
+    }
 </style>
 @stop
 
@@ -82,12 +97,13 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" id="showtable">
+                                    <table class="table table-hover" id="showtable" style="width:100%;">
                                         <thead style="text-align:center;">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama</th>
                                                 <th>Alamat</th>
+                                                <th>Provinsi</th>
                                                 <th>Email</th>
                                                 <th>Telp</th>
                                                 <th>NPWP</th>
@@ -96,64 +112,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                                <td>1</td>
-                                                <td>PT Dakai</td>
-                                                <td>
-                                                    Jl. Tambak Osowilangun A7 Benowo
-                                                </td>
-                                                <td></td>
-                                                <td>08181828384</td>
-                                                <td></td>
-                                                <td>-</td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.customer.detail', ['id' => 1])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                                Edit
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>PT Dakai</td>
-                                                <td>
-                                                    Jl. Tambak Osowilangun A7 Benowo
-                                                </td>
-                                                <td></td>
-                                                <td>08181828384</td>
-                                                <td></td>
-                                                <td>-</td>
-                                                <td>
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>PT Dakai</td>
-                                                <td>
-                                                    Jl. Tambak Osowilangun A7 Benowo
-                                                </td>
-                                                <td></td>
-                                                <td>08181828384</td>
-                                                <td></td>
-                                                <td>-</td>
-                                                <td>
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </td>
-                                            </tr> -->
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -208,6 +167,13 @@
                 },
                 {
                     data: 'alamat',
+                    className: 'minimizechar',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: "prov",
+                    className: 'align-center nowrap-text',
                     orderable: false,
                     searchable: false
                 },
@@ -231,6 +197,7 @@
                 },
                 {
                     data: 'npwp',
+                    className: 'minimizechar',
                     orderable: false,
                     searchable: false
                 },
@@ -263,6 +230,8 @@
                     console.log(id);
                     // $("#editform").attr("action", href);
                     select_data();
+
+
                 },
                 complete: function() {
                     $('#loader').hide();

@@ -22,4 +22,8 @@ class Customer extends Model
     {
         return $this->hasMany(Ekatalog::class);
     }
+    public function Provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'id_provinsi');
+    }
 }

@@ -341,84 +341,86 @@
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Status</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="sepakat" id="status1" />
-                                                    <label class="form-check-label" for="status1">
-                                                        Sepakat
-                                                    </label>
+                                    <form id="filter_ekat">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Status</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="status2" />
-                                                    <label class="form-check-label" for="status2">
-                                                        Negosiasi
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="sepakat" id="status1" />
+                                                        <label class="form-check-label" for="status1">
+                                                            Sepakat
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="batal" id="status3" />
-                                                    <label class="form-check-label" for="status3">
-                                                        Batal
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="negosiasi" id="status2" />
+                                                        <label class="form-check-label" for="status2">
+                                                            Negosiasi
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                    <label class="form-check-label" for="status4">
-                                                        PO
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="batal" id="status3" />
+                                                        <label class="form-check-label" for="status3">
+                                                            Batal
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                    <label class="form-check-label" for="status5">
-                                                        Gudang
-                                                    </label>
+                                                <!-- <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
+                                                        <label class="form-check-label" for="status4">
+                                                            PO
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                    <label class="form-check-label" for="status6">
-                                                        QC
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
+                                                        <label class="form-check-label" for="status5">
+                                                            Gudang
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                    <label class="form-check-label" for="status7">
-                                                        Logistik
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
+                                                        <label class="form-check-label" for="status6">
+                                                            QC
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                    <label class="form-check-label" for="status8">
-                                                        Pengiriman
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
+                                                        <label class="form-check-label" for="status7">
+                                                            Logistik
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
+                                                        <label class="form-check-label" for="status8">
+                                                            Pengiriman
+                                                        </label>
+                                                    </div>
+                                                </div> -->
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary" type="submit">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </span>
                             </div>
                         </div>
@@ -813,8 +815,7 @@
                 },
                 {
                     data: 'no_paket',
-                    orderable: false,
-                    searchable: false
+
                 },
                 {
                     data: 'nopo',
@@ -836,8 +837,6 @@
                 },
                 {
                     data: 'nama_customer',
-                    orderable: false,
-                    searchable: false
                 },
 
                 {
@@ -854,6 +853,17 @@
         })
         var spatable = $('#spatable').DataTable({})
         var spbtable = $('#spbtable').DataTable({})
+
+
+        $('#filter_ekat').submit(function() {
+            var values = [];
+            $("input:checked").each(function() {
+                values.push($(this).val());
+            });
+            $('#ekatalogtable').DataTable().ajax.url('/api/ekatalog/data/' + values).load();
+            console.log(values);
+            return false;
+        });
 
     })
 </script>

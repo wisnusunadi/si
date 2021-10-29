@@ -73,13 +73,15 @@ Route::prefix('/penjualan_produk')->group(function () {
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_id']);
 });
 Route::prefix('/penjualan')->group(function () {
-    Route::get('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
+    Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
 });
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
 });
 Route::prefix('/ekatalog')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
+    Route::post('pengiriman/data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_pengiriman']);
+    Route::post('data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_filter_data_ekatalog']);
     Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_ekatalog']);
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_ekatalog']);

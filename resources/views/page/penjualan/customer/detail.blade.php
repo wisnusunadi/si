@@ -33,7 +33,6 @@
                             <li class="list-group-item">
                                 <a>Nama</a>
                                 <b class="float-right" id="nama_customer">{{$customer->nama}}</b>
-                                <input class="d-none" id="id">{{$customer->nama}}</b>
                             </li>
                             <li class="list-group-item">
                                 <a>Alamat</a>
