@@ -215,7 +215,7 @@
             event.preventDefault();
             var href = $(this).attr('data-attr');
             $.ajax({
-                url: "{{route('penjualan.penjualan.detail', ['id' => 2])}}",
+                url: "",
                 beforeSend: function() {
                     $('#loader').show();
                 },

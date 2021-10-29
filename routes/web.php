@@ -66,7 +66,9 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/penjualan'], function () {
         Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
         Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
-        Route::view('/detail/{id}', 'page.penjualan.penjualan.detail')->name('penjualan.penjualan.detail');
+        Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
+        Route::view('/detail/spa/{id}', 'page.penjualan.penjualan.detail_spa')->name('penjualan.penjualan.detail.spa');
+        Route::view('/detail/spb/{id}', 'page.penjualan.penjualan.detail_spb')->name('penjualan.penjualan.detail.spb');
         Route::view('/edit/{id}/{jenis}', 'page.penjualan.penjualan.edit')->name('penjualan.penjualan.edit');
     });
 
@@ -76,6 +78,13 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/edit', 'page.penjualan.so.edit')->name('penjualan.so.edit');
     });
 
+    Route::group(['prefix' => '/lacak'], function () {
+        Route::view('/show', 'page.penjualan.lacak.show')->name('penjualan.lacak.show');
+    });
+
+    Route::group(['prefix' => '/laporan'], function () {
+        Route::view('/show', 'page.penjualan.laporan.show')->name('penjualan.laporan.show');
+    });
     // Route::get('/dashboard', 'digidocu\DocumentsController@dashboard')->name('dc.dashboard');
     // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });

@@ -19,12 +19,9 @@ class PenjualanController extends Controller
     //Get Data Table
     public function get_data_detail_ekatalog($value)
     {
-        $data  = DetailEkatalog::with('Penjualan_produk', 'Ekatalog')
-            ->where('ekatalog', $value)
-            ->get();
-        return datatables()->of($data)
-            ->addIndexColumn()
-            ->make(true);
+        $data  = Ekatalog::find($value);
+
+        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data]);
     }
     public function get_data_detail_spa($value)
     {
@@ -86,10 +83,10 @@ class PenjualanController extends Controller
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
+                <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '">
                 <button class="dropdown-item" type="button">
                       <i class="fas fa-search"></i>
-                      Detail
+                      Details
                     </button>
                 </a>
                 <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         

@@ -227,107 +227,107 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                            <td>1</td>
-                                            <td>SOEKAT090202101</td>
-                                            <td>AKN1-79479274207</td>
-                                            <td>PO/ON/51/10/21</td>
-                                            <td>05-10-2021</td>
-                                            <td>
-                                                <span class="urgent">19-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
-                                            <td>E-Catalogue</td>
-                                            <td>
-                                                <span class="red-text badge">Batal</span>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </div>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-pencil-alt"></i>
-                                                            Edit
-                                                        </button>
-                                                    </a>
-                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-search"></i>
-                                                            Detail
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>SOSPB090202101</td>
-                                            <td>-</td>
-                                            <td>PO/ON/45/10/21</td>
-                                            <td>14-10-2021</td>
-                                            <td>
-                                                <span class="warning">28-10-2021</span>
-                                            </td>
-                                            <td><span class="minimizechar">Pak Amin Pasuruan</span></td>
-                                            <td>SPB</td>
-                                            <td>
-                                                <span class="green-text badge">Pengiriman</span>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </div>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spb'])}}">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-pencil-alt"></i>
-                                                            Edit
-                                                        </button>
-                                                    </a>
-                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-search"></i>
-                                                            Detail
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>SOSPA090202101</td>
-                                            <td>-</td>
-                                            <td>PO/ON/37/10/21</td>
-                                            <td>15-10-2021</td>
-                                            <td>29-10-2021</td>
-                                            <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
-                                            <td>SPA</td>
-                                            
-                                            <td>
-                                                <span class="yellow-text badge">Gudang</span>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </div>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spa'])}}">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-pencil-alt"></i>
-                                                            Edit
-                                                        </button>
-                                                    </a>
-                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
-                                                        <button class="dropdown-item" type="button">
-                                                            <i class="fas fa-search"></i>
-                                                            Detail
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr> -->
+                                            <tr>
+                                                <td>1</td>
+                                                <td>SOEKAT090202101</td>
+                                                <td>AKN1-79479274207</td>
+                                                <td>PO/ON/51/10/21</td>
+                                                <td>05-10-2021</td>
+                                                <td>
+                                                    <span class="urgent">19-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
+                                                <td>E-Catalogue</td>
+                                                <td>
+                                                    <span class="red-text badge">Batal</span>
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('penjualan.penjualan.detail.ekatalog', ['id' => 2])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>SOSPB090202101</td>
+                                                <td>-</td>
+                                                <td>PO/ON/45/10/21</td>
+                                                <td>14-10-2021</td>
+                                                <td>
+                                                    <span class="warning">28-10-2021</span>
+                                                </td>
+                                                <td><span class="minimizechar">Pak Amin Pasuruan</span></td>
+                                                <td>SPB</td>
+                                                <td>
+                                                    <span class="green-text badge">Pengiriman</span>
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spb'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('penjualan.penjualan.detail.spb', ['id' => 2])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>SOSPA090202101</td>
+                                                <td>-</td>
+                                                <td>PO/ON/37/10/21</td>
+                                                <td>15-10-2021</td>
+                                                <td>29-10-2021</td>
+                                                <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
+                                                <td>SPA</td>
+
+                                                <td>
+                                                    <span class="yellow-text badge">Gudang</span>
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spa'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('penjualan.penjualan.detail.spa', ['id' => 2])}}">
+                                                            <button class=" dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -874,7 +874,7 @@
             event.preventDefault();
             var href = $(this).attr('data-attr');
             $.ajax({
-                url: "{{route('penjualan.penjualan.detail', ['id' => 2])}}",
+                url: href,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -882,7 +882,6 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    $("#detailform").attr("action", href);
                 },
                 complete: function() {
                     $('#loader').hide();
