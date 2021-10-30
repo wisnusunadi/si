@@ -1,6 +1,6 @@
 <script>
-import Calendar from "./Calendar.vue";
-import Chart from "./Chart.vue";
+import Calendar from "./calendar/Calendar.vue";
+import Chart from "./chart/Chart.vue";
 import Table from "../../../manager/App.vue";
 
 export default {
@@ -26,11 +26,7 @@ export default {
   },
 
   mounted: function () {
-    axios
-      .get("/api/ppic/schedule/" + this.$route.params.status)
-      .then((response) => {
-        this.$store.commit("updateJadwal", response.data);
-      });
+    this.$store.dispatch("updateJadwal", this.$route.params.status);
   },
 };
 </script>

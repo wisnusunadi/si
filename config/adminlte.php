@@ -254,46 +254,46 @@ return [
                 ],
             ]
         ],
-        [
-            'text'  =>  'Laporan',
-            'icon'  =>  'fas fa-file',
-            'auth'  => [24],
-            'submenu'   =>  [
-                [
-                    'text'  =>  'Pembelian',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
-                [
-                    'text'  =>  'Perakitan dan Pengemasan',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
-                [
-                    'text'  =>  'Pemeriksaan, Pengujian, dan Pemeriksaan Pengemasan QA',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
+        // [
+        //     'text'  =>  'Laporan',
+        //     'icon'  =>  'fas fa-file',
+        //     'auth'  => [24],
+        //     'submenu'   =>  [
+        //         [
+        //             'text'  =>  'Pembelian',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
+        //         [
+        //             'text'  =>  'Perakitan dan Pengemasan',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
+        //         [
+        //             'text'  =>  'Pemeriksaan, Pengujian, dan Pemeriksaan Pengemasan QA',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
 
-                [
-                    'text'  =>  'Kerja GK',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
+        //         [
+        //             'text'  =>  'Kerja GK',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
 
-                [
-                    'text'  =>  'Penjualan',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
+        //         [
+        //             'text'  =>  'Penjualan',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
 
-                [
-                    'text'  =>  'Marketing',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
-            ]
-        ],
+        //         [
+        //             'text'  =>  'Marketing',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
+        //     ]
+        // ],
         [
             'text' => 'Perakitan',
             'url'  => '/ppic/data/perakitan',
@@ -327,30 +327,30 @@ return [
                 ],
             ]
         ],
-        [
-            'text' => 'BOM',
-            'url'  => '/ppic/bom',
-            'icon' => 'fas fa-list',
-            'auth' => [24]
-        ],
-        [
-            'text'    => 'BPPB',
-            'icon'    => 'fas fa-project-diagram',
-            'url' => '/bppb',
-            'auth' => [24],
-            'submenu'   =>  [
-                [
-                    'text'  =>  'Pelaksanaan',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/bppb/pelaksanaan',
-                ],
-                [
-                    'text'  =>  'Selesai',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/bppb/selesai'
-                ],
-            ]
-        ],
+        // [
+        //     'text' => 'BOM',
+        //     'url'  => '/ppic/bom',
+        //     'icon' => 'fas fa-list',
+        //     'auth' => [24]
+        // ],
+        // [
+        //     'text'    => 'BPPB',
+        //     'icon'    => 'fas fa-project-diagram',
+        //     'url' => '/bppb',
+        //     'auth' => [24],
+        //     'submenu'   =>  [
+        //         [
+        //             'text'  =>  'Pelaksanaan',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '/ppic/bppb/pelaksanaan',
+        //         ],
+        //         [
+        //             'text'  =>  'Selesai',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '/ppic/bppb/selesai'
+        //         ],
+        //     ]
+        // ],
 
         // Manager Teknik
         [

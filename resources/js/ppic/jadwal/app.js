@@ -1,9 +1,12 @@
 import Vue from 'vue'
+
 import VueSweetalert2 from 'vue-sweetalert2'
-import vSelect from 'vue-select'
-import VueApexCharts from 'vue-apexcharts'
 import 'sweetalert2/dist/sweetalert2.min.css'
+
+import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+
+import VueApexCharts from 'vue-apexcharts'
 
 
 import router from './router'

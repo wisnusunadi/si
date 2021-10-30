@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+<div id="app"></div>
 <div class="row">
     <div class="col-12">
         <div class="card p-3">

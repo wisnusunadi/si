@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <router-view></router-view>
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
   props: {
-    auth: String,
+    user: String,
+    status: String,
   },
 
   mounted: function () {
     this.$store.commit("updateUser", JSON.parse(this.auth));
+    this.$store.commit("updateStatus", this.status);
   },
 };
 </script>

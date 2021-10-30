@@ -37,6 +37,8 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/get-gbj-query', [App\Http\Controllers\PpicController::class, 'getGbjQuery']);
     Route::get('/get-gbj-datatable', [App\Http\Controllers\PpicController::class, 'getGbjDatatable']);
     Route::get('/jadwal', [App\Http\Controllers\PpicController::class, 'getJadwalPerakitan']);
+    Route::get('test-event', [App\Http\Controllers\PpicController::class, 'testBroadcast']);
+    Route::get('update-confirmation', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
 });
 
 Route::prefix('/customer')->group(function () {
