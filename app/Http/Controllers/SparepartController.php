@@ -8,6 +8,7 @@ use App\Models\SparepartHis;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class SparepartController extends Controller
@@ -160,7 +161,7 @@ class SparepartController extends Controller
                 $spr_gdg->stok = $spr_gdg->stok - $request->stok;
             }
             $spr_gdg->layout_id = $request->layout_id;
-            File::delete(public_path('upload/'.$spr_gdg->gambar));
+            // unlink('upload/sparepart/'. $spr_gdg->gambar);
             $image = $request->file('gambar');
             if ($image) {
                 $path = 'upload/sparepart/';
@@ -200,6 +201,7 @@ class SparepartController extends Controller
                 $spr_his->delete();
                 $spr_gdg->delete();
                 $spr->delete();
+
                 return response()->json(['msg' => 'Successfully']);
             }
         } catch (\Exception $e) {
@@ -207,6 +209,15 @@ class SparepartController extends Controller
             if (empty($spr)) {
                 return response()->json(['msg' => 'Data not found']);
             }
+        }
+    }
+
+    function deleteImage() {
+        if(File::exists('upload/sparepart/20211029163528.png')){
+            unlink('upload/sparepart/20211029163528.png');
+            return 'ok';
+        }else{
+            dd('File does not exists.');
         }
     }
 

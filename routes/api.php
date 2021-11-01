@@ -83,6 +83,7 @@ Route::prefix('/spr')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\SparepartController::class, 'update']);
     Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
     Route::get('/data/{id}', [App\Http\Controllers\SparepartController::class, 'getId']);
+    Route::delete('/test', [App\Http\Controllers\SparepartController::class, 'deleteImage']);
 });
 
 Route::prefix('/noseri')->group(function () {
