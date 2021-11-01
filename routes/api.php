@@ -55,6 +55,7 @@ Route::prefix('/produk')->group(function () {
     Route::post('update', [App\Http\Controllers\MasterController::class, 'update_produk']);
     Route::delete('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_produk']);
     Route::get('check/{id}', [App\Http\Controllers\MasterController::class, 'check_produk']);
+    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_produk']);
 });
 Route::prefix('/penjualan_produk')->group(function () {
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_penjualan_produk']);
@@ -66,4 +67,46 @@ Route::prefix('/penjualan_produk')->group(function () {
 });
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
+    Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
+    Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
+    Route::get('/get/{id}', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
+});
+
+Route::prefix('/tfp')->group(function () {
+    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
+});
+
+Route::prefix('/spr')->group(function () {
+    Route::get('/data', [App\Http\Controllers\SparepartController::class, 'get']);
+    Route::post('/create', [App\Http\Controllers\SparepartController::class, 'store']);
+    Route::post('/edit/{id}', [App\Http\Controllers\SparepartController::class, 'update']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
+    Route::get('/data/{id}', [App\Http\Controllers\SparepartController::class, 'getId']);
+});
+
+Route::prefix('/noseri')->group(function () {
+    Route::post('/edit/{id}', [App\Http\Controllers\NoseriController::class, 'UpdateNoSeri']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\NoseriController::class, 'DestroyNoSeri']);
+});
+Route::prefix('/ekatalog')->group(function () {
+    Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
+    Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_ekatalog']);
+    Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog']);
+    Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_ekatalog']);
+    Route::get('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_ekatalog']);
+});
+Route::prefix('/spa')->group(function () {
+    Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
+    Route::get('create', [App\Http\Controllers\PenjualanController::class, 'create_spa']);
+    Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa']);
+    Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spa']);
+    Route::get('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_spa']);
+});
+Route::prefix('/spb')->group(function () {
+    Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
+    Route::get('create', [App\Http\Controllers\PenjualanController::class, 'create_spb']);
+    Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb']);
+    Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spb']);
+    Route::get('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_spb']);
 });
