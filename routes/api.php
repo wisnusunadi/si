@@ -75,6 +75,14 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
 });
 
+Route::prefix('/spr')->group(function () {
+    Route::get('/data', [App\Http\Controllers\SparepartController::class, 'get']);
+    Route::post('/create', [App\Http\Controllers\SparepartController::class, 'store']);
+    Route::post('/edit/{id}', [App\Http\Controllers\SparepartController::class, 'update']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
+    Route::get('/data/{id}', [App\Http\Controllers\SparepartController::class, 'getId']);
+});
+
 Route::prefix('/noseri')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\NoseriController::class, 'UpdateNoSeri']);
     Route::delete('/delete/{id}', [App\Http\Controllers\NoseriController::class, 'DestroyNoSeri']);

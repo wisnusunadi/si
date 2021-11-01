@@ -8,6 +8,7 @@ use App\Models\NoseriBarangJadi;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GudangController extends Controller
 {
@@ -44,14 +45,37 @@ class GudangController extends Controller
 
     function StoreBarangJadi(Request $request)
     {
-        try {
+        $validator = Validator::make($request->all(), [
+            'produk_id' => 'required',
+            'nama' => 'required',
+            'stok' => 'required|numeric',
+            'ke' => 'required',
+        ],
+        [
+            'produk_id.required' => 'Produk harus diisi',
+            'nama.required' => 'Nama harus diisi',
+            'stok.numeric' => 'Stok harus diisi angka',
+            'stok.required' => 'Stok harus diisi',
+            'ke.required' => 'Tujuan harus diisi',
+        ]
+        );
+
+        if ($validator->fails()) {
+            return $validator->errors();
+        } else {
             $brg_jadi = new GudangBarangJadi();
             $brg_jadi->produk_id = $request->produk_id;
             $brg_jadi->nama = $request->nama;
             $brg_jadi->deskripsi = $request->deskripsi;
             $brg_jadi->stok = $request->stok;
             $brg_jadi->layout_id = $request->layout_id;
-            $brg_jadi->gambar = $request->gambar;
+            $image = $request->file('gambar');
+            if ($image) {
+                $path = 'upload/gbj/';
+                $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
+                $image->move($path, $nameImage);
+                $brg_jadi->gambar = $nameImage;
+            }
             $brg_jadi->dim_p = $request->dim_p;
             $brg_jadi->dim_l = $request->dim_l;
             $brg_jadi->dim_t = $request->dim_t;
@@ -84,16 +108,35 @@ class GudangController extends Controller
             $noseri->save();
 
             return response()->json(['msg' => 'Successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['msg' => $e->getMessage()]);
         }
     }
 
     function UpdateBarangJadi(Request $request, $id)
     {
-        $brg_jadi = GudangBarangJadi::find($id);
-        $brg_his = new GudangBarangJadiHis();
-        try {
+        $validator = Validator::make($request->all(), [
+            'produk_id' => 'required',
+            'nama' => 'required',
+            'stok' => 'required|numeric',
+            'ke' => 'required',
+        ],
+        [
+            'produk_id.required' => 'Produk harus diisi',
+            'nama.required' => 'Nama harus diisi',
+            'stok.numeric' => 'Stok harus diisi angka',
+            'stok.required' => 'Stok harus diisi',
+            'ke.required' => 'Tujuan harus diisi',
+        ]
+        );
+
+        if ($validator->fails()) {
+            return $validator->errors();
+        } else {
+            $brg_jadi = GudangBarangJadi::find($id);
+            $brg_his = new GudangBarangJadiHis();
+
+            if (empty($brg_jadi->id)) {
+                return response()->json(['msg' => 'Data not found']);
+            }
 
             $brg_jadi->produk_id = $request->produk_id;
             $brg_jadi->nama = $request->nama;
@@ -104,7 +147,13 @@ class GudangController extends Controller
                 $brg_jadi->stok = $brg_jadi->stok - $request->stok;
             }
             $brg_jadi->layout_id = $request->layout_id;
-            $brg_jadi->gambar = $request->gambar;
+            $image = $request->file('gambar');
+            if ($image) {
+                $path = 'upload/gbj/';
+                $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
+                $image->move($path, $nameImage);
+                $brg_jadi->gambar = $nameImage;
+            }
             $brg_jadi->dim_p = $request->dim_p;
             $brg_jadi->dim_l = $request->dim_l;
             $brg_jadi->dim_t = $request->dim_t;
@@ -146,10 +195,6 @@ class GudangController extends Controller
             $noseri->save();
 
             return response()->json(['msg' => 'Successfully']);
-        } catch (\Exception $e) {
-            if (empty($brg_jadi->id)) {
-                return response()->json(['msg' => 'Data not found']);
-            }
         }
     }
 
@@ -157,8 +202,8 @@ class GudangController extends Controller
     {
         try {
             $brg_jadi = GudangBarangJadi::find($id);
-            $brg_his = GudangBarangJadiHis::where('gdg_brg_jadi_id', $brg_jadi->id);
-            $noseri = NoseriBarangJadi::where('gdg_barang_jadi_id', $brg_jadi->id);
+            $brg_his = GudangBarangJadiHis::whereIn('gdg_brg_jadi_id', array($brg_jadi->id));
+            $noseri = NoseriBarangJadi::whereIn('gdg_barang_jadi_id', array($brg_jadi->id));
 
             if (!empty($brg_jadi)) {
                 $noseri->delete();
@@ -169,7 +214,9 @@ class GudangController extends Controller
                 return response()->json(['msg' => 'Data not found']);
             }
         } catch (\Exception $e) {
-            return response()->json(['msg' => $e->getMessage()]);
+            if (empty($brg_jadi)) {
+                return response()->json(['msg' => 'Data not found']);
+            }
         }
     }
 
@@ -208,6 +255,7 @@ class GudangController extends Controller
                     'nama' => $brg_jadi->nama,
                     'stok' => $brg_jadi->stok,
                     'Layout' => $brg_jadi->Layout->ruang . '-' . $brg_jadi->Layout->lantai . '/' . $brg_jadi->Layout->rak,
+                    'Gambar' => url('/upload/gbj/'. $brg_jadi->gambar),
                     'created_at' => date_format($brg_jadi->created_at, 'd-m-Y H:i:s'),
                     'updated_at' => date_format($brg_jadi->updated_at, 'd-m-Y H:i:s'),
                     'History Stok' => $his_stock,
