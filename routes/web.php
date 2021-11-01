@@ -50,11 +50,55 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
 });
 
-Route::middleware('auth')->prefix('/penjualan')->group(function () {
-    Route::view('/produk/{any?}', 'page.penjualan.produk');
-    Route::view('/customer/{any?}', 'page.penjualan.customer');
-    Route::view('/penjualan/{any?}', 'page.penjualan.penjualan');
+// Route::middleware('auth')->prefix('/penjualan')->group(function () {
+//     Route::view('/produk/{any?}', 'page.penjualan.produk');
+//     Route::view('/customer/{any?}', 'page.penjualan.customer');
+//     Route::view('/penjualan/{any?}', 'page.penjualan.penjualan');
+//     Route::view('/po/{any?}', 'page.penjualan.po');
+// });
+
+Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.penjualan.dashboard')->name('penjualan.dashboard');
+
+    Route::group(['prefix' => '/produk'], function () {
+        Route::view('/show', 'page.penjualan.produk.show')->name('penjualan.produk.show');
+        Route::view('/create', 'page.penjualan.produk.create')->name('penjualan.produk.create');
+        Route::view('/edit', 'page.penjualan.produk.edit')->name('penjualan.produk.edit');
+    });
+
+    Route::group(['prefix' => '/customer'], function () {
+        Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
+        Route::view('/create', 'page.penjualan.customer.create')->name('penjualan.customer.create');
+        Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
+    });
+
+    Route::group(['prefix' => '/penjualan'], function () {
+        Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
+        Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
+        Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
+        Route::view('/detail/spa/{id}', 'page.penjualan.penjualan.detail_spa')->name('penjualan.penjualan.detail.spa');
+        Route::view('/detail/spb/{id}', 'page.penjualan.penjualan.detail_spb')->name('penjualan.penjualan.detail.spb');
+        Route::view('/edit/{id}/{jenis}', 'page.penjualan.penjualan.edit')->name('penjualan.penjualan.edit');
+    });
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.penjualan.so.show')->name('penjualan.so.show');
+        Route::view('/create', 'page.penjualan.so.create')->name('penjualan.so.create');
+        Route::view('/edit', 'page.penjualan.so.edit')->name('penjualan.so.edit');
+    });
+
+    Route::group(['prefix' => '/lacak'], function () {
+        Route::view('/show', 'page.penjualan.lacak.show')->name('penjualan.lacak.show');
+    });
+
+    Route::group(['prefix' => '/laporan'], function () {
+        Route::view('/show', 'page.penjualan.laporan.show')->name('penjualan.laporan.show');
+    });
+    // Route::get('/dashboard', 'digidocu\DocumentsController@dashboard')->name('dc.dashboard');
+    // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
+
+Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 
 Route::get('/test/{name?}', function ($name = null) {
     return $name;

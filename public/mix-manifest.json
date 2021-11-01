@@ -8,5 +8,8 @@
     "/native/js/gbj/penjualan.js": "/native/js/gbj/penjualan.js",
     "/native/js/penjualan/produk.js": "/native/js/penjualan/produk.js",
     "/native/js/penjualan/customer.js": "/native/js/penjualan/customer.js",
+    "/native/js/penjualan/penjualan.js": "/native/js/penjualan/penjualan.js",
+    "/native/js/penjualan/po.js": "/native/js/penjualan/po.js",
+    "/native/css/plugin.css": "/native/css/plugin.css"
     "/native/js/penjualan/penjualan.js": "/native/js/penjualan/penjualan.js"
 }
