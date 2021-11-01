@@ -48,6 +48,7 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
 Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
+    Route::view('/produk/{any?}', 'page.gbj.produk');
 });
 
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {

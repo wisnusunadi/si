@@ -39,7 +39,7 @@ class GudangController extends Controller
             })
             ->rawColumns(['nama'])
             ->make(true);
-
+        
         //return datatables()->of(GudangBarangJadi::select())->toJson();
     }
 
