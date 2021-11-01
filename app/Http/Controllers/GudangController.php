@@ -72,8 +72,9 @@ class GudangController extends Controller
             $image = $request->file('gambar');
             if ($image) {
                 $path = 'upload/gbj/';
-                $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
-                $image->move($path, $nameImage);
+                // $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
+                // $image->move($path, $nameImage);
+                $nameImage = base64_encode(file_get_contents($image));
                 $brg_jadi->gambar = $nameImage;
             }
             $brg_jadi->dim_p = $request->dim_p;
@@ -220,6 +221,10 @@ class GudangController extends Controller
         }
     }
 
+    public function base64toFile($img) {
+
+    }
+
     function GetBarangJadiByID($id)
     {
         try {
@@ -249,13 +254,25 @@ class GudangController extends Controller
                     'created_at' => date_format($c->created_at, 'd-m-Y H:i:s'),
                 ];
             }
+            $source_data = $brg_jadi->gambar;
+            $source_data = base64_decode($source_data); //simple base64 any format decoded image source_data
+            $source_img = imagecreatefromstring($source_data);
+            $rotated_img = imagerotate($source_img, 0, 0); //simple images rotate with angle 90 degree here
+            $data_file = 'upload/gbj/'. $brg_jadi->id . '.png';
+            if (count($brg_jadi) < 0) {
+                $data_savefile = imagejpeg($rotated_img, $data_file, 10);
+            }
+            imagedestroy($source_img);
+
+
             if (!empty($brg_jadi)) {
                 return response()->json([
                     'produk' => $brg_jadi->produk->tipe,
                     'nama' => $brg_jadi->nama,
                     'stok' => $brg_jadi->stok,
                     'Layout' => $brg_jadi->Layout->ruang . '-' . $brg_jadi->Layout->lantai . '/' . $brg_jadi->Layout->rak,
-                    'Gambar' => url('/upload/gbj/'. $brg_jadi->gambar),
+                    'Gambar' => url('/upload/gbj/'. $data_file),
+                    // 'Gambar' => imagejpeg($img),
                     'created_at' => date_format($brg_jadi->created_at, 'd-m-Y H:i:s'),
                     'updated_at' => date_format($brg_jadi->updated_at, 'd-m-Y H:i:s'),
                     'History Stok' => $his_stock,
@@ -268,4 +285,6 @@ class GudangController extends Controller
             return response()->json(['msg' => $e->getMessage()]);
         }
     }
+
+
 }
