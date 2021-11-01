@@ -244,19 +244,14 @@ return [
             'auth'  => [24],
             'submenu'   =>  [
                 [
-                    'text'  =>  'GBMP',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/gudang/gbmp'
-                ],
-                [
                     'text'  =>  'GBJ',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/gudang/gbj'
+                    'url'   =>  '/ppic/data/gbj'
                 ],
                 [
                     'text'  =>  'GK',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/gudang/gk'
+                    'url'   =>  '/ppic/data/gk'
                 ],
             ]
         ],
@@ -301,35 +296,42 @@ return [
             ]
         ],
         [
+            'text' => 'Perakitan',
+            'url'  => '/ppic/data/perakitan',
+            'icon' => 'fas fa-list-alt',
+            'auth' => [24]
+        ],
+        [
+            'text' => 'SO',
+            'url'  => '/ppic/data/so',
+            'icon' => 'fas fa-database',
+            'auth' => [24]
+        ],
+        [
             'header' => 'PPIC',
             'auth' => [24]
         ],
         [
-            'text' => 'Jadwal Produksi',
+            'text' => 'Jadwal Perakitan',
             'icon' => 'fas fa-calendar-alt',
             'auth' => [24],
             'submenu'   =>  [
                 [
-                    'text'  =>  'Penyusunan',
+                    'text'  =>  'Rencana',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/schedule/penyusunan'
+                    'url'   =>  '/ppic/jadwal/penyusunan'
                 ],
                 [
                     'text'  =>  'Pelaksanaan',
                     'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/schedule/pelaksanaan',
-                ],
-                [
-                    'text'  =>  'Selesai',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/schedule/selesai'
+                    'url'   =>  '/ppic/jadwal/pelaksanaan',
                 ],
             ]
         ],
         [
             'text' => 'BOM',
             'url'  => '/ppic/bom',
-            'icon' => 'fas fa-list-alt',
+            'icon' => 'fas fa-list',
             'auth' => [24]
         ],
         [
@@ -350,6 +352,53 @@ return [
                 ],
             ]
         ],
+
+        // Manager Teknik
+        [
+            'header' => 'Data',
+            'auth' => [3]
+        ],
+        [
+            'text' => 'Perakitan',
+            'url'  => '/ppic/data/perakitan',
+            'icon' => 'fas fa-list-alt',
+            'auth' => [3]
+        ],
+        [
+            'text' => 'SO',
+            'url'  => '/ppic/data/so',
+            'icon' => 'fas fa-database',
+            'auth' => [3]
+        ],
+        [
+            'header' => 'PPIC',
+            'auth' => [3]
+        ],
+        [
+            'text' => 'Jadwal Perakitan',
+            'icon' => 'fas fa-calendar-alt',
+            'auth' => [3],
+            'submenu'   =>  [
+                [
+                    'text'  =>  'Rencana',
+                    'icon'  =>  'far fa-circle',
+                    'url'   =>  '/ppic/jadwal/penyusunan'
+                ],
+                [
+                    'text'  =>  'Pelaksanaan',
+                    'icon'  =>  'far fa-circle',
+                    'url'   =>  '/ppic/jadwal/pelaksanaan',
+                ],
+            ]
+        ],
+        [
+            'text' => 'Persetujuan Manager',
+            'url'  => '/manager-teknik/persetujuan_jadwal',
+            'icon' => 'fas fa-circle',
+            'auth' => [3]
+        ],
+
+        // other
         [
             'text' => 'Beranda',
             'url'  => '/penjualan/dashboard',
@@ -691,13 +740,6 @@ return [
             'auth' => [11],
             'icon' =>  'fas fa-boxes',
             'url' => '/gbmp/bppb_view'
-        ],
-        // Manager Teknik (3)
-        [
-            'text' => 'Jadwal Produksi',
-            'icon' => 'fas fa-calendar-alt',
-            'auth' => [3],
-            'url'   =>  '/ppic/schedule/penyusunan',
         ],
         // Produksi (17)
         [
