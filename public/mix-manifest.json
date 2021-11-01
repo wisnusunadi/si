@@ -2,9 +2,9 @@
     "/native/js/plugin.js": "/native/js/plugin.js",
     "/native/js/gbj/stok.js": "/native/js/gbj/stok.js",
     "/native/js/gbj/penjualan.js": "/native/js/gbj/penjualan.js",
+    "/native/js/gbj/produk.js": "/native/js/gbj/produk.js",
     "/native/js/penjualan/produk.js": "/native/js/penjualan/produk.js",
     "/native/js/penjualan/customer.js": "/native/js/penjualan/customer.js",
     "/native/js/penjualan/penjualan.js": "/native/js/penjualan/penjualan.js",
-    "/native/js/penjualan/po.js": "/native/js/penjualan/po.js",
-    "/native/js/gbj/produk.js": "/native/js/gbj/produk.js"
+    "/native/js/penjualan/po.js": "/native/js/penjualan/po.js"
 }

@@ -11,12 +11,12 @@
                     <table class="table table-bordered" id="gudang-barang">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Nomor Seri</th>
                                 <th>Produk</th>
                                 <th>Stok</th>
-                                <th>Kelompok</th>
                                 <th>Satuan</th>
+                                <th>Kelompok</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -63,10 +63,10 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"
                             data: "stok",
                         },
                         {
-                            data: "kelompok",
+                            data: "satuan",
                         },
                         {
-                            data: "satuan",
+                            data: "kelompok",
                         },
                         {
                             data: null,
@@ -77,7 +77,16 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"
                             },
                             orderable: false,
                             searchable: false,
-                        }
+                        },
+                        {
+                            "render": function ( data, type, row ) {
+                            return data +' ('+ row[4]+')';
+                        },
+                        "targets": 3
+                        },
+                        // {
+                        //     "visible": false,  "targets": [4]
+                        // }
                     ]
                 })
             }
