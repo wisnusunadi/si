@@ -231,6 +231,7 @@ return [
             'text'        => 'Beranda',
             'url'         => '',
             'icon'        => 'nav-icon fa fa-home',
+            'auth'        => [24]
         ],
         // PPIC (24)
         [
@@ -399,31 +400,37 @@ return [
 
         // other
         [
+            'text' => 'Beranda',
+            'url'  => '/penjualan/dashboard',
+            'icon' => 'fas fa-home',
+            'auth' => [26]
+        ],
+        [
             'header' => 'DATA',
             'auth' => [14, 17, 26, 23]
         ],
         // penjualan (26)
         [
             'text' => 'Penjualan Produk',
-            'url'  => '/penjualan/produk',
+            'url'  => '/penjualan/produk/show',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
         [
             'text' => 'Penjualan',
-            'url'  => '/penjualan/penjualan',
+            'url'  => '/penjualan/penjualan/show',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
         [
             'text' => 'Customer',
-            'url'  => '/penjualan/customer',
+            'url'  => '/penjualan/customer/show',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
         [
-            'text' => 'AKN',
-            'url'  => '/penjualan/akn',
+            'text' => 'Sales Order',
+            'url'  => '/penjualan/so/show',
             'icon' => 'fas fa-table',
             'auth' => [26]
         ],
@@ -1060,16 +1067,16 @@ return [
             ],
         ],
         // dependecies plugins
-        'DataTables' => [
-            'js' => [
-                'vendor/datatables/jquery.dataTables.min.js',
-                'vendor/datatables/dataTables.bootstrap4.min.js',
-                'vendor/datatables/dataTables.responsive.min.js',
-            ],
-            'css' => [
-                'vendor/datatables/dataTables.bootstrap4.min.css',
-            ],
-        ],
+        // 'DataTables' => [
+        //     'js' => [
+        //         'vendor/datatables/jquery.dataTables.min.js',
+        //         'vendor/datatables/dataTables.bootstrap4.min.js',
+        //         'vendor/datatables/dataTables.responsive.min.js',
+        //     ],
+        //     'css' => [
+        //         'vendor/datatables/dataTables.bootstrap4.min.css',
+        //     ],
+        // ],
         'overlayScrollbars' => [
             'js' => [
                 'vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js',
@@ -1081,6 +1088,7 @@ return [
         'Select2' => [
             'js' => [
                 'vendor/select2/js/select2.full.min.js',
+
             ],
             'css' => [
                 'vendor/select2/css/select2.min.css',

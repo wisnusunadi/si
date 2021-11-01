@@ -15,11 +15,6 @@ class GudangBarangJadi extends Model
     protected $table = "gdg_barang_jadi";
     protected $fillable = ['produk_id', 'variasi', 'stok'];
 
-    public function noseri()
-    {
-        return $this->hasMany(NoseriBarangJadi::class, 'gdg_barang_jadi_id');
-    }
-
     public function produk()
     {
         return $this->belongsTo(Produk::class, 'produk_id');

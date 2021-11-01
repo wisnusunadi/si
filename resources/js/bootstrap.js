@@ -19,15 +19,19 @@
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+window.axios = require("axios");
 
 // window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 // library
-window.$ = window.jQuery = require('jquery');
-import "bootstrap/dist/js/bootstrap.bundle"
+window.$ = window.jQuery = require("jquery");
+import "bootstrap/dist/js/bootstrap.bundle";
 import "datatables.net-bs4/js/dataTables.bootstrap4.min";
-window.OverlayScrollbars = require('overlayscrollbars')
+import "chart.js/dist/chart";
+import "select2/dist/js/select2.full";
+
+window.OverlayScrollbars = require("overlayscrollbars");
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
