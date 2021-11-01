@@ -10,7 +10,7 @@ use App\Models\Produk;
 class JadwalPerakitan extends Model
 {
     protected $table = 'jadwal_perakitan';
-    protected $fillable = ['produk_id', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'warna', 'konfirmasi', 'proses_konfirmasi'];
+    protected $fillable = ['produk_id', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'warna', 'konfirmasi', 'status_menunggu', 'status_perubahan'];
 
     public function Produk()
     {

@@ -58,3 +58,58 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data: function () {
+    return {
+      start_date_str: "",
+      end_date_str: "",
+      event_ref: null,
+
+      // modal
+      produk: [],
+      produkValue: "",
+      quantity: 0,
+      color: "#007bff",
+      colors: [
+        "#007bff",
+        "#6c757d",
+        "#28a745",
+        "#dc3545",
+        "#ffc107",
+        "#17a2b8",
+      ],
+    };
+  },
+
+  methods: {
+    handleClick: function (event) {
+      this.color = event.target.style.backgroundColor;
+    },
+
+    handleSubmit: function () {
+      if (!this.produkValue || Number(this.quantity) <= 0) {
+        alert("input error");
+        return;
+      }
+
+      axios
+        .post("/api/ppic/add-event", {
+          produk_id: this.produkValue,
+          jumlah: this.quantity,
+          tanggal_mulai: this.start_date_str,
+          tanggal_selesai: this.end_date_str,
+          status: this.$route.params.status,
+          warna: this.color,
+        })
+        .then((response) => {
+          this.$store.commit("updateJadwal", response.data);
+          $("#exampleModal").modal("hide");
+          this.produkValue = "";
+          this.quantity = 0;
+        });
+    },
+  },
+};
+</script>

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md">
       <div class="modal-content">
         <div class="modal-body">
-          <div v-html="confirmationMessage"></div>
+          <div v-html="message"></div>
         </div>
         <div class="modal-footer d-flex justify-content-between">
           <button class="btn btn-primary" @click="handleButtonYes">Yes</button>
@@ -15,43 +15,50 @@
 </template>
 
 <script>
-export default {
-  data: function () {
-    return {
-      start_date_str: "",
-      end_date_str: "",
-      event_ref: null,
+import axios from "axios";
 
-      // modal
-      produk: [],
-      produkValue: "",
-      quantity: 0,
-      color: "#007bff",
-      colors: [
-        "#007bff",
-        "#6c757d",
-        "#28a745",
-        "#dc3545",
-        "#ffc107",
-        "#17a2b8",
-      ],
-    };
+export default {
+  props: {
+    message: String,
   },
 
-  computed: {
-    message: function () {
-      let result = {};
-      let jadwal = this.$store.state.jadwal;
-      for (let i = 0; i < jadwal.length; i++) {
-        result[jadwal[i].id] = `
-          produk: ${jadwal[i].produk.nama} <br />
-          Jumlah: ${jadwal[i].jumlah}  <br />
-          <br />
-          Apakah Anda ingin menghapus produk ini dari jadwal?
-        `;
-      }
+  methods: {
+    handleButtonYes: function () {
+      if (this.deleteJadwal) {
+        axios
+          .post("/api/ppic/delete-event", {
+            id: this.event_ref.event._def.publicId,
+          })
+          .then((response) => {
+            this.$store.commit("updateJadwal", response.data);
+            $("#confirmation").modal("hide");
+          });
+      } else {
+        axios
+          .post("/api/ppic/update-event", {
+            proses_konfirmasi: 1,
+            status: this.status,
+          })
+          .then((response) => {
+            this.$store.commit("updateJadwal", response.data);
 
-      return result;
+            $("#confirmation").modal("hide");
+            this.$swal({
+              icon: "success",
+              text: "Berhasil mengirim permintaan",
+            });
+          });
+
+        axios.get("/api/ppic/test-event", {
+          params: {
+            message: "menunggu persetujuan",
+          },
+        });
+      }
+    },
+
+    handleButtonNo: function () {
+      $("#confirmation").modal("hide");
     },
   },
 };

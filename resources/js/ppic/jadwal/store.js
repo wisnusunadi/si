@@ -6,8 +6,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        konfirmasi: false,
-        proses_konfirmasi: false,
+        konfirmasi: 0,
+        status_menunggu: 0,
+        status_perubahan: 0,
         jadwal: [],
         user: {},
         status: "",
@@ -18,19 +19,16 @@ const store = new Vuex.Store({
             state.jadwal = jadwal
             for (let i = 0; i < jadwal.length; i++)
                 if (jadwal[i].konfirmasi === 1)
-                    state.konfirmasi = true
+                    state.konfirmasi = jadwal[i].konfirmasi
                 else {
-                    state.konfirmasi = false
+                    state.konfirmasi = jadwal[i].konfirmasi
                     break
                 }
 
-            for (let i = 0; i < jadwal.length; i++)
-                if (jadwal[i].proses_konfirmasi === 1)
-                    state.proses_konfirmasi = true
-                else {
-                    state.proses_konfirmasi = false
-                    break
-                }
+            if (state.jadwal.length > 0) {
+                state.status_menunggu = jadwal[0].status_menunggu
+                state.status_perubahan = jadwal[0].status_perubahan
+            }
         },
 
         updateUser: function (state, user) {

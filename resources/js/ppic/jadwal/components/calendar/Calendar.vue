@@ -43,6 +43,19 @@ export default {
   },
 
   methods: {
+    convertJadwal: function (jadwal) {
+      return jadwal.length == 0
+        ? []
+        : jadwal.map((data) => ({
+            id: data.id,
+            title: data.produk.nama,
+            start: data.tanggal_mulai,
+            end: data.tanggal_selesai,
+            backgroundColor: data.warna,
+            borderColor: data.warna,
+          }));
+    },
+
     handleSelect: function (selectInfo) {
       if (this.editable) {
         let calendarApi = selectInfo.view.calendar;
@@ -83,6 +96,40 @@ export default {
       $ref.style.backgroundColor = "";
       eventInfo.event.setProp("borderColor", eventInfo.event.backgroundColor);
     },
+
+    disableEdit: function () {
+      this.editable = false;
+    },
+
+    enableEdit: function () {
+      this.editable = true;
+    },
+  },
+
+  mounted: function () {
+    let api = this.$refs.fullCalendar.getApi();
+
+    if (this.status == "penyusunan") {
+      this.headerToolbar = "";
+      api.next();
+      if (this.$store.state.proses_konfirmasi) this.disableEdit();
+      else this.enableEdit();
+    }
+
+    if (this.status === "pelaksanaan") {
+      this.disableEdit();
+    }
+
+    if (this.$store.state.user.divisi_id === 3) {
+      this.disableEdit();
+    }
+  },
+
+  updated: function () {
+    if (this.status === "penyusunan") {
+      if (this.$store.state.proses_konfirmasi) this.disableEdit();
+      else this.enableEdit();
+    }
   },
 };
 </script>
