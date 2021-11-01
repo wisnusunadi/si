@@ -1,6 +1,6 @@
 <script>
 import Calendar from "./calendar/Calendar.vue";
-import Chart from "./chart/Chart.vue";
+import Chart from "./Chart.vue";
 import Table from "../../../manager/App.vue";
 
 export default {
