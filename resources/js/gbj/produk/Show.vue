@@ -5,7 +5,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                        <h3 class="card-title">Gudang Produk Barang Jadi</h3>
+                        <h3 class="card-title">Produk Gudang Barang Jadi</h3>
                         </div>
                         <div class="col-md-4">
 
