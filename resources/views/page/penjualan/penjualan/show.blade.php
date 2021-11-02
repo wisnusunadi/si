@@ -227,7 +227,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>SOEKAT090202101</td>
                                                 <td>AKN1-79479274207</td>
@@ -327,7 +327,7 @@
                                                         </a>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>

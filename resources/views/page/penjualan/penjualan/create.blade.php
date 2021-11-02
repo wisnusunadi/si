@@ -85,6 +85,11 @@
                                                         <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan3" value="spb" />
                                                         <label class="form-check-label" for="jenis_penjualan3">SPB</label>
                                                     </div>
+                                                    <div class="invalid-feedback" id="msgjenis_penjualan">
+                                                        @if($errors->has('jenis_penjualan'))
+                                                        {{ $errors->first('jenis_penjualan')}}
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,7 +108,9 @@
                                                 <div class="col-4">
                                                     <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
                                                     <div class="invalid-feedback" id="msgtanggal_pemesanan">
-
+                                                        @if($errors->has('tanggal_pemesanan'))
+                                                        {{ $errors->first('tanggal_pemesanan')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -112,7 +119,9 @@
                                                 <div class="col-7">
                                                     <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
                                                     <div class="invalid-feedback" id="msginstansi">
-
+                                                        @if($errors->has('instansi'))
+                                                        {{ $errors->first('instansi')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -121,7 +130,9 @@
                                                 <div class="col-7">
                                                     <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
                                                     <div class="invalid-feedback" id="msgsatuan_kerja">
-
+                                                        @if($errors->has('satuan_kerja'))
+                                                        {{ $errors->first('satuan_kerja')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -142,7 +153,9 @@
                                                         <label class="form-check-label" for="satuan3">Batal</label>
                                                     </div>
                                                     <div class="invalid-feedback" id="msgstatus">
-
+                                                        @if($errors->has('status'))
+                                                        {{ $errors->first('status')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -155,7 +168,9 @@
                                                     </div>
                                                     <input type="text" class="form-control col-form-label @error('nomor_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
                                                     <div class="invalid-feedback" id="msgno_paket">
-
+                                                        @if($errors->has('no_paket'))
+                                                        {{ $errors->first('no_paket')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -164,7 +179,9 @@
                                                 <div class="col-4">
                                                     <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
                                                     <div class="invalid-feedback" id="msgbatas_kontrak">
-
+                                                        @if($errors->has('batas_kontrak'))
+                                                        {{ $errors->first('batas_kontrak')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,7 +190,9 @@
                                                 <div class="col-5">
                                                     <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
                                                     <div class="invalid-feedback" id="msgdeskripsi">
-
+                                                        @if($errors->has('deskripsi'))
+                                                        {{ $errors->first('deskripsi')}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,6 +217,9 @@
                                             <div class="col-4">
                                                 <input type="date" class="form-control col-form-label @error('nontanggal_pemesanan') is-invalid @enderror" id="nontanggal_pemesanan" name="nontanggal_pemesanan" />
                                                 <div class="invalid-feedback" id="msgnontanggal_pemesanan">
+                                                    @if($errors->has('nontanggal_pemesanan'))
+                                                    {{ $errors->first('nontanggal_pemesanan')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -206,6 +228,9 @@
                                             <div class="col-4">
                                                 <input type="text" class="form-control col-form-label @error('no_so') is-invalid @enderror" id="no_so" name="no_so" />
                                                 <div class="invalid-feedback" id="msgno_so">
+                                                    @if($errors->has('no_so'))
+                                                    {{ $errors->first('no_so')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -214,6 +239,9 @@
                                             <div class="col-4">
                                                 <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
                                                 <div class="invalid-feedback" id="msgno_po">
+                                                    @if($errors->has('no_po'))
+                                                    {{ $errors->first('no_po')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -222,6 +250,9 @@
                                             <div class="col-4">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
                                                 <div class="invalid-feedback" id="msgtanggal_po">
+                                                    @if($errors->has('tanggal_po'))
+                                                    {{ $errors->first('tanggal_po')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -236,6 +267,7 @@
                                                     <input class="form-check-input" type="radio" name="do" id="no" value="no" />
                                                     <label class="form-check-label" for="no">Tidak tersedia</label>
                                                 </div>
+
                                             </div>
                                         </div>
                                         <div class="form-group row hide" id="do_detail_no">
@@ -243,6 +275,9 @@
                                             <div class="col-4">
                                                 <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
                                                 <div class="invalid-feedback" id="msgno_do">
+                                                    @if($errors->has('no_do'))
+                                                    {{ $errors->first('no_do')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -250,7 +285,10 @@
                                             <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
                                             <div class="col-4">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
-                                                <div class="invalid-feedback" id="msgtanggal_po">
+                                                <div class="invalid-feedback" id="msgtanggal_do">
+                                                    @if($errors->has('tanggal_do'))
+                                                    {{ $errors->first('tanggal_do')}}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -931,8 +969,6 @@
                 $(el).find('.part_id').attr('name', 'part_id[' + j + ']');
                 $(el).find('.part_id').attr('id', 'part_id' + j);
                 $(el).find('input[id="part_jumlah"]').attr('name', 'part_jumlah[' + j + ']');
-
-
             });
         }
 
@@ -999,6 +1035,7 @@
         $('#parttable').on('click', '#removerowpart', function(e) {
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
+            totalhargapart();
         });
 
     });
