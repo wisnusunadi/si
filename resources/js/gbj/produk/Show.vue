@@ -15,12 +15,28 @@
                                 <th>Nomor Seri</th>
                                 <th>Produk</th>
                                 <th>Stok</th>
-                                <th>Satuan</th>
                                 <th>Kelompok</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>ZTP80AS-UPGRADE</td>
+                                <td>STERILISATOR KERING</td>
+                                <td>100 Unit</td>
+                                <td>Alat Kesehatan</td>
+                                <td>
+                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                                                          <div class="dropdown-menu">
+                                      <button class="dropdown-item"><i class="fas fa-eye">Edit</i></button>
+                                      <button class="dropdown-item"><i class="far fa-edit">View</i></button>
+                                  </div>
+                                    </div>
+
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -28,55 +44,3 @@
         </div>
     </div>
 </template>
-
-<script>
-import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"
-    export default {
-        mounted: function () {
-            this.allproduk();
-        },
-        methods: {
-            allproduk: function () {
-                $("#gudang-barang").DataTable({
-                    ajax: {
-                        url: "/api/gbj/data",
-                    },
-                    processing: true,
-                    serverSide: true,
-                    columns: [{
-                            data: "DT_RowIndex",
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
-                            data: "nama",
-                        },
-                        {
-                            data: "produk.nama"
-                        },
-                        {
-                            data: "stok",
-                        },
-                        {
-                            data: "satuan",
-                        },
-                        {
-                            data: "kelompok",
-                        },
-                        {
-                            data: null,
-                            render: function (data) {
-                                return (
-                                    `<td><router-link :to="{name: 'view', params: {id:data.id}}" class="btn btn-success"><i class="fas fa-eye"></i></router-link>&nbsp;<router-link :to="{name: 'edit', params: {id:data.id}}" class="btn btn-warning"><i class="far fa-edit"></i></router-link></td>`
-                                );
-                            },
-                            orderable: false,
-                            searchable: false,
-                        },
-                    ],
-                })
-            }
-        },
-    }
-
-</script>
