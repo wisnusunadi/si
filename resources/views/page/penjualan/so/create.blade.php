@@ -66,13 +66,22 @@
                                         <div class="col-3">
                                             <div class="text-muted">Tanggal Pemesanan</div>
                                             <div>
-                                                <b id="tanggal_pemesanan">{{$ekatalog->tgl_buat}}</b>
+                                                <b id="tanggal_pemesanan">Pemesanan pada {{$ekatalog->tgl_buat}}</b>
                                             </div>
                                         </div>
                                         <div class="col-2">
                                             <div class="text-muted">Status</div>
                                             <div>
-                                                <b id="status"><span class="badge red-text">{{$ekatalog->status}}</span></b>
+                                                <b id="status">
+                                                    <span class="badge 
+                                                    @if($ekatalog->status == 'batal')
+                                                        red-text
+                                                    @elseif($ekatalog->status == 'negosiasi')
+                                                        yellow-text
+                                                    @elseif($ekatalog->status == 'sepakat')
+                                                        green-text
+                                                    @endif
+                                                    ">{{$ekatalog->status}}</span></b>
                                             </div>
                                         </div>
                                     </div>

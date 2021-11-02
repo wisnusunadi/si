@@ -79,6 +79,9 @@ Route::prefix('/so')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_so']);
     Route::post('create/{id}', [App\Http\Controllers\PenjualanController::class, 'create_so_ekatalog']);
 });
+Route::prefix('/laporan')->group(function () {
+    Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
+});
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
 });

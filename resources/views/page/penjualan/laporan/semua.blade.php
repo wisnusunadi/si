@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table table-bordered">
     <thead style="text-align: center;">
         <tr>
             <th colspan="18">
@@ -26,7 +26,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($ekatalog as $i)
+        @foreach($semua as $i)
         <tr>
             <td>{{$loop->iteration}}</td>
             <td>{{$i->no_paket}}</td>
