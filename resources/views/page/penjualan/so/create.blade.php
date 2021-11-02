@@ -212,6 +212,7 @@
             } else if ($(this).val() == "") {
                 $("#msgno_po").text("Nomor PO Harus diisi");
                 $("#no_po").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
             }
         });
 
@@ -235,10 +236,11 @@
             } else if ($(this).val() == "") {
                 $("#msgtanggal_po").text("Tanggal PO Harus diisi");
                 $("#tanggal_po").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
             }
         });
 
-        $('#no_do').on('keyup', function() {
+        $('#no_do').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgno_do").text("");
                 $("#no_do").removeClass('is-invalid');
@@ -251,6 +253,7 @@
             } else if ($(this).val() == "") {
                 $("#msgno_po").text("Nomor Do Harus diisi");
                 $("#no_po").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
             }
         });
 
@@ -266,6 +269,7 @@
             } else if ($(this).val() == "") {
                 $("#msgtanggal_do").text("Tanggal DO Harus diisi");
                 $("#tanggal_do").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
             }
         });
     })

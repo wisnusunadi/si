@@ -51,7 +51,7 @@
                 <h5>Detail Pemesanan</h5>
                 <div class="card">
                     <div class="card-body">
-                        <div class='table-responsive'>
+                        <div class="table-responsive">
                             <table class="table" id="detailtabel">
                                 <thead>
                                     <tr>

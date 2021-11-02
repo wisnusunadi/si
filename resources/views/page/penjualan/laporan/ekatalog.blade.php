@@ -1,5 +1,6 @@
 <table class="table">
     <thead>
+        <tr colspan="16" style="text-align: center;">Laporan Penjualan</tr>
         <tr>
             <th>No</th>
             <th>No AKN</th>

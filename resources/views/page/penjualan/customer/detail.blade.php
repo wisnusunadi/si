@@ -58,19 +58,20 @@
                 <h5>Histori Penjualan</h5>
                 <div class="card">
                     <div class="card-body">
-                        <table class="table" id="showtable" style="width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>No SO</th>
-                                    <th>No PO</th>
-                                    <th>Tanggal PO</th>
-                                    <th>Jenis</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- <tr>
+                        <div class="table-responsive">
+                            <table class="table" id="showtable" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>No SO</th>
+                                        <th>No PO</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Jenis</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- <tr>
                                     <td>1</td>
                                     <td>SO-SPA10210001</td>
                                     <td>PO/ON/10/21/0001</td>
@@ -94,8 +95,9 @@
                                     <td>SPB</td>
                                     <td><span class="badge red-text">PO</span></td>
                                 </tr> -->
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

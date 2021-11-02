@@ -458,7 +458,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var jenis = "{{$jenis}}";
+        var jenis = '{{$jenis}}';
         jenis_penjualan(jenis);
 
         $('input[name="status_akn"][value={{$ekatalog->status}}]').attr('checked', 'checked');
