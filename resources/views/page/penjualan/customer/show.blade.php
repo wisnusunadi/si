@@ -227,6 +227,7 @@
                     $('#edit').html(result).show();
                     console.log(id);
                     // $("#editform").attr("action", href);
+
                     select_data();
 
 
@@ -371,7 +372,6 @@
             $('.provinsi').select2({
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih Produk",
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -394,7 +394,7 @@
                         };
                     },
                 }
-            }).select2('val', 23);
+            })
         }
     })
 </script>

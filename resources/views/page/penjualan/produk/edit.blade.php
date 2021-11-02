@@ -17,6 +17,7 @@
             </button>
         </div>
         @endif
+        @foreach($penjualanproduk as $p)
         <form action="" method="post">
             <div class="row d-flex justify-content-center">
 
@@ -29,7 +30,7 @@
                                     <div class="form-group row">
                                         <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Nama Paket</label>
                                         <div class="col-6">
-                                            <input type="text" class="form-control" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" value="{{$penjualanproduk->nama}}" />
+                                            <input type="text" class="form-control" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" value="{{$p->nama}}" />
                                             <div class="invalid-feedback" id="msgnama_paket">
 
                                             </div>
@@ -41,7 +42,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Rp</span>
                                             </div>
-                                            <input type="text" class="form-control" name="harga" id="harga" placeholder="Masukkan Harga" value="{{ number_format($penjualanproduk->harga)}}" />
+                                            <input type="text" class="form-control" name="harga" id="harga" placeholder="Masukkan Harga" value="{{ number_format($p->harga)}}" />
                                             <div class="invalid-feedback" id="msgharga">
 
                                             </div>
@@ -73,37 +74,39 @@
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Nama Produk</th>
+                                                    <th width="50%">Nama Produk</th>
                                                     <th>Kelompok</th>
-                                                    <th>Jumlah</th>
+                                                    <th width="20%">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
-
+                                                @foreach($p->produk as $s)
                                                 <tr>
-                                                    <td></td>
+                                                    <td>{{$loop->iteration}}</td>
                                                     <td>
                                                         <div class="form-group row">
                                                             <div class="col-12">
-                                                                <select class="select-info select2 form-control produk_id" name="produk_id[]" id="produk_id">
+                                                                <select class="select-info select2 form-control produk_id" name="produk_id[]" id="produk_id" style="width:100%">
                                                                     <option value=""></option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td><span class="badge" id="kelompok_produk"></span></td>
+                                                    <td><span class="badge" id="kelompok_produk"></span>{{$s->kelompokproduk->nama}}</td>
                                                     <td>
                                                         <div class="form-group d-flex justify-content-center">
-                                                            <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
+
+                                                            <input type="text" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" value="{{$s->pivot->jumlah}}" />
+
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
                                                     </td>
                                                 </tr>
-
+                                                @endforeach
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>

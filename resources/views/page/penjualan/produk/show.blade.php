@@ -52,13 +52,13 @@
                                             <i class="fas fa-filter"></i> Filter
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <form action="" class="px-4 py-3">
+                                            <form id="filter" class="px-4 py-3">
                                                 <div class="dropdown-header">
                                                     Kelompok Produk
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="alat_kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="1" />
                                                         <label class="form-check-label" for="dropdownkelompokproduk">
                                                             Alat Kesehatan
                                                         </label>
@@ -66,7 +66,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="sarana_kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="2" />
                                                         <label class="form-check-label" for="dropdownkelompokproduk">
                                                             Sarana Kesehatan
                                                         </label>
@@ -74,7 +74,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="aksesoris" />
+                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="3" />
                                                         <label class="form-check-label" for="dropdownkelompokproduk">
                                                             Aksesoris
                                                         </label>
@@ -82,7 +82,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="lain" />
+                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="4" />
                                                         <label class="form-check-label" for="dropdownkelompokproduk">
                                                             Lain - lain
                                                         </label>
@@ -189,7 +189,6 @@
                                                             <th>No</th>
                                                             <th>Produk</th>
                                                             <th>Kelompok</th>
-                                                            <th>Jumlah</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -204,7 +203,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+            <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-warning">
@@ -228,8 +227,8 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/penjualan_produk/data',
-                'type': 'POST',
+                'url': '/api/penjualan_produk/data/' + 0,
+
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -295,10 +294,7 @@
                         data: 'kelompok'
 
                     },
-                    {
-                        data: 'jumlah'
 
-                    },
                 ],
             });
             $('#modaldetail').modal('show');
@@ -322,7 +318,7 @@
                     $('#edit').html(result).show();
                     console.log(result);
                     $("#editform").attr("action", href);
-                    select_data();
+
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -396,6 +392,7 @@
 
         function select_data() {
             $('.produk_id').select2({
+                dropdownParent: $("#editmodal"),
                 ajax: {
                     minimumResultsForSearch: 20,
                     placeholder: "Pilih Produk",
@@ -421,11 +418,8 @@
                         };
                     },
                 }
-            }).change(function() {
-
-            });
+            })
         }
-
         $(document).on('keyup change', '#nama_paket', function() {
             if ($(this).val() != "") {
                 $('#msgnama_paket').text("");
@@ -441,6 +435,23 @@
                 $('#nama_paket').addClass("is-invalid");
                 $('#btnsimpan').addClass('disabled');
             }
+        });
+
+        $('#filter').submit(function() {
+            var values = [];
+            $("input:checked").each(function() {
+                values.push($(this).val());
+            });
+            if (values != 0) {
+                var x = values;
+
+            } else {
+                var x = ['kosong']
+            }
+            console.log(x);
+            $('#showtable').DataTable().ajax.url(' /api/penjualan_produk/data/' + x).load();
+            return false;
+
         });
     });
 </script>

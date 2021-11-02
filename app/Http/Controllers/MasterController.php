@@ -13,6 +13,7 @@ use App\Models\Produk;
 use App\Models\Provinsi;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class MasterController extends Controller
 {
@@ -49,9 +50,16 @@ class MasterController extends Controller
             ->rawColumns(['button'])
             ->make(true);
     }
-    public function get_data_penjualan_produk()
+    public function get_data_penjualan_produk($value)
     {
-        $data = PenjualanProduk::select();
+        $x = explode(',', $value);
+        if ($value == 0 || $value == 'kosong') {
+            $data = PenjualanProduk::select();
+        } else {
+            $data = PenjualanProduk::whereHas('Produk', function ($q) use ($value) {
+                $q->where('kelompok_produk_id', $value);
+            })->get();
+        }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('button', function ($data) {
@@ -72,37 +80,41 @@ class MasterController extends Controller
             ->rawColumns(['button'])
             ->make(true);
     }
+    //public function get_data_detail_penjualan_produk($id)
+    //{
+    // $data = DetailPenjualanProduk::where('penjualan_produk_id', $id)->get();
+    // $where = [49, 129];
+
+    // $detail_data = GudangBarangJadi::whereIn('produk_id', $where)->get();
+    // return datatables()->of($detail_data)
+    //     ->addIndexColumn()
+    //     ->addColumn('nama', function ($detail_data) {
+    //         return $detail_data->produk->nama . ' - <b>' . $detail_data->variasi . '</b>';
+    //     })
+    //     ->addColumn('kelompok', function ($detail_data) {
+    //         return $detail_data->produk->KelompokProduk->nama;
+    //     })
+    //     ->rawColumns(['nama'])
+    //     ->make(true);
+    //}
     public function get_data_detail_penjualan_produk($id)
     {
-        // $data = DetailPenjualanProduk::where('penjualan_produk_id', $id)->get();
-        // $where = [49, 129];
-
-        // $detail_data = GudangBarangJadi::whereIn('produk_id', $where)->get();
-        // return datatables()->of($detail_data)
-        //     ->addIndexColumn()
-        //     ->addColumn('nama', function ($detail_data) {
-        //         return $detail_data->produk->nama . ' - <b>' . $detail_data->variasi . '</b>';
-        //     })
-        //     ->addColumn('kelompok', function ($detail_data) {
-        //         return $detail_data->produk->KelompokProduk->nama;
-        //     })
-        //     ->rawColumns(['nama'])
-        //     ->make(true);
+        $data = Produk::whereHas('PenjualanProduk', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->get();
+        //$data = PenjualanProduk::with('produk')->where('id', $id)->get();
+        // $data = PenjualanProduk::with('Produk')->selectRaw('distinct penjualan_produk.*')->where('id', '5')->get();
+        return datatables()->of($data)
+            // ->addColumn('produk_nama', function ($data) {
+            //     return implode(',', $data->Produk->pluck('nama')->toArray());
+            // })
+            // ->rawColumns(['produk_nama'])
+            ->addColumn('kelompok', function ($data) {
+                return $data->KelompokProduk->nama;
+            })
+            ->addIndexColumn()
+            ->make(true);
     }
-    // public function get_data_detail_penjualan_produk($id)
-    // {
-    //     // $data = DetailPenjualanProduk::where('penjualan_produk_id', $id);
-    //     // return datatables()->of($data)
-    //     //     ->addIndexColumn()
-    //     //     ->addColumn('nama', function ($data) {
-    //     //         return Produk::find($data->produk_id)->nama;
-    //     //     })
-    //     //     ->addColumn('kelompok', function ($data) {
-    //     //         return Produk::find($data->produk_id)->KelompokProduk->nama;
-    //     //     })
-
-    //     //     ->make(true);
-    // }
     public function get_data_pesanan($id)
     {
         $data  = Ekatalog::with('pesanan')
@@ -200,9 +212,12 @@ class MasterController extends Controller
 
     public function update_penjualan_produk_modal($id)
     {
+        $penjualanproduk = PenjualanProduk::with('produk')->where('id', $id)->get();
+        // $produk = Produk::whereHas('PenjualanProduk', function ($q) use ($id) {
+        //     $q->where('id', $id);
+        // })->with('PenjualanProduk')->get();
 
-        $penjualanproduk = PenjualanProduk::find($id);
-        return view("page.penjualan.produk.edit", ['penjualanproduk' => $penjualanproduk]);
+        return view("page.penjualan.produk.edit", ['penjualanproduk' => $penjualanproduk,]);
     }
 
 

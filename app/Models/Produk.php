@@ -12,7 +12,9 @@ class Produk extends Model
 
     public function PenjualanProduk()
     {
-        return $this->belongsToMany(PenjualanProduk::class);
+        return $this->belongsToMany(PenjualanProduk::class, 'detail_penjualan_produk')
+            ->withTimestamps()
+            ->withPivot('jumlah');
     }
     public function GudangBarangJadi()
     {
