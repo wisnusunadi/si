@@ -873,6 +873,7 @@
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -882,6 +883,7 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
+                    detailtabel(id);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -894,6 +896,84 @@
                 timeout: 8000
             })
         });
+
+        function detailtabel(id) {
+            $('#detailtabel').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/ekatalog/paket/detail/' + id,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
+
+                    },
+                    {
+                        data: 'harga',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'jumlah',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'total',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api(),
+                        data;
+                    // converting to interger to find total
+                    var intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+                    // computing column Total of the complete result 
+                    var jumlah_pesanan = api
+                        .column(3)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    // computing column Total of the complete result 
+                    var total_pesanan = api
+                        .column(4)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                    $(api.column(0).footer()).html('Total');
+                    $(api.column(3).footer()).html('Total');
+                    $(api.column(4).footer()).html(num_for(total_pesanan));
+                },
+            })
+        }
     });
 </script>
 @stop

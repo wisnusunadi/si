@@ -12,7 +12,7 @@ class DetailEkatalog extends Model
 
     public function Ekatalog()
     {
-        return $this->belongsTo(Ekatalog::class, 'penjualan_id');
+        return $this->belongsTo(Ekatalog::class, 'ekatalog_id');
     }
     public function PenjualanProduk()
     {

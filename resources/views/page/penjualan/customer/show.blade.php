@@ -212,7 +212,6 @@
 
 
         $(document).on('click', '.editmodal', function(event) {
-
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');

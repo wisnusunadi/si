@@ -48,31 +48,31 @@
                                     <div class="row">
                                         <div class="col-4">
                                             <div>
-                                                <b>Rumah Sakit Dr. Soetomo</b>
+                                                <b>{{$ekatalog->customer->nama}}</b>
                                             </div>
                                             <div>
-                                                <b>Jl. Dharmahusada 19 - 27, Surabaya</b>
+                                                <b>{{$ekatalog->customer->alamat}}</b>
                                             </div>
                                             <div>
-                                                <b>0315653715</b>
+                                                <b>{{$ekatalog->customer->telp}}</b>
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="text-muted">No AKN</div>
                                             <div>
-                                                <b id="no_akn">AKN-128371984719</b>
+                                                <b id="no_akn">{{$ekatalog->no_paket}}</b>
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="text-muted">Tanggal Pemesanan</div>
                                             <div>
-                                                <b id="tanggal_pemesanan">09-09-2022</b>
+                                                <b id="tanggal_pemesanan">{{$ekatalog->tgl_buat}}</b>
                                             </div>
                                         </div>
                                         <div class="col-2">
                                             <div class="text-muted">Status</div>
                                             <div>
-                                                <b id="status"><span class="badge red-text">Batal</span></b>
+                                                <b id="status"><span class="badge red-text">{{$ekatalog->status}}</span></b>
                                             </div>
                                         </div>
                                     </div>
@@ -84,7 +84,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form>
+                                    <form action="/api/so/create/{{$ekatalog->id}}" method="post">
                                         <div class="form-horizontal">
                                             <div class="form-group row">
                                                 <label for="no_po" class="col-4 col-form-label" style="text-align:right;">No SO</label>
@@ -143,7 +143,7 @@
                                             <div class="form-group row">
                                                 <label for="keterangan" class="col-4 col-form-label" style="text-align:right;">Keterangan</label>
                                                 <div class="col-5">
-                                                    <textarea class="form-control" placeholder="Masukkan Keterangan" id="keterangan"></textarea>
+                                                    <textarea class="form-control" placeholder="Masukkan Keterangan" id="keterangan" name="keterangan"></textarea>
                                                 </div>
                                             </div>
                                         </div>

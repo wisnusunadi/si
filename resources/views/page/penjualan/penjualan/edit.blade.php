@@ -31,19 +31,19 @@
                                 <div>
                                     <b>Info Customer</b>
                                 </div>
-                                <div id="nama_distributor">Nama Distributor</div>
-                                <div id="instansi">Instansi</div>
-                                <div id="satuan_kerja">Satuan Kerja</div>
-                                <div id="alamat">Alamat</div>
+                                <div id="nama_distributor">{{$ekatalog->customer->nama}}</div>
+                                <div id="instansi">{{$ekatalog->instansi}}</div>
+                                <div id="satuan_kerja">{{$ekatalog->satuan}}</div>
+                                <div id="alamat">{{$ekatalog->customer->alamat}}</div>
                             </div>
                             <div class="col-3">
                                 <div>
                                     <b>Info AKN</b>
                                 </div>
-                                <div id="no_paket">No Paket</div>
-                                <div id="tanggal_pemesanan">Tanggal</div>
-                                <div id="batas_kontrak">Batas Kontrak</div>
-                                <div class="badge red-text" id="status">Status</div>
+                                <div id="no_paket">{{$ekatalog->no_paket}}</div>
+                                <div id="tanggal_pemesanan">{{$ekatalog->tgl_buat}}</div>
+                                <div id="batas_kontrak">{{$ekatalog->tgl_kontrak}}</div>
+                                <div class="badge red-text" id="status">{{$ekatalog->status}}</div>
                             </div>
                             <div class="col-3">
                                 <div>
@@ -127,8 +127,8 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
                                                 <div class="col-5">
-                                                    <select name="customer_id" id="customer_id" class="form-control custom-select @error('customer_id') is-invalid @enderror">
-                                                        <option value=""></option>
+                                                    <select name="customer_id" id="customer_id" class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
+                                                        <option value="{{$ekatalog->customer_id}}">{{$ekatalog->customer->nama}}</option>
                                                     </select>
                                                     <div class="invalid-feedback" id="msgcustomer_id">
                                                         @if($errors->has('customer_id'))
@@ -140,13 +140,13 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
                                                 <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label" name="alamat" id="alamat" readonly />
+                                                    <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$ekatalog->customer->alamat}}" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
                                                 <div class="col-5">
-                                                    <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
+                                                    <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$ekatalog->customer->telp}}" />
                                                 </div>
                                             </div>
 
@@ -165,15 +165,15 @@
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
                                                 <div class="col-5 col-form-label">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="ekatalog" />
+                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn" value="sepakat" />
                                                         <label class="form-check-label" for="status_akn1">Sepakat</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="spa" />
+                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn" value="negosiasi" />
                                                         <label class="form-check-label" for="status_akn2">Negosiasi</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="spb" />
+                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn" value="batal" />
                                                         <label class="form-check-label" for="status_akn3">Batal</label>
                                                     </div>
                                                 </div>
@@ -181,7 +181,7 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
                                                 <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
+                                                    <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$ekatalog->instansi}}" />
                                                     <div class="invalid-feedback" id="msginstansi">
                                                         @if($errors->has('instansi'))
                                                         {{ $errors->first('instansi')}}
@@ -193,8 +193,8 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
                                                 <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
-                                                    <div class="invalid-feedback" id="msgsatuan_kerja">
+                                                    <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$ekatalog->satuan}}" />
+                                                    <div class=" invalid-feedback" id="msgsatuan_kerja">
                                                         @if($errors->has('satuan_kerja'))
                                                         {{ $errors->first('satuan_kerja')}}
                                                         @endif
@@ -204,7 +204,7 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
                                                 <div class="col-5">
-                                                    <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
+                                                    <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi">{{$ekatalog->deskripsi}}</textarea>
                                                     <div class="invalid-feedback" id="msgdeskripsi">
                                                         @if($errors->has('deskripsi'))
                                                         {{ $errors->first('deskripsi')}}
@@ -215,7 +215,7 @@
                                             <div class="form-group row">
                                                 <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
                                                 <div class="col-5">
-                                                    <textarea class="form-control col-form-label" v-model="keterangan"></textarea>
+                                                    <textarea class="form-control col-form-label" v-model="keterangan">{{$ekatalog->ket}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -302,6 +302,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @foreach($ekatalog as $d)
                                                             <tr>
                                                                 <td>1</td>
                                                                 <td>
@@ -314,7 +315,7 @@
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
                                                                         <div class="input-group">
-                                                                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
+                                                                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;" value="">
                                                                             <div class="input-group-append">
                                                                                 <span class="input-group-text" id="produk_satuan">pcs</span>
                                                                             </div>
@@ -336,6 +337,7 @@
                                                                     <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
                                                                 </td>
                                                             </tr>
+                                                            @endforeach
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
@@ -454,15 +456,17 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var jenis = "spa";
+        var jenis = "{{$jenis}}";
         jenis_penjualan(jenis);
+
+        $('input[name="status_akn"][value={{$ekatalog->status}}]').attr('checked', 'checked');
         $('#customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('#msgcustomer_id').text("");
                 $('#customer_id').removeClass('is-invalid');
-                var value = getCustomer($(this).val());
-                $('#alamat').val(value.alamat);
-                $('#telepon').val(value.telepon);
+                //var value = getCustomer($(this).val());
+                // $('#alamat').val(value.alamat);
+                // $('#telepon').val(value.telepon);
             } else if ($(this).val() == "") {
                 $('#msgcustomer_id').text("Silahkan Pilih Customer");
                 $('#customer_id').addClass('is-invalid');
@@ -780,6 +784,47 @@
         $('#parttable').on('click', '#removerowpart', function(e) {
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
+        });
+
+
+        $('#customer_id').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Customer",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/customer/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        }).change(function() {
+            var id = $(this).val();
+            $.ajax({
+                url: '/api/customer/select/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    $('#alamat_customer').val(data[0].alamat);
+                    $('#telepon_customer').val(data[0].telp);
+                }
+            });
         });
 
     });

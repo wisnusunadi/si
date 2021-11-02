@@ -111,7 +111,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/customer/detail/' + 1,
+                'url': '/api/customer/detail/' + '{{$customer->id}}',
                 'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'

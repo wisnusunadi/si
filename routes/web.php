@@ -69,12 +69,12 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
         Route::view('/detail/spa/{id}', 'page.penjualan.penjualan.detail_spa')->name('penjualan.penjualan.detail.spa');
         Route::view('/detail/spb/{id}', 'page.penjualan.penjualan.detail_spb')->name('penjualan.penjualan.detail.spb');
-        Route::view('/edit/{id}/{jenis}', 'page.penjualan.penjualan.edit')->name('penjualan.penjualan.edit');
+        Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan'])->name('penjualan.penjualan.edit');
     });
 
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.penjualan.so.show')->name('penjualan.so.show');
-        Route::view('/create', 'page.penjualan.so.create')->name('penjualan.so.create');
+        Route::get('/create/{id}', [App\Http\Controllers\PenjualanController::class, 'view_so_ekatalog'])->name('penjualan.so.create');
         Route::view('/edit', 'page.penjualan.so.edit')->name('penjualan.so.edit');
     });
 

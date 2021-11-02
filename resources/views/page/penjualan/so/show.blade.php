@@ -134,7 +134,58 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({})
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/so/data',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'jenis',
+                },
+                {
+                    data: 'no_po',
+                },
+                {
+                    data: 'tgl_po',
+                },
+                {
+                    data: 'nama_customer',
+                },
+                {
+                    data: 'no_do',
+                },
+                {
+                    data: 'tgl_do',
+                },
+                {
+                    data: 'ket',
+                },
+                {
+                    data: 'ket',
+                }
+            ]
+        })
 
     })
 </script>

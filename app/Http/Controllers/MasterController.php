@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\DetailPenjualanProduk;
+use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\KelompokProduk;
 use App\Models\PenjualanProduk;
@@ -104,10 +105,14 @@ class MasterController extends Controller
     // }
     public function get_data_pesanan($id)
     {
-        $data  = Pesanan::where('id', $id);
-        return datatables()->of($data)
-            ->addIndexColumn()
-            ->make(true);
+        $data  = Ekatalog::with('pesanan')
+            ->where('customer_id', $id)
+            ->get();
+
+        if ($data)
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->make(true);
     }
     //Create
     public function create_produk(Request $request)
