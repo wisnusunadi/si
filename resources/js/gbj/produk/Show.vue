@@ -133,7 +133,7 @@
                                     <span class="dropdown float-right" id="semuaprodukfilter" style="margin-right: 5px">
                                         <button class="btn btn-outline-info dropdown-toggle" type="button"
                                             id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
+                                            aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
                                             Filter
                                         </button>
                                         <div class="dropdown-menu p-3 text-nowrap" aria-labelledby="semuaprodukfilter">
