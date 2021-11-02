@@ -18,22 +18,31 @@ Auth::routes();
 
 Route::get('/', function () {
     if (auth()->user()->divisi->id == 24) return redirect('/ppic/dashboard');
-    else return redirect('/home');
+    else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik/dashboard');
+    else return view('home');
 })->middleware('auth');
 
 Route::get('/home', function () {
-    return view('home');
+    return redirect('/');
 })->middleware('auth');
-
-// Route::get('/ppic/{any}', function () {
-//     return view('test');
-// })->where('any', '.*');
 
 Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/dashboard', 'spa.ppic.dashboard');
-    Route::view('/gudang/{any}', 'spa.ppic.gudang');
-    Route::view('/schedule/{any}', 'spa.ppic.jadwal');
+    Route::get('/data/{status}', function ($status) {
+        return view('spa.ppic.data', ['status' => $status]);
+    });
+    Route::get('/jadwal/{status}', function ($status) {
+        return view('spa.ppic.jadwal', ['status' => $status]);
+    });
+
+    //test
     Route::view('/bppb/{any}', 'spa.ppic.bppb');
+    Route::view('/test', 'spa.ppic');
+});
+
+Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
+    Route::view('/dashboard', 'spa.manager_teknik.dashboard');
+    Route::view('/persetujuan_jadwal', 'spa.manager_teknik.persetujuan_jadwal');
 });
 
 Route::middleware('auth')->prefix('/gbj')->group(function () {

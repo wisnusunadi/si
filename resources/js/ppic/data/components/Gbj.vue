@@ -14,6 +14,10 @@ export default {
       ajax: "/api/ppic/get-gbj-datatable",
       processing: true,
       serverSide: true,
+      searching: false,
+      lengthChange: false,
+      ordering: false,
+      info: false,
       columns: [
         {
           data: "DT_RowIndex",
@@ -28,7 +32,7 @@ export default {
         },
         {
           data: function () {
-            return "<button class='btn btn-primary'><i class='fas fa-search' /></button>";
+            return "<button class='btn btn-outline-primary btn-sm'><i class='fas fa-search' /></button>";
           },
         },
       ],
@@ -47,20 +51,27 @@ export default {
 
 <template>
   <div>
-    <table id="table" class="table table-hover styled-table table-striped">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nama</th>
-          <th>Stok</th>
-          <th>Detail</th>
-        </tr>
-      </thead>
-    </table>
+    <div class="card">
+      <div class="card-body">
+        <table
+          id="table"
+          class="table table-hover styled-table table-striped text-center"
+        >
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama</th>
+              <th>Stok</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="modal">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Nomer Seri</h5>
@@ -69,9 +80,13 @@ export default {
             </button>
           </div>
           <div class="modal-body">
-            <ul v-for="data in data_stok" :key="data.id">
-              <li>{{ data.noseri }}</li>
-            </ul>
+            <table class="table table-hover text-center">
+              <tbody>
+                <tr v-for="data in data_stok" :key="data.id">
+                  <td>{{ data.noseri }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
