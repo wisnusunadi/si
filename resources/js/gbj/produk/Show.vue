@@ -4,11 +4,22 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-8">
                         <h3 class="card-title">Produk Gudang Barang Jadi</h3>
                         </div>
-                        <div class="col-md-4">
-
+                        <div class="col-4 d-flex justify-content-end">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
+                                </div>
                         </div>
                     </div>
                 </div>
