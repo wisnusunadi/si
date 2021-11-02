@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Produk Gudang</h3>
+                    <h3 class="card-title">Gudang Produk Barang Jadi</h3>
                     <!-- <router-link :to=""></router-link> -->
                 </div>
                 <!-- /.card-header -->
@@ -40,11 +40,6 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"
                 $("#gudang-barang").DataTable({
                     ajax: {
                         url: "/api/gbj/data",
-                        error: function (xhr, status, err) {
-                            console.log(xhr);
-                            alert(status);
-                            alert(err);
-                        }
                     },
                     processing: true,
                     serverSide: true,
@@ -78,16 +73,7 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"
                             orderable: false,
                             searchable: false,
                         },
-                        {
-                            "render": function ( data, type, row ) {
-                            return data +' ('+ row[4]+')';
-                        },
-                        "targets": 3
-                        },
-                        // {
-                        //     "visible": false,  "targets": [4]
-                        // }
-                    ]
+                    ],
                 })
             }
         },
