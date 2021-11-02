@@ -983,7 +983,7 @@ return [
         [
             'text' => 'Produk',
             'url' => '/gbj/produk',
-            'icon' => 'fas fa-circle',
+            'icon' => 'fas fa-boxes',
             'auth' => [13],
         ],
         [

@@ -11,10 +11,10 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <span class="float-right">
-                                        <b-button v-b-modal.modal-center variant="info"><i
+                                        <b-button v-b-modal.modal-add variant="info"><i
                                                 class="fas fa-plus"></i>&nbsp;Tambah</b-button>
-
-                                        <b-modal id="modal-center" centered title="Tambah Produk Baru">
+                                        <!-- Modal Create -->
+                                        <b-modal id="modal-add" centered title="Tambah Produk Baru">
 
                                             <div class="form-group">
                                                 <label for="">Nama Produk</label>
@@ -56,6 +56,76 @@
                                                 <div class="d-flex justify-content-end">
                                                     <button class="btn btn-secondary">Close</button>&nbsp;
                                                 <button class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </b-modal>
+                                        <!-- Modal Update -->
+                                        <b-modal id="modal-edit" centered title="Edit Produk STERILISATOR KERING">
+
+                                            <div class="form-group">
+                                                <label for="">Nama Produk</label>
+                                                <input type="text" class="form-control" value="STERILISATOR KERING">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Deskripsi</label>
+                                                <textarea class="form-control" id="" cols="5" rows="5">lalalalayyyy</textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Dimensi</label>
+                                                <div class="d-flex justify-content-between">
+                                                    <input type="text" class="form-control" placeholder="Panjang" value="5">&nbsp;
+                                                    <input type="text" class="form-control" placeholder="Lebar" value="10">&nbsp;
+                                                    <input type="text" class="form-control" placeholder="Tinggi" value="15">&nbsp;
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="">Produk</label>
+                                                        <select name="" id="" class="form-control">
+                                                            <option value="" selected>Buku</option>
+                                                            <option value="">Bolpoin</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="">Layout</label>
+                                                    <select name="" id="" class="form-control">
+                                                        <option value="" selected>Buku</option>
+                                                        <option value="">Bolpoin</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <b-form-file placeholder="Silahkan pilih foto produk"
+                                                drop-placeholder="Letakkan foto disini"></b-form-file>
+                                            <div slot="modal-footer" class="w-100">
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-secondary">Close</button>&nbsp;
+                                                <button class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </b-modal>
+                                        <!-- Modal View -->
+                                        <b-modal id="modal-view" centered title="Detail Produk STERILISATOR KERING">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <img src="https://images.unsplash.com/photo-1615486510940-4e96763c7f6d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80" alt="">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p><b>Nama Produk</b></p>
+                                                        <p>STERILISATOR KERING</p>
+                                                        <p><b>Deskripsi Produk</b></p>
+                                                        <p>Inovasi Produk Terbaru dari industri kami</p>
+                                                        <p><b>Dimensi</b></p>
+                                                        <div class="d-flex"><p>Panjang: 50</p>   
+                                                        <p>Lebar: 50</p>   
+                                                        <p>Tinggi: 50</p>   </div>
+                                                        <p><b>Produk</b></p>
+                                                        <p>Buku</p>
+                                                        <p><b>Layout</b></p>
+                                                        <p>Buku</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </b-modal>
@@ -118,8 +188,9 @@
                                         aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v"></i>
                                         <div class="dropdown-menu">
-                                            <button class="dropdown-item"><i class="fas fa-eye">Edit</i></button>
-                                            <button class="dropdown-item"><i class="far fa-edit">View</i></button>
+                                            <b-button v-b-modal.modal-edit class="dropdown-item"><i
+                                                class="far fa-edit"></i>&nbsp;Edit</b-button>
+                                            <b-button v-b-modal.modal-view class="dropdown-item"><i class="far fa-eye"></i>&nbsp;View</b-button>
                                         </div>
                                     </div>
                                 </td>
@@ -131,42 +202,8 @@
         </div>
     </div>
 </template>
-<script>
-    export default {
-        data() {
-            return {
-                form: {
-                    email: '',
-                    name: '',
-                    food: null,
-                    checked: []
-                },
-                foods: [{
-                    text: 'Select One',
-                    value: null
-                }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
-                show: true
-            }
-        },
-        methods: {
-            onSubmit(event) {
-                event.preventDefault()
-                alert(JSON.stringify(this.form))
-            },
-            onReset(event) {
-                event.preventDefault()
-                // Reset our form values
-                this.form.email = ''
-                this.form.name = ''
-                this.form.food = null
-                this.form.checked = []
-                // Trick to reset/clear native browser form validation state
-                this.show = false
-                this.$nextTick(() => {
-                    this.show = true
-                })
-            }
-        }
+<style scoped>
+    img{
+        width: 100%;
     }
-
-</script>
+</style>
