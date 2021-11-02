@@ -254,6 +254,7 @@ return [
                 ],
             ]
         ],
+        
         // [
         //     'text'  =>  'Laporan',
         //     'icon'  =>  'fas fa-file',
@@ -993,15 +994,20 @@ return [
             'auth' => [13],
         ],
         [
-            'header' => 'Permintaan',
+            'header' => 'Penjualan',
             'auth' => [13]
         ],
         [
-            'text' => 'Penjualan',
-            'url' => '/gbj/penjualan',
+            'text' => 'Sales Order',
+            'url' => '/gbj/so',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
+        [
+            'header' => 'Permintaan',
+            'auth' => [13]
+        ],
+
         [
             'text' => 'test',
             'isNavbarRightItem' => true,

@@ -16,9 +16,15 @@
                                         <!-- Modal Create -->
                                         <b-modal id="modal-add" centered title="Tambah Produk Baru">
 
-                                            <div class="form-group">
-                                                <label for="">Nama Produk</label>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="">Nama Produk</label>
                                                 <input type="text" class="form-control" placeholder="Nama Produk">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="">Stok</label>
+                                                <input type="text" class="form-control" placeholder="Stok">
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="">Deskripsi</label>
