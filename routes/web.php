@@ -89,6 +89,16 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
 
+Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.qc.dashboard')->name('qc.dashboard');
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
+        Route::view('/detail/{id}', 'page.qc.so.detail')->name('qc.so.detail');
+        Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
+        Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
+    });
+});
 Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 
 Route::get('/test/{name?}', function ($name = null) {

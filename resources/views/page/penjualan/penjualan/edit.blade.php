@@ -456,7 +456,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var jenis = "spa";
+        var jenis = '{{$jenis}}';
         jenis_penjualan(jenis);
         $('#customer_id').on('keyup change', function() {
             if ($(this).val() != "") {

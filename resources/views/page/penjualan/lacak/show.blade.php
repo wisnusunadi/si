@@ -31,24 +31,24 @@
                         <div class="col-12">
                             <div class="form-horizontal">
                                 <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Pilih</label>
-                                    <div class="col-5 col-form-label">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="pilih" id="pilih1" value="no_seri" />
-                                            <label class="form-check-label" for="pilih1">No Seri</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="pilih" id="pilih2" value="purchase_order" />
-                                            <label class="form-check-label" for="pilih2">Purchase Order</label>
+                                    <label for="" class="col-form-label col-5" style="text-align: right">Masukkan Data</label>
+                                    <div class="col-4">
+                                        <input type="text" class="form-control col-form-label @error('data') is-invalid @enderror" id="data" name="data" />
+                                        <div class="invalid-feedback" id="msgdata">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Masukkan Data</label>
+                                    <label for="" class="col-form-label col-5" style="text-align: right">Data Lacak</label>
                                     <div class="col-4">
-                                        <input type="text" class="form-control col-form-label @error('data') is-invalid @enderror" id="data" name="data" disabled />
-                                        <div class="invalid-feedback" id="msgdata">
-                                        </div>
+                                        <select name="pilih_data" id="pilih_data" class="select2 select-info form-control custom-select col-form-label pilih_data" placeholder="Pilih Data" disabled>
+                                            <option value=""></option>
+                                            <option value="no_po">No Purchase Order</option>
+                                            <option value="no_akn">No AKN</option>
+                                            <option value="no_seri">No Seri</option>
+                                            <option value="no_so">No Sales Order</option>
+                                            <option value="no_sj">No Surat Jalan</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -56,7 +56,6 @@
                                     <div class="col-4">
                                         <span class="float-right filter"><button type="button" class="btn btn-success" id="btncari" disabled>Cari</button></span>
                                         <span class="float-right filter"><button type="button" class="btn btn-outline-danger" id="btnbatal">Batal</button></span>
-
                                     </div>
                                 </div>
                             </div>
@@ -68,9 +67,9 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="card hide" id="po">
+            <div class="card hide" id="nopo">
                 <div class="card-body">
-                    <h4>Hasil Pencarian</h4>
+                    <h4>Hasil Pencarian Purchase Order</h4>
                     <div class="table-responsive">
                         <table class="table table-hover" id="potable">
                             <thead>
@@ -108,6 +107,63 @@
                     </div>
                 </div>
             </div>
+            <div class="card hide" id="noakn">
+                <div class="card-body">
+                    <h4>Hasil Pencarian No AKN</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="noakntable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Posisi</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card hide" id="noso">
+                <div class="card-body">
+                    <h4>Hasil Pencarian Sales Order</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Posisi</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card hide" id="nosj">
+                <div class="card-body">
+                    <h4>Hasil Pencarian Surat Jalan</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Posisi</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -116,50 +172,84 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $('.pilih_data').select2({
+            placeholder: "Pilih Data Lacak",
+            allowClear: true
+        });
         $('#potable').DataTable();
         $('#noseritable').DataTable();
-        $('input[type="radio"][name="pilih"]').on('change', function() {
+
+        $('#data').on('keyup change', function() {
             if ($(this).val() != "") {
-                $('#data').removeAttr('disabled');
+                $('.pilih_data').removeAttr('disabled');
+                if ($('.pilih_data').find(":selected").val() != "") {
+                    $('#btncari').removeAttr('disabled');
+                } else if ($('.pilih_data').find(":selected").val() == "") {
+                    $('#btncari').attr('disabled', true);
+                }
+            } else {
+                $('#btncari').attr('disabled', true);
+            }
+        });
+        $('.pilih_data').on('keyup change', function() {
+            console.log($(this).val());
+            if ($(this).val() != "") {
                 if ($('#data').val() != "") {
                     $('#btncari').removeAttr('disabled');
                 } else {
                     $('#btncari').attr('disabled', true);
                 }
-            } else {
-                $('#btncari').attr('disabled', true);
-            }
-        });
-
-        $('#data').on('keyup change', function() {
-            if ($(this).val() != "") {
-                if ($('input[type="radio"][name="pilih"]').val() != "") {
-                    $('#btncari').removeAttr('disabled');
-                } else {
-                    $('#btncari').attr('disabled', true);
-                }
-            } else {
+            } else if ($(this).val() == "") {
                 $('#btncari').attr('disabled', true);
             }
         });
 
         $('#btncari').on('click', function() {
-            if ($('input[type="radio"][name="pilih"]:checked').val() == "no_seri") {
+            if ($('.pilih_data').val() == "no_seri") {
                 $('#noseri').removeClass('hide');
-                $('#po').addClass('hide');
-            } else if ($('input[type="radio"][name="pilih"]:checked').val() == "purchase_order") {
-                $('#po').removeClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noakn').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+            } else if ($('.pilih_data').val() == "no_po") {
+                $('#nopo').removeClass('hide');
                 $('#noseri').addClass('hide');
+                $('#noakn').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+            } else if ($('.pilih_data').val() == "no_akn") {
+                $('#noakn').removeClass('hide');
+                $('#noseri').addClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+            } else if ($('.pilih_data').val() == "no_akn") {
+                $('#noakn').removeClass('hide');
+                $('#noseri').addClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+            } else if ($('.pilih_data').val() == "no_sj") {
+                $('#nosj').removeClass('hide');
+                $('#noseri').addClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#noakn').addClass('hide');
             }
+            // $('#btncari').attr("disabled", true);
+            // $('.pilih_data').attr("disabled", true);
+            // $('#data').attr('disabled', true);
         });
 
         $('#btnbatal').on('click', function() {
-            $('input[type="radio"][name="pilih"]').prop('checked', false);
+            $('.pilih_data').prop('selectedIndex', -1);
             $('#data').val('');
-            $('#data').attr('disabled', true);
-            $('#po').addClass('hide');
-            $('#noseri').addClass('hide');
+            $('#data').removeAttr('disabled');
+            $('#pilih_data').attr('disabled', true);
             $('#btncari').attr('disabled', true);
+            $('#noseri').addClass('hide');
+            $('#nopo').addClass('hide');
+            $('#noso').addClass('hide');
         });
     })
 </script>

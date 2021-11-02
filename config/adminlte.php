@@ -362,27 +362,28 @@ return [
         ],
         // penjualan (26)
         [
-            'text' => 'Penjualan Produk',
+            'text' => 'Produk Penjualan',
             'url'  => '/penjualan/produk/show',
-            'icon' => 'fas fa-table',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
-        [
-            'text' => 'Penjualan',
-            'url'  => '/penjualan/penjualan/show',
-            'icon' => 'fas fa-table',
-            'auth' => [26]
-        ],
+
         [
             'text' => 'Customer',
             'url'  => '/penjualan/customer/show',
-            'icon' => 'fas fa-table',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
         [
-            'text' => 'Sales Order',
-            'url'  => '/penjualan/so/show',
-            'icon' => 'fas fa-table',
+            'text' => 'Laporan',
+            'url'  => '/penjualan/laporan/show',
+            'icon' => 'far fa-circle',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Lacak',
+            'url'  => '/penjualan/lacak/show',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
         [
@@ -400,6 +401,18 @@ return [
         [
             'header' => 'TRANSAKSI',
             'auth'   => [26]
+        ],
+        [
+            'text' => 'Penjualan',
+            'url'  => '/penjualan/penjualan/show',
+            'icon' => 'fas fa-dollar-sign',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Sales Order',
+            'url'  => '/penjualan/so/show',
+            'icon' => 'fas fa-file-invoice-dollar',
+            'auth' => [26]
         ],
         [
             'text'    => 'Daftar Pesanan',
@@ -821,6 +834,7 @@ return [
             'header' => 'INCOMING',
             'auth' => [23]
         ],
+
         [
             'text' => 'Kedatangan',
             'icon' => 'fas fa-dolly-flatbed',
@@ -918,6 +932,16 @@ return [
                     'auth' => [23],
                 ],
             ],
+        ],
+        [
+            'header' => 'OUTGOING',
+            'auth' => [23]
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'fas fa-circle',
+            'url' => '/qc/so/show',
+            'auth' => [23],
         ],
         [
             'text'    => 'Permintaan',

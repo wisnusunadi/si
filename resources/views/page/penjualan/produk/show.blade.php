@@ -130,10 +130,10 @@
                                         <table class="table table-hover" id="showtable">
                                             <thead style="text-align: center;">
                                                 <tr>
-                                                    <th>No</th>
-                                                    <th>Nama Produk</th>
-                                                    <th>Harga</th>
-                                                    <th>Aksi</th>
+                                                    <th width="5%">No</th>
+                                                    <th width="78%">Nama Produk</th>
+                                                    <th width="12%">Harga</th>
+                                                    <th width="5%">Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -245,14 +245,18 @@
                     searchable: false
                 },
                 {
-                    data: 'nama'
+                    data: 'nama',
+                    orderable: true,
+                    searchable: true
                 },
                 {
-                    data: null,
-                    className: 'nowrap-text',
-                    render: function(data) {
-                        return '<div class="align-right">Rp. ' + (data.harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); + '</div>';
-                    },
+                    data: 'harga',
+                    className: 'nowrap-text align-right',
+                    render: $.fn.dataTable.render.number(',', '.', 2)
+                        // function(data) {
+                        //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
+                        // }
+                        ,
                     orderable: false,
                     searchable: false
                 },

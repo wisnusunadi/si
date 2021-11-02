@@ -51,33 +51,35 @@
                 <h5>Detail Pemesanan</h5>
                 <div class="card">
                     <div class="card-body">
-                        <table class="table" id="detailtabel">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Subtotal</th>
-                                    <th>No Seri</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>FOX-BABY Yellow</td>
-                                    <td>5</td>
-                                    <td>Rp. 15.000</td>
-                                    <td><i class="fas fa-search"></i></td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="3" style="text-align:right;">Total Harga</th>
-                                    <th id="totalharga" style="text-align:center;">Rp. 15.000</th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table" id="detailtabel">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Produk</th>
+                                        <th>Jumlah</th>
+                                        <th>Subtotal</th>
+                                        <th>No Seri</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>FOX-BABY Yellow</td>
+                                        <td>5</td>
+                                        <td>Rp. 15.000</td>
+                                        <td><i class="fas fa-search"></i></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="3" style="text-align:right;">Total Harga</th>
+                                        <th id="totalharga" style="text-align:center;">Rp. 15.000</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
