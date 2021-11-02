@@ -5,72 +5,92 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-8">
-                        <h3 class="card-title">Produk Gudang Barang Jadi</h3>
+                            <h3 class="card-title">Produk Gudang Barang Jadi</h3>
                         </div>
                         <div class="col-4 d-flex justify-content-end">
-                                      <div class="row">
-            <div class="col-lg-12">
-              <span class="float-right">
-            <b-button v-b-modal.modal-center variant="info"><i class="fas fa-plus"></i>&nbsp;Tambah</b-button>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <span class="float-right">
+                                        <b-button v-b-modal.modal-center variant="info"><i
+                                                class="fas fa-plus"></i>&nbsp;Tambah</b-button>
 
-            <b-modal id="modal-center" centered title="Tambah Produk Baru">
-                            <label for="">Nama Produk</label>
-                            <input type="text" class="form-control" v-model="nama" placeholder="nama produk">
-                            <label for="">Deskripsi</label>
-                            <textarea class="form-control" id="" cols="5" rows="10"></textarea>
-            </b-modal>
-              </span>
-              <span
-                class="dropdown float-right"
-                id="semuaprodukfilter"
-                style="margin-right: 5px"
-              >
-                <button
-                  class="btn btn-outline-info dropdown-toggle"
-                  type="button"
-                  id="semuaprodukfilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Filter
-                </button>
-                <div
-                  class="dropdown-menu p-3 text-nowrap"
-                  aria-labelledby="semuaprodukfilter"
-                >
-                  <div class="dropdown-header">Kelompok Produk</div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="sp_kelompok"
-                        value="alat_kesehatan"
-                      />
-                      <label class="form-check-label" for="sp_kelompok">
-                        Alat Kesehatan
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="sp_kelompok"
-                        value="sarana_kesehatan"
-                      />
-                      <label class="form-check-label" for="sp_kelompok">
-                        Sarana Kesehatan
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </span>
-            </div>
-          </div>
-            </div>
+                                        <b-modal id="modal-center" centered title="Tambah Produk Baru">
+
+                                            <div class="form-group">
+                                                <label for="">Nama Produk</label>
+                                                <input type="text" class="form-control" placeholder="Nama Produk">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Deskripsi</label>
+                                                <textarea class="form-control" id="" cols="5" rows="5"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Dimensi</label>
+                                                <div class="d-flex justify-content-between">
+                                                    <input type="text" class="form-control" placeholder="Panjang">&nbsp;
+                                                    <input type="text" class="form-control" placeholder="Lebar">&nbsp;
+                                                    <input type="text" class="form-control" placeholder="Tinggi">&nbsp;
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label for="">Produk</label>
+                                                        <select name="" id="" class="form-control">
+                                                            <option value="">Buku</option>
+                                                            <option value="">Bolpoin</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="">Layout</label>
+                                                    <select name="" id="" class="form-control">
+                                                        <option value="">Buku</option>
+                                                        <option value="">Bolpoin</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <b-form-file placeholder="Silahkan pilih foto produk"
+                                                drop-placeholder="Letakkan foto disini"></b-form-file>
+                                            <div slot="modal-footer" class="w-100">
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-secondary">Close</button>&nbsp;
+                                                <button class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </b-modal>
+                                    </span>
+                                    <span class="dropdown float-right" id="semuaprodukfilter" style="margin-right: 5px">
+                                        <button class="btn btn-outline-info dropdown-toggle" type="button"
+                                            id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Filter
+                                        </button>
+                                        <div class="dropdown-menu p-3 text-nowrap" aria-labelledby="semuaprodukfilter">
+                                            <div class="dropdown-header">Kelompok Produk</div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="sp_kelompok"
+                                                        value="alat_kesehatan" />
+                                                    <label class="form-check-label" for="sp_kelompok">
+                                                        Alat Kesehatan
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="sp_kelompok"
+                                                        value="sarana_kesehatan" />
+                                                    <label class="form-check-label" for="sp_kelompok">
+                                                        Sarana Kesehatan
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -111,3 +131,42 @@
         </div>
     </div>
 </template>
+<script>
+    export default {
+        data() {
+            return {
+                form: {
+                    email: '',
+                    name: '',
+                    food: null,
+                    checked: []
+                },
+                foods: [{
+                    text: 'Select One',
+                    value: null
+                }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
+                show: true
+            }
+        },
+        methods: {
+            onSubmit(event) {
+                event.preventDefault()
+                alert(JSON.stringify(this.form))
+            },
+            onReset(event) {
+                event.preventDefault()
+                // Reset our form values
+                this.form.email = ''
+                this.form.name = ''
+                this.form.food = null
+                this.form.checked = []
+                // Trick to reset/clear native browser form validation state
+                this.show = false
+                this.$nextTick(() => {
+                    this.show = true
+                })
+            }
+        }
+    }
+
+</script>
