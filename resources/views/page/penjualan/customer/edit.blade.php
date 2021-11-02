@@ -49,7 +49,7 @@
                                 <label for="provinsi" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
                                 <div class="col-8">
                                     <select class="select2 select-info form-control custom-select provinsi" name="provinsi" id="provinsi" style="width:100%">
-                                        <option value="{{$customer->provinsi_id}}" selected="selected">{{$customer->provinsi->nama}}</option>
+
                                     </select>
 
                                 </div>
