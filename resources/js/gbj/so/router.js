@@ -10,7 +10,7 @@ const router = new VueRouter({
     routes: [
         {
             name: 'show',
-            path: '/gbj/produk',
+            path: '/gbj/so',
             component: Show
         },
     ]

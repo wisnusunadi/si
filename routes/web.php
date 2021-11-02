@@ -49,6 +49,7 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
     Route::view('/produk/{any?}', 'page.gbj.produk');
+    Route::view('/so/{any?}', 'page.gbj.so');
 });
 
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
