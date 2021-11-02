@@ -14,19 +14,23 @@ use Illuminate\Support\Facades\Validator;
 class SparepartController extends Controller
 {
     function get() {
-        $spr = SparepartGudang::with('Spare', 'his')->paginate(10);
-        return $spr;
+        $spr = SparepartGudang::with('Spare', 'his')->select();
+
+        return datatables()->of($spr)
+            ->addIndexColumn()
+            ->rawColumns(['nama'])
+            ->make(true);
     }
 
     function getId($id) {
-        $data = Sparepart::find($id);
-        $head = SparepartGudang::whereIn('sparepart_id', array($data->id))->get();
-        $his = SparepartHis::whereIn('sparepart_id', array($data->id))->get();
         try {
+            $data = Sparepart::find($id);
+            $head = SparepartGudang::where('sparepart_id', $data->id)->get();
+            $his = SparepartHis::whereIn('sparepart_id', array($data->id))->orderBy('created_at', 'DESC')->get();
             $res_head = [];
             foreach($head as $h) {
                 $res_head[] = [
-                    'nama' => $h->nama,
+                    'nama' => $h->nama ,
                     'deskripsi' => $h->deskripsi,
                     'stok' => $h->stok,
                     'layout_id' => $h->layout_id ? $h->layout_id : '-',
@@ -48,15 +52,21 @@ class SparepartController extends Controller
                     'updated_at' => date_format($hh->updated_at, 'd-m-Y H:i:s')
                 ];
             }
-            return response()->json([
-                'data' => [
-                    'head' => $data,
-                    'gudang' => $res_head,
-                    'history' => $res_his
-                ]
-            ]);
-        } catch (\Throwable $th) {
-            if (empty($data)) {
+            if (!empty($data->id)) {
+                return response()->json([
+                    'data' => [
+                        'head' => $data,
+                        'gudang' => $res_head,
+                        'history' => $res_his
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'msg' => 'Data not found'
+                ]);
+            }
+        } catch (\Exception $e) {
+            if (empty($data->id)) {
                 return response()->json(['msg' => 'Data not found']);
             }
         }
@@ -101,6 +111,7 @@ class SparepartController extends Controller
                 $path = 'upload/sparepart/';
                 $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
                 $image->move($path, $nameImage);
+                // $nameImage = base64_encode(file_get_contents($image));
                 $spr_gdg->gambar = $nameImage;
             }
             $spr_gdg->dim_p = $request->dim_p;
@@ -161,12 +172,12 @@ class SparepartController extends Controller
                 $spr_gdg->stok = $spr_gdg->stok - $request->stok;
             }
             $spr_gdg->layout_id = $request->layout_id;
-            // unlink('upload/sparepart/'. $spr_gdg->gambar);
             $image = $request->file('gambar');
             if ($image) {
                 $path = 'upload/sparepart/';
                 $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
                 $image->move($path, $nameImage);
+                // $nameImage = base64_encode(file_get_contents($image));
                 $spr_gdg->gambar = $nameImage;
             }
             $spr_gdg->dim_p = $request->dim_p;
@@ -198,7 +209,14 @@ class SparepartController extends Controller
             $spr_gdg = SparepartGudang::where('sparepart_id', $spr->id);
             $spr_his = SparepartHis::whereIn('sparepart_id', array($spr->id));
             if (!empty($spr)) {
+
                 $spr_his->delete();
+                // $gdgId = $spr_gdg->get()->pluck('id');
+                // if (file_exists('upload/sparepart/'. $gdgId->id)) {
+                    // unlink('upload/sparepart/'. $spr_gdg->id. '.png');
+                    // dd(public_path('upload/sparepart/',$spr_gdg->id));
+                    // return url('upload/sparepart/'. $gdgId. '.png');
+                // }
                 $spr_gdg->delete();
                 $spr->delete();
 
@@ -209,15 +227,6 @@ class SparepartController extends Controller
             if (empty($spr)) {
                 return response()->json(['msg' => 'Data not found']);
             }
-        }
-    }
-
-    function deleteImage() {
-        if(File::exists('upload/sparepart/20211029163528.png')){
-            unlink('upload/sparepart/20211029163528.png');
-            return 'ok';
-        }else{
-            dd('File does not exists.');
         }
     }
 

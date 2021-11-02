@@ -66,10 +66,10 @@ Route::prefix('/penjualan_produk')->group(function () {
     Route::get('check/{id}', [App\Http\Controllers\MasterController::class, 'check_penjualan_produk']);
 });
 Route::prefix('/gbj')->group(function () {
-    Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
+    Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi'])->name('gbj.get');
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
-    Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
+    // Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::get('/get/{id}', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
 });
 
@@ -81,7 +81,7 @@ Route::prefix('/spr')->group(function () {
     Route::get('/data', [App\Http\Controllers\SparepartController::class, 'get']);
     Route::post('/create', [App\Http\Controllers\SparepartController::class, 'store']);
     Route::post('/edit/{id}', [App\Http\Controllers\SparepartController::class, 'update']);
-    Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
+    // Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
     Route::get('/data/{id}', [App\Http\Controllers\SparepartController::class, 'getId']);
     Route::delete('/test', [App\Http\Controllers\SparepartController::class, 'deleteImage']);
 });

@@ -15,6 +15,7 @@ class MKategoriGs extends Migration
     {
         Schema::create('kelompok_produk', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('tipe')->nullable();
             $table->string('nama')->nullable();
             $table->unsignedBigInteger('jenis_id')->nullable();
             $table->foreign('jenis_id')->references('id')->on('m_jenis_gks');

@@ -14,7 +14,7 @@ class GudangController extends Controller
 {
     public function get_data_barang_jadi()
     {
-        $data = GudangBarangJadi::with('produk')->select();
+        $data = GudangBarangJadi::with('produk', 'noseri')->select();
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -25,17 +25,13 @@ class GudangController extends Controller
                 return $data->produk->merk;
             })
             ->addColumn('satuan', function ($data) {
-                return $data->produk->Satuan->nama;
+                return $data->stok .' '.$data->produk->Satuan->nama;
             })
             ->addColumn('layout', function ($data) {
-                return $data->Layout->ruang . '-' . $data->Layout->lantai . '/' . $data->Layout->rak;
+                return $data->Layout->ruang . ';' . $data->Layout->lantai . '-' . $data->Layout->rak;
             })
             ->addColumn('nama', function ($data) {
-                if ($data->variasi != '') {
-                    return $data->produk->tipe . ' - <b>' . $data->variasi . '</b>';
-                } else {
-                    return $data->produk->tipe;
-                }
+                return $data->nama;
             })
             ->rawColumns(['nama'])
             ->make(true);
@@ -45,19 +41,21 @@ class GudangController extends Controller
 
     function StoreBarangJadi(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'produk_id' => 'required',
-            'nama' => 'required',
-            'stok' => 'required|numeric',
-            'ke' => 'required',
-        ],
-        [
-            'produk_id.required' => 'Produk harus diisi',
-            'nama.required' => 'Nama harus diisi',
-            'stok.numeric' => 'Stok harus diisi angka',
-            'stok.required' => 'Stok harus diisi',
-            'ke.required' => 'Tujuan harus diisi',
-        ]
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'produk_id' => 'required',
+                'nama' => 'required',
+                'stok' => 'required|numeric',
+                'ke' => 'required',
+            ],
+            [
+                'produk_id.required' => 'Produk harus diisi',
+                'nama.required' => 'Nama harus diisi',
+                'stok.numeric' => 'Stok harus diisi angka',
+                'stok.required' => 'Stok harus diisi',
+                'ke.required' => 'Tujuan harus diisi',
+            ]
         );
 
         if ($validator->fails()) {
@@ -72,9 +70,9 @@ class GudangController extends Controller
             $image = $request->file('gambar');
             if ($image) {
                 $path = 'upload/gbj/';
-                // $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
-                // $image->move($path, $nameImage);
-                $nameImage = base64_encode(file_get_contents($image));
+                $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
+                $image->move($path, $nameImage);
+                // $nameImage = base64_encode(file_get_contents($image));
                 $brg_jadi->gambar = $nameImage;
             }
             $brg_jadi->dim_p = $request->dim_p;
@@ -114,19 +112,21 @@ class GudangController extends Controller
 
     function UpdateBarangJadi(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'produk_id' => 'required',
-            'nama' => 'required',
-            'stok' => 'required|numeric',
-            'ke' => 'required',
-        ],
-        [
-            'produk_id.required' => 'Produk harus diisi',
-            'nama.required' => 'Nama harus diisi',
-            'stok.numeric' => 'Stok harus diisi angka',
-            'stok.required' => 'Stok harus diisi',
-            'ke.required' => 'Tujuan harus diisi',
-        ]
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'produk_id' => 'required',
+                'nama' => 'required',
+                'stok' => 'required|numeric',
+                'ke' => 'required',
+            ],
+            [
+                'produk_id.required' => 'Produk harus diisi',
+                'nama.required' => 'Nama harus diisi',
+                'stok.numeric' => 'Stok harus diisi angka',
+                'stok.required' => 'Stok harus diisi',
+                'ke.required' => 'Tujuan harus diisi',
+            ]
         );
 
         if ($validator->fails()) {
@@ -153,6 +153,7 @@ class GudangController extends Controller
                 $path = 'upload/gbj/';
                 $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
                 $image->move($path, $nameImage);
+                // $nameImage = base64_encode(file_get_contents($image));
                 $brg_jadi->gambar = $nameImage;
             }
             $brg_jadi->dim_p = $request->dim_p;
@@ -221,10 +222,6 @@ class GudangController extends Controller
         }
     }
 
-    public function base64toFile($img) {
-
-    }
-
     function GetBarangJadiByID($id)
     {
         try {
@@ -240,7 +237,7 @@ class GudangController extends Controller
                     'dari' => $b->from->nama,
                     'ke' => $b->to->nama,
                     'jenis' => $b->jenis,
-                    'Layout' => $b->Layout->ruang .';'. $b->Layout->lantai .'/'. $b->Layout->rak,
+                    'Layout' => $b->Layout->ruang . ';' . $b->Layout->lantai . '/' . $b->Layout->rak,
                     'created_at' => date_format($b->created_at, 'd-m-Y H:i:s'),
                 ];
             }
@@ -254,37 +251,46 @@ class GudangController extends Controller
                     'created_at' => date_format($c->created_at, 'd-m-Y H:i:s'),
                 ];
             }
-            $source_data = $brg_jadi->gambar;
-            $source_data = base64_decode($source_data); //simple base64 any format decoded image source_data
-            $source_img = imagecreatefromstring($source_data);
-            $rotated_img = imagerotate($source_img, 0, 0); //simple images rotate with angle 90 degree here
-            $data_file = 'upload/gbj/'. $brg_jadi->id . '.png';
-            if (count($brg_jadi) < 0) {
-                $data_savefile = imagejpeg($rotated_img, $data_file, 10);
-            }
-            imagedestroy($source_img);
 
+            // decode base64 to image
+            // $source_data = $brg_jadi->gambar;
+            // $source_data = base64_decode($source_data);
+            // $source_img = imagecreatefromstring($source_data);
+            // $rotated_img = imagerotate($source_img, 0, 0);
+            // $data_file = 'upload/gbj/' . $brg_jadi->id . '.png';
+            // if (!file_exists($brg_jadi->id)) {
+            //     $data_savefile = imagejpeg($rotated_img, $data_file, 10);
+            // }
+            // imagedestroy($source_img);
 
-            if (!empty($brg_jadi)) {
-                return response()->json([
+            $res_data = [
                     'produk' => $brg_jadi->produk->tipe,
                     'nama' => $brg_jadi->nama,
                     'stok' => $brg_jadi->stok,
                     'Layout' => $brg_jadi->Layout->ruang . '-' . $brg_jadi->Layout->lantai . '/' . $brg_jadi->Layout->rak,
-                    'Gambar' => url('/upload/gbj/'. $data_file),
-                    // 'Gambar' => imagejpeg($img),
+                    'Gambar' => url('upload/gbj/' . $brg_jadi->gambar),
+                    // 'Gambar' => url($data_file),
                     'created_at' => date_format($brg_jadi->created_at, 'd-m-Y H:i:s'),
                     'updated_at' => date_format($brg_jadi->updated_at, 'd-m-Y H:i:s'),
+            ];
+
+
+            if (!empty($brg_jadi)) {
+                return response()->json([
+                   'Data' => [
+                    'Produk' => $res_data,
                     'History Stok' => $his_stock,
                     'No Seri' => $his_noseri,
+                   ]
                 ]);
             } else {
                 return response()->json(['msg' => 'Data not found']);
             }
         } catch (\Exception $e) {
-            return response()->json(['msg' => $e->getMessage()]);
+            if (empty($brg_jadi->id)) {
+                # code...
+                return response()->json(['msg' => 'Data not found']);
+            }
         }
     }
-
-
 }
