@@ -8,19 +8,69 @@
                         <h3 class="card-title">Produk Gudang Barang Jadi</h3>
                         </div>
                         <div class="col-4 d-flex justify-content-end">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Action
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
-                                </div>
-                                </div>
-                        </div>
+                                      <div class="row">
+            <div class="col-lg-12">
+              <span class="float-right">
+            <b-button v-b-modal.modal-center variant="info"><i class="fas fa-plus"></i>&nbsp;Tambah</b-button>
+
+            <b-modal id="modal-center" centered title="Tambah Produk Baru">
+                            <label for="">Nama Produk</label>
+                            <input type="text" class="form-control" v-model="nama" placeholder="nama produk">
+                            <label for="">Deskripsi</label>
+                            <textarea class="form-control" id="" cols="5" rows="10"></textarea>
+            </b-modal>
+              </span>
+              <span
+                class="dropdown float-right"
+                id="semuaprodukfilter"
+                style="margin-right: 5px"
+              >
+                <button
+                  class="btn btn-outline-info dropdown-toggle"
+                  type="button"
+                  id="semuaprodukfilter"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Filter
+                </button>
+                <div
+                  class="dropdown-menu p-3 text-nowrap"
+                  aria-labelledby="semuaprodukfilter"
+                >
+                  <div class="dropdown-header">Kelompok Produk</div>
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="sp_kelompok"
+                        value="alat_kesehatan"
+                      />
+                      <label class="form-check-label" for="sp_kelompok">
+                        Alat Kesehatan
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="sp_kelompok"
+                        value="sarana_kesehatan"
+                      />
+                      <label class="form-check-label" for="sp_kelompok">
+                        Sarana Kesehatan
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </span>
+            </div>
+          </div>
+            </div>
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -29,7 +79,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Foto Produk</th>
+                                <th>Kode Produk</th>
                                 <th>Produk</th>
                                 <th>Stok</th>
                                 <th>Kelompok</th>
@@ -52,7 +102,6 @@
                                             <button class="dropdown-item"><i class="far fa-edit">View</i></button>
                                         </div>
                                     </div>
-
                                 </td>
                             </tr>
                         </tbody>
