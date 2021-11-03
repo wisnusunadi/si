@@ -20,8 +20,9 @@ class GudangBarangJadi extends Model
         return $this->hasMany(NoseriBarangJadi::class, 'gdg_barang_jadi_id');
     }
 
-    function history() {
-        return $this->hasMany(GudangBarangJadiHis::class, 'gdg_brg_jadi_id');
+    function history()
+    {
+        return $this->hasMany(GudangBarangJadiHis::class, 'gdg_brg_jadi_id'); 
     }
 
     public function produk()
@@ -29,7 +30,8 @@ class GudangBarangJadi extends Model
         return $this->belongsTo(Produk::class, 'produk_id');
     }
 
-    function Layout(){
+    function Layout()
+    {
         return $this->belongsTo(Layout::class);
     }
 }

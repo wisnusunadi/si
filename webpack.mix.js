@@ -17,6 +17,7 @@ const mix = require('laravel-mix');
 
 // plugin library
 mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
+mix.sass('resources/css/bootstrap.scss', 'public/native/css/plugin.css')
 
 // ppic
 // mix.js('resources/js/ppic/jadwal/app.js', 'public/native/js/ppic/jadwal.js').vue()
@@ -27,7 +28,6 @@ mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
 
 mix.js('resources/js/gbj/stok/app.js', 'public/native/js/gbj/stok.js').vue()
 mix.js('resources/js/gbj/penjualan/app.js', 'public/native/js/gbj/penjualan.js').vue()
-mix.js('resources/js/gbj/produk/app.js', 'public/native/js/gbj/produk.js').vue()
 mix.js('resources/js/gbj/so/app.js', 'public/native/js/gbj/so.js').vue()
 mix.js('resources/js/penjualan/produk/app.js', 'public/native/js/penjualan/produk.js').vue()
 mix.js('resources/js/penjualan/customer/app.js', 'public/native/js/penjualan/customer.js').vue()

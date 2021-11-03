@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     protected $table = 'customer';
-    protected $fillable = ['nama', 'telp', 'alamat', 'npwp', 'ket'];
+    protected $fillable = ['id_provinsi', 'nama', 'telp', 'email', 'alamat', 'npwp', 'ket'];
 
     public function Spa()
     {
@@ -21,5 +21,9 @@ class Customer extends Model
     public function Ekatalog()
     {
         return $this->hasMany(Ekatalog::class);
+    }
+    public function Provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'id_provinsi');
     }
 }

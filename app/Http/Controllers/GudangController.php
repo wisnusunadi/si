@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
+use App\Models\Layout;
 use App\Models\NoseriBarangJadi;
+use App\Models\Produk;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
@@ -25,17 +27,27 @@ class GudangController extends Controller
                 return $data->produk->merk;
             })
             ->addColumn('satuan', function ($data) {
-                return $data->stok .' '.$data->produk->Satuan->nama;
+                return $data->stok . ' ' . $data->produk->Satuan->nama;
+            })
+            ->addColumn('satuan1', function ($data) {
+                return $data->stok - 20 . ' ' . $data->produk->Satuan->nama;
             })
             ->addColumn('layout', function ($data) {
                 return $data->Layout->ruang . ';' . $data->Layout->lantai . '-' . $data->Layout->rak;
             })
             ->addColumn('nama', function ($data) {
-                return $data->nama;
+                return $data->produk->nama;
             })
-            ->rawColumns(['nama'])
+            ->addColumn('kode', function ($data) {
+                return $data->produk->kode ? $data->produk->kode : '-';
+            })
+            ->addColumn('action', function ($data) {
+                return '<button type="button" class="btn btn-success btn-sm" id="getEditArticleData" data-id="'.$data->id.'">Edit</button>
+                <button type="button" class="btn btn-success btn-sm" id="showEditArticleData" data-id="'.$data->id.'">View</button>';
+            })
+            ->rawColumns(['action'])
             ->make(true);
-        
+
         //return datatables()->of(GudangBarangJadi::select())->toJson();
     }
 
@@ -44,22 +56,22 @@ class GudangController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'produk_id' => 'required',
+                // 'produk_id' => 'required',
                 'nama' => 'required',
-                'stok' => 'required|numeric',
-                'ke' => 'required',
+                // 'stok' => 'required|numeric',
+                // 'ke' => 'required',
             ],
             [
-                'produk_id.required' => 'Produk harus diisi',
+                // 'produk_id.required' => 'Produk harus diisi',
                 'nama.required' => 'Nama harus diisi',
-                'stok.numeric' => 'Stok harus diisi angka',
-                'stok.required' => 'Stok harus diisi',
-                'ke.required' => 'Tujuan harus diisi',
+                // 'stok.numeric' => 'Stok harus diisi angka',
+                // 'stok.required' => 'Stok harus diisi',
+                // 'ke.required' => 'Tujuan harus diisi',
             ]
         );
 
         if ($validator->fails()) {
-            return $validator->errors();
+            return response()->json(['error' =>  $validator->errors()]);
         } else {
             $brg_jadi = new GudangBarangJadi();
             $brg_jadi->produk_id = $request->produk_id;
@@ -70,7 +82,7 @@ class GudangController extends Controller
             $image = $request->file('gambar');
             if ($image) {
                 $path = 'upload/gbj/';
-                $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
+                $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
                 $image->move($path, $nameImage);
                 // $nameImage = base64_encode(file_get_contents($image));
                 $brg_jadi->gambar = $nameImage;
@@ -151,7 +163,7 @@ class GudangController extends Controller
             $image = $request->file('gambar');
             if ($image) {
                 $path = 'upload/gbj/';
-                $nameImage = date('YmdHis') . ".". $image->getClientOriginalExtension();
+                $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
                 $image->move($path, $nameImage);
                 // $nameImage = base64_encode(file_get_contents($image));
                 $brg_jadi->gambar = $nameImage;
@@ -264,24 +276,24 @@ class GudangController extends Controller
             // imagedestroy($source_img);
 
             $res_data = [
-                    'produk' => $brg_jadi->produk->tipe,
-                    'nama' => $brg_jadi->nama,
-                    'stok' => $brg_jadi->stok,
-                    'Layout' => $brg_jadi->Layout->ruang . '-' . $brg_jadi->Layout->lantai . '/' . $brg_jadi->Layout->rak,
-                    'Gambar' => url('upload/gbj/' . $brg_jadi->gambar),
-                    // 'Gambar' => url($data_file),
-                    'created_at' => date_format($brg_jadi->created_at, 'd-m-Y H:i:s'),
-                    'updated_at' => date_format($brg_jadi->updated_at, 'd-m-Y H:i:s'),
+                'produk' => $brg_jadi->produk->tipe,
+                'nama' => $brg_jadi->nama,
+                'stok' => $brg_jadi->stok,
+                'Layout' => $brg_jadi->Layout->ruang . '-' . $brg_jadi->Layout->lantai . '/' . $brg_jadi->Layout->rak,
+                'Gambar' => url('upload/gbj/' . $brg_jadi->gambar),
+                // 'Gambar' => url($data_file),
+                'created_at' => date_format($brg_jadi->created_at, 'd-m-Y H:i:s'),
+                'updated_at' => date_format($brg_jadi->updated_at, 'd-m-Y H:i:s'),
             ];
 
 
             if (!empty($brg_jadi)) {
                 return response()->json([
-                   'Data' => [
-                    'Produk' => $res_data,
-                    'History Stok' => $his_stock,
-                    'No Seri' => $his_noseri,
-                   ]
+                    'Data' => [
+                        'Produk' => $res_data,
+                        'History Stok' => $his_stock,
+                        'No Seri' => $his_noseri,
+                    ]
                 ]);
             } else {
                 return response()->json(['msg' => 'Data not found']);
@@ -292,5 +304,137 @@ class GudangController extends Controller
                 return response()->json(['msg' => 'Data not found']);
             }
         }
+    }
+
+    function show($id) {
+        $data = GudangBarangJadi::with('noseri', 'history', 'Layout', 'produk')->where('id', $id)->get();
+        $lay = Layout::all();
+        $prd = Produk::all();
+        $res = [];
+        foreach($prd as $r) {
+            $res[] = $r;
+        }
+        $res_lay = [];
+        foreach($lay as $l) {
+            $res_lay[] = $l;
+        }
+        foreach($data as $d) {
+            $html = '<div class="modal-header">
+                            <h5 class="modal-title">Produk '.$d->produk->nama.'</h5>
+                            
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <img src="https://images.unsplash.com/photo-1615486510940-4e96763c7f6d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
+                                        alt="">
+                                </div>
+                                <div class="col-6">
+                                    <p><b>Nama Produk</b></p>
+                                    <p>'.$d->produk->nama.'</p>
+                                    <p><b>Deskripsi Produk</b></p>
+                                    <p>'.$d->deskripsi.'</p>
+                                    <p><b>Dimensi</b></p>
+                                    <div class="d-flex">
+                                        <p>Panjang: '.$d->dim_p.'</p>
+                                        <p>Lebar: '.$d->dim_l.'</p>
+                                        <p>Tinggi: '.$d->dim_t.'</p>
+                                    </div>
+                                    <p><b>Produk</b></p>
+                                    <p>'.$r->nama.'</p>
+                                    <p><b>Layout</b></p>
+                                    <p>'.$l->ruang.';'.$l->lantai.'-'.$l->rak.'</p>
+                                </div>
+                            </div>
+                        </div>';
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
+    function edit($id)
+    {
+        $data = GudangBarangJadi::with('noseri', 'history', 'Layout', 'produk')->where('id', $id)->get();
+        $lay = Layout::all();
+        $prd = Produk::all();
+        $res = [];
+        foreach($prd as $r) {
+            $res[] = $r;
+        }
+        $res_lay = [];
+        foreach($lay as $l) {
+            $res_lay[] = $l;
+        }
+        foreach($data as $d) {
+            $html = ' <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Produk '.$d->produk->nama.'</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+                    <strong>Success!</strong>Article was added successfully.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="">Nama Produk</label>
+                        <input type="text" name="nama" id="nama" class="form-control" placeholder="Nama Produk" value="'.$d->produk->nama.' '.$d->nama.'">
+                    </div>
+                    <div class="col">
+                        <label for="">Stok</label>
+                        <input type="text" name="stok" id="stok" class="form-control" placeholder="Stok" value="'.$d->stok.'">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="">Deskripsi</label>
+                    <textarea class="form-control" name="deskripsi" id="deskripsi" cols="5" rows="5">'.$d->deskripsi.'</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="">Dimensi</label>
+                    <div class="d-flex justify-content-between">
+                        <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang" value="'.$d->dim_p.'">&nbsp;
+                        <input type="text" class="form-control" name="dim_l" id="dim_l" value="'.$d->dim_l.'" placeholder="Lebar">&nbsp;
+                        <input type="text" class="form-control" name="dim_t" id="dim_t" value="'.$d->dim_t.'" placeholder="Tinggi">&nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Produk</label>
+                            <select name="produk_id" id="produk_idd" class="form-control produk-edit">
+                                <option value="'.$r->id.'">'.$r->nama.'</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="">Layout</label>
+                        <select name="layout_id" id="layout_idd" class="form-control layout-edit">
+                            <option value="'.$l->id.'">'.$l->ruang.'</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02" />
+                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
+                    </div>
+                </div>
+
+            </div>';
+        }
+
+
+        return response()->json(['html' => $html]);
     }
 }

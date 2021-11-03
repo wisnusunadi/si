@@ -10,10 +10,6 @@ class PenjualanProduk extends Model
     protected $table = 'penjualan_produk';
     protected $fillable = ['nama', 'harga'];
 
-    public function DetailPenjualanProduk()
-    {
-        return $this->hasMany(DetailPenjualanProduk::class);
-    }
     public function DetailEkatalog()
     {
         return $this->hasMany(DetailEkatalog::class);
@@ -25,5 +21,11 @@ class PenjualanProduk extends Model
     public function DetailSpb()
     {
         return $this->hasMany(DetailSpb::class);
+    }
+    public function Produk()
+    {
+        return $this->belongsToMany(Produk::class, 'detail_penjualan_produk')
+            ->withTimestamps()
+            ->withPivot('jumlah');
     }
 }

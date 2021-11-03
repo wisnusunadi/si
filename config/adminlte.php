@@ -231,6 +231,7 @@ return [
             'text'        => 'Beranda',
             'url'         => '',
             'icon'        => 'nav-icon fa fa-home',
+            'auth'        => [24]
         ],
         // PPIC (24)
         [
@@ -400,32 +401,39 @@ return [
 
         // other
         [
+            'text' => 'Beranda',
+            'url'  => '/penjualan/dashboard',
+            'icon' => 'fas fa-home',
+            'auth' => [26]
+        ],
+        [
             'header' => 'DATA',
             'auth' => [14, 17, 26, 23]
         ],
         // penjualan (26)
         [
-            'text' => 'Penjualan Produk',
-            'url'  => '/penjualan/produk',
-            'icon' => 'fas fa-table',
+            'text' => 'Produk Penjualan',
+            'url'  => '/penjualan/produk/show',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
-        [
-            'text' => 'Penjualan',
-            'url'  => '/penjualan/penjualan',
-            'icon' => 'fas fa-table',
-            'auth' => [26]
-        ],
+
         [
             'text' => 'Customer',
-            'url'  => '/penjualan/customer',
-            'icon' => 'fas fa-table',
+            'url'  => '/penjualan/customer/show',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
         [
-            'text' => 'PO',
-            'url'  => '/penjualan/po',
-            'icon' => 'fas fa-table',
+            'text' => 'Laporan',
+            'url'  => '/penjualan/laporan/show',
+            'icon' => 'far fa-circle',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Lacak',
+            'url'  => '/penjualan/lacak/show',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
         [
@@ -443,6 +451,18 @@ return [
         [
             'header' => 'TRANSAKSI',
             'auth'   => [26]
+        ],
+        [
+            'text' => 'Penjualan',
+            'url'  => '/penjualan/penjualan/show',
+            'icon' => 'fas fa-dollar-sign',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Sales Order',
+            'url'  => '/penjualan/so/show',
+            'icon' => 'fas fa-file-invoice-dollar',
+            'auth' => [26]
         ],
         [
             'text'    => 'Daftar Pesanan',
@@ -857,6 +877,7 @@ return [
             'header' => 'INCOMING',
             'auth' => [23]
         ],
+
         [
             'text' => 'Kedatangan',
             'icon' => 'fas fa-dolly-flatbed',
@@ -954,6 +975,16 @@ return [
                     'auth' => [23],
                 ],
             ],
+        ],
+        [
+            'header' => 'OUTGOING',
+            'auth' => [23]
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'fas fa-circle',
+            'url' => '/qc/so/show',
+            'auth' => [23],
         ],
         [
             'text'    => 'Permintaan',
@@ -1066,16 +1097,16 @@ return [
             ],
         ],
         // dependecies plugins
-        'DataTables' => [
-            'js' => [
-                'vendor/datatables/jquery.dataTables.min.js',
-                'vendor/datatables/dataTables.bootstrap4.min.js',
-                'vendor/datatables/dataTables.responsive.min.js',
-            ],
-            'css' => [
-                'vendor/datatables/dataTables.bootstrap4.min.css',
-            ],
-        ],
+        // 'DataTables' => [
+        //     'js' => [
+        //         'vendor/datatables/jquery.dataTables.min.js',
+        //         'vendor/datatables/dataTables.bootstrap4.min.js',
+        //         'vendor/datatables/dataTables.responsive.min.js',
+        //     ],
+        //     'css' => [
+        //         'vendor/datatables/dataTables.bootstrap4.min.css',
+        //     ],
+        // ],
         'overlayScrollbars' => [
             'js' => [
                 'vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js',
