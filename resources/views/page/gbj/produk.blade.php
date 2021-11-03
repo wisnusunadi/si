@@ -62,6 +62,7 @@
                                     <th>No</th>
                                     <th>Kode Produk</th>
                                     <th>Produk</th>
+                                    <th>Stok Gudang</th>
                                     <th>Stok</th>
                                     <th>Kelompok</th>
                                     <th>Action</th>
@@ -73,16 +74,17 @@
                                     <td>ZTP80AS-UPGRADE</td>
                                     <td>STERILISATOR KERING</td>
                                     <td>100 Unit</td>
+                                    <td>80 Unit</td>
                                     <td>Alat Kesehatan</td>
                                     <td>
                                         <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
-                                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#modal-edit">
+                                                    <button type="button" class="dropdown-item editProduk">
                                                         <i class="far fa-edit"></i>&nbsp;Edit
                                                       </button>
-                                                      <button type="button" class="dropdown-item" data-toggle="modal" data-target="#modal-view">
+                                                      <button type="button" class="dropdown-item viewProduk">
                                                         <i class="far fa-eye"></i>&nbsp;View
                                                       </button>
                                             </div>
@@ -138,7 +140,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label for="">Produk</label>
-                        <select name="" id="" class="form-control">
+                        <select name="" class="form-control produk-add">
                             <option value="">Buku</option>
                             <option value="">Bolpoin</option>
                         </select>
@@ -146,7 +148,7 @@
                 </div>
                 <div class="col">
                     <label for="">Layout</label>
-                    <select name="" id="" class="form-control">
+                    <select name="" class="form-control layout-add">
                         <option value="">Buku</option>
                         <option value="">Bolpoin</option>
                     </select>
@@ -155,13 +157,13 @@
             <div class="form-group">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="inputGroupFile02"/>
-                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                    <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+          <button type="button" class="btn btn-primary">Kirim</button>
         </div>
       </div>
     </div>
@@ -175,7 +177,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Produk (Nama Produk)</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Edit Produk Sterilisator</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -207,7 +209,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label for="">Produk</label>
-                        <select name="" id="" class="form-control">
+                        <select name="" class="form-control produk-edit">
                             <option value="">Buku</option>
                             <option value="">Bolpoin</option>
                         </select>
@@ -215,7 +217,7 @@
                 </div>
                 <div class="col">
                     <label for="">Layout</label>
-                    <select name="" id="" class="form-control">
+                    <select name="" class="form-control layout-edit">
                         <option value="">Buku</option>
                         <option value="">Bolpoin</option>
                     </select>
@@ -224,13 +226,13 @@
             <div class="form-group">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="inputGroupFile02"/>
-                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                    <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+          <button type="button" class="btn btn-primary">Kirim</button>
         </div>
       </div>
     </div>
@@ -243,7 +245,7 @@
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title">Modal title</h5>
+                  <h5 class="modal-title">Produk Sterilisator</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -269,13 +271,14 @@
                     </div>
                 </div>
               </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save</button>
-              </div>
           </div>
       </div>
   </div>
+  <style>
+      img{
+          width: 100%;
+      }
+  </style>
   @stop
 
 @section('adminlte_js')
@@ -286,6 +289,21 @@
                 var fileName = $(this).val();
                 //replace the "Choose a file" label
                 $(this).next('.custom-file-label').html(fileName);
-            })
+    });
+    $('.editProduk').click(function (e) { 
+            $('#modal-edit').modal('show');
+            selectEdit();
+        });
+    $('.viewProduk').click(function (e) { 
+            $('#modal-view').modal('show');
+        });
+    $(document).ready(function () {
+        $('.produk-add').select2();
+        $('.layout-add').select2();
+    });
+    function selectEdit() { 
+        $('.produk-edit').select2();
+        $('.layout-edit').select2();
+    }
 </script>
 @stop

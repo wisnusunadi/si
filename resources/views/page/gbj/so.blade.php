@@ -7,17 +7,6 @@
     <div class="col-12">
         <div class="row">
             <div class="col-lg-12">
-                <!-- navigation -->
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="semua-produk-tab" data-toggle="tab" href="#semua-produk" role="tab"
-                            aria-controls="semua-produk" aria-selected="true">Semua Data</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="tanggal-tab" data-toggle="tab" href="#tanggal" role="tab"
-                            aria-controls="tanggal" aria-selected="false">Per Tanggal</a>
-                    </li>
-                </ul>
                 <!-- Card -->
                 <div class="card">
                     <div class="card-header">
@@ -34,7 +23,7 @@
                                     <th>No</th>
                                     <th>Nomor SO</th>
                                     <th>Customer</th>
-                                    <th>Batas Input</th>
+                                    <th>Batas Pengeluaran</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -53,10 +42,10 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
                                                         <button type="button" class="dropdown-item addProduk" id="">
-                                                            <i class="fas fa-plus"></i>&nbsp;Add Produk
+                                                            <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                           </button>
                                                         <button type="button" class="dropdown-item viewProduk" id="">
-                                                            <i class="far fa-eye"></i>&nbsp;View
+                                                            <i class="far fa-eye"></i>&nbsp;Detail
                                                           </button>
                                             </div>
                                         </div>
@@ -95,7 +84,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="addProdukModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Modal title</h5>
@@ -131,15 +120,15 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="viewProdukModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Detail Produk SO 8457938475938475</h5>
