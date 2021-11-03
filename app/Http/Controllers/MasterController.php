@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\DetailPenjualanProduk;
+use App\Models\Divisi;
+use App\Models\Layout;
 use App\Models\PenjualanProduk;
 use App\Models\Produk;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -182,5 +185,43 @@ class MasterController extends Controller
     {
         $data = Produk::all();
         echo json_encode($data);
+    }
+
+    //Layout
+    function select_layout() {
+        $data = Layout::all();
+        return response()->json($data);
+    }
+
+    // divisi
+    function select_divisi() {
+        $data = Divisi::all();
+        return response()->json($data);
+    }
+
+    // satuan
+    function select_satuan(){
+        $data = Satuan::all();
+        return response()->json($data);
+    }
+
+    function search_produk(Request $request) {
+        $search = $request->search;
+
+      if($search == ''){
+         $produk = Produk::select('*')->limit(5)->get();
+      }else{
+         $produk = Produk::select('*')->where('nama', 'like', '%' .$search . '%')->get();
+      }
+
+      $response = array();
+      foreach($produk as $p){
+         $response[] = array(
+              "id"=>$p->id,
+              "text"=>$p->nama
+         );
+      }
+
+      return response()->json($response);
     }
 }

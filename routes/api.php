@@ -55,7 +55,11 @@ Route::prefix('/produk')->group(function () {
     Route::post('update', [App\Http\Controllers\MasterController::class, 'update_produk']);
     Route::delete('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_produk']);
     Route::get('check/{id}', [App\Http\Controllers\MasterController::class, 'check_produk']);
-    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_produk']);
+    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_produk'])->name('sel.produk');
+    Route::get('select-layout', [App\Http\Controllers\MasterController::class, 'select_layout'])->name('sel.layout');
+    Route::get('select-divisi', [App\Http\Controllers\MasterController::class, 'select_divisi'])->name('sel.divisi');
+    Route::get('select-satuan', [App\Http\Controllers\MasterController::class, 'select_satuan'])->name('sel.satuan');
+    Route::get('search-produk', [App\Http\Controllers\MasterController::class, 'search_produk'])->name('src.produk');
 });
 Route::prefix('/penjualan_produk')->group(function () {
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_penjualan_produk']);
@@ -67,7 +71,7 @@ Route::prefix('/penjualan_produk')->group(function () {
 });
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi'])->name('gbj.get');
-    Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
+    Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi'])->name('gbj.post');
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     // Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::get('/get/{id}', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
