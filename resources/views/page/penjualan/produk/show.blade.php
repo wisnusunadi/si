@@ -318,7 +318,7 @@
                     $('#edit').html(result).show();
                     console.log(result);
                     $("#editform").attr("action", href);
-
+                    select_data();
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -391,7 +391,7 @@
         });
 
         function select_data() {
-            $('.produk_id').select2({
+            $('#createtable tr').find('.produk_id').select2({
                 dropdownParent: $("#editmodal"),
                 ajax: {
                     minimumResultsForSearch: 20,

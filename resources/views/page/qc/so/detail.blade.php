@@ -31,12 +31,36 @@
         float: right;
     }
 
+    .align-center {
+        text-align: center;
+    }
+
     .margin {
         margin-bottom: 5px;
     }
 
     .filter {
         margin: 5px;
+    }
+
+    .hide {
+        display: none !important;
+    }
+
+    .bgcolor {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .fa-search:hover {
+        color: #ADD8E6;
+    }
+
+    .fa-search:active {
+        color: #808080;
+    }
+
+    .nowrap-text {
+        white-space: nowrap;
     }
 </style>
 @stop
@@ -50,7 +74,7 @@
                 <div class="row">
                     <div class="col-5">
                         <div class="margin">
-                            <b id="no_akn">AK1-P2110-4365736 </b>
+                            <div><small class="text-muted">Distributor & Instansi</small></div>
                         </div>
                         <div class="margin">
                             <b id="distributor">CIPTAJAYA RETAIL INDONESIA PT </b><small>(Distributor)</small>
@@ -59,26 +83,34 @@
                             <div><b id="no_akn">DINAS KESEHATAN PENGENDALIAN PENDUDUK DAN KELUARGA BERENCANA</b></div>
                             <small>(Pemerintah Daerah Provinsi Kalimantan Selatan)</small>
                         </div>
-
                     </div>
-                    <div class="col-3"></div>
-                    <div class="col-3 filter">
+                    <div class="col-2">
                         <div class="margin">
-                            <span class="text-muted">No SO</span>
-                            <b id="no_po" class="align-right">SO/EKAT/09/21/00001 </b>
+                            <div><small class="text-muted">No AKN</small></div>
+                            <div><b id="no_akn">AK1-P2110-4365736</b></div>
                         </div>
                         <div class="margin">
-                            <span class="text-muted">No PO</span>
-                            <b id="no_po" class="align-right">PO/ON/09/21/00001 </b>
-                        </div>
-                        <div class="margin">
-                            <div><span class="text-muted">Batas Uji</span>
-                                <b id="no_po" class="align-right">29 November 2020 </b>
-                            </div>
-                            <div class="align-right"><small class="nok"><i class="fas fa-exclamation-circle"></i> Pengujian sisa 3 hari lagi</small></div>
+                            <div><small class="text-muted">No SO</small></div>
+                            <div><b id="no_so">SO/EKAT/09/21/00001 </b></div>
                         </div>
                     </div>
-
+                    <div class="col-2">
+                        <div class="margin">
+                            <div><small class="text-muted">No PO</small></div>
+                            <div><b id="no_so">PO/ON/09/21/00001</b></div>
+                        </div>
+                        <div class="margin">
+                            <div><small class="text-muted">Batas Uji</small></div>
+                            <div><b id="no_so">29-11-2020</b></div>
+                            <div><small class="nok"><i class="fas fa-exclamation-circle"></i> Pengujian sisa 3 hari lagi</small></div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="margin">
+                            <div><small class="text-muted">Status</small></div>
+                            <div><span class="badge yellow-text">Sebagian Diperiksa</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,7 +118,7 @@
 </div>
 </div>
 <div class="row">
-    <div class="col-6">
+    <div class="col-7">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -161,7 +193,7 @@
                                         <td>2</td>
                                         <td>0</td>
                                         <td>0</td>
-                                        <td><i class="fas fa-search"></i></td>
+                                        <td><a type="button" class="noserishow" data-id="1"><i class="fas fa-search"></i></a></td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
@@ -169,7 +201,7 @@
                                         <td>5</td>
                                         <td>2</td>
                                         <td>0</td>
-                                        <td><i class="fas fa-search"></i></td>
+                                        <td><a type="button" class="noserishow" data-id="2"><i class="fas fa-search"></i></a></td>
                                     </tr>
                                     <tr>
                                         <td>3</td>
@@ -177,8 +209,7 @@
                                         <td>10</td>
                                         <td>5</td>
                                         <td>2</td>
-                                        <td>0</td>
-                                        <td><i class="fas fa-search"></i></td>
+                                        <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -188,48 +219,28 @@
             </div>
         </div>
     </div>
-    <!-- <div class="col-6">
+    <div class="col-5 hide" id="noseridetail">
         <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <span class="float-right filter">
-                            <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-clipboard-check"></i> Filter
+                            <!-- <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="cekbrg" disabled>
+                                <i class="fas fa-clipboard-check"></i> Cek Barang
                             </button>
                             <div class="dropdown-menu">
-                                <div class="px-3 py-3">
-                                    <div class="form-group">
-                                        <label for="jenis_penjualan">Status</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <button>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                            <label class="form-check-label" for="status2">
-                                                Sebagian Diperiksa
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                            <label class="form-check-label" for="status3">
-                                                Belum Diperiksa
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <span class="float-right">
-                                            <button class="btn btn-primary">
-                                                Cari
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                                <button class="dropdown-item" type="button"><i class="fas fa-check-circle ok"></i> Hasil OK</button>
+                                <button class="dropdown-item" type="button"><i class="fas fa-times-circle nok"></i> Hasil Tidak OK</button>
+                            </div> -->
+                            <!-- <button class="btn btn-outline-info" id="cekbrg" disabled>
+                                <i class="fas fa-clipboard-check"></i> Cek Barang
+                            </button> -->
+
+                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                                <button class="btn btn-warning" id="cekbrg" disabled>
+                                    <i class="fas fa-pencil-alt"></i> Cek Barang
+                                </button>
+                            </a>
                         </span>
                     </div>
                 </div>
@@ -237,7 +248,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table" style="text-align:center;" id="showtable">
+                            <table class="table" style="text-align:center;" id="noseritable">
                                 <thead>
                                     <th>#</th>
                                     <th>No</th>
@@ -260,7 +271,7 @@
                                     <tr>
                                         <td>
                                             <div class="form-check">
-                                                <input class="form-check-input yet" type="checkbox" value="spa" id="" />
+                                                <input class="form-check-input yet nosericheck" id="" type="checkbox" />
                                             </div>
                                         </td>
                                         <td>2</td>
@@ -271,7 +282,7 @@
                                     <tr>
                                         <td>
                                             <div class="form-check">
-                                                <input class="form-check-input " type="checkbox" value="spa" id="" />
+                                                <input class="form-check-input not nosericheck" id="" type="checkbox" />
                                             </div>
                                         </td>
                                         <td>3</td>
@@ -286,13 +297,85 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
+    <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="margin: 10px">
+                <div class="modal-header bg-warning">
+                    <h4 class="modal-title">Edit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="edit">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @stop
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({})
+        var showtable = $('#showtable').DataTable({});
+
+        $('#showtable').on('click', '.noserishow', function() {
+            var data = $(this).attr('data-id');
+            $('#showtable').find('tr').removeClass('bgcolor');
+            $(this).closest('tr').addClass('bgcolor');
+            $('#noseridetail').removeClass('hide');
+            console.log(data);
+        })
+
+        function load_noseritable(id) {
+            $('#noseritable').DataTable({});
+        }
+
+        $('.nosericheck').on('change', function() {
+            if ($('.nosericheck:checked').length > 0) {
+                $('#cekbrg').removeAttr('disabled');
+            } else if ($('.nosericheck:checked').length <= 0) {
+                $('#cekbrg').attr('disabled', true);
+            }
+
+        })
+
+        $(document).on('click', '.editmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
+            $.ajax({
+                url: "/api/qc/so/update_modal",
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#editmodal').modal("show");
+                    $('#edit').html(result).show();
+                    console.log(id);
+                    // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+
+        $(document).on('change', 'input[type="radio"][name="cek"]', function(event) {
+            if ($(this).val() != "") {
+                $('#btnsimpan').removeAttr('disabled');
+            } else {
+                $('#btnsimpan').attr('disabled', true);
+            }
+        });
 
     })
 </script>

@@ -10,9 +10,10 @@
             <th>No SO</th>
             <th>No AKN</th>
             <th>No PO</th>
+            <th>No SJ</th>
             <th>Customer / Distributor</th>
-            <th>Tanggal Pesan</th>
             <th>Batas Kontrak</th>
+            <th>Tanggal Pengiriman</th>
             <th>Tanggal PO</th>
             <th>Instansi</th>
             <th>Satuan</th>

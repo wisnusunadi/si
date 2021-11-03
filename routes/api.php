@@ -109,3 +109,13 @@ Route::prefix('/spb')->group(function () {
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spb']);
     Route::get('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_spb']);
 });
+
+
+Route::prefix('/qc')->group(function () {
+    Route::prefix('/so')->group(function () {
+        Route::get('update_modal', [App\Http\Controllers\QcController::class, 'update_modal_so']);
+        Route::prefix('/riwayat')->group(function () {
+            Route::get('detail_modal', [App\Http\Controllers\QcController::class, 'detail_modal_riwayat_so']);
+        });
+    });
+});

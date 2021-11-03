@@ -97,7 +97,7 @@
                                                     <td>
                                                         <div class="form-group d-flex justify-content-center">
 
-                                                            <input type="text" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" value="{{$s->pivot->jumlah}}" />
+                                                            <input type="text" class="form-control" name="jumlah[]" id="jumlah{{$loop->iteration}}" style="width: 50%" value="{{$s->pivot->jumlah}}" />
 
                                                         </div>
                                                     </td>

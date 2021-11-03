@@ -119,12 +119,6 @@
                                                                 Detail
                                                             </button>
                                                         </a>
-                                                        <a href="" data-id="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas -plus"></i>
-                                                                Pengujian
-                                                            </button>
-                                                        </a>
                                                     </div>
                                                 </td>
                                             </tr>

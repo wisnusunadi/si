@@ -981,8 +981,14 @@ return [
         ],
         [
             'text' => 'Sales Order',
-            'icon' => 'fas fa-circle',
+            'icon' => 'far fa-circle',
             'url' => '/qc/so/show',
+            'auth' => [23],
+        ],
+        [
+            'text' => 'Riwayat Pengujian',
+            'icon' => 'far fa-circle',
+            'url' => '/qc/so/riwayat/show',
             'auth' => [23],
         ],
         [
