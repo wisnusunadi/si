@@ -22,8 +22,10 @@
     {{-- Custom stylesheets (pre AdminLTE) --}}
     @yield('adminlte_css_pre')
     {{-- Configured Stylesheets --}}
-    <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet" />
-
+    <link href="{{ asset('native/css/plugin.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/select2/select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+     <link href="{{ asset('assets/css/select2/select2-bootstrap4.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/adminlte.min.css') }}" />
     
     <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
@@ -32,7 +34,7 @@
     @yield('master_css')
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400, 300">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    
+    <link rel="stylesheet" ref="https://fonts.googleapis.com/css?family=Varela+Round">
 
     {{-- Favicon --}}
     @if(config('adminlte.use_ico_only'))
@@ -65,8 +67,7 @@
     {{-- Configured Scripts --}}
     <script src="{{ asset('native/js/plugin.js') }}"></script>
     <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
-    <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
-
+  
     {{-- Custom Scripts --}}
     @yield('master_js')
 </body>

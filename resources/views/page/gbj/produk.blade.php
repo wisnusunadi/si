@@ -104,7 +104,7 @@
 <!-- Button trigger modal -->
   
   <!-- Modal -->
-  <div class="modal fade" id="modal-create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modal-create" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -141,6 +141,7 @@
                     <div class="form-group">
                         <label for="">Produk</label>
                         <select name="" class="form-control produk-add">
+
                             <option value="">Buku</option>
                             <option value="">Bolpoin</option>
                         </select>
@@ -173,7 +174,7 @@
 <!-- Button trigger modal -->
   
   <!-- Modal -->
-  <div class="modal fade" id="modal-edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modal-edit" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -241,7 +242,7 @@
   {{-- Modal View --}}
   
   <!-- Modal -->
-  <div class="modal fade" id="modal-view" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal fade" id="modal-view" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <div class="modal-header">
@@ -292,18 +293,16 @@
     });
     $('.editProduk').click(function (e) { 
             $('#modal-edit').modal('show');
-            selectEdit();
+            $('.produk-edit ').select2();
+            $('.layout-edit').select2();
         });
     $('.viewProduk').click(function (e) { 
             $('#modal-view').modal('show');
         });
     $(document).ready(function () {
-        $('.produk-add').select2();
+        $('.produk-add ').select2();
         $('.layout-add').select2();
     });
-    function selectEdit() { 
-        $('.produk-edit').select2();
-        $('.layout-edit').select2();
-    }
+
 </script>
 @stop

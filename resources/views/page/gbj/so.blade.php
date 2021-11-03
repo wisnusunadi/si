@@ -127,7 +127,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="viewProdukModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade" id="viewProdukModal"role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -175,6 +175,7 @@
         });
         $('.viewProduk').click(function (e) { 
             $('#viewProdukModal').modal('show');
+
         });
     });
 </script>

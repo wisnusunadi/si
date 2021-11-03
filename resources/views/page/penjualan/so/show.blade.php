@@ -16,11 +16,6 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
-                                    <a href="{{route('penjualan.so.create')}}"><button class="btn btn-outline-info">
-                                            <i class="fas fa-plus"></i> Tambah
-                                        </button></a>
-                                </span>
-                                <span class="float-right filter">
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
@@ -68,7 +63,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table" style="text-align:center;">
+                                    <table class="table" style="text-align:center;" id="showtable">
                                         <thead>
                                             <th>No</th>
                                             <th>No SO</th>
@@ -79,10 +74,10 @@
                                             <th>DO</th>
                                             <th>Tanggal DO</th>
                                             <th>Keterangan</th>
-                                            <th>Aksi</th>
+                                            <th>Status</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>SO-EKAT000001</td>
                                                 <td>PO/ON/10/2021/0001</td>
@@ -123,7 +118,7 @@
                                                 <td>31-10-2021</td>
                                                 <td>-</td>
                                                 <td></td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -136,6 +131,62 @@
     </div>
 </div>
 @stop
-
 @section('adminlte_js')
+<script>
+    $(function() {
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/so/data',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'jenis',
+                },
+                {
+                    data: 'no_po',
+                },
+                {
+                    data: 'tgl_po',
+                },
+                {
+                    data: 'nama_customer',
+                },
+                {
+                    data: 'no_do',
+                },
+                {
+                    data: 'tgl_do',
+                },
+                {
+                    data: 'ket',
+                },
+                {
+                    data: 'ket',
+                }
+            ]
+        })
+
+    })
+</script>
 @stop
