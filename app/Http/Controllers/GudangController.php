@@ -36,14 +36,15 @@ class GudangController extends Controller
                 return $data->Layout->ruang . ';' . $data->Layout->lantai . '-' . $data->Layout->rak;
             })
             ->addColumn('nama', function ($data) {
-                return $data->produk->nama;
+                return $data->nama;
             })
             ->addColumn('kode', function ($data) {
                 return $data->produk->kode ? $data->produk->kode : '-';
             })
             ->addColumn('action', function ($data) {
-                return '<button type="button" class="btn btn-success btn-sm" id="getEditArticleData" data-id="'.$data->id.'">Edit</button>
-                <button type="button" class="btn btn-success btn-sm" id="showEditArticleData" data-id="'.$data->id.'">View</button>';
+                return '
+                <button type="button" class="dropdown-item" id="getEditArticleData" data-id="'.$data->id.'"> <i class="far fa-edit"></i>&nbsp;Edit</button>
+                <button type="button" class="dropdown-item" id="showEditArticleData" data-id="'.$data->id.'"><i class="far fa-eye"></i>&nbsp;View</button>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -321,7 +322,7 @@ class GudangController extends Controller
         foreach($data as $d) {
             $html = '<div class="modal-header">
                             <h5 class="modal-title">Produk '.$d->produk->nama.'</h5>
-                            
+
                         </div>
                         <div class="modal-body">
                             <div class="row">

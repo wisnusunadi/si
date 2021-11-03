@@ -71,30 +71,6 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            {{-- <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>ZTP80AS-UPGRADE</td>
-                                    <td>STERILISATOR KERING</td>
-                                    <td>100 Unit</td>
-                                    <td>80 Unit</td>
-                                    <td>Alat Kesehatan</td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                    <button type="button" class="dropdown-item editProduk">
-                                                        <i class="far fa-edit"></i>&nbsp;Edit
-                                                      </button>
-                                                      <button type="button" class="dropdown-item viewProduk">
-                                                        <i class="far fa-eye"></i>&nbsp;View
-                                                      </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody> --}}
                         </table>
                     </div>
                 </div>
@@ -175,7 +151,7 @@
 
 <!-- Modal -->
 
-<div class="modal" id="EditArticleModal">
+<div class="modal" id="EditArticleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div id="EditArticleModalBody">
@@ -193,14 +169,6 @@
 {{-- Modal View --}}
 
 <!-- Modal -->
-<div class="modal fade" id="modal-view" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
-
-        </div>
-    </div>
-</div>
 
 <div class="modal" id="DeleteArticleModal">
     <div class="modal-dialog">
@@ -489,44 +457,6 @@
                 success: function(result) {
                     console.log(result);
                     $('#GetArticleModalBody').html(result.html);
-                    $('.produk-edit ').select2({
-                        placeholder: 'Select an item',
-                        ajax: {
-                            url: '{{ route('sel.produk') }}',
-                            dataType: 'json',
-                            delay: 250,
-                            processResults: function (data) {
-                            return {
-                                results:  $.map(data, function (item) {
-                                    return {
-                                        text: item.nama,
-                                        id: item.id
-                                    }
-                                })
-                            };
-                            },
-                            cache: true
-                        }
-                    });
-                    $('.layout-edit').select2({
-                        placeholder: 'Select an item',
-                        ajax: {
-                            url: '{{ route('sel.layout') }}',
-                            dataType: 'json',
-                            delay: 250,
-                            processResults: function (data) {
-                            return {
-                                results:  $.map(data, function (item) {
-                                    return {
-                                        text: item.ruang + item.lantai + item.rak,
-                                        id: item.id
-                                    }
-                                })
-                            };
-                            },
-                            cache: true
-                        }
-                    });
                     $('#DeleteArticleModal').show();
                 }
             });
