@@ -97,7 +97,7 @@
                 <table class="table table-striped" id="add-produk">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" name="" id=""></th>
+                            <th></th>
                             <th>Nama Produk</th>
                             <th>Tipe</th>
                             <th>Merk</th>
@@ -105,13 +105,13 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row"><input type="checkbox" name="" id=""></th>
+                            <td></td>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                             <td>ABPM50</td>
                             <td>ELITECH</td>
                         </tr>
                         <tr>
-                            <th scope="row"><input type="checkbox" name="" id=""></th>
+                            <td></td>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                             <td>RGB</td>
                             <td>ELITECH</td>
@@ -175,8 +175,22 @@
         });
         $('.viewProduk').click(function (e) { 
             $('#viewProdukModal').modal('show');
-
         });
+    });
+
+    $('#add-produk').DataTable({
+            'columnDefs': [
+        {
+            'targets': 0,
+            'checkboxes': {
+                'selectRow': true
+            }
+        }
+    ],
+    'select': {
+        'style': 'multi'
+    },
+    'order': [[1, 'asc']]
     });
 </script>
 @stop

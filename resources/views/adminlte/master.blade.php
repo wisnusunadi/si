@@ -26,6 +26,8 @@
     <link href="{{ asset('assets/css/select2/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
      <link href="{{ asset('assets/css/select2/select2-bootstrap4.min.css') }}" rel="stylesheet" />
+<link type="text/css" href="{{ asset('vendor/select2/checkbox/check.css') }}" rel="stylesheet" />
+
     <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/adminlte.min.css') }}" />
     
     <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
@@ -67,6 +69,7 @@
     {{-- Configured Scripts --}}
     <script src="{{ asset('native/js/plugin.js') }}"></script>
     <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('vendor/select2/checkbox/check.js') }}"></script>
   
     {{-- Custom Scripts --}}
     @yield('master_js')
