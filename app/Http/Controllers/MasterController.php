@@ -22,9 +22,16 @@ class MasterController extends Controller
     {
         return datatables()->of(Produk::with('KelompokProduk'))->toJson();
     }
-    public function get_data_customer()
+    public function get_data_customer($value)
     {
-        $data = Customer::select();
+        $x = explode(',', $value);
+        if ($value == 0 || $value == 'kosong') {
+            $data = Customer::select();
+        } else {
+            $data = Customer::whereHas('Provinsi', function ($q) use ($x) {
+                $q->whereIN('status', $x);
+            })->get();
+        }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('prov', function ($data) {
@@ -201,6 +208,11 @@ class MasterController extends Controller
             'harga' => $harga_convert
         ]);
 
+        for ($i = 0; $i < count($request->produk_id); $i++) {
+            $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
+        }
+
+
         // for ($i = 0; $i < count($request->produk_id); $i++) {
         //     DetailPenjualanProduk::create([
         //         'produk_id' => $request->produk_id[$i],
@@ -270,6 +282,22 @@ class MasterController extends Controller
     {
         // $produk = DetailPenjualanProduk::findOrFail($id);
         // $produk->delete();
+    }
+
+    public function update_penjualan_produk(Request $request, $id)
+    {
+
+        $harga_convert =  str_replace(',', "", $request->harga);
+        $PenjualanProduk = PenjualanProduk::find($id);
+        $PenjualanProduk->nama = $request->nama_paket;
+        $PenjualanProduk->harga = $harga_convert;
+        $PenjualanProduk->save();
+
+        $produk_array = [];
+        for ($i = 0; $i < count($request->produk_id); $i++) {
+            $produk_array[$request->produk_id[$i]] = ['jumlah' => $request->jumlah[$i]];
+        }
+        $PenjualanProduk->produk()->sync($produk_array);
     }
     //Other
 

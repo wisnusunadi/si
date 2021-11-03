@@ -56,31 +56,31 @@
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="filterpenjualan">
-                                        <form class="px-4" style="white-space:nowrap;">
+                                        <form class="px-4" style="white-space:nowrap;" id="filter">
                                             <div class="dropdown-header">
                                                 Status
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="dropdownStatus" value="ekatalog" />
-                                                    <label class="form-check-label" for="dropdownStatus">
-                                                        E-Catalogue
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus1" value="2" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus1">
+                                                        Jawa
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="dropdownStatus" />
-                                                    <label class="form-check-label" for="dropdownStatus" value="spa">
-                                                        SPA
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus2" value="1" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus2">
+                                                        Luar Jawa
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="dropdownStatus" value="spb" />
-                                                    <label class="form-check-label" for="dropdownStatus">
-                                                        SPB
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="0" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus3">
+                                                        Semua
                                                     </label>
                                                 </div>
                                             </div>
@@ -146,8 +146,8 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/customer/data',
-                'type': 'POST',
+                'url': '/api/customer/data/' + 0,
+
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -396,6 +396,22 @@
                 }
             })
         }
+
+        $('#filter').submit(function() {
+            var values = [];
+            $("input:checked").each(function() {
+                values.push($(this).val());
+            });
+            if (values != 0) {
+                var x = values;
+
+            } else {
+                var x = ['kosong']
+            }
+            console.log(x);
+            $('#showtable').DataTable().ajax.url(' /api/customer/data/' + x).load();
+            return false;
+        });
     })
 </script>
 @stop
