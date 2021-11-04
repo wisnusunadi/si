@@ -791,12 +791,10 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/ekatalog/data',
-                'type': 'POST',
+                'url': '/api/ekatalog/data/' + 0,
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
-
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -860,8 +858,14 @@
             $("input:checked").each(function() {
                 values.push($(this).val());
             });
-            $('#ekatalogtable').DataTable().ajax.url('/api/ekatalog/data/' + values).load();
-            console.log(values);
+            if (values == 'sepakat') {
+                var x = values;
+
+            } else {
+                var x = ['kosong']
+            }
+            console.log(x);
+            $('#ekatalogtable').DataTable().ajax.url('/api/ekatalog/data/' + x).load();
             return false;
         });
 

@@ -18,7 +18,7 @@
         </div>
         @endif
         @foreach($penjualanproduk as $p)
-        <form action="" method="post">
+        <form action="/api/penjualan_produk/update/{{$p->id}}" method="post">
             <div class="row d-flex justify-content-center">
 
                 <div class="col-11">
@@ -87,18 +87,16 @@
                                                     <td>
                                                         <div class="form-group row">
                                                             <div class="col-12">
-                                                                <select class="select-info select2 form-control produk_id" name="produk_id[]" id="produk_id" style="width:100%">
-                                                                    <option value=""></option>
+                                                                <select class="select-info select2 form-control " name="produk_id[]" id="{{$loop->iteration-1}}" style="width:100%">
+                                                                    <option value="{{$s->id}}" selected>{{$s->tipe}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td><span class="badge" id="kelompok_produk"></span>{{$s->kelompokproduk->nama}}</td>
+                                                    <td><span class="badge kelompok_produk" id="kelompok_produk{{$loop->iteration-1}}">{{$s->kelompokproduk->nama}}</span></td>
                                                     <td>
                                                         <div class="form-group d-flex justify-content-center">
-
-                                                            <input type="text" class="form-control" name="jumlah[]" id="jumlah{{$loop->iteration}}" style="width: 50%" value="{{$s->pivot->jumlah}}" />
-
+                                                            <input type="text" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" value="{{$s->pivot->jumlah}}" />
                                                         </div>
                                                     </td>
                                                     <td>

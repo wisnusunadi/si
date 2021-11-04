@@ -74,9 +74,16 @@ class PenjualanController extends Controller
             ->rawColumns(['batas_kontrak',])
             ->make(true);
     }
-    public function get_data_ekatalog()
+    public function get_data_ekatalog($value)
     {
-        $data  = Ekatalog::with('pesanan')->get();
+        $x = explode(',', $value);
+
+        if ($value == 0 || $value == 'kosong') {
+            $data  = Ekatalog::with('pesanan');
+        } else {
+            $data  = Ekatalog::with('pesanan')->where('status', 'sepakat')->get();
+        }
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('status', function ($data) {
@@ -140,54 +147,6 @@ class PenjualanController extends Controller
                 </a>
                 </div>';
                 }
-            })
-            ->rawColumns(['button', 'status'])
-            ->make(true);
-    }
-    public function get_filter_data_ekatalog($value)
-    {
-        $x = explode(',', $value);
-        $y = ['sepakat', 'negosisasi', 'batal'];
-        $data  = Ekatalog::with('pesanan')->whereIN('status', $x)->get();
-        return datatables()->of($data)
-            ->addIndexColumn()
-            ->addColumn('status', function ($data) {
-                if ($data->status == "sepakat") {
-                    $status = '<span class="green-text badge">Sepakat</span>';
-                } else if ($data->status == "negosiasi") {
-                    $status =  '<span class="yellow-text badge">Negosiasi</span>';
-                } else {
-                    $status =  '<span class="red-text badge">Batal</span>';
-                }
-
-                return $status;
-            })
-            ->addColumn('nopo', function ($data) {
-                if ($data->Pesanan) {
-                    return $data->Pesanan->no_po;
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
-            })
-            ->addColumn('button', function ($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="">
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
-                      Detail
-                    </button>
-                </a>
-                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
-                    <button class="dropdown-item" type="button" >
-                      <i class="fas fa-pencil-alt"></i>
-                      Edit
-                    </button>
-                </a>
-                </div>';
             })
             ->rawColumns(['button', 'status'])
             ->make(true);
