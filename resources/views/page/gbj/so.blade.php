@@ -236,7 +236,7 @@
             [1, 'asc']
         ],
         "oLanguage": {
-        "sSearch": "Masukkan Produk:"
+        "sSearch": "Cari:"
         }
     });
 
