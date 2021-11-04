@@ -133,7 +133,7 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile02" />
+                        <input type="file" name="gambar" class="custom-file-input" id="inputGroupFile02"/>
                         <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
 
 <!-- Modal -->
 
-<div class="modal" id="EditArticleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="EditArticleModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div id="EditArticleModalBody">
@@ -160,7 +160,7 @@
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary modelClose" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary" id="SubmitEditArticleForm">Kirim</button>
+                <button type="button" class="btn btn-primary" id="Submitmodaledit">Kirim</button>
             </div>
         </div>
     </div>
@@ -329,7 +329,7 @@
                     dim_t: $('#dim_t').val(),
                     produk_id: $('#produk_id').val(),
                     layout_id: $('#layout_id').val(),
-                    gambar: $('#gambar').val()
+                    gambar: $('#inputGroupFile02').val()
                 },
                 success: function (res) {
                     if (res.errors) {
@@ -404,7 +404,7 @@
                 }
             });
         });
-        $('#SubmitEditArticleForm').click(function(e) {
+        $('#Submitmodaledit').click(function(e) {
             e.preventDefault();
             $.ajaxSetup({
                 headers: {
@@ -412,27 +412,26 @@
                 }
             });
             $.ajax({
-                url: "articles/"+id,
-                method: 'PUT',
+                url: "/api/gbj/edit/"+id,
+                method: 'POST',
                 data: {
-                    title: $('#editTitle').val(),
-                    description: $('#editDescription').val(),
+                    nama: $('#editnama').val(),
+                    stok: $('#editstok').val(),
+                    deskripsi: $('#editdeskripsi').val(),
+                    dim_p: $('#editdim_p').val(),
+                    dim_l: $('#editdim_l').val(),
+                    dim_t: $('#editdim_t').val(),
+                    produk_id: $('#editproduk_id').val(),
+                    layout_id: $('#editlayout_id').val(),
+                    gambar: $('#editinputGroupFile02').val(),
                 },
                 success: function(result) {
                     if(result.errors) {
-                        $('.alert-danger').html('');
-                        $.each(result.errors, function(key, value) {
-                            $('.alert-danger').show();
-                            $('.alert-danger').append('<strong><li>'+value+'</li></strong>');
-                        });
+                        console.log('error');
                     } else {
-                        $('.alert-danger').hide();
-                        $('.alert-success').show();
                         $('.datatable').DataTable().ajax.reload();
-                        setInterval(function(){
-                            $('.alert-success').hide();
-                            $('#EditArticleModal').hide();
-                        }, 2000);
+                        $('#EditArticleModal').hide();
+                        location.reload();
                     }
                 }
             });
