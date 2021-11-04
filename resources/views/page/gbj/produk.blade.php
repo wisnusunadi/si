@@ -17,8 +17,7 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <span class="float-right">
-                                            <button type="button" class="btn btn-info" data-toggle="modal"
-                                                data-target="#modal-create">
+                                            <button type="button" class="btn btn-info" id="create">
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
@@ -93,6 +92,8 @@
                 </button>
             </div>
             <div class="modal-body">
+                <form action="" id="produkForm" name="produkForm" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="id">
                 <div class="row">
                     <div class="col">
                         <label for="">Nama Produk</label>
@@ -140,8 +141,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary" id="Submitmodalcreate">Kirim</button>
+                <button type="submit" class="btn btn-primary" id="Submitmodalcreate">Kirim</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -167,7 +169,15 @@
 </div>
 
 {{-- Modal View --}}
+<div class="modal fade" id="modal-view" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div id="GetArticleModalBody">
 
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal -->
 
 <div class="modal" id="DeleteArticleModal">
@@ -204,6 +214,11 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         $('.produk-add ').select2();
         $('.layout-add').select2();
         // load data
@@ -288,7 +303,7 @@
                 }
             }
         });
-
+        // show value by dropdown
         $('#produk_id').change(function(e) {
             var id = $(this).val();
             console.log(id);
@@ -303,136 +318,89 @@
                             $('#nama').val(res.nama);
                         } else {
                             // $("#layout_id").empty();
+                            $('#nama').val();
                         }
                     }
                 });
             }
-        })
+        });
 
         // post
-        $('#Submitmodalcreate').click(function (e) {
+        $('#create').click(function(e) {
+            $('#Submitmodalcreate').val('create-product');
+            $('#produkForm').trigger("reset");
+            $('#exampleModalLabel').html('Tambah Produk');
+            $('#modal-create').modal('show');
+        });
+
+        $('body').on('submit', '#produkForm', function (e) {
             e.preventDefault();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+            var actionType = $('#Submitmodalcreate').val();
+            $('#Submitmodalcreate').html('Sending..');
+            var formData = new FormData(this);
             $.ajax({
+                type: 'POST',
                 url: "{{ route('gbj.post') }}",
-                method: "post",
-                data: {
-                    nama: $('#nama').val(),
-                    stok: $('#stok').val(),
-                    deskripsi: $('#deskripsi').val(),
-                    dim_p: $('#dim_p').val(),
-                    dim_l: $('#dim_l').val(),
-                    dim_t: $('#dim_t').val(),
-                    produk_id: $('#produk_id').val(),
-                    layout_id: $('#layout_id').val(),
-                    gambar: $('#inputGroupFile02').val()
-                },
-                success: function (res) {
-                    if (res.errors) {
-                        console.log('error');
-                    } else {
-                        console.log('ok');
-                        $('.datatable').DataTable().ajax.reload();
-                        location.reload();
-                    }
+                data: formData,
+                cache:false,
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    $('#produkForm').trigger('reset');
+                    $('#modal-create').modal('hide');
+                    $('#Submitmodalcreate').html('Kirim');
+                    $('.datatable').DataTable().ajax.reload();
+                    location.reload();
                 }
             });
         });
 
         // edit
-        $('.modelClose').on('click', function(){
-            $('#EditArticleModal').hide();
-        });
-        var id;
-        $('body').on('click', '#getEditArticleData', function(e) {
-            // e.preventDefault();
-            // $('.alert-danger').html('');
-            // $('.alert-danger').hide();
-            id = $(this).data('id');
+        $(document).on('click', '.editmodal', function() {
+        var id = $(this).data('id');
+           console.log(id);
+           // ajax
             $.ajax({
-                url: "/api/gbj/ubah/" + id,
-                method: 'GET',
-                // data: {
-                //     id: id,
-                // },
-                success: function(result) {
-                    console.log(result);
-                    $('#EditArticleModalBody').html(result.html);
-                    $('.produk-edit ').select2({
-                        placeholder: 'Select an item',
-                        ajax: {
-                            url: '{{ route('sel.produk') }}',
-                            dataType: 'json',
-                            delay: 250,
-                            processResults: function (data) {
-                            return {
-                                results:  $.map(data, function (item) {
-                                    return {
-                                        text: item.nama,
-                                        id: item.id
-                                    }
-                                })
-                            };
-                            },
-                            cache: true
-                        }
-                    });
-                    $('.layout-edit').select2({
-                        placeholder: 'Select an item',
-                        ajax: {
-                            url: '{{ route('sel.layout') }}',
-                            dataType: 'json',
-                            delay: 250,
-                            processResults: function (data) {
-                            return {
-                                results:  $.map(data, function (item) {
-                                    return {
-                                        text: item.ruang + item.lantai + item.rak,
-                                        id: item.id
-                                    }
-                                })
-                            };
-                            },
-                            cache: true
-                        }
-                    });
-                    $('#EditArticleModal').show();
+                type:"POST",
+                url: '/api/gbj/ubah',
+                data: { id: id },
+                dataType: 'json',
+                success: function(res){
+                    console.log(res);
+                    // var newOption = $("<option selected='selected'></option>").val(res[0].layout_id).text(res[0].layout.ruang + ';' + res[0].layout.lantai + '-' + res[0].layout.rak);
+                    // var newOption1 = $("<option selected='selected'></option>").val(res[0].produk_id).text(res[0].produk.nama);
+                    $('#exampleModalLabel').html('Edit Produk ' + res[0].nama);
+                    $('#Submitmodalcreate').val('edit-product');
+                    $('#modal-create').modal('show');
+                    $('#id').val(res[0].id);
+                    $('#nama').val(res[0].nama);
+                    $('textarea#deskripsi').val(res[0].deskripsi);
+                    $('#stok').val(res[0].stok);
+                    $('#dim_p').val(res[0].dim_p);
+                    $('#dim_l').val(res[0].dim_l);
+                    $('#dim_t').val(res[0].dim_t);
+                    $('#layout_id').val(res[0].layout_id);
+                    // $('#layout_id').select2().trigger('change');
+                    $('#produk_id').val(res[0].produk_id);
+                    //$('#produk_id').select2().trigger('change');
+                    $('#inputGroupFile02').val(res[0].gambar);
                 }
             });
         });
-        $('#Submitmodaledit').click(function(e) {
-            e.preventDefault();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+
+        // detail
+        $(document).on('click', '.detailmodal', function() {
+            var id = $(this).data('id');
+            console.log(id);
             $.ajax({
-                url: "/api/gbj/edit/"+id,
-                method: 'POST',
-                data: {
-                    nama: $('#editnama').val(),
-                    stok: $('#editstok').val(),
-                    deskripsi: $('#editdeskripsi').val(),
-                    dim_p: $('#editdim_p').val(),
-                    dim_l: $('#editdim_l').val(),
-                    dim_t: $('#editdim_t').val(),
-                    produk_id: $('#editproduk_id').val(),
-                    layout_id: $('#editlayout_id').val(),
-                    gambar: $('#editinputGroupFile02').val(),
-                },
-                success: function(result) {
-                    if(result.errors) {
-                        console.log('error');
-                    } else {
-                        $('.datatable').DataTable().ajax.reload();
-                        $('#EditArticleModal').hide();
-                        location.reload();
-                    }
+                url: "/api/gbj/view/" + id,
+                type: 'GET',
+                // data: { id: id },
+                dataType: 'json',
+                success: function(res){
+                    console.log(res);
+                    $('#GetArticleModalBody').html(res.html);
+                    $('#modal-view').modal('show');
                 }
             });
         });

@@ -92,7 +92,7 @@ Route::prefix('/gbj')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     // Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::get('/get/{id}', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
-    Route::get('/ubah/{id}', [App\Http\Controllers\GudangController::class, 'edit'])->name('show.gbj');
+    Route::post('/ubah', [App\Http\Controllers\GudangController::class, 'edit'])->name('show.gbj');
     Route::get('/view/{id}', [App\Http\Controllers\GudangController::class, 'show'])->name('show.gbj');
 });
 
