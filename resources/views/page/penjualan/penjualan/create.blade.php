@@ -126,6 +126,24 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
+                                                <div class="col-7">
+                                                    <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" />
+                                                    <div class="invalid-feedback" id="msgalamatinstansi">
+                                                        @if($errors->has('alamatinstansi'))
+                                                        {{ $errors->first('alamatinstansi')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
+                                                <div class="col-7">
+                                                    <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
                                                 <div class="col-7">
                                                     <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
@@ -136,7 +154,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
                                                 <div class="col-5 col-form-label">
@@ -151,6 +168,10 @@
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
                                                         <label class="form-check-label" for="satuan3">Batal</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status" id="satuan3" value="draft" />
+                                                        <label class="form-check-label" for="satuan3">Draft</label>
                                                     </div>
                                                     <div class="invalid-feedback" id="msgstatus">
                                                         @if($errors->has('status'))
@@ -295,7 +316,7 @@
                                         <div class="form-group row">
                                             <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
                                             <div class="col-5">
-                                                <textarea class="form-control col-form-label" id="nonketerangan"></textarea>
+                                                <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -464,7 +485,7 @@
                                     </a>
                                 </span>
                                 <span class="float-right">
-                                    <button type="submit" class="btn btn-info" id="btntambah" disabled>
+                                    <button type="submit" class="btn btn-info" id="btntambah">
                                         Tambah
                                     </button>
                                 </span>
@@ -945,7 +966,7 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" />
+                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" readonly/>
                     </div>
                 </td>
                 <td>
@@ -1038,6 +1059,33 @@
             totalhargapart();
         });
 
+        $('.provinsi').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/provinsi/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
     });
 </script>
 @stop

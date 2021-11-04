@@ -19,6 +19,7 @@
 @stop
 
 @section('content')
+@foreach($ekatalog as $e)
 <div class="row">
     <div class="col-12">
         <div class="card hide" id="ekatalog">
@@ -31,19 +32,19 @@
                                 <div>
                                     <b>Info Customer</b>
                                 </div>
-                                <div id="nama_distributor">{{$ekatalog->customer->nama}}</div>
-                                <div id="instansi">{{$ekatalog->instansi}}</div>
-                                <div id="satuan_kerja">{{$ekatalog->satuan}}</div>
-                                <div id="alamat">{{$ekatalog->customer->alamat}}</div>
+                                <div id="nama_distributor">{{$e->customer->nama}}</div>
+                                <div id="instansi">{{$e->instansi}}</div>
+                                <div id="satuan_kerja">{{$e->satuan}}</div>
+                                <div id="alamat">{{$e->alamat}}</div>
                             </div>
                             <div class="col-3">
                                 <div>
                                     <b>Info AKN</b>
                                 </div>
-                                <div id="no_paket">{{$ekatalog->no_paket}}</div>
-                                <div id="tanggal_pemesanan">{{$ekatalog->tgl_buat}}</div>
-                                <div id="batas_kontrak">{{$ekatalog->tgl_kontrak}}</div>
-                                <div class="badge red-text" id="status">{{$ekatalog->status}}</div>
+                                <div id="no_paket">{{$e->no_paket}}</div>
+                                <div id="tanggal_pemesanan">{{$e->tgl_buat}}</div>
+                                <div id="batas_kontrak">{{$e->tgl_kontrak}}</div>
+                                <div class="badge red-text" id="status">{{$e->status}}</div>
                             </div>
                             <div class="col-3">
                                 <div>
@@ -119,7 +120,7 @@
                 </div>
                 @endif
                 <div class="content">
-                    <form>
+                    <form method="post" action="/api/ekatalog/update/{{$e->id}}">
                         <div class="row d-flex justify-content-center">
                             <div class="col-10">
                                 <h4>Info Customer</h4>
@@ -130,7 +131,7 @@
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
                                                 <div class="col-5">
                                                     <select name="customer_id" id="customer_id" class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
-                                                        <option value="{{$ekatalog->customer_id}}">{{$ekatalog->customer->nama}}</option>
+                                                        <option value="{{$e->customer_id}}" selected>{{$e->customer->nama}}</option>
                                                     </select>
                                                     <div class="invalid-feedback" id="msgcustomer_id">
                                                         @if($errors->has('customer_id'))
@@ -142,13 +143,13 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
                                                 <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$ekatalog->customer->alamat}}" />
+                                                    <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$e->customer->alamat}}" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
                                                 <div class="col-5">
-                                                    <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$ekatalog->customer->telp}}" />
+                                                    <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$e->customer->telp}}" />
                                                 </div>
                                             </div>
 
@@ -178,12 +179,16 @@
                                                         <input class="form-check-input" type="radio" name="status_akn" id="status_akn" value="batal" />
                                                         <label class="form-check-label" for="status_akn3">Batal</label>
                                                     </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn" value="draft" />
+                                                        <label class="form-check-label" for="status_akn3">Draft</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
                                                 <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$ekatalog->instansi}}" />
+                                                    <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$e->instansi}}" />
                                                     <div class="invalid-feedback" id="msginstansi">
                                                         @if($errors->has('instansi'))
                                                         {{ $errors->first('instansi')}}
@@ -191,11 +196,29 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
+                                                <div class="col-7">
+                                                    <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" value="{{$e->alamat}}" />
+                                                    <div class="invalid-feedback" id="msgalamatinstansi">
+                                                        @if($errors->has('alamatinstansi'))
+                                                        {{ $errors->first('alamatinstansi')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
+                                                <div class="col-7">
+                                                    <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                        <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
                                                 <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$ekatalog->satuan}}" />
+                                                    <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$e->satuan}}" />
                                                     <div class=" invalid-feedback" id="msgsatuan_kerja">
                                                         @if($errors->has('satuan_kerja'))
                                                         {{ $errors->first('satuan_kerja')}}
@@ -206,7 +229,7 @@
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
                                                 <div class="col-5">
-                                                    <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi">{{$ekatalog->deskripsi}}</textarea>
+                                                    <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi">{{$e->deskripsi}}</textarea>
                                                     <div class="invalid-feedback" id="msgdeskripsi">
                                                         @if($errors->has('deskripsi'))
                                                         {{ $errors->first('deskripsi')}}
@@ -217,7 +240,7 @@
                                             <div class="form-group row">
                                                 <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
                                                 <div class="col-5">
-                                                    <textarea class="form-control col-form-label" v-model="keterangan">{{$ekatalog->ket}}</textarea>
+                                                    <textarea class="form-control col-form-label" name="keterangan">{{$e->ket}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -304,20 +327,22 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach($ekatalog as $d)
+
+                                                            @foreach($e->DetailEkatalog as $f)
+
                                                             <tr>
-                                                                <td>1</td>
+                                                                <td>{{$loop->iteration}}</td>
                                                                 <td>
                                                                     <div class="form-group">
-                                                                        <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
-                                                                            <option value=""></option>
+                                                                        <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                                                            <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
                                                                         </select>
                                                                     </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
                                                                         <div class="input-group">
-                                                                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;" value="">
+                                                                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah{{$loop->iteration-1}}" style="width:100%;" value="{{$f->jumlah}}">
                                                                             <div class="input-group-append">
                                                                                 <span class="input-group-text" id="produk_satuan">pcs</span>
                                                                             </div>
@@ -327,12 +352,12 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
-                                                                        <input type="number" class="form-control produk_harga" id="produk_harga" name="produk_harga[]" style="width:100%;" />
+                                                                        <input type="number" class="form-control produk_harga" id="produk_harga{{$loop->iteration-1}}" name="produk_harga[]" style="width:100%;" value="{{$f->harga}}" />
                                                                     </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
-                                                                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" readonly />
+                                                                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal{{$loop->iteration-1}}" name="produk_subtotal[]" style="width:100%;" readonly value="{{$f->harga*$f->jumlah}}" />
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -340,13 +365,22 @@
                                                                 </td>
                                                             </tr>
                                                             @endforeach
+
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
                                                                 <th colspan="4" style="text-align:right;">Total Harga</th>
-                                                                <th id="totalhargaprd" class="align-right">Rp. 0</th>
+                                                                <th id="totalhargaprd" class="align-right">Rp.
+                                                                    <?php $x = 0;
+                                                                    foreach ($e->DetailEkatalog as $f) {
+                                                                        $x += $f->harga * $f->jumlah;
+                                                                    }
+                                                                    ?>
+                                                                    {{number_format($x)}}
+                                                                </th>
                                                             </tr>
                                                         </tfoot>
+
                                                     </table>
                                                 </div>
                                             </div>
@@ -446,6 +480,7 @@
                                 </span>
                             </div>
                         </div>
+
                     </form>
 
                 </div>
@@ -453,6 +488,7 @@
         </div>
     </div>
 </div>
+@endforeach
 @stop
 
 @section('adminlte_js')
@@ -460,8 +496,15 @@
     $(function() {
         var jenis = '{{$jenis}}';
         jenis_penjualan(jenis);
+        loop();
 
-        $('input[name="status_akn"][value={{$ekatalog->status}}]').attr('checked', 'checked');
+        function loop() {
+            for (i = 0; i < 20; i++) {
+                select_data(i);
+            }
+        }
+
+        $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
         $('#customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('#msgcustomer_id').text("");
@@ -638,11 +681,14 @@
                 $(el).find("td:eq(0)").html(++c);
                 var j = c - 1;
                 $(el).find('.penjualan_produk_id').attr('name', 'penjualan_produk_id[' + j + ']');
-                $(el).find('.penjualan_produk_id').attr('id', 'penjualan_produk_id' + j);
+                $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
+                $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
+                $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
+                $(el).find('.penjualan_produk_id').attr('id', j);
                 $(el).find('.variasi').attr('name', 'variasi[' + j + ']');
                 $(el).find('.variasi').attr('id', 'variasi' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
-                $('.produk_id').select2();
+                select_data(j);
             });
         }
 
@@ -672,7 +718,7 @@
                 <td></td>
                 <td>
                     <div class="form-group">
-                        <select name="penjualan_produk_id[]" id="penjualan_produk_id" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                        <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
                     </div>
@@ -695,7 +741,7 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" />
+                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" readonly/>
                     </div>
                 </td>
                 <td>
@@ -719,7 +765,7 @@
                 $(el).find('.part_id').attr('name', 'part_id[' + j + ']');
                 $(el).find('.part_id').attr('id', 'part_id' + j);
                 $(el).find('input[id="part_jumlah"]').attr('name', 'part_jumlah[' + j + ']');
-                // $('.produk_id').select2();
+
             });
         }
 
@@ -831,6 +877,80 @@
             });
         });
 
+
+        $('.provinsi').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/provinsi/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
+
+
+
+        function select_data(i) {
+            $('#' + i).select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/penjualan_produk/select/',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            }).change(function() {
+                var index = $(this).attr('id');
+                var id = $(this).val();
+                console.log(index);
+                console.log(id);
+                $.ajax({
+                    url: '/api/penjualan_produk/select/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#produk_harga' + index).val(data[0].harga);
+                    }
+                });
+            });
+        }
     });
 </script>
 @stop
