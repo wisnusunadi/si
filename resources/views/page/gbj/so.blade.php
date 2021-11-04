@@ -185,6 +185,7 @@
                             <th>Jumlah</th>
                             <th>Tipe</th>
                             <th>Merk</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -193,12 +194,14 @@
                             <td>100</td>
                             <td>ABPM50</td>
                             <td>ELITECH</td>
+                            <td><span class="badge badge-success">Sudah Diinput</span></td>
                         </tr>
                         <tr>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                             <td>100</td>
                             <td>RGB</td>
                             <td>ELITECH</td>
+                            <td><span class="badge badge-danger">Belum Diinput</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -231,7 +234,10 @@
         },
         'order': [
             [1, 'asc']
-        ]
+        ],
+        "oLanguage": {
+        "sSearch": "Masukkan Produk:"
+        }
     });
 
 </script>
