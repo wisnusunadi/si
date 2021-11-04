@@ -372,11 +372,7 @@
                                 <option value="2">Layout 2</option>
                             </select>
                             </td> <td>
-                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                    <button class="btn btn-info viewStock"><i class="far fa-eye"> View</button>
-                                </div>
+                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
                         </td>
                     </tr>
                     <tr>
@@ -388,7 +384,7 @@
                                 <option value="2">Layout 2</option>
                             </select>
                             </td> <td>
-                                <button class="btn btn-info viewStock"><i class="far fa-eye"> View</button>
+                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
                         </td>
                     </tr>
                 </table>
@@ -402,13 +398,21 @@
     </div>
 </div>
 
-
-<!-- Modal -->
+<!-- Modal Detail-->
 <div class="modal fade modalViewStock" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">
+                    <div class="row">
+                        <div class="col">
+                            <b>Produk</b><p>Ambulatory</p>
+                        </div>
+                        <div class="col">
+                            <b>Nomor SO</b><p>8457938475938475</p>
+                        </div>
+                    </div>
+                </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -436,9 +440,32 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Edit --}}
+<div class="modal fade edit-stok" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Layout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Layout</label>
+                    <select name="" id="change-layout" class="form-control">
+                      <option value="1">Layout 1</option>
+                      <option value="2">Layout 2</option>
+                  </select>
+                </div>
+            </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary" onclick="ubahData()">Simpan</button>
             </div>
         </div>
     </div>
