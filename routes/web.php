@@ -109,6 +109,9 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => '/riwayat'], function () {
             Route::view('/show', 'page.qc.so.riwayat.show')->name('qc.so.riwayat.show');
         });
+        Route::group(['prefix' => '/laporan'], function () {
+            Route::view('/show', 'page.qc.laporan.show')->name('qc.so.laporan.show');
+        });
     });
 });
 Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');

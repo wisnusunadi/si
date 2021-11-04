@@ -117,5 +117,8 @@ Route::prefix('/qc')->group(function () {
         Route::prefix('/riwayat')->group(function () {
             Route::get('detail_modal', [App\Http\Controllers\QcController::class, 'detail_modal_riwayat_so']);
         });
+        Route::prefix('/laporan')->group(function () {
+            Route::post('/create', [App\Http\Controllers\QcController::class, 'laporan_outgoing']);
+        });
     });
 });

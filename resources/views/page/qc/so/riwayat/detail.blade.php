@@ -13,11 +13,6 @@
                         <div><small class="text-muted">No SO</small></div>
                         <div><b>SO/EKAT/X/02/98</b></div>
                     </div>
-
-                    <div class="margin">
-                        <div><small class="text-muted">No PO</small></div>
-                        <div><b>PO/ON/10/02/99</b></div>
-                    </div>
                     <div class="margin">
                         <div><small class="text-muted">Jumlah</small></div>
                         <div><b>2 pcs</b></div>

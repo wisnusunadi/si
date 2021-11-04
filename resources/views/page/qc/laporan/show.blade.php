@@ -29,16 +29,27 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <form method="POST" action="/api/laporan/create">
+                            <form method="POST" action="/api/qc/so/laporan/create">
                                 <div class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Distributor / Customer</label>
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Produk</label>
                                         <div class="col-4">
-                                            <select class="select2 select-info form-control customer_id" name="customer_id" id="customer_id">
+                                            <select class="select2 select-info form-control produk_id" name="produk_id" id="produk_id">
                                                 <option value=""></option>
                                             </select>
-                                            <div class="feedback" id="msgcustomer_id">
-                                                <small class="text-muted">Distributor / Customer boleh dikosongi</small>
+                                            <div class="feedback" id="msgproduk_id">
+                                                <small class="text-muted">Produk boleh dikosongi</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">No SO</label>
+                                        <div class="col-4">
+                                            <select class="select2 select-info form-control no_so" name="no_so" id="no_so">
+                                                <option value=""></option>
+                                            </select>
+                                            <div class="feedback" id="msgno_so">
+                                                <small class="text-muted">No SO boleh dikosongi</small>
                                             </div>
                                         </div>
                                     </div>
@@ -46,20 +57,16 @@
                                         <label for="" class="col-form-label col-5" style="text-align: right">Penjualan</label>
                                         <div class="col-5 col-form-label">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="penjualan" id="penjualan1" value="semua" />
-                                                <label class="form-check-label" for="penjualan1">Semua</label>
+                                                <input class="form-check-input" type="radio" name="hasil_uji" id="hasil_uji1" value="semua" />
+                                                <label class="form-check-label" for="hasil_uji1">Semua</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="penjualan" id="penjualan2" value="ekatalog" />
-                                                <label class="form-check-label" for="penjualan2">E-Catalogue</label>
+                                                <input class="form-check-input" type="radio" name="hasil_uji" id="hasil_uji2" value="ok" />
+                                                <label class="form-check-label" for="hasil_uji2">OK</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="penjualan" id="penjualan3" value="spa" />
-                                                <label class="form-check-label" for="penjualan3">SPA</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="penjualan" id="penjualan4" value="spb" />
-                                                <label class="form-check-label" for="penjualan4">SPB</label>
+                                                <input class="form-check-input" type="radio" name="hasil_uji" id="hasil_uji3" value="nok" />
+                                                <label class="form-check-label" for="hasil_uji3">Tidak OK</label>
                                             </div>
                                         </div>
                                     </div>
@@ -110,10 +117,10 @@
         $("#tanggal_mulai").attr("max", today);
         $("#tanggal_akhir").attr("max", today);
 
-        $('.customer_id').on('keyup change', function() {
+        $('.produk_id').on('keyup change', function() {
             if ($(this).val() != "") {
-                $('input[type="radio"][name="penjualan"]').removeAttr('disabled');
-                if ($('input[type="radio"][name="penjualan"]').val() != undefined && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
+                $('input[type="radio"][name="hasil_uji"]').removeAttr('disabled');
+                if ($('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -123,7 +130,7 @@
             }
         });
 
-        $('input[type="radio"][name="penjualan"]').on('change', function() {
+        $('input[type="radio"][name="hasil_uji"]').on('change', function() {
             if ($(this).val() != "") {
                 $('#tanggal_mulai').removeAttr('readonly');
                 if ($('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
@@ -142,7 +149,7 @@
             if ($(this).val() != "") {
                 $('#tanggal_akhir').removeAttr('readonly');
                 $("#tanggal_akhir").attr("min", $(this).val())
-                if ($('input[type="radio"][name="penjualan"]').val() != undefined && $('#tanggal_akhir').val() != "") {
+                if ($('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
 
@@ -156,7 +163,7 @@
 
         $('#tanggal_akhir').on('keyup change', function() {
             if ($(this).val() != "") {
-                if ($('#tanggal_mulai').val() != "" && $('input[type="radio"][name="penjualan"]').val() != undefined) {
+                if ($('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_mulai').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -166,15 +173,15 @@
             }
         });
 
-        $('.customer_id').select2({
+        $('.produk_id').select2({
             allowClear: true,
-            placeholder: 'Pilih Data',
+            placeholder: 'Pilih Data Produk',
             ajax: {
                 tags: [],
                 dataType: 'json',
                 delay: 250,
                 type: 'GET',
-                url: '/api/customer/select/',
+                url: '/api/penjualan_produk/select/',
                 processResults: function(data) {
                     console.log(data);
                     return {
@@ -189,10 +196,16 @@
             }
         });
 
+        $('.no_so').select2({
+            allowClear: true,
+            placeholder: 'Pilih Data No SO'
+        });
+
         $("#btnbatal").on('click', function() {
             $("#btncetak").attr('disabled', true);
-            $(".customer_id").val(null).trigger("change");
-            $('input[type="radio"][name="penjualan"]').prop('checked', false);
+            $(".produk_id").val(null).trigger("change");
+            $(".no_so").val(null).trigger("change");
+            $('input[type="radio"][name="hasil_uji"]').prop('checked', false);
             $('#tanggal_mulai').val('');
             $('#tanggal_mulai').attr('readonly', true);
             $('#tanggal_akhir').val('');

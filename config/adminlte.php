@@ -233,6 +233,12 @@ return [
             'icon'        => 'nav-icon fa fa-home',
             'auth'        => [24]
         ],
+        [
+            'text'        => 'Beranda',
+            'url'         => '/qc/dashboard',
+            'icon'        => 'nav-icon fa fa-home',
+            'auth'        => [23]
+        ],
         // PPIC (24)
         [
             'header' => 'Data',
@@ -991,6 +997,13 @@ return [
             'url' => '/qc/so/riwayat/show',
             'auth' => [23],
         ],
+        [
+            'text' => 'Laporan',
+            'icon' => 'far fa-circle',
+            'url' => '/qc/so/laporan/show',
+            'auth' => [23],
+        ],
+
         [
             'text'    => 'Permintaan',
             'icon'    => 'fas fa-box-open',

@@ -3,7 +3,7 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Sales Order</h1>
+<h1 class="m-0 text-dark">Riwayat Pengujian</h1>
 @stop
 
 @section('adminlte_css')
@@ -135,7 +135,6 @@
                                                 <th rowspan="2" class="nowrap">Jumlah</th>
                                                 <th colspan="2" class="nowrap">Hasil</th>
                                                 <th rowspan="2" class="nowrap">Status</th>
-                                                <th rowspan="2" class="nowrap">Aksi</th>
                                             </tr>
                                             <tr>
                                                 <th><i class="fas fa-check ok"></i></th>
@@ -152,7 +151,6 @@
                                                 <td>2</td>
                                                 <td>2</td>
                                                 <td>0</td>
-                                                <td><span class="badge green-text">Selesai</span></td>
                                                 <td>
                                                     <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
                                                         <div><i class="fas fa-search"></i></div>
@@ -168,7 +166,6 @@
                                                 <td>1</td>
                                                 <td>1</td>
                                                 <td>0</td>
-                                                <td><span class="badge green-text">Selesai</span></td>
                                                 <td>
                                                     <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
                                                         <div><i class="fas fa-search"></i></div>
@@ -184,7 +181,6 @@
                                                 <td>1</td>
                                                 <td>1</td>
                                                 <td>0</td>
-                                                <td><span class="badge green-text">Selesai</span></td>
                                                 <td>
                                                     <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
                                                         <div><i class="fas fa-search"></i></div>
