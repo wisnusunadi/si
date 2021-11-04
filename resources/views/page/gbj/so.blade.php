@@ -127,14 +127,14 @@
                         <tr>
                             <td></td>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100</td>
+                            <td>100 Unit</td>
                             <td>ABPM50</td>
                             <td>ELITECH</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100</td>
+                            <td>100 Unit</td>
                             <td>RGB</td>
                             <td>ELITECH</td>
                         </tr>

@@ -24,7 +24,7 @@
                 <td>1</td>
                 <td>10-11-2021</td>
                 <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                <td>100</td>
+                <td>100 Unit</td>
                 <td><div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>

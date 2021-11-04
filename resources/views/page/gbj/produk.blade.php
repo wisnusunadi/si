@@ -156,7 +156,7 @@
                     </div>
                     <div class="col">
                         <label for="">Stok</label>
-                        <input type="text" class="form-control" placeholder="Stok" value="0" disabled>
+                        <input type="text" class="form-control" placeholder="Stok" value="0" readonly>
                     </div>
                 </div>
                 <div class="form-group">
@@ -241,7 +241,7 @@
                     </div>
                     <div class="col">
                         <label for="">Stok</label>
-                        <input type="text" class="form-control" placeholder="Stok" value="0" disabled>
+                        <input type="text" class="form-control" placeholder="Stok" value="0" readonly>
 
                     </div>
                 </div>

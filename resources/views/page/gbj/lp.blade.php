@@ -31,7 +31,7 @@
                                     <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                     <td>Divisi IT</td>
                                     <td>Sebagai Sampel Produk</td>
-                                    <td>10</td>
+                                    <td>10 Unit</td>
                                     <td>
                                         <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
                                             aria-haspopup="true" aria-expanded="false">

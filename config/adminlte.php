@@ -999,6 +999,22 @@ return [
             'auth' => [22],
         ],
         [
+            'header' => 'Dasboard',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Produk dan Transfer',
+            'url' => '/gbj/dashboard',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Riwayat Transfer Produk',
+            'url' => '/gbj/tp',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
             'header' => 'Produksi',
             'auth' => [13]
         ],

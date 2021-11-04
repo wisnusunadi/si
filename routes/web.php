@@ -56,6 +56,8 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/tso', 'page.gbj.tso');
     Route::view('/dp', 'page.gbj.dp');
     Route::view('/lp', 'page.gbj.lp');
+    Route::view('/tp', 'page.gbj.tp'); 
+    Route::view('/dashboard', 'page.gbj.dashboard'); 
 });
 
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
