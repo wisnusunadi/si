@@ -321,7 +321,7 @@ class GudangController extends Controller
         }
         foreach($data as $d) {
             $html = '<div class="modal-header">
-                            <h5 class="modal-title">Produk '.$d->produk->nama.'</h5>
+                            <h5 class="modal-title">Produk '.$d->nama.'</h5>
 
                         </div>
                         <div class="modal-body">
@@ -332,7 +332,7 @@ class GudangController extends Controller
                                 </div>
                                 <div class="col-6">
                                     <p><b>Nama Produk</b></p>
-                                    <p>'.$d->produk->nama.'</p>
+                                    <p>'.$d->nama.'</p>
                                     <p><b>Deskripsi Produk</b></p>
                                     <p>'.$d->deskripsi.'</p>
                                     <p><b>Dimensi</b></p>
