@@ -19,6 +19,7 @@ class Ekatalog extends Migration
             $table->foreign('customer_id')->references('id')->on('customer');
             $table->unsignedBigInteger('pesanan_id')->nullable();
             $table->foreign('pesanan_id')->references('id')->on('pesanan');
+            $table->string('so')->nullable();
             $table->string('no_paket')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('instansi')->nullable();
