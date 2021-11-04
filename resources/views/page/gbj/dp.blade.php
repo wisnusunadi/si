@@ -9,7 +9,7 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-      <table class="table table-bordered">
+      <table class="table table-bordered dalam-perakitan">
         <thead>
           <tr>
             <th>No</th>
@@ -32,7 +32,7 @@
                         <button type="button" class="dropdown-item terimaProduk">
                             <i class="far fa-edit"></i>&nbsp;Terima
                           </button>
-                          <button type="button" class="dropdown-item detailProduk">
+                          <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
                             <i class="far fa-eye"></i>&nbsp;Detail
                           </button>
                     </div>
@@ -50,7 +50,7 @@
                         <button type="button" class="dropdown-item terimaProduk">
                             <i class="far fa-edit"></i>&nbsp;Terima
                           </button>
-                          <button type="button" class="dropdown-item detailProduk">
+                          <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
                             <i class="far fa-eye"></i>&nbsp;Detail
                           </button>
                     </div>
@@ -142,12 +142,53 @@
           </div>
       </div>
   </div>
+  
+  <!-- Modal -->
+  <div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Detail Produk <b>AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+              </div>
+              <div class="modal-body">
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>No Seri</th>
+                              <th>Layout</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>654165654</td>
+                              <td>Layout 1</td>
+                          </tr>
+                          <tr>
+                            <td>654165654</td>
+                            <td>Layout 1</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save</button>
+              </div>
+          </div>
+      </div>
+  </div>
 @stop
 
 @section('adminlte_js')
 <script>
+    $('.dalam-perakitan').DataTable({
+        "oLanguage": {
+        "sSearch": "Cari:"}
+    });
     $('.scan-produk').DataTable({
-            
             "oLanguage": {
         "sSearch": "Cari:"
         }
@@ -169,6 +210,10 @@
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
+    }
+
+    function openModalView() { 
+        $('.detail-layout').modal('show');
     }
 </script>
 @stop
