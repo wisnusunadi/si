@@ -1052,17 +1052,17 @@ return [
             'auth' => [13],
         ],
         [
-            'header' => 'Pemasukan',
+            'header' => 'Penerimaan',
             'auth' => [13]
         ],
         [
-            'text' => 'Dalam Produksi',
+            'text' => 'Dalam Perakitan',
             'url' => '/gbj/dp',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
         [
-            'text' => 'Luar Produksi',
+            'text' => 'Selain Perakitan',
             'url' => '/gbj/lp',
             'icon' => 'fas fa-circle',
             'auth' => [13],

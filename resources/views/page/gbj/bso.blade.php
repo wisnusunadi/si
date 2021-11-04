@@ -193,7 +193,10 @@
             },
             'order': [
                 [1, 'asc']
-            ]
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"
+            }
         });
 
         $('.scan-produk').DataTable({
@@ -208,7 +211,10 @@
             },
             'order': [
                 [0, 'asc']
-            ]
+            ],
+            "oLanguage": {
+            "sSearch": "Masukkan Nomor Seri:"
+            }
         });
     });
 

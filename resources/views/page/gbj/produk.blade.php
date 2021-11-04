@@ -17,17 +17,20 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <span class="float-right">
-                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create">
-                                                        <i class="fas fa-plus"></i>&nbsp;Tambah
-                                                      </button>
+                                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                                data-target="#modal-create">
+                                                <i class="fas fa-plus"></i>&nbsp;Tambah
+                                            </button>
                                         </span>
-                                        <span class="dropdown float-right" id="semuaprodukfilter" style="margin-right: 5px">
+                                        <span class="dropdown float-right" id="semuaprodukfilter"
+                                            style="margin-right: 5px">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
                                                 id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
                                                 Filter
                                             </button>
-                                            <div class="dropdown-menu p-3 text-nowrap" aria-labelledby="semuaprodukfilter">
+                                            <div class="dropdown-menu p-3 text-nowrap"
+                                                aria-labelledby="semuaprodukfilter">
                                                 <div class="dropdown-header">Kelompok Produk</div>
                                                 <div class="form-group">
                                                     <div class="form-check">
@@ -81,12 +84,15 @@
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
-                                                    <button type="button" class="dropdown-item editProduk">
-                                                        <i class="far fa-edit"></i>&nbsp;Edit
-                                                      </button>
-                                                      <button type="button" class="dropdown-item viewProduk">
-                                                        <i class="far fa-eye"></i>&nbsp;View
-                                                      </button>
+                                                <button type="button" class="dropdown-item editProduk">
+                                                    <i class="far fa-edit"></i>&nbsp;Edit
+                                                </button>
+                                                <button type="button" class="dropdown-item viewProduk">
+                                                    <i class="far fa-eye"></i>&nbsp;Detail
+                                                </button>
+                                                <button type="button" class="dropdown-item stokProduct">
+                                                    <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
+                                                </button>
                                             </div>
                                         </div>
                                     </td>
@@ -103,12 +109,15 @@
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
-                                                    <button type="button" class="dropdown-item editProduk">
-                                                        <i class="far fa-edit"></i>&nbsp;Edit
-                                                      </button>
-                                                      <button type="button" class="dropdown-item viewProduk">
-                                                        <i class="far fa-eye"></i>&nbsp;View
-                                                      </button>
+                                                <button type="button" class="dropdown-item editProduk">
+                                                    <i class="far fa-edit"></i>&nbsp;Edit
+                                                </button>
+                                                <button type="button" class="dropdown-item viewProduk">
+                                                    <i class="far fa-eye"></i>&nbsp;Detail
+                                                </button>
+                                                <button type="button" class="dropdown-item stokProduct">
+                                                    <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
+                                                </button>
                                             </div>
                                         </div>
                                     </td>
@@ -124,195 +133,195 @@
 
 {{-- Modal Create --}}
 <!-- Button trigger modal -->
-  
-  <!-- Modal -->
-  <div class="modal fade" id="modal-create" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Produk GBJ</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <div class="col">
-                    <label for="">Nama Produk</label>
-                <input type="text" name="nama" class="form-control @error('title') is-invalid @enderror" placeholder="Nama Produk">
-                @error('title')
-                    <span class="invalid-feedback">Silahkan isi Nama Produk</span>
-                @enderror
-                </div>
-                <div class="col">
-                    <label for="">Stok</label>
-                <input type="text" class="form-control" placeholder="Stok">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="">Deskripsi</label>
-                <textarea class="form-control" id="" cols="5" rows="5"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="">Dimensi</label>
-                <div class="d-flex justify-content-between">
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" placeholder="Panjang">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">mm</div>
-                          </div>
-                    </div>&nbsp;
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" placeholder="Lebar">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">mm</div>
-                          </div>
-                    </div>&nbsp;
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" placeholder="Tinggi">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">mm</div>
-                          </div>
-                    </div>&nbsp;
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label for="">Produk</label>
-                        <select name="" class="form-control produk-add">
 
+<!-- Modal -->
+<div class="modal fade" id="modal-create" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Produk GBJ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <label for="">Nama Produk</label>
+                        <input type="text" name="nama" class="form-control @error('title') is-invalid @enderror"
+                            placeholder="Nama Produk">
+                        @error('title')
+                        <span class="invalid-feedback">Silahkan isi Nama Produk</span>
+                        @enderror
+                    </div>
+                    <div class="col">
+                        <label for="">Stok</label>
+                        <input type="text" class="form-control" placeholder="Stok" value="0" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="">Deskripsi</label>
+                    <textarea class="form-control" id="" cols="5" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="">Dimensi</label>
+                    <div class="d-flex justify-content-between">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Panjang">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Lebar">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Tinggi">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Produk</label>
+                            <select name="" class="form-control produk-add">
+
+                                <option value="">Buku</option>
+                                <option value="">Bolpoin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="">Layout</label>
+                        <select name="" class="form-control layout-add">
                             <option value="">Buku</option>
                             <option value="">Bolpoin</option>
                         </select>
                     </div>
                 </div>
-                <div class="col">
-                    <label for="">Layout</label>
-                    <select name="" class="form-control layout-add">
-                        <option value="">Buku</option>
-                        <option value="">Bolpoin</option>
-                    </select>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" name="gambar" class="custom-file-input gambar" id="inputGroupFile02" />
+                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="inputGroupFile02"/>
-                    <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary">Kirim</button>
             </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-          <button type="button" class="btn btn-primary">Kirim</button>
-        </div>
-      </div>
     </div>
-  </div>
-  
+</div>
+
 {{-- Modal Edit --}}
 <!-- Button trigger modal -->
-  
-  <!-- Modal -->
-  <div class="modal fade modal-edit" id="" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<!-- Modal -->
+<div class="modal fade modal-edit" id="" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Produk Sterilisator</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <div class="alert alert-danger" role="alert">
-                A simple danger alert—check it out!
-              </div>
-            <div class="row">
-                <div class="col">
-                    <label for="">Nama Produk</label>
-                <input type="text" class="form-control" placeholder="Nama Produk">
-                </div>
-                <div class="col">
-                    <label for="">Stok</label>
-                <input type="text" class="form-control" placeholder="Stok">
-                </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Produk Sterilisator</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="form-group">
-                <label for="">Deskripsi</label>
-                <textarea class="form-control" id="" cols="5" rows="5"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="">Dimensi</label>
-                <div class="d-flex justify-content-between">
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" placeholder="Panjang">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">mm</div>
-                          </div>
-                    </div>&nbsp;
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" placeholder="Lebar">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">mm</div>
-                          </div>
-                    </div>&nbsp;
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" placeholder="Tinggi">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">mm</div>
-                          </div>
-                    </div>&nbsp;
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <label for="">Nama Produk</label>
+                        <input type="text" class="form-control" placeholder="Nama Produk">
+                    </div>
+                    <div class="col">
+                        <label for="">Stok</label>
+                        <input type="text" class="form-control" placeholder="Stok" value="0" disabled>
+
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label for="">Produk</label>
-                        <select name="" class="form-control produk-edit">
+                <div class="form-group">
+                    <label for="">Deskripsi</label>
+                    <textarea class="form-control" id="" cols="5" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="">Dimensi</label>
+                    <div class="d-flex justify-content-between">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Panjang">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Lebar">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Tinggi">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Produk</label>
+                            <select name="" class="form-control produk-edit">
+                                <option value="">Buku</option>
+                                <option value="">Bolpoin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="">Layout</label>
+                        <select name="" class="form-control layout-edit">
                             <option value="">Buku</option>
                             <option value="">Bolpoin</option>
                         </select>
                     </div>
                 </div>
-                <div class="col">
-                    <label for="">Layout</label>
-                    <select name="" class="form-control layout-edit">
-                        <option value="">Buku</option>
-                        <option value="">Bolpoin</option>
-                    </select>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02" />
+                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="inputGroupFile02"/>
-                    <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary">Kirim</button>
             </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-          <button type="button" class="btn btn-primary">Kirim</button>
-        </div>
-      </div>
     </div>
-  </div>
-  
-  {{-- Modal View --}}
-  
-  <!-- Modal -->
-  <div class="modal fade modal-view" id="" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Produk Sterilisator</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-              </div>
-              <div class="modal-body">
+</div>
+
+{{-- Modal View --}}
+
+<!-- Modal -->
+<div class="modal fade modal-view" id="" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Produk Sterilisator</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
                 <div class="row">
                     <div class="col-6">
-                        <img src="https://images.unsplash.com/photo-1615486510940-4e96763c7f6d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80" alt="">
+                        <img src="https://images.unsplash.com/photo-1615486510940-4e96763c7f6d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
+                            alt="">
                     </div>
                     <div class="col-6">
                         <p><b>Nama Produk</b></p>
@@ -320,46 +329,174 @@
                         <p><b>Deskripsi Produk</b></p>
                         <p>Inovasi Produk Terbaru dari industri kami</p>
                         <p><b>Dimensi</b></p>
-                        <div class="d-flex"><p>Panjang: 50</p>   
-                        <p>Lebar: 50</p>   
-                        <p>Tinggi: 50</p>   </div>
+                        <div class="d-flex">
+                            <p>Panjang: 50</p>
+                            <p>Lebar: 50</p>
+                            <p>Tinggi: 50</p>
+                        </div>
                         <p><b>Produk</b></p>
                         <p>Buku</p>
                         <p><b>Layout</b></p>
                         <p>Buku</p>
                     </div>
                 </div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <style>
-      img{
-          width: 100%;
-      }
-  </style>
-  @stop
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Daftar Stok-->
+<div class="modal fade daftar-stok" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Daftar Stok Produk</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table scan-produk">
+                    <tr>
+                        <th><input type="checkbox" id="head-cb"></th>
+                        <th>No. Seri</th>
+                        <th>Layout</th>
+                        <th>Aksi</th>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="cb-child" value="1"></td>
+                        <td>5474598674958698645</td>
+                        <td>
+                            <select name="" id="" class="form-control">
+                                <option value="1">Layout 1</option>
+                                <option value="2">Layout 2</option>
+                            </select>
+                            </td> <td>
+                                <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                    <button class="btn btn-info viewStock"><i class="far fa-eye"> View</button>
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="cb-child" value="2"></td>
+                        <td>5474598674958698645</td>
+                        <td>
+                            <select name="" id="" class="form-control">
+                                <option value="1">Layout 1</option>
+                                <option value="2">Layout 2</option>
+                            </select>
+                            </td> <td>
+                                <button class="btn btn-info viewStock"><i class="far fa-eye"> View</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade modalViewStock" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tanggal Masuk</th>
+                            <th>Dari</th>
+                            <th>Tujuan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row">10-04-2022</td>
+                            <td>Divisi IT</td>
+                            <td>Uji Coba</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">10-04-2022</td>
+                            <td>Divisi IT</td>
+                            <td>Uji Coba</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    img {
+        width: 100%;
+    }
+
+</style>
+@stop
 
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
-     $('#inputGroupFile02').on('change',function(){
-                //get the file name
-                var fileName = $(this).val();
-                //replace the "Choose a file" label
-                $(this).next('.custom-file-label').html(fileName);
+    $('#inputGroupFile02').on('change', function () {
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
     });
-    $('.editProduk').click(function (e) { 
-            $('.modal-edit').modal('show');
-            $('.produk-edit ').select2();
-            $('.layout-edit').select2();
-        });
-    $('.viewProduk').click(function (e) { 
-            $('.modal-view').modal('show');
-        });
+    $('.editProduk').click(function (e) {
+        $('.modal-edit').modal('show');
+        $('.produk-edit ').select2();
+        $('.layout-edit').select2();
+    });
+    $('.viewProduk').click(function (e) {
+        $('.modal-view').modal('show');
+    });
     $(document).ready(function () {
         $('.produk-add ').select2();
         $('.layout-add').select2();
+
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
+        });
+    });
+
+    function ubahData() {
+        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let layout = $('#change-layout').val();
+        $.each(checkbox_terpilih, function (index, elm) {
+            let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
+        });
+        $('.edit-stok').modal('hide');
+    }
+
+    $('.stokProduct').click(function (e) {
+        $('.daftar-stok').modal('show');
+    });
+
+    $('.editStok').click(function (e) {
+        $('.edit-stok').modal('show');
+    });
+
+    $('.viewStock').click(function (e) {
+        $('.modalViewStock').modal('show');
     });
 
 </script>

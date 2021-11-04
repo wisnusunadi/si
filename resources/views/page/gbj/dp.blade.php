@@ -29,8 +29,8 @@
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                     <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item eksekusi">
-                            <i class="far fa-edit"></i>&nbsp;Eksekusi
+                        <button type="button" class="dropdown-item terimaProduk">
+                            <i class="far fa-edit"></i>&nbsp;Terima
                           </button>
                           <button type="button" class="dropdown-item detailProduk">
                             <i class="far fa-eye"></i>&nbsp;Detail
@@ -47,8 +47,8 @@
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                     <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item eksekusi">
-                            <i class="far fa-edit"></i>&nbsp;Eksekusi
+                        <button type="button" class="dropdown-item terimaProduk">
+                            <i class="far fa-edit"></i>&nbsp;Terima
                           </button>
                           <button type="button" class="dropdown-item detailProduk">
                             <i class="far fa-eye"></i>&nbsp;Detail
@@ -61,7 +61,7 @@
     </div>
   </div>
   <!-- Modal Detail-->
-  <div class="modal fade detail-produk" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal fade terima-produk" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
@@ -74,35 +74,70 @@
                 <table class="table table-striped scan-produk">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th><input type="checkbox" id="head-cb"></th>
                             <th>Nomor Seri</th>
                             <th>Layout</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td></td>
+                            <td><input type="checkbox" class="cb-child" value="1"></td>
                             <td>36541654654654564</td>
                             <td><select name="" id="" class="form-control">
-                                <option value="">Layout 1</option>
-                                <option value="">Layout 1</option>
+                                <option value="1">Layout 1</option>
+                                <option value="2">Layout 2</option>
                                 </select></td>
                         </tr>
                         <tr>
-                            <td></td>
+                            <td><input type="checkbox" class="cb-child" value="2"></td>
                             <td>36541654654654564</td>
                             <td><select name="" id="" class="form-control">
-                                <option value="">Layout 1</option>
-                                <option value="">Layout 1</option>
+                                <option value="1">Layout 1</option>
+                                <option value="2">Layout 2</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="3"></td>
+                            <td>36541654654654564</td>
+                            <td><select name="" id="" class="form-control">
+                                <option value="1">Layout 1</option>
+                                <option value="2">Layout 2</option>
                                 </select></td>
                         </tr>
                     </tbody>
                 </table>
-                <button class="btn btn-info">Ubah Layout</button>
+                <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <button type="button" class="btn btn-primary">Save</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <!-- Modal Ubah Layout-->
+  <div class="modal fade" id="ubah-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Ubah Layout</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+              </div>
+              <div class="modal-body">
+                  <div class="form-group">
+                      <label for="">Layout</label>
+                      <select name="" id="change-layout" class="form-control">
+                        <option value="1">Layout 1</option>
+                        <option value="2">Layout 2</option>
+                    </select>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                  <button type="button" class="btn btn-primary" onclick="ubahData()">Simpan</button>
               </div>
           </div>
       </div>
@@ -112,23 +147,28 @@
 @section('adminlte_js')
 <script>
     $('.scan-produk').DataTable({
-            'columnDefs': [{
-                'targets': 0,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [1, 'asc']
-            ]
+            
+            "oLanguage": {
+        "sSearch": "Cari:"
+        }
     });
     $(document).ready(function () {
-        $('.detailProduk').click(function (e) { 
-            $('.detail-produk').modal('show');
+        $('.terimaProduk').click(function (e) { 
+            $('.terima-produk').modal('show');
+        });
+
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
         });
     });
+
+    function ubahData() { 
+        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let layout = $('#change-layout').val();
+        $.each(checkbox_terpilih, function (index, elm) {
+            let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
+        });
+    }
 </script>
 @stop
