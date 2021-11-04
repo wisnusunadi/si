@@ -90,9 +90,22 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <p><b>Siapkan Produk</b></p>
-                    <p><b>Nomor SO</b> 8457938475938475</p>
-                    <p><b>Nomor PO</b> 8457938475938475</p>
-                    <p><b>Nomor AKN</b> 8457938475938475</p>
+                    <div class="row">
+                        <div class="col">
+                            <b>Nomor SO</b><p>8457938475938475</p>
+                        </div>
+                        <div class="col">
+                            <b>Nomor AKN</b><p>8457938475938475</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Nomor PO</b><p>8457938475938475</p>
+                        </div>
+                        <div class="col">
+                            <b>Instansi</b><p>RS. Dr. Soetomo</p>
+                        </div>
+                    </div>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -100,11 +113,12 @@
             </div>
             <div class="modal-body">
                 {{-- Tambahkan DataTable --}}
-                <table class="table table-striped" id="add-produk">
+                <table class="table table-striped add-produk">
                     <thead>
                         <tr>
                             <th></th>
                             <th>Nama Produk</th>
+                            <th>Jumlah</th>
                             <th>Tipe</th>
                             <th>Merk</th>
                         </tr>
@@ -113,12 +127,14 @@
                         <tr>
                             <td></td>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                            <td>100</td>
                             <td>ABPM50</td>
                             <td>ELITECH</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                            <td>100</td>
                             <td>RGB</td>
                             <td>ELITECH</td>
                         </tr>
@@ -133,15 +149,30 @@
     </div>
 </div>
 
+
 <div class="modal fade" id="viewProdukModal" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
                     <p><b>Detail Produk</b></p>
-                    <p><b>Nomor SO</b> 8457938475938475</p>
-                    <p><b>Nomor PO</b> 8457938475938475</p>
-                    <p><b>Nomor AKN</b> 8457938475938475</p></h5>
+                    <div class="row">
+                        <div class="col">
+                            <b>Nomor SO</b><p>8457938475938475</p>
+                        </div>
+                        <div class="col">
+                            <b>Nomor AKN</b><p>8457938475938475</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Nomor PO</b><p>8457938475938475</p>
+                        </div>
+                        <div class="col">
+                            <b>Instansi</b><p>RS. Dr. Soetomo</p>
+                        </div>
+                    </div>
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -151,6 +182,7 @@
                     <thead>
                         <tr>
                             <th>Nama Produk</th>
+                            <th>Jumlah</th>
                             <th>Tipe</th>
                             <th>Merk</th>
                         </tr>
@@ -158,11 +190,13 @@
                     <tbody>
                         <tr>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                            <td>100</td>
                             <td>ABPM50</td>
                             <td>ELITECH</td>
                         </tr>
                         <tr>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                            <td>100</td>
                             <td>RGB</td>
                             <td>ELITECH</td>
                         </tr>
@@ -185,7 +219,7 @@
         });
     });
 
-    $('#add-produk').DataTable({
+    $('.add-produk').DataTable({
         'columnDefs': [{
             'targets': 0,
             'checkboxes': {

@@ -91,6 +91,28 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>ZTP80AS-UPGRADE</td>
+                                    <td>STERILISATOR KERING</td>
+                                    <td>100 Unit</td>
+                                    <td>80 Unit</td>
+                                    <td>Alat Kesehatan</td>
+                                    <td>
+                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <div class="dropdown-menu">
+                                                    <button type="button" class="dropdown-item editProduk">
+                                                        <i class="far fa-edit"></i>&nbsp;Edit
+                                                      </button>
+                                                      <button type="button" class="dropdown-item viewProduk">
+                                                        <i class="far fa-eye"></i>&nbsp;View
+                                                      </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -117,7 +139,10 @@
             <div class="row">
                 <div class="col">
                     <label for="">Nama Produk</label>
-                <input type="text" class="form-control" placeholder="Nama Produk">
+                <input type="text" name="nama" class="form-control @error('title') is-invalid @enderror" placeholder="Nama Produk">
+                @error('title')
+                    <span class="invalid-feedback">Silahkan isi Nama Produk</span>
+                @enderror
                 </div>
                 <div class="col">
                     <label for="">Stok</label>
@@ -131,9 +156,24 @@
             <div class="form-group">
                 <label for="">Dimensi</label>
                 <div class="d-flex justify-content-between">
-                    <input type="text" class="form-control" placeholder="Panjang">&nbsp;
-                    <input type="text" class="form-control" placeholder="Lebar">&nbsp;
-                    <input type="text" class="form-control" placeholder="Tinggi">&nbsp;
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" placeholder="Panjang">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">mm</div>
+                          </div>
+                    </div>&nbsp;
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" placeholder="Lebar">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">mm</div>
+                          </div>
+                    </div>&nbsp;
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" placeholder="Tinggi">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">mm</div>
+                          </div>
+                    </div>&nbsp;
                 </div>
             </div>
             <div class="row">
@@ -174,7 +214,7 @@
 <!-- Button trigger modal -->
   
   <!-- Modal -->
-  <div class="modal fade" id="modal-edit" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade modal-edit" id="" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -184,6 +224,9 @@
           </button>
         </div>
         <div class="modal-body">
+            <div class="alert alert-danger" role="alert">
+                A simple danger alert—check it out!
+              </div>
             <div class="row">
                 <div class="col">
                     <label for="">Nama Produk</label>
@@ -201,9 +244,24 @@
             <div class="form-group">
                 <label for="">Dimensi</label>
                 <div class="d-flex justify-content-between">
-                    <input type="text" class="form-control" placeholder="Panjang">&nbsp;
-                    <input type="text" class="form-control" placeholder="Lebar">&nbsp;
-                    <input type="text" class="form-control" placeholder="Tinggi">&nbsp;
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" placeholder="Panjang">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">mm</div>
+                          </div>
+                    </div>&nbsp;
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" placeholder="Lebar">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">mm</div>
+                          </div>
+                    </div>&nbsp;
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" placeholder="Tinggi">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">mm</div>
+                          </div>
+                    </div>&nbsp;
                 </div>
             </div>
             <div class="row">
@@ -242,7 +300,7 @@
   {{-- Modal View --}}
   
   <!-- Modal -->
-  <div class="modal fade" id="modal-view" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal fade modal-view" id="" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <div class="modal-header">
@@ -292,12 +350,12 @@
                 $(this).next('.custom-file-label').html(fileName);
     });
     $('.editProduk').click(function (e) { 
-            $('#modal-edit').modal('show');
+            $('.modal-edit').modal('show');
             $('.produk-edit ').select2();
             $('.layout-edit').select2();
         });
     $('.viewProduk').click(function (e) { 
-            $('#modal-view').modal('show');
+            $('.modal-view').modal('show');
         });
     $(document).ready(function () {
         $('.produk-add ').select2();

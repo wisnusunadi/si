@@ -1052,6 +1052,22 @@ return [
             'auth' => [13],
         ],
         [
+            'header' => 'Pemasukan',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Dalam Produksi',
+            'url' => '/gbj/dp',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Luar Produksi',
+            'url' => '/gbj/lp',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
             'text' => 'test',
             'isNavbarRightItem' => true,
             'icon' => 'fas fa-sign-out-alt',
