@@ -101,7 +101,7 @@
                     </div>
                     <div class="col">
                         <label for="">Stok</label>
-                        <input type="text" name="stok" id="stok" class="form-control" placeholder="Stok">
+                        <input type="text" name="stok" id="stok" class="form-control" placeholder="Stok" value="0" readonly>
                     </div>
                 </div>
                 <div class="form-group">
@@ -152,7 +152,6 @@
 <!-- Button trigger modal -->
 
 <!-- Modal -->
-
 <div class="modal" id="EditArticleModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -178,21 +177,60 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
 
-<div class="modal" id="DeleteArticleModal">
-    <div class="modal-dialog">
+{{-- modal stok --}}
+<div class="modal fade" id="daftar-stok" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <div id="GetArticleModalBody">
-
+            <div class="modal-header">
+                <h5 class="modal-title">Daftar Stok Produk</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <!-- Modal footer -->
+            <div class="modal-body">
+                <table class="table scan-produk">
+                    <tr>
+                        <th><input type="checkbox" id="head-cb"></th>
+                        <th>No. Seri</th>
+                        <th>Layout</th>
+                        <th>Aksi</th>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="cb-child" value="1"></td>
+                        <td>5474598674958698645</td>
+                        <td>
+                            <select name="" id="" class="form-control">
+                                <option value="1">Layout 1</option>
+                                <option value="2">Layout 2</option>
+                            </select>
+                            </td> <td>
+                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="cb-child" value="2"></td>
+                        <td>5474598674958698645</td>
+                        <td>
+                            <select name="" id="" class="form-control">
+                                <option value="1">Layout 1</option>
+                                <option value="2">Layout 2</option>
+                            </select>
+                            </td> <td>
+                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default modelCloseq" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
         </div>
     </div>
 </div>
+
 <style>
     img {
         width: 100%;
@@ -296,7 +334,7 @@
                     $("#produk_id").empty();
                     $("#produk_id").append('<option value="">-- Pilih Produk--</option>');
                     $.each(res, function(key, value) {
-                        $("#produk_id").append('<option value="'+value.id+'">'+value.nama+'</option');
+                        $("#produk_id").append('<option value="'+value.id+'">'+value.tipe+'</option');
                     });
                 } else {
                     $("#produk_id").empty();
@@ -315,7 +353,7 @@
                     success: function(res) {
                         if(res) {
                             console.log(res);
-                            $('#nama').val(res.nama);
+                            $('#nama').val(res.tipe);
                         } else {
                             // $("#layout_id").empty();
                             $('#nama').val();
@@ -405,28 +443,9 @@
             });
         });
 
-        // detail
-        $('.modelCloseq').on('click', function(){
-            $('#DeleteArticleModal').hide();
-        });
-        var id;
-        $('body').on('click', '#showEditArticleData', function(e) {
-            // e.preventDefault();
-            // $('.alert-danger').html('');
-            // $('.alert-danger').hide();
-            id = $(this).data('id');
-            $.ajax({
-                url: "/api/gbj/view/" + id,
-                method: 'GET',
-                // data: {
-                //     id: id,
-                // },
-                success: function(result) {
-                    console.log(result);
-                    $('#GetArticleModalBody').html(result.html);
-                    $('#DeleteArticleModal').show();
-                }
-            });
+        // stok
+        $(document).on('click', '.stokmodal', function() {
+            $('#daftar-stok').modal('show');
         });
     });
 

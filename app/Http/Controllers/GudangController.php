@@ -56,6 +56,12 @@ class GudangController extends Controller
                             </button>
                         </a>
 
+                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
+                            </button>
+                        </a>
+
                         </div>';
             })
             ->rawColumns(['action'])
@@ -179,23 +185,23 @@ class GudangController extends Controller
                 $brg_his->nama = $request->nama;
                 $brg_his->deskripsi = $request->deskripsi;
                 $brg_his->stok = $request->stok;
-                $brg_his->jenis = 'MASUK';
-                $brg_his->dari = $request->dari;
-                $brg_his->ke = $request->ke;
+                // $brg_his->jenis = 'MASUK';
+                // $brg_his->dari = $request->dari;
+                // $brg_his->ke = $request->ke;
                 $brg_his->status = $request->status;
                 $brg_his->layout_id = $request->layout_id;
                 $brg_his->created_at = Carbon::now();
                 $brg_his->save();
 
-                $noseri = new NoseriBarangJadi();
-                $noseri->gdg_barang_jadi_id = $brg_jadi->id;
-                $noseri->dari = $request->dari;
-                $noseri->ke = $request->ke;
-                $noseri->noseri = date('Ymd') . '-' . mt_rand(100, 999);
-                $noseri->jenis = 'MASUK';
-                $noseri->is_aktif = 1;
-                $noseri->created_at = Carbon::now();
-                $noseri->save();
+                // $noseri = new NoseriBarangJadi();
+                // $noseri->gdg_barang_jadi_id = $brg_jadi->id;
+                // $noseri->dari = $request->dari;
+                // $noseri->ke = $request->ke;
+                // $noseri->noseri = date('Ymd') . '-' . mt_rand(100, 999);
+                // $noseri->jenis = 'MASUK';
+                // $noseri->is_aktif = 1;
+                // $noseri->created_at = Carbon::now();
+                // $noseri->save();
             }
             return response()->json(['msg' => 'Successfully']);
         }
