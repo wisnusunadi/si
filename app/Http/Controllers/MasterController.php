@@ -14,6 +14,9 @@ use App\Models\Provinsi;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\Session;
+use Alert;
+
 
 class MasterController extends Controller
 {
@@ -174,7 +177,7 @@ class MasterController extends Controller
         //         'nama.required|unique:customer' => 'Nama Customer harus di isi',
         //     ]
         // );
-        Customer::create([
+        $c = Customer::create([
             'nama' => $request->nama_customer,
             'telp' => $request->telepon,
             'alamat' => $request->alamat,
@@ -183,6 +186,13 @@ class MasterController extends Controller
             'npwp' => $request->npwp,
             'ket' => $request->keterangan,
         ]);
+
+        if ($c) {
+            // Alert::success('Berhasil', 'Berhasil menambahkan data');
+            return redirect()->back()->with('success', 'success');
+        } else {
+            return redirect()->back()->with('error', 'error');
+        }
     }
     public function create_penjualan_produk(Request $request)
     {
@@ -207,9 +217,24 @@ class MasterController extends Controller
             'nama' => $request->nama_paket,
             'harga' => $harga_convert
         ]);
-
-        for ($i = 0; $i < count($request->produk_id); $i++) {
-            $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
+        if ($PenjualanProduk) {
+            $bool = true;
+            for ($i = 0; $i < count($request->produk_id); $i++) {
+                $j = $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
+                if (!$j) {
+                    $bool = false;
+                }
+            }
+            if ($bool == true) {
+                // Alert::success('Berhasil', 'Berhasil menambahkan data');
+                return redirect()->back()->with('success', 'success');
+            } else if ($bool == false) {
+                return redirect()->back()->with('error', 'error');
+                // Alert::error('Gagal', 'Gagal menambahkan data');
+            }
+        } else {
+            return redirect()->back()->with('error', 'error');
+            // Alert::error('Gagal', 'Gagal menambahkan data');
         }
 
 

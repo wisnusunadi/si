@@ -74,6 +74,8 @@
 @yield('adminlte_css')
 @stop
 
+@include('sweetalert::alert')
+
 @section('classes_body', $LayoutHelper->makeBodyClasses())
 
 @section('body_data', $LayoutHelper->makeBodyData())

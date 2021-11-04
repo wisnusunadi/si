@@ -9,7 +9,8 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        @if(session()->has('error') || count($errors) > 0 )
+        {{session()->get('success')}}
+        @if(Session::has('error') || count($errors) > 0 )
         <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
             <strong>Gagal menambahkan!</strong> Periksa
             kembali data yang diinput
@@ -17,7 +18,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        @elseif(session()->has('success'))
+        @elseif(Session::has('success'))
         <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
             <strong>Berhasil menambahkan data</strong>,
             Terima kasih
@@ -27,8 +28,8 @@
         </div>
         @endif
         <form action="/api/penjualan_produk/create" method="post">
+            {{csrf_field()}}
             <div class="row d-flex justify-content-center">
-
                 <div class="col-11">
                     <h5>Info Umum Paket</h5>
                     <div class="card">
@@ -85,11 +86,11 @@
                                                     </th>
                                                 </tr>
                                                 <tr>
-                                                    <th>No</th>
-                                                    <th width="15%">Nama Produk</th>
-                                                    <th>Kelompok</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Aksi</th>
+                                                    <th width="5%">No</th>
+                                                    <th width="40%">Nama Produk</th>
+                                                    <th width="32%">Kelompok</th>
+                                                    <th width="18%">Jumlah</th>
+                                                    <th width="5%">Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

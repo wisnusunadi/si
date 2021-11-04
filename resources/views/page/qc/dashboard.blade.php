@@ -26,6 +26,10 @@
         color: #FFC700;
     }
 
+    #info {
+        color: #3a7bb0;
+    }
+
     .fa-search:hover {
         color: #4682B4;
     }
@@ -138,7 +142,7 @@
                                                 <td>SOSPA102100001</td>
                                                 <td>
                                                     <div class="urgent">12-10-2021</div>
-                                                    <small><i class="fas fa-clock"></i> 7 Hari Lagi</small>
+                                                    <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                 </td>
                                                 <td><span class="badge red-text">Belum diuji</span></td>
                                                 <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
@@ -148,7 +152,7 @@
                                                 <td>SOSPA102100002</td>
                                                 <td>
                                                     <div class="urgent">11-10-2021</div>
-                                                    <small><i class="fas fa-clock"></i> 6 Hari Lagi</small>
+                                                    <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                 </td>
                                                 <td><span class="badge red-text">Belum diuji</span></td>
                                                 <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
@@ -158,7 +162,7 @@
                                                 <td>SOSPA102100003</td>
                                                 <td>
                                                     <div class="urgent">11-10-2021</div>
-                                                    <small><i class="fas fa-clock"></i> 6 Hari Lagi</small>
+                                                    <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                 </td>
                                                 <td><span class="badge red-text">Belum diuji</span></td>
                                                 <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
@@ -200,7 +204,7 @@
                                                 <td>SOSPA102100001</td>
                                                 <td>
                                                     <div class="urgent">12-10-2021</div>
-                                                    <small><i class="fas fa-clock"></i> 6 Hari Lagi</small>
+                                                    <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                 </td>
                                                 <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                             </tr>
@@ -209,7 +213,7 @@
                                                 <td>SOSPA102100002</td>
                                                 <td>
                                                     <div class="urgent">11-10-2021</div>
-                                                    <small><i class="fas fa-clock"></i> 7 Hari Lagi</small>
+                                                    <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                 </td>
                                                 <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                             </tr>
