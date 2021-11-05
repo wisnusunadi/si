@@ -170,8 +170,8 @@
         let divisi = $('.division').val();
         let tujuan = $('.tujuan').val();
         let produk = $('.product').val();
-        let stok = $('.stok').val();
-        let stok_gudang = $('.stok-gudang').val();
+        let stok = parseInt($('.stok').val());
+        let stok_gudang = parseInt($('.stok-gudang').val());
         $.ajax({
             success: function () { 
                 if (stok < stok_gudang) {
@@ -203,7 +203,6 @@
         }
     });
 
-    
     $('.scan-produk').DataTable({
             'columnDefs': [{
                 'targets': 1,

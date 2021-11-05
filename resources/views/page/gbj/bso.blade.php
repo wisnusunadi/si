@@ -3,6 +3,26 @@
 @section('title', 'ERP')
 
 @section('content')
+<style>
+    .nomor-so{
+        background-color: #717FE1;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-akn{
+        background-color: #DF7458;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-po{
+        background-color: #85D296;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+</style>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -96,25 +116,23 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <label for="">Nomor SO</label>
-                                        {{-- <input type="text" class="form-control" id="transfer-so" name="nomor_so"
-                                            value="897987978" readonly> --}}
-                                            <div class="card">
+                                            <div class="card nomor-so">
                                                 <div class="card-body">
                                                     89798797856456
                                                 </div>
                                               </div>
                                     </div>
                                     <div class="col-sm">
-                                        <label for="">Nomor PO</label>
-                                        <div class="card">
+                                        <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
                                             <div class="card-body">
                                                 89798797856456
                                             </div>
                                           </div>
                                     </div>
                                     <div class="col-sm">
-                                        <label for="">Nomor AKN</label>
-                                        <div class="card">
+                                        <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
                                             <div class="card-body">
                                                 89798797856456
                                             </div>
@@ -128,7 +146,7 @@
                                         <tr>
                                             <th></th>
                                             <th>Nama Produk</th>
-                                            <th>Stok</th>
+                                            <th>Jumlah</th>
                                             <th>Tipe</th>
                                             <th>Merk</th>
                                             <th>Aksi</th>
@@ -138,7 +156,7 @@
                                         <tr>
                                             <td></td>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
+                                            <td>100 Unit</td>
                                             <td>ABPM50</td>
                                             <td>ELITECH</td>
                                             <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
@@ -147,7 +165,7 @@
                                         <tr>
                                             <td></td>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
+                                            <td>100 Unit</td>
                                             <td>RGB</td>
                                             <td>ELITECH</td>
                                             <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
