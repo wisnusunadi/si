@@ -3,6 +3,32 @@
 @section('title', 'ERP')
 
 @section('content')
+<style>
+    .nomor-so{
+        background-color: #717FE1;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-akn{
+        background-color: #DF7458;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-po{
+        background-color: #85D296;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .instansi{
+        background-color: #36425E;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+</style>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -89,57 +115,86 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <p><b>Siapkan Produk</b></p>
-                    <div class="row">
-                        <div class="col">
-                            <b>Nomor SO</b><p>8457938475938475</p>
-                        </div>
-                        <div class="col">
-                            <b>Nomor AKN</b><p>8457938475938475</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <b>Nomor PO</b><p>8457938475938475</p>
-                        </div>
-                        <div class="col">
-                            <b>Instansi</b><p>RS. Dr. Soetomo</p>
-                        </div>
-                    </div>
+
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row row-cols-2">
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor SO</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Instansi</label>
+                                        <div class="card instansi">
+                                            <div class="card-body">
+                                                RS. Dr. Soetomo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped add-produk">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Nama Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Tipe</th>
+                                            <th>Merk</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100 Unit</td>
+                                            <td>ABPM50</td>
+                                            <td>ELITECH</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100 Unit</td>
+                                            <td>RGB</td>
+                                            <td>ELITECH</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {{-- Tambahkan DataTable --}}
-                <table class="table table-striped add-produk">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Nama Produk</th>
-                            <th>Jumlah</th>
-                            <th>Tipe</th>
-                            <th>Merk</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100 Unit</td>
-                            <td>ABPM50</td>
-                            <td>ELITECH</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100 Unit</td>
-                            <td>RGB</td>
-                            <td>ELITECH</td>
-                        </tr>
-                    </tbody>
-                </table>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
@@ -155,56 +210,83 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <p><b>Detail Produk</b></p>
-                    <div class="row">
-                        <div class="col">
-                            <b>Nomor SO</b><p>8457938475938475</p>
-                        </div>
-                        <div class="col">
-                            <b>Nomor AKN</b><p>8457938475938475</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <b>Nomor PO</b><p>8457938475938475</p>
-                        </div>
-                        <div class="col">
-                            <b>Instansi</b><p>RS. Dr. Soetomo</p>
-                        </div>
-                    </div>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped" id="view-produk">
-                    <thead>
-                        <tr>
-                            <th>Nama Produk</th>
-                            <th>Jumlah</th>
-                            <th>Tipe</th>
-                            <th>Merk</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100</td>
-                            <td>ABPM50</td>
-                            <td>ELITECH</td>
-                            <td><span class="badge badge-success">Sudah Diinput</span></td>
-                        </tr>
-                        <tr>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100</td>
-                            <td>RGB</td>
-                            <td>ELITECH</td>
-                            <td><span class="badge badge-danger">Belum Diinput</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row row-cols-2">
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor SO</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Instansi</label>
+                                        <div class="card instansi">
+                                            <div class="card-body">
+                                                RS. Dr. Soetomo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped" id="view-produk">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Tipe</th>
+                                            <th>Merk</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>ABPM50</td>
+                                            <td>ELITECH</td>
+                                            <td><span class="badge badge-success">Sudah Diinput</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>RGB</td>
+                                            <td>ELITECH</td>
+                                            <td><span class="badge badge-danger">Belum Diinput</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -236,7 +318,7 @@
             [1, 'asc']
         ],
         "oLanguage": {
-        "sSearch": "Cari:"
+            "sSearch": "Cari:"
         }
     });
 

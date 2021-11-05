@@ -65,7 +65,7 @@
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title">Produk AMBULATORY</h5>
+                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -77,6 +77,7 @@
                             <th><input type="checkbox" id="head-cb"></th>
                             <th>Nomor Seri</th>
                             <th>Layout</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,8 +110,8 @@
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  <button type="button" class="btn btn-primary">Simpan</button>
               </div>
           </div>
       </div>
@@ -148,7 +149,7 @@
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title">Detail Produk <b>AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                  <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -172,10 +173,6 @@
                           </tr>
                       </tbody>
                   </table>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save</button>
               </div>
           </div>
       </div>
@@ -210,10 +207,8 @@
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
+        $('#ubah-layout').modal('hide');
     }
 
-    function openModalView() { 
-        $('.detail-layout').modal('show');
-    }
 </script>
 @stop

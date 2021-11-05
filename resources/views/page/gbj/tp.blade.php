@@ -19,48 +19,6 @@
                     <div class="tab-pane fade show active card-body" id="semua-produk" role="tabpanel" aria-labelledby="semua-produk-tab">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="table-responsive">
-                                    <table class="table semuaproduk" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Gambar</th>
-                                                <th>Produk</th>
-                                                <th>Jumlah</th>
-                                                <th>Kategori</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>
-                                                <img alt="Avatar" class="img-fluid" src="https://images.unsplash.com/photo-1615486510940-4e96763c7f6d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80" width="100px">
-                                                </td>
-                                                <td>Ambulator</td>
-                                                <td>100 Unit</td>
-                                                <td>Produk Kesehatan</td>
-                                                <td><button class="btn btn-info" onclick="preview()"><i class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>
-                                                <img alt="Avatar" class="img-fluid" src="https://images.unsplash.com/photo-1615486510940-4e96763c7f6d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80" width="100px">
-                                                </td>
-                                                <td>Ambulator</td>
-                                                <td>100</td>
-                                                <td>Produk Kesehatan</td>
-                                                <td><button class="btn btn-info" onclick="preview()"><i class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade card-body" id="produk" role="tabpanel" aria-labelledby="produk-tab">
-                        <div class="row">
-                            <div class="col-lg-12">
                                 <div class="form-horizontal">
                                     <div class="form-group row">
                                         <label for="" id="tanggal" class="col-sm-5 text-right">Tanggal</label>
@@ -109,6 +67,12 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade card-body" id="produk" role="tabpanel" aria-labelledby="produk-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
                             </div>
                         </div>
                     </div>

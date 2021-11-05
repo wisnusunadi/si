@@ -188,14 +188,17 @@
         });
     });
 
-    function addData(divisi, tujuan, produk, stok) { 
-        let tambah_data = '<tr><td>'+divisi+'</td><td>'+tujuan+'</td><td>'+produk+'</td><td>'+stok+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+    function addData(divisi, tujuan, produk, stok) {
+        if (tujuan.length > 30) {
+            var a = tujuan.substring(0, 10) + '...';
+        } 
+        let tambah_data = '<tr><td>'+divisi+'</td><td>'+a+'</td><td>'+produk+'</td><td>'+stok+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function(e){
         e.preventDefault();
         $(this).parent().parent().remove();
-        var check = $('.kd-barang-field').length;
+        var check = $('tbody.tambah_data tr').length;
         if(check != 0){
             $('.btn-simpan').prop('hidden', false);
         }else{

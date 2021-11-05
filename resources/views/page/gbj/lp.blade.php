@@ -7,6 +7,24 @@
     .hapus{
         display: none;
     }
+   .nomor-so{
+        background-color: #717FE1;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-akn{
+        background-color: #DF7458;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-po{
+        background-color: #85D296;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
 </style>
 <section class="content">
     <div class="row">
@@ -45,7 +63,7 @@
                                                     <th>Tanggal Masuk</th>
                                                     <th>Dari</th>
                                                     <th>Tujuan</th>
-                                                    <td>Aksi</td>
+                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -53,18 +71,13 @@
                                                     <td>10-09-2022</td>
                                                     <td>Divisi IT</td>
                                                     <td>Uji Coba Produk</td>
-                                                    <td>Ambulatory</td>
-                                                    <td>100 Unit</td>
-                                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button></td>
+                                                    <td><button class="btn btn-info" onclick="modalRancangan()"><i class="far fa-eye"></i> Detail</button></td>
                                                 </tr>
                                                 <tr>
                                                     <td>10-09-2022</td>
-                                                    <td>10-09-2022</td>
                                                     <td>Divisi IT</td>
                                                     <td>Uji Coba Produk</td>
-                                                    <td>Ambulatory</td>
-                                                    <td>100 Unit</td>
-                                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button></td>
+                                                    <td><button class="btn btn-info" onclick="modalRancangan()"><i class="far fa-eye"></i> Detail</button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -87,11 +100,11 @@
                                                                         <div class="form-group row top-min">
                                                                             <label for="" class="col-12 font-weight-bold col-form-label">Tanggal Masuk</label>
                                                                             <div class="col-12">
-                                                                                <input type="date" class="form-control" id="tanggal">
+                                                                                <input type="date" class="form-control tanggal">
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group row top-min">
-                                                                            <label for="" class="col-12 font-weight-bold col-form-label">Tujuan</label>
+                                                                            <label for="" class="col-12 font-weight-bold col-form-label">Dari</label>
                                                                             <div class="col-12">
                                                                                 <select class="form-control division" name="division">
                                                                                     <option value="Divisi IT">Divisi IT</option>
@@ -155,7 +168,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>Tanggal Masuk</th>
-                                                                <th>Tujuan</th>
+                                                                <th>Dari</th>
                                                                 <th>Keterangan</th>
                                                                 <th>Produk</th>
                                                                 <th>Jumlah</th>
@@ -187,41 +200,241 @@
     </div>
 </section>
 
-{{-- Modal Scan Product --}}
-<!-- Modal -->
-<div class="modal fade modal-produk" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<!-- Modal Detail Rancangan-->
+<div class="modal fade modal-rancangan" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Produk AIR STERILIZER AND PURIFIER</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title">Detail Rancangan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped scan-produk">
-                    <thead>
-                        <tr>
-                            <th>Nomor Seri</th>
-                            <th>Layout</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>    
-                                <option value="2">Layout 2</option>    
-                            </select></td>
-                            <td><button class="btn btn-success addproduk"><i class="fas fa-plus"></i></button>&nbsp;<button class="btn btn-danger addproduk"><i class="fas fa-minus"></i></button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="">Tanggal Masuk</label>
+                                    <div class="card nomor-so">
+                                        <div class="card-body">
+                                            10-04-2020
+                                        </div>
+                                      </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="">Dari</label>
+                                <div class="card nomor-akn">
+                                    <div class="card-body">
+                                        Divisi IT
+                                    </div>
+                                  </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="">Tujuan</label>
+                                <div class="card nomor-po">
+                                    <div class="card-body">
+                                        Uji Coba Produk
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-rancangan">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>Ambulatory</td>
+                                    <td>100 Unit</td>
+                                    <td><button class="btn btn-info" onclick="tambahanRancangan()"><i class="far fa-edit"></i> Detail</button></td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>Ambulatory</td>
+                                    <td>100 Unit</td>
+                                    <td><button class="btn btn-info" onclick="tambahanRancangan()"><i class="far fa-edit"></i> Detail</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal Tambahan Perakitan-->
+  <!-- Modal Detail-->
+  <div class="modal fade tambahan-perakitan" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped scan-produk">
+                  <thead>
+                      <tr>
+                          <th><input type="checkbox" id="head-cb"></th>
+                          <th>Nomor Seri</th>
+                          <th>Layout</th>
+                          <th>Aksi</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td><input type="checkbox" class="cb-child" value="1"></td>
+                          <td>36541654654654564</td>
+                          <td><select name="" id="" class="form-control">
+                              <option value="1">Layout 1</option>
+                              <option value="2">Layout 2</option>
+                              </select></td>
+                              <td>
+                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
+                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                            </td>
+                      </tr>
+                      <tr>
+                          <td><input type="checkbox" class="cb-child" value="2"></td>
+                          <td>36541654654654564</td>
+                          <td><select name="" id="" class="form-control">
+                              <option value="1">Layout 1</option>
+                              <option value="2">Layout 2</option>
+                              </select></td>
+                              <td>
+                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
+                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                            </td>
+                      </tr>
+                      <tr>
+                          <td><input type="checkbox" class="cb-child" value="3"></td>
+                          <td>36541654654654564</td>
+                          <td><select name="" id="" class="form-control">
+                              <option value="1">Layout 1</option>
+                              <option value="2">Layout 2</option>
+                              </select></td>
+                              <td>
+                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
+                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                            </td>
+                      </tr>
+                  </tbody>
+              </table>
+              <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Tambahan Rancangan-->
+  <!-- Modal Detail-->
+  <div class="modal fade tambahan-rancangan" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped scan-produk">
+                  <thead>
+                      <tr>
+                          <th><input type="checkbox" id="head-cb"></th>
+                          <th>Nomor Seri</th>
+                          <th>Layout</th>
+                          <th>Aksi</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td><input type="checkbox" class="cb-child" value="1"></td>
+                          <td>36541654654654564</td>
+                          <td><select name="" id="" class="form-control">
+                              <option value="1">Layout 1</option>
+                              <option value="2">Layout 2</option>
+                              </select></td>
+                              <td>
+                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
+                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                            </td>
+                      </tr>
+                      <tr>
+                          <td><input type="checkbox" class="cb-child" value="2"></td>
+                          <td>36541654654654564</td>
+                          <td><select name="" id="" class="form-control">
+                              <option value="1">Layout 1</option>
+                              <option value="2">Layout 2</option>
+                              </select></td>
+                              <td>
+                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
+                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                            </td>
+                      </tr>
+                      <tr>
+                          <td><input type="checkbox" class="cb-child" value="3"></td>
+                          <td>36541654654654564</td>
+                          <td><select name="" id="" class="form-control">
+                              <option value="1">Layout 1</option>
+                              <option value="2">Layout 2</option>
+                              </select></td>
+                              <td>
+                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
+                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                            </td>
+                      </tr>
+                  </tbody>
+              </table>
+              <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Modal Ubah Layout-->
+  <div class="modal fade" id="ubah-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Layout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Layout</label>
+                    <select name="" id="change-layout" class="form-control">
+                      <option value="1">Layout 1</option>
+                      <option value="2">Layout 2</option>
+                  </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary" onclick="ubahData()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @stop
 
 @section('adminlte_js')
@@ -256,7 +469,7 @@
     });
 
     $(document).on('click','.btn-tambah', function () {
-        let tanggal = $('#tanggal').val();
+        let tanggal = $('.tanggal').val();
         let divisi = $('.division').val();
         let tujuan = $('.tujuan').val();
         let produk = $('.product').val();
@@ -270,7 +483,7 @@
     });
 
     function addData(tanggal, divisi, tujuan, produk, jumlah) { 
-        let tambah_data = '<tr><td>'+tanggal+'</td><td>'+divisi+'</td><td>'+tujuan+'</td><td>'+produk+'</td><td>'+jumlah+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-plus"></i> Tambah Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr><td>'+tanggal+'</td><td>'+divisi+'</td><td>'+tujuan+'</td><td>'+produk+'</td><td>'+jumlah+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-plus"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function(e){
@@ -278,9 +491,9 @@
         $(this).parent().parent().remove();
         var check = $('.kd-barang-field').length;
         if(check != 0){
-            $('.btn-simpan').addClass('hapus');
-        }else{
             $('.btn-simpan').removeClass('hapus');
+        }else{
+            $('.btn-simpan').addClass('hapus');
         }
     });
     
@@ -289,5 +502,37 @@
             "sSearch": "Scan Nomor Seri:"
             }
     });
+
+    $(document).ready(function () {
+        $('.table-rancangan').DataTable({});
+
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
+        });
+    });
+
+    function ubahData() { 
+        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let layout = $('#change-layout').val();
+        $.each(checkbox_terpilih, function (index, elm) {
+            let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
+        });
+        $('#ubah-layout').modal('hide');
+    }
+
+    $('#datetimepicker1').daterangepicker({});
+
+    function modalRancangan() { 
+        $('.modal-rancangan').modal('show');
+    }
+
+    function tambahanRancangan() { 
+        $('.tambahan-rancangan').modal('show');
+    }
+
+    function tambahanPerakitan() { 
+        $('.tambahan-perakitan').modal('show');
+    }
 </script>
 @stop

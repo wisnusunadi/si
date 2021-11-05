@@ -999,11 +999,7 @@ return [
             'auth' => [22],
         ],
         [
-            'header' => 'Dasboard',
-            'auth' => [13]
-        ],
-        [
-            'text' => 'Produk dan Transfer',
+            'text' => 'Dasboard',
             'url' => '/gbj/dashboard',
             'icon' => 'fas fa-circle',
             'auth' => [13],
