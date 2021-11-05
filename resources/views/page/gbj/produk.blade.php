@@ -306,8 +306,9 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-6">
-                        <img src="https://images.unsplash.com/photo-1615486510940-4e96763c7f6d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
-                            alt="">
+                        <div class="card">
+                            <img class="card-img-top" src="https://images.unsplash.com/photo-1636096111790-01540e4b36fd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80" alt="">
+                        </div>
                     </div>
                     <div class="col-6">
                         <p><b>Nama Produk</b></p>
