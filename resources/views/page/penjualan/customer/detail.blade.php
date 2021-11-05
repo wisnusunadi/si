@@ -129,18 +129,21 @@
                     searchable: false
                 },
                 {
-                    data: 'DT_RowIndex'
+                    data: 'so'
                 },
                 {
-                    data: 'DT_RowIndex',
+                    data: 'nopo',
 
                 },
                 {
-                    data: 'DT_RowIndex',
+                    data: 'tglpo',
 
                 },
                 {
-                    data: 'DT_RowIndex',
+                    data: 'jenis',
+
+                }, {
+                    data: 'status',
 
                 }
             ]

@@ -786,7 +786,46 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        //   var penjualantable = $('#penjualantable').DataTable({})
+        var penjualantable = $('#penjualantable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/data/',
+                'method': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'nama_customer',
+            }, {
+                data: 'no_paket',
+            }, {
+                data: 'nopo',
+            }, {
+                data: 'tgl_order',
+            }, {
+                data: 'tgl_kontrak',
+            }, {
+                data: 'nama_customer',
+            }, {
+                data: 'jenis',
+            }, {
+                data: 'status',
+            }, {
+                data: 'button',
+                orderable: false,
+                searchable: false
+            }, ]
+        });
         var ekatalogtable = $('#ekatalogtable').DataTable({
             processing: true,
             serverSide: true,

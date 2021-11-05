@@ -15,15 +15,102 @@ use Hamcrest\Core\IsNot;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
+use League\Fractal\Resource\Item;
 
 use function PHPUnit\Framework\assertIsNotArray;
 
 class PenjualanController extends Controller
 {
     //Get Data Table
+    public function penjualan_data()
+    {
+        // $data  = Ekatalog::all();
+
+        $Ekatalog = collect(Ekatalog::with('Pesanan')->get());
+        $Spa = collect(Spa::with('Pesanan')->get());
+        $Spb = collect(Spb::with('Pesanan')->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                $name =  $data->getTable();
+                if ($name == 'ekatalog') {
+                    return 'E-Catalogue';
+                } else if ($name == 'spa') {
+                    return 'SPA';
+                } else {
+                    return 'SPB';
+                }
+            })
+            ->addColumn('nama_customer', function ($data) {
+                return $data->Customer->nama;
+            })
+            ->addColumn('no_paket', function ($data) {
+                if (isset($data->no_paket)) {
+                    return $data->no_paket;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('tgl_order', function ($data) {
+                if (isset($data->tgl_buat)) {
+                    return $data->tgl_buat;
+                } else {
+                    return $data->tgl_po;;
+                }
+            })
+            ->addColumn('tgl_kontrak', function ($data) {
+                if (isset($data->tgl_kontrak)) {
+                    return $data->tgl_kontrak;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('nopo', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->no_po;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                return '<span class="yellow-text badge">Gudang</span>';
+            })
+            ->addColumn('button', function ($data) {
+                $name =  $data->getTable();
+                if ($name == 'ekatalog') {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+            <div>';
+                } else if ($name == 'spa') {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+                    </div>';
+                } else {
+                    return '';
+                }
+            })
+            ->rawColumns(['button', 'status'])
+            ->make(true);
+    }
     public function get_data_detail_spa($value)
     {
-        $data  = Spa::find($value);
+        $data  = Spa::with('Pesanan')
+            ->where('id', $value)
+            ->get();
         return view('page.penjualan.penjualan.detail_spa', ['data' => $data]);
     }
     public function get_data_detail_ekatalog($value)

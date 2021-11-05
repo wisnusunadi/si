@@ -75,6 +75,7 @@ Route::prefix('/penjualan_produk')->group(function () {
 });
 Route::prefix('/penjualan')->group(function () {
     Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
+    Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
 });
 Route::prefix('/so')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_so']);

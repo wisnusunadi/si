@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\DetailEkatalog;
 use App\Models\DetailPenjualanProduk;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
@@ -11,6 +12,8 @@ use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Provinsi;
+use App\Models\Spa;
+use App\Models\Spb;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -124,13 +127,53 @@ class MasterController extends Controller
     }
     public function get_data_pesanan($id)
     {
-        $data  = Ekatalog::with('pesanan')
-            ->where('customer_id', $id)
-            ->get();
+        // $data  = Ekatalog::with('pesanan')
+        //     ->where('customer_id', $id)
+        //     ->get();
+
+        $Ekatalog = collect(Ekatalog::with('Pesanan')->where('customer_id', $id)->get());
+        $Spa = collect(Spa::with('Pesanan')->where('customer_id', $id)->get());
+        $Spb = collect(Spb::with('Pesanan')->where('customer_id', $id)->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         if ($data)
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('jenis', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'ekatalog') {
+                        return 'E-Catalogue';
+                    } else if ($name == 'spa') {
+                        return 'SPA';
+                    } else {
+                        return 'SPB';
+                    }
+                })
+                ->addColumn('so', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->so;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('nopo', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->no_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('tglpo', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->tgl_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('status', function ($data) {
+                    return '<span class="yellow-text badge">Gudang</span>';
+                })
+                ->rawColumns(['status'])
                 ->make(true);
     }
     //Create
