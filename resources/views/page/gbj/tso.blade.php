@@ -80,7 +80,7 @@
                                         <th>Keterangan</th>
                                         <th>Produk</th>
                                         <th>Stok</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="tambah_data">
@@ -216,7 +216,10 @@
             },
             'order': [
                 [0, 'asc']
-            ]
+            ],
+            "oLanguage": {
+            "sSearch": "Scan Nomor Seri:"
+            }
         });
 </script>
 @stop

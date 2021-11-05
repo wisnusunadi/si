@@ -61,7 +61,7 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
                                                 <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Tambah Produk Produk
+                                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
                                             </div>
                                         </div>
@@ -82,50 +82,83 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
-                    <p><b>Transfer Produk</b></p>
-                    <p><b>Nomor SO</b> 8457938475938475</p>
-                    <p><b>Nomor PO</b> 8457938475938475</p>
-                    <p><b>Nomor AKN</b> 8457938475938475</p>
+                <h5 class="modal-title">Transfer Produk
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                {{-- Tambahkan DataTable --}}
-                <table class="table table-striped add-produk">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Nama Produk</th>
-                            <th>Stok</th>
-                            <th>Tipe</th>
-                            <th>Merk</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100</td>
-                            <td>ABPM50</td>
-                            <td>ELITECH</td>
-                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
-                                        class="fas fa-qrcode"></i> Scan Produk</button></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100</td>
-                            <td>RGB</td>
-                            <td>ELITECH</td>
-                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
-                                        class="fas fa-qrcode"></i> Scan Produk</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <label for="">Nomor SO</label>
+                                        {{-- <input type="text" class="form-control" id="transfer-so" name="nomor_so"
+                                            value="897987978" readonly> --}}
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    89798797856456
+                                                </div>
+                                              </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <label for="">Nomor PO</label>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                          </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <label for="">Nomor AKN</label>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped add-produk">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Nama Produk</th>
+                                            <th>Stok</th>
+                                            <th>Tipe</th>
+                                            <th>Merk</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>ABPM50</td>
+                                            <td>ELITECH</td>
+                                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
+                                                        class="fas fa-qrcode"></i> Scan Produk</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>RGB</td>
+                                            <td>ELITECH</td>
+                                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
+                                                        class="fas fa-qrcode"></i> Scan Produk</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success">Transfer</button>
@@ -226,7 +259,10 @@
             }],
             "order": [
                 [1, 'asc']
-            ]
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"
+            }
         });
         a.on('order.dt search.dt', function () {
             a.column(0, {
@@ -236,6 +272,5 @@
                 cell.innerHTML = i + 1;
             });
         }).draw();
-
 </script>
 @stop
