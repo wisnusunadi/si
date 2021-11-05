@@ -246,7 +246,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'ekatalog'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit
@@ -280,7 +280,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spb'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'spb'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit
@@ -313,7 +313,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spa'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'spa'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit

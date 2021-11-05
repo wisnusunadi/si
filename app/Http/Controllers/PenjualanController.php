@@ -135,7 +135,7 @@ class PenjualanController extends Controller
                       Details
                     </button>
                 </a>
-                <a href="' . route('penjualan.penjualan.edit', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
                     <button class="dropdown-item" type="button" >
                       <i class="fas fa-pencil-alt"></i>
                       Edit
@@ -157,7 +157,7 @@ class PenjualanController extends Controller
                       Details
                     </button>
                 </a>
-                <a href="' . route('penjualan.penjualan.edit', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
                     <button class="dropdown-item" type="button" >
                       <i class="fas fa-pencil-alt"></i>
                       Edit
@@ -208,7 +208,7 @@ class PenjualanController extends Controller
                           Details
                         </button>
                     </a>
-                    <a href="' . route('penjualan.penjualan.edit', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
@@ -224,7 +224,7 @@ class PenjualanController extends Controller
                           Details
                         </button>
                     </a>
-                    <a href="' . route('penjualan.penjualan.edit', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
@@ -502,11 +502,11 @@ class PenjualanController extends Controller
             $ekatalog = Ekatalog::with('DetailEkatalog')->where('id', $id)->get();
 
 
-            return view('page.penjualan.penjualan.edit', ['jenis' => $jenis, 'ekatalog' => $ekatalog]);
+            return view('page.penjualan.penjualan.edit_ekatalog', ['jenis' => $jenis, 'ekatalog' => $ekatalog]);
         } else if ($jenis == 'spa') {
-            return view('page.penjualan.penjualan.edit', ['jenis' => $jenis]);
+            return view('page.penjualan.penjualan.edit_ekatalog', ['jenis' => $jenis]);
         } else {
-            return view('page.penjualan.penjualan.edit', ['jenis' => $jenis]);
+            return view('page.penjualan.penjualan.edit_ekatalog', ['jenis' => $jenis]);
         }
     }
     public function update_ekatalog(Request $request, $id)

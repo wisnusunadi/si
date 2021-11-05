@@ -158,6 +158,10 @@
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
                                                 <div class="col-5 col-form-label">
                                                     <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
+                                                        <label class="form-check-label" for="satuan4">Draft</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
                                                         <label class="form-check-label" for="satuan1">Sepakat</label>
                                                     </div>
@@ -169,10 +173,7 @@
                                                         <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
                                                         <label class="form-check-label" for="satuan3">Batal</label>
                                                     </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status" id="satuan3" value="draft" />
-                                                        <label class="form-check-label" for="satuan3">Draft</label>
-                                                    </div>
+
                                                     <div class="invalid-feedback" id="msgstatus">
                                                         @if($errors->has('status'))
                                                         {{ $errors->first('status')}}
@@ -233,28 +234,6 @@
                                 <h4>Info Penjualan</h4>
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
-                                            <div class="col-4">
-                                                <input type="date" class="form-control col-form-label @error('nontanggal_pemesanan') is-invalid @enderror" id="nontanggal_pemesanan" name="nontanggal_pemesanan" />
-                                                <div class="invalid-feedback" id="msgnontanggal_pemesanan">
-                                                    @if($errors->has('nontanggal_pemesanan'))
-                                                    {{ $errors->first('nontanggal_pemesanan')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Sales Order</label>
-                                            <div class="col-4">
-                                                <input type="text" class="form-control col-form-label @error('no_so') is-invalid @enderror" id="no_so" name="no_so" />
-                                                <div class="invalid-feedback" id="msgno_so">
-                                                    @if($errors->has('no_so'))
-                                                    {{ $errors->first('no_so')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="form-group row">
                                             <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
                                             <div class="col-4">
@@ -373,12 +352,18 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
-                                                                        <input type="number" class="form-control produk_harga" id="produk_harga0" name="produk_harga[]" style="width:100%;" />
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">Rp</span>
+                                                                        </div>
+                                                                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" />
                                                                     </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
-                                                                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" readonly />
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">Rp</span>
+                                                                        </div>
+                                                                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -528,8 +513,6 @@
         }
 
         function reset_penjualan() {
-            $("#nontanggal_pemesanan").val("");
-            $("#no_so").val("");
             $("#no_po").val("");
             $("#tanggal_po").val("");
             $('input[type="radio"][name="do"]').prop("checked", false);
@@ -570,8 +553,8 @@
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
             } else if ($(this).val() == "spb") {
-                $("#datapart").removeClass("hide");
-                $("#dataproduk").addClass("hide");
+                $("#datapart").addClass("hide");
+                $("#dataproduk").removeClass("hide");
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
             }
@@ -585,7 +568,7 @@
                 $("#do_detail_no").removeClass("hide");
                 $("#do_detail_tgl").removeClass("hide");
             } else if ($(this).val() == "no") {
-                if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "") {
+                if ($("#no_po").val() != "" && $("#tanggal_po").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -628,8 +611,18 @@
 
         $('input[type="radio"][name="status"]').on('change', function() {
             if ($(this).val() != "") {
+                if ($(this).val() == "draft") {
+                    $("#produktable tbody").empty();
+                    $('#produktable tbody').append(trproduktable());
+                    numberRowsProduk($("#produktable"));
+                    $("#totalhargaprd").text("Rp. 0");
+                    $("#dataproduk").addClass("hide");
+                } else {
+                    $("#dataproduk").removeClass("hide");
+                }
                 if ($("#tanggal_pemesanan").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#instansi").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
                     $('#btntambah').removeAttr("disabled");
+
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
@@ -686,41 +679,19 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
-        $('#nontanggal_pemesanan').on('keyup change', function() {
-            if ($(this).val() != "") {
-                $("#msgnontanggal_pemesanan").text("");
-                $("#nontanggal_pemesanan").removeClass('is-invalid');
-                if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_so").val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
-                        $('#btntambah').removeAttr("disabled");
-                    } else {
-                        $('#btntambah').attr("disabled", true);
-                    }
-                } else {
-                    if ($("#no_so").val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "") {
-                        $('#btntambah').removeAttr("disabled");
-                    } else {
-                        $('#btntambah').attr("disabled", true);
-                    }
-                }
-            } else if ($(this).val() == "") {
-                $("#msgnontanggal_pemesanan").text("Isi Tanggal Pemesanan");
-                $("#nontanggal_pemesanan").addClass('is-invalid');
-            }
-        });
         $('#no_po').on('keyup', function() {
             if ($(this).val() != "") {
                 $("#msgno_po").text("");
                 $("#no_po").removeClass('is-invalid');
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                    if ($("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
                         $('#btntambah').attr("disabled", true);
                     }
                 } else {
 
-                    if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#tanggal_po").val() != "") {
+                    if ($("#tanggal_po").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
 
@@ -738,14 +709,13 @@
                 $("#msgtanggal_po").text("");
                 $("#tanggal_po").removeClass('is-invalid');
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#no_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                    if ($("#no_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
                         $('#btntambah').attr("disabled", true);
                     }
                 } else {
-
-                    if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#no_po").val() != "") {
+                    if ($("#no_po").val() != "") {
 
                         $('#btntambah').removeAttr("disabled");
                     } else {
@@ -763,7 +733,7 @@
             if ($(this).val() != "") {
                 $("#msgno_do").text("");
                 $("#no_do").removeClass('is-invalid');
-                if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#tanggal_po").val() != "" && $("#tanggal_do").val() != "") {
+                if ($("#tanggal_po").val() != "" && $("#tanggal_do").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -779,7 +749,7 @@
             if ($(this).val() != "") {
                 $("#msgtanggal_do").text("");
                 $("#tanggal_do").removeClass('is-invalid');
-                if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#no_po").val() != "" && $("#no_do").val() != "") {
+                if ($("#no_po").val() != "" && $("#no_do").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -830,8 +800,26 @@
             });
         });
 
+        function formatmoney(bilangan) {
+            var number_string = bilangan.toString(),
+                sisa = number_string.length % 3,
+                rupiah = number_string.substr(0, sisa),
+                ribuan = number_string.substr(sisa).match(/\d{3}/g);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            return rupiah;
+        }
+
+        function replaceAll(string, search, replace) {
+            return string.split(search).join(replace);
+        }
+
         function select_data() {
             $('.penjualan_produk_id').select2({
+                placeholder: "Pilih Produk",
                 ajax: {
                     minimumResultsForSearch: 20,
                     placeholder: "Pilih Produk",
@@ -866,18 +854,17 @@
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        $('#produk_harga' + index).val(data[0].harga);
+                        $('#produk_harga' + index).val(formatmoney(data[0].harga));
                     }
                 });
             });
 
         }
 
-
         function totalhargaprd() {
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
-                var subtotal = $(this).val();
+                var subtotal = replaceAll($(this).val(), '.', '');
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
@@ -886,12 +873,59 @@
         function totalhargapart() {
             var totalharga = 0;
             $('#parttable').find('tr .part_subtotal').each(function() {
-                var subtotal = $(this).val();
+                var subtotal = replaceAll($(this).val(), '.', '');
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargapart").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
         }
 
+        $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var harga = $(this).closest('tr').find('.produk_harga').val();
+            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+
+            if (jumlah != "" && harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargaprd();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargaprd();
+            }
+        });
+
+        $("#produktable").on('keyup change', '.produk_jumlah', function() {
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var harga = $(this).closest('tr').find('.produk_harga').val();
+            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+
+            if (jumlah != "" && harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargaprd();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargaprd();
+            }
+        });
+
+        $("#produktable").on('keyup change', '.produk_harga', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var harga = $(this).closest('tr').find('.produk_harga').val();
+            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+            if (jumlah != "" && harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargaprd();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargaprd();
+            }
+        });
+
+        //PRODUK TABLE
         function numberRowsProduk($t) {
             var c = 0 - 2;
             $t.find("tr").each(function(ind, el) {
@@ -907,39 +941,8 @@
             });
         }
 
-        $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
-            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-            var harga = $(this).closest('tr').find('.produk_harga').val();
-            var subtotal = $(this).closest('tr').find('.produk_subtotal');
-
-            if (jumlah != "" && harga != "") {
-                subtotal.val(jumlah * harga);
-                totalhargaprd();
-            }
-        });
-        $("#produktable").on('keyup change', '.produk_jumlah', function() {
-            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-            var harga = $(this).closest('tr').find('.produk_harga').val();
-            var subtotal = $(this).closest('tr').find('.produk_subtotal');
-
-            if (jumlah != "" && harga != "") {
-                subtotal.val(jumlah * harga);
-                totalhargaprd();
-            }
-        });
-
-        $("#produktable").on('keyup change', '.produk_harga', function() {
-            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-            var harga = $(this).closest('tr').find('.produk_harga').val();
-            var subtotal = $(this).closest('tr').find('.produk_subtotal');
-            if (jumlah != "" && harga != "") {
-                subtotal.val(jumlah * harga);
-                totalhargaprd();
-            }
-        });
-
-        $('#addrowproduk').on('click', function() {
-            $('#produktable tbody tr:last').after(`<tr>
+        function trproduktable() {
+            var data = `<tr>
                 <td></td>
                 <td>
                     <div class="form-group">
@@ -961,25 +964,44 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control produk_harga" id="produk_harga0" name="produk_harga[]" style="width:100%;" />
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" readonly/>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
                 <td>
                     <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
-            </tr>`);
-            numberRowsProduk($("#produktable"));
+            </tr>`;
+            return data;
+        }
+
+        $('#addrowproduk').on('click', function() {
+            if ($('#produktable > tbody > tr').length <= 0) {
+                $('#produktable tbody').append(trproduktable());
+                numberRowsProduk($("#produktable"));
+            } else {
+                $('#produktable tbody tr:last').after(trproduktable());
+                numberRowsProduk($("#produktable"));
+            }
         });
 
         $('#produktable').on('click', '#removerowproduk', function(e) {
             $(this).closest('tr').remove();
             numberRowsProduk($("#produktable"));
             totalhargaprd();
+            if ($('#produktable > tbody > tr').length <= 0) {
+                $("#totalhargaprd").text("0");
+            }
         });
 
         function numberRowsPart($t) {
@@ -1017,6 +1039,11 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control" name="part_harga" id="part_harga[]" placeholder="Masukkan Harga" />
+                                            
                         <input type="number" class="form-control part_harga" id="part_harga" name="part_harga[]" style="width:100%;" />
                     </div>
                 </td>
@@ -1041,6 +1068,7 @@
                 subtotal.val(jumlah * harga);
                 totalhargapart();
             }
+
         });
 
         $("#parttable").on('keyup change', '.part_harga', function() {
