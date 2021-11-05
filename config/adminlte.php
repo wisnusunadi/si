@@ -1008,22 +1008,16 @@ return [
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
-        [
-            'text' => 'Riwayat Transfer Produk',
-            'url' => '/gbj/tp',
-            'icon' => 'fas fa-circle',
-            'auth' => [13],
-        ],
-        [
-            'header' => 'Produksi',
-            'auth' => [13]
-        ],
-        [
-            'text' => 'BPPB',
-            'url' => '/bppb',
-            'icon' => 'fas fa-circle',
-            'auth' => [13],
-        ],
+        // [
+        //     'header' => 'Produksi',
+        //     'auth' => [13]
+        // ],
+        // [
+        //     'text' => 'BPPB',
+        //     'url' => '/bppb',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
         [
             'header' => 'Stok',
             'auth' => [13]
@@ -1035,9 +1029,15 @@ return [
             'icon' => 'fas fa-boxes',
             'auth' => [13],
         ],
+        // [
+        //     'text' => 'Stok',
+        //     'url' => '/gbj/stok',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
         [
-            'text' => 'Stok',
-            'url' => '/gbj/stok',
+            'text' => 'Riwayat Transfer Produk',
+            'url' => '/gbj/tp',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],

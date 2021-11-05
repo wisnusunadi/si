@@ -197,13 +197,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
-                        <label for="">Layout</label>
-                        <select name="" class="form-control layout-add">
-                            <option value="">Buku</option>
-                            <option value="">Bolpoin</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="form-group">
                     <div class="custom-file">
@@ -282,13 +275,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
-                        <label for="">Layout</label>
-                        <select name="" class="form-control layout-edit">
-                            <option value="">Buku</option>
-                            <option value="">Bolpoin</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="form-group">
                     <div class="custom-file">
@@ -335,8 +321,6 @@
                             <p>Tinggi: 50</p>
                         </div>
                         <p><b>Produk</b></p>
-                        <p>Buku</p>
-                        <p><b>Layout</b></p>
                         <p>Buku</p>
                     </div>
                 </div>

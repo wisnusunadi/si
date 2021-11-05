@@ -21,7 +21,7 @@
                                 <div class="col-12 mt-3">
                                     <form method="post">
                                         <div class="form-group row top-min">
-                                            <label for="" class="col-12 font-weight-bold col-form-label">Ke</label>
+                                            <label for="" class="col-12 font-weight-bold col-form-label">Tujuan</label>
                                             <div class="col-12">
                                                 <select class="form-control division" name="division">
                                                     <option value="Divisi IT">Divisi IT</option>
@@ -31,7 +31,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row top-min">
-                                            <label for="" class="col-12 font-weight-bold col-form-label">Tujuan</label>
+                                            <label for="" class="col-12 font-weight-bold col-form-label">Keterangan</label>
                                             <div class="col-12">
                                                 <textarea name="tujuan" id="" class="form-control tujuan"></textarea>
                                             </div>
@@ -76,8 +76,8 @@
                             <table class="table table-hover addData">
                                 <thead>
                                     <tr>
-                                        <th>Ke</th>
                                         <th>Tujuan</th>
+                                        <th>Keterangan</th>
                                         <th>Produk</th>
                                         <th>Stok</th>
                                         <th>Action</th>

@@ -61,7 +61,7 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
                                                 <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Add Produk
+                                                    <i class="fas fa-plus"></i>&nbsp;Tambah Produk Produk
                                                 </button>
                                             </div>
                                         </div>
@@ -130,7 +130,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success">Transfer</button>
                 <button type="button" class="btn btn-info">Rancang</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
         </div>
     </div>
