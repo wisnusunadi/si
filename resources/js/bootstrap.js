@@ -32,6 +32,7 @@ import "select2/dist/js/select2.full";
 import "sweetalert2/dist/sweetalert2.all";
 // import swal from 'sweetalert2';
 
+
 window.OverlayScrollbars = require("overlayscrollbars");
 
 
