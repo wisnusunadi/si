@@ -115,6 +115,33 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         });
     });
 });
+
+
+Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.logistik.dashboard')->name('logistik.dashboard');
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
+        Route::view('/detail/{id}', 'page.logistik.so.detail')->name('logistik.so.detail');
+        Route::view('/create', 'page.logistik.so.create')->name('logistik.so.create');
+        Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
+        Route::group(['prefix' => '/riwayat'], function () {
+            Route::view('/show', 'page.logistik.so.riwayat.show')->name('logistik.so.riwayat.show');
+        });
+        Route::group(['prefix' => '/laporan'], function () {
+            Route::view('/show', 'page.logistik.laporan.show')->name('logistik.so.laporan.show');
+        });
+    });
+
+    Route::group(['prefix' => '/ekspedisi'], function () {
+        Route::view('/show', 'page.logistik.ekspedisi.show')->name('logistik.ekspedisi.show');
+        Route::view('/detail/{id}', 'page.logistik.ekspedisi.detail')->name('logistik.ekspedisi.detail');
+        Route::view('/create', 'page.logistik.ekspedisi.create')->name('logistik.ekspedisi.create');
+        Route::view('/edit/{id}', 'page.logistik.ekspedisi.edit')->name('logistik.ekspedisi.edit');
+    });
+});
+
+
 Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 
 Route::get('/test/{name?}', function ($name = null) {

@@ -1052,6 +1052,41 @@ return [
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
+
+        //LOGISTIK
+        [
+            'text' => 'Beranda',
+            'icon' => 'fas fa-home',
+            'url' => '/logistik/dashboard',
+            'auth' => [15],
+        ],
+        [
+            'header' => 'DATA',
+            'auth' => [15]
+        ],
+        [
+            'text' => 'Jasa Ekspedisi',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/ekspedisi/show',
+            'auth' => [15],
+        ],
+        [
+            'header' => 'PENJUALAN',
+            'auth' => [15]
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/so/show',
+            'auth' => [15],
+        ],
+        [
+            'text' => 'Riwayat Pengiriman',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/so/riwayat/show',
+            'auth' => [15],
+        ],
+
         [
             'text' => 'test',
             'isNavbarRightItem' => true,
