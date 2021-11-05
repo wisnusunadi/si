@@ -25,7 +25,7 @@
                                     <th>Customer</th>
                                     <th>Batas Pengeluaran</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,7 +131,7 @@
                                             <th>Stok</th>
                                             <th>Tipe</th>
                                             <th>Merk</th>
-                                            <th>Action</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
