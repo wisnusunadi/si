@@ -17,6 +17,7 @@
     <div class="col-12">
         <div class="content">
             <form action="/api/customer/create" method="post">
+                {{csrf_field()}}
                 <div class="row d-flex justify-content-center">
                     <div class="col-8">
                         <h5>Info Customer</h5>
@@ -25,16 +26,16 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group row">
-                                            @if(session()->has('error') || count($errors) > 0 )
-                                            <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+                                            @if(session('error') || count($errors) > 0 )
+                                            <div class="alert alert-danger alert-dismissible show fade col-12" role="alert">
                                                 <strong>Gagal menambahkan!</strong> Periksa
                                                 kembali data yang diinput
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            @elseif(session()->has('success'))
-                                            <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+                                            @elseif(session('success'))
+                                            <div class="alert alert-success alert-dismissible show fade col-12" role="alert">
                                                 <strong>Berhasil menambahkan data</strong>,
                                                 Terima kasih
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

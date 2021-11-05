@@ -10,16 +10,6 @@
                                 <span style="font-size: 24px"><b>SPA</b></span>
                             </li>
                             <li class="list-group-item">
-                                <a>Tanggal Pemesanan</a>
-                                <b class="float-right" id="tanggal_pemesanan">
-                                    @if ($d->Pesanan)
-                                    {{ $d->Pesanan->tgl_po}}
-                                    @else
-                                    -
-                                    @endif
-                                </b>
-                            </li>
-                            <li class="list-group-item">
                                 <a>Nama Customer</a>
                                 <b class="float-right" id="nama_customer">{{$d->customer->nama}}</b>
                             </li>
@@ -28,8 +18,17 @@
                                 <b class="float-right" id="no_po">
                                     @if ($d->Pesanan)
                                     {{ $d->Pesanan->no_po}}
-                                    @else
-                                    -
+
+                                    @endif
+                                </b>
+                            </li>
+                            <li class="list-group-item">
+                                <a>Tanggal PO</a>
+                                <b class="float-right" id="tanggal_pemesanan">
+                                    @if ($d->Pesanan)
+                                    {{ $d->Pesanan->tgl_po}}
+
+
                                     @endif
                                 </b>
                             </li>

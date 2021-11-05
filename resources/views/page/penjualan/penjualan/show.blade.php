@@ -246,7 +246,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'ekatalog'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit
@@ -280,7 +280,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spb'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'spb'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit
@@ -313,7 +313,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spa'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'spa'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit
@@ -698,7 +698,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" id="spbtable">
+                                    <table class="table table-hover" id="spbtable" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -929,7 +929,47 @@
                 }
             ]
         })
-        //   var spbtable = $('#spbtable').DataTable({})
+        var spbtable = $('#spbtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/spb/data/',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so'
+                },
+                {
+                    data: 'nopo'
+                },
+                {
+                    data: 'tglpo'
+                },
+                {
+                    data: 'tglpo'
+                },
+                {
+                    data: 'nama_customer'
+                },
+                {
+                    data: 'DT_RowIndex'
+                },
+                {
+                    data: 'button'
+                }
+            ]
+        })
 
 
 
@@ -959,7 +999,8 @@
                         detailtabel_ekatalog(id);
                     } else if (label == 'spa') {
                         detailtabel_spa(id);
-                        //console.log(id);
+                    } else {
+                        detailtabel_spb(id);
                     }
 
                 },
@@ -1059,6 +1100,82 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/spa/paket/detail/' + id,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
+                    },
+                    {
+                        data: 'harga',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'jumlah',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'total',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api(),
+                        data;
+                    // converting to interger to find total
+                    var intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+                    // computing column Total of the complete result 
+                    var jumlah_pesanan = api
+                        .column(3)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    // computing column Total of the complete result 
+                    var total_pesanan = api
+                        .column(4)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                    $(api.column(0).footer()).html('Total');
+                    $(api.column(3).footer()).html('Total');
+                    $(api.column(4).footer()).html(num_for(total_pesanan));
+                },
+            })
+        }
+
+        function detailtabel_spb(id) {
+            $('#detailtabel_spb').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/spb/paket/detail/' + id,
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LaporanPenjualan;
 use App\Models\Customer;
 use App\Models\DetailEkatalog;
 use App\Models\DetailSpa;
@@ -16,6 +17,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
 use League\Fractal\Resource\Item;
+use Maatwebsite\Excel\Facades\Excel;
 
 use function PHPUnit\Framework\assertIsNotArray;
 
@@ -100,7 +102,15 @@ class PenjualanController extends Controller
                     </a>
                     </div>';
                 } else {
-                    return '';
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+                    </div>';
                 }
             })
             ->rawColumns(['button', 'status'])
@@ -118,9 +128,36 @@ class PenjualanController extends Controller
         $data  = Ekatalog::find($value);
         return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data]);
     }
+
+    public function get_data_detail_spb($value)
+    {
+        $data  = Spb::with('Pesanan')
+            ->where('id', $value)
+            ->get();
+        return view('page.penjualan.penjualan.detail_spb', ['data' => $data]);
+    }
+
     public function get_data_detail_paket_spa($id)
     {
         $data  = DetailSpa::where('spa_id', $id)
+            ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                return $data->penjualanproduk->nama;
+            })
+            ->addColumn('total', function ($data) {
+                return $data->harga * $data->jumlah;
+            })
+            ->addColumn('button', function ($data) {
+                return '<i class="fas fa-search"></i>';
+            })
+            ->rawColumns(['button',])
+            ->make(true);
+    }
+    public function get_data_detail_paket_spb($id)
+    {
+        $data  = DetailSpb::where('spb_id', $id)
             ->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -155,15 +192,6 @@ class PenjualanController extends Controller
             ->make(true);
     }
 
-    public function get_data_detail_spb($value)
-    {
-        $data  = DetailSpa::with('Penjualan_produk', 'Spb')
-            ->where('spb_id', $value)
-            ->get();
-        return datatables()->of($data)
-            ->addIndexColumn()
-            ->make(true);
-    }
     public function get_data_ekatalog_pengiriman()
     {
         $data  = Ekatalog::all();
@@ -220,7 +248,7 @@ class PenjualanController extends Controller
                       Details
                     </button>
                 </a>
-                <a href="' . route('penjualan.penjualan.edit', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
                     <button class="dropdown-item" type="button" >
                       <i class="fas fa-pencil-alt"></i>
                       Edit
@@ -242,7 +270,7 @@ class PenjualanController extends Controller
                       Details
                     </button>
                 </a>
-                <a href="' . route('penjualan.penjualan.edit', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
                     <button class="dropdown-item" type="button" >
                       <i class="fas fa-pencil-alt"></i>
                       Edit
@@ -293,7 +321,7 @@ class PenjualanController extends Controller
                           Details
                         </button>
                     </a>
-                    <a href="' . route('penjualan.penjualan.edit', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
@@ -309,7 +337,7 @@ class PenjualanController extends Controller
                           Details
                         </button>
                     </a>
-                    <a href="' . route('penjualan.penjualan.edit', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
@@ -329,9 +357,75 @@ class PenjualanController extends Controller
     }
     public function get_data_spb()
     {
-        $data  = Spb::select();
+        $data  = Spb::with('pesanan')->get();
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->so;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('nopo', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->no_po;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('tglpo', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->tgl_po;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('nama_customer', function ($data) {
+                return $data->Customer->nama;
+            })
+            ->addColumn('button', function ($data) {
+                if ($data->Pesanan) {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
+                        <button class="dropdown-item" type="button" >
+                          <i class="fas fa-pencil-alt"></i>
+                          Edit
+                        </button>
+                    </a>
+                    </div>';
+                } else {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
+                        <button class="dropdown-item" type="button" >
+                          <i class="fas fa-pencil-alt"></i>
+                          Edit
+                        </button>
+                    </a>
+                    <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
+                    <button class="dropdown-item" type="button" >
+                    <i class="fas fa-plus"></i>
+                      Tambah PO
+                    </button>
+                </a>
+                    </div>';
+                }
+            })
+            ->rawColumns(['button'])
             ->make(true);
     }
     public function get_data_so()
@@ -404,7 +498,7 @@ class PenjualanController extends Controller
                     'ekatalog_id' => $Ekatalog->id,
                     'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                     'jumlah' => $request->produk_jumlah[$i],
-                    'harga' => $request->produk_harga[$i],
+                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
                     'ongkir' => 0,
                 ]);
             }
@@ -433,11 +527,38 @@ class PenjualanController extends Controller
                     'spa_id' => $Spa->id,
                     'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                     'jumlah' => $request->produk_jumlah[$i],
-                    'harga' => $request->produk_harga[$i],
+                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
                     'ongkir' => 0,
                 ]);
             }
         } else {
+
+            if (!empty($request->input('no_po'))) {
+                $pesanan = Pesanan::create([
+                    'no_po' => $request->no_po,
+                    'tgl_po' => $request->tanggal_po,
+                    'no_do' => $request->no_do,
+                    'tgl_do' => $request->tanggal_do,
+                    'ket' =>  $request->keterangan,
+                ]);
+                $x = $pesanan->id;
+            }
+
+            $Spb = Spb::create([
+                'customer_id' => $request->customer_id,
+                'pesanan_id' => $x,
+                'ket' => $request->keterangan
+            ]);
+
+            for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                DetailSpb::create([
+                    'spb_id' => $Spb->id,
+                    'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                    'jumlah' => $request->produk_jumlah[$i],
+                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                    'ongkir' => 0,
+                ]);
+            }
         }
     }
     public function create_ekatalog(Request $request)
@@ -504,12 +625,18 @@ class PenjualanController extends Controller
             'status' => $request->status,
             'ket' => $request->ket
         ]);
+
+        foreach ($request->produk_harga as $k => $v) {
+            $r =  $request->produk_harga[$k] = str_replace('.', '', $v);
+        }
+
         for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+
             DetailSpa::create([
                 'spa_id' => $Spa->id,
                 'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                'jumlah' => $request->jumlah[$i],
-                'harga' => $request->harga[$i],
+                'jumlah' => $request->produk_jumlah[$i],
+                'harga' => $r[$i],
                 'ongkir' => $request->ongkir[$i],
             ]);
         }
@@ -556,7 +683,7 @@ class PenjualanController extends Controller
     {
         // $this->validate(
         //     $request,
-        //     [
+        //     [w
         //         'customer_id' => 'required',
         //         'status' => 'required',
         //         'jumlah.*' => 'required',
@@ -585,13 +712,13 @@ class PenjualanController extends Controller
     {
         if ($jenis == 'ekatalog') {
             $ekatalog = Ekatalog::with('DetailEkatalog')->where('id', $id)->get();
-
-
-            return view('page.penjualan.penjualan.edit', ['jenis' => $jenis, 'ekatalog' => $ekatalog]);
+            return view('page.penjualan.penjualan.edit_ekatalog', ['ekatalog' => $ekatalog]);
         } else if ($jenis == 'spa') {
-            return view('page.penjualan.penjualan.edit', ['jenis' => $jenis]);
+            $spa = Spa::with('DetailSpa')->where('id', $id)->get();
+            return view('page.penjualan.penjualan.edit_spa', ['spa' => $spa]);
         } else {
-            return view('page.penjualan.penjualan.edit', ['jenis' => $jenis]);
+            $spb = Spb::with('DetailSpb')->where('id', $id)->get();
+            return view('page.penjualan.penjualan.edit_spb', ['spb' => $spb]);
         }
     }
     public function update_ekatalog(Request $request, $id)
@@ -610,14 +737,67 @@ class PenjualanController extends Controller
 
 
         DetailEkatalog::where('ekatalog_id', $id)->delete();
-
-
         for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+
             DetailEkatalog::create([
                 'ekatalog_id' => $id,
                 'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                 'jumlah' => $request->produk_jumlah[$i],
-                'harga' => $request->produk_harga[$i],
+                'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                'ongkir' => 0,
+            ]);
+        }
+    }
+    public function update_spa(Request $request, $id)
+    {
+        $spa = Spa::find($id);
+        $spa->customer_id = $request->customer_id;
+        $spa->save();
+
+
+        $pesanan = Pesanan::find($spa->pesanan_id);
+        $pesanan->no_do = $request->no_do;
+        $pesanan->tgl_do = $request->tanggal_do;
+        $pesanan->ket = $request->keterangan;
+        $pesanan->save();
+
+
+        DetailSpa::where('spa_id', $id)->delete();
+
+        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+
+            DetailSpa::create([
+                'spa_id' => $id,
+                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                'jumlah' => $request->produk_jumlah[$i],
+                'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                'ongkir' => 0,
+            ]);
+        }
+    }
+    public function update_spb(Request $request, $id)
+    {
+        $spb = Spb::find($id);
+        $spb->customer_id = $request->customer_id;
+        $spb->save();
+
+
+        $pesanan = Pesanan::find($spb->pesanan_id);
+        $pesanan->no_do = $request->no_do;
+        $pesanan->tgl_do = $request->tanggal_do;
+        $pesanan->ket = $request->keterangan;
+        $pesanan->save();
+
+
+        DetailSpb::where('spb_id', $id)->delete();
+
+        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+
+            DetailSpb::create([
+                'spb_id' => $id,
+                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                'jumlah' => $request->produk_jumlah[$i],
+                'harga' => str_replace(".", "", $request->produk_harga[$i]),
                 'ongkir' => 0,
             ]);
         }
@@ -653,5 +833,12 @@ class PenjualanController extends Controller
     {
         $ekatalog = Spb::findOrFail($id);
         $ekatalog->delete();
+    }
+
+
+    //Laporan
+    public function laporan(Request $request)
+    {
+        return Excel::download(new LaporanPenjualan($request->customer_id ?? '', $request->penjualan ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_penjualan.xlsx');
     }
 }

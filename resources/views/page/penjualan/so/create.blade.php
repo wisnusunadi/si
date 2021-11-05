@@ -66,13 +66,22 @@
                                         <div class="col-3">
                                             <div class="text-muted">Tanggal Pemesanan</div>
                                             <div>
-                                                <b id="tanggal_pemesanan">{{$ekatalog->tgl_buat}}</b>
+                                                <b id="tanggal_pemesanan">Pemesanan pada {{$ekatalog->tgl_buat}}</b>
                                             </div>
                                         </div>
                                         <div class="col-2">
                                             <div class="text-muted">Status</div>
                                             <div>
-                                                <b id="status"><span class="badge red-text">{{$ekatalog->status}}</span></b>
+                                                <b id="status">
+                                                    <span class="badge 
+                                                    @if($ekatalog->status == 'batal')
+                                                        red-text
+                                                    @elseif($ekatalog->status == 'negosiasi')
+                                                        yellow-text
+                                                    @elseif($ekatalog->status == 'sepakat')
+                                                        green-text
+                                                    @endif
+                                                    ">{{$ekatalog->status}}</span></b>
                                             </div>
                                         </div>
                                     </div>
@@ -86,15 +95,6 @@
                                 <div class="card-body">
                                     <form action="/api/so/create/{{$ekatalog->id}}" method="post">
                                         <div class="form-horizontal">
-                                            <div class="form-group row">
-                                                <label for="no_po" class="col-4 col-form-label" style="text-align:right;">No SO</label>
-                                                <div class="col-5">
-                                                    <input type="text" class="form-control @error('no_so') is-invalid @enderror" value="" placeholder="Masukkan Nomor Sales Order" id="no_so" name="no_so" />
-                                                    <div class="invalid-feedback" id="msgno_so">
-
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div class="form-group row">
                                                 <label for="no_po" class="col-4 col-form-label" style="text-align:right;">No PO</label>
                                                 <div class="col-5">
@@ -182,7 +182,7 @@
                 $("#do_detail_no").removeClass("hide");
                 $("#do_detail_tgl").removeClass("hide");
             } else if ($(this).val() == "no") {
-                if ($("#no_so").val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "") {
+                if ($("#no_po").val() != "" && $("#tanggal_po").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -197,13 +197,13 @@
                 $("#msgno_po").text("");
                 $("#no_po").removeClass('is-invalid');
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_so").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                    if ($("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
                         $('#btntambah').attr("disabled", true);
                     }
                 } else {
-                    if ($("#no_so").val() != "" && $("#tanggal_po").val() != "") {
+                    if ($("#tanggal_po").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
                         $('#btntambah').attr("disabled", true);
@@ -221,13 +221,13 @@
                 $("#msgtanggal_po").text("");
                 $("#tanggal_po").removeClass('is-invalid');
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_so").val() != "" && $("#no_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                    if ($("#no_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
                         $('#btntambah').attr("disabled", true);
                     }
                 } else {
-                    if ($("#no_so").val() != "" && $("#no_po").val() != "") {
+                    if ($("#no_po").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
                         $('#btntambah').attr("disabled", true);
@@ -244,7 +244,7 @@
             if ($(this).val() != "") {
                 $("#msgno_do").text("");
                 $("#no_do").removeClass('is-invalid');
-                if ($("#no_so").val() != "" && $("#tanggal_po").val() != "" && $("#no_po").val() != "" && $("#tanggal_do").val() != "") {
+                if ($("#tanggal_po").val() != "" && $("#no_po").val() != "" && $("#tanggal_do").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -261,7 +261,7 @@
             if ($(this).val() != "") {
                 $("#msgtanggal_do").text("");
                 $("#tanggal_do").removeClass('is-invalid');
-                if ($("#no_so").val() != "" && $("#tanggal_po").val() != "" && $("#no_po").val() != "" && $("#no_do").val() != "") {
+                if ($("#tanggal_po").val() != "" && $("#no_po").val() != "" && $("#no_do").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);

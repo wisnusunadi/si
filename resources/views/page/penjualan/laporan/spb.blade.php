@@ -2,7 +2,7 @@
     <thead style="text-align: center;">
         <tr>
             <th colspan="18">
-                Laporan Penjualan SPA
+                Laporan Penjualan SPB
             </th>
         </tr>
         <tr>
@@ -22,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($spa as $i)
+        @foreach($spb as $i)
         <tr>
             <td>{{$loop->iteration}}</td>
             <td>{{$i->no_paket}}</td>
