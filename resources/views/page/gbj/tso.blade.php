@@ -192,6 +192,7 @@
         if (tujuan.length > 30) {
             var a = tujuan.substring(0, 10) + '...';
         } 
+        console.log(tujuan.length);
         let tambah_data = '<tr><td>'+divisi+'</td><td>'+a+'</td><td>'+produk+'</td><td>'+stok+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }

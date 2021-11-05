@@ -29,7 +29,7 @@
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                     <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item terimaProduk">
+                        <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
                             <i class="far fa-edit"></i>&nbsp;Terima
                           </button>
                           <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
@@ -47,7 +47,7 @@
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                     <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item terimaProduk">
+                        <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
                             <i class="far fa-edit"></i>&nbsp;Terima
                           </button>
                           <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
@@ -77,7 +77,6 @@
                             <th><input type="checkbox" id="head-cb"></th>
                             <th>Nomor Seri</th>
                             <th>Layout</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -210,5 +209,11 @@
         $('#ubah-layout').modal('hide');
     }
 
+    function openModalTerima() {
+        $('.terima-produk').modal('show');
+    }
+    function openModalView() { 
+        $('.detail-layout').modal('show');
+    }
 </script>
 @stop

@@ -33,7 +33,6 @@
     
     <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/datepicker/datepicker.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/datepicker/datepicker-2.css') }}">
 
     {{-- Custom Stylesheets (post AdminLTE) --}}
     @yield('master_css')
@@ -75,7 +74,6 @@
 <script type="text/javascript" src="{{ asset('vendor/select2/checkbox/check.js') }}"></script>
 <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 <script src="{{ asset('vendor/datepicker/moment.js') }}"></script>
-<script src="{{ asset('vendor/datepicker/datepicker-2.js') }}"></script>
 <script src="{{ asset('vendor/datepicker/datepicker.js') }}"></script>
   
     {{-- Custom Scripts --}}
