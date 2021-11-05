@@ -397,4 +397,9 @@ class MasterController extends Controller
 
       return response()->json($response);
     }
+
+    function select_gbj() {
+        $data = GudangBarangJadi::all();
+        return response()->json($data);
+    }
 }

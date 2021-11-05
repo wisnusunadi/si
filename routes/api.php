@@ -64,6 +64,7 @@ Route::prefix('/produk')->group(function () {
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_produk_id']);
     Route::get('select-layout', [App\Http\Controllers\MasterController::class, 'select_layout'])->name('sel.layout');
     Route::get('select-divisi', [App\Http\Controllers\MasterController::class, 'select_divisi'])->name('sel.divisi');
+    Route::get('select-gbj', [App\Http\Controllers\MasterController::class, 'select_gbj'])->name('sel.gbj');
     Route::get('select-satuan', [App\Http\Controllers\MasterController::class, 'select_satuan'])->name('sel.satuan');
     Route::get('select-produk/{id}', [App\Http\Controllers\MasterController::class, 'select_produkId'])->name('sel.produkId');
     Route::get('search-produk', [App\Http\Controllers\MasterController::class, 'search_produk'])->name('src.produk');
@@ -101,7 +102,10 @@ Route::prefix('/gbj')->group(function () {
 });
 
 Route::prefix('/tfp')->group(function () {
-    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
+    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'Tf_so'])->name('tfp.post');
+    Route::post('/createnon', [\App\Http\Controllers\ProduksiController::class, 'TFNonSO'])->name('tfp.postnon');
+    Route::get('/data', [App\Http\Controllers\ProduksiController::class, 'getTFBJ'])->name('tf.get');
+
 });
 
 Route::prefix('/spr')->group(function () {

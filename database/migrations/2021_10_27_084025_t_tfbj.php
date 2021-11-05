@@ -16,6 +16,7 @@ class TTfbj extends Migration
         Schema::create('t_tfbj', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('ke');
+            $table->string('deskripsi')->nullable();
             $table->foreign('ke')->references('id')->on('divisi');
             $table->timestamps();
         });

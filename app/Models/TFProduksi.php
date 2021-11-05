@@ -10,4 +10,16 @@ class TFProduksi extends Model
     use HasFactory;
 
     protected $table = 't_tfbj';
+
+    function detail_tf() {
+        return $this->hasMany(TFProduksiDetail::class, 'tfbj_id');
+    }
+
+    function his_tf() {
+        return $this->belongsTo(TFProduksiHis::class);
+    }
+
+    function divisi() {
+        return $this->belongsTo(Divisi::class, 'ke');
+    }
 }
