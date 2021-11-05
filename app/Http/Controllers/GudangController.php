@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailEkatalog;
+use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\Layout;
 use App\Models\NoseriBarangJadi;
+use App\Models\Pesanan;
 use App\Models\Produk;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class GudangController extends Controller
 {
+    // produk gudang
     public function get_data_barang_jadi()
     {
         $data = GudangBarangJadi::with('produk', 'noseri')->select();
@@ -32,9 +37,9 @@ class GudangController extends Controller
             ->addColumn('satuan1', function ($data) {
                 return $data->stok - 20 . ' ' . $data->produk->Satuan->nama;
             })
-            ->addColumn('layout', function ($data) {
-                return $data->Layout->ruang . ';' . $data->Layout->lantai . '-' . $data->Layout->rak;
-            })
+            // ->addColumn('layout', function ($data) {
+            //     return $data->Layout->ruang . ';' . $data->Layout->lantai . '-' . $data->Layout->rak;
+            // })
             ->addColumn('nama', function ($data) {
                 return $data->nama;
             })
@@ -110,7 +115,7 @@ class GudangController extends Controller
                 //     $brg_jadi->stok = $brg_jadi->stok - $request->stok;
                 // }
                 $brg_jadi->stok = $request->stok;
-                $brg_jadi->layout_id = $request->layout_id;
+                // $brg_jadi->layout_id = $request->layout_id;
                 $image = $request->file('gambar');
                 if ($image) {
                     $path = 'upload/gbj/';
@@ -523,5 +528,98 @@ class GudangController extends Controller
 
         // return response()->json(['html' => $html]);
         return response()->json($data);
+    }
+
+    // so
+    function get_so(Request $request)
+    {
+
+        $id = $request->id;
+        if ($id) {
+            $data  = Pesanan::where('id', $id)->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Ekatalog->Customer->nama;
+                })
+                ->addColumn('jenis', function ($data) {
+                    return '   <span class="badge purple-text">E-Catalogue</span>';
+                })
+                ->addColumn('status', function ($data) {
+                    return '<span class="badge badge-info">Tersimpan ke rancangan</span>';
+                })
+                ->addColumn('batas_out', function ($data) {
+                    return $data->Ekatalog->tgl_kontrak;
+                })
+                ->addColumn('action', function ($data) {
+                    return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a data-toggle="modal" data-target="#addProduk" class="addProduk" data-attr=""  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button" >
+                        <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                    </button>
+                </a>
+
+                </div>';
+                })
+                ->rawColumns(['action', 'status'])
+                ->make(true);
+        } else {
+            $data  = Pesanan::select();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Ekatalog->Customer->nama;
+                })
+                ->addColumn('jenis', function ($data) {
+                    return '   <span class="badge purple-text">E-Catalogue</span>';
+                })
+                ->addColumn('status', function ($data) {
+                    return '<span class="badge badge-info">Tersimpan ke rancangan</span>';
+                })
+                ->addColumn('batas_out', function ($data) {
+                    return $data->Ekatalog->tgl_kontrak;
+                })
+                ->addColumn('action', function ($data) {
+                    return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a data-toggle="modal" data-target="#addProduk" class="addProduk" data-attr=""  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button" >
+                        <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                    </button>
+                </a>
+
+                </div>';
+                })
+                ->rawColumns(['action', 'status'])
+                ->make(true);
+        }
+    }
+
+    function addProdukSO($id)
+    {
+        // $x = 6;
+        $data = DetailEkatalog::whereHas('Ekatalog', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                    })->with('PenjualanProduk', 'Ekatalog')
+                ->get();
+        return datatables()->of($data)
+            ->addColumn('nama_produk', function ($data) {
+                return $data->penjualanproduk->nama;
+            })
+            ->addColumn('jumlah', function($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('tipe', function($data) {
+                return $data->penjualanproduk->nama;
+            })
+            ->addColumn('merk', function($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('action', function($data) {
+                return '<button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
+                class="fas fa-qrcode"></i> Scan Produk</button>';
+            })
+            ->make(true);
     }
 }

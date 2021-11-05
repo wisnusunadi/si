@@ -22,6 +22,8 @@ class TGbjHis extends Migration
             $table->string('nama')->nullable();
             $table->string('deskripsi')->nullable();
             $table->integer('stok');
+            $table->unsignedBigInteger('satuan_id')->nullable();
+            $table->foreign('satuan_id')->references('id')->on('m_satuan');
             $table->unsignedBigInteger('layout_id')->nullable();
             $table->foreign('layout_id')->references('id')->on('m_layout');
             $table->unsignedBigInteger('dari')->nullable();

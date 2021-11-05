@@ -41,12 +41,12 @@
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
-                                                        <button type="button" class="dropdown-item addProduk" id="">
-                                                            <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                                                          </button>
-                                                        <button type="button" class="dropdown-item viewProduk" id="">
-                                                            <i class="far fa-eye"></i>&nbsp;Detail
-                                                          </button>
+                                                <button type="button" class="dropdown-item addProduk" id="">
+                                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                                </button>
+                                                <button type="button" class="dropdown-item viewProduk" id="">
+                                                    <i class="far fa-eye"></i>&nbsp;Detail
+                                                </button>
                                             </div>
                                         </div>
                                     </td>
@@ -63,12 +63,12 @@
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
-                                                        <button type="button" class="dropdown-item addProduk" id="">
-                                                            <i class="fas fa-plus"></i>&nbsp;Add Produk
-                                                          </button>
-                                                        <button type="button" class="dropdown-item viewProduk" id="">
-                                                            <i class="far fa-eye"></i>&nbsp;View
-                                                          </button>
+                                                <button type="button" class="dropdown-item addProduk" id="">
+                                                    <i class="fas fa-plus"></i>&nbsp;Add Produk
+                                                </button>
+                                                <button type="button" class="dropdown-item viewProduk" id="">
+                                                    <i class="far fa-eye"></i>&nbsp;View
+                                                </button>
                                             </div>
                                         </div>
                                     </td>
@@ -83,22 +83,42 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="addProdukModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade" id="addProdukModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <h5 class="modal-title">
+                    <p><b>Siapkan Produk</b></p>
+                    <div class="row">
+                        <div class="col">
+                            <b>Nomor SO</b><p>8457938475938475</p>
+                        </div>
+                        <div class="col">
+                            <b>Nomor AKN</b><p>8457938475938475</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Nomor PO</b><p>8457938475938475</p>
+                        </div>
+                        <div class="col">
+                            <b>Instansi</b><p>RS. Dr. Soetomo</p>
+                        </div>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 {{-- Tambahkan DataTable --}}
-                <table class="table table-striped" id="add-produk">
+                <table class="table table-striped add-produk">
                     <thead>
                         <tr>
                             <th></th>
                             <th>Nama Produk</th>
+                            <th>Jumlah</th>
                             <th>Tipe</th>
                             <th>Merk</th>
                         </tr>
@@ -107,12 +127,14 @@
                         <tr>
                             <td></td>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                            <td>100 Unit</td>
                             <td>ABPM50</td>
                             <td>ELITECH</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                            <td>100 Unit</td>
                             <td>RGB</td>
                             <td>ELITECH</td>
                         </tr>
@@ -127,40 +149,62 @@
     </div>
 </div>
 
-<div class="modal fade" id="viewProdukModal"role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+
+<div class="modal fade" id="viewProdukModal" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Detail Produk SO 8457938475938475</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <h5 class="modal-title">
+                    <p><b>Detail Produk</b></p>
+                    <div class="row">
+                        <div class="col">
+                            <b>Nomor SO</b><p>8457938475938475</p>
+                        </div>
+                        <div class="col">
+                            <b>Nomor AKN</b><p>8457938475938475</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Nomor PO</b><p>8457938475938475</p>
+                        </div>
+                        <div class="col">
+                            <b>Instansi</b><p>RS. Dr. Soetomo</p>
+                        </div>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <table class="table table-striped" id="view-produk">
                     <thead>
                         <tr>
                             <th>Nama Produk</th>
+                            <th>Jumlah</th>
                             <th>Tipe</th>
                             <th>Merk</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                            <td>100</td>
                             <td>ABPM50</td>
                             <td>ELITECH</td>
+                            <td><span class="badge badge-success">Sudah Diinput</span></td>
                         </tr>
                         <tr>
                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                            <td>100</td>
                             <td>RGB</td>
                             <td>ELITECH</td>
+                            <td><span class="badge badge-danger">Belum Diinput</span></td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -170,27 +214,31 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function () {
-        $('.addProduk').click(function (e) { 
+        $('.addProduk').click(function (e) {
             $('#addProdukModal').modal('show');
         });
-        $('.viewProduk').click(function (e) { 
+        $('.viewProduk').click(function (e) {
             $('#viewProdukModal').modal('show');
         });
     });
 
-    $('#add-produk').DataTable({
-            'columnDefs': [
-        {
+    $('.add-produk').DataTable({
+        'columnDefs': [{
             'targets': 0,
             'checkboxes': {
                 'selectRow': true
             }
+        }],
+        'select': {
+            'style': 'multi'
+        },
+        'order': [
+            [1, 'asc']
+        ],
+        "oLanguage": {
+        "sSearch": "Cari:"
         }
-    ],
-    'select': {
-        'style': 'multi'
-    },
-    'order': [[1, 'asc']]
     });
+
 </script>
 @stop

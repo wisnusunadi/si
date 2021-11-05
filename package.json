@@ -30,6 +30,7 @@
         "@fullcalendar/daygrid": "^5.9.0",
         "@fullcalendar/interaction": "^5.9.0",
         "@fullcalendar/vue": "^5.9.0",
+        "air-datepicker": "^3.0.1",
         "bootstrap-vue": "^2.21.2",
         "chart.js": "^3.0.2",
         "datatables.net-bs4": "^1.11.3",
@@ -38,6 +39,7 @@
         "pusher-js": "^7.0.3",
         "select2": "^4.1.0-rc.0",
         "select2-bootstrap-theme": "^0.1.0-beta.10",
+        "sweetalert2": "^11.1.9",
         "vue-apexcharts": "^1.6.2",
         "vue-select": "^3.15.1",
         "vue-sweetalert2": "^5.0.2"

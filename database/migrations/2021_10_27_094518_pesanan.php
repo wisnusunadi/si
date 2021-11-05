@@ -15,6 +15,7 @@ class Pesanan extends Migration
     {
         Schema::create('pesanan', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('so')->nullable();
             $table->string('no_po')->nullable();
             $table->date('tgl_po')->nullable();
             $table->string('no_do')->nullable();

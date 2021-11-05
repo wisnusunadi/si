@@ -999,6 +999,22 @@ return [
             'auth' => [22],
         ],
         [
+            'header' => 'Dasboard',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Produk dan Transfer',
+            'url' => '/gbj/dashboard',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Riwayat Transfer Produk',
+            'url' => '/gbj/tp',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
             'header' => 'Produksi',
             'auth' => [13]
         ],
@@ -1012,6 +1028,7 @@ return [
             'header' => 'Stok',
             'auth' => [13]
         ],
+        // GBJ
         [
             'text' => 'Produk',
             'url' => '/gbj/produk',
@@ -1035,10 +1052,37 @@ return [
             'auth' => [13],
         ],
         [
-            'header' => 'Permintaan',
+            'header' => 'Pengeluaran',
             'auth' => [13]
         ],
-
+        [
+            'text' => 'Berdasarkan SO',
+            'url' => '/gbj/bso',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Tanpa SO',
+            'url' => '/gbj/tso',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'header' => 'Penerimaan',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Dalam Perakitan',
+            'url' => '/gbj/dp',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Selain Perakitan',
+            'url' => '/gbj/lp',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
         [
             'text' => 'test',
             'isNavbarRightItem' => true,

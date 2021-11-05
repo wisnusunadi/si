@@ -86,7 +86,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Produk GBJ</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Produk GBJ</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -97,23 +97,42 @@
                 <div class="row">
                     <div class="col">
                         <label for="">Nama Produk</label>
-                        <input type="text" name="nama" id="nama" class="form-control" placeholder="Nama Produk">
+                        <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror"
+                            placeholder="Nama Produk">
+                        @error('title')
+                        <span class="invalid-feedback">Silahkan isi Nama Produk</span>
+                        @enderror
                     </div>
                     <div class="col">
                         <label for="">Stok</label>
-                        <input type="text" name="stok" id="stok" class="form-control" placeholder="Stok" value="0" readonly>
+                        <input type="text" class="form-control" id="stok" name="stok" placeholder="Stok" value="0" readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="">Deskripsi</label>
-                    <textarea class="form-control" name="deskripsi" id="deskripsi" cols="5" rows="5"></textarea>
+                    <textarea class="form-control" name="deskripsi" id="deskripsi" id="" cols="5" rows="5"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="">Dimensi</label>
                     <div class="d-flex justify-content-between">
-                        <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">&nbsp;
-                        <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">&nbsp;
-                        <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
                     </div>
                 </div>
                 <div class="row">
@@ -152,22 +171,90 @@
 <!-- Button trigger modal -->
 
 <!-- Modal -->
-<div class="modal" id="EditArticleModal">
+<div class="modal fade modal-edit" id="" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div id="EditArticleModalBody">
-
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Produk Sterilisator</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <!-- Modal footer -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <label for="">Nama Produk</label>
+                        <input type="text" class="form-control" placeholder="Nama Produk">
+                    </div>
+                    <div class="col">
+                        <label for="">Stok</label>
+                        <input type="text" class="form-control" placeholder="Stok" value="0" readonly>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="">Deskripsi</label>
+                    <textarea class="form-control" id="" cols="5" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="">Dimensi</label>
+                    <div class="d-flex justify-content-between">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Panjang">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Lebar">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Tinggi">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="">Produk</label>
+                            <select name="" class="form-control produk-edit">
+                                <option value="">Buku</option>
+                                <option value="">Bolpoin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="">Layout</label>
+                        <select name="" class="form-control layout-edit">
+                            <option value="">Buku</option>
+                            <option value="">Bolpoin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02" />
+                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
+                    </div>
+                </div>
+            </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary modelClose" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary" id="Submitmodaledit">Kirim</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary">Kirim</button>
             </div>
         </div>
     </div>
 </div>
 
 {{-- Modal View --}}
+
+<!-- Modal -->
 <div class="modal fade" id="modal-view" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -178,7 +265,7 @@
     </div>
 </div>
 
-{{-- modal stok --}}
+<!-- Modal Daftar Stok-->
 <div class="modal fade" id="daftar-stok" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -231,6 +318,78 @@
     </div>
 </div>
 
+<!-- Modal Detail-->
+<div class="modal fade modalViewStock" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <div class="row">
+                        <div class="col">
+                            <b>Produk</b><p>Ambulatory</p>
+                        </div>
+                        <div class="col">
+                            <b>Nomor SO</b><p>8457938475938475</p>
+                        </div>
+                    </div>
+                </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tanggal Masuk</th>
+                            <th>Dari</th>
+                            <th>Tujuan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row">10-04-2022</td>
+                            <td>Divisi IT</td>
+                            <td>Uji Coba</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">10-04-2022</td>
+                            <td>Divisi IT</td>
+                            <td>Uji Coba</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Edit --}}
+<div class="modal fade edit-stok" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Layout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Layout</label>
+                    <select name="" id="change-layout" class="form-control">
+                      <option value="1">Layout 1</option>
+                      <option value="2">Layout 2</option>
+                  </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary" onclick="ubahData()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     img {
         width: 100%;
@@ -248,15 +407,59 @@
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
     });
-</script>
-
-<script type="text/javascript">
+    $('.editProduk').click(function (e) {
+        $('.modal-edit').modal('show');
+        $('.produk-edit ').select2();
+        $('.layout-edit').select2();
+    });
+    $('.viewProduk').click(function (e) {
+        $('.modal-view').modal('show');
+    });
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        $('.produk-add ').select2();
+        $('.layout-add').select2();
+
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
+        });
+    });
+
+    function ubahData() {
+        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let layout = $('#change-layout').val();
+        $.each(checkbox_terpilih, function (index, elm) {
+            let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
+        });
+        $('.edit-stok').modal('hide');
+    }
+
+    // $('.stokProduct').click(function (e) {
+    //     $('.daftar-stok').modal('show');
+    // });
+
+    // $('.editStok').click(function (e) {
+    //     $('.edit-stok').modal('show');
+    // });
+
+    // $('.viewStock').click(function (e) {
+    //     $('.modalViewStock').modal('show');
+    // });
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
         $('.produk-add ').select2();
         $('.layout-add').select2();
         // load data
@@ -303,7 +506,6 @@
                 },
             ]
         });
-
         // load layout
         $.ajax({
             url: '{{ route('sel.layout') }}',
@@ -322,7 +524,6 @@
                 }
             }
         });
-
         // load produk
         $.ajax({
             url: '{{ route('sel.produk') }}',
@@ -362,7 +563,6 @@
                 });
             }
         });
-
         // post
         $('#create').click(function(e) {
             $('#Submitmodalcreate').val('create-product');
@@ -370,7 +570,6 @@
             $('#exampleModalLabel').html('Tambah Produk');
             $('#modal-create').modal('show');
         });
-
         $('body').on('submit', '#produkForm', function (e) {
             e.preventDefault();
             var actionType = $('#Submitmodalcreate').val();
@@ -392,7 +591,6 @@
                 }
             });
         });
-
         // edit
         $(document).on('click', '.editmodal', function() {
         var id = $(this).data('id');
@@ -418,14 +616,14 @@
                     $('#dim_l').val(res[0].dim_l);
                     $('#dim_t').val(res[0].dim_t);
                     $('#layout_id').val(res[0].layout_id);
-                    // $('#layout_id').select2().trigger('change');
+                    $('#layout_id').select2().trigger('change');
                     $('#produk_id').val(res[0].produk_id);
-                    //$('#produk_id').select2().trigger('change');
+                    $('#produk_id').select2('enable', false);
+                    $('#produk_id').select2().trigger('change');
                     $('#inputGroupFile02').val(res[0].gambar);
                 }
             });
         });
-
         // detail
         $(document).on('click', '.detailmodal', function() {
             var id = $(this).data('id');
@@ -442,12 +640,10 @@
                 }
             });
         });
-
         // stok
         $(document).on('click', '.stokmodal', function() {
             $('#daftar-stok').modal('show');
         });
     });
-
 </script>
 @stop

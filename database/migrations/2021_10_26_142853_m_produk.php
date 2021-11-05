@@ -20,10 +20,8 @@ class MProduk extends Migration
             $table->string('merk')->nullable();
             $table->string('tipe')->nullable();
             $table->string('nama')->nullable();
-            $table->unsignedBigInteger('satuan_id')->nullable();
             $table->string('no_akd')->nullable();
             $table->foreign('kelompok_produk_id')->references('id')->on('kelompok_produk');
-            $table->foreign('satuan_id')->references('id')->on('m_satuan');
             $table->string('ket')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();

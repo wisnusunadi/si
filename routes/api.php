@@ -94,6 +94,10 @@ Route::prefix('/gbj')->group(function () {
     Route::get('/get/{id}', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
     Route::post('/ubah', [App\Http\Controllers\GudangController::class, 'edit'])->name('show.gbj');
     Route::get('/view/{id}', [App\Http\Controllers\GudangController::class, 'show'])->name('show.gbj');
+
+    // so
+    Route::get('/so', [App\Http\Controllers\GudangController::class, 'get_so'])->name('so.get');
+    Route::get('/soo/{id}', [App\Http\Controllers\GudangController::class, 'addProdukSO']);
 });
 
 Route::prefix('/tfp')->group(function () {
