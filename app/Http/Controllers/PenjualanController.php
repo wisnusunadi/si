@@ -12,10 +12,12 @@ use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
+use Carbon\Doctrine\CarbonType;
 use Hamcrest\Core\IsNot;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
+use League\Fractal\Resource\Item;
 use Maatwebsite\Excel\Facades\Excel;
 
 use function PHPUnit\Framework\assertIsNotArray;
@@ -23,9 +25,216 @@ use function PHPUnit\Framework\assertIsNotArray;
 class PenjualanController extends Controller
 {
     //Get Data Table
+    public function penjualan_data()
+    {
+        // $data  = Ekatalog::all();
+
+        $Ekatalog = collect(Ekatalog::with('Pesanan')->get());
+        $Spa = collect(Spa::with('Pesanan')->get());
+        $Spb = collect(Spb::with('Pesanan')->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                $name =  $data->getTable();
+                if ($name == 'ekatalog') {
+                    return 'E-Catalogue';
+                } else if ($name == 'spa') {
+                    return 'SPA';
+                } else {
+                    return 'SPB';
+                }
+            })
+            ->addColumn('nama_customer', function ($data) {
+                return $data->Customer->nama;
+            })
+            ->addColumn('no_paket', function ($data) {
+                if (isset($data->no_paket)) {
+                    return $data->no_paket;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('tgl_order', function ($data) {
+                if (isset($data->tgl_buat)) {
+                    return $data->tgl_buat;
+                } else {
+                    return $data->tgl_po;;
+                }
+            })
+            ->addColumn('tgl_kontrak', function ($data) {
+                if (isset($data->tgl_kontrak)) {
+                    return $data->tgl_kontrak;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('so', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->so;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('nopo', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->no_po;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                return '<span class="red-text badge">' . $data->log . '</span>';
+            })
+            ->addColumn('button', function ($data) {
+                $name =  $data->getTable();
+                if ($name == 'ekatalog') {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+            <div>';
+                } else if ($name == 'spa') {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+                    </div>';
+                } else {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+                    </div>';
+                }
+            })
+            ->rawColumns(['button', 'status'])
+            ->make(true);
+    }
+    public function get_lacak_penjualan($parameter, $value)
+    {
+
+        if ($parameter == 'no_po') {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('no_po', 'LIKE', '%' . $value . '%');
+            })->get());
+            $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('no_po', 'LIKE', '%' . $value . '%');
+            })->get());
+            $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('no_po', 'LIKE', '%' . $value . '%');
+            })->get());
+
+            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Customer->nama;
+                })
+                ->addColumn('no_po', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->no_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('tgl_po', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->tgl_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('noseri', function () {
+                    return '';
+                })
+                ->addColumn('log', function ($data) {
+                    return '<span class="red-text badge">' . $data->log . '</span>';
+                })
+                ->rawColumns(['log'])
+                ->make(true);
+        } elseif ($parameter == 'no_akn') {
+            $data = Ekatalog::where('no_paket', 'LIKE', '%' . $value . '%')
+                ->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('status', function ($data) {
+                    if ($data->status == "sepakat") {
+                        $status = '<span class="green-text badge">Sepakat</span>';
+                    } else if ($data->status == "negosiasi") {
+                        $status =  '<span class="yellow-text badge">Negosiasi</span>';
+                    } else {
+                        $status =  '<span class="red-text badge">Batal</span>';
+                    }
+                    return $status;
+                })
+                ->addColumn('log', function ($data) {
+                    return '<span class="red-text badge">' . $data->log . '</span>';
+                })
+
+                ->rawColumns(['status', 'log'])
+                ->make(true);
+        } elseif ($parameter == 'no_seri') {
+        } elseif ($parameter == 'no_so') {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('so', 'LIKE', '%' . $value . '%');
+            })->get());
+            $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('so', 'LIKE', '%' . $value . '%');
+            })->get());
+            $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('so', 'LIKE', '%' . $value . '%');
+            })->get());
+
+            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Customer->nama;
+                })
+                ->addColumn('so', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->so;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('tgl_po', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->tgl_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('noseri', function () {
+                    return '';
+                })
+                ->addColumn('log', function ($data) {
+                    return '<span class="red-text badge">' . $data->log . '</span>';
+                })
+                ->rawColumns(['log'])
+                ->make(true);
+        } elseif ($parameter == 'no_sj') {
+        }
+    }
     public function get_data_detail_spa($value)
     {
-        $data  = Spa::find($value);
+        $data  = Spa::with('Pesanan')
+            ->where('id', $value)
+            ->get();
         return view('page.penjualan.penjualan.detail_spa', ['data' => $data]);
     }
     public function get_data_detail_ekatalog($value)
@@ -33,9 +242,36 @@ class PenjualanController extends Controller
         $data  = Ekatalog::find($value);
         return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data]);
     }
+
+    public function get_data_detail_spb($value)
+    {
+        $data  = Spb::with('Pesanan')
+            ->where('id', $value)
+            ->get();
+        return view('page.penjualan.penjualan.detail_spb', ['data' => $data]);
+    }
+
     public function get_data_detail_paket_spa($id)
     {
         $data  = DetailSpa::where('spa_id', $id)
+            ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                return $data->penjualanproduk->nama;
+            })
+            ->addColumn('total', function ($data) {
+                return $data->harga * $data->jumlah;
+            })
+            ->addColumn('button', function ($data) {
+                return '<i class="fas fa-search"></i>';
+            })
+            ->rawColumns(['button',])
+            ->make(true);
+    }
+    public function get_data_detail_paket_spb($id)
+    {
+        $data  = DetailSpb::where('spb_id', $id)
             ->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -70,15 +306,6 @@ class PenjualanController extends Controller
             ->make(true);
     }
 
-    public function get_data_detail_spb($value)
-    {
-        $data  = DetailSpa::with('Penjualan_produk', 'Spb')
-            ->where('spb_id', $value)
-            ->get();
-        return datatables()->of($data)
-            ->addIndexColumn()
-            ->make(true);
-    }
     public function get_data_ekatalog_pengiriman()
     {
         $data  = Ekatalog::all();
@@ -104,6 +331,13 @@ class PenjualanController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->so;
+                } else {
+                    return '';
+                }
+            })
             ->addColumn('status', function ($data) {
                 if ($data->status == "sepakat") {
                     $status = '<span class="green-text badge">Sepakat</span>';
@@ -188,6 +422,9 @@ class PenjualanController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('status', function ($data) {
+                return '<span class="red-text badge">' . $data->log . '</span>';
+            })
             ->addColumn('tglpo', function ($data) {
                 if ($data->Pesanan) {
                     return $data->Pesanan->tgl_po;
@@ -208,7 +445,7 @@ class PenjualanController extends Controller
                           Details
                         </button>
                     </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
@@ -224,7 +461,7 @@ class PenjualanController extends Controller
                           Details
                         </button>
                     </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
@@ -239,14 +476,83 @@ class PenjualanController extends Controller
                     </div>';
                 }
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'status'])
             ->make(true);
     }
     public function get_data_spb()
     {
-        $data  = Spb::select();
+        $data  = Spb::with('pesanan')->get();
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->so;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                return '<span class="red-text badge">' . $data->log . '</span>';
+            })
+            ->addColumn('nopo', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->no_po;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('tglpo', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->tgl_po;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('nama_customer', function ($data) {
+                return $data->Customer->nama;
+            })
+            ->addColumn('button', function ($data) {
+                if ($data->Pesanan) {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
+                        <button class="dropdown-item" type="button" >
+                          <i class="fas fa-pencil-alt"></i>
+                          Edit
+                        </button>
+                    </a>
+                    </div>';
+                } else {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                          <i class="fas fa-search"></i>
+                          Details
+                        </button>
+                    </a>
+                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
+                        <button class="dropdown-item" type="button" >
+                          <i class="fas fa-pencil-alt"></i>
+                          Edit
+                        </button>
+                    </a>
+                    <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
+                    <button class="dropdown-item" type="button" >
+                    <i class="fas fa-plus"></i>
+                      Tambah PO
+                    </button>
+                </a>
+                    </div>';
+                }
+            })
+            ->rawColumns(['button', 'status'])
             ->make(true);
     }
     public function get_data_so()
@@ -312,14 +618,15 @@ class PenjualanController extends Controller
                 'status' => $request->status,
                 'tgl_kontrak' => $request->batas_kontrak,
                 'tgl_buat' => $request->tanggal_pemesanan,
-                'ket' => $request->keterangan
+                'ket' => $request->keterangan,
+                'log' => 'penjualan'
             ]);
             for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                 DetailEkatalog::create([
                     'ekatalog_id' => $Ekatalog->id,
                     'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                     'jumlah' => $request->produk_jumlah[$i],
-                    'harga' => $request->produk_harga[$i],
+                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
                     'ongkir' => 0,
                 ]);
             }
@@ -328,6 +635,7 @@ class PenjualanController extends Controller
 
             if (!empty($request->input('no_po'))) {
                 $pesanan = Pesanan::create([
+                    'so' => $this->createSO('SPA'),
                     'no_po' => $request->no_po,
                     'tgl_po' => $request->tanggal_po,
                     'no_do' => $request->no_do,
@@ -340,7 +648,8 @@ class PenjualanController extends Controller
             $Spa = Spa::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
-                'ket' => $request->keterangan
+                'ket' => $request->keterangan,
+                'log' => 'penjualan'
             ]);
 
             for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
@@ -348,11 +657,40 @@ class PenjualanController extends Controller
                     'spa_id' => $Spa->id,
                     'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                     'jumlah' => $request->produk_jumlah[$i],
-                    'harga' => $request->produk_harga[$i],
+                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
                     'ongkir' => 0,
                 ]);
             }
         } else {
+
+            if (!empty($request->input('no_po'))) {
+                $pesanan = Pesanan::create([
+                    'so' => $this->createSO('SPB'),
+                    'no_po' => $request->no_po,
+                    'tgl_po' => $request->tanggal_po,
+                    'no_do' => $request->no_do,
+                    'tgl_do' => $request->tanggal_do,
+                    'ket' =>  $request->keterangan,
+                ]);
+                $x = $pesanan->id;
+            }
+
+            $Spb = Spb::create([
+                'customer_id' => $request->customer_id,
+                'pesanan_id' => $x,
+                'ket' => $request->keterangan,
+                'log' => 'penjualan'
+            ]);
+
+            for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                DetailSpb::create([
+                    'spb_id' => $Spb->id,
+                    'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                    'jumlah' => $request->produk_jumlah[$i],
+                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                    'ongkir' => 0,
+                ]);
+            }
         }
     }
     public function create_ekatalog(Request $request)
@@ -419,12 +757,17 @@ class PenjualanController extends Controller
             'status' => $request->status,
             'ket' => $request->ket
         ]);
+
+        foreach ($request->produk_harga as $k => $v) {
+            $r =  $request->produk_harga[$k] = str_replace('.', '', $v);
+        }
+
         for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
             DetailSpa::create([
                 'spa_id' => $Spa->id,
                 'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                'jumlah' => $request->jumlah[$i],
-                'harga' => $request->harga[$i],
+                'jumlah' => $request->produk_jumlah[$i],
+                'harga' => $r[$i],
                 'ongkir' => $request->ongkir[$i],
             ]);
         }
@@ -471,7 +814,7 @@ class PenjualanController extends Controller
     {
         // $this->validate(
         //     $request,
-        //     [
+        //     [w
         //         'customer_id' => 'required',
         //         'status' => 'required',
         //         'jumlah.*' => 'required',
@@ -483,8 +826,11 @@ class PenjualanController extends Controller
         //         'jumlah.required' => 'Jumlah Produk harus di isi',
         //         'penjualan_produk_id.required' => 'Produk harus di pilih',
         //     ]
+
         // );
+
         $pesanan =  Pesanan::create([
+            'so' => $this->createSO('EKAT'),
             'no_po' => $request->no_po,
             'tgl_po' => $request->tanggal_po,
             'no_do' => $request->no_do,
@@ -500,13 +846,13 @@ class PenjualanController extends Controller
     {
         if ($jenis == 'ekatalog') {
             $ekatalog = Ekatalog::with('DetailEkatalog')->where('id', $id)->get();
-
-
-            return view('page.penjualan.penjualan.edit_ekatalog', ['jenis' => $jenis, 'ekatalog' => $ekatalog]);
+            return view('page.penjualan.penjualan.edit_ekatalog', ['ekatalog' => $ekatalog]);
         } else if ($jenis == 'spa') {
-            return view('page.penjualan.penjualan.edit_ekatalog', ['jenis' => $jenis]);
+            $spa = Spa::with('DetailSpa')->where('id', $id)->get();
+            return view('page.penjualan.penjualan.edit_spa', ['spa' => $spa]);
         } else {
-            return view('page.penjualan.penjualan.edit_ekatalog', ['jenis' => $jenis]);
+            $spb = Spb::with('DetailSpb')->where('id', $id)->get();
+            return view('page.penjualan.penjualan.edit_spb', ['spb' => $spb]);
         }
     }
     public function update_ekatalog(Request $request, $id)
@@ -525,14 +871,67 @@ class PenjualanController extends Controller
 
 
         DetailEkatalog::where('ekatalog_id', $id)->delete();
-
-
         for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+
             DetailEkatalog::create([
                 'ekatalog_id' => $id,
                 'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                 'jumlah' => $request->produk_jumlah[$i],
-                'harga' => $request->produk_harga[$i],
+                'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                'ongkir' => 0,
+            ]);
+        }
+    }
+    public function update_spa(Request $request, $id)
+    {
+        $spa = Spa::find($id);
+        $spa->customer_id = $request->customer_id;
+        $spa->save();
+
+
+        $pesanan = Pesanan::find($spa->pesanan_id);
+        $pesanan->no_do = $request->no_do;
+        $pesanan->tgl_do = $request->tanggal_do;
+        $pesanan->ket = $request->keterangan;
+        $pesanan->save();
+
+
+        DetailSpa::where('spa_id', $id)->delete();
+
+        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+
+            DetailSpa::create([
+                'spa_id' => $id,
+                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                'jumlah' => $request->produk_jumlah[$i],
+                'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                'ongkir' => 0,
+            ]);
+        }
+    }
+    public function update_spb(Request $request, $id)
+    {
+        $spb = Spb::find($id);
+        $spb->customer_id = $request->customer_id;
+        $spb->save();
+
+
+        $pesanan = Pesanan::find($spb->pesanan_id);
+        $pesanan->no_do = $request->no_do;
+        $pesanan->tgl_do = $request->tanggal_do;
+        $pesanan->ket = $request->keterangan;
+        $pesanan->save();
+
+
+        DetailSpb::where('spb_id', $id)->delete();
+
+        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+
+            DetailSpb::create([
+                'spb_id' => $id,
+                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                'jumlah' => $request->produk_jumlah[$i],
+                'harga' => str_replace(".", "", $request->produk_harga[$i]),
                 'ongkir' => 0,
             ]);
         }
@@ -575,5 +974,139 @@ class PenjualanController extends Controller
     public function laporan(Request $request)
     {
         return Excel::download(new LaporanPenjualan($request->customer_id ?? '', $request->penjualan ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_penjualan.xlsx');
+    }
+
+    //Chart
+    public function chart_penjualan()
+    {
+
+        //EKAT
+
+
+        $ekatalog = Pesanan::Has('Ekatalog')
+            ->select('Pesanan.tgl_po')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_po)->format('m');
+            });
+
+        $ekatalog_count = [];
+        $ekatalog_graph = [];
+
+        foreach ($ekatalog as $key => $value) {
+            $ekatalog_count[(int)$key] = count($value);
+        }
+
+
+        for ($i = 1; $i <= 12; $i++) {
+            if (!empty($ekatalog_count[$i])) {
+                $ekatalog_graph[$i]['count'] = $ekatalog_count[$i];
+            } else {
+                $ekatalog_graph[$i]['count'] = 0;
+            }
+            $ekatalog_graph[$i];
+        }
+
+        //SPA
+        $spa = Pesanan::Has('Spa')
+            ->select('Pesanan.tgl_po')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_po)->format('m');
+            });
+
+
+        $spa_count = [];
+        $spa_graph = [];
+        foreach ($spa as $key => $value) {
+            $spa_count[(int)$key] = count($value);
+        }
+
+
+        for ($i = 1; $i <= 12; $i++) {
+            if (!empty($spa_count[$i])) {
+                $spa_graph[$i]['count'] = $spa_count[$i];
+            } else {
+                $spa_graph[$i]['count'] = 0;
+            }
+            $spa_graph[$i];
+        }
+
+
+        //SPB
+        $spb = Pesanan::Has('Spb')
+            ->select('Pesanan.tgl_po')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_po)->format('m');
+            });
+
+
+        $spb_count = [];
+        $spb_graph = [];
+
+        foreach ($spb as $key => $value) {
+            $spb_count[(int)$key] = count($value);
+        }
+
+
+        for ($i = 1; $i <= 12; $i++) {
+            if (!empty($spb_count[$i])) {
+                $spb_graph[$i]['count'] = $spb_count[$i];
+            } else {
+                $spb_graph[$i]['count'] = 0;
+            }
+            $spb_graph[$i];
+        }
+
+        return response()->json(compact('ekatalog_graph', 'spa_graph', 'spb_graph'));
+    }
+    //Another 
+
+    function countChart()
+    {
+    }
+    function toRomawi($number)
+    {
+        $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+        $returnValue = '';
+        while ($number > 0) {
+            foreach ($map as $roman => $int) {
+                if ($number >= $int) {
+                    $number -= $int;
+                    $returnValue .= $roman;
+                    break;
+                }
+            }
+        }
+        return $returnValue;
+    }
+    function getMonth()
+    {
+        $m = Carbon::now()->format('m');
+        return $this->toRomawi($m);
+    }
+    function getYear()
+    {
+        return  Carbon::now()->format('Y');
+    }
+
+    function createSO($value)
+    {
+        $check = Pesanan::all('so');
+        $max_number = 0;
+        foreach ($check as $c) {
+            if ($c->so == NULL) {
+                $no = 'SO/' . $value . '/' . $this->getMonth() . '/' . $this->getYear() . '/1';
+            } else {
+                $get = explode('/', $c->so);
+                if ($get[1] == $value) {
+                    if ($get[4] > $max_number)
+                        $max_number = $get[4];
+                }
+            }
+        }
+        $no = 'SO/' . $value . '/' . $this->getMonth() . '/' . $this->getYear() . '/' . ($max_number + 1) . '';
+        return $no;
     }
 }

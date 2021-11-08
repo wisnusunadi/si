@@ -15,6 +15,10 @@
     .align-right {
         text-align: right;
     }
+
+    .select2 {
+        width: 100% !important;
+    }
 </style>
 @stop
 
@@ -418,7 +422,7 @@
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
-                                                                            <option value=""></option>
+
                                                                         </select>
                                                                     </div>
                                                                 </td>
@@ -485,7 +489,6 @@
 @stop
 
 @section('adminlte_js')
-
 <script>
     $(function() {
         select_data();
@@ -858,6 +861,7 @@
                     }
                 });
             });
+
 
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\DetailEkatalog;
 use App\Models\DetailPenjualanProduk;
 use App\Models\Divisi;
 use App\Models\Ekatalog;
@@ -14,6 +15,8 @@ use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Provinsi;
 use App\Models\Satuan;
+use App\Models\Spa;
+use App\Models\Spb;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -130,13 +133,53 @@ class MasterController extends Controller
     }
     public function get_data_pesanan($id)
     {
-        $data  = Ekatalog::with('pesanan')
-            ->where('customer_id', $id)
-            ->get();
+        // $data  = Ekatalog::with('pesanan')
+        //     ->where('customer_id', $id)
+        //     ->get();
+
+        $Ekatalog = collect(Ekatalog::with('Pesanan')->where('customer_id', $id)->get());
+        $Spa = collect(Spa::with('Pesanan')->where('customer_id', $id)->get());
+        $Spb = collect(Spb::with('Pesanan')->where('customer_id', $id)->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         if ($data)
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('jenis', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'ekatalog') {
+                        return 'E-Catalogue';
+                    } else if ($name == 'spa') {
+                        return 'SPA';
+                    } else {
+                        return 'SPB';
+                    }
+                })
+                ->addColumn('so', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->so;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('nopo', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->no_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('tglpo', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->tgl_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('status', function ($data) {
+                    return '<span class="red-text badge">' . $data->log . '</span>';
+                })
+                ->rawColumns(['status'])
                 ->make(true);
     }
     //Create
@@ -409,49 +452,55 @@ class MasterController extends Controller
     }
 
     //Layout
-    function select_layout() {
+    function select_layout()
+    {
         $data = Layout::all();
         return response()->json($data);
     }
 
-    function select_produkId($id) {
+    function select_produkId($id)
+    {
         $data = Produk::find($id);
         return response()->json($data);
     }
 
     // divisi
-    function select_divisi() {
+    function select_divisi()
+    {
         $data = Divisi::all();
         return response()->json($data);
     }
 
     // satuan
-    function select_satuan(){
+    function select_satuan()
+    {
         $data = Satuan::all();
         return response()->json($data);
     }
 
-    function search_produk(Request $request) {
+    function search_produk(Request $request)
+    {
         $search = $request->search;
 
-      if($search == ''){
-         $produk = Produk::select('*')->limit(5)->get();
-      }else{
-         $produk = Produk::select('*')->where('nama', 'like', '%' .$search . '%')->get();
-      }
+        if ($search == '') {
+            $produk = Produk::select('*')->limit(5)->get();
+        } else {
+            $produk = Produk::select('*')->where('nama', 'like', '%' . $search . '%')->get();
+        }
 
-      $response = array();
-      foreach($produk as $p){
-         $response[] = array(
-              "id"=>$p->id,
-              "text"=>$p->nama
-         );
-      }
+        $response = array();
+        foreach ($produk as $p) {
+            $response[] = array(
+                "id" => $p->id,
+                "text" => $p->nama
+            );
+        }
 
-      return response()->json($response);
+        return response()->json($response);
     }
 
-    function select_gbj() {
+    function select_gbj()
+    {
         $data = GudangBarangJadi::all();
         return response()->json($data);
     }

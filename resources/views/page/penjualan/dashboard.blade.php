@@ -67,11 +67,12 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <h4>Penjualan 2021</h4>
+                                    <h4></h4>
+                                    <div class="chart">
+                                        <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    </div>
                                 </div>
-                                <div class="chart">
-                                    <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -152,7 +153,6 @@
     </div>
 </div>
 @stop
-
 @section('adminlte_js')
 <script>
     $(function() {
@@ -239,67 +239,59 @@
     });
 </script>
 <script>
-    // var ctx = document.getElementById("areaChart");
-    // var tensi_sistolik_chart = new Chart(ctx, {
-    //     type: 'line',
-    //     data: {
-    //         labels: [],
-    //         datasets: [{
-    //             label: 'Sistolik',
-    //             data: [],
-    //             borderWidth: 2,
-    //             backgroundColor: 'transparent',
-    //             borderColor: 'red',
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             xAxes: [],
-    //             yAxes: [{
-    //                 ticks: {
-    //                     beginAtZero: true
-    //                 }
-    //             }]
-    //         }
-    //     }
-    // });
-    var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
+    $(document).ready(function() {
+        $.ajax({
+            url: "/api/penjualan/chart",
+            method: "GET",
+            success: function(data) {
+                console.log(data.ekatalog_graph);
+                var ctx = document.getElementById("myChart");
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+                        datasets: [{
+                                label: "E-Catalogue",
+                                backgroundColor: "red",
+                                data: [data.ekatalog_graph[1].count, data.ekatalog_graph[2].count, data.ekatalog_graph[3].count, data.ekatalog_graph[4].count, data.ekatalog_graph[5].count, data.ekatalog_graph[6].count, data.ekatalog_graph[7].count, data.ekatalog_graph[8].count, data.ekatalog_graph[9].count, data.ekatalog_graph[10].count, data.ekatalog_graph[11].count, data.ekatalog_graph[12].count],
+                                borderColor: 'red',
+                            },
+                            {
+                                label: "SPA",
+                                backgroundColor: "blue",
+                                data: [data.spa_graph[1].count, data.spa_graph[2].count, data.spa_graph[3].count, data.spa_graph[4].count, data.spa_graph[5].count, data.spa_graph[6].count, data.spa_graph[7].count, data.spa_graph[8].count, data.spa_graph[9].count, data.spa_graph[10].count, data.spa_graph[11].count, data.spa_graph[12].count],
+                                borderColor: 'blue',
+                            },
+                            {
+                                label: "SPB",
+                                backgroundColor: "black",
+                                data: [data.spb_graph[1].count, data.spb_graph[2].count, data.spb_graph[3].count, data.spb_graph[4].count, data.spb_graph[5].count, data.spb_graph[6].count, data.spb_graph[7].count, data.spb_graph[8].count, data.spb_graph[9].count, data.spb_graph[10].count, data.spb_graph[11].count, data.spb_graph[12].count],
+                                borderColor: 'black',
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Grafik Penjualan Bulanan'
+                            }
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }]
+                });
             }
-        }
+        });
     });
+</script>
+<script>
+
 </script>
 
 @stop
