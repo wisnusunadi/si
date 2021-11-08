@@ -203,7 +203,7 @@
                         )
                     // console.log('ok');
                     // $('.datatable').DataTable().ajax.reload();
-                    location.reload();
+                    // location.reload();
                 }
             $('.btn-simpan').prop('hidden', false);
             }
