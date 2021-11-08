@@ -16,7 +16,7 @@ class TFProduksi extends Model
     }
 
     function his_tf() {
-        return $this->belongsTo(TFProduksiHis::class);
+        return $this->hasMany(TFProduksiHis::class, 'tfbj_id');
     }
 
     function divisi() {

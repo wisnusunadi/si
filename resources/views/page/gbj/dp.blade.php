@@ -9,7 +9,7 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-      <table class="table table-bordered dalam-perakitan">
+      <table class="table table-bordered dalamperakitan">
         <thead>
           <tr>
             <th>No</th>
@@ -19,7 +19,7 @@
             <th>Aksi</th>
           </tr>
         </thead>
-        <tbody>
+        {{-- <tbody>
             <tr>
                 <td>1</td>
                 <td>10-11-2021</td>
@@ -29,7 +29,7 @@
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                     <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item terimaProduk">
+                        <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
                             <i class="far fa-edit"></i>&nbsp;Terima
                           </button>
                           <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
@@ -47,7 +47,7 @@
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                     <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item terimaProduk">
+                        <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
                             <i class="far fa-edit"></i>&nbsp;Terima
                           </button>
                           <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
@@ -56,7 +56,7 @@
                     </div>
                 </div></td>
             </tr>
-        </tbody>
+        </tbody> --}}
       </table>
     </div>
   </div>
@@ -65,7 +65,7 @@
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title">Produk AMBULATORY</h5>
+                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -109,13 +109,13 @@
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  <button type="button" class="btn btn-primary">Simpan</button>
               </div>
           </div>
       </div>
   </div>
-  
+
   <!-- Modal Ubah Layout-->
   <div class="modal fade" id="ubah-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -142,13 +142,13 @@
           </div>
       </div>
   </div>
-  
+
   <!-- Modal -->
   <div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title">Detail Produk <b>AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                  <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -173,10 +173,6 @@
                       </tbody>
                   </table>
               </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save</button>
-              </div>
           </div>
       </div>
   </div>
@@ -184,17 +180,53 @@
 
 @section('adminlte_js')
 <script>
-    $('.dalam-perakitan').DataTable({
-        "oLanguage": {
-        "sSearch": "Cari:"}
-    });
+    // $('.dalamperakitan').DataTable({
+    //     "oLanguage": {
+    //     "sSearch": "Cari:"}
+    // });
+    var datatable = $('.dalamperakitan').DataTable({
+            processing: false,
+            serverSide: true,
+            autoWidth: false,
+            searchable: true,
+            // pageLength: 5,
+            // scrollX: true,
+           
+            ajax: '{{ route('tf.get') }}',
+            // ajax:{ 'url': '/api/gbj/data'},
+            columns: [{
+                    data: "DT_RowIndex",
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_masuk',
+                    name: 'tgl_masuk'
+                },
+                {
+                    data: 'nama_produk',
+                    name: 'nama_produk'
+                },
+                {
+                    data: 'stok',
+                    name: 'stok'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"}
+        });
+
     $('.scan-produk').DataTable({
             "oLanguage": {
         "sSearch": "Cari:"
         }
     });
     $(document).ready(function () {
-        $('.terimaProduk').click(function (e) { 
+        $('.terimaProduk').click(function (e) {
             $('.terima-produk').modal('show');
         });
 
@@ -204,16 +236,31 @@
         });
     });
 
-    function ubahData() { 
+    function ubahData() {
         let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
         let layout = $('#change-layout').val();
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
+        $('#ubah-layout').modal('hide');
     }
 
-    function openModalView() { 
+    function openModalTerima() {
+        $('.terima-produk').modal('show');
+    }
+    function openModalView() {
         $('.detail-layout').modal('show');
     }
+
+    $(document).on('click', '.editmodal', function() {
+        openModalTerima();
+    });
+
+    $(document).on('click', '.detailmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+
+        openModalView();
+    });
 </script>
 @stop

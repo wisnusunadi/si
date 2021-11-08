@@ -144,12 +144,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
-                        <label for="">Layout</label>
-                        <select name="layout_id" id="layout_id" class="form-control layout-add">
-
-                        </select>
-                    </div>
                 </div>
                 <div class="form-group">
                     <div class="custom-file">
@@ -229,13 +223,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
-                        <label for="">Layout</label>
-                        <select name="" class="form-control layout-edit">
-                            <option value="">Buku</option>
-                            <option value="">Bolpoin</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="form-group">
                     <div class="custom-file">
@@ -255,9 +242,38 @@
 {{-- Modal View --}}
 
 <!-- Modal -->
-<div class="modal fade" id="modal-view" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade" id="modal-view" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            {{-- <div class="modal-header">
+                <h5 class="modal-title">Produk Sterilisator</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card">
+                            <img class="card-img-top" src="https://images.unsplash.com/photo-1636096111790-01540e4b36fd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80" alt="">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <p><b>Nama Produk</b></p>
+                        <p>STERILISATOR KERING</p>
+                        <p><b>Deskripsi Produk</b></p>
+                        <p>Inovasi Produk Terbaru dari industri kami</p>
+                        <p><b>Dimensi</b></p>
+                        <div class="d-flex">
+                            <p>Panjang: 50</p>
+                            <p>Lebar: 50</p>
+                            <p>Tinggi: 50</p>
+                        </div>
+                        <p><b>Produk</b></p>
+                        <p>Buku</p>
+                    </div>
+                </div>
+            </div> --}}
             <div id="GetArticleModalBody">
 
             </div>
@@ -407,14 +423,14 @@
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
     });
-    $('.editProduk').click(function (e) {
-        $('.modal-edit').modal('show');
-        $('.produk-edit ').select2();
-        $('.layout-edit').select2();
-    });
-    $('.viewProduk').click(function (e) {
-        $('.modal-view').modal('show');
-    });
+    // $('.editProduk').click(function (e) {
+    //     $('.modal-edit').modal('show');
+    //     $('.produk-edit ').select2();
+    //     $('.layout-edit').select2();
+    // });
+    // $('.viewProduk').click(function (e) {
+    //     $('.modal-view').modal('show');
+    // });
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
@@ -455,11 +471,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // });
         $('.produk-add ').select2();
         $('.layout-add').select2();
         // load data
@@ -543,7 +554,15 @@
             }
         });
         // show value by dropdown
-        $('#produk_id').change(function(e) {
+
+        // post
+        $('#create').click(function(e) {
+            $('#Submitmodalcreate').val('create-product');
+            $('#produkForm').trigger("reset");
+            $('#exampleModalLabel').html('Tambah Produk');
+            $('#modal-create').modal('show');
+
+            $('#produk_id').change(function(e) {
             var id = $(this).val();
             console.log(id);
             if(id) {
@@ -563,12 +582,6 @@
                 });
             }
         });
-        // post
-        $('#create').click(function(e) {
-            $('#Submitmodalcreate').val('create-product');
-            $('#produkForm').trigger("reset");
-            $('#exampleModalLabel').html('Tambah Produk');
-            $('#modal-create').modal('show');
         });
         $('body').on('submit', '#produkForm', function (e) {
             e.preventDefault();
@@ -615,11 +628,11 @@
                     $('#dim_p').val(res[0].dim_p);
                     $('#dim_l').val(res[0].dim_l);
                     $('#dim_t').val(res[0].dim_t);
-                    $('#layout_id').val(res[0].layout_id);
-                    $('#layout_id').select2().trigger('change');
+                    // $('#layout_id').val(res[0].layout_id);
+                    // $('#layout_id').select2().trigger('change');
                     $('#produk_id').val(res[0].produk_id);
-                    $('#produk_id').select2('enable', false);
                     $('#produk_id').select2().trigger('change');
+                    $('#produk_id').select2('enable', false);
                     $('#inputGroupFile02').val(res[0].gambar);
                 }
             });
@@ -628,17 +641,18 @@
         $(document).on('click', '.detailmodal', function() {
             var id = $(this).data('id');
             console.log(id);
-            $.ajax({
-                url: "/api/gbj/view/" + id,
-                type: 'GET',
-                // data: { id: id },
-                dataType: 'json',
-                success: function(res){
-                    console.log(res);
-                    $('#GetArticleModalBody').html(res.html);
-                    $('#modal-view').modal('show');
-                }
-            });
+            $('#modal-view').modal('show');
+            // $.ajax({
+            //     url: "/api/gbj/view/" + id,
+            //     type: 'GET',
+            //     // data: { id: id },
+            //     dataType: 'json',
+            //     success: function(res){
+            //         console.log(res);
+            //         $('#GetArticleModalBody').html(res.html);
+            //         $('#modal-view').modal('show');
+            //     }
+            // });
         });
         // stok
         $(document).on('click', '.stokmodal', function() {

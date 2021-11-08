@@ -3,6 +3,26 @@
 @section('title', 'ERP')
 
 @section('content')
+<style>
+    .nomor-so{
+        background-color: #717FE1;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-akn{
+        background-color: #DF7458;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-po{
+        background-color: #85D296;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+</style>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -17,7 +37,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered datatable" id="gudang-barang">
+                        <table class="table table-bordered" id="gudang-barang">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -25,7 +45,7 @@
                                     <th>Customer</th>
                                     <th>Batas Pengeluaran</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,7 +81,7 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
                                                 <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Add Produk
+                                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
                                             </div>
                                         </div>
@@ -96,25 +116,24 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <label for="">Nomor SO</label>
-
-                                            <div class="card">
+                                            <div class="card nomor-so">
                                                 <div class="card-body" id="no_so">
                                                     89798797856456
                                                 </div>
                                               </div>
                                     </div>
                                     <div class="col-sm">
-                                        <label for="">Nomor PO</label>
-                                        <div class="card">
-                                            <div class="card-body" id="no_po">
+                                        <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body" id="no_akn">
                                                 89798797856456
                                             </div>
                                           </div>
                                     </div>
                                     <div class="col-sm">
-                                        <label for="">Nomor AKN</label>
-                                        <div class="card">
-                                            <div class="card-body" id="no_akn">
+                                        <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body" id="no_po">
                                                 89798797856456
                                             </div>
                                           </div>
@@ -122,22 +141,22 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table class="table table-striped add-produk" id="showdetailtable">
+                                <table class="table table-striped add-produk">
                                     <thead>
                                         <tr>
                                             <th></th>
                                             <th>Nama Produk</th>
-                                            <th>Stok</th>
+                                            <th>Jumlah</th>
                                             <th>Tipe</th>
                                             <th>Merk</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
+                                        <tr>
                                             <td></td>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
+                                            <td>100 Unit</td>
                                             <td>ABPM50</td>
                                             <td>ELITECH</td>
                                             <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
@@ -146,12 +165,12 @@
                                         <tr>
                                             <td></td>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
+                                            <td>100 Unit</td>
                                             <td>RGB</td>
                                             <td>ELITECH</td>
                                             <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
                                                         class="fas fa-qrcode"></i> Scan Produk</button></td>
-                                        </tr> --}}
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -167,6 +186,7 @@
         </div>
     </div>
 </div>
+
 {{-- Modal Scan Product --}}
 <!-- Modal -->
 <div class="modal fade modal-scan" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -212,7 +232,6 @@
         $(document).on('click', '.addProduk', function() {
             var id = $(this).data('id');
            console.log(id);
-
            $.ajax({
                 url: "/api/gbj/so/",
                 data: { id: id },
@@ -223,7 +242,6 @@
                     console.log(res);
                     $('#no_so').html(res.data[0].so).show();
                     $('#no_po').html(res.data[0].no_po).show();
-
                     let t = $('.add-produk').DataTable({
                             processing: true,
                             destroy: true,
@@ -280,12 +298,27 @@
                     $('#addProdukModal').modal('show');
                 }
             });
-
         });
         $('.viewProduk').click(function (e) {
             $('#viewProdukModal').modal('show');
         });
-
+        let t = $('.add-produk').DataTable({
+            'columnDefs': [{
+                'targets': 0,
+                'checkboxes': {
+                    'selectRow': true
+                }
+            }],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
+                [1, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"
+            }
+        });
 
         $('.scan-produk').DataTable({
             'columnDefs': [{
@@ -343,7 +376,18 @@
                    data: 'action',
                    name: 'action'
                },
-           ]
+           ],
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [
+                [1, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"
+            }
         });
         a.on('order.dt search.dt', function () {
             a.column(0, {
@@ -354,6 +398,4 @@
             });
         }).draw();
 </script>
-
-
 @stop

@@ -99,12 +99,15 @@ Route::prefix('/gbj')->group(function () {
     // so
     Route::get('/so', [App\Http\Controllers\GudangController::class, 'get_so'])->name('so.get');
     Route::get('/soo/{id}', [App\Http\Controllers\GudangController::class, 'addProdukSO']);
+
+    // soo
+    Route::get('/sooo', [App\Http\Controllers\GudangController::class, 'data_so'])->name('get.soo');
 });
 
 Route::prefix('/tfp')->group(function () {
-    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'Tf_so'])->name('tfp.post');
-    Route::post('/createnon', [\App\Http\Controllers\ProduksiController::class, 'TFNonSO'])->name('tfp.postnon');
-    Route::get('/data', [App\Http\Controllers\ProduksiController::class, 'getTFBJ'])->name('tf.get');
+    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem'])->name('tfp.post');
+    Route::post('/createnon', [\App\Http\Controllers\ProduksiController::class, 'TFNonSO'])->name('tfp.post.non');
+    Route::get('/data', [App\Http\Controllers\ProduksiController::class, 'get_produksi'])->name('tf.get');
 
 });
 

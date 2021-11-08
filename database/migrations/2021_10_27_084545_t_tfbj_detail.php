@@ -21,6 +21,7 @@ class TTfbjDetail extends Migration
             $table->foreign('gdg_brg_jadi_id')->references('id')->on('gdg_barang_jadi');
             $table->integer('qty');
             $table->string('noseri');
+            $table->integer('is_aktif')->default(0);
             $table->timestamps();
         });
     }

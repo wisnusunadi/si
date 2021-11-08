@@ -18,6 +18,7 @@ class TTfbj extends Migration
             $table->unsignedBigInteger('ke');
             $table->string('deskripsi')->nullable();
             $table->foreign('ke')->references('id')->on('divisi');
+            $table->integer('is_aktif')->default(0);
             $table->timestamps();
         });
     }

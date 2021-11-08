@@ -3,6 +3,32 @@
 @section('title', 'ERP')
 
 @section('content')
+<style>
+    .nomor-so{
+        background-color: #717FE1;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-akn{
+        background-color: #DF7458;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-po{
+        background-color: #85D296;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .instansi{
+        background-color: #36425E;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+</style>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -17,7 +43,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered" id="gudang-barang">
+                        <table class="table table-bordered datatable" id="gudang-barang">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -89,62 +115,95 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <p><b>Siapkan Produk</b></p>
-                    <div class="row">
-                        <div class="col">
-                            <b>Nomor SO</b><p>8457938475938475</p>
-                        </div>
-                        <div class="col">
-                            <b>Nomor AKN</b><p>8457938475938475</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <b>Nomor PO</b><p>8457938475938475</p>
-                        </div>
-                        <div class="col">
-                            <b>Instansi</b><p>RS. Dr. Soetomo</p>
-                        </div>
-                    </div>
+
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form action="" id="myform" method="post">
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row row-cols-2">
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor SO</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body" id="no_so">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body" id="no_akn">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body" id="no_po">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Instansi</label>
+                                        <div class="card instansi">
+                                            <div class="card-body" id="instansi">
+                                                RS. Dr. Soetomo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped add-produk" id="mytable">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Nama Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Tipe</th>
+                                            <th>Merk</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100 Unit</td>
+                                            <td>ABPM50</td>
+                                            <td>ELITECH</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100 Unit</td>
+                                            <td>RGB</td>
+                                            <td>ELITECH</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
                 {{-- Tambahkan DataTable --}}
-                <table class="table table-striped add-produk">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Nama Produk</th>
-                            <th>Jumlah</th>
-                            <th>Tipe</th>
-                            <th>Merk</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100 Unit</td>
-                            <td>ABPM50</td>
-                            <td>ELITECH</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100 Unit</td>
-                            <td>RGB</td>
-                            <td>ELITECH</td>
-                        </tr>
-                    </tbody>
-                </table>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                 <button type="button" class="btn btn-primary">Simpan</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -155,56 +214,83 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <p><b>Detail Produk</b></p>
-                    <div class="row">
-                        <div class="col">
-                            <b>Nomor SO</b><p>8457938475938475</p>
-                        </div>
-                        <div class="col">
-                            <b>Nomor AKN</b><p>8457938475938475</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <b>Nomor PO</b><p>8457938475938475</p>
-                        </div>
-                        <div class="col">
-                            <b>Instansi</b><p>RS. Dr. Soetomo</p>
-                        </div>
-                    </div>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped" id="view-produk">
-                    <thead>
-                        <tr>
-                            <th>Nama Produk</th>
-                            <th>Jumlah</th>
-                            <th>Tipe</th>
-                            <th>Merk</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100</td>
-                            <td>ABPM50</td>
-                            <td>ELITECH</td>
-                            <td><span class="badge badge-success">Sudah Diinput</span></td>
-                        </tr>
-                        <tr>
-                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                            <td>100</td>
-                            <td>RGB</td>
-                            <td>ELITECH</td>
-                            <td><span class="badge badge-danger">Belum Diinput</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row row-cols-2">
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor SO</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body" id="no_soo">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body" id="no_aknn">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body" id="no_poo">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Instansi</label>
+                                        <div class="card instansi">
+                                            <div class="card-body" id="instansii">
+                                                RS. Dr. Soetomo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped" id="view-produk">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Tipe</th>
+                                            <th>Merk</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>ABPM50</td>
+                                            <td>ELITECH</td>
+                                            <td><span class="badge badge-success">Sudah Diinput</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>RGB</td>
+                                            <td>ELITECH</td>
+                                            <td><span class="badge badge-danger">Belum Diinput</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -223,6 +309,7 @@
     });
 
     $('.add-produk').DataTable({
+
         'columnDefs': [{
             'targets': 0,
             'checkboxes': {
@@ -236,9 +323,184 @@
             [1, 'asc']
         ],
         "oLanguage": {
-        "sSearch": "Cari:"
+            "sSearch": "Cari:"
         }
     });
 
+    var datatable = $('.datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            searchable: false,
+            // pageLength: 5,
+            // scrollX: true,
+            "order": [
+                [0, "desc"]
+            ],
+            ajax: '/api/gbj/sooo',
+            // ajax:{ 'url': '/api/gbj/data'},
+            columns: [{
+                    data: "DT_RowIndex",
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so',
+                    name: 'so'
+                },
+                {
+                    data: 'nama_customer',
+                    name: 'nama_customer'
+                },
+                {
+                    data: 'batas_out',
+                    name: 'batas_out'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
+            ]
+        });
+
+    var mytable;
+    $(document).on('click', '.addmodal', function() {
+        var id = $(this).data('id');
+           console.log(id);
+        $.ajax({
+            url: "/api/gbj/sooo/",
+            data: { id: id },
+            type: 'GET',
+            // data: { id: id },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('#no_so').html(res.data[0].so).show();
+                $('#no_po').html(res.data[0].no_po).show();
+                $('#instansi').html(res.data[0].nama_customer).show();
+                $.ajax({
+                    url: '/api/gbj/soo/' + res.data[0].id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        $('#no_akn').html(res.data[0].ekatalog.no_paket).show();
+                        // console.log(res);
+                    }
+                });
+                mytable = $('.add-produk').DataTable({
+                            processing: true,
+                            destroy: true,
+                            serverSide: true,
+                            ajax: {
+                                url: '/api/gbj/soo/' + res.data[0].id,
+                            },
+                            columns: [
+                                {
+                                    data: 'nama_produk'
+                                },
+                                {
+                                    data: 'nama_produk'
+                                },
+                                {
+                                    data: 'jumlah'
+                                },
+                                {
+                                    data: 'tipe'
+                                },
+                                {
+                                    data: 'merk'
+                                },
+                            ],
+                    'columnDefs': [{
+                        'targets': 0,
+                        'checkboxes': {
+                            'selectRow': true
+                        },
+
+                    }],
+                    'select': {
+                        'style': 'multi'
+                    },
+                    'order': [
+                        [1, 'asc']
+                    ],
+                    "oLanguage": {
+                        "sSearch": "Cari:"
+                    }
+                    });
+                $('#addProdukModal').modal('show');
+            }
+        })
+
+    });
+
+    
+
+    $(document).on('click', '.detailmodal', function() {
+        var id = $(this).data('id');
+           console.log(id);
+        $.ajax({
+            url: "/api/gbj/sooo/",
+            data: { id: id },
+            type: 'GET',
+            // data: { id: id },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('#no_soo').html(res.data[0].so).show();
+                $('#no_poo').html(res.data[0].no_po).show();
+                $('#instansii').html(res.data[0].nama_customer).show();
+                $.ajax({
+                    url: '/api/gbj/soo/' + res.data[0].id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        $('#no_aknn').html(res.data[0].ekatalog.no_paket).show();
+                        // console.log(res);
+                    }
+                });
+                $('#view-produk').DataTable({
+                    processing: true,
+                            destroy: true,
+                            serverSide: true,
+                            ajax: {
+                                url: '/api/gbj/soo/' + res.data[0].id,
+                            },
+                            columns: [
+                                {
+                                    data: 'nama_produk'
+                                },
+                                {
+                                    data: 'jumlah'
+                                },
+                                {
+                                    data: 'tipe'
+                                },
+                                {
+                                    data: 'merk'
+                                },
+                                {
+                                    data: 'status'
+                                },
+                            ],
+                    'select': {
+                        'style': 'multi'
+                    },
+                    'order': [
+                        [1, 'asc']
+                    ],
+                    "oLanguage": {
+                        "sSearch": "Cari:"
+                    }
+                    });
+                $('#viewProdukModal').modal('show');
+            }
+        })
+
+    });
 </script>
 @stop

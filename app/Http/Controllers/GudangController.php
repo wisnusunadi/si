@@ -533,7 +533,6 @@ class GudangController extends Controller
     // so
     function get_so(Request $request)
     {
-
         $id = $request->id;
         if ($id) {
             $data  = Pesanan::where('id', $id)->get();
@@ -620,6 +619,86 @@ class GudangController extends Controller
                 return '<button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
                 class="fas fa-qrcode"></i> Scan Produk</button>';
             })
+            ->addColumn('status', function ($data) {
+                return '<span class="badge badge-danger">Belum Diinput</span>';
+            })
+            ->rawColumns(['action', 'status'])
             ->make(true);
+    }
+
+    function data_so(Request $request) {
+        $id = $request->id;
+        if ($id) {
+            $data  = Pesanan::where('id', $id)->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Ekatalog->Customer->nama;
+                })
+                ->addColumn('jenis', function ($data) {
+                    return '<span class="badge purple-text">E-Catalogue</span>';
+                })
+                ->addColumn('status', function ($data) {
+                    return '<span class="badge badge-danger">Belum Dicek</span>';
+                })
+                ->addColumn('batas_out', function ($data) {
+                    return $data->Ekatalog->tgl_kontrak;
+                })
+                ->addColumn('action', function ($data) {
+                    return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a data-toggle="modal" data-target="#addmodal" class="addmodal" data-attr=""  data-id="' . $data->id . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                </button>
+                            </a>
+
+                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>
+
+                            </div>
+                            </div>';
+                })
+                ->rawColumns(['action', 'status'])
+                ->make(true);
+        } else {
+            $data  = Pesanan::select();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Ekatalog->Customer->nama;
+                })
+                ->addColumn('jenis', function ($data) {
+                    return '   <span class="badge purple-text">E-Catalogue</span>';
+                })
+                ->addColumn('status', function ($data) {
+                    return '<span class="badge badge-danger">Belum Dicek</span>';
+                })
+                ->addColumn('batas_out', function ($data) {
+                    return date('d F Y', strtotime($data->Ekatalog->tgl_kontrak));
+                })
+                ->addColumn('action', function ($data) {
+                    return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a data-toggle="modal" data-target="#addmodal" class="addmodal" data-attr=""  data-id="' . $data->id . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                </button>
+                            </a>
+                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>
+
+                            </div>
+                            </div>';
+                })
+                ->rawColumns(['action', 'status'])
+                ->make(true);
+        }
     }
 }

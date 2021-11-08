@@ -21,7 +21,7 @@
                                 <div class="col-12 mt-3">
                                     <form method="post" id="tsoForm" name="tsoForm">
                                         <div class="form-group row top-min">
-                                            <label for="" class="col-12 font-weight-bold col-form-label">Ke</label>
+                                            <label for="" class="col-12 font-weight-bold col-form-label">Tujuan</label>
                                             <div class="col-12">
                                                 <select class="form-control division" name="ke" id="ke">
 
@@ -31,7 +31,7 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Keterangan</label>
                                             <div class="col-12">
-                                                <textarea name="ket" id="ket" class="form-control tujuan"></textarea>
+                                                <textarea name="deskripsi" id="deskripsi" class="form-control tujuan"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row top-min">
@@ -72,11 +72,11 @@
                             <table class="table table-hover addData">
                                 <thead>
                                     <tr>
-                                        <th>Ke</th>
                                         <th>Tujuan</th>
+                                        <th>Keterangan</th>
                                         <th>Produk</th>
                                         <th>Stok</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="tambah_data">
@@ -120,7 +120,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td>36541654654654564</td>
+                            <td>2121212122</td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -163,11 +163,11 @@
     });
 
     $(document).on('click','.btn-tambah', function (e) {
-        // let divisi = $('.division').val();
-        // let tujuan = $('.tujuan').val();
-        // let produk = $('.product').val();
-        // let stok = $('.stok').val();
-        // let stok_gudang = $('.stok-gudang').val();
+        let divisi = $('#ke').val();
+        let tujuan = $('#deskripsi').val();
+        let produk = $('#gdg_brg_jadi_id').val();
+        let stok = parseInt($('#qty').val());
+        let stok_gudang = parseInt($('.stok-gudang').val());
         e.preventDefault();
         $.ajaxSetup({
             headers: {
@@ -175,14 +175,14 @@
             }
         });
         $.ajax({
-            url: '{{ route("tfp.postnon") }}',
-            type: "POST",
-            data: {
-                ke: $('#ke').val(),
-                ket: $('#ket').val(),
-                gdg_brg_jadi_id: $('#gdg_brg_jadi_id').val(),
-                qty: $('#qty').val(),
-            },
+            // url: '{{ route("tfp.post.non") }}',
+            // type: "POST",
+            // data: {
+            //     ke: $('#ke').val(),
+            //     deskripsi: $('#deskripsi').val(),
+            //     gdg_brg_jadi_id: $('#gdg_brg_jadi_id').val(),
+            //     qty: $('#qty').val(),
+            // },
             success: function (res) {
                 if(res.errors) {
                     console.log('error');
@@ -196,12 +196,15 @@
                     //         'error'
                     //     )
                     // }
-                    Swal.fire(
-                        'Good job!',
-                        'You clicked the button!',
-                        'success'
-                        )
-                    // console.log('ok');
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Your data has been saved',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                        addData(divisi, tujuan, produk, stok)
+                    console.log('ok');
                     // $('.datatable').DataTable().ajax.reload();
                     // location.reload();
                 }
@@ -211,20 +214,23 @@
     });
 
     function addData(divisi, tujuan, produk, stok) {
+        if (tujuan.length > 30) {
+            var a = tujuan.substring(0, 10) + '...';
+        }
+        console.log(tujuan.length);
         let tambah_data = '<tr><td>'+divisi+'</td><td>'+tujuan+'</td><td>'+produk+'</td><td>'+stok+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function(e){
         e.preventDefault();
         $(this).parent().parent().remove();
-        var check = $('.kd-barang-field').length;
+        var check = $('tbody.tambah_data tr').length;
         if(check != 0){
             $('.btn-simpan').prop('hidden', false);
         }else{
             $('.btn-simpan').prop('hidden', true);
         }
     });
-
 
     $('.scan-produk').DataTable({
             'columnDefs': [{
@@ -238,7 +244,10 @@
             },
             'order': [
                 [0, 'asc']
-            ]
+            ],
+            "oLanguage": {
+            "sSearch": "Scan Nomor Seri:"
+            }
         });
 
     $.ajax({
