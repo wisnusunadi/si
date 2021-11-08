@@ -17,6 +17,7 @@ class Customer extends Migration
             $table->bigIncrements('id');
             $table->string('nama')->nullable();
             $table->integer('telp')->nullable();
+            $table->string('email')->nullable();
             $table->string('alamat')->nullable();
             $table->string('npwp')->nullable();
             $table->string('ket')->nullable();

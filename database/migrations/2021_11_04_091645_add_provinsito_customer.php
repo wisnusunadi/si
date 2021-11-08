@@ -14,8 +14,8 @@ class AddProvinsitoCustomer extends Migration
     public function up()
     {
         Schema::table('customer', function (Blueprint $table) {
-            $table->unsignedBigInteger('provinsi_id')->after('id');
-            $table->foreign('provinsi_id')->references('id')->on('provinsi');
+            $table->unsignedBigInteger('id_provinsi')->after('id');
+            $table->foreign('id_provinsi')->references('id')->on('provinsi');
         });
     }
 
@@ -27,7 +27,7 @@ class AddProvinsitoCustomer extends Migration
     public function down()
     {
         Schema::table('customer', function (Blueprint $table) {
-            $table->dropForeign('customer_provinsi_id_foreign');
+            $table->dropForeign('customer_id_provinsi_foreign');
         });
     }
 }
