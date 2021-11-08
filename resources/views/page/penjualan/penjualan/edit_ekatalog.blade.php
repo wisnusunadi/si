@@ -268,7 +268,7 @@
                                                                         <div class="input-group-prepend">
                                                                             <span class="input-group-text" id="prdhrg">Rp</span>
                                                                         </div>
-                                                                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{$f->harga}}" />
+                                                                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -276,7 +276,7 @@
                                                                         <div class="input-group-prepend">
                                                                             <span class="input-group-text" id="prdsub">Rp</span>
                                                                         </div>
-                                                                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="{{$f->harga*$f->jumlah}}" aria-describedby="prdsub" readonly />
+                                                                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -295,7 +295,7 @@
                                                                         $x += $f->harga * $f->jumlah;
                                                                     }
                                                                     ?>
-                                                                    {{number_format($x)}}
+                                                                    {{number_format($x,0,',','.')}}
                                                                 </th>
                                                             </tr>
                                                         </tfoot>
@@ -336,6 +336,16 @@
 @section('adminlte_js')
 <script>
     $(function() {
+
+
+        loop();
+
+        function loop() {
+            for (i = 0; i < 20; i++) {
+                select_data(i);
+            }
+        }
+
         $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
         $('#customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
