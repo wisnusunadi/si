@@ -300,7 +300,7 @@
                   <tbody>
                       <tr>
                           <td><input type="checkbox" class="cb-child" value="1"></td>
-                          <td>36541654654654564</td>
+                          <td><input type="text" name="" id="" class="form-control"></td>
                           <td><select name="" id="" class="form-control">
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
@@ -312,7 +312,7 @@
                       </tr>
                       <tr>
                           <td><input type="checkbox" class="cb-child" value="2"></td>
-                          <td>36541654654654564</td>
+                          <td><input type="text" name="" id="" class="form-control"></td>
                           <td><select name="" id="" class="form-control">
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
@@ -324,7 +324,7 @@
                       </tr>
                       <tr>
                           <td><input type="checkbox" class="cb-child" value="3"></td>
-                          <td>36541654654654564</td>
+                          <td><input type="text" name="" id="" class="form-control"></td>
                           <td><select name="" id="" class="form-control">
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
@@ -500,11 +500,6 @@
         }
     });
     
-    $('.scan-produk').DataTable({
-            "oLanguage": {
-            "sSearch": "Scan Nomor Seri:"
-            }
-    });
 
     $(document).ready(function () {
         $('.table-rancangan').DataTable({});

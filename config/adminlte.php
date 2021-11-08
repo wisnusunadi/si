@@ -1032,7 +1032,7 @@ return [
         //     'auth' => [13],
         // ],
         [
-            'text' => 'Riwayat Transfer Produk',
+            'text' => 'Riwayat Transaksi',
             'url' => '/gbj/tp',
             'icon' => 'fas fa-circle',
             'auth' => [13],
