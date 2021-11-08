@@ -21,7 +21,7 @@ class PpicController extends Controller
         $year = date('Y');
         $event = JadwalPerakitan::with('Produk')->orderBy('tanggal_mulai', 'asc');
 
-        if (isset($request->proses_konfirmasi)) $event->where('proses_konfirmasi', $request->proses_konfirmasi);
+        if (isset($request->state)) $event->where('state', $request->state);
 
         if ($status == "pelaksanaan") {
             $event = $event->whereYear('tanggal_mulai', $year)->whereMonth('tanggal_mulai', $month)->get();
@@ -53,10 +53,9 @@ class PpicController extends Controller
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
             'status' => $request->status,
+            'state' => "perencanaan",
             'warna' => $request->warna,
-            'konfirmasi_rencana' => 0,
-            'konfirmasi_perubahan' => 0,
-            'proses_konfirmasi' => 0
+            'konfirmasi' => 0
         ];
         JadwalPerakitan::create($data);
 
@@ -66,7 +65,7 @@ class PpicController extends Controller
     public function deleteEvent(Request $request)
     {
         JadwalPerakitan::destroy($request->id);
-        return JadwalPerakitan::with("Produk")->get();
+        return $this->getEvent($request->status, $request);
     }
 
     public function updateStatus($event, $status)
@@ -81,9 +80,10 @@ class PpicController extends Controller
     {
         $event = JadwalPerakitan::where('status', $request->status)->get();
         foreach ($event as $data) {
-            if (isset($request->proses_konfirmasi)) $data->proses_konfirmasi = $request->proses_konfirmasi;
-            if (isset($request->konfirmasi_rencana)) $data->konfirmasi_rencana = $request->konfirmasi_rencana;
-            if (isset($request->konfirmasi_perubahan)) $data->konfirmasi_perubahan = $request->konfirmasi_perubahan;
+            if (isset($request->state)) $data->state = $request->state;
+            $data->konfirmasi = 0;
+            // if (isset($request->konfirmasi_rencana)) $data->konfirmasi_rencana = $request->konfirmasi_rencana;
+            // if (isset($request->konfirmasi_perubahan)) $data->konfirmasi_perubahan = $request->konfirmasi_perubahan;
             $data->save();
         }
 
@@ -95,13 +95,12 @@ class PpicController extends Controller
         $event = JadwalPerakitan::all();
         foreach ($event as $data) {
             if ($data->status == "penyusunan") {
-                $data->konfirmasi_rencana = 0;
-                $data->konfirmasi_perubahan = 0;
+                $data->konfirmasi = 0;
+                $data->state = "perencanaan";
             } else if ($data->status == "pelaksanaan") {
-                $data->konfirmasi_rencana = 1;
-                $data->konfirmasi_perubahan = 0;
+                $data->konfirmasi = 1;
+                $data->state = "persetujuan";
             }
-            $data->proses_konfirmasi = 0;
             $data->save();
         }
 

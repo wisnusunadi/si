@@ -1,4 +1,7 @@
 <script>
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import { data } from "./data_so";
+
 export default {
   data: function () {
     return {
@@ -29,77 +32,58 @@ export default {
   },
 
   mounted: function () {
-    this.view = "unit";
+    $("#table-so").DataTable({
+      pageLength: 5,
+      lengthChange: false,
+      ordering: false,
+      info: false,
+      data: data,
+      columns: [
+        {
+          data: "No",
+        },
+        {
+          data: "No SO",
+        },
+        {
+          data: "Jenis",
+        },
+        {
+          data: "Batas Kontrak",
+        },
+        {
+          data: "status",
+        },
+        {
+          data: function () {
+            return `<button class="btn btn-outline-primary btn-sm">
+                      <i class="fas fa-search"></i>
+                    </button>`;
+          },
+        },
+      ],
+    });
+
+    $("#table-detail").DataTable({
+      pageLength: 3,
+      lengthChange: false,
+      ordering: false,
+      info: false,
+    });
+
+    let vue = this;
+    $("#table-so tbody").on("click", "button", function () {
+      vue.showCard(true);
+    });
   },
 };
 </script>
 
 <template>
   <div>
-    <div class="card">
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-hover text-center" width="100%">
-            <thead style="text-align: center; font-size: 15px">
-              <tr>
-                <th>No</th>
-                <th>No SO</th>
-                <th>Jenis</th>
-                <th>Batas Kontrak</th>
-                <th>Detail</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>123</td>
-                <td>SPA</td>
-                <td>2021-10-10</td>
-                <td>
-                  <button
-                    class="btn btn-outline-primary btn-sm"
-                    @click="showCard(true)"
-                  >
-                    <i class="fas fa-search"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>234</td>
-                <td>SPA</td>
-                <td>2021-11-11</td>
-                <td>
-                  <button
-                    class="btn btn-outline-primary btn-sm"
-                    @click="showCard(true)"
-                  >
-                    <i class="fas fa-search"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>345</td>
-                <td>SPA</td>
-                <td>2021-12-12</td>
-                <td>
-                  <button
-                    class="btn btn-outline-primary btn-sm"
-                    @click="showCard(true)"
-                  >
-                    <i class="fas fa-search"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="show" class="card">
+    <div v-if="show" class="card card-info">
       <div class="card-header">
+        <div class="card-title">Detail SO</div>
         <div class="card-tools">
           <button type="button" class="btn btn-tool" @click="showCard(false)">
             <i class="fas fa-times"></i>
@@ -111,19 +95,14 @@ export default {
         <!-- info row -->
         <div class="row invoice-info">
           <div class="col-sm-6 invoice-col">
-            Distributor: test Instansi: test
-            <address>
-              <strong>Admin, Inc.</strong><br />
-              795 Folsom Ave, Suite 600<br />
-              San Francisco, CA 94107<br />
-              Phone: (804) 123-5432<br />
-              Email: info@almasaeedstudio.com
-            </address>
+            Distributor: test <br />
+            Instansi: test <br />
+            No SO: 1234
           </div>
         </div>
         <div class="row">
           <div class="col-12 table-responsive">
-            <table class="table table-striped">
+            <table id="table-detail" class="table table-hover">
               <thead>
                 <tr>
                   <th>No</th>
@@ -175,6 +154,32 @@ export default {
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-primary">
+      <div class="card-header">
+        <h4>Daftar SO</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table
+            id="table-so"
+            class="table table-hover text-center"
+            width="100%"
+          >
+            <thead style="text-align: center; font-size: 15px">
+              <tr>
+                <th>No</th>
+                <th>No SO</th>
+                <th>Jenis</th>
+                <th>Batas Kontrak</th>
+                <th>Status</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+          </table>
         </div>
       </div>
     </div>

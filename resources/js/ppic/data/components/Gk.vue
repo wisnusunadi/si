@@ -1,4 +1,7 @@
 <script>
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import { unit_data, part_data } from "./data_gk_unit";
+
 export default {
   data: function () {
     return {
@@ -26,6 +29,81 @@ export default {
 
   mounted: function () {
     this.view = "unit";
+    console.log(unit_data);
+    $("#table-unit").DataTable({
+      pageLength: 8,
+      lengthChange: false,
+      ordering: false,
+      info: false,
+      data: unit_data,
+      columns: [
+        {
+          data: "No",
+        },
+        {
+          data: "Kode Unit",
+        },
+        {
+          data: function (row) {
+            let color;
+            let stok = Number(row.Stok);
+            if (stok < 5 && stok >= 3) color = "yellow";
+            else if (stok < 10 && stok >= 5) color = "orange";
+            else if (stok >= 10) color = "red";
+            return `<span style="color: ${color};">${stok}</span>`;
+          },
+        },
+        {
+          data: function () {
+            return `<button class="btn btn-outline-primary btn-sm">
+                      <i class="fas fa-search"></i>
+                    </button>`;
+          },
+        },
+      ],
+    });
+
+    $("#table-part").DataTable({
+      pageLength: 8,
+      lengthChange: false,
+      ordering: false,
+      info: false,
+      data: part_data,
+      columns: [
+        {
+          data: "No",
+        },
+        {
+          data: "Kode Unit",
+        },
+        {
+          data: function (row) {
+            let color;
+            let stok = Number(row.Stok);
+            if (stok < 5 && stok >= 3) color = "yellow";
+            else if (stok < 10 && stok >= 5) color = "orange";
+            else if (stok >= 10) color = "red";
+            return `<span style="color: ${color};">${stok}</span>`;
+          },
+        },
+        {
+          data: function () {
+            return `<button class="btn btn-outline-primary btn-sm">
+                      <i class="fas fa-search"></i>
+                    </button>`;
+          },
+        },
+      ],
+    });
+
+    let vue = this;
+    $("#table-unit tbody, #table-part tbody").on(
+      "click",
+      "button",
+      function () {
+        vue.handleClick();
+      }
+    );
   },
 };
 </script>
@@ -51,7 +129,11 @@ export default {
         <div class="tab-content">
           <div :class="['tab-pane fade', { 'show active': isUnit() }]">
             <div class="table-responsive">
-              <table class="table table-hover text-center" width="100%">
+              <table
+                id="table-unit"
+                class="table table-hover text-center"
+                width="100%"
+              >
                 <thead style="text-align: center; font-size: 15px">
                   <tr>
                     <th>No</th>
@@ -60,56 +142,17 @@ export default {
                     <th>Detail</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>BJAA01NB001</td>
-                    <td><span style="color: green">1000</span></td>
-                    <td>
-                      <button
-                        class="btn btn-outline-primary btn-sm"
-                        @click="handleClick"
-                      >
-                        <i class="fas fa-search"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>BJOZ03G0001</td>
-                    <td><span style="color: red">5</span></td>
-                    <td>
-                      <button
-                        class="btn btn-outline-primary btn-sm"
-                        @click="handleClick"
-                      >
-                        <i class="fas fa-search"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>BJZZ03T0010</td>
-                    <td>
-                      <span style="color: rgba(0, 0, 0, 0.4)">0</span>
-                    </td>
-                    <td>
-                      <button
-                        class="btn btn-outline-primary btn-sm"
-                        @click="handleClick"
-                      >
-                        <i class="fas fa-search"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
               </table>
             </div>
           </div>
           <div :class="['tab-pane fade', { 'show active': isPart() }]">
             <div class="table-responsive">
               <div class="table-responsive">
-                <table class="table table-hover text-center" width="100%">
+                <table
+                  id="table-part"
+                  class="table table-hover text-center"
+                  width="100%"
+                >
                   <thead style="text-align: center; font-size: 15px">
                     <tr>
                       <th>No</th>
@@ -118,49 +161,6 @@ export default {
                       <th>Detail</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>1231231</td>
-                      <td><span style="color: green">1000</span></td>
-                      <td>
-                        <button
-                          class="btn btn-outline-primary btn-sm"
-                          @click="handleClick"
-                        >
-                          <i class="fas fa-search"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>12323412</td>
-                      <td><span style="color: red">5</span></td>
-                      <td>
-                        <button
-                          class="btn btn-outline-primary btn-sm"
-                          @click="handleClick"
-                        >
-                          <i class="fas fa-search"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>34212313</td>
-                      <td>
-                        <span style="color: rgba(0, 0, 0, 0.4)">0</span>
-                      </td>
-                      <td>
-                        <button
-                          class="btn btn-outline-primary btn-sm"
-                          @click="handleClick"
-                        >
-                          <i class="fas fa-search"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
                 </table>
               </div>
             </div>

@@ -7,17 +7,25 @@ import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+
 export default {
   components: {
     FullCalendar,
+    "v-select": vSelect,
+  },
+
+  props: {
+    status: String,
   },
 
   data: function () {
     return {
-      status: this.$route.params.status,
       start_date_str: "",
       end_date_str: "",
       event_ref: null,
+      calendarApi: null,
 
       // modal
       produk: [],
@@ -35,7 +43,11 @@ export default {
 
       confirmationMessage: "",
       deleteJadwal: false,
-      editable: true,
+      // editable: true,
+      calendarHeight: 0,
+
+      comment: [],
+      state: "",
     };
   },
 
@@ -53,12 +65,20 @@ export default {
         },
         weekends: false,
         showNonCurrentDates: false,
-        selectable: this.editable,
+        selectable: this.editable(
+          this.$store.state.state,
+          this.$store.state.user
+        ),
 
         events: this.convertJadwal(this.$store.state.jadwal),
 
         select: this.handleSelect,
-        eventClick: this.handleEventClick,
+        eventClick: this.editable(
+          this.$store.state.state,
+          this.$store.state.user
+        )
+          ? this.handleEventClick
+          : null,
         eventMouseEnter: this.handleEventMouseEnter,
         eventMouseLeave: this.handleEventMouseLeave,
       };
@@ -101,11 +121,17 @@ export default {
           }));
     },
 
+    editable: function (state, user) {
+      if (user.divisi_id !== 24) return false;
+
+      if (state === "perencanaan") return true;
+      else return false;
+    },
+
     handleSelect: function (selectInfo) {
       if (this.editable) {
         let calendarApi = selectInfo.view.calendar;
         calendarApi.unselect();
-
         this.start_date_str = selectInfo.startStr;
         this.end_date_str = selectInfo.endStr;
 
@@ -142,13 +168,13 @@ export default {
       eventInfo.event.setProp("borderColor", eventInfo.event.backgroundColor);
     },
 
-    disableEdit: function () {
-      this.editable = false;
-    },
+    // disableEdit: function () {
+    //   this.editable = false;
+    // },
 
-    enableEdit: function () {
-      this.editable = true;
-    },
+    // enableEdit: function () {
+    //   this.editable = true;
+    // },
 
     // modal
     handleClick: function (event) {
@@ -156,7 +182,7 @@ export default {
     },
 
     handleSubmit: function () {
-      if (!this.produkValue || Number(this.quantity) <= 0) {
+      if (!this.produkValue | (Number(this.quantity) <= 0)) {
         alert("input error");
         return;
       }
@@ -167,7 +193,7 @@ export default {
           jumlah: this.quantity,
           tanggal_mulai: this.start_date_str,
           tanggal_selesai: this.end_date_str,
-          status: this.$route.params.status,
+          status: this.$store.state.status,
           warna: this.color,
         })
         .then((response) => {
@@ -178,9 +204,10 @@ export default {
         });
     },
 
-    sendToManager: function () {
+    sendToManager: function (state) {
       this.confirmationMessage = `Apakah Anda yakin ingin mengirim permintaan?`;
       this.deleteJadwal = false;
+      this.state = state;
 
       $("#confirmation").modal("show");
     },
@@ -190,15 +217,18 @@ export default {
         axios
           .post("/api/ppic/delete-event", {
             id: this.event_ref.event._def.publicId,
+            status: this.status,
           })
           .then((response) => {
+            // alert(response.data);
+            console.log(response.data);
             this.$store.commit("updateJadwal", response.data);
             $("#confirmation").modal("hide");
           });
       } else {
         axios
           .post("/api/ppic/update-event", {
-            proses_konfirmasi: 1,
+            state: this.state,
             status: this.status,
           })
           .then((response) => {
@@ -216,32 +246,72 @@ export default {
     handleButtonNo: function () {
       $("#confirmation").modal("hide");
     },
+
+    showButtonAction: function () {
+      if (this.$store.state.state === "perencanaan") {
+        if (this.$store.state.konfirmasi == 0) return "perencanaan";
+      } else if (this.$store.state.state === "persetujuan") {
+        if (this.$store.state.konfirmasi == 1) return "perubahan";
+        else if (this.$store.state.konfirmasi == 2) return "perencanaan";
+      } else if (this.$store.state.state === "perubahan") {
+        if (this.$store.state.konfirmasi == 1) return "perencanan";
+        else if (this.$store.state.konfirmasi == 2) return "perubahan";
+      }
+    },
+
+    // table
+    tableItemHover: function (id) {
+      // alert(id);
+      // console.log(this.$refs.fullCalendar.getApi());
+    },
+
+    // common
+    getCalendarHeight: function () {
+      // console.log(this.$refs.calendar_card);
+      // console.log(this.$refs.calendar_card.clientHeight);
+      this.calendarHeight = this.$refs.calendar_card.clientHeight;
+    },
+
+    windowResize: function () {},
+  },
+
+  created: function () {
+    window.addEventListener("resize", this.windowResize);
   },
 
   mounted: function () {
-    let api = this.$refs.fullCalendar.getApi();
+    this.getCalendarHeight();
+    this.calendarApi = this.$refs.fullCalendar.getApi();
 
     if (this.status == "penyusunan") {
       this.headerToolbar = "";
-      api.next();
-      if (this.$store.state.proses_konfirmasi) this.disableEdit();
-      else this.enableEdit();
+      this.calendarApi.next();
+      // if (this.$store.state.proses_konfirmasi) this.disableEdit();
+      // else this.enableEdit();
     }
 
     if (this.status === "pelaksanaan") {
-      this.disableEdit();
+      // this.disableEdit();
     }
 
     if (this.$store.state.user.divisi_id === 3) {
-      this.disableEdit();
+      // this.disableEdit();
     }
+
+    // axios.get("/api/get-comment").then((response) => {
+    //   this.comment = response.data;
+    // });
   },
 
   updated: function () {
     if (this.status === "penyusunan") {
-      if (this.$store.state.proses_konfirmasi) this.disableEdit();
-      else this.enableEdit();
+      // if (this.$store.state.proses_konfirmasi) this.disableEdit();
+      // else this.enableEdit();
     }
+  },
+
+  destroyed: function () {
+    window.removeEventListener("resize", this.windowResize);
   },
 };
 </script>
@@ -249,15 +319,8 @@ export default {
 <template>
   <div class="row">
     <div class="col-xl-8">
-      <div class="card">
-        <div
-          :class="[
-            'card-header',
-            'text-center',
-            { 'bg-primary': status === 'penyusunan' },
-            { 'bg-secondary': status === 'pelaksanaan' },
-          ]"
-        >
+      <div class="card" ref="calendar_card">
+        <div :class="['card-header', 'text-center']">
           {{ status.toUpperCase() }}
         </div>
         <div class="card-body">
@@ -272,18 +335,16 @@ export default {
     <div class="col-xl-4">
       <div v-if="$store.state.user.divisi_id === 24">
         <button
-          v-if="status === 'penyusunan' && !this.$store.state.proses_konfirmasi"
+          v-if="showButtonAction() === 'perencanaan'"
           class="btn btn-block btn-info mb-3"
-          @click="sendToManager"
+          @click="sendToManager('persetujuan')"
         >
           Permintaan Persetujuan
         </button>
         <button
-          v-if="
-            status === 'pelaksanaan' && !this.$store.state.proses_konfirmasi
-          "
-          class="btn btn-block btn-info mb-3"
-          @click="sendToManager"
+          v-if="showButtonAction() === 'perubahan'"
+          class="btn btn-block btn-warning mb-3"
+          @click="sendToManager('perubahan')"
         >
           Permintaan Perubahan Jadwal
         </button>
@@ -291,50 +352,67 @@ export default {
 
       <div class="card">
         <div class="card-header text-center">Daftar Produksi</div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-hover styled-table table-striped">
-              <thead>
-                <tr>
-                  <th>Nama</th>
-                  <th>Jumlah</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="item in this.$store.state.jadwal"
-                  :key="item.id"
-                  :ref="'sample-ref-' + item.id"
-                >
-                  <td>
-                    <i
-                      v-if="$store.state.user.divisi_id === 24"
-                      :class="[
-                        { 'far fa-hourglass': item.proses_konfirmasi === 1 },
-                        {
-                          'far fa-check-circle':
-                            item.proses_konfirmasi === 2 &&
-                            item.konfirmasi_rencana === 1,
-                        },
-                        {
-                          'far fa-times-circle':
-                            item.proses_konfirmasi === 2 &&
-                            item.konfirmasi_rencana === 0,
-                        },
-                      ]"
-                      :style="
-                        item.proses_konfirmasi === 2
-                          ? { color: 'blue' }
-                          : { color: 'red' }
-                      "
-                    ></i>
-                    {{ item.produk.nama }}
-                  </td>
-                  <td>{{ item.jumlah }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div
+          class="card-body table-responsive p-0"
+          :style="{ height: (this.calendarHeight * 5) / 12 + 'px' }"
+        >
+          <table class="table table-hover table-head-fixed">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Jumlah</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in this.$store.state.jadwal"
+                :key="item.id"
+                :ref="'sample-ref-' + item.id"
+              >
+                <td>
+                  <i
+                    v-if="$store.state.user.divisi_id === 24"
+                    :class="[
+                      {
+                        'far fa-check-circle':
+                          item.proses_konfirmasi === 2 &&
+                          item.konfirmasi_rencana === 1,
+                      },
+                      {
+                        'far fa-times-circle':
+                          item.proses_konfirmasi === 2 &&
+                          item.konfirmasi_rencana === 0,
+                      },
+                    ]"
+                    :style="
+                      item.konfirmasi_rencana === 1
+                        ? { color: 'blue' }
+                        : { color: 'red' }
+                    "
+                  ></i>
+                  {{ item.produk.nama }}
+                </td>
+                <td>{{ item.jumlah }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header text-center">Komentar</div>
+        <div
+          class="card-body"
+          :style="{ height: this.calendarHeight / 3 + 'px' }"
+        >
+          <ul>
+            <li>comment 1</li>
+            <li>comment 2</li>
+            <li>comment 3</li>
+            <li>comment 4</li>
+            <li>comment 5</li>
+            <li>comment 6</li>
+            <li>comment 7</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -416,3 +494,6 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+</style>

@@ -14,7 +14,7 @@
 
 @section('content')
 <div id="app">
-    <calendar auth="{{ Auth::user() }}" />
+    <app user="{{ Auth::user() }}" status={{ $status }} />
 </div>
 @stop
 

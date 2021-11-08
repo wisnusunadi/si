@@ -14,7 +14,7 @@ export default {
       ajax: "/api/ppic/get-gbj-datatable",
       processing: true,
       serverSide: true,
-      searching: false,
+      pageLength: 8,
       lengthChange: false,
       ordering: false,
       info: false,
@@ -28,7 +28,15 @@ export default {
           data: "produk.nama",
         },
         {
-          data: "stok",
+          data: function (row, type, set, meta) {
+            let color;
+            let stok = Number(row.stok);
+            if (stok <= 20 && stok >= 10) color = "yellow";
+            else if (stok <= 9 && stok >= 5) color = "orange";
+            else if (stok <= 4 && stok >= 1) color = "red";
+            else color = "blue";
+            return `<span style="color: ${color};">${row.stok}</span>`;
+          },
         },
         {
           data: function () {
@@ -53,10 +61,7 @@ export default {
   <div>
     <div class="card">
       <div class="card-body">
-        <table
-          id="table"
-          class="table table-hover styled-table table-striped text-center"
-        >
+        <table id="table" class="table table-hover styled-table text-center">
           <thead>
             <tr>
               <th>No</th>

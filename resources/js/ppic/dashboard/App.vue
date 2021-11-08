@@ -1,53 +1,77 @@
 <template>
-  <div id="wrapper">
-    <div class="content-area">
-      <div class="container-fluid">
-        <div class="main">
-          <div class="row sparkboxes mt-4 mb-4">
-            <div class="col-md-4">
-              <div class="box box1">
-                <div id="spark1"></div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="box box2">
-                <div id="spark2"></div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="box box3">
-                <div id="spark3"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mt-5 mb-4">
-            <div class="col-md-6">
-              <div class="box">
-                <div id="bar"></div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="box">
-                <div id="donut"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mt-4 mb-4">
-            <div class="col-md-6">
-              <div class="box">
-                <div id="area"></div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="box">
-                <div id="line"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div>
+    <div class="card p-3">
+      <apexcharts
+        width="100%"
+        height="350"
+        type="bar"
+        :options="chartOptions"
+        :series="series"
+      ></apexcharts>
     </div>
+    <div class="card"></div>
   </div>
 </template>
+
+<script>
+import VueApexCharts from "vue-apexcharts";
+
+export default {
+  name: "Chart",
+  components: {
+    apexcharts: VueApexCharts,
+  },
+  data: function () {
+    return {
+      chartOptions: {
+        subtitle: {
+          text: "Data Perakitan",
+          align: "center",
+          margin: 10,
+          offsetX: 0,
+          offsetY: 0,
+          floating: false,
+          style: {
+            fontSize: "12px",
+            fontWeight: "normal",
+            fontFamily: undefined,
+            color: "#9699a2",
+          },
+        },
+        chart: {
+          id: "basic-bar",
+          animations: {
+            speed: 200,
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        plotOptions: {
+          bar: {
+            distributed: true,
+          },
+        },
+        xaxis: {
+          categories: ["rencana", "pelaksanaan", "selesai"],
+        },
+      },
+      series: [
+        {
+          name: "data",
+          data: [30, 40, 45],
+        },
+      ],
+    };
+  },
+  methods: {
+    updateTheme(e) {
+      this.chartOptions = {
+        theme: {
+          palette: e.target.value,
+        },
+      };
+    },
+  },
+};
+</script>

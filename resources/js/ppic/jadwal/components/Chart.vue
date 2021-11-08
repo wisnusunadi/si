@@ -1,5 +1,11 @@
 <script>
+import VueApexCharts from "vue-apexcharts";
+
 export default {
+  components: {
+    apexchart: VueApexCharts,
+  },
+
   computed: {
     series: function () {
       return [

@@ -1,4 +1,6 @@
 <script>
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+
 export default {
   data: function () {
     return {
@@ -19,6 +21,10 @@ export default {
       }
       return false;
     },
+  },
+
+  mounted: function () {
+    $("#perakitan-table").DataTable({});
   },
 };
 </script>
@@ -77,7 +83,11 @@ export default {
     <div class="card">
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-hover text-center" width="100%">
+          <table
+            id="perakitan-table"
+            class="table table-hover text-center"
+            width="100%"
+          >
             <thead style="text-align: center; font-size: 15px">
               <tr align="center">
                 <th rowspan="2">No</th>

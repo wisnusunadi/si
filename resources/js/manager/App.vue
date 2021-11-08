@@ -7,32 +7,39 @@ export default {
     return {
       jadwal_rencana: [],
       jadwal_pelaksanaan: [],
-      checked_jadwal_rencana: [],
+
+      acc_checked_jadwal_rencana: [],
+      all_acc_rencana: false,
+      reject_checked_jadwal_rencana: [],
+      all_reject_rencana: false,
+
       checked_jadwal_pelaksanaan: [],
       view: "rencana",
       param_setuju: false,
       param_rencana: false,
+
+      picked: null,
     };
   },
 
   mounted: function () {
-    console.log("test");
     axios({
       method: "get",
       url: "/api/ppic/schedule/penyusunan",
       params: {
-        proses_konfirmasi: 1,
+        state: "persetujuan",
+        konfirmasi: 0,
       },
     }).then((response) => {
       this.jadwal_rencana = response.data;
-      console.log(this.jadwal);
     });
 
     axios({
       method: "get",
       url: "/api/ppic/schedule/pelaksanaan",
       params: {
-        proses_konfirmasi: 1,
+        state: "perubahan",
+        konfirmasi: 0,
       },
     }).then((response) => {
       this.jadwal_pelaksanaan = response.data;
@@ -83,6 +90,40 @@ export default {
     changeView: function (view) {
       this.view = view;
     },
+
+    selectAllSetuju: function () {
+      this.reject_checked_jadwal_rencana = [];
+      this.acc_checked_jadwal_rencana = [];
+      if (!this.all_acc_rencana) {
+        for (let i = 0; i < this.jadwal_rencana.length; i++) {
+          this.acc_checked_jadwal_rencana.push(this.jadwal_rencana[i]);
+        }
+      }
+    },
+
+    selectAllTolak: function () {
+      this.reject_checked_jadwal_rencana = [];
+      this.acc_checked_jadwal_rencana = [];
+      if (!this.all_reject_rencana) {
+        for (let i = 0; i < this.jadwal_rencana.length; i++) {
+          this.reject_checked_jadwal_rencana.push(this.jadwal_rencana[i]);
+        }
+      }
+    },
+
+    accCheckbox: function (event) {
+      console.log(event);
+      this.reject_checked_jadwal_rencana =
+        this.reject_checked_jadwal_rencana.filter(
+          (item) => item !== event.target._value
+        );
+    },
+
+    rejectCheckbox: function (event) {
+      this.acc_checked_jadwal_rencana = this.acc_checked_jadwal_rencana.filter(
+        (item) => item !== event.target._value
+      );
+    },
   },
 };
 </script>
@@ -111,45 +152,76 @@ export default {
           <div :class="['tab-pane fade', { 'show active': isRencana() }]">
             <table
               id="table"
-              class="table table-hover styled-table table-striped"
+              class="table table-hover styled-table text-center"
             >
               <thead>
                 <tr>
-                  <th>Produk</th>
-                  <th>Jumlah</th>
-                  <th>Tanggal Mulai</th>
-                  <th>Tanggal Selesai</th>
+                  <th rowspan="2">Produk</th>
+                  <th rowspan="2">Jumlah</th>
+                  <th rowspan="2">Tanggal Mulai</th>
+                  <th rowspan="2">Tanggal Selesai</th>
+                  <th colspan="2">Aksi</th>
+                </tr>
+                <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      v-model="all_acc_rencana"
+                      @click="selectAllSetuju"
+                    />
+                    Setuju
+                  </th>
+                  <th>
+                    <input
+                      type="checkbox"
+                      v-model="all_reject_rencana"
+                      @click="selectAllTolak"
+                    />
+                    Tolak
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="data in jadwal_rencana" :key="data.id">
+                  <td>{{ data.produk.nama }}</td>
+                  <td>{{ data.jumlah }}</td>
+                  <td>{{ data.tanggal_mulai }}</td>
+                  <td>{{ data.tanggal_selesai }}</td>
                   <td>
                     <input
                       type="checkbox"
                       :value="data"
-                      v-model="checked_jadwal_rencana"
-                      :id="'data-' + data.id"
+                      v-model="acc_checked_jadwal_rencana"
+                      :id="'acc-data-' + data.id"
+                      @click="accCheckbox"
                     />
-                    <label :for="'data-' + data.id">{{
-                      data.produk.nama
-                    }}</label>
                   </td>
-                  <td>{{ data.jumlah }}</td>
-                  <td>{{ data.tanggal_mulai }}</td>
-                  <td>{{ data.tanggal_selesai }}</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      :value="data"
+                      v-model="reject_checked_jadwal_rencana"
+                      :id="'reject-data-' + data.id"
+                      @click="rejectCheckbox"
+                    />
+                  </td>
                 </tr>
               </tbody>
             </table>
             <div
-              v-if="checked_jadwal_rencana.length > 0"
+              v-if="
+                acc_checked_jadwal_rencana.length +
+                  reject_checked_jadwal_rencana.length ===
+                jadwal_rencana.length
+              "
               class="btn-group btn-block"
             >
               <button class="btn btn-success" @click="clickSetujuRencana">
-                Setuju
+                Kirim
               </button>
-              <button class="btn btn-danger" @click="clickTolakRencana">
+              <!-- <button class="btn btn-danger" @click="clickTolakRencana">
                 Tolak
-              </button>
+              </button> -->
             </div>
           </div>
           <div :class="['tab-pane fade', { 'show active': isPerubahan() }]">
@@ -167,17 +239,7 @@ export default {
               </thead>
               <tbody>
                 <tr v-for="data in jadwal_pelaksanaan" :key="data.id">
-                  <td>
-                    <input
-                      type="checkbox"
-                      :value="data"
-                      v-model="checked_jadwal_pelaksanaan"
-                      :id="'data-' + data.id"
-                    />
-                    <label :for="'data-' + data.id">{{
-                      data.produk.nama
-                    }}</label>
-                  </td>
+                  <td>{{ data.produk.nama }}</td>
                   <td>{{ data.jumlah }}</td>
                   <td>{{ data.tanggal_mulai }}</td>
                   <td>{{ data.tanggal_selesai }}</td>
@@ -185,7 +247,7 @@ export default {
               </tbody>
             </table>
             <div
-              v-if="checked_jadwal_pelaksanaan.length > 0"
+              v-if="jadwal_pelaksanaan.length > 0"
               class="btn-group btn-block"
             >
               <button class="btn btn-success" @click="clickSetujuRencana">
@@ -204,17 +266,16 @@ export default {
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Detail</h5>
+            <h4>Komentar</h4>
             <button type="button" class="close" data-dismiss="modal">
               <span>&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <div v-if="!param_setuju" class="form-group">
-              <label for="message-text" class="col-form-label">Komentar:</label>
+            <div class="form-group">
               <textarea class="form-control" id="message-text"></textarea>
             </div>
-            <table class="table table-hover text-center">
+            <!-- <table class="table table-hover text-center">
               <thead>
                 <tr>
                   <th>Produk</th>
@@ -233,7 +294,7 @@ export default {
                   <td>{{ data.jumlah }}</td>
                 </tr>
               </tbody>
-            </table>
+            </table> -->
           </div>
           <div class="modal-footer d-flex justify-content-between">
             <button class="btn btn-primary" @click="handleButtonYes">
