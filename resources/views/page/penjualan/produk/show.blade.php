@@ -147,7 +147,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog" aria-labelledby="modaldetail" aria-hidden="true">
+            <div class="modal fade" id="modaldetail" role="dialog" aria-labelledby="modaldetail" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-success">
@@ -228,7 +228,6 @@
             serverSide: true,
             ajax: {
                 'url': '/api/penjualan_produk/data/' + 0,
-
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -300,8 +299,6 @@
             $('#modaldetail').modal('show');
         });
 
-
-
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
 
@@ -318,6 +315,10 @@
                     $('#edit').html(result).show();
                     console.log(result);
                     $("#editform").attr("action", href);
+                    var x = 3;
+                    for (i = 0; i < 10; i++) {
+                        select_data(i);
+                    }
 
                 },
                 complete: function() {
@@ -340,6 +341,8 @@
                 $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
                 $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                 $(el).find('.produk_id').attr('id', j);
+                $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
+                select_data(j);
             });
         }
 
@@ -348,11 +351,11 @@
             <td></td>
             <td>
                 <div class="form-group">
-                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0">
+                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0" style="width:100%" >
                     </select>
                 </div>
             </td>
-            <td><span class="badge" id="kelompok_produk"></span></td>
+            <td><span class="badge kelompok_produk" id="kelompok_produk0"></span></td>
             <td>
                 <div class="form-group d-flex justify-content-center">
                     <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
@@ -390,9 +393,8 @@
             }
         });
 
-        function select_data() {
-            $('.produk_id').select2({
-                dropdownParent: $("#editmodal"),
+        function select_data(x) {
+            $('#' + x).select2({
                 ajax: {
                     minimumResultsForSearch: 20,
                     placeholder: "Pilih Produk",
@@ -407,7 +409,7 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -418,7 +420,21 @@
                         };
                     },
                 }
-            })
+            }).change(function() {
+                var value = $(this).val();
+                var index = $(this).attr('id');
+                console.log(index);
+                // var id = $(#produk_id).val();
+                $.ajax({
+                    url: '/api/produk/select/' + value,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
+                    }
+                });
+            });
         }
         $(document).on('keyup change', '#nama_paket', function() {
             if ($(this).val() != "") {
@@ -436,7 +452,6 @@
                 $('#btnsimpan').addClass('disabled');
             }
         });
-
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {
@@ -451,7 +466,6 @@
             console.log(x);
             $('#showtable').DataTable().ajax.url(' /api/penjualan_produk/data/' + x).load();
             return false;
-
         });
     });
 </script>

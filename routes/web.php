@@ -86,9 +86,10 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
         Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
         Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
-        Route::view('/detail/spa/{id}', 'page.penjualan.penjualan.detail_spa')->name('penjualan.penjualan.detail.spa');
+        Route::get('/detail/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa'])->name('penjualan.penjualan.detail.spa');
         Route::view('/detail/spb/{id}', 'page.penjualan.penjualan.detail_spb')->name('penjualan.penjualan.detail.spb');
-        Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan'])->name('penjualan.penjualan.edit');
+        Route::get('/edit_ekatalog/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan'])->name('penjualan.penjualan.edit_ekatalog');
+        Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
     });
 
     Route::group(['prefix' => '/so'], function () {
@@ -116,8 +117,49 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         Route::view('/detail/{id}', 'page.qc.so.detail')->name('qc.so.detail');
         Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
         Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
+        Route::group(['prefix' => '/riwayat'], function () {
+            Route::view('/show', 'page.qc.so.riwayat.show')->name('qc.so.riwayat.show');
+        });
+        Route::group(['prefix' => '/laporan'], function () {
+            Route::view('/show', 'page.qc.laporan.show')->name('qc.so.laporan.show');
+        });
     });
 });
+
+
+Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.logistik.dashboard')->name('logistik.dashboard');
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
+        Route::view('/detail/{id}', 'page.logistik.so.detail')->name('logistik.so.detail');
+        Route::view('/create', 'page.logistik.so.create')->name('logistik.so.create');
+        Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
+        Route::group(['prefix' => '/riwayat'], function () {
+            Route::view('/show', 'page.logistik.so.riwayat.show')->name('logistik.so.riwayat.show');
+        });
+        Route::group(['prefix' => '/laporan'], function () {
+            Route::view('/show', 'page.logistik.laporan.show')->name('logistik.so.laporan.show');
+        });
+    });
+
+    Route::group(['prefix' => '/ekspedisi'], function () {
+        Route::view('/show', 'page.logistik.ekspedisi.show')->name('logistik.ekspedisi.show');
+        Route::view('/detail/{id}', 'page.logistik.ekspedisi.detail')->name('logistik.ekspedisi.detail');
+        Route::view('/create', 'page.logistik.ekspedisi.create')->name('logistik.ekspedisi.create');
+        Route::view('/edit/{id}', 'page.logistik.ekspedisi.edit')->name('logistik.ekspedisi.edit');
+    });
+
+    Route::group(['prefix' => '/pengiriman'], function () {
+        Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
+        Route::view('/detail/{id}', 'page.logistik.pengiriman.detail')->name('logistik.pengiriman.detail');
+        Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
+        Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
+        Route::get('/print', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
+    });
+});
+
+
 Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 
 Route::get('/test/{name?}', function ($name = null) {

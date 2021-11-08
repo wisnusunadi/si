@@ -9,16 +9,16 @@
                                 <span style="font-size: 24px"><b>SPB</b></span>
                             </li>
                             <li class="list-group-item">
-                                <a>Tanggal Pemesanan</a>
-                                <b class="float-right" id="tanggal_pemesanan"></b>
-                            </li>
-                            <li class="list-group-item">
                                 <a>Nama Customer</a>
                                 <b class="float-right" id="nama_customer"></b>
                             </li>
                             <li class="list-group-item">
                                 <a>No PO</a>
                                 <b class="float-right" id="no_po"></b>
+                            </li>
+                            <li class="list-group-item">
+                                <a>Tanggal PO</a>
+                                <b class="float-right" id="tanggal_pemesanan"></b>
                             </li>
                             <li class="list-group-item">
                                 <a>Status</a>

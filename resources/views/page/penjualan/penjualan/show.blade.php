@@ -246,7 +246,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'ekatalog'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'ekatalog'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit
@@ -280,7 +280,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spb'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'spb'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit
@@ -313,7 +313,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('penjualan.penjualan.edit', ['id' => 1, 'jenis' => 'spa'])}}">
+                                                        <a href="{{route('penjualan.penjualan.edit_ekatalog', ['id' => 1, 'jenis' => 'spa'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                                 Edit
@@ -565,7 +565,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" id="spatable">
+                                    <table class="table table-hover" id="spatable" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -785,95 +785,128 @@
 
 @section('adminlte_js')
 <script>
-    // $(function() {
-    //     var penjualantable = $('#penjualantable').DataTable({})
-    //     var ekatalogtable = $('#ekatalogtable').DataTable({
-    //         processing: true,
-    //         serverSide: true,
-    //         ajax: {
-    //             'url': '/api/ekatalog/data',
-    //             'type': 'POST',
-    //             'headers': {
-    //                 'X-CSRF-TOKEN': '{{csrf_token()}}'
-    //             }
+    $(function() {
+        //   var penjualantable = $('#penjualantable').DataTable({})
+        var ekatalogtable = $('#ekatalogtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/ekatalog/data/' + 0,
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'no_paket',
 
-    //         },
-    //         language: {
-    //             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-    //         },
-    //         columns: [{
-    //                 data: 'DT_RowIndex',
-    //                 className: 'nowrap-text align-center',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
-    //             {
-    //                 data: 'DT_RowIndex',
-    //                 className: 'nowrap-text align-center',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
-    //             {
-    //                 data: 'no_paket',
-
-    //             },
-    //             {
-    //                 data: 'nopo',
-    //                 className: 'nowrap-text align-center',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
+                },
+                {
+                    data: 'nopo',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
 
 
-    //             {
-    //                 data: 'tgl_buat',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
-    //             {
-    //                 data: 'tgl_kontrak',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
-    //             {
-    //                 data: 'nama_customer',
-    //             },
+                {
+                    data: 'tgl_buat',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_kontrak',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nama_customer',
+                },
 
-    //             {
-    //                 data: 'status',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
-    //             {
-    //                 data: 'button',
-    //                 orderable: false,
-    //                 searchable: false
-    //             },
-    //         ]
-    //     })
-    //     var spatable = $('#spatable').DataTable({})
-    //     var spbtable = $('#spbtable').DataTable({})
+                {
+                    data: 'status',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                },
+            ]
+        });
+        var spatable = $('#spatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/spa/data/',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so'
+                },
+                {
+                    data: 'nopo'
+                },
+                {
+                    data: 'tglpo'
+                },
+                {
+                    data: 'tglpo'
+                },
+                {
+                    data: 'nama_customer'
+                },
+                {
+                    data: 'DT_RowIndex'
+                },
+                {
+                    data: 'button'
+                }
+            ]
+        })
+        //   var spbtable = $('#spbtable').DataTable({})
 
 
-    //     $('#filter_ekat').submit(function() {
-    //         var values = [];
-    //         $("input:checked").each(function() {
-    //             values.push($(this).val());
-    //         });
-    //         $('#ekatalogtable').DataTable().ajax.url('/api/ekatalog/data/' + values).load();
-    //         console.log(values);
-    //         return false;
-    //     });
 
-    // })
+
+    })
 </script>
 
 <script>
     $(function() {
         $(document).on('click', '.detailmodal', function(event) {
+
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data("id");
+            var label = $(this).data("target");
+
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -883,7 +916,13 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    detailtabel(id);
+                    if (label == 'ekatalog') {
+                        detailtabel_ekatalog(id);
+                    } else if (label == 'spa') {
+                        detailtabel_spa(id);
+                        //console.log(id);
+                    }
+
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -897,83 +936,177 @@
             })
         });
 
-        // function detailtabel(id) {
-        //     $('#detailtabel').DataTable({
-        //         processing: true,
-        //         serverSide: true,
-        //         ajax: {
-        //             'url': '/api/ekatalog/paket/detail/' + id,
-        //         },
-        //         language: {
-        //             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-        //         },
-        //         columns: [{
-        //                 data: 'DT_RowIndex',
-        //                 className: 'nowrap-text align-center',
-        //                 orderable: false,
-        //                 searchable: false
-        //             },
-        //             {
-        //                 data: 'nama_produk',
+        function detailtabel_ekatalog(id) {
+            $('#detailtabel').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/ekatalog/paket/detail/' + id,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
 
-        //             },
-        //             {
-        //                 data: 'harga',
-        //                 render: $.fn.dataTable.render.number(',', '.', 2),
-        //                 orderable: false,
-        //                 searchable: false
-        //             },
-        //             {
-        //                 data: 'jumlah',
-        //                 className: 'nowrap-text align-center',
-        //                 orderable: false,
-        //                 searchable: false
-        //             },
-        //             {
-        //                 data: 'total',
-        //                 render: $.fn.dataTable.render.number(',', '.', 2),
-        //                 orderable: false,
-        //                 searchable: false
-        //             },
-        //             {
-        //                 data: 'button',
-        //                 className: 'nowrap-text align-center',
-        //                 orderable: false,
-        //                 searchable: false
-        //             },
-        //         ],
-        //         footerCallback: function(row, data, start, end, display) {
-        //             var api = this.api(),
-        //                 data;
-        //             // converting to interger to find total
-        //             var intVal = function(i) {
-        //                 return typeof i === 'string' ?
-        //                     i.replace(/[\$,]/g, '') * 1 :
-        //                     typeof i === 'number' ?
-        //                     i : 0;
-        //             };
-        //             // computing column Total of the complete result 
-        //             var jumlah_pesanan = api
-        //                 .column(3)
-        //                 .data()
-        //                 .reduce(function(a, b) {
-        //                     return intVal(a) + intVal(b);
-        //                 }, 0);
-        //             // computing column Total of the complete result 
-        //             var total_pesanan = api
-        //                 .column(4)
-        //                 .data()
-        //                 .reduce(function(a, b) {
-        //                     return intVal(a) + intVal(b);
-        //                 }, 0);
+                    },
+                    {
+                        data: 'harga',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'jumlah',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'total',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api(),
+                        data;
+                    // converting to interger to find total
+                    var intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+                    // computing column Total of the complete result 
+                    var jumlah_pesanan = api
+                        .column(3)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    // computing column Total of the complete result 
+                    var total_pesanan = api
+                        .column(4)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-        //             var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
-        //             $(api.column(0).footer()).html('Total');
-        //             $(api.column(3).footer()).html('Total');
-        //             $(api.column(4).footer()).html(num_for(total_pesanan));
-        //         },
-        //     })
-        // }
-    });
+                    var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                    $(api.column(0).footer()).html('Total');
+                    $(api.column(3).footer()).html('Total');
+                    $(api.column(4).footer()).html(num_for(total_pesanan));
+                },
+            })
+        }
+
+        function detailtabel_spa(id) {
+            $('#detailtabel_spa').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/spa/paket/detail/' + id,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
+                    },
+                    {
+                        data: 'harga',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'jumlah',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'total',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api(),
+                        data;
+                    // converting to interger to find total
+                    var intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+                    // computing column Total of the complete result 
+                    var jumlah_pesanan = api
+                        .column(3)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    // computing column Total of the complete result 
+                    var total_pesanan = api
+                        .column(4)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                    $(api.column(0).footer()).html('Total');
+                    $(api.column(3).footer()).html('Total');
+                    $(api.column(4).footer()).html(num_for(total_pesanan));
+                },
+            })
+        }
+
+        $('#filter_ekat').submit(function() {
+            var values = [];
+            $("input:checked").each(function() {
+                values.push($(this).val());
+            });
+            if (values != 0) {
+                var x = values;
+
+            } else {
+                var x = ['kosong']
+            }
+
+            console.log(x);
+            $('#ekatalogtable').DataTable().ajax.url('/api/ekatalog/data/' + x).load();
+            return false;
+
+        });
+    })
 </script>
 @stop

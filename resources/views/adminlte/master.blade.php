@@ -78,6 +78,7 @@
   
     {{-- Custom Scripts --}}
     @yield('master_js')
+
 </body>
 
 </html>

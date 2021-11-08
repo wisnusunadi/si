@@ -233,6 +233,12 @@ return [
             'icon'        => 'nav-icon fa fa-home',
             'auth'        => [24]
         ],
+        [
+            'text'        => 'Beranda',
+            'url'         => '/qc/dashboard',
+            'icon'        => 'nav-icon fa fa-home',
+            'auth'        => [23]
+        ],
         // PPIC (24)
         [
             'header' => 'Data',
@@ -981,10 +987,23 @@ return [
         ],
         [
             'text' => 'Sales Order',
-            'icon' => 'fas fa-circle',
+            'icon' => 'far fa-circle',
             'url' => '/qc/so/show',
             'auth' => [23],
         ],
+        [
+            'text' => 'Riwayat Pengujian',
+            'icon' => 'far fa-circle',
+            'url' => '/qc/so/riwayat/show',
+            'auth' => [23],
+        ],
+        [
+            'text' => 'Laporan',
+            'icon' => 'far fa-circle',
+            'url' => '/qc/so/laporan/show',
+            'auth' => [23],
+        ],
+
         [
             'text'    => 'Permintaan',
             'icon'    => 'fas fa-box-open',
@@ -1078,6 +1097,47 @@ return [
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
+
+        //LOGISTIK
+        [
+            'text' => 'Beranda',
+            'icon' => 'fas fa-home',
+            'url' => '/logistik/dashboard',
+            'auth' => [15],
+        ],
+        [
+            'header' => 'DATA',
+            'auth' => [15]
+        ],
+        [
+            'text' => 'Jasa Ekspedisi',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/ekspedisi/show',
+            'auth' => [15],
+        ],
+        [
+            'header' => 'PENJUALAN',
+            'auth' => [15]
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/so/show',
+            'auth' => [15],
+        ],
+        [
+            'text' => 'Pengiriman',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/pengiriman/show',
+            'auth' => [15],
+        ],
+        [
+            'text' => 'Riwayat Pengiriman',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/pengiriman/riwayat/show',
+            'auth' => [15],
+        ],
+
         [
             'text' => 'test',
             'isNavbarRightItem' => true,

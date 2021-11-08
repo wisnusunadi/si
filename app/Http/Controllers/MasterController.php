@@ -17,6 +17,9 @@ use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\Session;
+use Alert;
+
 
 class MasterController extends Controller
 {
@@ -25,9 +28,16 @@ class MasterController extends Controller
     {
         return datatables()->of(Produk::with('KelompokProduk'))->toJson();
     }
-    public function get_data_customer()
+    public function get_data_customer($value)
     {
-        $data = Customer::select();
+        $x = explode(',', $value);
+        if ($value == 0 || $value == 'kosong') {
+            $data = Customer::select();
+        } else {
+            $data = Customer::whereHas('Provinsi', function ($q) use ($x) {
+                $q->whereIN('status', $x);
+            })->get();
+        }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('prov', function ($data) {
@@ -170,7 +180,7 @@ class MasterController extends Controller
         //         'nama.required|unique:customer' => 'Nama Customer harus di isi',
         //     ]
         // );
-        Customer::create([
+        $c = Customer::create([
             'nama' => $request->nama_customer,
             'telp' => $request->telepon,
             'alamat' => $request->alamat,
@@ -179,6 +189,13 @@ class MasterController extends Controller
             'npwp' => $request->npwp,
             'ket' => $request->keterangan,
         ]);
+
+        if ($c) {
+            // Alert::success('Berhasil', 'Berhasil menambahkan data');
+            return redirect()->back()->with('success', 'success');
+        } else {
+            return redirect()->back()->with('error', 'error');
+        }
     }
     public function create_penjualan_produk(Request $request)
     {
@@ -203,6 +220,26 @@ class MasterController extends Controller
             'nama' => $request->nama_paket,
             'harga' => $harga_convert
         ]);
+        if ($PenjualanProduk) {
+            $bool = true;
+            for ($i = 0; $i < count($request->produk_id); $i++) {
+                $j = $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
+                if (!$j) {
+                    $bool = false;
+                }
+            }
+            if ($bool == true) {
+                // Alert::success('Berhasil', 'Berhasil menambahkan data');
+                return redirect()->back()->with('success', 'success');
+            } else if ($bool == false) {
+                return redirect()->back()->with('error', 'error');
+                // Alert::error('Gagal', 'Gagal menambahkan data');
+            }
+        } else {
+            return redirect()->back()->with('error', 'error');
+            // Alert::error('Gagal', 'Gagal menambahkan data');
+        }
+
 
         // for ($i = 0; $i < count($request->produk_id); $i++) {
         //     DetailPenjualanProduk::create([
@@ -273,6 +310,22 @@ class MasterController extends Controller
     {
         // $produk = DetailPenjualanProduk::findOrFail($id);
         // $produk->delete();
+    }
+
+    public function update_penjualan_produk(Request $request, $id)
+    {
+
+        $harga_convert =  str_replace(',', "", $request->harga);
+        $PenjualanProduk = PenjualanProduk::find($id);
+        $PenjualanProduk->nama = $request->nama_paket;
+        $PenjualanProduk->harga = $harga_convert;
+        $PenjualanProduk->save();
+
+        $produk_array = [];
+        for ($i = 0; $i < count($request->produk_id); $i++) {
+            $produk_array[$request->produk_id[$i]] = ['jumlah' => $request->jumlah[$i]];
+        }
+        $PenjualanProduk->produk()->sync($produk_array);
     }
     //Other
 
