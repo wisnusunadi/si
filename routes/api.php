@@ -41,6 +41,9 @@ Route::prefix('/ppic')->group(function () {
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
 });
+Route::prefix('/kota_kabupaten')->group(function () {
+    Route::get('select', [App\Http\Controllers\ProvincesController::class, 'kota_kabupaten']);
+});
 Route::prefix('/customer')->group(function () {
     Route::get('data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
     Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_pesanan']);

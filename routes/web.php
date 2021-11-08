@@ -139,6 +139,14 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::view('/create', 'page.logistik.ekspedisi.create')->name('logistik.ekspedisi.create');
         Route::view('/edit/{id}', 'page.logistik.ekspedisi.edit')->name('logistik.ekspedisi.edit');
     });
+
+    Route::group(['prefix' => '/pengiriman'], function () {
+        Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
+        Route::view('/detail/{id}', 'page.logistik.pengiriman.detail')->name('logistik.pengiriman.detail');
+        Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
+        Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
+        Route::get('/print', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
+    });
 });
 
 

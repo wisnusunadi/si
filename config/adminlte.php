@@ -1081,9 +1081,15 @@ return [
             'auth' => [15],
         ],
         [
+            'text' => 'Pengiriman',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/pengiriman/show',
+            'auth' => [15],
+        ],
+        [
             'text' => 'Riwayat Pengiriman',
             'icon' => 'far fa-circle',
-            'url' => '/logistik/so/riwayat/show',
+            'url' => '/logistik/pengiriman/riwayat/show',
             'auth' => [15],
         ],
 

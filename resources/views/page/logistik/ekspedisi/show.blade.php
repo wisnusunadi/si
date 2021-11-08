@@ -34,6 +34,10 @@
     .dropdown-toggle:active {
         color: #C0C0C0;
     }
+
+    .hide {
+        display: none !important;
+    }
 </style>
 @stop
 
@@ -105,7 +109,7 @@
                                                 <th>Alamat</th>
                                                 <th>Email</th>
                                                 <th>Telp</th>
-                                                <th>Via</th>
+                                                <th>Jalur</th>
                                                 <th>Jurusan</th>
                                                 <th>Keterangan</th>
                                                 <th>Aksi</th>
@@ -338,9 +342,8 @@
                     $('#edit').html(result).show();
                     console.log(id);
                     // $("#editform").attr("action", href);
-
-                    select_data();
-
+                    provinsi();
+                    kota_kabupaten();
 
                 },
                 complete: function() {
@@ -363,7 +366,7 @@
             } else if ($(this).val() != "") {
                 $("#msgnama_ekspedisi").val("");
                 $('#nama_ekspedisi').removeClass('is-invalid');
-                if ($('#telepon').val() != "" && $('#alamat').val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                if ($('#telepon').val() != "" && $('#alamat').val() != "" && $('input[type="radio"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                     $("#btnsimpan").removeAttr("disabled");
                 } else {
                     $("#btnsimpan").attr("disabled", true);
@@ -385,7 +388,7 @@
                     $("#msgtelepon").text("");
                     $("#telepon").removeClass('is-invalid');
                     $("#btnsimpan").removeAttr('disabled');
-                    if ($("#nama_ekspedisi").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                    if ($("#nama_ekspedisi").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                         $("#btnsimpan").removeAttr('disabled');
                     } else {
                         $("#btnsimpan").attr('disabled', true);
@@ -398,7 +401,7 @@
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="radio"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                     $("#btnsimpan").removeAttr('disabled');
                 } else {
                     $("#btnsimpan").attr('disabled', true);
@@ -410,35 +413,47 @@
             }
         });
 
-        $(document).on('keyup change', '#jurusan', function() {
+        $(document).on('change', 'input[type="radio"][name="jurusan"]', function() {
+            $(".provinsi").val(null).trigger('change');
+            $(".kota_kabupaten").val(null).trigger('change');
             if ($(this).val() != "") {
+                if ($(this).val() == "provinsi") {
+                    $('#provinsi_select').removeClass('hide');
+                    $('#kota_kabupaten_select').addClass('hide');
+                } else if ($(this).val() == "kota_kabupaten") {
+                    $('#provinsi_select').addClass('hide');
+                    $('#kota_kabupaten_select').removeClass('hide');
+                } else if ($(this).val() == "indonesia") {
+                    $('#provinsi_select').addClass('hide');
+                    $('#kota_kabupaten_select').addClass('hide');
+                }
                 $('#msgjurusan').text("");
                 $('#jurusan').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#alamat').val() != "") {
-                    $("#btnsimpan").removeAttr('disabled');
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#alamat').val() != "") {
+                    $("#btntambah").removeAttr('disabled');
                 } else {
-                    $("#btnsimpan").attr('disabled', true);
+                    $("#btntambah").attr('disabled', true);
                 }
             } else {
                 $('#msgjurusan').text("jurusan tidak boleh kosong");
                 $('#jurusan').addClass("is-invalid");
-                $("#btnsimpan").attr('disabled', true);
+                $("#btntambah").attr('disabled', true);
             }
         });
 
-        $(document).on('keyup change', 'input[type="radio"][name="via"]', function() {
-            if ($(this).val() != "") {
-                $('#msgvia').text("");
-                $('input[type="radio"][name="via"]').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#alamat').val() != "") {
-                    $("#btnsimpan").removeAttr('disabled');
+        $(document).on('keyup change', 'input[type="checkbox"][name="jalur"]', function() {
+            if ($('input[type="checkbox"][name="jalur"]').val() != "") {
+                $('#msgjalur').text("");
+                $('input[type="checkbox"][name="jalur"]').removeClass("is-invalid");
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('#jurusan').val() != "" && $('#alamat').val() != "") {
+                    $("#btntambah").removeAttr('disabled');
                 } else {
-                    $("#btnsimpan").attr('disabled', true);
+                    $("#btntambah").attr('disabled', true);
                 }
             } else {
-                $('#msgvia').text("Via tidak boleh kosong");
-                $('#via').addClass("is-invalid");
-                $("#btnsimpan").attr('disabled', true);
+                $('#msgjalur').text("Jalur tidak boleh kosong");
+                $('#jalur').addClass("is-invalid");
+                $("#btntambah").attr('disabled', true);
             }
         });
 
@@ -453,23 +468,24 @@
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                    if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                         $("#btnsimpan").removeAttr('disabled');
                     }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                     $("#btnsimpan").removeAttr('disabled');
                 }
             }
         })
 
-        function select_data() {
+        function provinsi() {
             $('.provinsi').select2({
                 ajax: {
                     minimumResultsForSearch: 20,
+                    placeholder: "Pilih ",
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -492,7 +508,43 @@
                         };
                     },
                 }
-            })
+            });
+        }
+
+        function kota_kabupaten() {
+            $('.kota_kabupaten').select2({
+                ajax: {
+                    multiple: true,
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Kota Kabupaten",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/kota_kabupaten/select',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    text: obj.text,
+                                    children: $.map(obj.children, function(objs) {
+                                        return {
+                                            id: objs.id,
+                                            text: objs.text
+                                        }
+                                    })
+                                };
+                            })
+                        };
+                    },
+                }
+            });
         }
 
         $('#filter').submit(function() {

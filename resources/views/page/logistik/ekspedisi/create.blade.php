@@ -8,7 +8,9 @@
 
 @section('adminlte_css')
 <style>
-
+    .hide {
+        display: none !important;
+    }
 </style>
 @stop
 
@@ -89,43 +91,78 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="" class="col-form-label col-4" style="text-align: right">Via</label>
+                                            <label for="" class="col-form-label col-4" style="text-align: right">Jalur</label>
                                             <div class="col-5 col-form-label">
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="via" id="via4" value="lain" />
-                                                    <label class="form-check-label" for="via4">Lain</label>
+                                                    <input class="form-check-input jalur" type="checkbox" id="jalur1" value="darat" name="jalur">
+                                                    <label class="form-check-label" for="jalur1">Darat</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="via" id="via1" value="darat" />
-                                                    <label class="form-check-label" for="via1">Darat</label>
+                                                    <input class="form-check-input jalur" type="checkbox" id="jalur2" value="laut" name="jalur">
+                                                    <label class="form-check-label" for="jalur2">Laut</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="via" id="via2" value="laut" />
-                                                    <label class="form-check-label" for="via2">Laut</label>
+                                                    <input class="form-check-input jalur" type="checkbox" id="jalur3" value="udara" name="jalur">
+                                                    <label class="form-check-label" for="jalur3">Udara</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="via" id="via3" value="" />
-                                                    <label class="form-check-label" for="via3">Udara</label>
+                                                    <input class="form-check-input jalur" type="checkbox" id="jalur4" value="lain" name="jalur">
+                                                    <label class="form-check-label" for="jalur4">Lain</label>
                                                 </div>
-
-                                                <div class="invalid-feedback" id="msgvia">
-                                                    @if($errors->has('via'))
-                                                    {{ $errors->first('via')}}
+                                                <div class="invalid-feedback" id="msgjalur">
+                                                    @if($errors->has('jalur'))
+                                                    {{ $errors->first('jalur')}}
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Jurusan</label>
-                                            <div class="col-5">
-                                                <textarea class="form-control" name="jurusan" id="jurusan"></textarea>
+                                            <label for="" class="col-form-label col-4" style="text-align: right">Jurusan</label>
+                                            <div class="col-8 col-form-label">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan1" value="indonesia" />
+                                                    <label class="form-check-label" for="jurusan1">Seluruh Indonesia</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
+                                                    <label class="form-check-label" for="jurusan2">Per Provinsi</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
+                                                    <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
+                                                </div>
+
                                                 <div class="invalid-feedback" id="msgjurusan">
-                                                    @if($errors->has('jurusan'))
-                                                    {{ $errors->first('jurusan')}}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row hide" id="provinsi_select">
+                                            <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
+                                            <div class="col-8">
+                                                <select class="select-info form-control custom-select provinsi" name="provinsi" id="provinsi" style="width: 100%;">
+                                                </select>
+                                                <div class="invalid-feedback" id="msgprovinsi">
+                                                    @if($errors->has('provinsi'))
+                                                    {{ $errors->first('provinsi')}}
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row hide" id="kota_kabupaten_select">
+                                            <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Kota / Kabupaten</label>
+                                            <div class="col-8">
+                                                <select class="select-info form-control custom-select kota_kabupaten" name="kota_kabupaten" id="kota_kabupaten" style="width: 100%;">
+                                                </select>
+                                                <div class="invalid-feedback" id="msgkota_kabupaten">
+                                                    @if($errors->has('kota_kabupaten'))
+                                                    {{ $errors->first('kota_kabupaten')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group row">
                                             <label for="telepon" class="col-4 col-form-label" style="text-align:right;">Keterangan</label>
                                             <div class="col-5">
@@ -167,6 +204,7 @@
             if ($(this).val() == "") {
                 $("#msgnama_ekspedisi").text("Nama tidak boleh kosong");
                 $('#nama_ekspedisi').addClass('is-invalid');
+                $("#btntambah").attr("disabled", true);
             } else if ($(this).val() != "") {
                 // if (checkCustomer($('#nama_ekspedisi').val()) >= 1) {
                 //     $("#msgnama_customer").text("Nama sudah terpakai");
@@ -179,7 +217,7 @@
                 // }
                 $("#msgnama_customer").val("");
                 $('#nama_ekspedisi').removeClass('is-invalid');
-                if ($('#telepon').val() != "" && $('#alamat').val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                if ($('#telepon').val() != "" && $('#alamat').val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr("disabled");
                 } else {
                     $("#btntambah").attr("disabled", true);
@@ -210,7 +248,7 @@
                     $("#msgtelepon").text("");
                     $("#telepon").removeClass('is-invalid');
                     $("#btntambah").removeAttr('disabled');
-                    if ($("#nama_ekspedisi").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                    if ($("#nama_ekspedisi").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     } else {
                         $("#btntambah").attr('disabled', true);
@@ -223,7 +261,7 @@
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 } else {
                     $("#btntambah").attr('disabled', true);
@@ -245,25 +283,67 @@
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                    if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="radio"][name="via"]').val() != "" && $('#jurusan').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 }
             }
         })
 
+        $('input[type="radio"][name="jurusan"]').on('change', function() {
+            $(".provinsi").val(null).trigger('change');
+            $(".kota_kabupaten").val(null).trigger('change');
+            if ($(this).val() != "") {
+                if ($(this).val() == "provinsi") {
+                    $('#provinsi_select').removeClass('hide');
+                    $('#kota_kabupaten_select').addClass('hide');
+                } else if ($(this).val() == "kota_kabupaten") {
+                    $('#provinsi_select').addClass('hide');
+                    $('#kota_kabupaten_select').removeClass('hide');
+                } else if ($(this).val() == "indonesia") {
+                    $('#provinsi_select').addClass('hide');
+                    $('#kota_kabupaten_select').addClass('hide');
+                }
+                $('#msgjurusan').text("");
+                $('#jurusan').removeClass("is-invalid");
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#alamat').val() != "") {
+                    $("#btntambah").removeAttr('disabled');
+                } else {
+                    $("#btntambah").attr('disabled', true);
+                }
+            } else {
+                $('#msgjurusan').text("jurusan tidak boleh kosong");
+                $('#jurusan').addClass("is-invalid");
+                $("#btntambah").attr('disabled', true);
+            }
+        });
+
+        $('input[type="checkbox"][name="jalur"]').on('keyup change', function() {
+            if ($('input[type="checkbox"][name="jalur"]').val() != "") {
+                $('#msgjalur').text("");
+                $('input[type="checkbox"][name="jalur"]').removeClass("is-invalid");
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('#jurusan').val() != "" && $('#alamat').val() != "") {
+                    $("#btntambah").removeAttr('disabled');
+                } else {
+                    $("#btntambah").attr('disabled', true);
+                }
+            } else {
+                $('#msgjalur').text("Jalur tidak boleh kosong");
+                $('#jalur').addClass("is-invalid");
+                $("#btntambah").attr('disabled', true);
+            }
+        });
+
         $('.provinsi').select2({
             ajax: {
                 minimumResultsForSearch: 20,
-                placeholder: "Pilih Produk",
                 dataType: 'json',
-                theme: "bootstrap",
                 delay: 250,
                 type: 'GET',
                 url: '/api/provinsi/select',
@@ -283,9 +363,40 @@
                         })
                     };
                 },
-            }
-        })
+            },
+        });
 
+
+        $('.kota_kabupaten').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                dataType: 'json',
+                delay: 250,
+                type: 'GET',
+                url: '/api/kota_kabupaten/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                text: obj.text,
+                                children: $.map(obj.children, function(objs) {
+                                    return {
+                                        id: objs.id,
+                                        text: objs.text
+                                    }
+                                })
+                            };
+                        })
+                    };
+                },
+            }
+        });
     })
 </script>
 @stop

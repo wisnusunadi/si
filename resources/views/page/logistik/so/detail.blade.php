@@ -251,7 +251,10 @@
 <script>
     $(function() {
         function ekspedisi_select() {
-            $('.ekspedisi_id').select2();
+            $('.ekspedisi_id').select2({
+                placeholder: "Pilih Ekspedisi",
+                allowClear: true,
+            });
         }
 
         var showtable = $('#showtable').DataTable({});
@@ -312,7 +315,7 @@
             $('#msgnama_pengirim').text("");
             $('#no_polisi').removeClass('is-invalid');
             $('#msgno_polisi').text("");
-            if ($(this).val() != "ekspedisi") {
+            if ($(this).val() == "ekspedisi") {
                 $('#ekspedisi').removeClass('hide');
                 $('#nonekspedisi').addClass('hide');
                 $('#no_polisi').val("");
@@ -324,7 +327,7 @@
                     $('#btnsimpan').attr('disabled', true);
                 }
 
-            } else if ($(this).val() != "nonekspedisi") {
+            } else if ($(this).val() == "nonekspedisi") {
                 $('#ekspedisi').addClass('hide');
                 $('#nonekspedisi').removeClass('hide');
                 $('#no_polisi').val("");

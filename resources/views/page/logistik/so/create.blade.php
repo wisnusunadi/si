@@ -41,7 +41,7 @@
                                             <div class="form-group row">
                                                 <label class="col-form-label col-5 align-right" for="ekspedisi_id">Jasa Pengiriman</label>
                                                 <div class="col-7">
-                                                    <select class="select2 select-info form-control ekspedisi_id" name="ekspedisi_id" id="ekspedisi_id">
+                                                    <select class="select2 select-info form-control ekspedisi_id" name="ekspedisi_id" id="ekspedisi_id" style="width: 100%;">
                                                         <option value=""></option>
                                                     </select>
                                                     <div class="invalid-feedback" id="msgekspedisi_id"></div>

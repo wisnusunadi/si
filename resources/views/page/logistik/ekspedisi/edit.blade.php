@@ -57,34 +57,74 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="" class="col-form-label col-4" style="text-align: right">Via</label>
+                                <label for="" class="col-form-label col-4" style="text-align: right">Jalur</label>
                                 <div class="col-5 col-form-label">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="via" id="via4" value="lain" />
-                                        <label class="form-check-label" for="via4">Lain</label>
+                                        <input class="form-check-input jalur" type="checkbox" id="jalur1" value="darat" name="jalur">
+                                        <label class="form-check-label" for="jalur1">Darat</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="via" id="via1" value="darat" />
-                                        <label class="form-check-label" for="via1">Darat</label>
+                                        <input class="form-check-input jalur" type="checkbox" id="jalur2" value="laut" name="jalur">
+                                        <label class="form-check-label" for="jalur2">Laut</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="via" id="via2" value="laut" />
-                                        <label class="form-check-label" for="via2">Laut</label>
+                                        <input class="form-check-input jalur" type="checkbox" id="jalur3" value="udara" name="jalur">
+                                        <label class="form-check-label" for="jalur3">Udara</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="via" id="via3" value="" />
-                                        <label class="form-check-label" for="via3">Udara</label>
+                                        <input class="form-check-input jalur" type="checkbox" id="jalur4" value="lain" name="jalur">
+                                        <label class="form-check-label" for="jalur4">Lain</label>
                                     </div>
-
-                                    <div class="invalid-feedback" id="msgvia">
+                                    <div class="invalid-feedback" id="msgjalur">
+                                        @if($errors->has('jalur'))
+                                        {{ $errors->first('jalur')}}
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Jurusan</label>
-                                <div class="col-5">
-                                    <textarea class="form-control" name="jurusan" id="jurusan"></textarea>
+                                <label for="" class="col-form-label col-4" style="text-align: right">Jurusan</label>
+                                <div class="col-8 col-form-label">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan1" value="indonesia" />
+                                        <label class="form-check-label" for="jurusan1">Seluruh Indonesia</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
+                                        <label class="form-check-label" for="jurusan2">Per Provinsi</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
+                                        <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
+                                    </div>
+
                                     <div class="invalid-feedback" id="msgjurusan">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row hide" id="provinsi_select">
+                                <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
+                                <div class="col-8">
+                                    <select class="select-info form-control custom-select provinsi" name="provinsi" id="provinsi" style="width: 100%;">
+                                    </select>
+                                    <div class="invalid-feedback" id="msgprovinsi">
+                                        @if($errors->has('provinsi'))
+                                        {{ $errors->first('provinsi')}}
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row hide" id="kota_kabupaten_select">
+                                <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Kota / Kabupaten</label>
+                                <div class="col-8">
+                                    <select class="select-info form-control custom-select kota_kabupaten" name="kota_kabupaten" id="kota_kabupaten" style="width: 100%;">
+                                    </select>
+                                    <div class="invalid-feedback" id="msgkota_kabupaten">
+                                        @if($errors->has('kota_kabupaten'))
+                                        {{ $errors->first('kota_kabupaten')}}
+                                        @endif
                                     </div>
                                 </div>
                             </div>

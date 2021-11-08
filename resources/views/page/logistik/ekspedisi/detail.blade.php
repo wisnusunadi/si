@@ -48,7 +48,7 @@
                                 <b class="float-right" id="telepon"></b>
                             </li>
                             <li class="list-group-item">
-                                <a>Via</a>
+                                <a>Jalur</a>
                                 <b class="float-right" id="via"></b>
                             </li>
                             <li class="list-group-item">
@@ -73,36 +73,48 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No SO</th>
-                                        <th>No PO</th>
                                         <th>No SJ</th>
                                         <th>Tanggal Kirim</th>
+                                        <th>Nama Customer</th>
+                                        <th>Alamat</th>
+                                        <th>Telepon</th>
                                         <th>Status</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>1</td>
                                         <td>SO-SPA10210001</td>
-                                        <td>PO/ON/10/21/0001</td>
-                                        <td>SJ/01/20/2001</td>
+                                        <td>SJ/10/20/2001</td>
                                         <td>09-10-2021</td>
+                                        <td>RS Nurul Ikhsan</td>
+                                        <td>Jl. Jakarta No 18A-20A, Garut, Jawa Barat</td>
+                                        <td>081119494950</td>
                                         <td><span class="badge blue-text">Dalam Pengiriman</span></td>
+                                        <td><i class="fas fa-search"></i></td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
                                         <td>SO-EKAT08210005</td>
-                                        <td>PO/ON/08/21/0005</td>
-                                        <td>SJ/01/20/2035</td>
+                                        <td>SJ/08/21/0986</td>
                                         <td>02-08-2021</td>
+                                        <td>Bapak Hutapea</td>
+                                        <td>Jl. Moh. Hatta No 73, Medan, Sumatera Utara</td>
+                                        <td>082139754850</td>
                                         <td><span class="badge green-text">Selesai</span></td>
+                                        <td><i class="fas fa-search"></i></td>
                                     </tr>
                                     <tr>
                                         <td>3</td>
                                         <td>SO-SPB08210005</td>
-                                        <td>PO/ON/08/21/0005</td>
                                         <td>SJ/01/20/1927</td>
                                         <td>02-08-2021</td>
+                                        <td>Pemerintah Kab Badung</td>
+                                        <td>Jl. Bougenvil No 45, Badung, Bali</td>
+                                        <td>082139754850</td>
                                         <td><span class="badge green-text">Selesai</span></td>
+                                        <td><i class="fas fa-search"></i></td>
                                     </tr>
                                 </tbody>
                             </table>
