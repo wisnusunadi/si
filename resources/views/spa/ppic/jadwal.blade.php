@@ -14,7 +14,7 @@
 
 @section('content')
 <div id="app">
-    <app user="{{ Auth::user() }}" status={{ $status }} />
+    <app user="{{ Auth::user() }}" status="{{ $status }}" />
 </div>
 @stop
 
