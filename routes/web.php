@@ -48,13 +48,77 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
 Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
+    Route::view('/produk/{any?}', 'page.gbj.produk');
+    Route::view('/so/{any?}', 'page.gbj.so');
+    Route::view('/transferproduk', 'page.gbj.transferproduk');
+    Route::view('/transferproduk', 'page.gbj.transferproduk');
+    Route::view('/bso', 'page.gbj.bso');
+    Route::view('/tso', 'page.gbj.tso');
+    Route::view('/dp', 'page.gbj.dp');
+    Route::view('/lp', 'page.gbj.lp');
+    Route::view('/tp', 'page.gbj.tp'); 
+    Route::view('/dashboard', 'page.gbj.dashboard'); 
 });
 
-Route::middleware('auth')->prefix('/penjualan')->group(function () {
-    Route::view('/produk/{any?}', 'page.penjualan.produk');
-    Route::view('/customer/{any?}', 'page.penjualan.customer');
-    Route::view('/penjualan/{any?}', 'page.penjualan.penjualan');
+// Route::middleware('auth')->prefix('/penjualan')->group(function () {
+//     Route::view('/produk/{any?}', 'page.penjualan.produk');
+//     Route::view('/customer/{any?}', 'page.penjualan.customer');
+//     Route::view('/penjualan/{any?}', 'page.penjualan.penjualan');
+//     Route::view('/po/{any?}', 'page.penjualan.po');
+// });
+
+Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.penjualan.dashboard')->name('penjualan.dashboard');
+
+    Route::group(['prefix' => '/produk'], function () {
+        Route::view('/show', 'page.penjualan.produk.show')->name('penjualan.produk.show');
+        Route::view('/create', 'page.penjualan.produk.create')->name('penjualan.produk.create');
+        Route::view('/edit', 'page.penjualan.produk.edit')->name('penjualan.produk.edit');
+    });
+
+    Route::group(['prefix' => '/customer'], function () {
+        Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
+        Route::view('/create', 'page.penjualan.customer.create')->name('penjualan.customer.create');
+        Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
+    });
+
+    Route::group(['prefix' => '/penjualan'], function () {
+        Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
+        Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
+        Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
+        Route::view('/detail/spa/{id}', 'page.penjualan.penjualan.detail_spa')->name('penjualan.penjualan.detail.spa');
+        Route::view('/detail/spb/{id}', 'page.penjualan.penjualan.detail_spb')->name('penjualan.penjualan.detail.spb');
+        Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan'])->name('penjualan.penjualan.edit');
+    });
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.penjualan.so.show')->name('penjualan.so.show');
+        Route::get('/create/{id}', [App\Http\Controllers\PenjualanController::class, 'view_so_ekatalog'])->name('penjualan.so.create');
+        Route::view('/edit', 'page.penjualan.so.edit')->name('penjualan.so.edit');
+    });
+
+    Route::group(['prefix' => '/lacak'], function () {
+        Route::view('/show', 'page.penjualan.lacak.show')->name('penjualan.lacak.show');
+    });
+
+    Route::group(['prefix' => '/laporan'], function () {
+        Route::view('/show', 'page.penjualan.laporan.show')->name('penjualan.laporan.show');
+    });
+    // Route::get('/dashboard', 'digidocu\DocumentsController@dashboard')->name('dc.dashboard');
+    // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
+
+Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.qc.dashboard')->name('qc.dashboard');
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
+        Route::view('/detail/{id}', 'page.qc.so.detail')->name('qc.so.detail');
+        Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
+        Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
+    });
+});
+Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 
 Route::get('/test/{name?}', function ($name = null) {
     return $name;

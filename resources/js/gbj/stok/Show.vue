@@ -219,6 +219,7 @@
                       <th>Tipe Produk</th>
                       <th>Stok</th>
                       <th>Satuan</th>
+                      <th>Layout</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
@@ -494,8 +495,6 @@
 import axios from "axios";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 
-console.log("test");
-
 export default {
   mounted: function () {
     this.semuaproduk();
@@ -504,7 +503,14 @@ export default {
   methods: {
     semuaproduk: function () {
       $("#test-table").DataTable({
-        ajax: "/api/gbj/data",
+        ajax: {
+          url: "/api/gbj/data",
+          error: function (xhr, status, err) {
+            console.log(xhr);
+            alert(status);
+            alert(err);
+          },
+        },
         processing: true,
         serverSide: true,
         columns: [
@@ -527,6 +533,11 @@ export default {
           },
           {
             data: "satuan",
+            orderable: false,
+            searchable: false,
+          },
+          {
+            data: "layout",
             orderable: false,
             searchable: false,
           },

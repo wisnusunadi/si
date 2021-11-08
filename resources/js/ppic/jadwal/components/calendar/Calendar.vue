@@ -31,7 +31,7 @@ export default {
       produk: [],
       produkValue: "",
       quantity: 0,
-      color: "#6c757d",
+      color: "#007bff",
       colors: [
         "#007bff",
         "#6c757d",
@@ -104,6 +104,35 @@ export default {
       }
 
       return result;
+    },
+
+    proses_konfirmasi: function () {
+      let jadwal = this.$store.state.jadwal;
+      if (jadwal.length === 0) return -1;
+      return jadwal[0].proses_konfirmasi;
+    },
+
+    konfirmasi_rencana: function () {
+      console.log("konfirmasi rencana");
+      let jadwal = this.$store.state.jadwal;
+      if (jadwal.length === 0) return -1;
+      for (let i = 0; i < jadwal.length; i++) {
+        if (jadwal[i].konfirmasi_rencana === 0) {
+          console.log(jadwal[i]);
+          return 0;
+        }
+      }
+      console.log("true");
+      return 1;
+    },
+
+    konfirmasi_perubahan: function () {
+      let jadwal = this.$store.state.jadwal;
+      if (jadwal.length === 0) return -1;
+      for (let i = 0; i < jadwal.length; i++) {
+        if (jadwal[i].konfirmasi_perubahan === 0) return 0;
+      }
+      return 1;
     },
   },
 
@@ -240,6 +269,12 @@ export default {
               text: "Berhasil mengirim permintaan",
             });
           });
+
+        axios.get("/api/ppic/test-event", {
+          params: {
+            message: "menunggu persetujuan",
+          },
+        });
       }
     },
 
@@ -415,79 +450,86 @@ export default {
           </ul>
         </div>
       </div>
-    </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal">
-      <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Produk Modal</h5>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div style="margin-bottom: 20px">
-              <label>Pilih Warna:</label>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal">
+        <div
+          class="modal-dialog modal-dialog-centered modal-md"
+          role="document"
+        >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Produk Modal</h5>
+              <button type="button" class="close" data-dismiss="modal">
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div style="margin-bottom: 20px">
+                <label>Pilih Warna:</label>
+                <button
+                  v-for="col in colors"
+                  :key="col"
+                  v-on:click="handleClick"
+                  class="btn"
+                  :style="{
+                    padding: '20px',
+                    margin: '8px',
+                    backgroundColor: col,
+                    borderColor: col,
+                  }"
+                ></button>
+              </div>
+              <div class="form-group">
+                <label>Produk:</label>
+                <v-select
+                  :options="options"
+                  :reduce="(nama) => nama.value"
+                  v-model="produkValue"
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Stok:</label>
+                  <div>GBJ: -</div>
+                  <div>GK : -</div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Jumlah Produk:</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    v-model="quantity"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
               <button
-                v-for="col in colors"
-                :key="col"
-                v-on:click="handleClick"
+                type="button"
                 class="btn"
-                :style="{
-                  padding: '20px',
-                  margin: '8px',
-                  backgroundColor: col,
-                  borderColor: col,
-                }"
-              ></button>
+                :style="{ backgroundColor: color, borderColor: color }"
+                @click="handleSubmit"
+              >
+                Save
+              </button>
             </div>
-            <div class="form-group">
-              <label>Produk:</label>
-              <v-select
-                :options="options"
-                :reduce="(nama) => nama.value"
-                v-model="produkValue"
-              />
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label>Stok:</label>
-                <div>GBJ: -</div>
-                <div>GK : -</div>
-              </div>
-              <div class="form-group col-md-6">
-                <label>Jumlah Produk:</label>
-                <input type="number" class="form-control" v-model="quantity" />
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn"
-              :style="{ backgroundColor: color, borderColor: color }"
-              @click="handleSubmit"
-            >
-              Save
-            </button>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="modal fade" id="confirmation">
-      <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div v-html="confirmationMessage"></div>
-          </div>
-          <div class="modal-footer d-flex justify-content-between">
-            <button class="btn btn-primary" @click="handleButtonYes">
-              Yes
-            </button>
-            <button class="btn btn-danger" @click="handleButtonNo">No</button>
+      <div class="modal fade" id="confirmation">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div v-html="confirmationMessage"></div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+              <button class="btn btn-primary" @click="handleButtonYes">
+                Yes
+              </button>
+              <button class="btn btn-danger" @click="handleButtonNo">No</button>
+            </div>
           </div>
         </div>
       </div>

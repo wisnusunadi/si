@@ -1,5 +1,5 @@
 <script>
-import Calendar from "./Calendar.vue";
+import Calendar from "./calendar/Calendar.vue";
 import Chart from "./Chart.vue";
 
 export default {

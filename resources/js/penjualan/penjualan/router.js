@@ -2,7 +2,7 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 
 import Show from './Show.vue'
-import CreateAkn from './CreateAkn.vue'
+import Create from './Create.vue'
 
 Vue.use(VueRouter)
 
@@ -15,9 +15,9 @@ const router = new VueRouter({
             component: Show
         },
         {
-            name: 'create_akn',
-            path: '/penjualan/create_akn',
-            component: CreateAkn
+            name: 'create',
+            path: '/penjualan/penjualan/create',
+            component: Create
         },
     ]
 })

@@ -231,6 +231,7 @@ return [
             'text'        => 'Beranda',
             'url'         => '',
             'icon'        => 'nav-icon fa fa-home',
+            'auth'        => [24]
         ],
         // PPIC (24)
         [
@@ -399,32 +400,39 @@ return [
 
         // other
         [
+            'text' => 'Beranda',
+            'url'  => '/penjualan/dashboard',
+            'icon' => 'fas fa-home',
+            'auth' => [26]
+        ],
+        [
             'header' => 'DATA',
             'auth' => [14, 17, 26, 23]
         ],
         // penjualan (26)
         [
-            'text' => 'Penjualan Produk',
-            'url'  => '/penjualan/produk',
-            'icon' => 'fas fa-table',
+            'text' => 'Produk Penjualan',
+            'url'  => '/penjualan/produk/show',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
-        [
-            'text' => 'Penjualan',
-            'url'  => '/penjualan/penjualan',
-            'icon' => 'fas fa-table',
-            'auth' => [26]
-        ],
+
         [
             'text' => 'Customer',
-            'url'  => '/penjualan/customer',
-            'icon' => 'fas fa-table',
+            'url'  => '/penjualan/customer/show',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
         [
-            'text' => 'AKN',
-            'url'  => '/penjualan/akn',
-            'icon' => 'fas fa-table',
+            'text' => 'Laporan',
+            'url'  => '/penjualan/laporan/show',
+            'icon' => 'far fa-circle',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Lacak',
+            'url'  => '/penjualan/lacak/show',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
         [
@@ -442,6 +450,18 @@ return [
         [
             'header' => 'TRANSAKSI',
             'auth'   => [26]
+        ],
+        [
+            'text' => 'Penjualan',
+            'url'  => '/penjualan/penjualan/show',
+            'icon' => 'fas fa-dollar-sign',
+            'auth' => [26]
+        ],
+        [
+            'text' => 'Sales Order',
+            'url'  => '/penjualan/so/show',
+            'icon' => 'fas fa-file-invoice-dollar',
+            'auth' => [26]
         ],
         [
             'text'    => 'Daftar Pesanan',
@@ -856,6 +876,7 @@ return [
             'header' => 'INCOMING',
             'auth' => [23]
         ],
+
         [
             'text' => 'Kedatangan',
             'icon' => 'fas fa-dolly-flatbed',
@@ -955,6 +976,16 @@ return [
             ],
         ],
         [
+            'header' => 'OUTGOING',
+            'auth' => [23]
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'fas fa-circle',
+            'url' => '/qc/so/show',
+            'auth' => [23],
+        ],
+        [
             'text'    => 'Permintaan',
             'icon'    => 'fas fa-box-open',
             'url'  => '/kalibrasi',
@@ -967,38 +998,83 @@ return [
             'auth' => [22],
         ],
         [
-            'header' => 'Produksi',
-            'auth' => [13]
-        ],
-        [
-            'text' => 'BPPB',
-            'url' => '/bppb',
+            'text' => 'Dasboard',
+            'url' => '/gbj/dashboard',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
+        // [
+        //     'header' => 'Produksi',
+        //     'auth' => [13]
+        // ],
+        // [
+        //     'text' => 'BPPB',
+        //     'url' => '/bppb',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
         [
             'header' => 'Stok',
             'auth' => [13]
         ],
+        // GBJ
         [
             'text' => 'Produk',
-            'url' => '/produk',
+            'url' => '/gbj/produk',
+            'icon' => 'fas fa-boxes',
+            'auth' => [13],
+        ],
+        // [
+        //     'text' => 'Stok',
+        //     'url' => '/gbj/stok',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
+        [
+            'text' => 'Riwayat Transaksi',
+            'url' => '/gbj/tp',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
         [
-            'text' => 'Stok',
-            'url' => '/gbj/stok',
-            'icon' => 'fas fa-circle',
-            'auth' => [13],
-        ],
-        [
-            'header' => 'Permintaan',
+            'header' => 'Penjualan',
             'auth' => [13]
         ],
         [
-            'text' => 'Penjualan',
-            'url' => '/gbj/penjualan',
+            'text' => 'Sales Order',
+            'url' => '/gbj/so',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'header' => 'Pengeluaran',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Berdasarkan SO',
+            'url' => '/gbj/bso',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Tanpa SO',
+            'url' => '/gbj/tso',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'header' => 'Penerimaan',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Dalam Perakitan',
+            'url' => '/gbj/dp',
+            'icon' => 'fas fa-circle',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Selain Perakitan',
+            'url' => '/gbj/lp',
             'icon' => 'fas fa-circle',
             'auth' => [13],
         ],
@@ -1060,16 +1136,16 @@ return [
             ],
         ],
         // dependecies plugins
-        'DataTables' => [
-            'js' => [
-                'vendor/datatables/jquery.dataTables.min.js',
-                'vendor/datatables/dataTables.bootstrap4.min.js',
-                'vendor/datatables/dataTables.responsive.min.js',
-            ],
-            'css' => [
-                'vendor/datatables/dataTables.bootstrap4.min.css',
-            ],
-        ],
+        // 'DataTables' => [
+        //     'js' => [
+        //         'vendor/datatables/jquery.dataTables.min.js',
+        //         'vendor/datatables/dataTables.bootstrap4.min.js',
+        //         'vendor/datatables/dataTables.responsive.min.js',
+        //     ],
+        //     'css' => [
+        //         'vendor/datatables/dataTables.bootstrap4.min.css',
+        //     ],
+        // ],
         'overlayScrollbars' => [
             'js' => [
                 'vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js',
@@ -1081,6 +1157,7 @@ return [
         'Select2' => [
             'js' => [
                 'vendor/select2/js/select2.full.min.js',
+
             ],
             'css' => [
                 'vendor/select2/css/select2.min.css',

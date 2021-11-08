@@ -10,4 +10,12 @@ class NoseriBarangJadi extends Model
     use HasFactory;
 
     protected $table = "noseri_barang_jadi";
+
+    function from() {
+        return $this->belongsTo(Divisi::class, 'dari');
+    }
+
+    function to() {
+        return $this->belongsTo(Divisi::class, 'ke');
+    }
 }

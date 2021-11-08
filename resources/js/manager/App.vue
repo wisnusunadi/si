@@ -1,5 +1,6 @@
 <script>
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import axios from "axios";
 // import axios from "axios";
 
 export default {
@@ -44,6 +45,24 @@ export default {
     }).then((response) => {
       this.jadwal_pelaksanaan = response.data;
     });
+
+    EchoObj.private("test").listen("TestEvent", (response) => {
+      this.$swal({
+        icon: "success",
+        text: "Message: " + response.message,
+      });
+
+      axios({
+        method: "get",
+        url: "/api/ppic/schedule/penyusunan",
+        params: {
+          proses_konfirmasi: 1,
+        },
+      }).then((response) => {
+        this.jadwal_rencana = response.data;
+        console.log(this.jadwal_rencana);
+      });
+    });
   },
 
   methods: {
@@ -73,6 +92,12 @@ export default {
 
     handleButtonYes: function () {
       $("#modal").modal("hide");
+
+      axios.post("/api/ppic/update-event", {
+        params: {
+          event: this.checked_jadwal_rencana,
+        },
+      });
     },
 
     handleButtonNo: function () {

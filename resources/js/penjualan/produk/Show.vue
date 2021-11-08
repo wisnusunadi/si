@@ -464,7 +464,9 @@
                                     </select>
                                   </div>
                                 </td>
-                                <td>{{ row.kelompok_produk }}Alat Kesehatan</td>
+                                <td>
+                                  {{ row.kelompok_produk }}
+                                </td>
                                 <td>
                                   <div
                                     class="
@@ -530,13 +532,7 @@ export default {
   methods: {
     semuaproduk: function () {
       $("#penjualan_produk").DataTable({
-        ajax: {
-          url: "/api/penjualan_produk/data",
-          error: function (xhr, status, err) {
-            alert(status);
-            alert(err);
-          },
-        },
+        ajax: "/api/penjualan_produk/data",
         processing: true,
         serverSide: true,
         columns: [
