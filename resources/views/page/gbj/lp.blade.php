@@ -485,7 +485,9 @@
     function addData(tanggal, divisi, tujuan, produk, jumlah) { 
         if (tujuan.length > 30) {
             var a = tujuan.substring(0, 10) + '...';
-        } 
+        }else{
+            var a = tujuan;
+        }
         let tambah_data = '<tr><td>'+tanggal+'</td><td>'+divisi+'</td><td>'+a+'</td><td>'+produk+'</td><td>'+jumlah+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-plus"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }
