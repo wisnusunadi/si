@@ -12,6 +12,7 @@ use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
+use Carbon\Doctrine\CarbonType;
 use Hamcrest\Core\IsNot;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -69,6 +70,13 @@ class PenjualanController extends Controller
                     return '';
                 }
             })
+            ->addColumn('so', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->so;
+                } else {
+                    return '';
+                }
+            })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {
                     return $data->Pesanan->no_po;
@@ -77,7 +85,7 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="yellow-text badge">Gudang</span>';
+                return '<span class="red-text badge">' . $data->log . '</span>';
             })
             ->addColumn('button', function ($data) {
                 $name =  $data->getTable();
@@ -115,6 +123,112 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status'])
             ->make(true);
+    }
+    public function get_lacak_penjualan($parameter, $value)
+    {
+
+        if ($parameter == 'no_po') {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('no_po', 'LIKE', '%' . $value . '%');
+            })->get());
+            $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('no_po', 'LIKE', '%' . $value . '%');
+            })->get());
+            $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('no_po', 'LIKE', '%' . $value . '%');
+            })->get());
+
+            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Customer->nama;
+                })
+                ->addColumn('no_po', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->no_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('tgl_po', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->tgl_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('noseri', function () {
+                    return '';
+                })
+                ->addColumn('log', function ($data) {
+                    return '<span class="red-text badge">' . $data->log . '</span>';
+                })
+                ->rawColumns(['log'])
+                ->make(true);
+        } elseif ($parameter == 'no_akn') {
+            $data = Ekatalog::where('no_paket', 'LIKE', '%' . $value . '%')
+                ->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('status', function ($data) {
+                    if ($data->status == "sepakat") {
+                        $status = '<span class="green-text badge">Sepakat</span>';
+                    } else if ($data->status == "negosiasi") {
+                        $status =  '<span class="yellow-text badge">Negosiasi</span>';
+                    } else {
+                        $status =  '<span class="red-text badge">Batal</span>';
+                    }
+                    return $status;
+                })
+                ->addColumn('log', function ($data) {
+                    return '<span class="red-text badge">' . $data->log . '</span>';
+                })
+
+                ->rawColumns(['status', 'log'])
+                ->make(true);
+        } elseif ($parameter == 'no_seri') {
+        } elseif ($parameter == 'no_so') {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('so', 'LIKE', '%' . $value . '%');
+            })->get());
+            $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('so', 'LIKE', '%' . $value . '%');
+            })->get());
+            $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($value) {
+                $q->where('so', 'LIKE', '%' . $value . '%');
+            })->get());
+
+            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Customer->nama;
+                })
+                ->addColumn('so', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->so;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('tgl_po', function ($data) {
+                    if ($data->Pesanan) {
+                        return $data->Pesanan->tgl_po;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('noseri', function () {
+                    return '';
+                })
+                ->addColumn('log', function ($data) {
+                    return '<span class="red-text badge">' . $data->log . '</span>';
+                })
+                ->rawColumns(['log'])
+                ->make(true);
+        } elseif ($parameter == 'no_sj') {
+        }
     }
     public function get_data_detail_spa($value)
     {
@@ -217,6 +331,13 @@ class PenjualanController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->so;
+                } else {
+                    return '';
+                }
+            })
             ->addColumn('status', function ($data) {
                 if ($data->status == "sepakat") {
                     $status = '<span class="green-text badge">Sepakat</span>';
@@ -301,6 +422,9 @@ class PenjualanController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('status', function ($data) {
+                return '<span class="red-text badge">' . $data->log . '</span>';
+            })
             ->addColumn('tglpo', function ($data) {
                 if ($data->Pesanan) {
                     return $data->Pesanan->tgl_po;
@@ -352,7 +476,7 @@ class PenjualanController extends Controller
                     </div>';
                 }
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'status'])
             ->make(true);
     }
     public function get_data_spb()
@@ -366,6 +490,9 @@ class PenjualanController extends Controller
                 } else {
                     return '-';
                 }
+            })
+            ->addColumn('status', function ($data) {
+                return '<span class="red-text badge">' . $data->log . '</span>';
             })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {
@@ -425,7 +552,7 @@ class PenjualanController extends Controller
                     </div>';
                 }
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'status'])
             ->make(true);
     }
     public function get_data_so()
@@ -491,7 +618,8 @@ class PenjualanController extends Controller
                 'status' => $request->status,
                 'tgl_kontrak' => $request->batas_kontrak,
                 'tgl_buat' => $request->tanggal_pemesanan,
-                'ket' => $request->keterangan
+                'ket' => $request->keterangan,
+                'log' => 'penjualan'
             ]);
             for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                 DetailEkatalog::create([
@@ -507,6 +635,7 @@ class PenjualanController extends Controller
 
             if (!empty($request->input('no_po'))) {
                 $pesanan = Pesanan::create([
+                    'so' => $this->createSO('SPA'),
                     'no_po' => $request->no_po,
                     'tgl_po' => $request->tanggal_po,
                     'no_do' => $request->no_do,
@@ -519,7 +648,8 @@ class PenjualanController extends Controller
             $Spa = Spa::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
-                'ket' => $request->keterangan
+                'ket' => $request->keterangan,
+                'log' => 'penjualan'
             ]);
 
             for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
@@ -535,6 +665,7 @@ class PenjualanController extends Controller
 
             if (!empty($request->input('no_po'))) {
                 $pesanan = Pesanan::create([
+                    'so' => $this->createSO('SPB'),
                     'no_po' => $request->no_po,
                     'tgl_po' => $request->tanggal_po,
                     'no_do' => $request->no_do,
@@ -547,7 +678,8 @@ class PenjualanController extends Controller
             $Spb = Spb::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
-                'ket' => $request->keterangan
+                'ket' => $request->keterangan,
+                'log' => 'penjualan'
             ]);
 
             for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
@@ -631,7 +763,6 @@ class PenjualanController extends Controller
         }
 
         for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-
             DetailSpa::create([
                 'spa_id' => $Spa->id,
                 'penjualan_produk_id' => $request->penjualan_produk_id[$i],
@@ -695,8 +826,11 @@ class PenjualanController extends Controller
         //         'jumlah.required' => 'Jumlah Produk harus di isi',
         //         'penjualan_produk_id.required' => 'Produk harus di pilih',
         //     ]
+
         // );
+
         $pesanan =  Pesanan::create([
+            'so' => $this->createSO('EKAT'),
             'no_po' => $request->no_po,
             'tgl_po' => $request->tanggal_po,
             'no_do' => $request->no_do,
@@ -840,5 +974,139 @@ class PenjualanController extends Controller
     public function laporan(Request $request)
     {
         return Excel::download(new LaporanPenjualan($request->customer_id ?? '', $request->penjualan ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_penjualan.xlsx');
+    }
+
+    //Chart
+    public function chart_penjualan()
+    {
+
+        //EKAT
+
+
+        $ekatalog = Pesanan::Has('Ekatalog')
+            ->select('Pesanan.tgl_po')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_po)->format('m');
+            });
+
+        $ekatalog_count = [];
+        $ekatalog_graph = [];
+
+        foreach ($ekatalog as $key => $value) {
+            $ekatalog_count[(int)$key] = count($value);
+        }
+
+
+        for ($i = 1; $i <= 12; $i++) {
+            if (!empty($ekatalog_count[$i])) {
+                $ekatalog_graph[$i]['count'] = $ekatalog_count[$i];
+            } else {
+                $ekatalog_graph[$i]['count'] = 0;
+            }
+            $ekatalog_graph[$i];
+        }
+
+        //SPA
+        $spa = Pesanan::Has('Spa')
+            ->select('Pesanan.tgl_po')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_po)->format('m');
+            });
+
+
+        $spa_count = [];
+        $spa_graph = [];
+        foreach ($spa as $key => $value) {
+            $spa_count[(int)$key] = count($value);
+        }
+
+
+        for ($i = 1; $i <= 12; $i++) {
+            if (!empty($spa_count[$i])) {
+                $spa_graph[$i]['count'] = $spa_count[$i];
+            } else {
+                $spa_graph[$i]['count'] = 0;
+            }
+            $spa_graph[$i];
+        }
+
+
+        //SPB
+        $spb = Pesanan::Has('Spb')
+            ->select('Pesanan.tgl_po')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_po)->format('m');
+            });
+
+
+        $spb_count = [];
+        $spb_graph = [];
+
+        foreach ($spb as $key => $value) {
+            $spb_count[(int)$key] = count($value);
+        }
+
+
+        for ($i = 1; $i <= 12; $i++) {
+            if (!empty($spb_count[$i])) {
+                $spb_graph[$i]['count'] = $spb_count[$i];
+            } else {
+                $spb_graph[$i]['count'] = 0;
+            }
+            $spb_graph[$i];
+        }
+
+        return response()->json(compact('ekatalog_graph', 'spa_graph', 'spb_graph'));
+    }
+    //Another 
+
+    function countChart()
+    {
+    }
+    function toRomawi($number)
+    {
+        $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+        $returnValue = '';
+        while ($number > 0) {
+            foreach ($map as $roman => $int) {
+                if ($number >= $int) {
+                    $number -= $int;
+                    $returnValue .= $roman;
+                    break;
+                }
+            }
+        }
+        return $returnValue;
+    }
+    function getMonth()
+    {
+        $m = Carbon::now()->format('m');
+        return $this->toRomawi($m);
+    }
+    function getYear()
+    {
+        return  Carbon::now()->format('Y');
+    }
+
+    function createSO($value)
+    {
+        $check = Pesanan::all('so');
+        $max_number = 0;
+        foreach ($check as $c) {
+            if ($c->so == NULL) {
+                $no = 'SO/' . $value . '/' . $this->getMonth() . '/' . $this->getYear() . '/1';
+            } else {
+                $get = explode('/', $c->so);
+                if ($get[1] == $value) {
+                    if ($get[4] > $max_number)
+                        $max_number = $get[4];
+                }
+            }
+        }
+        $no = 'SO/' . $value . '/' . $this->getMonth() . '/' . $this->getYear() . '/' . ($max_number + 1) . '';
+        return $no;
     }
 }

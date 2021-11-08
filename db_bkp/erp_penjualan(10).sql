@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2021 at 10:44 AM
+-- Generation Time: Nov 08, 2021 at 10:29 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.27
 
@@ -526,12 +526,10 @@ CREATE TABLE `detail_ekatalog` (
 --
 
 INSERT INTO `detail_ekatalog` (`id`, `ekatalog_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
-(35, 17, 3, 1, 583000, 0, '2021-11-04 00:00:00', '2021-11-04 00:00:00'),
-(36, 17, 5, 2, 1760000, 0, '2021-11-04 00:00:00', '2021-11-04 00:00:00'),
-(44, 18, 3, 2, 583000, 0, '2021-11-04 00:01:05', '2021-11-04 00:01:05'),
-(45, 18, 12, 1, 141130000, 0, '2021-11-04 00:01:05', '2021-11-04 00:01:05'),
-(53, 19, 15, 2, 999, 0, '2021-11-05 00:03:38', '2021-11-05 00:03:38'),
-(54, 19, 18, 5, 106590000, 0, '2021-11-05 00:03:38', '2021-11-05 00:03:38');
+(59, 20, 10, 1, 66550000, 0, '2021-11-07 20:44:19', '2021-11-07 20:44:19'),
+(60, 20, 52, 2, 298100000, 0, '2021-11-07 20:44:19', '2021-11-07 20:44:19'),
+(61, 21, 20, 2, 125950000, 0, '2021-11-07 21:01:01', '2021-11-07 21:01:01'),
+(62, 21, 49, 1, 284790000, 0, '2021-11-07 21:01:01', '2021-11-07 21:01:01');
 
 -- --------------------------------------------------------
 
@@ -967,10 +965,9 @@ CREATE TABLE `detail_spa` (
 --
 
 INSERT INTO `detail_spa` (`id`, `spa_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
-(30, 30, 47, 1, 69740000, 0, '2021-11-05 02:25:31', '2021-11-05 02:25:31'),
-(31, 30, 64, 2, 31900000, 0, '2021-11-05 02:25:31', '2021-11-05 02:25:31'),
-(32, 29, 9, 2, 51700000, 0, '2021-11-05 02:38:18', '2021-11-05 02:38:18'),
-(33, 29, 13, 2, 1760000, 0, '2021-11-05 02:38:18', '2021-11-05 02:38:18');
+(34, 31, 83, 2, 81400000, 0, '2021-11-07 20:55:52', '2021-11-07 20:55:52'),
+(35, 31, 32, 1, 1100000, 0, '2021-11-07 20:55:52', '2021-11-07 20:55:52'),
+(36, 32, 70, 10, 836000, 0, '2021-11-07 20:58:25', '2021-11-07 20:58:25');
 
 -- --------------------------------------------------------
 
@@ -994,9 +991,8 @@ CREATE TABLE `detail_spb` (
 --
 
 INSERT INTO `detail_spb` (`id`, `spb_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
-(3, 2, 20, 2, 125950000, 0, '2021-11-05 02:30:31', '2021-11-05 02:30:31'),
-(4, 2, 185, 1, 334400000, 0, '2021-11-05 02:30:31', '2021-11-05 02:30:31'),
-(6, 3, 46, 5, 46750000, 0, '2021-11-05 02:39:38', '2021-11-05 02:39:38');
+(7, 4, 13, 5, 1760000, 0, '2021-11-07 20:57:19', '2021-11-07 20:57:19'),
+(8, 4, 80, 1, 31900000, 0, '2021-11-07 20:57:19', '2021-11-07 20:57:19');
 
 -- --------------------------------------------------------
 
@@ -1066,7 +1062,7 @@ CREATE TABLE `ekatalog` (
   `tgl_kontrak` date NOT NULL,
   `tgl_buat` date NOT NULL,
   `ket` varchar(255) DEFAULT NULL,
-  `log` enum('penjualan','po','qc','gudang','selesai') DEFAULT NULL,
+  `log` enum('penjualan','po','qc','gudang','logistik','selesai') DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1076,9 +1072,8 @@ CREATE TABLE `ekatalog` (
 --
 
 INSERT INTO `ekatalog` (`id`, `customer_id`, `provinsi_id`, `pesanan_id`, `no_paket`, `deskripsi`, `instansi`, `alamat`, `satuan`, `status`, `tgl_kontrak`, `tgl_buat`, `ket`, `log`, `created_at`, `updated_at`) VALUES
-(17, 213, 2, 6, 'AK1-34545', 'trt', 'Insd', 'iuukuik', 'ghg', 'negosiasi', '2022-01-06', '2021-11-04', 'rtt', NULL, '2021-11-04 00:00:00', '2021-11-04 00:00:00'),
-(18, 213, 2, NULL, 'AK1-85', 'trt', 'Insd', 'iuukuik', 'ghg', 'negosiasi', '2022-01-06', '2021-11-04', 'rtt', NULL, '2021-11-04 00:00:18', '2021-11-04 00:00:18'),
-(19, 394, 2, NULL, 'AK1-9898', 'trt', 'Insd', 'iuukuik', 'ghg', 'sepakat', '2022-01-06', '2021-11-04', 'rtt', NULL, '2021-11-04 00:00:37', '2021-11-04 00:00:37');
+(20, 213, 11, 54, 'AK1-P0001', 'Kebutuhan Alat  kesehatan', 'Pemerintah Daerah Kabupaten Jawa Timur', 'Jl GentengKali', 'Satuan Kerja', 'sepakat', '2022-01-01', '2021-11-08', NULL, 'penjualan', '2021-11-07 20:44:19', '2021-11-07 20:53:18'),
+(21, 63, 12, NULL, 'AK1-P989898', 'Deskripsi itulah yang aku mau', 'Pemerintah Daerah Kabupaten Tanjung Jabung Barat', 'Jl Kemana Aja Bla Bla', 'Satuan Kerja Sebenarnya', 'negosiasi', '2022-02-16', '2021-11-03', NULL, 'penjualan', '2021-11-07 21:01:01', '2021-11-07 21:01:01');
 
 -- --------------------------------------------------------
 
@@ -1662,40 +1657,10 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, `created_at`, `updated_at`) VALUES
-(1, 'SO123', 'ewr', '2021-11-23', '12313', '2021-11-10', 'qweqw', NULL, NULL),
-(6, NULL, 'PO12312312', '2021-11-23', 'DO12323', '2021-11-09', 'dasd', '2021-11-04 00:44:35', '2021-11-04 00:44:35'),
-(7, NULL, 'PO123123', '2021-11-24', NULL, NULL, 'sfdf', '2021-11-04 00:45:43', '2021-11-04 00:45:43'),
-(8, NULL, 'PO21321', '2021-11-02', 'DO123123', '2021-11-17', 'sdfsdf', '2021-11-04 02:56:25', '2021-11-04 02:56:25'),
-(9, NULL, 'PO1959', '2021-11-11', 'DO52525', '2021-12-16', 'ket', '2021-11-04 20:17:08', '2021-11-04 20:17:08'),
-(10, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-02', 'Dasdsad', '2021-11-05 00:32:50', '2021-11-05 00:32:50'),
-(11, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 00:34:34', '2021-11-05 00:34:34'),
-(12, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 00:37:52', '2021-11-05 00:37:52'),
-(13, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 00:38:44', '2021-11-05 00:38:44'),
-(14, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 00:39:34', '2021-11-05 00:39:34'),
-(15, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 00:44:47', '2021-11-05 00:44:47'),
-(16, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 00:46:42', '2021-11-05 00:46:42'),
-(17, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 00:47:50', '2021-11-05 00:47:50'),
-(18, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 00:58:13', '2021-11-05 00:58:13'),
-(19, NULL, 'PO12331231', '2021-11-17', 'DO123123', '2021-11-18', 'asda', '2021-11-05 01:04:15', '2021-11-05 01:04:15'),
-(20, NULL, 'PO/JJHI/01', '2021-11-05', 'DO/JJHI/02', '2021-11-04', 'ket', '2021-11-05 01:06:33', '2021-11-05 01:06:33'),
-(21, NULL, 'PO/JJHI/01', '2021-11-05', 'DO/JJHI/02', '2021-11-04', 'ket', '2021-11-05 01:07:21', '2021-11-05 01:07:21'),
-(22, NULL, 'PO/JJHI/01', '2021-11-05', 'DO/JJHI/02', '2021-11-04', 'ket', '2021-11-05 01:08:17', '2021-11-05 01:08:17'),
-(23, NULL, 'PO/JJHI/01', '2021-11-05', 'DO/JJHI/02', '2021-11-04', 'ket', '2021-11-05 01:09:09', '2021-11-05 01:09:09'),
-(24, NULL, 'PO/JJHI/01', '2021-11-05', 'DO/JJHI/02', '2021-11-04', 'ket', '2021-11-05 01:10:04', '2021-11-05 01:10:04'),
-(25, NULL, 'PO/JJHI/01', '2021-11-05', 'DO/JJHI/02', '2021-11-04', 'ket', '2021-11-05 01:10:43', '2021-11-05 01:10:43'),
-(26, NULL, 'PO/JJHI/01', '2021-11-05', 'DO/JJHI/02', '2021-11-04', 'ket', '2021-11-05 01:11:19', '2021-11-05 01:11:19'),
-(27, NULL, 'PO/JJHI/01', '2021-11-05', 'DO/JJHI/02', '2021-11-04', 'ket', '2021-11-05 01:11:51', '2021-11-05 01:11:51'),
-(28, NULL, 'P331', '2021-11-30', NULL, NULL, 'sdfd', '2021-11-05 01:12:43', '2021-11-05 01:12:43'),
-(29, NULL, 'P331', '2021-11-30', NULL, NULL, 'sdfd', '2021-11-05 01:21:37', '2021-11-05 01:21:37'),
-(30, NULL, 'PO34234', '2021-11-09', NULL, NULL, 'retret', '2021-11-05 01:22:26', '2021-11-05 01:22:26'),
-(31, NULL, 'PO34234', '2021-11-09', NULL, NULL, 'retret', '2021-11-05 01:23:11', '2021-11-05 01:23:11'),
-(32, NULL, 'PO34234', '2021-11-09', NULL, NULL, 'retret', '2021-11-05 01:23:36', '2021-11-05 01:23:36'),
-(33, NULL, 'PO34234', '2021-11-09', NULL, NULL, 'retret', '2021-11-05 01:27:03', '2021-11-05 01:27:03'),
-(34, NULL, 'PO34234', '2021-11-09', 'DO3455', '2021-11-04', 'xxx', '2021-11-05 01:28:23', '2021-11-05 01:45:36'),
-(35, NULL, 'PO12321', '2021-11-09', NULL, NULL, 'sdg', '2021-11-05 01:52:41', '2021-11-05 01:52:41'),
-(36, NULL, 'PO12321', '2021-11-09', NULL, NULL, 'sdg', '2021-11-05 01:56:46', '2021-11-05 01:56:46'),
-(37, NULL, 'PO12321', '2021-11-09', 'DO4546', '2021-11-17', 'ket', '2021-11-05 01:58:19', '2021-11-05 02:39:38'),
-(38, NULL, 'PK123', '2021-11-10', NULL, NULL, 'saas', '2021-11-05 02:25:31', '2021-11-05 02:25:31');
+(54, 'SO/EKAT/XI/2021/1', 'EMIIINDO123/XXI', '2021-07-01', NULL, NULL, NULL, '2021-11-07 20:53:18', '2021-11-07 20:53:18'),
+(56, 'SO/SPA/XI/2021/1', 'PO1230444', '2021-09-09', NULL, NULL, NULL, '2021-11-07 20:55:52', '2021-11-07 20:55:52'),
+(57, 'SO/SPB/XI/2021/1', 'PO8889', '2021-11-17', NULL, NULL, NULL, '2021-11-07 20:57:19', '2021-11-07 20:57:19'),
+(58, 'SO/SPA/XI/2021/2', 'PO5555', '2021-11-08', 'DO5555', '2021-11-18', NULL, '2021-11-07 20:58:25', '2021-11-07 20:58:25');
 
 -- --------------------------------------------------------
 
@@ -1947,7 +1912,7 @@ CREATE TABLE `spa` (
   `customer_id` int(11) NOT NULL,
   `pesanan_id` int(11) DEFAULT NULL,
   `ket` varchar(255) DEFAULT NULL,
-  `log` enum('penjualan','po','qc','gudang','selesai') NOT NULL,
+  `log` enum('penjualan','po','qc','gudang','logistik','selesai') NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1957,8 +1922,8 @@ CREATE TABLE `spa` (
 --
 
 INSERT INTO `spa` (`id`, `customer_id`, `pesanan_id`, `ket`, `log`, `created_at`, `updated_at`) VALUES
-(29, 262, 34, 'retret', 'penjualan', '2021-11-05 01:28:23', '2021-11-05 01:28:23'),
-(30, 304, 38, 'saas', 'penjualan', '2021-11-05 02:25:31', '2021-11-05 02:25:31');
+(31, 395, 56, NULL, 'penjualan', '2021-11-07 20:55:52', '2021-11-07 20:55:52'),
+(32, 38, 58, NULL, 'penjualan', '2021-11-07 20:58:25', '2021-11-07 20:58:25');
 
 -- --------------------------------------------------------
 
@@ -1972,6 +1937,7 @@ CREATE TABLE `spb` (
   `pesanan_id` int(11) DEFAULT NULL,
   `status` enum('sepakat','negosiasi','batal') NOT NULL,
   `ket` varchar(255) DEFAULT NULL,
+  `log` enum('penjualan','po','qc','logistik','gudang','selesai') NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1980,9 +1946,8 @@ CREATE TABLE `spb` (
 -- Dumping data for table `spb`
 --
 
-INSERT INTO `spb` (`id`, `customer_id`, `pesanan_id`, `status`, `ket`, `created_at`, `updated_at`) VALUES
-(2, 81, 36, 'sepakat', 'sdg', '2021-11-05 01:56:46', '2021-11-05 01:56:46'),
-(3, 374, 37, 'sepakat', 'xxx', '2021-11-05 01:58:19', '2021-11-05 01:58:19');
+INSERT INTO `spb` (`id`, `customer_id`, `pesanan_id`, `status`, `ket`, `log`, `created_at`, `updated_at`) VALUES
+(4, 413, 57, 'sepakat', NULL, 'penjualan', '2021-11-07 20:57:19', '2021-11-07 20:57:19');
 
 -- --------------------------------------------------------
 
@@ -2189,19 +2154,19 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `detail_ekatalog`
 --
 ALTER TABLE `detail_ekatalog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `detail_spa`
 --
 ALTER TABLE `detail_spa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `detail_spb`
 --
 ALTER TABLE `detail_spb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `divisi`
@@ -2213,7 +2178,7 @@ ALTER TABLE `divisi`
 -- AUTO_INCREMENT for table `ekatalog`
 --
 ALTER TABLE `ekatalog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -2255,7 +2220,7 @@ ALTER TABLE `penjualan_produk`
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `produk`
@@ -2273,13 +2238,13 @@ ALTER TABLE `provinsi`
 -- AUTO_INCREMENT for table `spa`
 --
 ALTER TABLE `spa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `spb`
 --
 ALTER TABLE `spb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`

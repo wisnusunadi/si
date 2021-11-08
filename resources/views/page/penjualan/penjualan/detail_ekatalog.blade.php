@@ -10,7 +10,10 @@
                             </li>
                             <li class="list-group-item">
                                 <a>No PO</a>
-                                <b class="float-right" id="no_po"></b>
+                                <b class="float-right" id="no_po"> @if ($data->Pesanan)
+                                    {{ $data->Pesanan->no_po}}
+
+                                    @endif</b>
                             </li>
                             <li class="list-group-item">
                                 <a>No AKN</a>

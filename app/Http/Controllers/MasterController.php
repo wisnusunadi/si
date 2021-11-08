@@ -174,7 +174,7 @@ class MasterController extends Controller
                     }
                 })
                 ->addColumn('status', function ($data) {
-                    return '<span class="yellow-text badge">Gudang</span>';
+                    return '<span class="red-text badge">' . $data->log . '</span>';
                 })
                 ->rawColumns(['status'])
                 ->make(true);

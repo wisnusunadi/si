@@ -805,7 +805,9 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'nama_customer',
+                data: 'so',
+                orderable: false,
+                searchable: false
             }, {
                 data: 'no_paket',
             }, {
@@ -845,8 +847,7 @@
                     searchable: false
                 },
                 {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
+                    data: 'so',
                     orderable: false,
                     searchable: false
                 },
@@ -856,21 +857,17 @@
                 },
                 {
                     data: 'nopo',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+
                 },
 
 
                 {
                     data: 'tgl_buat',
-                    orderable: false,
-                    searchable: false
+
                 },
                 {
                     data: 'tgl_kontrak',
-                    orderable: false,
-                    searchable: false
+
                 },
                 {
                     data: 'nama_customer',
@@ -878,8 +875,7 @@
 
                 {
                     data: 'status',
-                    orderable: false,
-                    searchable: false
+
                 },
                 {
                     data: 'button',
@@ -907,7 +903,9 @@
                     searchable: false
                 },
                 {
-                    data: 'so'
+                    data: 'so',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'nopo'
@@ -922,7 +920,7 @@
                     data: 'nama_customer'
                 },
                 {
-                    data: 'DT_RowIndex'
+                    data: 'status'
                 },
                 {
                     data: 'button'
@@ -948,7 +946,9 @@
                     searchable: false
                 },
                 {
-                    data: 'so'
+                    data: 'so',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'nopo'
@@ -963,7 +963,7 @@
                     data: 'nama_customer'
                 },
                 {
-                    data: 'DT_RowIndex'
+                    data: 'status'
                 },
                 {
                     data: 'button'
