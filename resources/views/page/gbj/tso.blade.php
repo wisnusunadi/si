@@ -45,8 +45,7 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Stok</label>
                                             <div class="col-12">
-                                                <input type="text" name="qty" id="qty"
-                                                    class="form-control number-input input-notzero stok">
+                                                <input type="text" name="qty" id="qty" class="form-control number-input input-notzero stok">
                                                 <span class="form-text text-muted">Stok Input Maks. 20</span>
                                                 {{-- <input type="text" class="stok-gudang" value="20" hidden> --}}
                                             </div>
@@ -84,8 +83,7 @@
                             </table>
                         </div>
                         <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-primary btn-simpan" type="button" data-toggle="modal"
-                                data-target="#modalNotes" hidden>Simpan</button>
+                            <button class="btn btn-primary btn-simpan" type="button" data-toggle="modal" data-target="#modalNotes" hidden>Simpan</button>
                         </div>
                     </div>
                     </form>
@@ -120,7 +118,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td>2121212122</td>
+                            <td>65654564646545455</td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -135,9 +133,9 @@
 <script>
     // import swal from 'sweetalert2/src/sweetalert2.js'
     // Restricts input for each element in the set of matched elements to the given inputFilter.
-    (function ($) {
-        $.fn.inputFilter = function (inputFilter) {
-            return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+    (function($) {
+        $.fn.inputFilter = function(inputFilter) {
+            return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
                 if (inputFilter(this.value)) {
                     this.oldValue = this.value;
                     this.oldSelectionStart = this.selectionStart;
@@ -151,18 +149,18 @@
             });
         };
     }(jQuery));
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.division').select2();
         $('.product').select2();
 
-        $(".number-input").inputFilter(function (value) {
+        $(".number-input").inputFilter(function(value) {
             return /^\d*$/.test(value);
             var value = $(this).val();
         });
 
     });
 
-    $(document).on('click','.btn-tambah', function (e) {
+    $(document).on('click', '.btn-tambah', function(e) {
         let divisi = $('#ke').val();
         let tujuan = $('#deskripsi').val();
         let produk = $('#gdg_brg_jadi_id').val();
@@ -183,8 +181,8 @@
             //     gdg_brg_jadi_id: $('#gdg_brg_jadi_id').val(),
             //     qty: $('#qty').val(),
             // },
-            success: function (res) {
-                if(res.errors) {
+            success: function(res) {
+                if (res.errors) {
                     console.log('error');
                 } else {
                     // if (stok < stok_gudang) {
@@ -203,12 +201,12 @@
                         showConfirmButton: false,
                         timer: 1500
                     })
-                        addData(divisi, tujuan, produk, stok)
+                    addData(divisi, tujuan, produk, stok)
                     console.log('ok');
                     // $('.datatable').DataTable().ajax.reload();
                     // location.reload();
                 }
-            $('.btn-simpan').prop('hidden', false);
+                $('.btn-simpan').prop('hidden', false);
             }
         });
     });
@@ -216,51 +214,53 @@
     function addData(divisi, tujuan, produk, stok) {
         if (tujuan.length > 30) {
             var a = tujuan.substring(0, 10) + '...';
+        } else {
+            var a = tujuan;
         }
         console.log(tujuan.length);
-        let tambah_data = '<tr><td>'+divisi+'</td><td>'+tujuan+'</td><td>'+produk+'</td><td>'+stok+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr><td>' + divisi + '</td><td>' + tujuan + '</td><td>' + produk + '</td><td>' + stok + '</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }
-    $(document).on('click', '.btn-delete', function(e){
+    $(document).on('click', '.btn-delete', function(e) {
         e.preventDefault();
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
-        if(check != 0){
+        if (check != 0) {
             $('.btn-simpan').prop('hidden', false);
-        }else{
+        } else {
             $('.btn-simpan').prop('hidden', true);
         }
     });
 
     $('.scan-produk').DataTable({
-            'columnDefs': [{
-                'targets': 1,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [0, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Scan Nomor Seri:"
+        'columnDefs': [{
+            'targets': 1,
+            'checkboxes': {
+                'selectRow': true
             }
-        });
+        }],
+        'select': {
+            'style': 'multi'
+        },
+        'order': [
+            [0, 'asc']
+        ],
+        "oLanguage": {
+            "sSearch": "Scan Nomor Seri:"
+        }
+    });
 
     $.ajax({
-        url: '{{ route('sel.divisi') }}',
+        url: "{{ route('sel.divisi') }}",
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            if(res) {
+            if (res) {
                 console.log(res);
                 $("#ke").empty();
                 $("#ke").append('<option value="">-- Pilih Tujuan--</option>');
                 $.each(res, function(key, value) {
-                    $("#ke").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    $("#ke").append('<option value="' + value.id + '">' + value.nama + '</option');
                 });
             } else {
                 $("#ke").empty();
@@ -269,16 +269,16 @@
     });
 
     $.ajax({
-        url: '{{ route('sel.gbj') }}',
+        url: "{{ route('sel.gbj') }}",
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            if(res) {
+            if (res) {
                 console.log(res);
                 $("#gdg_brg_jadi_id").empty();
                 $("#gdg_brg_jadi_id").append('<option value="">-- Pilih Produk--</option>');
                 $.each(res, function(key, value) {
-                    $("#gdg_brg_jadi_id").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    $("#gdg_brg_jadi_id").append('<option value="' + value.id + '">' + value.nama + '</option');
                 });
             } else {
                 $("#gdg_brg_jadi_id").empty();

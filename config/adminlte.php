@@ -999,9 +999,9 @@ return [
             'auth' => [22],
         ],
         [
-            'text' => 'Dasboard',
+            'text' => 'Dashboard',
             'url' => '/gbj/dashboard',
-            'icon' => 'fas fa-circle',
+            'icon' => 'fas fa-layer-group',
             'auth' => [13],
         ],
         // [
@@ -1034,33 +1034,7 @@ return [
         [
             'text' => 'Riwayat Transaksi',
             'url' => '/gbj/tp',
-            'icon' => 'fas fa-circle',
-            'auth' => [13],
-        ],
-        [
-            'header' => 'Penjualan',
-            'auth' => [13]
-        ],
-        [
-            'text' => 'Sales Order',
-            'url' => '/gbj/so',
-            'icon' => 'fas fa-circle',
-            'auth' => [13],
-        ],
-        [
-            'header' => 'Pengeluaran',
-            'auth' => [13]
-        ],
-        [
-            'text' => 'Berdasarkan SO',
-            'url' => '/gbj/bso',
-            'icon' => 'fas fa-circle',
-            'auth' => [13],
-        ],
-        [
-            'text' => 'Tanpa SO',
-            'url' => '/gbj/tso',
-            'icon' => 'fas fa-circle',
+            'icon' => 'fas fa-history',
             'auth' => [13],
         ],
         [
@@ -1070,13 +1044,39 @@ return [
         [
             'text' => 'Dalam Perakitan',
             'url' => '/gbj/dp',
-            'icon' => 'fas fa-circle',
+            'icon' => 'fas fa-truck-loading',
             'auth' => [13],
         ],
         [
             'text' => 'Selain Perakitan',
             'url' => '/gbj/lp',
-            'icon' => 'fas fa-circle',
+            'icon' => 'fas fa-box-open',
+            'auth' => [13],
+        ],
+        [
+            'header' => 'Penjualan',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Sales Order',
+            'url' => '/gbj/so',
+            'icon' => 'fas fa-people-carry',
+            'auth' => [13],
+        ],
+        [
+            'header' => 'Pengeluaran',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Berdasarkan SO',
+            'url' => '/gbj/bso',
+            'icon' => 'fas fa-swatchbook',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Tanpa SO',
+            'url' => '/gbj/tso',
+            'icon' => 'fas fa-book-open',
             'auth' => [13],
         ],
         [
