@@ -339,7 +339,9 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                if ($data->status == "sepakat") {
+                if ($data->status == "draft") {
+                    $status = '<span class="blue-text badge">Draft</span>';
+                } else if ($data->status == "sepakat") {
                     $status = '<span class="green-text badge">Sepakat</span>';
                 } else if ($data->status == "negosiasi") {
                     $status =  '<span class="yellow-text badge">Negosiasi</span>';
@@ -922,73 +924,126 @@ class PenjualanController extends Controller
         $ekatalog->satuan = $request->satuan_kerja;
         $ekatalog->status = $request->status_akn;
         $ekatalog->ket = $request->keterangan;
-        $ekatalog->save();
+        $ekat = $ekatalog->save();
+        $bool = true;
+        if ($ekat) {
+            $dekat = DetailEkatalog::where('ekatalog_id', $id)->delete();
+            if ($dekat) {
+                if ($request->status != "draft") {
+                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                        $cdekat = DetailEkatalog::create([
+                            'ekatalog_id' => $id,
+                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'jumlah' => $request->produk_jumlah[$i],
+                            'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                            'ongkir' => 0,
+                        ]);
+                        if ($cdekat) {
+                            $bool = false;
+                        }
+                    }
+                }
+            } else {
+                $bool = false;
+            }
+        } else {
+            $bool = false;
+        }
 
-
-        DetailEkatalog::where('ekatalog_id', $id)->delete();
-        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-
-            DetailEkatalog::create([
-                'ekatalog_id' => $id,
-                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                'jumlah' => $request->produk_jumlah[$i],
-                'harga' => str_replace(".", "", $request->produk_harga[$i]),
-                'ongkir' => 0,
-            ]);
+        if ($bool == true) {
+            return redirect()->back()->with('success', 'Berhasil mengubah Ekatalog');
+        } else if ($bool == false) {
+            return redirect()->back()->with('error', 'Gagal mengubah Ekatalog');
         }
     }
     public function update_spa(Request $request, $id)
     {
         $spa = Spa::find($id);
         $spa->customer_id = $request->customer_id;
-        $spa->save();
+        $uspa = $spa->save();
+        $bool = true;
+        if ($uspa) {
+            $pesanan = Pesanan::find($spa->pesanan_id);
+            $pesanan->no_do = $request->no_do;
+            $pesanan->tgl_do = $request->tanggal_do;
+            $pesanan->ket = $request->keterangan;
+            $po = $pesanan->save();
 
+            if ($po) {
+                $dspa = DetailSpa::where('spa_id', $id)->delete();
+                if ($dspa) {
+                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
 
-        $pesanan = Pesanan::find($spa->pesanan_id);
-        $pesanan->no_do = $request->no_do;
-        $pesanan->tgl_do = $request->tanggal_do;
-        $pesanan->ket = $request->keterangan;
-        $pesanan->save();
+                        $cdspa = DetailSpa::create([
+                            'spa_id' => $id,
+                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'jumlah' => $request->produk_jumlah[$i],
+                            'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                            'ongkir' => 0,
+                        ]);
+                        if (!$cdspa) {
+                            $bool = false;
+                        }
+                    }
+                } else {
+                    $bool = false;
+                }
+            } else {
+                $bool = false;
+            }
+        } else {
+            $bool = false;
+        }
 
-
-        DetailSpa::where('spa_id', $id)->delete();
-
-        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-
-            DetailSpa::create([
-                'spa_id' => $id,
-                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                'jumlah' => $request->produk_jumlah[$i],
-                'harga' => str_replace(".", "", $request->produk_harga[$i]),
-                'ongkir' => 0,
-            ]);
+        if ($bool == true) {
+            return redirect()->back()->with('success', 'Berhasil mengubah SPA');
+        } else if ($bool == false) {
+            return redirect()->back()->with('error', 'Gagal mengubah SPA');
         }
     }
     public function update_spb(Request $request, $id)
     {
         $spb = Spb::find($id);
         $spb->customer_id = $request->customer_id;
-        $spb->save();
+        $uspb = $spb->save();
+        $bool = true;
+        if ($uspb) {
+            $pesanan = Pesanan::find($spb->pesanan_id);
+            $pesanan->no_do = $request->no_do;
+            $pesanan->tgl_do = $request->tanggal_do;
+            $pesanan->ket = $request->keterangan;
+            $po = $pesanan->save();
 
+            if ($po) {
+                $dspb = DetailSpb::where('spb_id', $id)->delete();
+                if ($dspb) {
+                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                        $cdspb = DetailSpb::create([
+                            'spb_id' => $id,
+                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'jumlah' => $request->produk_jumlah[$i],
+                            'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                            'ongkir' => 0,
+                        ]);
 
-        $pesanan = Pesanan::find($spb->pesanan_id);
-        $pesanan->no_do = $request->no_do;
-        $pesanan->tgl_do = $request->tanggal_do;
-        $pesanan->ket = $request->keterangan;
-        $pesanan->save();
+                        if (!$cdspb) {
+                            $bool = true;
+                        }
+                    }
+                } else {
+                    $bool = false;
+                }
+            } else {
+                $bool = false;
+            }
+        } else {
+            $bool = false;
+        }
 
-
-        DetailSpb::where('spb_id', $id)->delete();
-
-        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-
-            DetailSpb::create([
-                'spb_id' => $id,
-                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                'jumlah' => $request->produk_jumlah[$i],
-                'harga' => str_replace(".", "", $request->produk_harga[$i]),
-                'ongkir' => 0,
-            ]);
+        if ($bool == true) {
+            return redirect()->back()->with('success', 'Berhasil mengubah SPB');
+        } else if ($bool == false) {
+            return redirect()->back()->with('error', 'Gagal mengubah SPB');
         }
     }
 

@@ -83,11 +83,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{route('logistik.pengiriman.create')}}">
-                            <span class="float-right filter">
-                                <button class="btn btn-outline-info" type="button"><i class="fas fa-plus"></i> Tambah</button>
-                            </span>
-                        </a>
                         <span class="float-right filter">
                             <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-filter"></i> Filter
@@ -144,6 +139,7 @@
                                         <th>No SO</th>
                                         <th>No SJ</th>
                                         <th>Ekspedisi</th>
+                                        <th>No Resi</th>
                                         <th>Tanggal Kirim</th>
                                         <th>Nama Customer</th>
                                         <th>Alamat</th>
@@ -158,6 +154,7 @@
                                         <td>SO-SPA10210001</td>
                                         <td>SJ/10/20/2001</td>
                                         <td>J&T</td>
+                                        <td><i class="text-muted">Belum Tersedia</i></td>
                                         <td>09-10-2021</td>
                                         <td>RS Nurul Ikhsan</td>
                                         <td>Jl. Jakarta No 18A-20A, Garut, Jawa Barat</td>
@@ -172,7 +169,7 @@
                                                         Detail
                                                     </button>
                                                 </a>
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'dalam_pengiriman'])}}" data-id="">
                                                     <button class="dropdown-item" type="button">
                                                         <i class="fas fa-pencil-alt"></i>
                                                         Edit
@@ -210,7 +207,7 @@
                                                         Detail
                                                     </button>
                                                 </a>
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
                                                     <button class="dropdown-item" type="button">
                                                         <i class="fas fa-pencil-alt"></i>
                                                         Edit
@@ -259,6 +256,21 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="margin: 10px">
+                <div class="modal-header bg-info">
+                    <h4 class="modal-title">Edit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="edit">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @stop
 
@@ -266,6 +278,34 @@
 <script>
     $(function() {
         $('#showtable').DataTable();
+        $(document).on('click', '.editmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
+            $.ajax({
+                url: href,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#editmodal').modal("show");
+                    $('#edit').html(result).show();
+                    console.log(id);
+                    ekspedisi_select();
+                    // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
 
         function gg() {
             var showtable = $('#showtable').DataTable({
