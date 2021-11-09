@@ -65,12 +65,14 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/create', 'page.penjualan.produk.create')->name('penjualan.produk.create');
         Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_penjualan_produk'])->name('penjualan.produk.store');
         Route::view('/edit', 'page.penjualan.produk.edit')->name('penjualan.produk.edit');
+        Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_penjualan_produk'])->name('penjualan.produk.update');
     });
 
     Route::group(['prefix' => '/customer'], function () {
         Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
         Route::view('/create', 'page.penjualan.customer.create')->name('penjualan.customer.create');
-        Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_customer'])->name('penjualan.customer.store');;
+        Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_customer'])->name('penjualan.customer.store');
+        Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer'])->name('penjualan.customer.update');
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
     });
 

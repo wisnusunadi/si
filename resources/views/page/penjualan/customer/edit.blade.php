@@ -1,4 +1,4 @@
-<form action="/api/customer/update/{{$customer->id}}" method="post">
+<form action="{{route('penjualan.customer.update', ['id'=> $customer->id])}}" method="post">
     {{ csrf_field() }}
     {{ method_field('PUT') }}
     <div class="row d-flex justify-content-center">

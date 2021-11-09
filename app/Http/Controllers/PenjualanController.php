@@ -351,21 +351,21 @@ class PenjualanController extends Controller
                     $hari = $to->diffInDays($from);
 
                     if ($hari > 7) {
-                        return  ' ' . $tgl_parameter . '
-                        <br><span class="badge bg-success">' . $hari . ' Hari Lagi</span>
+                        return  '<div> ' . $tgl_parameter . '</div>
+                        <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>
                         ';
                     } else if ($hari > 0 && $hari <= 7) {
-                        return  '' . $tgl_parameter . '
-                        <br><span class="badge bg-warning">' . $hari . ' Hari Lagi</span>
+                        return  '<div>' . $tgl_parameter . '</div>
+                        <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>
                         ';
                     } else {
-                        return  '' . $tgl_parameter . '
-                        <br><span class="badge bg-danger">Batas Kontrak Habis</span>
+                        return  '<div>' . $tgl_parameter . '</div>
+                        <div class="invalid-feedback d-block"><small><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</small></div>
                         ';
                     }
                 } elseif ($tgl_sekarang == $tgl_parameter) {
-                    return  '' . $tgl_parameter . '
-                    <br><span class="badge bg-danger">Batas Kontrak Habis</span>
+                    return  '<div>' . $tgl_parameter . '</div>
+                    <div class="invalid-feedback d-block"><small><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</small></div>
                     ';
                 } else {
                     $to = Carbon::now();
@@ -928,6 +928,21 @@ class PenjualanController extends Controller
     }
     public function create_so_ekatalog(Request $request, $id)
     {
+        $v = Validator::make(
+            $request->all(),
+            [
+                'customer_id' => 'required',
+                'status' => 'required',
+            ],
+            [
+                'customer_id.required' => 'Customer harus di isi',
+                'status.required' => 'Status harus di pilih',
+            ]
+        );
+
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v);
+        } else {
         // $this->validate(
         //     $request,
         //     [w
@@ -970,6 +985,7 @@ class PenjualanController extends Controller
             return redirect()->back()->with('error', 'Gagal menambahkan PO');
         }
     }
+    }
     //Update
     public function update_penjualan($id, $jenis)
     {
@@ -1010,7 +1026,7 @@ class PenjualanController extends Controller
                             'harga' => str_replace(".", "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-                        if ($cdekat) {
+                        if (!$cdekat) {
                             $bool = false;
                         }
                     }

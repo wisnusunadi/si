@@ -33,6 +33,10 @@
         color: #FFC700;
     }
 
+    #info {
+        color: #3a7bb0;
+    }
+
     .fa-search:hover {
         color: #4682B4;
     }

@@ -7,6 +7,8 @@
 @stop
 
 @section('content')
+<section class="content">
+    <div class="container-fluid">
 <div class="row">
     <div class="col-12">
         @if(Session::has('error') || count($errors) > 0 )
@@ -138,6 +140,8 @@
         </form>
     </div>
 </div>
+</div>
+</section>
 @endsection
 
 @section('adminlte_js')

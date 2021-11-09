@@ -263,7 +263,7 @@ class MasterController extends Controller
         $bool = true;
         if ($PenjualanProduk) {
             for ($i = 0; $i < count($request->produk_id); $i++) {
-                $j = $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
+                $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
             }
         } else {
             $bool = false;
@@ -354,7 +354,6 @@ class MasterController extends Controller
 
     public function update_penjualan_produk(Request $request, $id)
     {
-
         $harga_convert =  str_replace(',', "", $request->harga);
         $PenjualanProduk = PenjualanProduk::find($id);
         $PenjualanProduk->nama = $request->nama_paket;
@@ -365,7 +364,12 @@ class MasterController extends Controller
         for ($i = 0; $i < count($request->produk_id); $i++) {
             $produk_array[$request->produk_id[$i]] = ['jumlah' => $request->jumlah[$i]];
         }
-        $PenjualanProduk->produk()->sync($produk_array);
+        $p = $PenjualanProduk->produk()->sync($produk_array);
+        if ($p) {
+            return redirect()->back()->with('success', 'Berhasil mengubah data');
+        } else {
+            return redirect()->back()->with('error', 'Gagal mengubah data');
+        }
     }
     //Other
 
