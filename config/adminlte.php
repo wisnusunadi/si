@@ -1035,7 +1035,7 @@ return [
             'text' => 'Riwayat Transaksi',
             'url' => '/gbj/tp',
             'icon' => 'fas fa-history',
-            'auth' => [13],
+            'auth' => [13, 17],
         ],
         [
             'header' => 'Penerimaan',
