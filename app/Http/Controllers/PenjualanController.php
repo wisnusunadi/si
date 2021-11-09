@@ -621,18 +621,34 @@ class PenjualanController extends Controller
                 'ket' => $request->keterangan,
                 'log' => 'penjualan'
             ]);
-            for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                DetailEkatalog::create([
-                    'ekatalog_id' => $Ekatalog->id,
-                    'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                    'jumlah' => $request->produk_jumlah[$i],
-                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                    'ongkir' => 0,
-                ]);
+            $bool = true;
+            if ($Ekatalog) {
+                if ($request->status != 'draft') {
+                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                        $dekat = DetailEkatalog::create([
+                            'ekatalog_id' => $Ekatalog->id,
+                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'jumlah' => $request->produk_jumlah[$i],
+                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                            'ongkir' => 0,
+                        ]);
+                        if (!$dekat) {
+                            $bool = false;
+                        }
+                    }
+                } else {
+                    $bool = true;
+                }
+            } else {
+                $bool = false;
+            }
+
+            if ($bool == true) {
+                return redirect()->back()->with('success', 'Berhasil menambahkan Ekatalog');
+            } else if ($bool == false) {
+                return redirect()->back()->with('error', 'Gagal menambahkan Ekatalog');
             }
         } elseif ($request->jenis_penjualan == 'spa') {
-
-
             if (!empty($request->input('no_po'))) {
                 $pesanan = Pesanan::create([
                     'so' => $this->createSO('SPA'),
@@ -651,15 +667,28 @@ class PenjualanController extends Controller
                 'ket' => $request->keterangan,
                 'log' => 'penjualan'
             ]);
+            $bool = true;
+            if ($Spa) {
+                for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                    $dspa = DetailSpa::create([
+                        'spa_id' => $Spa->id,
+                        'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                        'jumlah' => $request->produk_jumlah[$i],
+                        'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                        'ongkir' => 0,
+                    ]);
+                    if (!$dspa) {
+                        $bool = false;
+                    }
+                }
+            } else {
+                $bool = false;
+            }
 
-            for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                DetailSpa::create([
-                    'spa_id' => $Spa->id,
-                    'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                    'jumlah' => $request->produk_jumlah[$i],
-                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                    'ongkir' => 0,
-                ]);
+            if ($bool == true) {
+                return redirect()->back()->with('success', 'Berhasil menambahkan SPA');
+            } else if ($bool == false) {
+                return redirect()->back()->with('error', 'Gagal menambahkan SPA');
             }
         } else {
 
@@ -681,15 +710,28 @@ class PenjualanController extends Controller
                 'ket' => $request->keterangan,
                 'log' => 'penjualan'
             ]);
+            $bool = true;
+            if ($Spb) {
+                for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                    $dspb = DetailSpb::create([
+                        'spb_id' => $Spb->id,
+                        'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                        'jumlah' => $request->produk_jumlah[$i],
+                        'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                        'ongkir' => 0,
+                    ]);
+                    if (!$dspb) {
+                        $bool = false;
+                    }
+                }
+            } else {
+                $bool = false;
+            }
 
-            for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                DetailSpb::create([
-                    'spb_id' => $Spb->id,
-                    'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                    'jumlah' => $request->produk_jumlah[$i],
-                    'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                    'ongkir' => 0,
-                ]);
+            if ($bool == true) {
+                return redirect()->back()->with('success', 'Berhasil menambahkan SPB');
+            } else if ($bool == false) {
+                return redirect()->back()->with('error', 'Gagal menambahkan SPB');
             }
         }
     }
@@ -828,7 +870,7 @@ class PenjualanController extends Controller
         //     ]
 
         // );
-
+        $bool = true;
         $pesanan =  Pesanan::create([
             'so' => $this->createSO('EKAT'),
             'no_po' => $request->no_po,
@@ -837,9 +879,22 @@ class PenjualanController extends Controller
             'tgl_do' => $request->tanggal_do,
             'ket' => $request->keterangan
         ]);
-        $ekatalog = Ekatalog::find($id);
-        $ekatalog->pesanan_id = $pesanan->id;
-        $ekatalog->save();
+        if (!$pesanan) {
+            $bool = false;
+        } else {
+            $ekatalog = Ekatalog::find($id);
+            $ekatalog->pesanan_id = $pesanan->id;
+            $ekat = $ekatalog->save();
+            if (!$ekat) {
+                $bool = false;
+            }
+        }
+
+        if ($bool == true) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan PO');
+        } else if ($bool == false) {
+            return redirect()->back()->with('error', 'Gagal menambahkan PO');
+        }
     }
     //Update
     public function update_penjualan($id, $jenis)
