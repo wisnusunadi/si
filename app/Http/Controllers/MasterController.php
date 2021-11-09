@@ -118,10 +118,10 @@ class MasterController extends Controller
         //$data = PenjualanProduk::with('produk')->where('id', $id)->get();
         // $data = PenjualanProduk::with('Produk')->selectRaw('distinct penjualan_produk.*')->where('id', '5')->get();
         return datatables()->of($data)
-            // ->addColumn('produk_nama', function ($data) {
-            //     return implode(',', $data->Produk->pluck('nama')->toArray());
-            // })
-            // ->rawColumns(['produk_nama'])
+            ->addColumn('produk_nama', function ($data) {
+                return implode(',', $data->Produk->pluck('nama')->toArray());
+            })
+            ->rawColumns(['produk_nama'])
             ->addColumn('kelompok', function ($data) {
                 return $data->KelompokProduk->nama;
             })
