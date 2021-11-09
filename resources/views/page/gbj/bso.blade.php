@@ -32,7 +32,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
-                                <h3 class="card-title">Daftar SO Gudang Barang Jadi</h3>
+                                <h3 class="card-title">Transfer Produk Berdasarkan SO</h3>
                             </div>
                         </div>
                     </div>

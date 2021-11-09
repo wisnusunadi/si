@@ -147,6 +147,17 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col">
+                        <div class="form-group">
+                            <label for="">Produk</label>
+                            <select name="" class="form-control produk-add">
+                                <option value="">Buku</option>
+                                <option value="">Bolpoin</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <label for="">Nama Produk</label>
                         <input type="text" name="nama" class="form-control @error('title') is-invalid @enderror"
                             placeholder="Nama Produk">
@@ -155,8 +166,11 @@
                         @enderror
                     </div>
                     <div class="col">
-                        <label for="">Stok</label>
-                        <input type="text" class="form-control" placeholder="Stok" value="0" readonly>
+                        <label for="">Satuan</label>
+                       <select name="" id="satuan-tambah" class="form-control">
+                           <option value="">mm</option>
+                           <option value="">unit</option>
+                       </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -184,18 +198,6 @@
                                 <div class="input-group-text">mm</div>
                             </div>
                         </div>&nbsp;
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="">Produk</label>
-                            <select name="" class="form-control produk-add">
-
-                                <option value="">Buku</option>
-                                <option value="">Bolpoin</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -229,13 +231,26 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col">
+                        <div class="form-group">
+                            <label for="">Produk</label>
+                            <select name="" class="form-control produk-add">
+                                <option value="">Buku</option>
+                                <option value="">Bolpoin</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <label for="">Nama Produk</label>
                         <input type="text" class="form-control" placeholder="Nama Produk">
                     </div>
                     <div class="col">
-                        <label for="">Stok</label>
-                        <input type="text" class="form-control" placeholder="Stok" value="0" readonly>
-
+                        <label for="">Satuan</label>
+                       <select name="" id="" class="form-control satuan-edit">
+                           <option value="">mm</option>
+                           <option value="">unit</option>
+                       </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -263,17 +278,6 @@
                                 <div class="input-group-text">mm</div>
                             </div>
                         </div>&nbsp;
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="">Produk</label>
-                            <select name="" class="form-control produk-edit">
-                                <option value="">Buku</option>
-                                <option value="">Bolpoin</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -475,6 +479,7 @@
     $('.editProduk').click(function (e) {
         $('.modal-edit').modal('show');
         $('.produk-edit ').select2();
+        $('.satuan-edit').select2();
         $('.layout-edit').select2();
     });
     $('.viewProduk').click(function (e) {
@@ -510,6 +515,6 @@
     $('.viewStock').click(function (e) {
         $('.modalViewStock').modal('show');
     });
-
+    $('#satuan-tambah').select2();
 </script>
 @stop

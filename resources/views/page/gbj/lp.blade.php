@@ -45,7 +45,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-horizontal">
                                         <div class="form-group row">
-                                            <label for="" id="tanggal" class="col-sm-5 text-right">Tanggal</label>
+                                            <label for="" id="tanggal" class="col-sm-5 text-right">Tanggal Masuk</label>
                                             <div class="col-sm-2">
                                                 <input type="text" class="form-control" id="datetimepicker1">
                                             </div>

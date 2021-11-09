@@ -555,33 +555,31 @@
 @section('adminlte_js')
 <script>
   // Jumlah Stok 10 sampai 20 Unit
+  const DATA_COUNT = 7;
+const NUMBER_CFG = {count: DATA_COUNT, min: 0, max: 100};
+const data = {
+  labels: Utils.months({count: DATA_COUNT}),
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data: Utils.numbers(NUMBER_CFG),
+      fill: false,
+      borderColor: Utils.CHART_COLORS.red,
+      backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+    },
+    {
+      label: 'Dataset 2',
+      data: Utils.numbers(NUMBER_CFG),
+      fill: false,
+      borderColor: Utils.CHART_COLORS.blue,
+      backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
+    }
+  ]
+};
 var ctx = document.getElementById('myChart1').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
-    data: {
-        labels: ['Nama Produk 1', 'Nama Produk 2', 'Nama Produk 3', 'Nama Produk 4', 'Nama Produk 5', 'Nama Produk 6'],
-        datasets: [{
-            data: [12, 19, 13, 15, 12, 13],
-            label: 'Stok',
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
+    data: data
     options: {
         scales: {
             y: {

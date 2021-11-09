@@ -287,6 +287,7 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th>Nomor SO</th>
                                 <th>Tanggal Masuk</th>
                                 <th>Tanggal Keluar</th>
                                 <th>Dari/Ke</th>
@@ -297,6 +298,7 @@
                         </thead>
                         <tbody>
                             <tr>
+                                <td>652146416541654</td>
                                 <td scope="row">10-04-2021</td>
                                 <td>23-09-2021</td>
                                 <td><span class="badge badge-success">Divisi IT</span></td>
@@ -306,6 +308,7 @@
                                             class="far fa-eye"> Detail</i></button></td>
                             </tr>
                             <tr>
+                                <td>652146416541654</td>
                                 <td scope="row">10-04-2021</td>
                                 <td>23-09-2021</td>
                                 <td><span class="badge badge-info">Divisi QC</span></td>
