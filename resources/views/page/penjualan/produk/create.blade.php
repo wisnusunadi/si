@@ -9,7 +9,6 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        {{session()->get('success')}}
         @if(Session::has('error') || count($errors) > 0 )
         <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
             <strong>Gagal menambahkan!</strong> Periksa
@@ -27,7 +26,7 @@
             </button>
         </div>
         @endif
-        <form action="/api/penjualan_produk/create" method="post">
+        <form action="{{route('penjualan.produk.store')}}" method="post">
             {{csrf_field()}}
             <div class="row d-flex justify-content-center">
                 <div class="col-11">

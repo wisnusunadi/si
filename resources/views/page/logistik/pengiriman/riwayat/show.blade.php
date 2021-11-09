@@ -92,7 +92,7 @@
 @stop
 
 @section('content_header')
-<h1 class="m-0 text-dark">Pengiriman</h1>
+<h1 class="m-0 text-dark">Riwayat Pengiriman</h1>
 @stop
 
 @section('content')
@@ -173,12 +173,12 @@
                                         <td>SO-SPA10210001</td>
                                         <td>SJ/10/20/2001</td>
                                         <td class="minimizechar">J&T</td>
-                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
+                                        <td>JT793719379</td>
                                         <td>09-10-2021</td>
                                         <td class="minimizechar">RS Nurul Ikhsan</td>
                                         <td class="minimizechar">Jl. Jakarta No 18A-20A, Garut, Jawa Barat</td>
                                         <td>081119494950</td>
-                                        <td><span class="badge blue-text">Dalam Pengiriman</span></td>
+                                        <td><span class="badge green-text">Selesai</span></td>
                                         <td>
                                             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -186,12 +186,6 @@
                                                     <button class="dropdown-item" type="button">
                                                         <i class="fas fa-search"></i>
                                                         Detail
-                                                    </button>
-                                                </a>
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'dalam_pengiriman'])}}" data-id="">
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                        Edit
                                                     </button>
                                                 </a>
                                                 <a href="{{route('logistik.pengiriman.print')}}">
@@ -208,15 +202,12 @@
                                         <td>SO-EKAT08210005</td>
                                         <td>SJ/08/21/0986</td>
                                         <td class="minimizechar">Safari Dharma Raya</td>
-                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
+                                        <td>JT793719379</td>
                                         <td>02-08-2021</td>
                                         <td class="minimizechar">Bapak Hutapea</td>
                                         <td class="minimizechar">Jl. Moh. Hatta No 73, Medan, Sumatera Utara</td>
                                         <td>082139754850</td>
-                                        <td><a href="" id="pengirimanhref">
-                                                <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
-                                                <div><small class="text-muted">Pengiriman</small></div>
-                                            </a>
+                                        <td><span class="badge green-text">Selesai</span>
                                         </td>
                                         <td>
                                             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -227,10 +218,10 @@
                                                         Detail
                                                     </button>
                                                 </a>
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
+                                                <a href="{{route('logistik.pengiriman.print')}}">
                                                     <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                        Edit
+                                                        <i class="fas fa-file"></i>
+                                                        Laporan PDF
                                                     </button>
                                                 </a>
                                             </div>
@@ -241,15 +232,12 @@
                                         <td>SO-SPB08210005</td>
                                         <td>SJ/01/20/1927</td>
                                         <td class="minimizechar">Si Cepat</td>
-                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
+                                        <td>JT793719379</td>
                                         <td>02-08-2021</td>
                                         <td class="minimizechar">Pemerintah Kab Badung</td>
                                         <td class="minimizechar">Jl. Bougenvil No 45, Badung, Bali</td>
                                         <td>082139754850</td>
-                                        <td><a href="" id="pengirimanhref">
-                                                <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
-                                                <div><small class="text-muted">Pengiriman</small></div>
-                                            </a>
+                                        <td><span class="badge green-text">Selesai</span>
                                         </td>
                                         <td>
                                             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -260,10 +248,10 @@
                                                         Detail
                                                     </button>
                                                 </a>
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
+                                                <a href="{{route('logistik.pengiriman.print')}}">
                                                     <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                        Edit
+                                                        <i class="fas fa-file"></i>
+                                                        Laporan PDF
                                                     </button>
                                                 </a>
                                             </div>
@@ -293,173 +281,4 @@
         </div>
     </div>
 </div>
-@stop
-
-@section('adminlte_js')
-<script>
-    $(function() {
-        $('#showtable').DataTable();
-        $(document).on('click', '.editmodal', function() {
-            var href = $(this).attr('data-attr');
-            var id = $(this).data('id');
-            console.log(href);
-            $.ajax({
-                url: href,
-                beforeSend: function() {
-                    $('#loader').show();
-                },
-                success: function(result) {
-                    $('#editmodal').modal("show");
-                    $('#edit').html(result).show();
-                    console.log(id);
-                    ekspedisi_select();
-                    // $("#editform").attr("action", href);
-                },
-                complete: function() {
-                    $('#loader').hide();
-                },
-                error: function(jqXHR, testStatus, error) {
-                    console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
-                    $('#loader').hide();
-                },
-                timeout: 8000
-            })
-        });
-
-        $(document).on('change', 'input[type="radio"][name="pengiriman"]', function(event) {
-            $('#ekspedisi_id').removeClass('is-invalid');
-            $('#msgekspedisi_id').text("");
-            $('#nama_pengirim').removeClass('is-invalid');
-            $('#msgnama_pengirim').text("");
-            $('#no_polisi').removeClass('is-invalid');
-            $('#msgno_polisi').text("");
-            if ($('input[type="radio"][name="pengiriman"]:checked').val() == "ekspedisi") {
-                $('#ekspedisi').removeClass('hide');
-                $('#nonekspedisi').addClass('hide');
-                $('#no_polisi').val("");
-                $('#nama_pengirim').val("");
-                if ($('.ekspedisi_id').val() != "") {
-                    $('#btnsimpan').removeAttr('disabled');
-                } else {
-                    $('#btnsimpan').attr('disabled', true);
-                }
-            } else if ($('input[type="radio"][name="pengiriman"]:checked').val() == "nonekspedisi") {
-                $('#ekspedisi').addClass('hide');
-                $('#nonekspedisi').removeClass('hide');
-                $('.ekspedisi_id').val("");
-                if ($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") {
-                    $('#btnsimpan').removeAttr('disabled');
-                } else {
-                    $('#btnsimpan').attr('disabled', true);
-                }
-            }
-        });
-
-        $(document).on('change keyup', '#no_resi', function(event) {
-            if ($(this).val() != "") {
-                $('#no_resi').removeClass('is-invalid');
-                $('#msgno_resi').text("");
-                $('#btnsimpan').removeAttr('disabled');
-            } else if ($(this).val() == "") {
-                $('#no_resi').addClass('is-invalid');
-                $('#msgno_resi').text("No Resi harus diisi");
-                $('#btnsimpan').attr('disabled', true);
-            }
-        });
-
-        $(document).on('change keyup', '#nama_pengirim', function(event) {
-            if ($(this).val() != "") {
-                $('#nama_pengirim').removeClass('is-invalid');
-                $('#msgnama_pengirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
-                    $('#btnsimpan').removeAttr('disabled');
-                } else {
-                    $('#btnsimpan').attr('disabled', true);
-                }
-            } else if ($(this).val() == "") {
-                $('#nama_pengirim').addClass('is-invalid');
-                $('#msgnama_pengirim').text("Nama Pengirim harus diisi");
-                $('#btnsimpan').attr('disabled', true);
-            }
-        });
-
-        $(document).on('change keyup', '#no_polisi', function(event) {
-            if ($(this).val() != "") {
-                $('#no_polisi').removeClass('is-invalid');
-                $('#msgno_polisi').text("");
-                if (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "") {
-                    $('#btnsimpan').removeAttr('disabled');
-                } else {
-                    $('#btnsimpan').attr('disabled', true);
-                }
-            } else if ($(this).val() == "") {
-                $('#no_polisi').addClass('is-invalid');
-                $('#msgno_polisi').text("No Kendaraan harus diisi");
-                $('#btnsimpan').attr('disabled', true);
-            }
-        });
-
-        $(document).on('change keyup', '.ekspedisi_id', function(event) {
-            if ($(this).val() != "") {
-                $('#ekspedisi_id').removeClass('is-invalid');
-                $('#msgekspedisi_id').text("");
-                if (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val("") != "") {
-                    $('#btnsimpan').removeAttr('disabled');
-                } else {
-                    $('#btnsimpan').attr('disabled', true);
-                }
-            } else if ($(this).val() == "") {
-                $('#ekspedisi_id').addClass('is-invalid');
-                $('#msgekspedisi_id').text("No Kendaraan harus diisi");
-                $('#btnsimpan').attr('disabled', true);
-            }
-        });
-
-        function ekspedisi_select() {
-            $('.ekspedisi_id').select2({
-                placeholder: "Pilih Ekspedisi",
-                allowClear: true,
-            });
-        }
-
-        function gg() {
-            var showtable = $('#showtable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/customer/detail/' + '1',
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    }
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'DT_RowIndex',
-
-                    },
-                    {
-                        data: 'DT_RowIndex',
-
-                    },
-                    {
-                        data: 'DT_RowIndex',
-
-                    }
-                ]
-            });
-        }
-    });
-</script>
 @stop

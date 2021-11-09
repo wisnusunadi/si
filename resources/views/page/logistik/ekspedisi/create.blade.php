@@ -127,10 +127,10 @@
                                                     <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
                                                     <label class="form-check-label" for="jurusan2">Per Provinsi</label>
                                                 </div>
-                                                <div class="form-check form-check-inline">
+                                                <!-- <div class="form-check form-check-inline">
                                                     <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
                                                     <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="invalid-feedback" id="msgjurusan">
                                                 </div>
@@ -341,6 +341,7 @@
         });
 
         $('.provinsi').select2({
+            multiple: true,
             ajax: {
                 minimumResultsForSearch: 20,
                 dataType: 'json',

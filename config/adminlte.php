@@ -1092,6 +1092,12 @@ return [
             'url' => '/logistik/pengiriman/riwayat/show',
             'auth' => [15],
         ],
+        [
+            'text' => 'Laporan',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/pengiriman/laporan/show',
+            'auth' => [15],
+        ],
 
         [
             'text' => 'test',

@@ -8,10 +8,10 @@
                             <div class="form-horizontal">
                                 <h5>Data Pengiriman</h5>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-5 align-right" for="no_sj">No Surat Jalan</label>
+                                    <label class="col-form-label col-5 align-right" for="no_invoice">No Invoice</label>
                                     <div class="col-6">
-                                        <input type="text" class="form-control col-form-label" name="no_sj" id="no_sj">
-                                        <div class="invalid-feedback" id="msgno_sj"></div>
+                                        <input type="text" class="form-control col-form-label" name="no_invoice" id="no_invoice">
+                                        <div class="invalid-feedback" id="msgno_invoice"></div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -115,7 +115,7 @@
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
                 </div>
                 <div class="col-6">
-                    <button type="submit" class="btn btn-warning float-right" id="btnsimpan" disabled>Simpan</button>
+                    <button type="submit" class="btn btn-info float-right" id="btnsimpan" disabled>Simpan</button>
                 </div>
             </div>
         </div>

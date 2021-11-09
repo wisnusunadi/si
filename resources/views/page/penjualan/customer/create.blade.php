@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-12">
         <div class="content">
-            <form action="/api/customer/create" method="post">
+            <form action="{{route('penjualan.customer.store')}}" method="post">
                 {{csrf_field()}}
                 <div class="row d-flex justify-content-center">
                     <div class="col-8">

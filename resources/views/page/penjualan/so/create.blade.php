@@ -27,7 +27,7 @@
                         <div class="col-12">
                             @if(session()->has('error') || count($errors) > 0 )
                             <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
-                                <strong>Gagal menambahkan!</strong> Periksa
+                                <strong>{{session()->get('error')}}</strong> Periksa
                                 kembali data yang diinput
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -35,7 +35,7 @@
                             </div>
                             @elseif(session()->has('success'))
                             <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
-                                <strong>Berhasil menambahkan data</strong>,
+                                <strong>{{session()->get('success')}}</strong>,
                                 Terima kasih
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -93,7 +93,9 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="/api/so/create/{{$ekatalog->id}}" method="post">
+                                    <form action="{{route('penjualan.so.ekatalog.create', ['id' => $ekatalog->id])}}" method="post">
+                                        {{csrf_field()}}
+                                        {{method_field('PUT')}}
                                         <div class="form-horizontal">
                                             <div class="form-group row">
                                                 <label for="no_po" class="col-4 col-form-label" style="text-align:right;">No PO</label>
