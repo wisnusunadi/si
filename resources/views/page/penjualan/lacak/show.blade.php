@@ -26,6 +26,7 @@
                 <div class="card-header bg-secondary">
                     <div class="card-title">Pencarian</div>
                 </div>
+
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
@@ -71,7 +72,7 @@
                 <div class="card-body">
                     <h4>Hasil Pencarian Purchase Order</h4>
                     <div class="table-responsive">
-                        <table class="table table-hover" id="potable">
+                        <table class="table table-hover" id="potable" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -92,7 +93,7 @@
                 <div class="card-body">
                     <h4>Hasil Pencarian No Seri</h4>
                     <div class="table-responsive">
-                        <table class="table table-hover" id="noseritable">
+                        <table class="table table-hover" id="noseritable" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -111,7 +112,7 @@
                 <div class="card-body">
                     <h4>Hasil Pencarian No AKN</h4>
                     <div class="table-responsive">
-                        <table class="table table-hover" id="noakntable">
+                        <table class="table table-hover" id="noakntable" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -130,13 +131,14 @@
                 <div class="card-body">
                     <h4>Hasil Pencarian Sales Order</h4>
                     <div class="table-responsive">
-                        <table class="table table-hover" id="table">
+                        <table class="table table-hover" id="nosotable" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>No SO</th>
                                     <th>Tanggal</th>
                                     <th>Posisi</th>
-                                    <th>Status</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -149,7 +151,7 @@
                 <div class="card-body">
                     <h4>Hasil Pencarian Surat Jalan</h4>
                     <div class="table-responsive">
-                        <table class="table table-hover" id="table">
+                        <table class="table table-hover" id="table" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -176,7 +178,99 @@
             placeholder: "Pilih Data Lacak",
             allowClear: true
         });
-        $('#potable').DataTable();
+        $('#potable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/no_po/0',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'no_po',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'tgl_po',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'nama_customer',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'noseri',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'log',
+                orderable: false,
+                searchable: false
+            }, ]
+        });
+        $('#nosotable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/no_so/0',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'so',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'tgl_po',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'log',
+                orderable: false,
+                searchable: false
+            }, ]
+        });
+        $('#noakntable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/no_akn/0',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_buat',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'log',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'status',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
         $('#noseritable').DataTable();
 
         $('#data').on('keyup change', function() {
@@ -212,22 +306,28 @@
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
             } else if ($('.pilih_data').val() == "no_po") {
+                var data = $('#data').val();
+                $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
                 $('#nopo').removeClass('hide');
                 $('#noseri').addClass('hide');
                 $('#noakn').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
             } else if ($('.pilih_data').val() == "no_akn") {
+                var data = $('#data').val();
+                $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
                 $('#noakn').removeClass('hide');
                 $('#noseri').addClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
-            } else if ($('.pilih_data').val() == "no_akn") {
-                $('#noakn').removeClass('hide');
+            } else if ($('.pilih_data').val() == "no_so") {
+                var data = $('#data').val();
+                $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
+                $('#noakn').addClass('hide');
                 $('#noseri').addClass('hide');
                 $('#nopo').addClass('hide');
-                $('#noso').addClass('hide');
+                $('#noso').removeClass('hide');
                 $('#nosj').addClass('hide');
             } else if ($('.pilih_data').val() == "no_sj") {
                 $('#nosj').removeClass('hide');

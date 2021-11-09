@@ -698,7 +698,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" id="spbtable">
+                                    <table class="table table-hover" id="spbtable" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -786,7 +786,48 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        //   var penjualantable = $('#penjualantable').DataTable({})
+        var penjualantable = $('#penjualantable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/data/',
+                'method': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'so',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'no_paket',
+            }, {
+                data: 'nopo',
+            }, {
+                data: 'tgl_order',
+            }, {
+                data: 'tgl_kontrak',
+            }, {
+                data: 'nama_customer',
+            }, {
+                data: 'jenis',
+            }, {
+                data: 'status',
+            }, {
+                data: 'button',
+                orderable: false,
+                searchable: false
+            }, ]
+        });
         var ekatalogtable = $('#ekatalogtable').DataTable({
             processing: true,
             serverSide: true,
@@ -806,8 +847,7 @@
                     searchable: false
                 },
                 {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
+                    data: 'so',
                     orderable: false,
                     searchable: false
                 },
@@ -817,21 +857,17 @@
                 },
                 {
                     data: 'nopo',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+
                 },
 
 
                 {
                     data: 'tgl_buat',
-                    orderable: false,
-                    searchable: false
+
                 },
                 {
                     data: 'tgl_kontrak',
-                    orderable: false,
-                    searchable: false
+
                 },
                 {
                     data: 'nama_customer',
@@ -839,8 +875,7 @@
 
                 {
                     data: 'status',
-                    orderable: false,
-                    searchable: false
+
                 },
                 {
                     data: 'button',
@@ -868,7 +903,9 @@
                     searchable: false
                 },
                 {
-                    data: 'so'
+                    data: 'so',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'nopo'
@@ -883,14 +920,56 @@
                     data: 'nama_customer'
                 },
                 {
-                    data: 'DT_RowIndex'
+                    data: 'status'
                 },
                 {
                     data: 'button'
                 }
             ]
         })
-        //   var spbtable = $('#spbtable').DataTable({})
+        var spbtable = $('#spbtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/spb/data/',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nopo'
+                },
+                {
+                    data: 'tglpo'
+                },
+                {
+                    data: 'tglpo'
+                },
+                {
+                    data: 'nama_customer'
+                },
+                {
+                    data: 'status'
+                },
+                {
+                    data: 'button'
+                }
+            ]
+        })
 
 
 
@@ -920,7 +999,8 @@
                         detailtabel_ekatalog(id);
                     } else if (label == 'spa') {
                         detailtabel_spa(id);
-                        //console.log(id);
+                    } else {
+                        detailtabel_spb(id);
                     }
 
                 },
@@ -1020,6 +1100,82 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/spa/paket/detail/' + id,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
+                    },
+                    {
+                        data: 'harga',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'jumlah',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'total',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api(),
+                        data;
+                    // converting to interger to find total
+                    var intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+                    // computing column Total of the complete result 
+                    var jumlah_pesanan = api
+                        .column(3)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    // computing column Total of the complete result 
+                    var total_pesanan = api
+                        .column(4)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                    $(api.column(0).footer()).html('Total');
+                    $(api.column(3).footer()).html('Total');
+                    $(api.column(4).footer()).html(num_for(total_pesanan));
+                },
+            })
+        }
+
+        function detailtabel_spb(id) {
+            $('#detailtabel_spb').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/spb/paket/detail/' + id,
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
