@@ -260,24 +260,19 @@ class MasterController extends Controller
             'nama' => $request->nama_paket,
             'harga' => $harga_convert
         ]);
+        $bool = true;
         if ($PenjualanProduk) {
-            $bool = true;
             for ($i = 0; $i < count($request->produk_id); $i++) {
                 $j = $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
-                if (!$j) {
-                    $bool = false;
-                }
-            }
-            if ($bool == true) {
-                // Alert::success('Berhasil', 'Berhasil menambahkan data');
-                return redirect()->back()->with('success', 'success');
-            } else if ($bool == false) {
-                return redirect()->back()->with('error', 'error');
-                // Alert::error('Gagal', 'Gagal menambahkan data');
             }
         } else {
-            return redirect()->back()->with('error', 'error');
-            // Alert::error('Gagal', 'Gagal menambahkan data');
+            $bool = false;
+        }
+
+        if ($bool == true) {
+            return redirect()->back()->with('success', 'success');
+        } else if ($bool == false) {
+            return redirect()->back()->with('error', 'Detail Penjualan error');
         }
 
 
@@ -312,12 +307,12 @@ class MasterController extends Controller
         $customer->telp = $request->telepon;
         $customer->alamat = $request->alamat;
         $customer->ket = $request->keterangan;
-        $customer->save();
+        $c = $customer->save();
 
-        if ($customer) {
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        if ($c) {
+            return redirect()->back()->with('success', 'Berhasil mengubah data');
         } else {
-            return redirect()->back()->with('error', 'Gagal menambahkan data');
+            return redirect()->back()->with('error', 'Gagal mengubah data');
         }
     }
 
@@ -334,7 +329,12 @@ class MasterController extends Controller
         $produk->no_akd = $request->no_akd;
         $produk->ket = $request->ket;
         $produk->status = $request->status;
-        $produk->save();
+        $p = $produk->save();
+        if ($p) {
+            return redirect()->back()->with('success', 'Berhasil mengubah data');
+        } else {
+            return redirect()->back()->with('error', 'Gagal mengubah data');
+        }
     }
     public function delete_produk($id)
     {
