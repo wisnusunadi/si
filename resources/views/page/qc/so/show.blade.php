@@ -74,7 +74,6 @@
                                 </span>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
@@ -161,7 +160,53 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({})
+        // var showtable = $('#showtable').DataTable({
+        //     processing: true,
+        //     serverSide: true,
+        //     ajax: {
+        //         'url': '/api/qc/so/data',
+        //         'type': 'POST',
+        //         'headers': {
+        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //         }
+
+        //     },
+        //     language: {
+        //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+        //     },
+        //     columns: [{
+        //         data: 'DT_RowIndex',
+        //         className: 'nowrap-text align-center',
+        //         orderable: false,
+        //         searchable: false
+        //     }, {
+        //         data: 'no_po',
+
+        //     }, {
+        //         data: 'DT_RowIndex',
+        //         className: 'nowrap-text align-center',
+        //         orderable: false,
+        //         searchable: false,
+        //     }, {
+        //         data: 'nama_customer',
+
+        //     }, {
+        //         data: 'DT_RowIndex',
+        //         className: 'nowrap-text align-center',
+        //         orderable: false,
+        //         searchable: false
+        //     }, {
+        //         data: 'DT_RowIndex',
+        //         className: 'nowrap-text align-center',
+        //         orderable: false,
+        //         searchable: false
+        //     }, {
+        //         data: 'DT_RowIndex',
+        //         className: 'nowrap-text align-center',
+        //         orderable: false,
+        //         searchable: false
+        //     }]
+        // })
 
     })
 </script>
