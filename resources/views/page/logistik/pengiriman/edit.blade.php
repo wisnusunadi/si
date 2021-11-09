@@ -1,6 +1,6 @@
 <div class="content">
     <div class=" d-flex justify-content-center">
-        <div class="col-11">
+        <div class="col-12">
             <div class="d-flex justify-content-center">
                 <div class="col-12">
                     <div class="card">
@@ -9,21 +9,21 @@
                             <div class="row">
                                 <div class="col-4">
                                     <div><small class="text-muted">Tujuan</small></div>
-                                    <div><b>PT. Karya Medika</b></div>
-                                    <div><b>Jl. Tambakberas No. 18-20, Pasuruan, Jawa Timur</b></div>
-                                    <div><b>08190983907</b></div>
+                                    <div><b class="smtxt">PT. Karya Medika</b></div>
+                                    <div><b class="smtxt">Jl. Tambakberas No. 18-20, Pasuruan, Jawa Timur</b></div>
+                                    <div><b class="smtxt">08190983907</b></div>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-3">
                                     <div><small class="text-muted">No Surat Jalan</small></div>
-                                    <div><b>SJ/15/20/2021/01</b></div>
+                                    <div><b class="smtxt">SJ/15/20/2021/01</b></div>
                                     <div><small class="text-muted">No PO</small></div>
-                                    <div><b>PO/ON/12/01/2021/01</b></div>
+                                    <div><b class="smtxt">PO/ON/12/01/2021/01</b></div>
                                 </div>
                                 <div class="col-2">
                                     <div><small class="text-muted">No Invoice</small></div>
-                                    <div><b>21102810837</b></div>
+                                    <div><b class="smtxt">21102810837</b></div>
                                     <div><small class="text-muted">Tanggal Kirim</small></div>
-                                    <div><b>20-11-2021</b></div>
+                                    <div><b class="smtxt">20-11-2021</b></div>
                                 </div>
                                 <div class="col-2">
                                     <div><small class="text-muted">Status</small></div>
