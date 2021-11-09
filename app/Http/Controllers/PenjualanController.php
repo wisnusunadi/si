@@ -305,20 +305,92 @@ class PenjualanController extends Controller
             ->rawColumns(['button',])
             ->make(true);
     }
+    public function getHariBatasKontrak($value, $limit)
+    {
+        if ($limit == 2) {
+            $days = '14';
+        } else {
+            $days = '21';
+        }
+        return Carbon::parse($value)->subDays($days);
+    }
 
     public function get_data_ekatalog_pengiriman()
     {
-        $data  = Ekatalog::all();
+
+        $data  = Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->orderBy('tgl_kontrak', 'ASC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('batas_kontrak', function ($data) {
-                $x = 'sd';
-
-                return  ' <hgroup>' . $data->tgl_kontrak .  '<small id="warning">' . $x . '</small> </hgroup>';
+            ->addColumn('so', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->so;
+                } else {
+                    return '';
+                }
             })
-            ->rawColumns(['batas_kontrak',])
+            ->addColumn('no_po', function ($data) {
+                if ($data->Pesanan) {
+                    return $data->Pesanan->no_po;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                return '<span class="red-text badge">' . $data->log . '</span>';
+            })
+            ->addColumn('batas_kontrak', function ($data) {
+
+                $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                $tgl_parameter = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status)->format('Y-m-d');
+
+                if ($tgl_sekarang < $tgl_parameter) {
+                    $to = Carbon::now();
+                    $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
+                    $hari = $to->diffInDays($from);
+
+                    if ($hari > 7) {
+                        return  ' ' . $tgl_parameter . '
+                        <br><span class="badge bg-success">' . $hari . ' Hari Lagi</span>
+                        ';
+                    } else if ($hari > 0 && $hari <= 7) {
+                        return  '' . $tgl_parameter . '
+                        <br><span class="badge bg-warning">' . $hari . ' Hari Lagi</span>
+                        ';
+                    } else {
+                        return  '' . $tgl_parameter . '
+                        <br><span class="badge bg-danger">Batas Kontrak Habis</span>
+                        ';
+                    }
+                } elseif ($tgl_sekarang == $tgl_parameter) {
+                    return  '' . $tgl_parameter . '
+                    <br><span class="badge bg-danger">Batas Kontrak Habis</span>
+                    ';
+                } else {
+                    $to = Carbon::now();
+                    $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
+                    $hari = $to->diffInDays($from);
+                    return  '' . $tgl_parameter . '
+                    <br><span class="badge bg-danger">Melebihi ' . $hari . ' Hari</span>
+                    ';
+                }
+            })
+            ->addColumn('button', function ($data) {
+                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                <button class="dropdown-item" type="button">
+                      <i class="fas fa-search"></i>
+                      Details
+                    </button>
+                </a>
+                </div>';
+            })
+            ->rawColumns(['batas_kontrak', 'button', 'status'])
             ->make(true);
     }
+
     public function get_data_ekatalog($value)
     {
         $x = explode(',', $value);
