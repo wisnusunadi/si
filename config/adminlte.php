@@ -1095,7 +1095,7 @@ return [
         [
             'text' => 'Laporan',
             'icon' => 'far fa-circle',
-            'url' => '/logistik/pengiriman/laporan/show',
+            'url' => '/logistik/laporan/show',
             'auth' => [15],
         ],
 

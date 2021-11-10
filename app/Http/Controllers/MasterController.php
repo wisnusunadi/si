@@ -310,9 +310,9 @@ class MasterController extends Controller
         $c = $customer->save();
 
         if ($c) {
-            return redirect()->back()->with('success', 'Berhasil mengubah data');
+            return redirect('/penjualan/customer/show')->with('success', 'Berhasil mengubah data');
         } else {
-            return redirect()->back()->with('error', 'Gagal mengubah data');
+            return redirect('/penjualan/customer/show')->with('error', 'Gagal mengubah data');
         }
     }
 
@@ -366,9 +366,9 @@ class MasterController extends Controller
         }
         $p = $PenjualanProduk->produk()->sync($produk_array);
         if ($p) {
-            return redirect()->back()->with('success', 'Berhasil mengubah data');
+            return redirect('/penjualan/produk/show')->with('success', 'Berhasil mengubah data');
         } else {
-            return redirect()->back()->with('error', 'Gagal mengubah data');
+            return redirect('/penjualan/produk/show')->with('error', 'Gagal mengubah data');
         }
     }
     //Other

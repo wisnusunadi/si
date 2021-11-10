@@ -1,6 +1,6 @@
 <style>
     .mdtxt {
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .nospace {
@@ -36,13 +36,27 @@
     .align-left {
         text-align: left;
     }
+
+    .imgsize {
+        width: auto;
+        height: 35px;
+    }
 </style>
 <div class="row">
     <div class="col-12">
         <div class="row">
-            <div class="col-12 align-left" style="border-bottom: 1px solid;">
-                <h2>SURAT JALAN</h2>
-            </div>
+            <table border=0 class="table" width="100%">
+                <tbody>
+                    <tr style="border-bottom: 1px solid;">
+                        <td>
+                            <h2>SURAT JALAN</h2>
+                        </td>
+                        <td class="align-right">
+                            <img src="{{public_path('assets/image/logo/spa_long.png') }}" alt="" class="imgsize">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="row mdtxt">
             <div class="col-12">
@@ -103,8 +117,8 @@
             </table>
         </div>
         <div class="row">
-            <div class="col-12 align-left" style="border-bottom: 1px double;">
-                <h2>SJ1289313198903</h2>
+            <div class="col-12 align-left" style="border-bottom: 1px solid;">
+                <h4>SJ1289313198903</h4>
             </div>
         </div><br>
         <div class="row mdtxt">
@@ -128,10 +142,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 align-left" style="border-bottom: 1px solid;">
-                <h2>Produk</h2>
+            <div class="col-12 align-left">
+                <h4>Produk</h4>
             </div>
-        </div><br>
+        </div>
         <div class="row mdtxt">
             <div class="col-12">
                 <table class="table" border="1" style="border-collapse: collapse; text-align:center;" width="100%">

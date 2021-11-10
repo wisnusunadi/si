@@ -161,8 +161,7 @@
                                         <th>No Resi</th>
                                         <th>Tanggal Kirim</th>
                                         <th>Nama Customer</th>
-                                        <th>Alamat</th>
-                                        <th>Telepon</th>
+                                        <th>Provinsi</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -176,8 +175,7 @@
                                         <td><small><i class="text-muted">Belum Tersedia</i></small></td>
                                         <td>09-10-2021</td>
                                         <td class="minimizechar">RS Nurul Ikhsan</td>
-                                        <td class="minimizechar">Jl. Jakarta No 18A-20A, Garut, Jawa Barat</td>
-                                        <td>081119494950</td>
+                                        <td class="minimizechar">Jawa Barat</td>
                                         <td><span class="badge blue-text">Dalam Pengiriman</span></td>
                                         <td>
                                             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -209,10 +207,12 @@
                                         <td>SJ/08/21/0986</td>
                                         <td class="minimizechar">Safari Dharma Raya</td>
                                         <td><small><i class="text-muted">Belum Tersedia</i></small></td>
-                                        <td>02-08-2021</td>
+                                        <td>
+                                            <div>02-08-2021</div>
+                                            <div><small><i class="fas fa-exclamation-circle warning"></i> Batas 2 Hari Lagi</small></div>
+                                        </td>
                                         <td class="minimizechar">Bapak Hutapea</td>
-                                        <td class="minimizechar">Jl. Moh. Hatta No 73, Medan, Sumatera Utara</td>
-                                        <td>082139754850</td>
+                                        <td class="minimizechar">Sumatera Utara</td>
                                         <td><a href="" id="pengirimanhref">
                                                 <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
                                                 <div><small class="text-muted">Pengiriman</small></div>
@@ -242,10 +242,12 @@
                                         <td>SJ/01/20/1927</td>
                                         <td class="minimizechar">Si Cepat</td>
                                         <td><small><i class="text-muted">Belum Tersedia</i></small></td>
-                                        <td>02-08-2021</td>
+                                        <td>
+                                            <div>02-08-2021</div>
+                                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</div>
+                                        </td>
                                         <td class="minimizechar">Pemerintah Kab Badung</td>
-                                        <td class="minimizechar">Jl. Bougenvil No 45, Badung, Bali</td>
-                                        <td>082139754850</td>
+                                        <td class="minimizechar">Bali</td>
                                         <td><a href="" id="pengirimanhref">
                                                 <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
                                                 <div><small class="text-muted">Pengiriman</small></div>

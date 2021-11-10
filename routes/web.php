@@ -161,6 +161,9 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
             Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
         });
     });
+    Route::group(['prefix' => '/laporan'], function () {
+        Route::view('/show', 'page.logistik.laporan.show')->name('logistik.laporan.show');
+    });
 });
 
 

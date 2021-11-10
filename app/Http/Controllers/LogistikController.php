@@ -9,7 +9,8 @@ class LogistikController extends Controller
 {
     public function pdf_surat_jalan()
     {
-        $pdf = PDF::loadView('page.logistik.pengiriman.print_sj')->setPaper('A4');
+        $customPaper = array(0, 0, 684.8094, 792.9372);
+        $pdf = PDF::loadView('page.logistik.pengiriman.print_sj')->setPaper($customPaper);
         return $pdf->stream('');
     }
 
