@@ -21,6 +21,10 @@
     .info {
         color: #3a7bb0;
     }
+
+    .filter {
+        margin: 5px;
+    }
 </style>
 @stop
 

@@ -117,7 +117,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-dolly-flatbed"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="pengirimanterbaru">Lihat Tabel <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a href="#" class="small-box-footer" id="pengirimanterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
@@ -129,7 +129,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-boxes"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="belumdikirim">Lihat Tabel <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a href="#" class="small-box-footer" id="belumdikirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
@@ -141,7 +141,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="lewatbataskirim">Lihat Tabel <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a href="#" class="small-box-footer" id="lewatbataskirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </div>

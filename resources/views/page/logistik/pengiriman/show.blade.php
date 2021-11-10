@@ -109,29 +109,56 @@
                             <div class="dropdown-menu">
                                 <div class="px-3 py-3">
                                     <div class="form-group">
-                                        <label for="jenis_penjualan">Status</label>
+                                        <label for="jenis_penjualan">No Resi</label>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                            <label class="form-check-label" for="status1">
-                                                Sudah Dikirim
+                                            <input class="form-check-input" type="radio" value="semua" id="no_resi1" name="no_resi" />
+                                            <label class="form-check-label" for="no_resi1">
+                                                Semua
                                             </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                            <label class="form-check-label" for="status2">
-                                                Sebagian Dikirim
+                                            <input class="form-check-input" type="radio" value="belum_tersedia" id="no_resi2" name="no_resi" />
+                                            <label class="form-check-label" for="no_resi2">
+                                                Belum Tersedia
                                             </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                            <label class="form-check-label" for="status3">
-                                                Belum Dikirim
+                                            <input class="form-check-input" type="radio" value="tersedia" id="no_resi3" name="no_resi" />
+                                            <label class="form-check-label" for="no_resi3">
+                                                Tersedia
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jenis_penjualan">Status Pengiriman</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="semua" id="status_pengiriman1" name="status_pengiriman" />
+                                            <label class="form-check-label" for="status_pengiriman1">
+                                                Semua
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="draft_pengiriman" id="status_pengiriman2" name="status_pengiriman" />
+                                            <label class="form-check-label" for="status_pengiriman2">
+                                                Draft Pengiriman
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="dalam_pengiriman" id="status_pengiriman3" name="status_pengiriman" />
+                                            <label class="form-check-label" for="status_pengiriman3">
+                                                Dalam Pengiriman
                                             </label>
                                         </div>
                                     </div>

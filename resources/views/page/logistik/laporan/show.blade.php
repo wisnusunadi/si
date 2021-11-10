@@ -32,14 +32,14 @@
                             <!-- <form method="POST" action="/api/laporan/create"> -->
                             <div class="form-horizontal">
                                 <div class="form-group row">
-                                    <label for="jasa_pengiriman" class="col-form-label col-5" style="text-align: right">Ekspedisi</label>
+                                    <label for="pengiriman" class="col-form-label col-5" style="text-align: right">Ekspedisi</label>
                                     <div class="col-5 col-form-label">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="jasa_pengiriman" id="jasa_pengiriman1" value="ekspedisi" />
+                                            <input class="form-check-input" type="radio" name="pengiriman" id="jasa_pengiriman1" value="ekspedisi" />
                                             <label class="form-check-label" for="jasa_pengiriman1">Ekspedisi</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="jasa_pengiriman" id="jasa_pengiriman2" value="nonekspedisi" />
+                                            <input class="form-check-input" type="radio" name="pengiriman" id="jasa_pengiriman2" value="nonekspedisi" />
                                             <label class="form-check-label" for="jasa_pengiriman2">Non Ekspedisi</label>
                                         </div>
                                         <div class="feedback" id="msgjasa_pengiriman">
@@ -47,10 +47,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row" id="ekspedisi_id">
+                                <div class="form-group row hide" id="ekspedisi">
                                     <label for="" class="col-form-label col-5" style="text-align: right">Ekspedisi</label>
-                                    <div class="col-4">
-                                        <select class="select2 select-info form-control ekspedisi_id" name="ekspedisi_id" id="ekspedisi_id">
+                                    <div class="col-5">
+                                        <select class="select2 select-info form-control ekspedisi_id" name="ekspedisi_id" id="ekspedisi_id" style="width:100%;">
                                             <option value=""></option>
                                         </select>
                                     </div>
@@ -58,7 +58,7 @@
                                 <div class="form-group row">
                                     <label for="tanggal_mulai" class="col-form-label col-5" style="text-align: right">Tanggal Mulai</label>
                                     <div class="col-2">
-                                        <input type="date" class="form-control col-form-label @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" readonly />
+                                        <input type="date" class="form-control col-form-label @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" />
                                         <div class="invalid-feedback" id="msgtanggal_mulai">
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
             </div>
         </div>
     </div>
-    <div class="row hide" id="semuaform">
+    <div class="row hide" id="showform">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
@@ -160,7 +160,12 @@
             ],
         });
 
-        $('.customer_id').on('keyup change', function() {
+        $('.ekspedisi_id').select2({
+            placeholder: 'Pilih Ekspedisi',
+            allowClear: true
+        });
+
+        $('.ekspedisi_id').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('input[type="radio"][name="penjualan"]').removeAttr('disabled');
                 if ($('input[type="radio"][name="penjualan"]').val() != undefined && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
@@ -174,15 +179,10 @@
         });
 
         $('input[type="radio"][name="pengiriman"]').on('change', function() {
-            if ($(this).val() != "") {
-                $('#tanggal_mulai').removeAttr('readonly');
-                if ($('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
-                    $("#btncetak").removeAttr('disabled');
-                } else {
-                    $("#btncetak").attr('disabled', true);
-                }
+            if ($(this).val() == "ekspedisi") {
+                $('#ekspedisi').removeClass('hide');
             } else {
-                $("#btncetak").attr('disabled', true);
+                $('#ekspedisi').addClass('hide');
             }
         });
 
@@ -192,7 +192,7 @@
             if ($(this).val() != "") {
                 $('#tanggal_akhir').removeAttr('readonly');
                 $("#tanggal_akhir").attr("min", $(this).val())
-                if ($('input[type="radio"][name="penjualan"]').val() != undefined && $('#tanggal_akhir').val() != "") {
+                if ($('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
 
@@ -206,7 +206,7 @@
 
         $('#tanggal_akhir').on('keyup change', function() {
             if ($(this).val() != "") {
-                if ($('#tanggal_mulai').val() != "" && $('input[type="radio"][name="penjualan"]').val() != undefined) {
+                if ($('#tanggal_mulai').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -241,40 +241,17 @@
 
         $("#btnbatal").on('click', function() {
             $("#btncetak").attr('disabled', true);
-            $(".customer_id").val(null).trigger("change");
-            $('input[type="radio"][name="penjualan"]').prop('checked', false);
+            $(".ekspedisi_id").val(null).trigger("change");
+            $('#ekspedisi').addClass('hide');
+            $('input[type="radio"][name="pengiriman"]').prop('checked', false);
             $('#tanggal_mulai').val('');
-            $('#tanggal_mulai').attr('readonly', true);
             $('#tanggal_akhir').val('');
             $('#tanggal_akhir').attr('readonly', true);
-            $('#semuaform').addClass('hide');
-            $('#ekatalogform').addClass('hide');
-            $('#spaform').addClass('hide');
-            $('#spbform').addClass('hide');
+            $('#showform').addClass('hide');
         });
 
         $('#btncetak').on('click', function() {
-            if ($('input[type="radio"][name="penjualan"]:checked').val() == "semua") {
-                $('#semuaform').removeClass('hide');
-                $('#ekatalogform').addClass('hide');
-                $('#spaform').addClass('hide');
-                $('#spbform').addClass('hide');
-            } else if ($('input[type="radio"][name="penjualan"]:checked').val() == "ekatalog") {
-                $('#semuaform').addClass('hide');
-                $('#ekatalogform').removeClass('hide');
-                $('#spaform').addClass('hide');
-                $('#spbform').addClass('hide');
-            } else if ($('input[type="radio"][name="penjualan"]:checked').val() == "spa") {
-                $('#semuaform').addClass('hide');
-                $('#ekatalogform').addClass('hide');
-                $('#spaform').removeClass('hide');
-                $('#spbform').addClass('hide');
-            } else if ($('input[type="radio"][name="penjualan"]:checked').val() == "spb") {
-                $('#semuaform').addClass('hide');
-                $('#ekatalogform').addClass('hide');
-                $('#spaform').addClass('hide');
-                $('#spbform').removeClass('hide');
-            }
+            $('#showform').removeClass('hide');
         })
     });
 </script>

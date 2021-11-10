@@ -60,13 +60,48 @@
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="filterpenjualan">
-                                        <form class="px-4" style="white-space:nowrap;" id="filter">
+                                        <form class="px-4 py-3" style="white-space:nowrap;" id="filter">
                                             <div class="dropdown-header">
-                                                Pengiriman
+                                                <label for="jenis_penjualan" class="text-muted">Jalur</label>
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus1" value="2" name='filter' />
+                                                    <input class="form-check-input" type="checkbox" value="darat" id="status1" name="jalur" />
+                                                    <label class="form-check-label" for="status1">
+                                                        Darat
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="laut" id="status2" name="jalur" />
+                                                    <label class="form-check-label" for="status2">
+                                                        Laut
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="udara" id="status3" name="jalur" />
+                                                    <label class="form-check-label" for="status3">
+                                                        Udara
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="lain" id="status4" name="jalur" />
+                                                    <label class="form-check-label" for="status4">
+                                                        Lain
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-header">
+                                                <label for="jenis_penjualan" class="text-muted">Jurusan</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus1" value="2" name='jurusan' />
                                                     <label class="form-check-label" for="dropdownStatus1">
                                                         Jawa
                                                     </label>
@@ -74,7 +109,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus2" value="1" name='filter' />
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus2" value="1" name='jurusan' />
                                                     <label class="form-check-label" for="dropdownStatus2">
                                                         Luar Jawa
                                                     </label>
@@ -82,7 +117,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="0" name='filter' />
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="0" name='jurusan' />
                                                     <label class="form-check-label" for="dropdownStatus3">
                                                         Semua
                                                     </label>

@@ -1,6 +1,6 @@
-<form action="{{route('penjualan.customer.update', ['id'=> $customer->id])}}" method="post">
-    {{ csrf_field() }}
-    {{ method_field('PUT') }}
+<form action="/penjualan/customer/update/{{$customer->id}}" method="POST">
+    {{method_field('PUT')}}
+    {{csrf_field()}}
     <div class="row d-flex justify-content-center">
         <div class="col-11">
             <h5>Info Customer</h5>

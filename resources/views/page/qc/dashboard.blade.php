@@ -56,6 +56,11 @@
         color: #FFC700;
     }
 
+    .warning-bg {
+        background-color: #FFC700;
+        color: white;
+    }
+
     .green-text {
         background-color: rgba(69, 102, 0, 0.2);
         color: #456600;
@@ -100,35 +105,56 @@
                             <div class="card-body">
                                 <h4>Outgoing 2021</h4>
                                 <div class="row">
+
                                     <div class="col-lg-4 col-6">
-                                        <a href="#" class="card active otg" id="pengujianterbaru">
-                                            <div class="card-body green-text">
-                                                <small class="margin-custom">Pengujian Terbaru</small>
-                                                <h1 class="align-center">3</h1>
+                                        <div class="small-box bg-success">
+                                            <div class="inner">
+                                                <h3>3</h3>
+                                                <p>Pengujian Terbaru</p>
                                             </div>
-                                        </a>
+                                            <div class="icon">
+                                                <i class="fas fa-tasks"></i>
+                                            </div>
+                                            <a href="#" class="small-box-footer active" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                        </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
-                                        <a href="#" class="card otg" id="belumdiuji">
-                                            <div class="card-body yellow-text">
-                                                <small class="margin-custom">Belum di Uji</small>
-                                                <h1 class="align-center">6</h1>
+                                        <div class="small-box warning-bg">
+                                            <div class="inner">
+                                                <h3>4</h3>
+                                                <p>Belum diuji</p>
                                             </div>
-                                        </a>
+                                            <div class="icon">
+                                                <i class="fas fa-boxes"></i>
+                                            </div>
+                                            <a href="#" class="small-box-footer" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                        </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
-                                        <a href="#" class="card otg" id="lewatbatasuji">
-                                            <div class="card-body red-text">
-                                                <small class="margin-custom">Lewat Batas Uji</small>
-                                                <h1 class="align-center">2</h1>
+                                        <div class="small-box bg-danger">
+                                            <div class="inner">
+                                                <h3>2</h3>
+                                                <p>Lewat Batas Uji</p>
                                             </div>
-                                        </a>
+                                            <div class="icon">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </div>
+                                            <a href="#" class="small-box-footer" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                        </div>
                                     </div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
                                         <table class="table table-hover" id="pengujianterbarutable" style="width:100%;">
                                             <thead>
+                                                <tr>
+                                                    <th colspan=5>
+
+                                                        <h5><b>Pengujian Terbaru</b></h5>
+
+                                                    </th>
+                                                </tr>
                                                 <tr>
                                                     <th>No</th>
                                                     <th>No SO</th>
@@ -174,6 +200,13 @@
 
                                         <table class="table table-hover hide" id="belumdiujitable" style="width:100%;">
                                             <thead>
+                                                <tr>
+                                                    <th colspan=4>
+
+                                                        <h5><b>Belum Diuji</b></h5>
+
+                                                    </th>
+                                                </tr>
                                                 <tr>
                                                     <th>No</th>
                                                     <th>No SO</th>
@@ -223,6 +256,11 @@
 
                                         <table class="table table-hover hide" id="lewatbatasujitable" style="width:100%;">
                                             <thead>
+                                                <tr>
+                                                    <th colspan=5>
+                                                        <h5><b>Lewat Batas Uji</b></h5>
+                                                    </th>
+                                                </tr>
                                                 <tr>
                                                     <th>No</th>
                                                     <th>No SO</th>
