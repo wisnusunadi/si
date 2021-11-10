@@ -320,10 +320,15 @@
                         <p><b>Deskripsi Produk</b></p>
                         <p>Inovasi Produk Terbaru dari industri kami</p>
                         <p><b>Dimensi</b></p>
-                        <div class="d-flex">
-                            <p>Panjang: 50</p>
-                            <p>Lebar: 50</p>
-                            <p>Tinggi: 50</p>
+                        <div class="row">
+                            <div class="col-sm">Panjang</div>
+                            <div class="col-sm">Lebar</div>
+                            <div class="col-sm">Tinggi</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm"><span id="panjang">1</span></div>
+                            <div class="col-sm"><span id="lebar">122</span></div>
+                            <div class="col-sm"><span id="tinggi">12</span></div>
                         </div>
                         <p><b>Produk</b></p>
                         <p>Buku</p>

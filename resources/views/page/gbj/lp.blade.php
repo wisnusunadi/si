@@ -181,7 +181,7 @@
                                                 </div>
                                                 <div class="col-12 d-flex justify-content-end">
                                                     <div class="btn-simpan hapus">
-                                                        <button class="btn btn-success" type="button">Transfer</button>&nbsp;
+                                                        <button class="btn btn-success" type="button">Terima</button>&nbsp;
                                                         <button class="btn btn-info" type="button">Rancang</button>&nbsp;
                                                         <button class="btn btn-secondary " type="button">Batal</button>
                                                     </div>
