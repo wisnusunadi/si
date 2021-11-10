@@ -42,6 +42,8 @@ class LoginController extends Controller
     {
         if (auth()->user()->divisi->id == 24) {
             return redirect('/ppic/dashboard');
+        }elseif (auth()->user()->divisi->id == 13) {
+            return redirect('/gbj/dashboard');
         }
 
         return redirect('/home');
