@@ -19,26 +19,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/ppic')->group(function () {
-    Route::get('/part', [App\Http\Controllers\PpicController::class, 'getPart']);
-    Route::get('/schedule/{status}', [App\Http\Controllers\PpicController::class, 'getEvent']);
+    Route::get('/schedule/{status?}', [App\Http\Controllers\PpicController::class, 'getEvent']);
     Route::get('/product', [App\Http\Controllers\PpicController::class, 'getProduk']);
-    Route::get('/version/{id}', [App\Http\Controllers\PpicController::class, 'getVersionDetailProduk']);
-    Route::get('/max-quantity/{id}', [App\Http\Controllers\PpicController::class, 'getMaxQuantity']);
     Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
     Route::post('/delete-event', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
-    Route::post('/update-event', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
-    Route::get('/bppb/{status}', [App\Http\Controllers\PpicController::class, 'getBppb']);
+    Route::post('/update-event', [App\Http\Controllers\PpicController::class, 'updateEvent']);
 
-    Route::get('/bppb/{id}', [App\Http\Controllers\PpicController::class, 'findSeriesBppb']);
-    Route::get('/reset', [App\Http\Controllers\PpicController::class, 'resetConfirmation']);
-    Route::get('/part-schedule/{id}', [App\Http\Controllers\PpicController::class, 'getPartFromSchedule']);
-    // Route::prefix('/ppic')->group(function () {
-    //     Route::get('part', [App\Http\Controllers\PpicController::class, 'getPart']);
+    Route::get('/komentar', [App\Http\Controllers\PpicController::class, 'getKomentar']);
+    Route::post('/add-komentar', [App\Http\Controllers\PpicController::class, 'addKomentar']);
+
+    Route::get('/reset', [App\Http\Controllers\PpicController::class, 'resetEvent']);
     Route::get('/get-gbj-query', [App\Http\Controllers\PpicController::class, 'getGbjQuery']);
     Route::get('/get-gbj-datatable', [App\Http\Controllers\PpicController::class, 'getGbjDatatable']);
-    Route::get('/jadwal', [App\Http\Controllers\PpicController::class, 'getJadwalPerakitan']);
     Route::get('test-event', [App\Http\Controllers\PpicController::class, 'testBroadcast']);
-    Route::get('update-confirmation', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
 });
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
@@ -121,7 +114,6 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem'])->name('tfp.post');
     Route::post('/createnon', [\App\Http\Controllers\ProduksiController::class, 'TFNonSO'])->name('tfp.post.non');
     Route::get('/data', [App\Http\Controllers\ProduksiController::class, 'get_produksi'])->name('tf.get');
-
 });
 
 Route::prefix('/spr')->group(function () {

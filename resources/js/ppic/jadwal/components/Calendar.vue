@@ -220,12 +220,14 @@ export default {
             status: this.status,
           })
           .then((response) => {
-            // alert(response.data);
-            console.log(response.data);
             this.$store.commit("updateJadwal", response.data);
             $("#confirmation").modal("hide");
           });
       } else {
+        console.log("handle button yes");
+        console.log(this.state);
+        console.log(this.status);
+
         axios
           .post("/api/ppic/update-event", {
             state: this.state,
@@ -273,6 +275,19 @@ export default {
     },
 
     windowResize: function () {},
+
+    // helper
+    convertState: function (state) {
+      if (state === 1) return "perencanaan";
+      else if (state === 2) return "persetujuan";
+      else if (state === 3) return "perubahan";
+    },
+
+    convertStatus: function (status) {
+      if (status === 1) return "penyusunan";
+      else if (status === 2) return "pelaksanaan";
+      else if (status === 3) return "selesai";
+    },
   },
 
   created: function () {
@@ -298,9 +313,9 @@ export default {
       // this.disableEdit();
     }
 
-    // axios.get("/api/get-comment").then((response) => {
-    //   this.comment = response.data;
-    // });
+    axios.get("/api/ppic/komentar").then((response) => {
+      this.comment = response.data;
+    });
   },
 
   updated: function () {
@@ -374,18 +389,14 @@ export default {
                     v-if="$store.state.user.divisi_id === 24"
                     :class="[
                       {
-                        'far fa-check-circle':
-                          item.proses_konfirmasi === 2 &&
-                          item.konfirmasi_rencana === 1,
+                        'far fa-check-circle': item.konfirmasi === 1,
                       },
                       {
-                        'far fa-times-circle':
-                          item.proses_konfirmasi === 2 &&
-                          item.konfirmasi_rencana === 0,
+                        'far fa-times-circle': item.konfirmasi === 2,
                       },
                     ]"
                     :style="
-                      item.konfirmasi_rencana === 1
+                      item.konfirmasi === 1
                         ? { color: 'blue' }
                         : { color: 'red' }
                     "
@@ -401,18 +412,31 @@ export default {
       <div class="card">
         <div class="card-header text-center">Komentar</div>
         <div
-          class="card-body"
+          class="card-body table-responsive p-0"
           :style="{ height: this.calendarHeight / 3 + 'px' }"
         >
-          <ul>
-            <li>comment 1</li>
-            <li>comment 2</li>
-            <li>comment 3</li>
-            <li>comment 4</li>
-            <li>comment 5</li>
-            <li>comment 6</li>
-            <li>comment 7</li>
-          </ul>
+          <table id="table-komentar" class="table table-hover">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Jenis</th>
+                <th>Komentar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="komen in comment" :key="komen.id">
+                <td>{{ komen.tanggal }}</td>
+                <td>
+                  {{
+                    convertState(komen.state) +
+                    " " +
+                    convertStatus(komen.status)
+                  }}
+                </td>
+                <td>{{ komen.komentar }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

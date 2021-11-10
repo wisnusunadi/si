@@ -20,10 +20,10 @@ mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
 mix.sass('resources/css/bootstrap.scss', 'public/native/css/plugin.css')
 
 // ppic
-// mix.js('resources/js/ppic/jadwal/app.js', 'public/native/js/ppic/jadwal.js').vue()
-// mix.js('resources/js/ppic/data/app.js', 'public/native/js/ppic/data.js').vue()
-// mix.js('resources/js/ppic/dashboard/app.js', 'public/native/js/ppic/dashboard.js').vue()
-// mix.js('resources/js/manager/app.js', 'public/native/js/ppic/manager.js').vue()
+mix.js('resources/js/ppic/jadwal/app.js', 'public/native/js/ppic/jadwal.js').vue()
+mix.js('resources/js/ppic/data/app.js', 'public/native/js/ppic/data.js').vue()
+mix.js('resources/js/ppic/dashboard/app.js', 'public/native/js/ppic/dashboard.js').vue()
+mix.js('resources/js/manager/app.js', 'public/native/js/ppic/manager.js').vue()
 
 
 mix.js('resources/js/gbj/stok/app.js', 'public/native/js/gbj/stok.js').vue()

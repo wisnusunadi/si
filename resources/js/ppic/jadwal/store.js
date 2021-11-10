@@ -33,7 +33,7 @@ const store = new Vuex.Store({
                     }
                 }
 
-            if (jadwal.length > 0) state.state = jadwal[0].state
+            if (jadwal.length > 0) state.state = jadwal[0].state.nama
         },
 
         updateUser: function (state, user) {

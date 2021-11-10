@@ -114,13 +114,13 @@ export default {
                     <div
                       class="progress-bar bg-green"
                       role="progressbar"
-                      aria-valuenow="0"
+                      aria-valuenow="20"
                       aria-valuemin="0"
                       aria-valuemax="100"
-                      style="width: 0%"
+                      style="width: 20%"
                     ></div>
                   </div>
-                  <small> 0% Complete </small>
+                  <small> 20% Complete </small>
                 </td>
                 <td>
                   <span class="badge badge-pill badge-warning"

@@ -14,34 +14,46 @@ export default {
       reject_checked_jadwal_rencana: [],
       all_reject_rencana: false,
 
-      checked_jadwal_pelaksanaan: [],
       view: "rencana",
-      param_setuju: false,
-      param_rencana: false,
+      flag_rencana_persetujuan: false,
+      flag_setuju_perubahan: false,
+
+      state: 0,
+      status: 0,
+      komentar: "",
 
       picked: null,
     };
   },
 
+  computed: {
+    state_rencana: function () {
+      console.log("state_rencana");
+      console.log(this.jadwal_rencana);
+      console.log("end jadwal");
+      if (this.jadwal_rencana.length > 0) {
+        if (this.jadwal_rencana[0].state.id == 2) return "persetujuan";
+        else if (this.jadwal_rencana[0].state.id == 3) return "perubahan";
+      }
+    },
+  },
+
   mounted: function () {
+    // get rencana jadwal
     axios({
       method: "get",
       url: "/api/ppic/schedule/penyusunan",
       params: {
-        state: "persetujuan",
         konfirmasi: 0,
       },
     }).then((response) => {
       this.jadwal_rencana = response.data;
     });
 
+    // get perubahan jadwal
     axios({
       method: "get",
       url: "/api/ppic/schedule/pelaksanaan",
-      params: {
-        state: "perubahan",
-        konfirmasi: 0,
-      },
     }).then((response) => {
       this.jadwal_pelaksanaan = response.data;
     });
@@ -66,38 +78,52 @@ export default {
   },
 
   methods: {
-    clickSetujuRencana: function () {
-      this.param_setuju = true;
-      this.param_rencana = true;
+    clickKirimRencana: function () {
       $("#modal").modal("show");
-    },
-
-    clickTolakRencana: function () {
-      this.param_setuju = false;
-      this.param_rencana = true;
-      $("#modal").modal("show");
+      this.flag_rencana_persetujuan = true;
+      this.state = 2;
+      this.status = 1;
     },
 
     clickSetujuPerubahan: function () {
-      this.param_setuju = true;
-      this.param_rencana = false;
       $("#modal").modal("show");
     },
 
     clickTolakPerubahan: function () {
-      this.param_setuju = false;
-      this.param_rencana = false;
       $("#modal").modal("show");
     },
 
     handleButtonYes: function () {
       $("#modal").modal("hide");
 
-      axios.post("/api/ppic/update-event", {
-        params: {
-          event: this.checked_jadwal_rencana,
-        },
-      });
+      if (this.flag_rencana_persetujuan) {
+        axios
+          .post("/api/ppic/add-komentar", {
+            state: this.state,
+            status: this.status,
+            komentar: this.komentar,
+          })
+          .then((response) => {
+            console.log(response);
+          });
+
+        axios
+          .post("/api/ppic/update-event", {
+            acc: this.acc_checked_jadwal_rencana,
+            reject: this.reject_checked_jadwal_rencana,
+            status: "penyusunan",
+            state: "persetujuan",
+            konfirmasi: 0,
+          })
+          .then((response) => {
+            this.jadwal_rencana = response.data;
+            this.acc_checked_jadwal_rencana = [];
+            this.all_acc_rencana = false;
+          });
+      }
+
+      if (this.flag_rencana_perubahan) {
+      }
     },
 
     handleButtonNo: function () {
@@ -119,6 +145,7 @@ export default {
     selectAllSetuju: function () {
       this.reject_checked_jadwal_rencana = [];
       this.acc_checked_jadwal_rencana = [];
+      this.all_reject_rencana = false;
       if (!this.all_acc_rencana) {
         for (let i = 0; i < this.jadwal_rencana.length; i++) {
           this.acc_checked_jadwal_rencana.push(this.jadwal_rencana[i]);
@@ -129,6 +156,7 @@ export default {
     selectAllTolak: function () {
       this.reject_checked_jadwal_rencana = [];
       this.acc_checked_jadwal_rencana = [];
+      this.all_acc_rencana = false;
       if (!this.all_reject_rencana) {
         for (let i = 0; i < this.jadwal_rencana.length; i++) {
           this.reject_checked_jadwal_rencana.push(this.jadwal_rencana[i]);
@@ -167,7 +195,7 @@ export default {
             <a
               href="#calendar-view"
               :class="['nav-link', { active: isPerubahan() }]"
-              >Perubahan</a
+              >Pelaksanaan</a
             >
           </li>
         </ul>
@@ -179,7 +207,7 @@ export default {
               id="table"
               class="table table-hover styled-table text-center"
             >
-              <thead>
+              <thead v-if="state_rencana === 'persetujuan'">
                 <tr>
                   <th rowspan="2">Produk</th>
                   <th rowspan="2">Jumlah</th>
@@ -206,13 +234,21 @@ export default {
                   </th>
                 </tr>
               </thead>
+              <thead v-if="state_rencana === 'perubahan'">
+                <tr>
+                  <th>Produk</th>
+                  <th>Jumlah</th>
+                  <th>Tanggal Mulai</th>
+                  <th>Tanggal Selesai</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr v-for="data in jadwal_rencana" :key="data.id">
                   <td>{{ data.produk.nama }}</td>
                   <td>{{ data.jumlah }}</td>
                   <td>{{ data.tanggal_mulai }}</td>
                   <td>{{ data.tanggal_selesai }}</td>
-                  <td>
+                  <td v-if="state_rencana === 'persetujuan'">
                     <input
                       type="checkbox"
                       :value="data"
@@ -221,7 +257,7 @@ export default {
                       @click="accCheckbox"
                     />
                   </td>
-                  <td>
+                  <td v-if="state_rencana === 'persetujuan'">
                     <input
                       type="checkbox"
                       :value="data"
@@ -237,16 +273,24 @@ export default {
               v-if="
                 acc_checked_jadwal_rencana.length +
                   reject_checked_jadwal_rencana.length ===
-                jadwal_rencana.length
+                  jadwal_rencana.length && state_rencana === 'persetujuan'
               "
               class="btn-group btn-block"
             >
-              <button class="btn btn-success" @click="clickSetujuRencana">
+              <button
+                v-if="jadwal_rencana.length > 0"
+                class="btn btn-success"
+                @click="clickKirimRencana"
+              >
                 Kirim
               </button>
-              <!-- <button class="btn btn-danger" @click="clickTolakRencana">
-                Tolak
-              </button> -->
+            </div>
+            <div
+              v-if="state_rencana === 'perubahan'"
+              class="btn-group btn-block"
+            >
+              <button class="btn btn-success" @click="() => {}">Setuju</button>
+              <button class="btn btn-danger" @click="() => {}">Tolak</button>
             </div>
           </div>
           <div :class="['tab-pane fade', { 'show active': isPerubahan() }]">
@@ -275,12 +319,8 @@ export default {
               v-if="jadwal_pelaksanaan.length > 0"
               class="btn-group btn-block"
             >
-              <button class="btn btn-success" @click="clickSetujuRencana">
-                Setuju
-              </button>
-              <button class="btn btn-danger" @click="clickTolakRencana">
-                Tolak
-              </button>
+              <button class="btn btn-success" @click="() => {}">Setuju</button>
+              <button class="btn btn-danger" @click="() => {}">Tolak</button>
             </div>
           </div>
         </div>
@@ -298,28 +338,12 @@ export default {
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <textarea class="form-control" id="message-text"></textarea>
+              <textarea
+                class="form-control"
+                id="message-text"
+                v-model="komentar"
+              ></textarea>
             </div>
-            <!-- <table class="table table-hover text-center">
-              <thead>
-                <tr>
-                  <th>Produk</th>
-                  <th>Jumlah</th>
-                </tr>
-              </thead>
-              <tbody v-if="isRencana()">
-                <tr v-for="data in checked_jadwal_rencana" :key="data.id">
-                  <td>{{ data.produk.nama }}</td>
-                  <td>{{ data.jumlah }}</td>
-                </tr>
-              </tbody>
-              <tbody v-if="isPerubahan()">
-                <tr v-for="data in checked_jadwal_pelaksanaan" :key="data.id">
-                  <td>{{ data.produk.nama }}</td>
-                  <td>{{ data.jumlah }}</td>
-                </tr>
-              </tbody>
-            </table> -->
           </div>
           <div class="modal-footer d-flex justify-content-between">
             <button class="btn btn-primary" @click="handleButtonYes">
