@@ -67,9 +67,11 @@
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
+                                                @if (Auth::user()->divisi->id == 13)
                                                 <button type="button" class="dropdown-item addProduk" id="">
                                                     <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
+                                                @endif
                                                 <button type="button" class="dropdown-item viewProduk" id="">
                                                     <i class="far fa-eye"></i>&nbsp;Detail
                                                 </button>

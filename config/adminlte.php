@@ -1055,13 +1055,13 @@ return [
         ],
         [
             'header' => 'Penjualan',
-            'auth' => [13]
+            'auth' => [13,17]
         ],
         [
             'text' => 'Sales Order',
             'url' => '/gbj/so',
             'icon' => 'fas fa-people-carry',
-            'auth' => [13],
+            'auth' => [13,17],
         ],
         [
             'header' => 'Pengeluaran',
