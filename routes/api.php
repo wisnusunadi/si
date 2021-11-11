@@ -86,11 +86,27 @@ Route::prefix('/gbj')->group(function () {
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
-    Route::get('/get/{id}', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
+    Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
+
+    // select
+    Route::get('sel-product', [\App\Http\Controllers\GudangController::class, 'select_product']);
+    Route::get('sel-product/{id}', [\App\Http\Controllers\GudangController::class, 'select_product_by_id']);
+    Route::get('sel-satuan', [\App\Http\Controllers\GudangController::class, 'select_satuan']);
+    Route::get('sel-layout', [\App\Http\Controllers\GudangController::class, 'select_layout']);
+    Route::get('sel-divisi', [\App\Http\Controllers\GudangController::class, 'select_divisi']);
+    Route::get('sel-gbj', [\App\Http\Controllers\GudangController::class, 'select_gbj']);
+
+    // so
+    Route::post('/createNon', [App\Http\Controllers\GudangController::class, 'tanpaSo']);
+
 });
 
 Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
+
+    // get
+    Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTanpaSo']);
+
 });
 
 Route::prefix('/spr')->group(function () {
