@@ -23,7 +23,7 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Tujuan</label>
                                             <div class="col-12">
-                                                <select class="form-control division" name="division">
+                                                <select class="form-control ke" name="ke" id="ke">
                                                     <option value="Divisi IT">Divisi IT</option>
                                                     <option value="Divisi QC">Divisi QC</option>
                                                     <option value="Divisi Perakitan">Divisi Perakitan</option>
@@ -33,13 +33,13 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Keterangan</label>
                                             <div class="col-12">
-                                                <textarea name="tujuan" id="" class="form-control tujuan"></textarea>
+                                                <textarea name="deskripsi" id="deskripsi" class="form-control deskripsi"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Produk</label>
                                             <div class="col-12">
-                                                <select class="form-control product" name="produk">
+                                                <select class="form-control product" name="gdg_brg_jadi_id" id="gdg_brg_jadi_id">
                                                     <option value="AMBULATORY BLOOD PRESSURE MONITOR">AMBULATORY BLOOD PRESSURE MONITOR</option>
                                                     <option value="AIR STERILIZER AND PURIFIER">AIR STERILIZER AND PURIFIER</option>
                                                     <option value="BACKUP POWER">BACKUP POWER</option>
@@ -49,7 +49,7 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Stok</label>
                                             <div class="col-12">
-                                                <input type="text" name="stok" id=""
+                                                <input type="text" name="qty" id="qty"
                                                     class="form-control number-input input-notzero stok">
                                                 <span class="form-text text-muted">Stok Input Maks. 20</span>
                                                 <input type="text" class="stok-gudang" value="20" hidden>
@@ -129,6 +129,10 @@
                         </tr>
                     </tbody>
                 </table>
+                <input type="hidden" name="ke[]" id="post_ke">
+                <input type="hidden" name="deskripsi[]" id="post_deskripsi">
+                <input type="hidden" name="gdg_brg_jadi_id[]" id="post_produk">
+                <input type="hidden" name="qty[]" id="post_qty">
             </div>
         </div>
     </div>
@@ -156,7 +160,7 @@
         };
     }(jQuery));
     $(document).ready(function () {
-        $('.division').select2();
+        $('.ke').select2();
         $('.product').select2();
 
         $(".number-input").inputFilter(function (value) {
@@ -164,38 +168,77 @@
             var value = $(this).val();
         });
 
-    });
-
-    $(document).on('click','.btn-tambah', function () {
-        let divisi = $('.division').val();
-        let tujuan = $('.tujuan').val();
-        let produk = $('.product').val();
-        let stok = parseInt($('.stok').val());
-        let stok_gudang = parseInt($('.stok-gudang').val());
+        // load produk
         $.ajax({
-            success: function () { 
-                if (stok < stok_gudang) {
-                    addData(divisi, tujuan, produk, stok)
-                }else{
-                    Swal.fire(
-                        'Stok Tidak Mencukupi',
-                        '',
-                        'error'
-                    )
+            url: '/api/gbj/sel-gbj',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $("#gdg_brg_jadi_id").empty();
+                    $("#gdg_brg_jadi_id").append('<option value="">Pilih Item</option>');
+                    $.each(res, function(key, value) {
+                        $("#gdg_brg_jadi_id").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    });
+                } else {
+                    $("#gdg_brg_jadi_id").empty();
                 }
-            $('.btn-simpan').prop('hidden', false);
+            }
+        });
+
+        // load divisi
+        $.ajax({
+            url: '/api/gbj/sel-divisi',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $("#ke").empty();
+                    $("#ke").append('<option value="">Pilih Item</option>');
+                    $.each(res, function(key, value) {
+                        $("#ke").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    });
+                } else {
+                    $("#ke").empty();
+                }
             }
         });
     });
 
-    function addData(divisi, tujuan, produk, stok) {
-        if (tujuan.length > 30) {
-            var a = tujuan.substring(0, 10) + '...';
+    $(document).on('click','.btn-tambah', function (e) {
+        e.preventDefault();
+
+        let divisi = $('.ke').val();
+        let d_divisi = $('.ke').find(':selected').text();
+        let deskripsi = $('.deskripsi').val();
+        let produk = $('.product').val();
+        let d_produk = $('.product').find(':selected').text();
+        let stok = parseInt($('.stok').val());
+        let stok_gudang = parseInt($('.stok-gudang').val());
+
+        $.ajax({
+            success: function (res) {
+                addData(divisi, d_divisi, deskripsi, d_produk, produk, stok)
+                // $('#post_ke').val(divisi);
+                // $('#post_deskripsi').val(deskripsi);
+                // $('#post_produk').val(produk);
+                // $('#post_qty').val(stok);
+            $('.btn-simpan').prop('hidden', false);
+            }
+        });
+    });
+    let i = 1;
+    function addData(divisi,d_divisi, deskripsi, d_produk, produk, stok) {
+        if (deskripsi.length > 30) {
+            var a = deskripsi.substring(0, 10) + '...';
         }else{
-            var a = tujuan;
+            var a = deskripsi;
         }
-        console.log(tujuan.length);
-        let tambah_data = '<tr><td>'+divisi+'</td><td>'+a+'</td><td>'+produk+'</td><td>'+stok+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        i++;
+        console.log(deskripsi.length);
+        let tambah_data = '<tr><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke[]" id="post_ke" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi[]" id="post_deskripsi" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id[]" id="post_produk" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty[]" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function(e){
@@ -209,22 +252,55 @@
         }
     });
 
-    $('.scan-produk').DataTable({
-            'columnDefs': [{
-                'targets': 1,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
+    $(document).on('click', '.btn-simpan', function(e) {
+        e.preventDefault();
+
+        let divisi = $('.ke').val();
+        let deskripsi = $('.deskripsi').val();
+        let produk = $('.product').val();
+        let stok = parseInt($('.stok').val());
+        let stok_gudang = parseInt($('.stok-gudang').val());
+
+        $.ajax({
+            url: "/api/tfp/create",
+            type:"POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                ke: divisi,
+                deskripsi: deskripsi,
+                gdg_brg_jadi_id: produk,
+                qty: stok,
             },
-            'order': [
-                [0, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Scan Nomor Seri:"
+            success: function (res) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
             }
         });
+        console.log('ok');
+    })
+
+    $('.scan-produk').DataTable({
+        'columnDefs': [{
+            'targets': 1,
+            'checkboxes': {
+                'selectRow': true
+            }
+        }],
+        'select': {
+            'style': 'multi'
+        },
+        'order': [
+            [0, 'asc']
+        ],
+        "oLanguage": {
+        "sSearch": "Scan Nomor Seri:"
+        }
+    });
 </script>
 @stop
