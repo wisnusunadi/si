@@ -17,6 +17,7 @@ use Hamcrest\Core\IsNot;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Validator;
 use League\Fractal\Resource\Item;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -1060,7 +1061,6 @@ class PenjualanController extends Controller
                 $dspa = DetailSpa::where('spa_id', $id)->delete();
                 if ($dspa) {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-
                         $cdspa = DetailSpa::create([
                             'spa_id' => $id,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
@@ -1168,18 +1168,82 @@ class PenjualanController extends Controller
 
 
     //Laporan
-    public function laporan(Request $request)
+    public function  get_data_laporan_penjualan($penjualan, $distributor, $tanggal_awal, $tanggal_akhir)
     {
-        return Excel::download(new LaporanPenjualan($request->customer_id ?? '', $request->penjualan ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_penjualan.xlsx');
+        if ($penjualan == 'ekatalog') {
+            $data  = DetailEkatalog::whereHas('Ekatalog.Pesanan');
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return $data->Ekatalog->Pesanan->so;
+                })
+                ->addColumn('no_paket', function ($data) {
+                    return $data->Ekatalog->no_paket;
+                })
+                ->addColumn('no_po', function ($data) {
+                    return $data->Ekatalog->Pesanan->no_po;
+                })
+                ->addColumn('no_sj', function () {
+                    return '-';
+                })
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Ekatalog->Customer->nama;
+                })
+                ->addColumn('tgl_kontrak', function ($data) {
+                    return $data->Ekatalog->tgl_kontrak;
+                })
+                ->addColumn('tgl_kirim', function () {
+                    return '-';
+                })
+                ->addColumn('tgl_po', function ($data) {
+                    return $data->Ekatalog->Pesanan->tgl_po;
+                })
+                ->addColumn('instansi', function ($data) {
+                    return $data->Ekatalog->instansi;
+                })
+                ->addColumn('satuan', function ($data) {
+                    return $data->Ekatalog->satuan;
+                })
+                ->addColumn('nama_produk', function ($data) {
+                    return $data->penjualanproduk->nama;
+                })
+                ->addColumn('no_seri', function () {
+                    return '-';
+                })
+                ->addColumn('jumlah', function ($data) {
+                    return $data->jumlah;
+                })
+                ->addColumn('harga', function ($data) {
+                    return $data->harga;
+                })
+                ->addColumn('subtotal', function ($data) {
+                    return $data->jumlah * $data->harga;
+                })
+                ->addColumn('total', function ($data) {
+                    return $data->jumlah * $data->harga;
+                })
+                ->addColumn('log', function ($data) {
+                    return '-';
+                })
+                ->make(true);
+        } elseif ($penjualan == 'spa') {
+            $data  = Spa::all();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->make(true);
+        } elseif ($penjualan == 'spb') {
+        } else {
+        }
     }
+    // public function laporan(Request $request)
+    // {
+    //     return Excel::download(new LaporanPenjualan($request->customer_id ?? '', $request->penjualan ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_penjualan.xlsx');
+    // }
 
     //Chart
     public function chart_penjualan()
     {
-
         //EKAT
-
-
         $ekatalog = Pesanan::Has('Ekatalog')
             ->select('Pesanan.tgl_po')
             ->get()
@@ -1259,10 +1323,6 @@ class PenjualanController extends Controller
         return response()->json(compact('ekatalog_graph', 'spa_graph', 'spb_graph'));
     }
     //Another 
-
-    function countChart()
-    {
-    }
     function toRomawi($number)
     {
         $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);

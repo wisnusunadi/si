@@ -15,11 +15,19 @@
     .hide {
         display: none !important;
     }
+
+    .table {
+        vertical-align: middle;
+    }
+
+    .tes {
+        background-color: #ffff !important;
+    }
 </style>
 @stop
 
 @section('content')
-<div class="content">
+<div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -35,7 +43,7 @@
                                     <label for="" class="col-form-label col-5" style="text-align: right">Distributor / Customer</label>
                                     <div class="col-4">
                                         <select class="select2 select-info form-control customer_id" name="customer_id" id="customer_id">
-                                            <option value=""></option>
+                                            <option value="semua">Semua Distributor</option>
                                         </select>
                                         <div class="feedback" id="msgcustomer_id">
                                             <small class="text-muted">Distributor / Customer boleh dikosongi</small>
@@ -138,7 +146,7 @@
                 <div class="card-body">
                     <h5>Laporan Penjualan Ekatalog</h5>
                     <div class="table-responsive">
-                        <table class="table table-hover" id="ekatalogtable">
+                        <table class="table table-hover" id="ekatalogtable" style="width: 100%;">
                             <thead style="text-align: center;">
                                 <tr>
                                     <th>No</th>
@@ -157,12 +165,10 @@
                                     <th>Jumlah</th>
                                     <th>Harga</th>
                                     <th>Subtotal</th>
-                                    <th>Total Harga</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-
                             </tbody>
                         </table>
                     </div>
@@ -242,8 +248,14 @@
 @endsection
 
 @section('adminlte_js')
+
+<script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.1.3/css/rowGroup.bootstrap4.min.css">
+
+
 <script>
     $(function() {
+        $('#customer_id').append('<option value="">s</option>');
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -261,6 +273,13 @@
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
+            ajax: {
+                'url': '/api/penjualan/data/',
+                'method': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
             buttons: [{
                     extend: 'excel',
                     title: 'Laporan Penjualan',
@@ -274,6 +293,13 @@
                     className: "btn btn-primary"
                 },
             ],
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }]
+
         });
         $('#ekatalogtable').DataTable({
             processing: true,
@@ -282,6 +308,15 @@
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
+            ajax: {
+                'url': '/api/laporan/penjualan/ekatalog/1/2/3/',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            orderFixed: [
+                [1, 'asc']
+            ],
             buttons: [{
                     extend: 'excel',
                     title: 'Laporan Penjualan Ekatalog',
@@ -295,6 +330,90 @@
                     className: "btn btn-primary"
                 },
             ],
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+
+                    data: 'so'
+                },
+                {
+
+                    data: 'no_paket'
+                },
+                {
+                    data: 'no_po'
+                },
+                {
+                    data: 'no_sj'
+                },
+                {
+                    data: 'nama_customer'
+                },
+                {
+                    data: 'tgl_kontrak'
+                },
+                {
+                    data: 'tgl_kirim'
+                },
+                {
+                    data: 'tgl_po'
+                },
+                {
+                    data: 'instansi'
+                },
+                {
+                    data: 'satuan'
+                },
+                {
+                    data: 'nama_produk'
+                },
+                {
+                    data: 'no_seri'
+                },
+                {
+                    data: 'jumlah'
+                },
+                {
+                    data: 'harga',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                },
+                {
+                    data: 'subtotal',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                },
+
+                {
+                    data: 'log'
+                }
+
+            ],
+            rowGroup: {
+                startRender: function(rows, group) {
+                    console.log(group);
+                    return $('<tr/>')
+                        .append('<td class="tes" colspan="17"><p style="font-weight:50;">No Paket :  ' + group + '</td>');
+
+                },
+                endRender: function(rows, group) {
+                    var totalPenjualan = rows
+                        .data()
+                        .pluck('subtotal')
+                        .reduce(function(a, b) {
+                            return a + b * 1;
+                        }, 0);
+                    totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
+                    return $('<tr/>')
+                        .append('<td colspan="15">Total Penjualan Produk:</td>')
+                        .append('<td colspan="2">' + totalPenjualan + '</td>');
+
+                },
+                dataSrc: function(row) {
+                    return row.no_paket;
+                },
+            }
         });
         $('#spatable').DataTable({
             processing: true,
@@ -302,6 +421,12 @@
             serverSide: false,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            ajax: {
+                'url': '/api/laporan/penjualan/spa/1/2/3/',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
             },
             buttons: [{
                     extend: 'excel',
@@ -316,6 +441,11 @@
                     className: "btn btn-primary"
                 },
             ],
+            columns: [{
+                data: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            }]
         });
         $('#spbtable').DataTable({
             processing: true,
@@ -337,6 +467,7 @@
                     className: "btn btn-primary"
                 },
             ],
+
         });
 
         $('.customer_id').on('keyup change', function() {
@@ -396,7 +527,7 @@
         });
 
         $('.customer_id').select2({
-            allowClear: true,
+            allowClear: false,
             placeholder: 'Pilih Data',
             ajax: {
                 tags: [],
@@ -434,16 +565,31 @@
 
         $('#btncetak').on('click', function() {
             if ($('input[type="radio"][name="penjualan"]:checked').val() == "semua") {
+                var customer_id = $('#customer_id').val();
+                var tanggal_mulai = $('#tanggal_mulai').val();
+                var tanggal_akhir = $('#tanggal_akhir').val();
+
+                console.log(customer_id);
+                console.log(tanggal_mulai);
+                console.log(tanggal_akhir);
                 $('#semuaform').removeClass('hide');
                 $('#ekatalogform').addClass('hide');
                 $('#spaform').addClass('hide');
                 $('#spbform').addClass('hide');
             } else if ($('input[type="radio"][name="penjualan"]:checked').val() == "ekatalog") {
+                var customer_id = $('#customer_id').val();
+                var tanggal_mulai = $('#tanggal_mulai').val();
+                var tanggal_akhir = $('#tanggal_akhir').val();
+                $('#ekatalogtable').DataTable().ajax.url('/api/laporan/penjualan/ekatalog/2/3/4').load();
                 $('#semuaform').addClass('hide');
                 $('#ekatalogform').removeClass('hide');
                 $('#spaform').addClass('hide');
                 $('#spbform').addClass('hide');
             } else if ($('input[type="radio"][name="penjualan"]:checked').val() == "spa") {
+                var customer_id = $('#customer_id').val();
+                var tanggal_mulai = $('#tanggal_mulai').val();
+                var tanggal_akhir = $('#tanggal_akhir').val();
+                $('#spatable').DataTable().ajax.url('/api/laporan/penjualan/spa/2/3/4').load();
                 $('#semuaform').addClass('hide');
                 $('#ekatalogform').addClass('hide');
                 $('#spaform').removeClass('hide');
@@ -455,6 +601,11 @@
                 $('#spbform').removeClass('hide');
             }
         })
+
+
+        function CheckNullUndefined(value) {
+            return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+        }
     });
 </script>
 @endsection

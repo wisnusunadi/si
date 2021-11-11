@@ -82,6 +82,8 @@ Route::prefix('/penjualan')->group(function () {
     Route::get('chart', [App\Http\Controllers\PenjualanController::class, 'chart_penjualan']);
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
 
+
+
     Route::prefix('/lacak')->group(function () {
         Route::get('data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);
     });
@@ -92,6 +94,7 @@ Route::prefix('/so')->group(function () {
 });
 Route::prefix('/laporan')->group(function () {
     Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
+    Route::get('/penjualan/{penjualan}/{distributor}/{tanggal_awal}/{tanggal_akhir}', [App\Http\Controllers\PenjualanController::class, 'get_data_laporan_penjualan']);
 });
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
