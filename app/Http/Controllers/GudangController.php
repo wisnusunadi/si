@@ -21,7 +21,7 @@ class GudangController extends Controller
         $data = GudangBarangJadi::with('produk', 'satuan')->get();
         // return response()->json($data);
 
-        return datatables()->of($data)
+        return datatables()->of($data) 
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
                 return $data->nama;

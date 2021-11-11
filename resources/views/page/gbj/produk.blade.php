@@ -540,7 +540,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/api/gbj/data',
+            url: '/api/gbj/data', 
         },
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex'},

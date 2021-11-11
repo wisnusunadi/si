@@ -16,7 +16,7 @@ class GudangBarangJadi extends Model
     protected $fillable = ['produk_id', 'variasi', 'stok', 'ruang'];
 
     public function noseri()
-    {
+    { 
         return $this->hasMany(NoseriBarangJadi::class, 'gdg_barang_jadi_id');
     }
 

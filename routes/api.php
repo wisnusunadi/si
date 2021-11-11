@@ -118,7 +118,7 @@ Route::prefix('/spr')->group(function () {
     Route::delete('/test', [App\Http\Controllers\SparepartController::class, 'deleteImage']);
 });
 
-Route::prefix('/noseri')->group(function () {
+Route::prefix('/noseri')->group(function () { 
     Route::post('/edit/{id}', [App\Http\Controllers\NoseriController::class, 'UpdateNoSeri']);
     Route::delete('/delete/{id}', [App\Http\Controllers\NoseriController::class, 'DestroyNoSeri']);
 });

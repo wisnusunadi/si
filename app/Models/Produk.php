@@ -14,7 +14,7 @@ class Produk extends Model
     {
         return $this->belongsToMany(PenjualanProduk::class, 'detail_penjualan_produk')
             ->withTimestamps()
-            ->withPivot('jumlah');
+            ->withPivot('jumlah'); 
     }
     public function GudangBarangJadi()
     {
