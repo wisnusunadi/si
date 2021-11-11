@@ -43,7 +43,7 @@
                                     <th>No</th>
                                     <th>Nomor SO</th>
                                     <th>Customer</th>
-                                    <th>Batas Pengeluaran</th>
+                                    <th>Batas Transfer</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>

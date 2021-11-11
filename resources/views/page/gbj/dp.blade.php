@@ -154,7 +154,7 @@
                       </button>
               </div>
               <div class="modal-body">
-                  <table class="table">
+                  <table class="table table-seri">
                       <thead>
                           <tr>
                               <th>No Seri</th>
@@ -180,6 +180,10 @@
 
 @section('adminlte_js')
 <script>
+    $('.table-seri').DataTable({
+        "oLanguage": {
+        "sSearch": "Cari:"}
+    });
     $('.dalam-perakitan').DataTable({
         "oLanguage": {
         "sSearch": "Cari:"}
