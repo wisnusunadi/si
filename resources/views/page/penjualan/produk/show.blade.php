@@ -31,9 +31,27 @@
 @stop
 
 @section('content')
+<section class="content">
+    <div class="container-fluid">
 <div class="row">
     <div class="col-12">
-        <div class="content">
+    @if(Session::has('error') || count($errors) > 0 )
+        <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+            <strong>Gagal menambahkan!</strong> Periksa
+            kembali data yang diinput
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @elseif(Session::has('success'))
+        <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+            <strong>Berhasil menambahkan data</strong>,
+            Terima kasih
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -215,9 +233,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
     </div>
 </div>
+</div>
+</section>
 @endsection
 
 @section('adminlte_js')

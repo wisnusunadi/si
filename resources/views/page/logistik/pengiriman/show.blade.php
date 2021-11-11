@@ -8,6 +8,10 @@
         border: 0 none;
     }
 
+    .smtxt {
+        font-size: 13px;
+    }
+
     #showtable {
         text-align: center;
         white-space: nowrap;
@@ -68,6 +72,21 @@
         white-space: nowrap;
     }
 
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 25ch;
+    }
+
+    .dropdown-toggle:hover {
+        color: #4682B4;
+    }
+
+    .dropdown-toggle:active {
+        color: #C0C0C0;
+    }
+
     #pengirimanhref:hover {}
 </style>
 @stop
@@ -90,29 +109,56 @@
                             <div class="dropdown-menu">
                                 <div class="px-3 py-3">
                                     <div class="form-group">
-                                        <label for="jenis_penjualan">Status</label>
+                                        <label for="jenis_penjualan">No Resi</label>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                            <label class="form-check-label" for="status1">
-                                                Sudah Dikirim
+                                            <input class="form-check-input" type="radio" value="semua" id="no_resi1" name="no_resi" />
+                                            <label class="form-check-label" for="no_resi1">
+                                                Semua
                                             </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                            <label class="form-check-label" for="status2">
-                                                Sebagian Dikirim
+                                            <input class="form-check-input" type="radio" value="belum_tersedia" id="no_resi2" name="no_resi" />
+                                            <label class="form-check-label" for="no_resi2">
+                                                Belum Tersedia
                                             </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                            <label class="form-check-label" for="status3">
-                                                Belum Dikirim
+                                            <input class="form-check-input" type="radio" value="tersedia" id="no_resi3" name="no_resi" />
+                                            <label class="form-check-label" for="no_resi3">
+                                                Tersedia
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jenis_penjualan">Status Pengiriman</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="semua" id="status_pengiriman1" name="status_pengiriman" />
+                                            <label class="form-check-label" for="status_pengiriman1">
+                                                Semua
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="draft_pengiriman" id="status_pengiriman2" name="status_pengiriman" />
+                                            <label class="form-check-label" for="status_pengiriman2">
+                                                Draft Pengiriman
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="dalam_pengiriman" id="status_pengiriman3" name="status_pengiriman" />
+                                            <label class="form-check-label" for="status_pengiriman3">
+                                                Dalam Pengiriman
                                             </label>
                                         </div>
                                     </div>
@@ -142,8 +188,7 @@
                                         <th>No Resi</th>
                                         <th>Tanggal Kirim</th>
                                         <th>Nama Customer</th>
-                                        <th>Alamat</th>
-                                        <th>Telepon</th>
+                                        <th>Provinsi</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -153,12 +198,11 @@
                                         <td>1</td>
                                         <td>SO-SPA10210001</td>
                                         <td>SJ/10/20/2001</td>
-                                        <td>J&T</td>
-                                        <td><i class="text-muted">Belum Tersedia</i></td>
+                                        <td class="minimizechar">J&T</td>
+                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
                                         <td>09-10-2021</td>
-                                        <td>RS Nurul Ikhsan</td>
-                                        <td>Jl. Jakarta No 18A-20A, Garut, Jawa Barat</td>
-                                        <td>081119494950</td>
+                                        <td class="minimizechar">RS Nurul Ikhsan</td>
+                                        <td class="minimizechar">Jawa Barat</td>
                                         <td><span class="badge blue-text">Dalam Pengiriman</span></td>
                                         <td>
                                             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -188,11 +232,14 @@
                                         <td>2</td>
                                         <td>SO-EKAT08210005</td>
                                         <td>SJ/08/21/0986</td>
-                                        <td>Safari Dharma Raya</td>
-                                        <td>02-08-2021</td>
-                                        <td>Bapak Hutapea</td>
-                                        <td>Jl. Moh. Hatta No 73, Medan, Sumatera Utara</td>
-                                        <td>082139754850</td>
+                                        <td class="minimizechar">Safari Dharma Raya</td>
+                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
+                                        <td>
+                                            <div>02-08-2021</div>
+                                            <div><small><i class="fas fa-exclamation-circle warning"></i> Batas 2 Hari Lagi</small></div>
+                                        </td>
+                                        <td class="minimizechar">Bapak Hutapea</td>
+                                        <td class="minimizechar">Sumatera Utara</td>
                                         <td><a href="" id="pengirimanhref">
                                                 <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
                                                 <div><small class="text-muted">Pengiriman</small></div>
@@ -220,11 +267,14 @@
                                         <td>3</td>
                                         <td>SO-SPB08210005</td>
                                         <td>SJ/01/20/1927</td>
-                                        <td>Si Cepat</td>
-                                        <td>02-08-2021</td>
-                                        <td>Pemerintah Kab Badung</td>
-                                        <td>Jl. Bougenvil No 45, Badung, Bali</td>
-                                        <td>082139754850</td>
+                                        <td class="minimizechar">Si Cepat</td>
+                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
+                                        <td>
+                                            <div>02-08-2021</div>
+                                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</div>
+                                        </td>
+                                        <td class="minimizechar">Pemerintah Kab Badung</td>
+                                        <td class="minimizechar">Bali</td>
                                         <td><a href="" id="pengirimanhref">
                                                 <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
                                                 <div><small class="text-muted">Pengiriman</small></div>
@@ -239,7 +289,7 @@
                                                         Detail
                                                     </button>
                                                 </a>
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
                                                     <button class="dropdown-item" type="button">
                                                         <i class="fas fa-pencil-alt"></i>
                                                         Edit
@@ -259,7 +309,7 @@
     <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-info">
+                <div class="modal-header bg-warning">
                     <h4 class="modal-title">Edit</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -278,16 +328,15 @@
 <script>
     $(function() {
         $('#showtable').DataTable();
-        $(document).on('click', '.editmodal', function(event) {
-            event.preventDefault();
+        $(document).on('click', '.editmodal', function() {
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
+            console.log(href);
             $.ajax({
                 url: href,
                 beforeSend: function() {
                     $('#loader').show();
                 },
-                // return the result
                 success: function(result) {
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
@@ -306,6 +355,102 @@
                 timeout: 8000
             })
         });
+
+        $(document).on('change', 'input[type="radio"][name="pengiriman"]', function(event) {
+            $('#ekspedisi_id').removeClass('is-invalid');
+            $('#msgekspedisi_id').text("");
+            $('#nama_pengirim').removeClass('is-invalid');
+            $('#msgnama_pengirim').text("");
+            $('#no_polisi').removeClass('is-invalid');
+            $('#msgno_polisi').text("");
+            if ($('input[type="radio"][name="pengiriman"]:checked').val() == "ekspedisi") {
+                $('#ekspedisi').removeClass('hide');
+                $('#nonekspedisi').addClass('hide');
+                $('#no_polisi').val("");
+                $('#nama_pengirim').val("");
+                if ($('.ekspedisi_id').val() != "") {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            } else if ($('input[type="radio"][name="pengiriman"]:checked').val() == "nonekspedisi") {
+                $('#ekspedisi').addClass('hide');
+                $('#nonekspedisi').removeClass('hide');
+                $('.ekspedisi_id').val("");
+                if ($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            }
+        });
+
+        $(document).on('change keyup', '#no_resi', function(event) {
+            if ($(this).val() != "") {
+                $('#no_resi').removeClass('is-invalid');
+                $('#msgno_resi').text("");
+                $('#btnsimpan').removeAttr('disabled');
+            } else if ($(this).val() == "") {
+                $('#no_resi').addClass('is-invalid');
+                $('#msgno_resi').text("No Resi harus diisi");
+                $('#btnsimpan').attr('disabled', true);
+            }
+        });
+
+        $(document).on('change keyup', '#nama_pengirim', function(event) {
+            if ($(this).val() != "") {
+                $('#nama_pengirim').removeClass('is-invalid');
+                $('#msgnama_pengirim').text("");
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            } else if ($(this).val() == "") {
+                $('#nama_pengirim').addClass('is-invalid');
+                $('#msgnama_pengirim').text("Nama Pengirim harus diisi");
+                $('#btnsimpan').attr('disabled', true);
+            }
+        });
+
+        $(document).on('change keyup', '#no_polisi', function(event) {
+            if ($(this).val() != "") {
+                $('#no_polisi').removeClass('is-invalid');
+                $('#msgno_polisi').text("");
+                if (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "") {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            } else if ($(this).val() == "") {
+                $('#no_polisi').addClass('is-invalid');
+                $('#msgno_polisi').text("No Kendaraan harus diisi");
+                $('#btnsimpan').attr('disabled', true);
+            }
+        });
+
+        $(document).on('change keyup', '.ekspedisi_id', function(event) {
+            if ($(this).val() != "") {
+                $('#ekspedisi_id').removeClass('is-invalid');
+                $('#msgekspedisi_id').text("");
+                if (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val("") != "") {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            } else if ($(this).val() == "") {
+                $('#ekspedisi_id').addClass('is-invalid');
+                $('#msgekspedisi_id').text("No Kendaraan harus diisi");
+                $('#btnsimpan').attr('disabled', true);
+            }
+        });
+
+        function ekspedisi_select() {
+            $('.ekspedisi_id').select2({
+                placeholder: "Pilih Ekspedisi",
+                allowClear: true,
+            });
+        }
 
         function gg() {
             var showtable = $('#showtable').DataTable({

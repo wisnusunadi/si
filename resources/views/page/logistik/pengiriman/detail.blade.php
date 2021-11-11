@@ -68,7 +68,7 @@
 @stop
 
 @section('content_header')
-<h1 class="m-0 text-dark">Pengiriman</h1>
+<h1 class="m-0 text-dark">Surat Jalan</h1>
 @stop
 
 @section('content')

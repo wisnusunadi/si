@@ -49,12 +49,13 @@ Route::prefix('/customer')->group(function () {
     Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_pesanan']);
     // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_customer']);
     Route::get('update_modal/{id}', [App\Http\Controllers\MasterController::class, 'update_customer_modal']);
-    Route::put('update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer']);
+    //Route::put('update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer']);
     Route::get('delete', [App\Http\Controllers\MasterController::class, 'delete_customer']);
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_customer']);;
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_customer_id']);;
     Route::get('check/{id}', [App\Http\Controllers\MasterController::class, 'check_customer']);
 });
+
 Route::prefix('/produk')->group(function () {
     Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_produk']);
     Route::post('create', [App\Http\Controllers\MasterController::class, 'create_produk']);
@@ -67,7 +68,7 @@ Route::prefix('/produk')->group(function () {
 Route::prefix('/penjualan_produk')->group(function () {
     Route::get('data/{value}', [App\Http\Controllers\MasterController::class, 'get_data_penjualan_produk']);
     // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_penjualan_produk']);
-    Route::post('update/{id}', [App\Http\Controllers\MasterController::class, 'update_penjualan_produk']);
+    // Route::post('update/{id}', [App\Http\Controllers\MasterController::class, 'update_penjualan_produk']);
     Route::post('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_penjualan_produk']);
     Route::get('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_penjualan_produk']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_detail_penjualan_produk']);

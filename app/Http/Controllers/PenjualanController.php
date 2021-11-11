@@ -172,7 +172,9 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function ($data) {
-                    if ($data->status == "sepakat") {
+                    if ($data->status == "draft") {
+                        $status = '<span class="badge blue-text">Draft</span>';
+                    } else if ($data->status == "sepakat") {
                         $status = '<span class="green-text badge">Sepakat</span>';
                     } else if ($data->status == "negosiasi") {
                         $status =  '<span class="yellow-text badge">Negosiasi</span>';
@@ -336,7 +338,7 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . $data->log . '</span>';
+                return '<span class="red-text badge">' . ucfirst($data->log) . '</span>';
             })
             ->addColumn('batas_kontrak', function ($data) {
 
@@ -347,30 +349,29 @@ class PenjualanController extends Controller
                     $to = Carbon::now();
                     $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
                     $hari = $to->diffInDays($from);
-
                     if ($hari > 7) {
-                        return  ' ' . $tgl_parameter . '
-                        <br><span class="badge bg-success">' . $hari . ' Hari Lagi</span>
+                        return  '<div> ' . $tgl_parameter . '</div>
+                        <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>
                         ';
                     } else if ($hari > 0 && $hari <= 7) {
-                        return  '' . $tgl_parameter . '
-                        <br><span class="badge bg-warning">' . $hari . ' Hari Lagi</span>
+                        return  '<div>' . $tgl_parameter . '</div>
+                        <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>
                         ';
                     } else {
-                        return  '' . $tgl_parameter . '
-                        <br><span class="badge bg-danger">Batas Kontrak Habis</span>
+                        return  '<div>' . $tgl_parameter . '</div>
+                        <div class="invalid-feedback d-block"><small><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</small></div>
                         ';
                     }
                 } elseif ($tgl_sekarang == $tgl_parameter) {
-                    return  '' . $tgl_parameter . '
-                    <br><span class="badge bg-danger">Batas Kontrak Habis</span>
+                    return  '<div>' . $tgl_parameter . '</div>
+                    <div class="invalid-feedback d-block"><small><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</small></div>
                     ';
                 } else {
                     $to = Carbon::now();
                     $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
                     $hari = $to->diffInDays($from);
-                    return  '' . $tgl_parameter . '
-                    <br><span class="badge bg-danger">Melebihi ' . $hari . ' Hari</span>
+                    return '<div>' . $tgl_parameter . '</div>
+                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>
                     ';
                 }
             })
@@ -926,46 +927,62 @@ class PenjualanController extends Controller
     }
     public function create_so_ekatalog(Request $request, $id)
     {
-        // $this->validate(
-        //     $request,
-        //     [w
-        //         'customer_id' => 'required',
-        //         'status' => 'required',
-        //         'jumlah.*' => 'required',
-        //         'penjualan_produk_id.*' => 'required'
-        //     ],
-        //     [
-        //         'customer_id.required' => 'Customer harus di isi',
-        //         'status.required' => 'Status harus di pilih',
-        //         'jumlah.required' => 'Jumlah Produk harus di isi',
-        //         'penjualan_produk_id.required' => 'Produk harus di pilih',
-        //     ]
+        $v = Validator::make(
+            $request->all(),
+            [
+                'customer_id' => 'required',
+                'status' => 'required',
+            ],
+            [
+                'customer_id.required' => 'Customer harus di isi',
+                'status.required' => 'Status harus di pilih',
+            ]
+        );
 
-        // );
-        $bool = true;
-        $pesanan =  Pesanan::create([
-            'so' => $this->createSO('EKAT'),
-            'no_po' => $request->no_po,
-            'tgl_po' => $request->tanggal_po,
-            'no_do' => $request->no_do,
-            'tgl_do' => $request->tanggal_do,
-            'ket' => $request->keterangan
-        ]);
-        if (!$pesanan) {
-            $bool = false;
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v);
         } else {
-            $ekatalog = Ekatalog::find($id);
-            $ekatalog->pesanan_id = $pesanan->id;
-            $ekat = $ekatalog->save();
-            if (!$ekat) {
-                $bool = false;
-            }
-        }
+            // $this->validate(
+            //     $request,
+            //     [w
+            //         'customer_id' => 'required',
+            //         'status' => 'required',
+            //         'jumlah.*' => 'required',
+            //         'penjualan_produk_id.*' => 'required'
+            //     ],
+            //     [
+            //         'customer_id.required' => 'Customer harus di isi',
+            //         'status.required' => 'Status harus di pilih',
+            //         'jumlah.required' => 'Jumlah Produk harus di isi',
+            //         'penjualan_produk_id.required' => 'Produk harus di pilih',
+            //     ]
 
-        if ($bool == true) {
-            return redirect()->back()->with('success', 'Berhasil menambahkan PO');
-        } else if ($bool == false) {
-            return redirect()->back()->with('error', 'Gagal menambahkan PO');
+            // );
+            $bool = true;
+            $pesanan =  Pesanan::create([
+                'so' => $this->createSO('EKAT'),
+                'no_po' => $request->no_po,
+                'tgl_po' => $request->tanggal_po,
+                'no_do' => $request->no_do,
+                'tgl_do' => $request->tanggal_do,
+                'ket' => $request->keterangan
+            ]);
+            if (!$pesanan) {
+                $bool = false;
+            } else {
+                $ekatalog = Ekatalog::find($id);
+                $ekatalog->pesanan_id = $pesanan->id;
+                $ekat = $ekatalog->save();
+                if (!$ekat) {
+                    $bool = false;
+                }
+            }
+
+            if ($bool == true) {
+                return redirect()->back()->with('success', 'Berhasil menambahkan PO');
+            } else if ($bool == false) {
+                return redirect()->back()->with('error', 'Gagal menambahkan PO');
+            }
         }
     }
     //Update
@@ -1008,7 +1025,7 @@ class PenjualanController extends Controller
                             'harga' => str_replace(".", "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-                        if ($cdekat) {
+                        if (!$cdekat) {
                             $bool = false;
                         }
                     }

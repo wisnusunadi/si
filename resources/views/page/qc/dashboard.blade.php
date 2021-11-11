@@ -56,6 +56,11 @@
         color: #FFC700;
     }
 
+    .warning-bg {
+        background-color: #FFC700;
+        color: white;
+    }
+
     .green-text {
         background-color: rgba(69, 102, 0, 0.2);
         color: #456600;
@@ -90,169 +95,204 @@
 @stop
 
 @section('content')
-<div class="content">
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4>Outgoing 2021</h4>
-                            <div class="row">
-                                <div class="col-4">
-                                    <a href="#" class="card active otg" id="pengujianterbaru">
-                                        <div class="card-body green-text">
-                                            <small class="margin-custom">Pengujian Terbaru</small>
-                                            <h1 class="align-center">3</h1>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-lg-6 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Outgoing 2021</h4>
+                                <div class="row">
+
+                                    <div class="col-lg-4 col-6">
+                                        <div class="small-box bg-success">
+                                            <div class="inner">
+                                                <h3>3</h3>
+                                                <p>Pengujian Terbaru</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-tasks"></i>
+                                            </div>
+                                            <a href="#" class="small-box-footer active" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
-                                    </a>
-                                </div>
-                                <div class="col-4">
-                                    <a href="#" class="card otg" id="belumdiuji">
-                                        <div class="card-body yellow-text">
-                                            <small class="margin-custom">Belum di Uji</small>
-                                            <h1 class="align-center">6</h1>
+                                    </div>
+                                    <div class="col-lg-4 col-6">
+                                        <div class="small-box warning-bg">
+                                            <div class="inner">
+                                                <h3>4</h3>
+                                                <p>Belum diuji</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-boxes"></i>
+                                            </div>
+                                            <a href="#" class="small-box-footer" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
-                                    </a>
-                                </div>
-                                <div class="col-4">
-                                    <a href="#" class="card otg" id="lewatbatasuji">
-                                        <div class="card-body red-text">
-                                            <small class="margin-custom">Lewat Batas Uji</small>
-                                            <h1 class="align-center">2</h1>
+                                    </div>
+                                    <div class="col-lg-4 col-6">
+                                        <div class="small-box bg-danger">
+                                            <div class="inner">
+                                                <h3>2</h3>
+                                                <p>Lewat Batas Uji</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </div>
+                                            <a href="#" class="small-box-footer" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
-                                    </a>
+                                    </div>
+
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <table class="table table-hover" id="pengujianterbarutable" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>No SO</th>
-                                                <th>Batas Pengujian</th>
-                                                <th>Status</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>SOSPA102100001</td>
-                                                <td>
-                                                    <div class="urgent">12-10-2021</div>
-                                                    <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
-                                                </td>
-                                                <td><span class="badge red-text">Belum diuji</span></td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SOSPA102100002</td>
-                                                <td>
-                                                    <div class="urgent">11-10-2021</div>
-                                                    <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                </td>
-                                                <td><span class="badge red-text">Belum diuji</span></td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SOSPA102100003</td>
-                                                <td>
-                                                    <div class="urgent">11-10-2021</div>
-                                                    <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                </td>
-                                                <td><span class="badge red-text">Belum diuji</span></td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <table class="table table-hover" id="pengujianterbarutable" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan=5>
+
+                                                        <h5><b>Pengujian Terbaru</b></h5>
+
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>Batas Pengujian</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>SOSPA102100001</td>
+                                                    <td>
+                                                        <div class="urgent">12-10-2021</div>
+                                                        <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
+                                                    </td>
+                                                    <td><span class="badge red-text">Belum diuji</span></td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>SOSPA102100002</td>
+                                                    <td>
+                                                        <div class="urgent">11-10-2021</div>
+                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
+                                                    </td>
+                                                    <td><span class="badge red-text">Belum diuji</span></td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>SOSPA102100003</td>
+                                                    <td>
+                                                        <div class="urgent">11-10-2021</div>
+                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
+                                                    </td>
+                                                    <td><span class="badge red-text">Belum diuji</span></td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
 
 
-                                    <table class="table table-hover hide" id="belumdiujitable" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>No SO</th>
-                                                <th>Batas Pengujian</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>SOSPA092100093</td>
-                                                <td>
-                                                    <div class="urgent">31-10-2021</div>
-                                                    <small><i class="fas fa-exclamation-circle" id="warning"></i> 2 Hari Lagi</small>
-                                                </td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SOSPA092100121</td>
-                                                <td>
-                                                    <div class="urgent">01-11-2021</div>
-                                                    <small><i class="fas fa-exclamation-circle" id="warning"></i> 3 Hari Lagi</small>
-                                                </td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SOSPA102100001</td>
-                                                <td>
-                                                    <div class="urgent">12-10-2021</div>
-                                                    <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                </td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>SOSPA102100002</td>
-                                                <td>
-                                                    <div class="urgent">11-10-2021</div>
-                                                    <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
-                                                </td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <table class="table table-hover hide" id="belumdiujitable" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan=4>
 
-                                    <table class="table table-hover hide" id="lewatbatasujitable" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>No SO</th>
-                                                <th>Batas Pengujian</th>
-                                                <th>Status</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>SOSPA092100093</td>
-                                                <td>
-                                                    <div class="urgent">31-10-2021</div>
-                                                    <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
-                                                </td>
-                                                <td><span class="badge yellow-text">Sebagian diuji</span></td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SOSPA092100121</td>
-                                                <td>
-                                                    <div class="urgent">01-11-2021</div>
-                                                    <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
-                                                </td>
-                                                <td><span class="badge yellow-text">Sebagian diuji</span></td>
-                                                <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                        <h5><b>Belum Diuji</b></h5>
+
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>Batas Pengujian</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>SOSPA092100093</td>
+                                                    <td>
+                                                        <div class="urgent">31-10-2021</div>
+                                                        <small><i class="fas fa-exclamation-circle" id="warning"></i> 2 Hari Lagi</small>
+                                                    </td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>SOSPA092100121</td>
+                                                    <td>
+                                                        <div class="urgent">01-11-2021</div>
+                                                        <small><i class="fas fa-exclamation-circle" id="warning"></i> 3 Hari Lagi</small>
+                                                    </td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>SOSPA102100001</td>
+                                                    <td>
+                                                        <div class="urgent">12-10-2021</div>
+                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
+                                                    </td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4</td>
+                                                    <td>SOSPA102100002</td>
+                                                    <td>
+                                                        <div class="urgent">11-10-2021</div>
+                                                        <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
+                                                    </td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <table class="table table-hover hide" id="lewatbatasujitable" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan=5>
+                                                        <h5><b>Lewat Batas Uji</b></h5>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>Batas Pengujian</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>SOSPA092100093</td>
+                                                    <td>
+                                                        <div class="urgent">31-10-2021</div>
+                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
+                                                    </td>
+                                                    <td><span class="badge yellow-text">Sebagian diuji</span></td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>SOSPA092100121</td>
+                                                    <td>
+                                                        <div class="urgent">01-11-2021</div>
+                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
+                                                    </td>
+                                                    <td><span class="badge yellow-text">Sebagian diuji</span></td>
+                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -260,20 +300,20 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-warning">
-                    <h4>Detail</h4>
-                </div>
-                <div class="modal-body" id="detail">
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-warning">
+                        <h4>Detail</h4>
+                    </div>
+                    <div class="modal-body" id="detail">
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 
 @section('adminlte_js')

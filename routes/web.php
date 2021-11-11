@@ -65,12 +65,14 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/create', 'page.penjualan.produk.create')->name('penjualan.produk.create');
         Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_penjualan_produk'])->name('penjualan.produk.store');
         Route::view('/edit', 'page.penjualan.produk.edit')->name('penjualan.produk.edit');
+        Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_penjualan_produk'])->name('penjualan.produk.update');
     });
 
     Route::group(['prefix' => '/customer'], function () {
         Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
         Route::view('/create', 'page.penjualan.customer.create')->name('penjualan.customer.create');
-        Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_customer'])->name('penjualan.customer.store');;
+        Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_customer'])->name('penjualan.customer.store');
+        Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer'])->name('penjualan.customer.update');
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
     });
 
@@ -153,7 +155,14 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::view('/detail/{id}', 'page.logistik.pengiriman.detail')->name('logistik.pengiriman.detail');
         Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
         Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
+        Route::get('/edit/{id}/{status}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');
         Route::get('/print', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
+        Route::group(['prefix' => '/riwayat'], function () {
+            Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
+        });
+    });
+    Route::group(['prefix' => '/laporan'], function () {
+        Route::view('/show', 'page.logistik.laporan.show')->name('logistik.laporan.show');
     });
 });
 
