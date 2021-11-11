@@ -166,6 +166,20 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 });
 
+Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.dc.dashboard')->name('dc.dashboard');
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.dc.so.show')->name('dc.so.show');
+        Route::view('/detail/{id}', 'page.dc.so.detail')->name('dc.so.detail');
+        Route::view('/produk/{id}', 'page.dc.so.produk')->name('dc.so.produk');
+        Route::view('/create', 'page.dc.so.create')->name('dc.so.create');
+        Route::view('/edit', 'page.dc.so.edit')->name('dc.so.edit');
+        Route::group(['prefix' => '/laporan'], function () {
+            Route::view('/show', 'page.dc.laporan.show')->name('dc.so.laporan.show');
+        });
+    });
+});
 
 Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 

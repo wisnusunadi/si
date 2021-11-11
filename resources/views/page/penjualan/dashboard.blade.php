@@ -25,6 +25,14 @@
         white-space: nowrap;
     }
 
+    .nowrap {
+        white-space: nowrap;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
     #urgent {
         color: red;
     }
@@ -77,6 +85,60 @@
                                     </div>
                                 </div>
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box purple-text">
+                                        <div class="inner">
+                                            <h3>3</h3>
+                                            <p>AKN Tanpa SO</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-tasks"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box orange-text">
+                                        <div class="inner">
+                                            <h3>4</h3>
+                                            <p>SO Belum Diproses Gudang</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-boxes"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box yellow-text">
+                                        <div class="inner">
+                                            <h3>2</h3>
+                                            <p>SO Belum Diproses QC</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box green-text">
+                                        <div class="inner">
+                                            <h3>2</h3>
+                                            <p>SO Belum Diproses Logistik</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -140,6 +202,56 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>Lewat Batas Penyelesaian Per Divisi</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="divisitable" style="width:100%;">
+                                            <thead class="align-center">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>Divisi</th>
+                                                    <th>Batas Selesai</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="nowrap align-center">1</td>
+                                                    <td class="nowrap align-center">SOSPA102100001</td>
+                                                    <td class="align-center"><span class="badge yellow-text">Logistik</span></td>
+                                                    <td class="align-center">
+                                                        <div>06-11-2021</div>
+                                                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 5 Hari</div>
+                                                    </td>
+                                                    <td class="align-center"><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="nowrap align-center">2</td>
+                                                    <td class="nowrap align-center">SOSPA102100001</td>
+                                                    <td class="align-center"><span class="badge orange-text">QC</span></td>
+                                                    <td class="align-center">
+                                                        <div>04-11-2021</div>
+                                                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 7 Hari</div>
+                                                    </td>
+                                                    <td class="align-center"><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -160,6 +272,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $('#divisitable').DataTable({});
         var pengirimantable = $('#pengirimantable').DataTable({
             processing: true,
             serverSide: true,
@@ -346,21 +459,21 @@
                         labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
                         datasets: [{
                                 label: "E-Catalogue",
-                                backgroundColor: "red",
+                                backgroundColor: "#7D6378",
                                 data: [data.ekatalog_graph[1].count, data.ekatalog_graph[2].count, data.ekatalog_graph[3].count, data.ekatalog_graph[4].count, data.ekatalog_graph[5].count, data.ekatalog_graph[6].count, data.ekatalog_graph[7].count, data.ekatalog_graph[8].count, data.ekatalog_graph[9].count, data.ekatalog_graph[10].count, data.ekatalog_graph[11].count, data.ekatalog_graph[12].count],
-                                borderColor: 'red',
+                                borderColor: '#7D6378',
                             },
                             {
                                 label: "SPA",
-                                backgroundColor: "blue",
+                                backgroundColor: "#EA8B1B",
                                 data: [data.spa_graph[1].count, data.spa_graph[2].count, data.spa_graph[3].count, data.spa_graph[4].count, data.spa_graph[5].count, data.spa_graph[6].count, data.spa_graph[7].count, data.spa_graph[8].count, data.spa_graph[9].count, data.spa_graph[10].count, data.spa_graph[11].count, data.spa_graph[12].count],
-                                borderColor: 'blue',
+                                borderColor: '#EA8B1B',
                             },
                             {
                                 label: "SPB",
-                                backgroundColor: "black",
+                                backgroundColor: "#5F7A90",
                                 data: [data.spb_graph[1].count, data.spb_graph[2].count, data.spb_graph[3].count, data.spb_graph[4].count, data.spb_graph[5].count, data.spb_graph[6].count, data.spb_graph[7].count, data.spb_graph[8].count, data.spb_graph[9].count, data.spb_graph[10].count, data.spb_graph[11].count, data.spb_graph[12].count],
-                                borderColor: 'black',
+                                borderColor: '#5F7A90',
                             }
                         ]
                     },
@@ -377,7 +490,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Grafik Penjualan Bulanan'
+                                text: 'Grafik Penjualan Tahunan'
                             }
                         },
                         scales: {

@@ -308,11 +308,10 @@ class MasterController extends Controller
         $customer->alamat = $request->alamat;
         $customer->ket = $request->keterangan;
         $c = $customer->save();
-
         if ($c) {
-            return redirect('/penjualan/customer/show')->with('success', 'Berhasil mengubah data');
-        } else {
-            return redirect('/penjualan/customer/show')->with('error', 'Gagal mengubah data');
+            return response()->json(['data' => 'success']);
+        } else if (!$c) {
+            return response()->json(['data' => 'error']);
         }
     }
 
@@ -366,9 +365,9 @@ class MasterController extends Controller
         }
         $p = $PenjualanProduk->produk()->sync($produk_array);
         if ($p) {
-            return redirect('/penjualan/produk/show')->with('success', 'Berhasil mengubah data');
-        } else {
-            return redirect('/penjualan/produk/show')->with('error', 'Gagal mengubah data');
+            return response()->json(['data' => 'success']);
+        } else if (!$p) {
+            return response()->json(['data' => 'error']);
         }
     }
     //Other
