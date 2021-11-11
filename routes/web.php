@@ -112,7 +112,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
-        Route::view('/detail/{id}', 'page.qc.so.detail')->name('qc.so.detail');
+        Route::get('/detail/{id}/{value}', [App\Http\Controllers\QCController::class, 'detail_so'])->name('qc.so.detail');
         Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
         Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {

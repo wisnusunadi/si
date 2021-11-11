@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\LaporanQcOutgoing;
 use App\Models\Ekatalog;
+use App\Models\Spa;
+use App\Models\Spb;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
@@ -11,23 +13,65 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class QcController extends Controller
 {
+    //Get Data
 
-
-    public function update_modal_so()
+    public function get_data_so($value)
     {
-        return view('page.qc.so.edit');
-    }
+        $x = explode(',', $value);
+        if ($value == 'semua') {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $data = $Ekatalog->merge($Spa)->merge($Spb);
+        } else if ($x == ['ekatalog', 'spa']) {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $data = $Ekatalog->merge($Spa);
+        } else if ($x == ['ekatalog', 'spb']) {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $data = $Ekatalog->merge($Spb);
+        } else if ($x == ['spa', 'spb']) {
+            $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get());
+            $data = $Spa->merge($Spb);
+        } else if ($value == 'ekatalog') {
+            $data = Ekatalog::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get();
+        } else if ($value == 'spa') {
+            $data = Spa::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get();
+        } else if ($value == 'spb') {
+            $data = Spb::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get();
+        } else {
+            $data = Spa::whereHas('Pesanan', function ($q) {
+                $q->whereNotNull('no_po');
+            })->get();
+        }
 
-    public function detail_modal_riwayat_so()
-    {
-        return view('page.qc.so.riwayat.detail');
-    }
 
-    public function get_data_so()
-    {
-        $data = Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('no_po', function ($data) {
@@ -36,12 +80,85 @@ class QcController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 return $data->Customer->nama;
             })
+            ->addColumn('status', function () {
+                return '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            })
+            ->addColumn('button', function ($data) {
+                $name =  $data->getTable();
+                return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a href="' . route('qc.so.detail', [$data->id, $name]) . '">
+                <button class="dropdown-item" type="button">
+                    <i class="fas fa-search"></i>
+                    Detail
+                </button>
+            </a>
+        </div>';
+            })
+            ->rawColumns(['button', 'status'])
             ->make(true);
+    }
+
+
+    //Detail
+    public function update_modal_so()
+    {
+        return view('page.qc.so.edit');
+    }
+
+    public function detail_so($id, $value)
+    {
+        if ($value == 'ekatalog') {
+            $data = Ekatalog::where('id', $id)->get();
+            foreach ($data as $d) {
+                $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                $tgl_parameter = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status)->format('Y-m-d');
+
+                if ($tgl_sekarang < $tgl_parameter) {
+                    $to = Carbon::now();
+                    $from = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status);
+                    $hari = $to->diffInDays($from);
+
+                    if ($hari > 7) {
+                        $x = ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                    } else if ($hari > 0 && $hari <= 7) {
+                        $x = ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                    } else {
+                        $x = '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                    }
+                } elseif ($tgl_sekarang == $tgl_parameter) {
+                    $x =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                } else {
+                    $to = Carbon::now();
+                    $from = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status);
+                    $hari = $to->diffInDays($from);
+                    $x =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                }
+            }
+        } elseif ($value == 'spa') {
+        } else {
+        }
+        return view('page.qc.so.detail', ['data' => $data, 'x' => $x]);
+    }
+
+    public function detail_modal_riwayat_so()
+    {
+        return view('page.qc.so.riwayat.detail');
     }
 
     //Laporan
     public function laporan_outgoing(Request $request)
     {
         return Excel::download(new LaporanQcOutgoing($request->produk_id ?? '', $request->no_so ?? '', $request->hasil_uji  ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_qc_outgoing.xlsx');
+    }
+
+    public function getHariBatasKontrak($value, $limit)
+    {
+        if ($limit == 2) {
+            $days = '21';
+        } else {
+            $days = '28';
+        }
+        return Carbon::parse($value)->subDays($days);
     }
 }

@@ -314,10 +314,8 @@ class PenjualanController extends Controller
         }
         return Carbon::parse($value)->subDays($days);
     }
-
     public function get_data_ekatalog_pengiriman()
     {
-
         $data  = Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })->orderBy('tgl_kontrak', 'ASC')->get();
