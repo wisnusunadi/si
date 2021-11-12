@@ -109,7 +109,7 @@
                                         <div class="small-box bg-success">
                                             <div class="inner">
                                                 <h3>3</h3>
-                                                <p>Pengiriman SO</p>
+                                                <p>SO milik Logistik</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-tasks"></i>
@@ -121,7 +121,7 @@
                                         <div class="small-box warning-bg">
                                             <div class="inner">
                                                 <h3>4</h3>
-                                                <p>SO Tanpa COO</p>
+                                                <p>Belum memiliki COO</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-boxes"></i>
@@ -132,7 +132,7 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-danger">
                                             <div class="inner">
-                                                <h3>2</h3>
+                                                <h3>3</h3>
                                                 <p>Lewat Batas Kontrak</p>
                                             </div>
                                             <div class="icon">
@@ -150,14 +150,14 @@
                                                 <tr>
                                                     <th colspan=5>
 
-                                                        <h5><b>Daftar Pengiriman SO</b></h5>
+                                                        <h5><b>Daftar SO milik Logistik</b></h5>
 
                                                     </th>
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
                                                     <th>No SO</th>
-                                                    <th>Batas Pengujian</th>
+                                                    <th>Batas Pengiriman</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -170,8 +170,8 @@
                                                         <div class="urgent">12-10-2021</div>
                                                         <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                     </td>
-                                                    <td><span class="badge red-text">Belum Diproses</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><span class="badge red-text">Belum Dikirim</span></td>
+                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -181,7 +181,7 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
                                                     <td><span class="badge blue-text">Draft Pengiriman</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
@@ -190,8 +190,8 @@
                                                         <div class="urgent">11-10-2021</div>
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
-                                                    <td><span class="badge red-text">Belum diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><span class="badge red-text">Belum Dikirim</span></td>
+                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -202,7 +202,7 @@
                                                 <tr>
                                                     <th colspan=4>
 
-                                                        <h5><b>Daftar SO tanpa COO</b></h5>
+                                                        <h5><b>Daftar SO belum memiliki COO</b></h5>
 
                                                     </th>
                                                 </tr>
@@ -221,7 +221,7 @@
                                                         <div class="urgent">31-10-2021</div>
                                                         <small><i class="fas fa-exclamation-circle" id="warning"></i> 2 Hari Lagi</small>
                                                     </td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -230,7 +230,7 @@
                                                         <div class="urgent">01-11-2021</div>
                                                         <small><i class="fas fa-exclamation-circle" id="warning"></i> 3 Hari Lagi</small>
                                                     </td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
@@ -239,7 +239,7 @@
                                                         <div class="urgent">12-10-2021</div>
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>4</td>
@@ -248,7 +248,7 @@
                                                         <div class="urgent">11-10-2021</div>
                                                         <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                     </td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -276,8 +276,8 @@
                                                         <div class="urgent">31-10-2021</div>
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
                                                     </td>
-                                                    <td><span class="badge yellow-text">Sebagian diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><span class="badge yellow-text">Sebagian diproses</span></td>
+                                                    <td><a href="{{route('dc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -286,8 +286,18 @@
                                                         <div class="urgent">01-11-2021</div>
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
                                                     </td>
-                                                    <td><span class="badge yellow-text">Sebagian diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><span class="badge yellow-text">Sebagian diproses</span></td>
+                                                    <td><a href="{{route('dc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>SOSPA092100311</td>
+                                                    <td>
+                                                        <div class="urgent">01-11-2021</div>
+                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
+                                                    </td>
+                                                    <td><span class="badge red-text">Belum diproses</span></td>
+                                                    <td><a href="{{route('dc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>

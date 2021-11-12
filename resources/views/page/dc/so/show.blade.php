@@ -19,7 +19,7 @@
     }
 
     .info {
-        color: #FFC700;
+        color: #3a7bb0;
         font-weight: 600;
     }
 
@@ -30,8 +30,8 @@
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+<section class="section">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -45,29 +45,29 @@
                                     <div class="dropdown-menu">
                                         <div class="px-3 py-3">
                                             <div class="form-group">
-                                                <label for="jenis_penjualan">Jenis Penjualan</label>
+                                                <label for="status">Status</label>
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
-                                                    <label class="form-check-label" for="defaultCheck1">
-                                                        E-Catalogue
+                                                    <input class="form-check-input" type="radio" value="semua" id="status3" name="status" />
+                                                    <label class="form-check-label" for="status3">
+                                                        Semua
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                        SPA
+                                                    <input class="form-check-input" type="radio" value="belum_diproses" id="status2" name="status" />
+                                                    <label class="form-check-label" for="status2">
+                                                        Belum Diproses
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                        SPB
+                                                    <input class="form-check-input" type="radio" value="sebagian_diproses" id="status1" name="status" />
+                                                    <label class="form-check-label" for="status1">
+                                                        Sebagian Diproses
                                                     </label>
                                                 </div>
                                             </div>
@@ -92,10 +92,10 @@
                                             <th>No SO</th>
                                             <th>No AKN</th>
                                             <th>Batas Kontrak</th>
-                                            <th>Distibutor</th>
                                             <th>Customer</th>
-                                            <th>Keterangan</th>
+                                            <th>Instansi</th>
                                             <th>Status</th>
+                                            <th>Keterangan</th>
                                             <th>Aksi</th>
                                         </thead>
                                         <tbody>
@@ -103,11 +103,14 @@
                                                 <td>1</td>
                                                 <td>SO/EKAT/X/02/98</td>
                                                 <td>AK1-909090-1892180</td>
-                                                <td>31-10-2021</td>
+                                                <td>
+                                                    <div class="urgent">31-10-2021</div>
+                                                    <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
+                                                </td>
                                                 <td>CV. Cipta Jaya Mandiri</td>
                                                 <td>Pemerintah Kota Gorontalo</td>
-                                                <td>-</td>
                                                 <td><span class="badge yellow-text">Sebagian Diproses</span></td>
+                                                <td>-</td>
                                                 <td><a href="/dc/so/detail/1">
                                                         <i class="fas fa-search"></i>
                                                     </a>
@@ -123,10 +126,11 @@
                                                 </td>
                                                 <td>CV. Cipta Jaya Mandiri</td>
                                                 <td>Rumah Sakit Santo Paulus</td>
-                                                <td>-</td>
-                                                <td><span class="badge red-text">Belum Diproses</span></td>
                                                 <td>
-                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1">
+                                                    <span class="badge red-text">Belum Diproses</span>
+                                                </td>
+                                                <td>-</td>
+                                                <td><a href="/dc/so/detail/1">
                                                         <i class="fas fa-search"></i>
                                                     </a>
                                                 </td>
@@ -141,11 +145,12 @@
                                                 </td>
                                                 <td>PT. Emiindo Jaya Bersama</td>
                                                 <td>Pemerintah Kota Padang</td>
-                                                <td>-</td>
                                                 <td><span class="badge yellow-text">Sebagian Diproses</span></td>
-                                                <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1">
+                                                <td>-</td>
+                                                <td><a href="/dc/so/detail/1">
                                                         <i class="fas fa-search"></i>
-                                                    </a></td>
+                                                    </a>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>4</td>
@@ -153,15 +158,16 @@
                                                 <td>AK1-909090-1892180</td>
                                                 <td>
                                                     <div>21-09-2021</div>
-                                                    <small>Batas sisa 6 Hari</small>
+                                                    <small><i class="fas fa-clock info"></i> Batas sisa 6 Hari</small>
                                                 </td>
                                                 <td>PT. Emiindo Jaya Bersama</td>
                                                 <td>Rumah Sakit Santo Paulus</td>
-                                                <td>-</td>
                                                 <td><span class="badge red-text">Belum Diproses</span></td>
-                                                <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1">
+                                                <td>-</td>
+                                                <td><a href="/dc/so/detail/1">
                                                         <i class="fas fa-search"></i>
-                                                    </a></td>
+                                                    </a>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -172,54 +178,55 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-info">
-                    <h4 class="modal-title">Info</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="detail">
 
+        <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-info">
+                        <h4 class="modal-title">Info</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="detail">
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 @section('adminlte_js')
 <script>
     $(function() {
-        $(document).on('click', '.detailmodal', function(event) {
-            event.preventDefault();
-            var href = $(this).attr('data-attr');
-            var id = $(this).data('id');
-            $.ajax({
-                url: "/dc/so/detail/" + id,
-                beforeSend: function() {
-                    $('#loader').show();
-                },
-                // return the result
-                success: function(result) {
-                    $('#detailmodal').modal("show");
-                    $('#detail').html(result).show();
-                    console.log(id);
-                    // $("#editform").attr("action", href);
-                },
-                complete: function() {
-                    $('#loader').hide();
-                },
-                error: function(jqXHR, testStatus, error) {
-                    console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
-                    $('#loader').hide();
-                },
-                timeout: 8000
-            })
-        });
+        // $(document).on('click', '.detailmodal', function(event) {
+        //     event.preventDefault();
+        //     var href = $(this).attr('data-attr');
+        //     var id = $(this).data('id');
+        //     $.ajax({
+        //         url: "/dc/so/detail/" + id,
+        //         beforeSend: function() {
+        //             $('#loader').show();
+        //         },
+        //         // return the result
+        //         success: function(result) {
+        //             $('#detailmodal').modal("show");
+        //             $('#detail').html(result).show();
+        //             console.log(id);
+        //             // $("#editform").attr("action", href);
+        //         },
+        //         complete: function() {
+        //             $('#loader').hide();
+        //         },
+        //         error: function(jqXHR, testStatus, error) {
+        //             console.log(error);
+        //             alert("Page " + href + " cannot open. Error:" + error);
+        //             $('#loader').hide();
+        //         },
+        //         timeout: 8000
+        //     })
+        // });
         // var showtable = $('#showtable').DataTable({
         //     processing: true,
         //     serverSide: true,

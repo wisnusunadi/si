@@ -134,7 +134,7 @@
                                                 <th rowspan="2" class="nowrap">Tanggal Selesai</th>
                                                 <th rowspan="2" class="nowrap">Jumlah</th>
                                                 <th colspan="2" class="nowrap">Hasil</th>
-                                                <th rowspan="2" class="nowrap">Status</th>
+                                                <th rowspan="2" class="nowrap">Aksi</th>
                                             </tr>
                                             <tr>
                                                 <th><i class="fas fa-check ok"></i></th>

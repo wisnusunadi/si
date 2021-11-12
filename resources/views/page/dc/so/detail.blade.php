@@ -121,15 +121,16 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-8">
+        <div class="col-lg-8 col-12">
             <div class="card">
                 <div class="card-body">
                     <h5>Daftar Barang</h5>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped" style="text-align: center; width:100%;">
+                        <table class="table table-hover" style="text-align: center; width:100%;" id="showtable">
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th class="nowrap-text">Tgl Surat Jalan</th>
                                     <th>Nama</th>
                                     <th>No AKD</th>
                                     <th>Bulan</th>
@@ -140,22 +141,44 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>1</td>
-                                    <td>B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
-                                    <td>21102900256</td>
-                                    <td>X</td>
-                                    <td>5</td>
-                                    <td><span class="badge green-text">Tersedia</span></td>
-                                    <td><a href="{{route('dc.so.produk', ['id' => 1])}}"><i class="fas fa-search"></i></a></td>
+                                    <td class="nowrap-text">1</td>
+                                    <td class="nowrap-text">19-10-2021</td>
+                                    <td class="nowrap-text">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
+                                    <td class="nowrap-text">21102900256</td>
+                                    <td class="nowrap-text">X</td>
+                                    <td class="nowrap-text">5</td>
+                                    <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
+                                    <td class="nowrap-text"></a>
+                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="noserishow dropdown-item" type="button">
+                                                <i class="fas fa-eye"></i>
+                                                Detail
+                                            </a>
+                                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-id="1">
+                                                <button class="dropdown-item" type="button">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                    Edit
+                                                </button>
+                                            </a>
+                                            <a href="{{route('logistik.pengiriman.print')}}">
+                                                <button class="dropdown-item" type="button">
+                                                    <i class="fas fa-file"></i>
+                                                    Laporan PDF
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
+                                    <td>21-10-2021</td>
                                     <td>ELITECH PULSE OXIMETER/OXYMETER FOX-2</td>
                                     <td>20502210102</td>
                                     <td></td>
                                     <td>2</td>
                                     <td><span class="badge red-text">Belum Tersedia</span></td>
-                                    <td><a href="{{route('dc.so.produk', ['id' => 1])}}"><i class="fas fa-search"></i></a></td>
+                                    <td><a type="button" class="noserishow"><i class="fas fa-search"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -163,12 +186,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-4" id="noseri">
+        <div class="col-lg-4 col-12 hide" id="noseri">
             <div class="card">
                 <div class="card-body">
                     <div>
                         <h5 style="display: inline;" class="filter">No Seri</h5>
-                        <span class="float-right" class="filter"><button type="button" class="btn btn-sm btn-warning"><i class="fas fa-plus"></i> Tambah COO</button></span>
+                        <a data-toggle="modal" data-target="#createmodal" class="createmodal float-right" data-attr="" data-id="1">
+                            <button type="button" class="btn btn-sm btn-info"><i class="fas fa-plus"></i> Tambah COO</button>
+                        </a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped" style="text-align: center; width:100%;" id="noseritable">
@@ -203,12 +228,27 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header bg-info">
-                        <h4 class="modal-title">Info</h4>
+                        <h4 class="modal-title">Tambah COO</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body" id="create">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-warning">
+                        <h4 class="modal-title">Edit COO</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="edit">
 
                     </div>
                 </div>
@@ -221,12 +261,22 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $('#showtable').DataTable({
+            scrollX: true
+        });
+        $('#showtable').on('click', '.noserishow', function() {
+            var data = $(this).attr('data-id');
+            $('#showtable').find('tr').removeClass('bgcolor');
+            $(this).closest('tr').addClass('bgcolor');
+            $('#noseri').removeClass('hide');
+            console.log(data);
+        })
         $(document).on('click', '.createmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
             $.ajax({
-                url: "/dc/so/create/" + id,
+                url: "/dc/coo/create/" + id,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -234,7 +284,10 @@
                 success: function(result) {
                     $('#createmodal').modal("show");
                     $('#create').html(result).show();
-                    console.log(id);
+                    $('.bulan').select2({
+                        placeholder: 'Pilih Bulan',
+                        allowClear: true
+                    });
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {
@@ -247,6 +300,53 @@
                 },
                 timeout: 8000
             })
+        });
+
+        $(document).on('click', '.editmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
+            $.ajax({
+                url: "/dc/coo/edit/" + id,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#editmodal').modal("show");
+                    $('#edit').html(result).show();
+                    $('.bulan_edit').select2({
+                        placeholder: 'Pilih Bulan',
+                        allowClear: true
+                    });
+                    // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+
+        $(document).on('keyup change', 'select[name="bulan"]', function() {
+            if ($(this).val() != "") {
+                $('#btntambah').removeClass('disabled');
+            } else {
+                $('#btntambah').addClass('disabled');
+            }
+        });
+
+        $(document).on('keyup change', 'select[name="bulan_edit"]', function() {
+            if ($(this).val() != "") {
+                $('#btnsimpan').removeClass('disabled');
+            } else {
+                $('#btnsimpan').addClass('disabled');
+            }
         });
     })
 </script>

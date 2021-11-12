@@ -151,16 +151,16 @@
                 <thead class="align-center">
                     <tr>
                         <th class="nospace">No SO</th>
-                        <th class="nospace">No Invoice</th>
                         <th class="nospace">No PO</th>
+                        <th class="nospace">No Invoice</th>
                         <th>Tanggal Kirim</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td class="nospace">SOEKAT51892108</td>
-                        <td class="wb">9003183913079</td>
                         <td class="nospace">PO/ON/09/10/2021</td>
+                        <td class="wb">9003183913079</td>
                         <td class="nospace">21-01-2021</td>
                     </tr>
                 </tbody>
@@ -179,8 +179,8 @@
                     <tr>
                         <th>Nama Barang</th>
                         <th class="nospace">Jumlah</th>
-                        <th>Keterangan</th>
                         <th>No Seri</th>
+                        <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -188,19 +188,19 @@
                         <td class="wb align-left">Elitech MTB 2 MTR</td>
                         <td class="nospace align-right">100.00 pcs</td>
                         <td class="wb">-</td>
-                        <td class="wb"></td>
+                        <td class="wb">-</td>
                     </tr>
                     <tr>
                         <td class="wb align-left">Elitech Pocket Fetal Doppler</td>
                         <td class="nospace align-right">2.00 pcs</td>
                         <td class="wb">-</td>
-                        <td class="wb"></td>
+                        <td class="wb">-</td>
                     </tr>
                     <tr>
                         <td class="wb  align-left">Elitech APRON</td>
                         <td class="nospace align-right">10.00 pcs</td>
                         <td class="wb">-</td>
-                        <td class="wb"></td>
+                        <td class="wb">-</td>
                     </tr>
                 </tbody>
             </table>

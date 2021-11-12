@@ -1119,7 +1119,7 @@ return [
         [
             'text' => 'COO',
             'icon' => 'far fa-circle',
-            'url' => '/dc/so/show',
+            'url' => '/dc/coo/show',
             'auth' => [9],
         ],
 
