@@ -40,33 +40,69 @@ class ProduksiController extends Controller
                 return response()->json(['msg' => 'Stok Tidak Mencukupi']);
             } else {
                 // insert one
-                $gdg->stok = $gdg->stok - $request->qty;
-                $gdg->save();
+                // $gdg->stok = $gdg->stok - $request->qty;
+                // $gdg->save();
 
-                $tf_prod = new TFProduksi();
-                $tf_prod->ke = $request->ke;
-                $tf_prod->deskripsi = $request->deskripsi;
-                $tf_prod->created_at = Carbon::now();
-                $tf_prod->save();
+                // $tf_prod = new TFProduksi();
+                // $tf_prod->ke = $request->ke;
+                // $tf_prod->deskripsi = $request->deskripsi;
+                // $tf_prod->created_at = Carbon::now();
+                // $tf_prod->save();
 
-                $tf_prod_det = new TFProduksiDetail();
-                $tf_prod_det->tfbj_id = $tf_prod->id;
-                $tf_prod_det->gdg_brg_jadi_id = $request->gdg_brg_jadi_id;
+                // $tf_prod_det = new TFProduksiDetail();
+                // $tf_prod_det->tfbj_id = $tf_prod->id;
+                // $tf_prod_det->gdg_brg_jadi_id = $request->gdg_brg_jadi_id;
 
-                $tf_prod_det->qty = $request->qty;
-                $tf_prod_det->noseri = $request->noseri;
-                $tf_prod_det->created_at = Carbon::now();
-                $tf_prod_det->save();
+                // $tf_prod_det->qty = $request->qty;
+                // $tf_prod_det->noseri = $request->noseri;
+                // $tf_prod_det->created_at = Carbon::now();
+                // $tf_prod_det->save();
 
-                $tf_prod_his = new TFProduksiHis();
-                $tf_prod_his->tfbj_id = $tf_prod->id;
-                $tf_prod_his->gdg_brg_jadi_id = $request->gdg_brg_jadi_id;
-                $tf_prod_his->qty = 1;
-                $tf_prod_his->noseri = $request->noseri;
-                $tf_prod_his->created_at = Carbon::now();
-                $tf_prod_his->save();
+                // $tf_prod_his = new TFProduksiHis();
+                // $tf_prod_his->tfbj_id = $tf_prod->id;
+                // $tf_prod_his->gdg_brg_jadi_id = $request->gdg_brg_jadi_id;
+                // $tf_prod_his->qty = 1;
+                // $tf_prod_his->noseri = $request->noseri;
+                // $tf_prod_his->created_at = Carbon::now();
+                // $tf_prod_his->save();
 
-                return response()->json(['msg' => 'Successfully']);
+                // return response()->json(['msg' => 'Successfully']);
+
+                // insert multi
+                for($i = 0; $i < count($request->ke); $i++) {
+                        $tf_prod = new TFProduksi();
+                        $data[] = [
+                            'ke' => $request->ke[$i],
+                            'deskripsi' => $request->deskripsi[$i]
+                        ];
+                        TFProduksi::insert($data);
+                          // $tf_prod->ke = $request->ke[$i];
+                        // $tf_prod->deskripsi = $request->deskripsi[$i];
+                        // $tf_prod->created_at = Carbon::now();
+                        // $tf_prod->save();
+
+                        // $tf_prod_det = new TFProduksiDetail();
+                        // $tf_prod_det->tfbj_id = $tf_prod->id;
+                        // $tf_prod_det->gdg_brg_jadi_id = $request->gdg_brg_jadi_id[$i];
+
+                        // $tf_prod_det->qty = $request->qty[$i];
+                        // $tf_prod_det->noseri = $request->noseri[$i];
+                        // $tf_prod_det->created_at = Carbon::now();
+                        // $tf_prod_det->save();
+
+                        // $tf_prod_his = new TFProduksiHis();
+                        // $tf_prod_his->tfbj_id = $tf_prod->id;
+                        // $tf_prod_his->gdg_brg_jadi_id = $request->gdg_brg_jadi_id[$i];
+                        // $tf_prod_his->qty = $request->qty[$i];
+                        // $tf_prod_his->noseri = $request->noseri[$i];
+                        // $tf_prod_his->created_at = Carbon::now();
+                        // $tf_prod_his->save();
+
+                    return response()->json(['msg' => 'Successfully']);
+                }
+
+
+
             }
         }
     }

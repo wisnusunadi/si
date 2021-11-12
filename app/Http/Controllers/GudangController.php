@@ -21,19 +21,19 @@ class GudangController extends Controller
         $data = GudangBarangJadi::with('produk', 'satuan')->get();
         // return response()->json($data);
 
-        return datatables()->of($data) 
+        return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
                 return $data->nama;
             })
             ->addColumn('kode_produk', function ($data) {
-                return $data->produk->kode .''. $data->produk->kode;
+                return $data->produk->product->kode .''. $data->produk->kode;
             })
             ->addColumn('jumlah', function ($data) {
                 return $data->stok .' '.$data->satuan->nama;
             })
             ->addColumn('kelompok', function ($data) {
-                return $data->produk->KelompokProduk->nama;
+                return $data->produk->product->KelompokProduk->nama;
             })
             ->addColumn('action', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -161,11 +161,29 @@ class GudangController extends Controller
     {
         $data = GudangBarangJadi::with('produk', 'satuan')->where('id', $request->id)->get();
         $dataid = $data->pluck('produk_id');
-        $datas = Produk::where('id', $dataid)->get();
+        $datas = Produk::with('product')->where('id', $dataid)->get();
         return response()->json([
             'data' => $data,
             'nama_produk' => $datas
         ]);
+    }
+
+    function getNoseri(Request $request, $id) {
+        $data = NoseriBarangJadi::with('gudang', 'from', 'to')->where('gdg_barang_jadi_id', $id)->get();
+        return response()->json($data);
+    }
+
+    function getHistory($id) {
+        $data = NoseriBarangJadi::with('from', 'to')->where('id', $id)->get();
+        return response()->json($data);
+    }
+
+    function storeNoseri(Request $request, $id) {
+        // dd($request->all());
+        $Gud = GudangBarangJadi::find($id);
+        $Gud->layout_id = $request->layout_id;
+        $Gud->save();
+        return response()->json('ok');
     }
 
     // select
@@ -175,12 +193,12 @@ class GudangController extends Controller
     }
 
     function select_product() {
-        $data = Produk::all();
+        $data = Produk::with('product')->get();
         return response()->json($data);
     }
 
     function select_product_by_id($id) {
-        $data = Produk::find($id);
+        $data = Produk::with('product')->find($id);
         return response()->json($data);
     }
 

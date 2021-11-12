@@ -99,6 +99,10 @@ Route::prefix('/gbj')->group(function () {
     // so
     Route::post('/createNon', [App\Http\Controllers\GudangController::class, 'tanpaSo']);
 
+    // noseri
+    Route::get('noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getNoseri']);
+    Route::get('history/{id}', [\App\Http\Controllers\GudangController::class, 'getHistory']);
+    Route::post('noseri/{id}', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
 });
 
 Route::prefix('/tfp')->group(function () {
@@ -118,7 +122,7 @@ Route::prefix('/spr')->group(function () {
     Route::delete('/test', [App\Http\Controllers\SparepartController::class, 'deleteImage']);
 });
 
-Route::prefix('/noseri')->group(function () { 
+Route::prefix('/noseri')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\NoseriController::class, 'UpdateNoSeri']);
     Route::delete('/delete/{id}', [App\Http\Controllers\NoseriController::class, 'DestroyNoSeri']);
 });

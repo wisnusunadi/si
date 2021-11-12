@@ -14,7 +14,7 @@ class Produk extends Model
     {
         return $this->belongsToMany(PenjualanProduk::class, 'detail_penjualan_produk')
             ->withTimestamps()
-            ->withPivot('jumlah'); 
+            ->withPivot('jumlah');
     }
     public function GudangBarangJadi()
     {
@@ -27,5 +27,9 @@ class Produk extends Model
 
     public function Satuan() {
         return $this->belongsTo(Satuan::class, 'satuan_id');
+    }
+
+    function product() {
+        return $this->belongsTo(Mproduk::class, 'produk_id');
     }
 }

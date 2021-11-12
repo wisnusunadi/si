@@ -229,16 +229,17 @@
             }
         });
     });
-    let i = 1;
+
     function addData(divisi,d_divisi, deskripsi, d_produk, produk, stok) {
         if (deskripsi.length > 30) {
             var a = deskripsi.substring(0, 10) + '...';
         }else{
             var a = deskripsi;
         }
+        let i = 0;
         i++;
-        console.log(deskripsi.length);
-        let tambah_data = '<tr><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke[]" id="post_ke" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi[]" id="post_deskripsi" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id[]" id="post_produk" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty[]" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        // console.log(deskripsi.length);
+        let tambah_data = '<tr><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function(e){
@@ -272,6 +273,7 @@
                 qty: stok,
             },
             success: function (res) {
+                console.log(res);
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -282,7 +284,7 @@
                 location.reload();
             }
         });
-        console.log('ok');
+        // console.log('ok');
     })
 
     $('.scan-produk').DataTable({

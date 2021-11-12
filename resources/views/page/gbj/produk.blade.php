@@ -353,14 +353,20 @@
                 </button>
             </div>
             <div class="modal-body">
+                <form action="" id="noseriForm" name="noseriForm">
                 <table class="table scan-produk">
-                    <tr>
-                        <th><input type="checkbox" id="head-cb"></th>
-                        <th>No. Seri</th>
-                        <th>Layout</th>
-                        <th>Aksi</th>
-                    </tr>
-                    <tr>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="head-cb"></th>
+                            <th>No. Seri</th>
+                            <th>Layout</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    {{-- <tr>
                         <td><input type="checkbox" class="cb-child" value="1"></td>
                         <td>5474598674958698645</td>
                         <td>
@@ -383,14 +389,15 @@
                             </td> <td>
                                 <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
                         </td>
-                    </tr>
+                    </tr> --}}
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -415,7 +422,8 @@
                     </button>
             </div>
             <div class="modal-body">
-                <table class="table">
+
+                <table class="table view-produk">
                     <thead>
                         <tr>
                             <th>Tanggal Masuk</th>
@@ -424,7 +432,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        {{-- <tr>
                             <td scope="row">10-04-2022</td>
                             <td>Divisi IT</td>
                             <td>Uji Coba</td>
@@ -433,7 +441,7 @@
                             <td scope="row">10-04-2022</td>
                             <td>Divisi IT</td>
                             <td>Uji Coba</td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -454,9 +462,9 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="">Layout</label>
-                    <select name="" id="change-layout" class="form-control">
-                      <option value="1">Layout 1</option>
-                      <option value="2">Layout 2</option>
+                    <select name="" id="change_layout" class="form-control">
+                      {{-- <option value="1">Layout 1</option>
+                      <option value="2">Layout 2</option> --}}
                   </select>
                 </div>
             </div>
@@ -505,7 +513,7 @@
 
     function ubahData() {
         let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
-        let layout = $('#change-layout').val();
+        let layout = $('#change_layout').val();
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
@@ -540,7 +548,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/api/gbj/data', 
+            url: '/api/gbj/data',
         },
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -564,7 +572,7 @@
                 $("#produk_id").empty();
                 $("#produk_id").append('<option value="">Pilih Item</option>');
                 $.each(res, function(key, value) {
-                    $("#produk_id").append('<option value="'+value.id+'">'+value.tipe+'</option');
+                    $("#produk_id").append('<option value="'+value.id+'">'+value.product.tipe+' '+value.nama+'</option');
                 });
             } else {
                 $("#produk_id").empty();
@@ -673,7 +681,7 @@
                 $('span#panjang').text(res.data[0].dim_p);
                 $('span#lebar').text(res.data[0].dim_l);
                 $('span#tinggi').text(res.data[0].dim_t);
-                $('p#produk').text(res.nama_produk[0].tipe);
+                $('p#produk').text(res.nama_produk[0].product.tipe + ' ' + res.nama_produk[0].nama);
                 $('img#img_prd').attr("src", "http://localhost:8000/upload/gbj/" + res.data[0].gambar);
                 $('#modal-view').modal('show');
             }
@@ -709,5 +717,125 @@
             }
         });
     });
+    // var ii = 0;
+   function select_layout() {
+    $.ajax({
+        url: '/api/gbj/sel-layout',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            // ii++;
+            console.log(res);
+            $.each(res, function(key, value) {
+                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
+            });
+        }
+    });
+   }
+
+    // modal noseri
+    $(document).on('click', '.stokmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        var i = 0;
+        var b = '';
+
+        $.ajax({
+            url: '/api/gbj/noseri/' + id,
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                $.each(data, function(key, value) {
+                    i++;
+                    b = "<tr ><td><input type='checkbox' class='cb-child' value="+value.id+"></td><td>"+value.noseri+"<input type='hidden' name='noseri[]' value="+value.noseri+"><input type='hidden' name='gdg_brg_jadi_id' value="+value.gdg_barang_jadi_id+"></td><td><select name='layout_id[]' id='layout_id' class='form-control'>"+select_layout()+"</select></td><td><button class='btn btn-info viewStock' data-id='"+value.id+"'><i class='far fa-eye'></i> View</button></td></tr>";
+                    $(".scan-produk").append(b);
+                })
+
+            }
+        });
+        $('.daftar-stok').modal('show');
+    });
+
+    // modal history
+    $(document).on('focus', '.viewStock', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        var i = 0;
+
+        $.ajax({
+            url: '/api/gbj/history/' + id,
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                var a = '';
+
+                $.each(data, function(key, value) {
+                    a = "<tr><td>"+new Date(value.created_at).toLocaleDateString()+"</td><td>"+value.from.nama+"</td><td>"+value.to.nama+"</td></tr>";
+                });
+                $(".view-produk tbody").html(a);
+            }
+        })
+        $('.modalViewStock').modal('show');
+    });
+
+    // load layout
+    $.ajax({
+        url: '/api/gbj/sel-layout',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            console.log(res);
+            $("#change_layout").empty();
+            $.each(res, function(key, value) {
+                $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                // $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
+            });
+        }
+    });
+
+    // modal ubah layout
+    $(document).on('click', '.editStok', function() {
+        $('.edit-stok').modal('show');
+    });
+
+    $(document).ready(function() {
+        $('#ubahSeri').on('click', function() {
+            // console.log('ok');
+
+            const cekid = [];
+            const noseri = [];
+            const layout = [];
+
+            $('.cb-child').each(function() {
+                if($(this).is(":checked")) {
+                    cekid.push($(this).val());
+                }
+            });
+
+            $('input[name^="gdg_brg_jadi_id"]').each(function() {
+                noseri.push($(this).val());
+            });
+
+            $('select[name^="layout_id"]').each(function() {
+                layout.push($(this).val());
+            });
+            // console.log(cekid);
+
+            $.ajax({
+                url: '/api/gbj/noseri/' + noseri,
+                type: 'post',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    cekid : cekid,
+                    // noseri : noseri,
+                    layout : layout,
+                },
+                success: function(res) {
+                    console.log(res);
+                }
+            })
+        })
+    })
 </script>
 @stop
