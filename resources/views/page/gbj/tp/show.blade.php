@@ -109,11 +109,11 @@
             <div class="col-xl-7">
                 <div class="card">
                     <div class="card-title">
-                        <div class="mb-7 mt-5 ml-3">
+                        <div class="ml-3 mr-3">
                             <div class="row align-items-center">
                                 <div class="col-lg-9 col-xl-8">
                                     <div class="row align-items-center">
-                                        <div class="col-md-4 my-2 my-md-0">
+                                        <div class="col-md-4">
                                             <div class="input-icon">
                                                 <input type="text" class="form-control" placeholder="Cari..."
                                                     id="kt_datatable_search_query">
@@ -122,18 +122,18 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 my-2 my-md-0">
+                                        <div class="col-md-4">
                                             <div class="d-flex align-items-center">
                                                 <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
                                                 <input type="text" name="" id="tanggalmasuk" class="form-control">
                                             </div>
                                         </div>
-                                        <div class="col-md-4 my-2 my-md-0">
+                                        <div class="col-md-4">
                                             <a href="#" class="btn btn-outline-primary">Search</a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+                                <div class="col-lg-3 col-xl-4">
                                     <div class="card">
                                         <div class="card-body">
                                             <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
@@ -151,7 +151,7 @@
                     </div>
                     <div class="card-body">
                         <div class="mb-7">
-                            <table class="table">
+                            <table class="table tableProdukView">
                                 <thead>
                                     <tr>
                                         <th>Nomor SO</th>
@@ -268,15 +268,6 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer clearfix">
-                        <ul class="pagination pagination-sm m-0 float-right">
-                            <li class="page-item"><a class="page-link" href="#">«</a></li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">»</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -322,6 +313,10 @@
 @section('adminlte_js')
 <script>
     $('.table-seri').DataTable({});
+    $('.tableProdukView').DataTable({
+        searching: false,
+        "lengthChange": false
+    });
     $('#nav-deskripsi-tab').click(function (e) {
         e.preventDefault();
         $('.is-active').addClass('font-weight-bold');
