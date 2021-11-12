@@ -38,7 +38,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
-                                <h3 class="card-title">Daftar SO Gudang Barang Jadi</h3>
+                                <h3 class="card-title">Daftar SO Produksi</h3>
                             </div>
                         </div>
                     </div>
@@ -61,20 +61,9 @@
                                     <td>Rumah Sakit Dr. Soetomo</td>
                                     <td>10 Oktober 2021</td>
                                     {{-- Menggunakan Perkondisian Jika Data Sudah Dicek Maka Tampil Seperti ini --}}
-                                    <td><span class="badge badge-primary">Sudah Dicek</span></td>
+                                    <td><span class="badge badge-primary">Pengecekan di QC</span></td>
                                     <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                                                </button>
-                                                <button type="button" class="dropdown-item viewProduk" id="">
-                                                    <i class="far fa-eye"></i>&nbsp;Detail
-                                                </button>
-                                            </div>
-                                        </div>
+                                        <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -83,20 +72,9 @@
                                     <td>Rumah Sakit Dr. Soetomo</td>
                                     <td>10 Oktober 2021</td>
                                     {{-- Menggunakan Perkondisian Jika Data Belum Dicek Maka Tampil Seperti ini --}}
-                                    <td><span class="badge badge-danger">Belum Dicek</span></td>
+                                    <td><span class="badge badge-warning">Pengecekan di Gudang</span></td>
                                     <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Add Produk
-                                                </button>
-                                                <button type="button" class="dropdown-item viewProduk" id="">
-                                                    <i class="far fa-eye"></i>&nbsp;View
-                                                </button>
-                                            </div>
-                                        </div>
+                                        <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -108,101 +86,6 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="addProdukModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row row-cols-2">
-                                    {{-- col --}}
-                                    <div class="col"> <label for="">Nomor SO</label>
-                                        <div class="card nomor-so">
-                                            <div class="card-body">
-                                                89798797856456
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{-- col --}}
-                                    <div class="col"> <label for="">Nomor AKN</label>
-                                        <div class="card nomor-akn">
-                                            <div class="card-body">
-                                                89798797856456
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{-- col --}}
-                                    <div class="col"> <label for="">Nomor PO</label>
-                                        <div class="card nomor-po">
-                                            <div class="card-body">
-                                                89798797856456
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{-- col --}}
-                                    <div class="col"> <label for="">Customer</label>
-                                        <div class="card instansi">
-                                            <div class="card-body">
-                                                RS. Dr. Soetomo
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-striped add-produk">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Nama Produk</th>
-                                            <th>Jumlah</th>
-                                            <th>Tipe</th>
-                                            <th>Merk</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100 Unit</td>
-                                            <td>ABPM50</td>
-                                            <td>ELITECH</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100 Unit</td>
-                                            <td>RGB</td>
-                                            <td>ELITECH</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- Tambahkan DataTable --}}
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <div class="modal fade" id="viewProdukModal" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -272,14 +155,14 @@
                                             <td>100</td>
                                             <td>ABPM50</td>
                                             <td>ELITECH</td>
-                                            <td><span class="badge badge-success">Sudah Diinput</span></td>
+                                            <td><span class="badge badge-success">Sudah di cek</span></td>
                                         </tr>
                                         <tr>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                             <td>100</td>
                                             <td>RGB</td>
                                             <td>ELITECH</td>
-                                            <td><span class="badge badge-danger">Belum Diinput</span></td>
+                                            <td><span class="badge badge-danger">Belum di cek</span></td>
                                         </tr>
                                     </tbody>
                                 </table>

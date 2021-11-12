@@ -57,7 +57,7 @@
                         <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
                             aria-controls="nav-profile" aria-selected="false">Produk</a>
                         <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
-                            aria-controls="nav-contact" aria-selected="false">Transfer</a>
+                            aria-controls="nav-contact" aria-selected="false">Penerimaan</a>
                     </div>
                 </nav>
             </div><!-- /.col -->
@@ -97,14 +97,20 @@
                                 </div>
                             </div>
                             <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-calendar-alt mr-1"></i>
+                                        Batas Transfer Produk
+                                    </h3>
+                                </div>
                                 <div class="card-body">
                                     <div class="transferonedaytable">
                                         <table class="table table-produk-batas-transfer-one-day">
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Produk</th>
-                                                    <th>Jumlah</th>
+                                                    <th>Nomor SO</th>
+                                                    <th>Customer</th>
                                                     <th>Batas Transfer</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -112,7 +118,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
+                                                    <td>68545465465</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -120,7 +126,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
+                                                    <td>4654564654654</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -128,7 +134,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
+                                                    <td>5456456155156</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -136,7 +142,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
+                                                    <td>4654564654654</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -144,7 +150,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
+                                                    <td>5456456155156</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -152,7 +158,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
+                                                    <td>4654564654654</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -160,7 +166,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
+                                                    <td>5456456155156</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -168,7 +174,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
+                                                    <td>4654564654654</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -176,7 +182,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
+                                                    <td>5456456155156</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -184,7 +190,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
+                                                    <td>4654564654654</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -217,7 +223,7 @@
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
-                                                    <td>100 Unit</td>
+                                                    <td>Customer 1</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
                                                                 class="fas fa-paper-plane"></i></a></td>
@@ -233,7 +239,7 @@
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
-                                                    <td>100 Unit</td>
+                                                    <td>Customer 1</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
                                                                 class="fas fa-paper-plane"></i></a></td>
@@ -249,7 +255,7 @@
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
-                                                    <td>100 Unit</td>
+                                                    <td>Customer 1</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
                                                                 class="fas fa-paper-plane"></i></a></td>
@@ -265,7 +271,7 @@
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
-                                                    <td>100 Unit</td>
+                                                    <td>Customer 1</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
                                                                 class="fas fa-paper-plane"></i></a></td>
@@ -281,7 +287,7 @@
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
-                                                    <td>100 Unit</td>
+                                                    <td>Customer 1</td>
                                                     <td>23-09-2021</td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
                                                                 class="fas fa-paper-plane"></i></a></td>
@@ -307,7 +313,7 @@
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
                                                     <td>
-                                                        10-04-2021
+                                                        10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 5 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -317,7 +323,7 @@
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 6 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -327,7 +333,7 @@
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 7 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -337,7 +343,7 @@
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 8 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -347,7 +353,7 @@
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 9 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -357,7 +363,7 @@
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 19 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -367,7 +373,7 @@
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 11 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -377,7 +383,7 @@
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 6 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -387,7 +393,7 @@
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 4 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -397,7 +403,7 @@
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 16 Hari</span>
                                                     </td>
                                                     <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
@@ -423,59 +429,98 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Produk</th>
-                                                <th>Jumlah</th>
+                                                <th>Permintaan</th>
+                                                <th>Stok Saat Ini</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
-                                                <td>50 Unit</td>
+                                                <td>200 Unit <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
+                                                <td>100 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
                                                 <td>Produk 2</td>
+                                                <td>200 Unit <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
                                                 <td>100 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
-                                                <td>50 Unit</td>
+                                                <td>200 Unit 
+                                                    <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
+                                                <td>100 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
                                                 <td>Produk 2</td>
+                                                <td>200 Unit
+                                                    <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
                                                 <td>100 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
-                                                <td>50 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>50 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
+                                                <td>200 Unit
+                                                    <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
                                                 <td>100 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
-                                                <td>50 Unit</td>
+                                                <td>200 Unit
+                                                    <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
+                                                <td>100 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
                                                 <td>Produk 2</td>
+                                                <td>200 Unit
+                                                    <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
                                                 <td>100 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
-                                                <td>50 Unit</td>
+                                                <td>200 Unit
+                                                    <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
+                                                <td>100 Unit</td>
+                                            </tr>
+                                            <tr>
+                                                <td scope="row">2</td>
+                                                <td>Produk 2</td>
+                                                <td>200 Unit
+                                                    <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
+                                                <td>100 Unit</td>
+                                            </tr>
+                                            <tr>
+                                                <td scope="row">1</td>
+                                                <td>Produk 1</td>
+                                                <td>200 Unit
+                                                    <br>
+                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
+                                                </td>
+                                                <td>100 Unit</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -499,7 +544,7 @@
                                             <div id="jml-produk-20" class="card active otg" style="background-color: #FEF7EA">
                                                 <div class="card-body text-center">
                                                     <h4>10</h4>
-                                                    <p class="card-text">Produk dengan jumlah stok 20 sampai 10</p>
+                                                    <p class="card-text">Produk dengan jumlah stok 10 sampai 20</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -507,7 +552,7 @@
                                             <div id="jml-produk-5" class="card otg" style="background-color: #FFBD67">
                                                 <div class="card-body text-center">
                                                     <h4>10</h4>
-                                                    <p class="card-text">Produk dengan jumlah stok 9 sampai 5</p>
+                                                    <p class="card-text">Produk dengan jumlah stok 5 sampai 9</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -515,13 +560,14 @@
                                             <div id="jml-produk-4" class="card otg" style="background-color: #FF6464">
                                                 <div class="card-body text-center">
                                                     <h4>10</h4>
-                                                    <p class="card-text">Produk dengan jumlah stok 4 sampai 1</p>
+                                                    <p class="card-text">Produk dengan jumlah stok 1 sampai 4</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card">
                                         <div class="card-header">
+                                            <h3 class="card-title">Jumlah Produk di <span id="layout">Layout 1</span> : <b id="produk">10 Produk</b></h3>
                                             <div class="card-tools">
                                                 <!-- button with a dropdown -->
                                                 <div class="btn-group">
@@ -530,6 +576,7 @@
                                                 </button>
                                                 <div class="dropdown dropdown-menu" id="myDropdown" role="menu">
                                                     <input type="text" class="form-control m-0" placeholder="Cari.." id="myInput" onkeyup="filterFunction()">
+                                                    <a href="#" class="dropdown-item">Semua Layout</a>
                                                     <a href="#" class="dropdown-item">Layout 1</a>
                                                     <a href="#" class="dropdown-item">Layout 2</a>
                                                     <a href="#" class="dropdown-item">Layout 3</a>
@@ -632,7 +679,7 @@
                                             <div id="produk-masuk-3-bulan" class="card otg active" style="background-color: #FEF7EA">
                                                 <div class="card-body text-center">
                                                     <h4>10</h4>
-                                                    <p class="card-text font-weight">Produk masuk 6 bulan sampai 3 bulan</p>
+                                                    <p class="card-text font-weight">Produk masuk 3 bulan sampai 6 bulan</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -640,7 +687,7 @@
                                             <div id="produk-masuk-6-bulan" class="card otg" style="background-color: #FFBD67">
                                                 <div class="card-body text-center">
                                                     <h4>10</h4>
-                                                    <p class="card-text font-weight">Produk masuk 1 tahun sampai 6 bulan</p>
+                                                    <p class="card-text font-weight">Produk masuk 6 bulan sampai 1 tahun</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -667,6 +714,7 @@
                                             <thead class="thead-light">
                                                 <tr>
                                                     <th>No</th>
+                                                    <th>Tanggal Masuk</th>
                                                     <th>Nama Produk</th>
                                                     <th>Jumlah</th>
                                                 </tr>
@@ -674,11 +722,13 @@
                                             <tbody>
                                                 <tr>
                                                     <td scope="row">1</td>
+                                                    <td>10-04-2021</td>
                                                     <td>Produk 1</td>
                                                     <td>10 Unit</td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
+                                                    <td>23-09-2021</td>
                                                     <td>Produk 2</td>
                                                     <td>20 Unit</td>
                                                 </tr>
@@ -691,6 +741,7 @@
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>No</th>
+                                                <th>Tanggal Masuk</th>
                                                 <th>Nama Produk</th>
                                                 <th>Jumlah</th>
                                             </tr>
@@ -698,11 +749,13 @@
                                         <tbody>
                                             <tr>
                                                 <td scope="row">1</td>
+                                                <td>10-04-2021</td>
                                                 <td>Produk 3</td>
                                                 <td>10 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
+                                                <td>23-09-2021</td>
                                                 <td>Produk 3</td>
                                                 <td>20 Unit</td>
                                             </tr>
@@ -715,6 +768,7 @@
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>No</th>
+                                                <th>Tanggal Masuk</th>
                                                 <th>Nama Produk</th>
                                                 <th>Jumlah</th>
                                             </tr>
@@ -722,11 +776,13 @@
                                         <tbody>
                                             <tr>
                                                 <td scope="row">1</td>
+                                                <td>10-04-2021</td>
                                                 <td>Produk 4</td>
                                                 <td>10 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
+                                                <td>23-09-2021</td>
                                                 <td>Produk 4</td>
                                                 <td>20 Unit</td>
                                             </tr>
@@ -739,6 +795,7 @@
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>No</th>
+                                                <th>Tanggal Masuk</th>
                                                 <th>Nama Produk</th>
                                                 <th>Jumlah</th>
                                             </tr>
@@ -746,11 +803,13 @@
                                         <tbody>
                                             <tr>
                                                 <td scope="row">1</td>
+                                                <td>10-04-2021</td>
                                                 <td>Produk 5</td>
                                                 <td>10 Unit</td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
+                                                <td>23-09-2021</td>
                                                 <td>Produk 5</td>
                                                 <td>20 Unit</td>
                                             </tr>
@@ -796,6 +855,12 @@
                                 </div>
                             </div>
                             <div class="card">
+                                <div class="card-header">
+                                        <h3 class="card-title">
+                                            <i class="fas fa-calendar-alt mr-1"></i>
+                                            Batas Penerimaan Produk
+                                        </h3>
+                                </div>
                                 <div class="card-body">
                                     <div class="receiptonedaytable">
                                         <table class="table table-produk-batas-receipt-one-day">

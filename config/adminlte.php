@@ -1035,7 +1035,7 @@ return [
             'text' => 'Riwayat Transaksi',
             'url' => '/gbj/tp',
             'icon' => 'fas fa-history',
-            'auth' => [13, 17],
+            'auth' => [13],
         ],
         [
             'header' => 'Penerimaan',
@@ -1061,7 +1061,13 @@ return [
             'text' => 'Sales Order',
             'url' => '/gbj/so',
             'icon' => 'fas fa-people-carry',
-            'auth' => [13,17],
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Sales Order',
+            'url' => '/produksi/so',
+            'icon' => 'fas fa-people-carry',
+            'auth' => [17],
         ],
         [
             'header' => 'Pengeluaran',
