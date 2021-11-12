@@ -649,8 +649,6 @@ class PenjualanController extends Controller
 
 
     //Create
-
-
     public function create_penjualan(Request $request)
     {
         if ($request->jenis_penjualan == 'ekatalog') {
@@ -1171,7 +1169,17 @@ class PenjualanController extends Controller
     public function  get_data_laporan_penjualan($penjualan, $distributor, $tanggal_awal, $tanggal_akhir)
     {
         if ($penjualan == 'ekatalog') {
-            $data  = DetailEkatalog::whereHas('Ekatalog.Pesanan');
+
+            if ($distributor == 'semua') {
+                $data  = DetailEkatalog::whereHas('Ekatalog.Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get();
+            } else {
+                $data  = DetailEkatalog::whereHas('Ekatalog.Pesanan', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                    $q->where('customer_id', $distributor)
+                        ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);;
+                })->get();
+            }
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
@@ -1222,17 +1230,257 @@ class PenjualanController extends Controller
                 ->addColumn('total', function ($data) {
                     return $data->jumlah * $data->harga;
                 })
-                ->addColumn('log', function ($data) {
+                ->addColumn('log', function () {
                     return '-';
+                })
+                ->addColumn('kosong', function () {
+                    return '';
                 })
                 ->make(true);
         } elseif ($penjualan == 'spa') {
-            $data  = Spa::all();
+            if ($distributor == 'semua') {
+                $data  = DetailSpa::whereHas('Spa.Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get();
+            } else {
+                $data  = DetailSpa::whereHas('Spa.Pesanan', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                    $q->where('customer_id', $distributor)
+                        ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get();
+            }
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return $data->Spa->Pesanan->so;
+                })
+                ->addColumn('no_po', function ($data) {
+                    return $data->Spa->Pesanan->no_po;
+                })
+                ->addColumn('no_sj', function () {
+                    return '-';
+                })
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Spa->Customer->nama;
+                })
+                ->addColumn('tgl_kirim', function () {
+                    return '-';
+                })
+                ->addColumn('tgl_po', function ($data) {
+                    return $data->Spa->Pesanan->tgl_po;
+                })
+                ->addColumn('nama_produk', function ($data) {
+                    return $data->penjualanproduk->nama;
+                })
+                ->addColumn('no_seri', function () {
+                    return '-';
+                })
+                ->addColumn('jumlah', function ($data) {
+                    return $data->jumlah;
+                })
+                ->addColumn('harga', function ($data) {
+                    return $data->harga;
+                })
+                ->addColumn('subtotal', function ($data) {
+                    return $data->jumlah * $data->harga;
+                })
+                ->addColumn('total', function ($data) {
+                    return $data->jumlah * $data->harga;
+                })
+                ->addColumn('log', function ($data) {
+                    return '-';
+                })
+                ->addColumn('kosong', function () {
+                    return '';
+                })
                 ->make(true);
         } elseif ($penjualan == 'spb') {
+            if ($distributor == 'semua') {
+                $data  = DetailSpb::whereHas('Spb.Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get();
+            } else {
+                $data  = DetailSpb::whereHas('Spb.Pesanan', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                    $q->where('customer_id', $distributor)
+                        ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get();
+            }
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return $data->Spb->Pesanan->so;
+                })
+                ->addColumn('no_po', function ($data) {
+                    return $data->Spb->Pesanan->no_po;
+                })
+                ->addColumn('no_sj', function () {
+                    return '-';
+                })
+                ->addColumn('nama_customer', function ($data) {
+                    return $data->Spb->Customer->nama;
+                })
+                ->addColumn('tgl_kirim', function () {
+                    return '-';
+                })
+                ->addColumn('tgl_po', function ($data) {
+                    return $data->Spb->Pesanan->tgl_po;
+                })
+                ->addColumn('nama_produk', function ($data) {
+                    return $data->penjualanproduk->nama;
+                })
+                ->addColumn('no_seri', function () {
+                    return '-';
+                })
+                ->addColumn('jumlah', function ($data) {
+                    return $data->jumlah;
+                })
+                ->addColumn('harga', function ($data) {
+                    return $data->harga;
+                })
+                ->addColumn('subtotal', function ($data) {
+                    return $data->jumlah * $data->harga;
+                })
+                ->addColumn('total', function ($data) {
+                    return $data->jumlah * $data->harga;
+                })
+                ->addColumn('log', function ($data) {
+                    return '-';
+                })
+                ->addColumn('kosong', function () {
+                    return '';
+                })
+                ->make(true);
         } else {
+            if ($distributor == 'semua') {
+                $Ekatalog = collect(DetailEkatalog::whereHas('Ekatalog.Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get());
+                $Spa = collect(DetailSpa::whereHas('Spa.Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get());
+                $Spb = collect(DetailSpb::whereHas('Spb.Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get());
+                $data = $Ekatalog->merge($Spa)->merge($Spb);
+            } else {
+                $Ekatalog = collect(DetailEkatalog::whereHas('Ekatalog.Pesanan', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                    $q->where('customer_id', $distributor)
+                        ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get());
+                $Spa = collect(DetailSpa::whereHas('Spa.Pesanan', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                    $q->where('customer_id', $distributor)
+                        ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get());
+                $Spb = collect(DetailSpb::whereHas('Spb.Pesanan', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                    $q->where('customer_id', $distributor)
+                        ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->get());
+                $data = $Ekatalog->merge($Spa)->merge($Spb);
+            }
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'detail_ekatalog') {
+                        return $data->Ekatalog->Pesanan->so;
+                    } elseif ($name == 'detail_spa') {
+                        return $data->Spa->Pesanan->so;
+                    } else {
+                        return $data->Spb->Pesanan->so;
+                    }
+                })
+                ->addColumn('no_paket', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'detail_ekatalog') {
+                        return $data->Ekatalog->no_paket;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('no_po', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'detail_ekatalog') {
+                        return $data->Ekatalog->Pesanan->no_po;
+                    } elseif ($name == 'detail_spa') {
+                        return $data->Spa->Pesanan->no_po;
+                    } else {
+                        return $data->Spb->Pesanan->no_po;
+                    }
+                })
+                ->addColumn('no_sj', function () {
+                    return '-';
+                })
+                ->addColumn('nama_customer', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'detail_ekatalog') {
+                        return $data->Ekatalog->Customer->nama;
+                    } elseif ($name == 'detail_spa') {
+                        return $data->Spa->Customer->nama;
+                    } else {
+                        return $data->Spb->Customer->nama;
+                    }
+                })
+                ->addColumn('tgl_kontrak', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'detail_ekatalog') {
+                        return $data->Ekatalog->tgl_kontrak;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('tgl_kirim', function () {
+                    return '-';
+                })
+                ->addColumn('tgl_po', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'detail_ekatalog') {
+                        return $data->Ekatalog->Pesanan->tgl_po;
+                    } elseif ($name == 'detail_spa') {
+                        return $data->Spa->Pesanan->tgl_po;
+                    } else {
+                        return $data->Spb->Pesanan->tgl_po;
+                    }
+                })
+                ->addColumn('instansi', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'detail_ekatalog') {
+                        return $data->Ekatalog->instansi;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('satuan', function ($data) {
+                    $name =  $data->getTable();
+                    if ($name == 'detail_ekatalog') {
+                        return $data->Ekatalog->Satuan;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('nama_produk', function ($data) {
+                    return $data->penjualanproduk->nama;
+                })
+                ->addColumn('no_seri', function () {
+                    return '-';
+                })
+                ->addColumn('jumlah', function ($data) {
+                    return $data->jumlah;
+                })
+                ->addColumn('harga', function ($data) {
+                    return $data->harga;
+                })
+                ->addColumn('subtotal', function ($data) {
+                    return $data->jumlah * $data->harga;
+                })
+                ->addColumn('total', function ($data) {
+                    return $data->jumlah * $data->harga;
+                })
+                ->addColumn('log', function () {
+                    return '-';
+                })
+                ->addColumn('kosong', function () {
+                    return '';
+                })
+                ->make(true);
         }
     }
     // public function laporan(Request $request)
