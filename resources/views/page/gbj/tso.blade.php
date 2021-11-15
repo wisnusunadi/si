@@ -179,7 +179,7 @@
                     $("#gdg_brg_jadi_id").empty();
                     $("#gdg_brg_jadi_id").append('<option value="">Pilih Item</option>');
                     $.each(res, function(key, value) {
-                        $("#gdg_brg_jadi_id").append('<option value="'+value.id+'">'+value.nama+'</option');
+                        $("#gdg_brg_jadi_id").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
                     });
                 } else {
                     $("#gdg_brg_jadi_id").empty();
@@ -219,8 +219,44 @@
         let stok_gudang = parseInt($('.stok-gudang').val());
 
         $.ajax({
+            url: "/api/tfp/cekStok",
+            type:"POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                ke: divisi,
+                deskripsi: deskripsi,
+                gdg_brg_jadi_id: produk,
+                qty: stok,
+            },
             success: function (res) {
-                addData(divisi, d_divisi, deskripsi, d_produk, produk, stok)
+                console.log(res);
+                if(res.stok < stok) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Stok Tidak Mencukupi',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    // console.log('tidak');
+                } else {
+                    // console.log('ok');
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Stok Tidak Mencukupi',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+                // Swal.fire({
+                //     position: 'center',
+                //     icon: 'success',
+                //     title: res.msg,
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // })
+                // addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
                 // $('#post_ke').val(divisi);
                 // $('#post_deskripsi').val(deskripsi);
                 // $('#post_produk').val(produk);
@@ -262,28 +298,48 @@
         let stok = parseInt($('.stok').val());
         let stok_gudang = parseInt($('.stok-gudang').val());
 
-        $.ajax({
-            url: "/api/tfp/create",
-            type:"POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                ke: divisi,
-                deskripsi: deskripsi,
-                gdg_brg_jadi_id: produk,
-                qty: stok,
-            },
-            success: function (res) {
-                console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
-            }
+        const ke = [];
+        const desk = [];
+        const gdg = [];
+        const qty = [];
+
+        $('input[name^="ke"]').each(function() {
+            ke.push($(this).val());
         });
+
+        $('input[name^="deskripsi"]').each(function() {
+            desk.push($(this).val());
+        });
+
+        $('input[name^="gdg_brg_jadi_id"]').each(function() {
+            gdg.push($(this).val());
+        });
+
+        $('input[name^="qty"]').each(function() {
+            qty.push($(this).val());
+        });
+        // $.ajax({
+        //     url: "/api/tfp/create",
+        //     type:"POST",
+        //     data: {
+        //         "_token": "{{ csrf_token() }}",
+        //         ke: ke,
+        //         deskripsi: desk,
+        //         gdg_brg_jadi_id: gdg,
+        //         qty: qty,
+        //     },
+        //     success: function (res) {
+        //         console.log(res);
+        //         Swal.fire({
+        //             position: 'center',
+        //             icon: 'success',
+        //             title: res.msg,
+        //             showConfirmButton: false,
+        //             timer: 1500
+        //         })
+        //         location.reload();
+        //     }
+        // });
         // console.log('ok');
     })
 

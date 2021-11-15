@@ -24,7 +24,7 @@ class GudangController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
-                return $data->nama;
+                return $data->produk->nama .' '. $data->nama;
             })
             ->addColumn('kode_produk', function ($data) {
                 return $data->produk->product->kode .''. $data->produk->kode;
@@ -33,7 +33,7 @@ class GudangController extends Controller
                 return $data->stok .' '.$data->satuan->nama;
             })
             ->addColumn('kelompok', function ($data) {
-                return $data->produk->product->KelompokProduk->nama;
+                return $data->produk->KelompokProduk->nama;
             })
             ->addColumn('action', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -169,7 +169,8 @@ class GudangController extends Controller
     }
 
     function getNoseri(Request $request, $id) {
-        $data = NoseriBarangJadi::with('gudang', 'from', 'to')->where('gdg_barang_jadi_id', $id)->get();
+        $data = GudangBarangJadi::with('noseri')->where('id', $id)->get();
+        // $data = NoseriBarangJadi::with('gudang', 'from', 'to')->where('gdg_barang_jadi_id', $id)->get();
         return response()->json($data);
     }
 
@@ -179,11 +180,11 @@ class GudangController extends Controller
     }
 
     function storeNoseri(Request $request, $id) {
-        // dd($request->all());
-        $Gud = GudangBarangJadi::find($id);
-        $Gud->layout_id = $request->layout_id;
-        $Gud->save();
-        return response()->json('ok');
+        dd($request->all());
+        // $Gud = GudangBarangJadi::find($id);
+        // $Gud->layout_id = $request->layout_id;
+        // $Gud->save();
+        // return response()->json('ok');
     }
 
     // select
@@ -214,7 +215,7 @@ class GudangController extends Controller
 
     function select_gbj()
     {
-        $data = GudangBarangJadi::all();
+        $data = GudangBarangJadi::with('produk')->get();
         return response()->json($data);
     }
 }

@@ -71,7 +71,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            {{-- <tbody>
                                 <tr>
                                     <td>1</td>
                                     <td>ZTP80AS-UPGRADE</td>
@@ -122,7 +122,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            </tbody>
+                            </tbody> --}}
                         </table>
                     </div>
                 </div>
@@ -572,7 +572,7 @@
                 $("#produk_id").empty();
                 $("#produk_id").append('<option value="">Pilih Item</option>');
                 $.each(res, function(key, value) {
-                    $("#produk_id").append('<option value="'+value.id+'">'+value.product.tipe+' '+value.nama+'</option');
+                    $("#produk_id").append('<option value="'+value.id+'">'+value.product.nama+' '+value.nama+'</option');
                 });
             } else {
                 $("#produk_id").empty();
@@ -605,27 +605,6 @@
         $('#produkForm').trigger("reset");
         $('#exampleModalLabel').html('Tambah Produk');
         $('#modal-create').modal('show');
-
-        $('#produk_id').change(function(e) {
-            var id = $(this).val();
-            console.log(id);
-            if(id) {
-                $.ajax({
-                    url: '/api/gbj/sel-product/' + id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(res) {
-                        if(res) {
-                            console.log(res);
-                            $('#nama').val(res.tipe);
-                        } else {
-                            // $("#layout_id").empty();
-                            $('#nama').val();
-                        }
-                    }
-                });
-            }
-        });
     });
 
     // load modal edit
@@ -681,7 +660,7 @@
                 $('span#panjang').text(res.data[0].dim_p);
                 $('span#lebar').text(res.data[0].dim_l);
                 $('span#tinggi').text(res.data[0].dim_t);
-                $('p#produk').text(res.nama_produk[0].product.tipe + ' ' + res.nama_produk[0].nama);
+                $('p#produk').text(res.nama_produk[0].product.nama + ' ' + res.nama_produk[0].nama);
                 $('img#img_prd').attr("src", "http://localhost:8000/upload/gbj/" + res.data[0].gambar);
                 $('#modal-view').modal('show');
             }

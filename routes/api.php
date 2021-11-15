@@ -109,7 +109,10 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
 
     // get
-    Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTanpaSo']);
+    Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
+
+    // check
+    Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
 
 });
 
