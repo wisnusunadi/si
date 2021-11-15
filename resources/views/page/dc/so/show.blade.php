@@ -26,6 +26,30 @@
     .filter {
         margin: 5px;
     }
+
+    .nowraptext {
+        white-space: nowrap;
+    }
+
+    @media screen and (min-width: 1440px) {
+        section {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        section {
+            font-size: 12px;
+        }
+
+        .dropdown-menu {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
@@ -86,7 +110,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table" style="text-align:center;" id="showtable">
+                                    <table class="table nowraptext" style="text-align:center;" id="showtable">
                                         <thead>
                                             <th>No</th>
                                             <th>No SO</th>

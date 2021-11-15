@@ -109,10 +109,10 @@
                                         <div class="small-box bg-success">
                                             <div class="inner">
                                                 <h3>3</h3>
-                                                <p>SO milik Logistik</p>
+                                                <p>Daftar SO</p>
                                             </div>
                                             <div class="icon">
-                                                <i class="fas fa-tasks"></i>
+                                                <i class="fas fa-truck"></i>
                                             </div>
                                             <a href="#" class="small-box-footer active" id="pengirimanso">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
@@ -124,7 +124,7 @@
                                                 <p>Belum memiliki COO</p>
                                             </div>
                                             <div class="icon">
-                                                <i class="fas fa-boxes"></i>
+                                                <i class="fas fa-certificate"></i>
                                             </div>
                                             <a href="#" class="small-box-footer" id="sotanpacoo">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
@@ -201,9 +201,7 @@
                                             <thead>
                                                 <tr>
                                                     <th colspan=4>
-
                                                         <h5><b>Daftar SO belum memiliki COO</b></h5>
-
                                                     </th>
                                                 </tr>
                                                 <tr>

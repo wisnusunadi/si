@@ -26,12 +26,36 @@
     .filter {
         margin: 5px;
     }
+
+    .nowraptext {
+        white-space: nowrap;
+    }
+
+    @media screen and (min-width: 1440px) {
+        section {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        section {
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+<section class="section">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -39,103 +63,91 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-striped" style="text-align:center;" id="showtable">
+                                    <table class="table table-striped nowraptext" style="text-align:center;" id="showtable">
                                         <thead>
                                             <th>No</th>
-                                            <th>No SO</th>
-                                            <th>No AKN</th>
-                                            <th>Customer</th>
-                                            <th>Instansi</th>
-                                            <th>Tanggal Surat Jalan</th>
-                                            <th>Nama Produk</th>
-                                            <th>No AKD</th>
                                             <th>No COO</th>
                                             <th>No Seri</th>
+                                            <th>No SO</th>
+                                            <th>No AKN</th>
+                                            <th>Nama Produk</th>
+                                            <th>No AKD</th>
+                                            <th>Bulan</th>
+                                            <th>Tgl Surat Jalan</th>
                                             <th>Laporan</th>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td rowspan="4">1</td>
-                                                <td rowspan="4">SO/EKAT/X/02/98</td>
-                                                <td rowspan="4">AK1-909090-1892180</td>
-                                                <td rowspan="4">CV. Cipta Jaya Mandiri</td>
-                                                <td rowspan="4">Pemerintah Kota Gorontalo</td>
-                                                <td rowspan="2">30-09-2021</td>
-                                                <td rowspan="2">Elitech MTB 2 MTR</td>
-                                                <td rowspan="2">AKD4284020</td>
+                                                <td>1</td>
                                                 <td>30031</td>
                                                 <td>MTB2390193</td>
-                                                <td><a href="/dc/so/detail/1">
+                                                <td>SO/EKAT/X/02/98</td>
+                                                <td>AK1-909090-1892180</td>
+                                                <td>Elitech MTB 2 MTR</td>
+                                                <td>AKD4284020</td>
+                                                <td>IX</td>
+                                                <td>30-09-2021</td>
+                                                <td><a href="/dc/coo/pdf">
                                                         <i class="fas fa-file"></i>
                                                     </a>
                                                 </td>
                                             </tr>
                                             <tr>
+                                                <td>2</td>
                                                 <td>30031</td>
                                                 <td>MTB2390193</td>
-                                                <td><a href="/dc/so/detail/1">
+                                                <td>SO/EKAT/X/02/98</td>
+                                                <td>AK1-909090-1892180</td>
+                                                <td>Elitech MTB 2 MTR</td>
+                                                <td>AKD4284020</td>
+                                                <td>IX</td>
+                                                <td>30-09-2021</td>
+                                                <td><a href="/dc/coo/pdf">
                                                         <i class="fas fa-file"></i>
                                                     </a>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td rowspan="2">30-09-2021</td>
-                                                <td rowspan="2">Elitech MTB 2 MTR</td>
-                                                <td rowspan="2">AKD4284020</td>
+                                                <td>3</td>
                                                 <td>30031</td>
                                                 <td>MTB2390193</td>
-                                                <td><a href="/dc/so/detail/1">
+                                                <td>SO/EKAT/X/02/98</td>
+                                                <td>AK1-909090-1892180</td>
+                                                <td>Elitech MTB 2 MTR</td>
+                                                <td>AKD4284020</td>
+                                                <td>IX</td>
+                                                <td>30-09-2021</td>
+                                                <td><a href="/dc/coo/pdf">
                                                         <i class="fas fa-file"></i>
                                                     </a>
                                                 </td>
                                             </tr>
                                             <tr>
+                                                <td>4</td>
                                                 <td>30031</td>
                                                 <td>MTB2390193</td>
-                                                <td><a href="/dc/so/detail/1">
+                                                <td>SO/EKAT/X/02/98</td>
+                                                <td>AK1-909090-1892180</td>
+                                                <td>Elitech MTB 2 MTR</td>
+                                                <td>AKD4284020</td>
+                                                <td>IX</td>
+                                                <td>30-09-2021</td>
+                                                <td><a href="/dc/coo/pdf">
                                                         <i class="fas fa-file"></i>
                                                     </a>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td rowspan="4">2</td>
-                                                <td rowspan="4">SO/EKAT/X/02/98</td>
-                                                <td rowspan="4">AK1-909090-1892180</td>
-                                                <td rowspan="4">CV. Cipta Jaya Mandiri</td>
-                                                <td rowspan="4">Pemerintah Kota Gorontalo</td>
-                                                <td rowspan="2">30-09-2021</td>
-                                                <td rowspan="2">Elitech MTB 2 MTR</td>
-                                                <td rowspan="2">AKD4284020</td>
+                                                <td>5</td>
                                                 <td>30031</td>
                                                 <td>MTB2390193</td>
-                                                <td><a href="/dc/so/detail/1">
-                                                        <i class="fas fa-file"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>30031</td>
-                                                <td>MTB2390193</td>
-                                                <td><a href="/dc/so/detail/1">
-                                                        <i class="fas fa-file"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td rowspan="2">30-09-2021</td>
-                                                <td rowspan="2">Elitech MTB 2 MTR</td>
-                                                <td rowspan="2">AKD4284020</td>
-                                                <td>30031</td>
-                                                <td>MTB2390193</td>
-                                                <td><a href="/dc/so/detail/1">
-                                                        <i class="fas fa-file"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>30031</td>
-                                                <td>MTB2390193</td>
-                                                <td><a href="/dc/so/detail/1">
+                                                <td>SO/EKAT/X/02/98</td>
+                                                <td>AK1-909090-1892180</td>
+                                                <td>Elitech MTB 2 MTR</td>
+                                                <td>AKD4284020</td>
+                                                <td>IX</td>
+                                                <td>30-09-2021</td>
+                                                <td><a href="/dc/coo/pdf">
                                                         <i class="fas fa-file"></i>
                                                     </a>
                                                 </td>
@@ -150,7 +162,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 @section('adminlte_js')
 <script>

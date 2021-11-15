@@ -72,6 +72,33 @@
     .nowrap-text {
         white-space: nowrap;
     }
+
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 30ch;
+    }
+
+    @media screen and (min-width: 1440px) {
+        section {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        section {
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
@@ -143,7 +170,7 @@
                                 <tr>
                                     <td class="nowrap-text">1</td>
                                     <td class="nowrap-text">19-10-2021</td>
-                                    <td class="nowrap-text">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
+                                    <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
                                     <td class="nowrap-text">21102900256</td>
                                     <td class="nowrap-text">X</td>
                                     <td class="nowrap-text">5</td>
@@ -155,13 +182,7 @@
                                                 <i class="fas fa-eye"></i>
                                                 Detail
                                             </a>
-                                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-id="1">
-                                                <button class="dropdown-item" type="button">
-                                                    <i class="fas fa-pencil-alt"></i>
-                                                    Edit
-                                                </button>
-                                            </a>
-                                            <a href="{{route('logistik.pengiriman.print')}}">
+                                            <a href="{{route('dc.coo.pdf')}}">
                                                 <button class="dropdown-item" type="button">
                                                     <i class="fas fa-file"></i>
                                                     Laporan PDF
@@ -173,12 +194,20 @@
                                 <tr>
                                     <td>2</td>
                                     <td>21-10-2021</td>
-                                    <td>ELITECH PULSE OXIMETER/OXYMETER FOX-2</td>
+                                    <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
                                     <td>20502210102</td>
                                     <td></td>
                                     <td>2</td>
                                     <td><span class="badge red-text">Belum Tersedia</span></td>
-                                    <td><a type="button" class="noserishow"><i class="fas fa-search"></i></a></td>
+                                    <td class="nowrap-text"></a>
+                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="noserishow dropdown-item" type="button">
+                                                <i class="fas fa-eye"></i>
+                                                Detail
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -191,15 +220,21 @@
                 <div class="card-body">
                     <div>
                         <h5 style="display: inline;" class="filter">No Seri</h5>
-                        <a data-toggle="modal" data-target="#createmodal" class="createmodal float-right" data-attr="" data-id="1">
-                            <button type="button" class="btn btn-sm btn-info"><i class="fas fa-plus"></i> Tambah COO</button>
+                        <a data-toggle="modal" data-target="#editmodal" class="editmodal float-right" data-attr="" data-id="1">
+                            <button type="button" class="btn btn-sm btn-warning disabled" id="btnedit"><i class="fas fa-pencil-alt"></i> COO</button>
                         </a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped" style="text-align: center; width:100%;" id="noseritable">
                             <thead>
                                 <tr>
-                                    <th>No</th>
+                                    <th>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
+                                            <label class="form-check-label" for="check_all">
+                                            </label>
+                                        </div>
+                                    </th>
                                     <th>No COO</th>
                                     <th>No Seri</th>
                                     <th>Laporan</th>
@@ -207,13 +242,25 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>1</td>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="1" id="1" name="no_seri_id[]" />
+                                            <label class="form-check-label" for="1">
+                                            </label>
+                                        </div>
+                                    </td>
                                     <td>-</td>
                                     <td>FX012183103841</td>
                                     <td>-</td>
                                 </tr>
                                 <tr>
-                                    <td>2</td>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="2" id="2" name="no_seri_id[]" />
+                                            <label class="form-check-label" for="2">
+                                            </label>
+                                        </div>
+                                    </td>
                                     <td>-</td>
                                     <td>FX012183103826</td>
                                     <td>-</td>
@@ -243,7 +290,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header bg-warning">
-                        <h4 class="modal-title">Edit COO</h4>
+                        <h4 class="modal-title">COO</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -264,13 +311,42 @@
         $('#showtable').DataTable({
             scrollX: true
         });
+
+
+        $('#noseritable').on('change', 'input[name="check_all"]', function() {
+            if ($('input[name="check_all"]:checked').length > 0) {
+                $('input[name="no_seri_id[]"]').prop('checked', true);
+                $('#btnedit').removeClass('disabled');
+            } else if ($('input[name="check_all"]:checked').length <= 0) {
+                $('input[name="no_seri_id[]"]').prop('checked', false);
+                $('#btnedit').addClass('disabled', true);
+            }
+        });
+
+        $('#noseritable').on('change', 'input[name="no_seri_id[]"]', function() {
+            if (!($(this).is(':checked'))) {
+                $('input[name="check_all"]').prop('checked', false);
+                if ($('input[name="no_seri_id[]"]:checked').length <= 0) {
+                    $('#btnedit').addClass('disabled', true);
+                }
+            } else {
+                $('#btnedit').removeClass('disabled');
+                if ($('input[name="no_seri_id[]"]').length == $('input[name="no_seri_id[]"]:checked').length) {
+                    $('input[name="check_all"]').prop('checked', true);
+                } else {
+                    $('input[name="check_all"]').prop('checked', false);
+                }
+            }
+        })
+
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseri').removeClass('hide');
             console.log(data);
-        })
+        });
+
         $(document).on('click', '.createmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
