@@ -29,7 +29,8 @@
                                     <th>Tgl Mulai</th>
                                     <th>Tgl Selesai</th>
                                     <th>Produk</th>
-                                    <th colspan="2">Jumlah Rakit</th>
+                                    <th>Jumlah</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,7 +40,7 @@
                                     <td>Produk 1</td>
                                     <td>100 Unit <br> <span class="badge badge-dark">Kurang 50 Unit</span></td>
                                     <td>
-                                        <button class="btn btn-outline-info" onclick="modalRakit()"><i class="far fa-edit"></i> Rakit Produk</button>
+                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -48,7 +49,7 @@
                                     <td>Produk 2</td>
                                     <td>200 Unit</td>
                                     <td>
-                                        <button class="btn btn-outline-info" onclick="modalRakit()"><i class="far fa-edit"></i> Rakit Produk</button>
+                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -57,7 +58,7 @@
                                     <td>Produk 3</td>
                                     <td>300 Unit</td>
                                     <td>
-                                        <button class="btn btn-outline-info" onclick="modalRakit()"><i class="far fa-edit"></i> Rakit Produk</button>
+                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -109,7 +110,7 @@
                                   </div>
                             </div>
                             <div class="col-sm">
-                                <label for="">Jumlah Rakit</label>
+                                <label for="">Jumlah Produk</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body">
                                         100 Unit
@@ -140,18 +141,22 @@
                         <table class="table table-striped scan-produk">
                             <thead>
                                 <tr>
+                                    <th><input type="checkbox" name="" id="head-cb"></th>
                                     <th>Nomor Seri</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" name="" id="" class="form-control"></td>
+                                    <td><input type="checkbox" name="" id="" class="cb-child"></td>
+                                    <td>56846514656566546516351654654</td>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" name="" id="" class="form-control"></td>
+                                    <td><input type="checkbox" name="" id="" class="cb-child"></td>
+                                    <td>56846514656566546516351654654</td>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" name="" id="" class="form-control"></td>
+                                    <td><input type="checkbox" name="" id="" class="cb-child"></td>
+                                    <td>56846514656566546516351654654</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -160,7 +165,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" onclick="transfer()">Simpan</button>
             </div>
         </div>
     </div>
@@ -229,7 +234,8 @@
 
         calendar.render();
 
-        var oTable = $('.table-produk-perakitan').DataTable({
+        $('.table-produk-perakitan').DataTable({
+        "ordering": false,
         "oLanguage": {
             "sProcessing": "Memproses...",
             "sZeroRecords": "Tidak ada data untuk ditampilkan...",
@@ -239,10 +245,18 @@
         });
 
         $('.scan-produk').DataTable({
-            "ordering":false,
+            ordering: false,
             "autoWidth": false,
-            searching: false,
+            "oLanguage": {
+                "sProcessing": "Memproses...",
+                "sZeroRecords": "Tidak ada data untuk ditampilkan...",
+                "sSearch": "Cari:",
+            },
             "lengthChange": false,
+            "columnDefs": [
+                { "width": "5%", "targets": 0 },
+                { "width": "95%", "targets": 1 }
+            ],
         });
     })
     function modalRakit() { 
@@ -258,7 +272,23 @@
             text: "Data yang sudah di transfer tidak dapat diubah!",
             icon: "warning",
             buttons: true,
+            showCancelButton: true,
             dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                Swal.fire(
+                    'Berhasil!',
+                    'Data berhasil di transfer!',
+                    'success'
+                );
+                $('.modalRakit').modal('hide');
+            } else {
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil di transfer!',
+                    'error'
+                );
+            }
         });
     }
 </script>

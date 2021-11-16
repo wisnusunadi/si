@@ -406,10 +406,10 @@ return [
             'icon' => 'fas fa-home',
             'auth' => [26]
         ],
-        [
-            'header' => 'DATA',
-            'auth' => [14, 17, 26, 23]
-        ],
+        // [
+        //     'header' => 'DATA',
+        //     'auth' => [14, 17, 26, 23]
+        // ],
         // penjualan (26)
         [
             'text' => 'Produk Penjualan',
@@ -514,61 +514,61 @@ return [
             ],
         ],
         // penjualan (26) & produksi (17)
-        [
-            'text' => 'Produk',
-            'url'  => '/produk',
-            'icon' => 'fas fa-table',
-            'auth' => [14, 17, 26]
-        ],
-        // produksi (17) & QC(23)
-        [
-            'text' => 'Data Karyawan',
-            'icon' => 'fas fa-users',
-            'auth' => [14, 17, 23, 28],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Jadwal Kerja Operator',
-                    'url'  => '/karyawan',
-                    'auth' => [],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Daftar Karyawan',
-                    'url'  => '/daftar_karyawan',
-                    'auth' => [28],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Permohonan Penugasan',
-                    'url'  => '/karyawan/peminjaman',
-                    'auth' => [],
-                ],
-            ],
-        ],
-        [
-            'text'    => 'Inventory',
-            'icon'    => 'fas fa-boxes',
-            'auth' => [14, 17],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Master Inventory',
-                    'auth' => [14],
-                    'url'  => '/inventory/divisi',
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Inventory',
-                    'url'  => '/inventory',
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Permintaan Peminjaman',
-                    'url'  => '/inventory/peminjaman',
-                ],
-            ],
-        ],
+        // [
+        //     'text' => 'Produk',
+        //     'url'  => '/produk',
+        //     'icon' => 'fas fa-table',
+        //     'auth' => [14, 17, 26]
+        // ],
+        // // produksi (17) & QC(23)
+        // [
+        //     'text' => 'Data Karyawan',
+        //     'icon' => 'fas fa-users',
+        //     'auth' => [14, 17, 23, 28],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Jadwal Kerja Operator',
+        //             'url'  => '/karyawan',
+        //             'auth' => [],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Daftar Karyawan',
+        //             'url'  => '/daftar_karyawan',
+        //             'auth' => [28],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Permohonan Penugasan',
+        //             'url'  => '/karyawan/peminjaman',
+        //             'auth' => [],
+        //         ],
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'Inventory',
+        //     'icon'    => 'fas fa-boxes',
+        //     'auth' => [14, 17],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Master Inventory',
+        //             'auth' => [14],
+        //             'url'  => '/inventory/divisi',
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Inventory',
+        //             'url'  => '/inventory',
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Permintaan Peminjaman',
+        //             'url'  => '/inventory/peminjaman',
+        //         ],
+        //     ],
+        // ],
         [
             'text'    => 'Peminjaman',
             'icon'    => 'fas fa-boxes',
@@ -756,33 +756,33 @@ return [
             'url' => '/gbmp/bppb_view'
         ],
         // Produksi (17)
-        [
-            'header' => 'PERSIAPAN',
-            'auth' => [17]
-        ],
-        [
-            'text'    => 'Packing Produk',
-            'icon'    => 'fas fa-calendar-alt',
-            'url'  => '/persiapan_packing_produk',
-            'auth' => [17],
-        ],
-        // Produksi (17) & Engineering (10) & Maintenence (16)
+        // [
+        //     'header' => 'PERSIAPAN',
+        //     'auth' => [17]
+        // ],
+        // [
+        //     'text'    => 'Packing Produk',
+        //     'icon'    => 'fas fa-calendar-alt',
+        //     'url'  => '/persiapan_packing_produk',
+        //     'auth' => [17],
+        // ],
+        // // Produksi (17) & Engineering (10) & Maintenence (16)
         [
             'header' => 'PRODUKSI',
             'auth' => [17, 10, 16]
         ],
-        [
-            'text'    => 'Jadwal Kerja Produksi',
-            'icon'    => 'fas fa-calendar-alt',
-            'url'  => '/jadwal_kerja_produksi',
-            'auth' => [17],
-        ],
-        [
-            'text'    => 'BPPB',
-            'icon'    => 'fas fa-project-diagram',
-            'url' => '/bppb',
-            'auth' => [17],
-        ],
+        // [
+        //     'text'    => 'Jadwal Kerja Produksi',
+        //     'icon'    => 'fas fa-calendar-alt',
+        //     'url'  => '/jadwal_kerja_produksi',
+        //     'auth' => [17],
+        // ],
+        // [
+        //     'text'    => 'BPPB',
+        //     'icon'    => 'fas fa-project-diagram',
+        //     'url' => '/bppb',
+        //     'auth' => [17],
+        // ],
         [
             'text'    => 'Perakitan',
             'icon'    => 'fas fa-cogs',
@@ -790,17 +790,39 @@ return [
             'submenu' => [
                 [
                     'icon' => 'far fa-circle',
-                    'text' => 'Jadwal Perakitan',
+                    'text' => 'Perencanaan Perakitan',
+                    'url' => 'produksi/perencanaan_perakitan',
+                    'auth' => [17],
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Perakitan Berlangsung',
                     'url' => 'produksi/jadwal_perakitan',
                     'auth' => [17],
                 ],
                 [
                     'icon' => 'far fa-circle',
-                    'text' => 'Laporan',
-                    'url'  => '/perakitan',
+                    'text' => 'Riwayat Perakitan',
+                    'url' => 'produksi/riwayat_perakitan',
                     'auth' => [17],
                 ],
+                // [
+                //     'icon' => 'far fa-circle',
+                //     'text' => 'Laporan',
+                //     'url'  => '/perakitan',
+                //     'auth' => [17],
+                // ],
             ],
+        ],
+        [
+            'header' => 'TRANSFER',
+            'auth' => [17]
+        ],
+        [
+            'text'    => 'Gudang',
+            'icon'    => 'fas fa-cubes',
+            'url'  => '/produksi/pengiriman',
+            'auth' => [17],
         ],
         [
             'text'    => 'Perakitan',
@@ -814,19 +836,19 @@ return [
             'url'  => '/perakitan/eng',
             'auth' => [10],
         ],
-        [
-            'text'    => 'Pengujian',
-            'icon'    => 'fab fa-searchengin',
-            'auth' => [17],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Laporan',
-                    'url'  => '/pengujian/prd',
-                    'auth' => [17],
-                ],
-            ],
-        ],
+        // [
+        //     'text'    => 'Pengujian',
+        //     'icon'    => 'fab fa-searchengin',
+        //     'auth' => [17],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Laporan',
+        //             'url'  => '/pengujian/prd',
+        //             'auth' => [17],
+        //         ],
+        //     ],
+        // ],
         [
             'text' => 'Pengujian',
             'icon' => 'fab fa-searchengin',
@@ -845,37 +867,37 @@ return [
             'url'  => '/pengemasan/mtc',
             'auth' => [16],
         ],
-        [
-            'text' => 'Pengemasan',
-            'icon' => 'fas fa-box-open',
-            'auth' => [17],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Laporan',
-                    'url'  => '/pengemasan',
-                    'auth' => [17],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Form Produk',
-                    'url'  => '/pengemasan/form',
-                    'auth' => [17],
-                ],
-            ],
-        ],
+        // [
+        //     'text' => 'Pengemasan',
+        //     'icon' => 'fas fa-box-open',
+        //     'auth' => [17],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Laporan',
+        //             'url'  => '/pengemasan',
+        //             'auth' => [17],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Form Produk',
+        //             'url'  => '/pengemasan/form',
+        //             'auth' => [17],
+        //         ],
+        //     ],
+        // ],
         [
             'text'    => 'Pengemasan',
             'icon'    => 'fas fa-box-open',
             'url'  => '/pengemasan/eng',
             'auth' => [10],
         ],
-        [
-            'text'    => 'Perbaikan',
-            'icon'    => 'fas fa-wrench',
-            'url' => '/perbaikan/produksi',
-            'auth' => [17],
-        ],
+        // [
+        //     'text'    => 'Perbaikan',
+        //     'icon'    => 'fas fa-wrench',
+        //     'url' => '/perbaikan/produksi',
+        //     'auth' => [17],
+        // ],
         // QC (23) & Lab (22)
         [
             'header' => 'TRANSAKSI',

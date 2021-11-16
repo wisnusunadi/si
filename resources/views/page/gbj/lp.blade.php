@@ -55,7 +55,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive ">
                                         {{-- Tanggal Masuk dan Tanggal Keluar --}}
                                         <table class="table table-hover pertanggal" width="100%">
                                             <thead>
@@ -505,6 +505,10 @@
 
     $(document).ready(function () {
         $('.table-rancangan').DataTable({});
+        $('.pertanggal').DataTable({
+            "lengthChange": false,
+            "searching": false
+        });
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
