@@ -441,18 +441,18 @@ return [
             'icon' => 'far fa-circle',
             'auth' => [26]
         ],
-        [
-            'text' => 'Nama & Alamat',
-            'url'  => '/nama_alamat',
-            'icon' => 'fas fa-table',
-            'auth' => [26]
-        ],
-        [
-            'text' => 'Jasa Ekspedisi',
-            'url'  => '/jasa_eks',
-            'icon' => 'fas fa-table',
-            'auth' => [26]
-        ],
+        // [
+        //     'text' => 'Nama & Alamat',
+        //     'url'  => '/nama_alamat',
+        //     'icon' => 'fas fa-table',
+        //     'auth' => [26]
+        // ],
+        // [
+        //     'text' => 'Jasa Ekspedisi',
+        //     'url'  => '/jasa_eks',
+        //     'icon' => 'fas fa-table',
+        //     'auth' => [26]
+        // ],
         [
             'header' => 'TRANSAKSI',
             'auth'   => [26]
@@ -460,71 +460,71 @@ return [
         [
             'text' => 'Penjualan',
             'url'  => '/penjualan/penjualan/show',
-            'icon' => 'fas fa-dollar-sign',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
-        [
-            'text' => 'Sales Order',
-            'url'  => '/penjualan/so/show',
-            'icon' => 'fas fa-file-invoice-dollar',
-            'auth' => [26]
-        ],
-        [
-            'text'    => 'Daftar Pesanan',
-            'icon'    => 'fas fa-table',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'E-Katalog',
-                    'url'  => '/penjualan_online',
-                ],
-                [
-                    'text' => 'E-Commerce',
-                    'url'  => '/penjualan_online_ecom',
-                ],
-                [
-                    'text' => 'Offline',
-                    'url'  => '/penjualan_offline',
-                ]
-            ],
-        ],
-        [
-            'text'    => 'Surat Penawaran',
-            'icon'    => 'fas fa-table',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'E-Commerce',
-                    'url'  => '/penawaran_ecom',
-                ],
-                [
-                    'text' => 'Offline',
-                    'url'  => '/penawaran_offline',
-                ]
-            ],
-        ],
-        [
-            'text'    => 'PO / DO',
-            'icon'    => 'fas fa-table',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'E-Katalog',
-                    'url'  => '/podo_online',
-                ],
-                [
-                    'text' => 'Offline',
-                    'url'  => '/podo_offline',
-                ]
-            ],
-        ],
-        // penjualan (26) & produksi (17)
-        [
-            'text' => 'Produk',
-            'url'  => '/produk',
-            'icon' => 'fas fa-table',
-            'auth' => [14, 17, 26]
-        ],
+        // [
+        //     'text' => 'Sales Order',
+        //     'url'  => '/penjualan/so/show',
+        //     'icon' => 'fas fa-file-invoice-dollar',
+        //     'auth' => [26]
+        // ],
+        // [
+        //     'text'    => 'Daftar Pesanan',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Katalog',
+        //             'url'  => '/penjualan_online',
+        //         ],
+        //         [
+        //             'text' => 'E-Commerce',
+        //             'url'  => '/penjualan_online_ecom',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/penjualan_offline',
+        //         ]
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'Surat Penawaran',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Commerce',
+        //             'url'  => '/penawaran_ecom',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/penawaran_offline',
+        //         ]
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'PO / DO',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Katalog',
+        //             'url'  => '/podo_online',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/podo_offline',
+        //         ]
+        //     ],
+        // ],
+        // // penjualan (26) & produksi (17)
+        // [
+        //     'text' => 'Produk',
+        //     'url'  => '/produk',
+        //     'icon' => 'fas fa-table',
+        //     'auth' => [14, 17, 26]
+        // ],
         // produksi (17) & QC(23)
         [
             'text' => 'Data Karyawan',
@@ -1121,6 +1121,30 @@ return [
             'icon' => 'far fa-circle',
             'url' => '/dc/coo/show',
             'auth' => [9],
+        ],
+
+        //AFTER SALES PERBAIKAN
+        [
+            'header' => 'DATA',
+            'auth' => [8]
+        ],
+        [
+            'text' => 'Customer',
+            'icon' => 'far fa-circle',
+            'url' => '/penjualan/customer/show',
+            'auth' => [8],
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'far fa-circle',
+            'url' => '/as/so/show',
+            'auth' => [8],
+        ],
+        [
+            'text' => 'Lacak',
+            'icon' => 'far fa-circle',
+            'url' => '/penjualan/lacak/show',
+            'auth' => [8],
         ],
 
         [

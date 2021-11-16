@@ -45,7 +45,22 @@
         color: #C0C0C0;
     }
 
-    @media screen and (max-width: 1440px) {
+    @media screen and (min-width: 1440px) {
+
+        section {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
 
         label,
         .row {
@@ -68,166 +83,167 @@
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="row">
-            <div class="col-12">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="semua-penjualan-tab" data-toggle="tab" href="#semua-penjualan" role="tab" aria-controls="semua-penjualan" aria-selected="true">Penjualan</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="ekatalog-tab" data-toggle="tab" href="#ekatalog" role="tab" aria-controls="ekatalog" aria-selected="false">E-Catalogue</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="spa-tab" data-toggle="tab" href="#spa" role="tab" aria-controls="spa" aria-selected="false">SPA</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="spb-tab" data-toggle="tab" href="#spb" role="tab" aria-controls="spb" aria-selected="false">SPB</a>
-                    </li>
-                </ul>
-                <div class="tab-content card" id="myTabContent">
-                    <div class="tab-pane fade show active card-body" id="semua-penjualan" role="tabpanel" aria-labelledby="semua-penjualan-tab">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
-                                            <i class="fas fa-plus"></i> Tambah
+<section class="content">
+    <div class="container-fluid">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="semua-penjualan-tab" data-toggle="tab" href="#semua-penjualan" role="tab" aria-controls="semua-penjualan" aria-selected="true">Penjualan</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="ekatalog-tab" data-toggle="tab" href="#ekatalog" role="tab" aria-controls="ekatalog" aria-selected="false">E-Catalogue</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="spa-tab" data-toggle="tab" href="#spa" role="tab" aria-controls="spa" aria-selected="false">SPA</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="spb-tab" data-toggle="tab" href="#spb" role="tab" aria-controls="spb" aria-selected="false">SPB</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content card" id="myTabContent">
+                        <div class="tab-pane fade show active card-body" id="semua-penjualan" role="tabpanel" aria-labelledby="semua-penjualan-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="float-right filter">
+                                        <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
+                                                <i class="fas fa-plus"></i> Tambah
+                                            </button>
+                                        </a>
+                                    </span>
+                                    <span class="float-right filter">
+                                        <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-filter"></i> Filter
                                         </button>
-                                    </a>
-                                </span>
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Jenis Penjualan</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
-                                                    <label class="form-check-label" for="jenis1">
-                                                        E-Catalogue
-                                                    </label>
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Jenis Penjualan</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
-                                                    <label class="form-check-label" for="jenis2">
-                                                        SPA
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                        <label class="form-check-label" for="jenis1">
+                                                            E-Catalogue
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="jenis3" />
-                                                    <label class="form-check-label" for="jenis3">
-                                                        SPB
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
+                                                        <label class="form-check-label" for="jenis2">
+                                                            SPA
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Status</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="sepakat" id="status1" />
-                                                    <label class="form-check-label" for="status1">
-                                                        Sepakat
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="spa" id="jenis3" />
+                                                        <label class="form-check-label" for="jenis3">
+                                                            SPB
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="status2" />
-                                                    <label class="form-check-label" for="status2">
-                                                        Negosiasi
-                                                    </label>
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Status</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="batal" id="status3" />
-                                                    <label class="form-check-label" for="status3">
-                                                        Batal
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="sepakat" id="status1" />
+                                                        <label class="form-check-label" for="status1">
+                                                            Sepakat
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                    <label class="form-check-label" for="status4">
-                                                        PO
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="spa" id="status2" />
+                                                        <label class="form-check-label" for="status2">
+                                                            Negosiasi
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                    <label class="form-check-label" for="status5">
-                                                        Gudang
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="batal" id="status3" />
+                                                        <label class="form-check-label" for="status3">
+                                                            Batal
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                    <label class="form-check-label" for="status6">
-                                                        QC
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
+                                                        <label class="form-check-label" for="status4">
+                                                            PO
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                    <label class="form-check-label" for="status7">
-                                                        Logistik
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
+                                                        <label class="form-check-label" for="status5">
+                                                            Gudang
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                    <label class="form-check-label" for="status8">
-                                                        Pengiriman
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
+                                                        <label class="form-check-label" for="status6">
+                                                            QC
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
+                                                        <label class="form-check-label" for="status7">
+                                                            Logistik
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
+                                                        <label class="form-check-label" for="status8">
+                                                            Pengiriman
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </span>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-hover" id="penjualantable" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>No SO</th>
-                                                <th>Nomor AKN</th>
-                                                <th>Nomor PO</th>
-                                                <th>Tanggal Order</th>
-                                                <th>Batas Kontrak</th>
-                                                <th>Customer</th>
-                                                <th>Jenis</th>
-                                                <th>Status</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- <tr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="penjualantable" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>Nomor AKN</th>
+                                                    <th>Nomor PO</th>
+                                                    <th>Tanggal Order</th>
+                                                    <th>Batas Kontrak</th>
+                                                    <th>Customer</th>
+                                                    <th>Jenis</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- <tr>
                                                 <td>1</td>
                                                 <td>SOEKAT090202101</td>
                                                 <td>AKN1-79479274207</td>
@@ -328,50 +344,50 @@
                                                     </div>
                                                 </td>
                                             </tr> -->
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane fade card-body" id="ekatalog" role="tabpanel" aria-labelledby="ekatalog-tab">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <form id="filter_ekat">
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Status</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="sepakat" id="status1" />
-                                                        <label class="form-check-label" for="status1">
-                                                            Sepakat
-                                                        </label>
+                        <div class="tab-pane fade card-body" id="ekatalog" role="tabpanel" aria-labelledby="ekatalog-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="float-right filter">
+                                        <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-filter"></i> Filter
+                                        </button>
+                                        <form id="filter_ekat">
+                                            <div class="dropdown-menu">
+                                                <div class="px-3 py-3">
+                                                    <div class="form-group">
+                                                        <label for="jenis_penjualan">Status</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="negosiasi" id="status2" />
-                                                        <label class="form-check-label" for="status2">
-                                                            Negosiasi
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="sepakat" id="status1" />
+                                                            <label class="form-check-label" for="status1">
+                                                                Sepakat
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="batal" id="status3" />
-                                                        <label class="form-check-label" for="status3">
-                                                            Batal
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="negosiasi" id="status2" />
+                                                            <label class="form-check-label" for="status2">
+                                                                Negosiasi
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <!-- <div class="form-group">
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="batal" id="status3" />
+                                                            <label class="form-check-label" for="status3">
+                                                                Batal
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="form-group">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" value="po" id="status4" />
                                                         <label class="form-check-label" for="status4">
@@ -411,38 +427,38 @@
                                                         </label>
                                                     </div>
                                                 </div> -->
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary" type="submit">
-                                                            Cari
-                                                        </button>
-                                                    </span>
+                                                    <div class="form-group">
+                                                        <span class="float-right">
+                                                            <button class="btn btn-primary" type="submit">
+                                                                Cari
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
-                                </span>
+                                        </form>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-hover" id="ekatalogtable" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nomor SO</th>
-                                                <th>Nomor AKN</th>
-                                                <th>Nomor PO</th>
-                                                <th>Tanggal Order</th>
-                                                <th>Batas Kontrak</th>
-                                                <th>Customer</th>
-                                                <th>Status</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- <tr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="ekatalogtable" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nomor SO</th>
+                                                    <th>Nomor AKN</th>
+                                                    <th>Nomor PO</th>
+                                                    <th>Tanggal Order</th>
+                                                    <th>Batas Kontrak</th>
+                                                    <th>Customer</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- <tr>
                                                 <td>1</td>
                                                 <td>SOEKAT090202101</td>
                                                 <td>AKN1-79479274207</td>
@@ -492,94 +508,94 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </td>
                                             </tr> -->
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane fade card-body" id="spa" role="tabpanel" aria-labelledby="spa-tab">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Status</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                    <label class="form-check-label" for="status4">
-                                                        PO
-                                                    </label>
+                        <div class="tab-pane fade card-body" id="spa" role="tabpanel" aria-labelledby="spa-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="float-right filter">
+                                        <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-filter"></i> Filter
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Status</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                    <label class="form-check-label" for="status5">
-                                                        Gudang
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
+                                                        <label class="form-check-label" for="status4">
+                                                            PO
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                    <label class="form-check-label" for="status6">
-                                                        QC
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
+                                                        <label class="form-check-label" for="status5">
+                                                            Gudang
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                    <label class="form-check-label" for="status7">
-                                                        Logistik
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
+                                                        <label class="form-check-label" for="status6">
+                                                            QC
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                    <label class="form-check-label" for="status8">
-                                                        Pengiriman
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
+                                                        <label class="form-check-label" for="status7">
+                                                            Logistik
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
+                                                        <label class="form-check-label" for="status8">
+                                                            Pengiriman
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </span>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-hover" id="spatable" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nomor SO</th>
-                                                <th>Nomor PO</th>
-                                                <th>Tanggal Order</th>
-                                                <th>Batas Kontrak</th>
-                                                <th>Customer</th>
-                                                <th>Status</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- <tr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="spatable" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nomor SO</th>
+                                                    <th>Nomor PO</th>
+                                                    <th>Tanggal Order</th>
+                                                    <th>Batas Kontrak</th>
+                                                    <th>Customer</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- <tr>
                                                 <td>1</td>
                                                 <td>SOSPA0902012910</td>
                                                 <td>PO/ON/51/10/21</td>
@@ -625,94 +641,94 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </td>
                                             </tr> -->
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane fade card-body" id="spb" role="tabpanel" aria-labelledby="spb-tab">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Status</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                    <label class="form-check-label" for="status4">
-                                                        PO
-                                                    </label>
+                        <div class="tab-pane fade card-body" id="spb" role="tabpanel" aria-labelledby="spb-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="float-right filter">
+                                        <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-filter"></i> Filter
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Status</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                    <label class="form-check-label" for="status5">
-                                                        Gudang
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
+                                                        <label class="form-check-label" for="status4">
+                                                            PO
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                    <label class="form-check-label" for="status6">
-                                                        QC
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
+                                                        <label class="form-check-label" for="status5">
+                                                            Gudang
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                    <label class="form-check-label" for="status7">
-                                                        Logistik
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
+                                                        <label class="form-check-label" for="status6">
+                                                            QC
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                    <label class="form-check-label" for="status8">
-                                                        Pengiriman
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
+                                                        <label class="form-check-label" for="status7">
+                                                            Logistik
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
+                                                        <label class="form-check-label" for="status8">
+                                                            Pengiriman
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </span>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-hover" id="spbtable" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nomor SO</th>
-                                                <th>Nomor PO</th>
-                                                <th>Tanggal Order</th>
-                                                <th>Batas Kontrak</th>
-                                                <th>Customer</th>
-                                                <th>Status</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- <tr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="spbtable" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nomor SO</th>
+                                                    <th>Nomor PO</th>
+                                                    <th>Tanggal Order</th>
+                                                    <th>Batas Kontrak</th>
+                                                    <th>Customer</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- <tr>
                                                 <td>1</td>
                                                 <td>SOSPB0902012910</td>
                                                 <td>PO/ON/51/10/21</td>
@@ -758,8 +774,9 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </td>
                                             </tr> -->
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -767,20 +784,20 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-warning">
-                    <h4>Detail</h4>
-                </div>
-                <div class="modal-body" id="detail">
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-warning">
+                        <h4>Detail</h4>
+                    </div>
+                    <div class="modal-body" id="detail">
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 
 @section('adminlte_js')

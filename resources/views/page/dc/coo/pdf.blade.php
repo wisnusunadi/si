@@ -12,15 +12,15 @@
         }
 
         @font-face {
-            font-family: 'Caladea';
-            src: url("{{public_path('font/Caladea/Caladea-Regular.ttf')}}")format("truetype");
+            font-family: 'Cambria';
+            src: url("{{asset('font/Cambria/Cambria.ttf')}}") format("truetype");
             font-weight: 400;
             font-style: normal;
         }
 
         .mdtxt {
             font-size: 18px;
-            font-family: 'Caladea', serif;
+
         }
 
         .nospace {
@@ -92,6 +92,7 @@
         body {
             background-image: url("{{public_path('assets/image/background_coo.jpg') }}");
             background-size: 100%;
+            font-family: 'Cambria';
         }
     </style>
 </head>

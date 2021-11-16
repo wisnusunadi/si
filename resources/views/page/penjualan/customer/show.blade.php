@@ -34,6 +34,26 @@
     .dropdown-toggle:active {
         color: #C0C0C0;
     }
+
+    @media screen and (min-width: 1440px) {
+        section {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        section {
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
@@ -60,7 +80,7 @@
                 </div>
                 @endif
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row" style="margin-bottom:10px;">

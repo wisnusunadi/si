@@ -148,7 +148,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-8 col-12">
+        <div class="col-lg-7 col-12">
             <div class="card">
                 <div class="card-body">
                     <h5>Daftar Barang</h5>
@@ -215,7 +215,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-12 hide" id="noseri">
+        <div class="col-lg-5 col-12 hide" id="noseri">
             <div class="card">
                 <div class="card-body">
                     <div>
@@ -237,6 +237,7 @@
                                     </th>
                                     <th>No COO</th>
                                     <th>No Seri</th>
+                                    <th>Diketahui Oleh</th>
                                     <th>Laporan</th>
                                 </tr>
                             </thead>
@@ -251,6 +252,8 @@
                                     </td>
                                     <td>-</td>
                                     <td>FX012183103841</td>
+                                    <td>Kusmardiana Rahayu <div><small>Q.A. Manager</small></div>
+                                    </td>
                                     <td>-</td>
                                 </tr>
                                 <tr>
@@ -263,6 +266,8 @@
                                     </td>
                                     <td>-</td>
                                     <td>FX012183103826</td>
+                                    <td>Kusmardiana Rahayu <div><small>Q.A. Manager</small></div>
+                                    </td>
                                     <td>-</td>
                                 </tr>
                             </tbody>
@@ -410,20 +415,52 @@
         });
 
         $(document).on('keyup change', 'select[name="bulan"]', function() {
-            if ($(this).val() != "") {
-                $('#btntambah').removeClass('disabled');
-            } else {
-                $('#btntambah').addClass('disabled');
-            }
-        });
-
-        $(document).on('keyup change', 'select[name="bulan_edit"]', function() {
-            if ($(this).val() != "") {
+            if ($(this).val() != "" && (($('input[type="radio"][name="diketahui"]:checked').val() == "spa") || ($('#jabatan').val() != "" && $('#nama').val() != ""))) {
                 $('#btnsimpan').removeClass('disabled');
             } else {
                 $('#btnsimpan').addClass('disabled');
             }
         });
+
+        $(document).on('change', 'input[type="radio"][name="diketahui"]', function() {
+            $('#jabatan').val("");
+            $('#nama').val("");
+            console.log($(this).val());
+            if ($(this).val() != "custom") {
+                $('#jabatan_label').addClass('hide');
+                $('#nama_label').addClass('hide');
+                if ($('select[name="bulan"]').val() != "") {
+                    $('#btnsimpan').removeClass('disabled');
+                } else {
+                    $('#btnsimpan').addClass('disabled');
+                }
+            } else {
+                $('#jabatan_label').removeClass('hide');
+                $('#nama_label').removeClass('hide');
+                if ($('select[name="bulan"]').val() != "" && $('#jabatan').val() != "" && $('#nama').val() != "") {
+                    $('#btnsimpan').removeClass('disabled');
+                } else {
+                    $('#btnsimpan').addClass('disabled');
+                }
+            }
+        });
+
+        $(document).on('keyup change', 'input[name="nama"]', function() {
+            if ($(this).val() != "" && $('#jabatan').val() != "" && $('select[name="bulan"]').val() != "") {
+                $('#btnsimpan').removeClass('disabled');
+            } else {
+                $('#btnsimpan').addClass('disabled');
+            }
+        });
+
+        $(document).on('keyup change', 'input[name="jabatan"]', function() {
+            if ($(this).val() != "" && $('#nama').val() != "" && $('select[name="bulan"]').val() != "") {
+                $('#btnsimpan').removeClass('disabled');
+            } else {
+                $('#btnsimpan').addClass('disabled');
+            }
+        });
+
     })
 </script>
 
