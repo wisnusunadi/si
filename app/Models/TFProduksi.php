@@ -11,6 +11,8 @@ class TFProduksi extends Model
 
     protected $table = 't_tfbj';
 
+    protected $fillable = ['ke', 'deskripsi'];
+
     function detail() {
         return $this->hasMany(TFProduksiDetail::class, 'tfbj_id');
     }

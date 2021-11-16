@@ -50,8 +50,8 @@
                                             <label for="" class="col-12 font-weight-bold col-form-label">Stok</label>
                                             <div class="col-12">
                                                 <input type="text" name="qty" id="qty"
-                                                    class="form-control number-input input-notzero stok">
-                                                <span class="form-text text-muted">Stok Input Maks. 20</span>
+                                                    class="form-control number-input input-notzero qty">
+                                                {{-- <span class="form-text text-muted">Stok Input Maks. 20</span> --}}
                                                 <input type="text" class="stok-gudang" value="20" hidden>
                                             </div>
                                         </div>
@@ -88,7 +88,7 @@
                             </table>
                         </div>
                         <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-primary btn-simpan" type="button" data-toggle="modal"
+                            <button class="btn btn-primary btn-simpan" type="submit" data-toggle="modal"
                                 data-target="#modalNotes" hidden>Simpan</button>
                         </div>
                     </div>
@@ -129,10 +129,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <input type="hidden" name="ke[]" id="post_ke">
-                <input type="hidden" name="deskripsi[]" id="post_deskripsi">
-                <input type="hidden" name="gdg_brg_jadi_id[]" id="post_produk">
-                <input type="hidden" name="qty[]" id="post_qty">
+
             </div>
         </div>
     </div>
@@ -215,8 +212,8 @@
         let deskripsi = $('.deskripsi').val();
         let produk = $('.product').val();
         let d_produk = $('.product').find(':selected').text();
-        let stok = parseInt($('.stok').val());
-        let stok_gudang = parseInt($('.stok-gudang').val());
+        let stok = parseInt($('.qty').val());
+        // let stok_gudang = parseInt($('.stok-gudang').val());
 
         $.ajax({
             url: "/api/tfp/cekStok",
@@ -243,40 +240,35 @@
                     // console.log('ok');
                     Swal.fire({
                         position: 'center',
-                        icon: 'error',
-                        title: 'Stok Tidak Mencukupi',
+                        icon: 'success',
+                        title: 'Successfully',
                         showConfirmButton: false,
                         timer: 1500
                     })
+                    addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
+                    $('#post_ke').val(divisi);
+                    $('#post_deskripsi').val(deskripsi);
+                    $('#post_produk').val(produk);
+                    $('#post_qty').val(stok);
                 }
-                // Swal.fire({
-                //     position: 'center',
-                //     icon: 'success',
-                //     title: res.msg,
-                //     showConfirmButton: false,
-                //     timer: 1500
-                // })
-                // addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
-                // $('#post_ke').val(divisi);
-                // $('#post_deskripsi').val(deskripsi);
-                // $('#post_produk').val(produk);
-                // $('#post_qty').val(stok);
             $('.btn-simpan').prop('hidden', false);
             }
         });
     });
 
+    var i = 0;
     function addData(divisi,d_divisi, deskripsi, d_produk, produk, stok) {
         if (deskripsi.length > 30) {
             var a = deskripsi.substring(0, 10) + '...';
         }else{
             var a = deskripsi;
         }
-        let i = 0;
+
         i++;
         // console.log(deskripsi.length);
-        let tambah_data = '<tr><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
+
     }
     $(document).on('click', '.btn-delete', function(e){
         e.preventDefault();
@@ -292,20 +284,27 @@
     $(document).on('click', '.btn-simpan', function(e) {
         e.preventDefault();
 
-        let divisi = $('.ke').val();
-        let deskripsi = $('.deskripsi').val();
-        let produk = $('.product').val();
-        let stok = parseInt($('.stok').val());
+        let a = $('#post_ke').val();
+        let b = $('#post_deskripsi').val();
+        let c = $('#post_produk').val();
+        let d = parseInt($('#post_qty').val());
         let stok_gudang = parseInt($('.stok-gudang').val());
 
-        const ke = [];
-        const desk = [];
-        const gdg = [];
-        const qty = [];
+        // let divisi = $('.ke').val();
+        // let deskripsi = $('.deskripsi').val();
+        // let produk = $('.product').val();
+        // let stok = parseInt($('.qty').val());
+        // let stok_gudang = parseInt($('.stok-gudang').val());
+
+        let ke = [];
+        let desk = [];
+        let gdg = [];
+        let stok = [];
 
         $('input[name^="ke"]').each(function() {
             ke.push($(this).val());
         });
+        console.log(ke);
 
         $('input[name^="deskripsi"]').each(function() {
             desk.push($(this).val());
@@ -316,49 +315,77 @@
         });
 
         $('input[name^="qty"]').each(function() {
-            qty.push($(this).val());
+            stok.push($(this).val());
         });
-        // $.ajax({
-        //     url: "/api/tfp/create",
-        //     type:"POST",
-        //     data: {
-        //         "_token": "{{ csrf_token() }}",
-        //         ke: ke,
-        //         deskripsi: desk,
-        //         gdg_brg_jadi_id: gdg,
-        //         qty: qty,
-        //     },
-        //     success: function (res) {
-        //         console.log(res);
-        //         Swal.fire({
-        //             position: 'center',
-        //             icon: 'success',
-        //             title: res.msg,
-        //             showConfirmButton: false,
-        //             timer: 1500
-        //         })
-        //         location.reload();
-        //     }
-        // });
+
+        $.ajax({
+            url: "/api/tfp/create",
+            type:"POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                ke: ke,
+                deskripsi: desk,
+                gdg_brg_jadi_id: gdg,
+                qty: stok,
+            },
+            success: function (res) {
+                console.log(res);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
+            }
+        });
         // console.log('ok');
     })
 
-    $('.scan-produk').DataTable({
-        'columnDefs': [{
-            'targets': 1,
-            'checkboxes': {
-                'selectRow': true
+    $(document).on('click', '.noseriModal', function(e) {
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/tfp/noseri/" + id,
+            type: "get",
+            // data : {id : id},
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+
+                $('.scan-produk').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '/api/tfp/noseri/' + id,
+                    },
+                    columns: [
+                        { data: 'noseri', name: 'noseri'},
+                        { data: 'checkbox', name: 'checkbox'},
+                    ],
+                    'columnDefs': [{
+                        'targets': 1,
+                        'checkboxes': {
+                            'selectRow': true
+                        },
+                    }],
+                    'select': {
+                        'style': 'multi'
+                    },
+                    'order': [
+                        [0, 'asc']
+                    ],
+                    "oLanguage": {
+                    "sSearch": "Scan Nomor Seri:"
+                    }
+                });
             }
-        }],
-        'select': {
-            'style': 'multi'
-        },
-        'order': [
-            [0, 'asc']
-        ],
-        "oLanguage": {
-        "sSearch": "Scan Nomor Seri:"
-        }
-    });
+        })
+        $('.modal-produk').modal('show');
+    })
+
+
 </script>
 @stop

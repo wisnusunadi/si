@@ -110,6 +110,10 @@ Route::prefix('/tfp')->group(function () {
 
     // get
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
+    Route::get('noseri/{id}', [\App\Http\Controllers\ProduksiController::class, 'getNoseri']);
+    Route::get('data-so', [\App\Http\Controllers\ProduksiController::class, 'getOutSO']);
+    Route::get('detail-so/{id}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
+    Route::get('header-so/{id}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);
 
     // check
     Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
