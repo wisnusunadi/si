@@ -790,6 +790,12 @@ return [
             'submenu' => [
                 [
                     'icon' => 'far fa-circle',
+                    'text' => 'Jadwal Perakitan',
+                    'url' => 'produksi/jadwal_perakitan',
+                    'auth' => [17],
+                ],
+                [
+                    'icon' => 'far fa-circle',
                     'text' => 'Laporan',
                     'url'  => '/perakitan',
                     'auth' => [17],

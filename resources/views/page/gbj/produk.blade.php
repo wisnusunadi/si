@@ -64,7 +64,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Kode Produk</th>
-                                    <th>Produk</th>
+                                    <th>Nama Produk</th>
                                     <th>Stok Gudang</th>
                                     <th>Stok</th>
                                     <th>Kelompok</th>
