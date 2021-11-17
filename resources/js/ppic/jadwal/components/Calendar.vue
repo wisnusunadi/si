@@ -121,6 +121,12 @@ export default {
           }));
     },
 
+    getComment: function () {
+      axios.get("/api/ppic/komentar").then((response) => {
+        this.comment = response.data;
+      });
+    },
+
     editable: function (state, user) {
       if (user.divisi_id !== 24) return false;
 
@@ -313,8 +319,12 @@ export default {
       // this.disableEdit();
     }
 
-    axios.get("/api/ppic/komentar").then((response) => {
-      this.comment = response.data;
+    this.getComment();
+
+    EchoObj.private("test").listen("TestEvent", (e) => {
+      console.log(e);
+      this.$store.dispatch("updateJadwal", this.status);
+      this.getComment();
     });
   },
 
@@ -518,6 +528,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style scoped>
-</style>

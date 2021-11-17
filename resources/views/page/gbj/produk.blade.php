@@ -21,20 +21,15 @@
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
-                                        <span class="dropdown float-right" id="semuaprodukfilter"
-                                            style="margin-right: 5px">
-                                            <button class="btn btn-outline-info dropdown-toggle" type="button"
-                                                id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
+                                        <span class="dropdown float-right" id="semuaprodukfilter" style="margin-right: 5px">
+                                            <button class="btn btn-outline-info dropdown-toggle" type="button" id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
                                                 Filter
                                             </button>
-                                            <div class="dropdown-menu p-3 text-nowrap"
-                                                aria-labelledby="semuaprodukfilter">
+                                            <div class="dropdown-menu p-3 text-nowrap" aria-labelledby="semuaprodukfilter">
                                                 <div class="dropdown-header">Kelompok Produk</div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="sp_kelompok"
-                                                            value="alat_kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="sp_kelompok" value="alat_kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Alat Kesehatan
                                                         </label>
@@ -42,8 +37,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="sp_kelompok"
-                                                            value="sarana_kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="sp_kelompok" value="sarana_kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Sarana Kesehatan
                                                         </label>
@@ -94,69 +88,72 @@
             <div class="modal-body">
                 <form action="" id="produkForm" name="produkForm" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="id">
-                <div class="row">
-                    <div class="col">
-                        <label for="">Nama Produk</label>
-                        <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror"
-                            placeholder="Nama Produk">
-                        @error('title')
-                        <span class="invalid-feedback">Silahkan isi Nama Produk</span>
-                        @enderror
-                    </div>
-                    <div class="col">
-                        <label for="">Stok</label>
-                        <input type="text" class="form-control" id="stok" name="stok" placeholder="Stok" value="0" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="">Deskripsi</label>
-                    <textarea class="form-control" name="deskripsi" id="deskripsi" id="" cols="5" rows="5"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="">Dimensi</label>
-                    <div class="d-flex justify-content-between">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Produk</label>
+                                <select name="" class="form-control produk-add">
+                                    <option value="">Buku</option>
+                                    <option value="">Bolpoin</option>
+                                </select>
                             </div>
-                        </div>&nbsp;
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="">Produk</label>
-                            <select name="produk_id" id="produk_id" class="form-control produk-add">
-
+                    <div class="row">
+                        <div class="col">
+                            <label for="">Nama Produk</label>
+                            <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror" placeholder="Nama Produk">
+                            @error('title')
+                            <span class="invalid-feedback">Silahkan isi Nama Produk</span>
+                            @enderror
+                        </div>
+                        <div class="col">
+                            <label for="">Satuan</label>
+                            <select name="" id="satuan-tambah" class="form-control">
+                                <option value="">mm</option>
+                                <option value="">unit</option>
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" name="gambar" class="custom-file-input" id="inputGroupFile02"/>
-                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
+                    <div class="form-group">
+                        <label for="">Deskripsi</label>
+                        <textarea class="form-control" name="deskripsi" id="deskripsi" id="" cols="5" rows="5"></textarea>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="">Dimensi</label>
+                        <div class="d-flex justify-content-between">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" name="gambar" class="custom-file-input" id="inputGroupFile02" />
+                            <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
+                        </div>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                 <button type="submit" class="btn btn-primary" id="Submitmodalcreate">Kirim</button>
             </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>
@@ -177,13 +174,26 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col">
+                        <div class="form-group">
+                            <label for="">Produk</label>
+                            <select name="" class="form-control produk-add">
+                                <option value="">Buku</option>
+                                <option value="">Bolpoin</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <label for="">Nama Produk</label>
                         <input type="text" class="form-control" placeholder="Nama Produk">
                     </div>
                     <div class="col">
-                        <label for="">Stok</label>
-                        <input type="text" class="form-control" placeholder="Stok" value="0" readonly>
-
+                        <label for="">Satuan</label>
+                        <select name="" id="" class="form-control satuan-edit">
+                            <option value="">mm</option>
+                            <option value="">unit</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -211,17 +221,6 @@
                                 <div class="input-group-text">mm</div>
                             </div>
                         </div>&nbsp;
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="">Produk</label>
-                            <select name="" class="form-control produk-edit">
-                                <option value="">Buku</option>
-                                <option value="">Bolpoin</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -264,10 +263,15 @@
                         <p><b>Deskripsi Produk</b></p>
                         <p>Inovasi Produk Terbaru dari industri kami</p>
                         <p><b>Dimensi</b></p>
-                        <div class="d-flex">
-                            <p>Panjang: 50</p>
-                            <p>Lebar: 50</p>
-                            <p>Tinggi: 50</p>
+                        <div class="row">
+                            <div class="col-sm">Panjang</div>
+                            <div class="col-sm">Lebar</div>
+                            <div class="col-sm">Tinggi</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm"><span id="panjang">1</span></div>
+                            <div class="col-sm"><span id="lebar">122</span></div>
+                            <div class="col-sm"><span id="tinggi">12</span></div>
                         </div>
                         <p><b>Produk</b></p>
                         <p>Buku</p>
@@ -307,8 +311,9 @@
                                 <option value="1">Layout 1</option>
                                 <option value="2">Layout 2</option>
                             </select>
-                            </td> <td>
-                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
                         </td>
                     </tr>
                     <tr>
@@ -319,8 +324,9 @@
                                 <option value="1">Layout 1</option>
                                 <option value="2">Layout 2</option>
                             </select>
-                            </td> <td>
-                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
                         </td>
                     </tr>
                 </table>
@@ -342,16 +348,18 @@
                 <h5 class="modal-title">
                     <div class="row">
                         <div class="col">
-                            <b>Produk</b><p>Ambulatory</p>
+                            <b>Produk</b>
+                            <p>Ambulatory</p>
                         </div>
                         <div class="col">
-                            <b>Nomor SO</b><p>8457938475938475</p>
+                            <b>Nomor SO</b>
+                            <p>8457938475938475</p>
                         </div>
                     </div>
                 </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <table class="table">
@@ -386,17 +394,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Ubah Layout</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="">Layout</label>
                     <select name="" id="change-layout" class="form-control">
-                      <option value="1">Layout 1</option>
-                      <option value="2">Layout 2</option>
-                  </select>
+                        <option value="1">Layout 1</option>
+                        <option value="2">Layout 2</option>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -410,28 +418,28 @@
     img {
         width: 100%;
     }
-
 </style>
 @stop
 
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
-    $('#inputGroupFile02').on('change', function () {
+    $('#inputGroupFile02').on('change', function() {
         //get the file name
         var fileName = $(this).val();
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
     });
-    // $('.editProduk').click(function (e) {
-    //     $('.modal-edit').modal('show');
-    //     $('.produk-edit ').select2();
-    //     $('.layout-edit').select2();
-    // });
-    // $('.viewProduk').click(function (e) {
-    //     $('.modal-view').modal('show');
-    // });
-    $(document).ready(function () {
+    $('.editProduk').click(function(e) {
+        $('.modal-edit').modal('show');
+        $('.produk-edit ').select2();
+        $('.satuan-edit').select2();
+        $('.layout-edit').select2();
+    });
+    $('.viewProduk').click(function(e) {
+        $('.modal-view').modal('show');
+    });
+    $(document).ready(function() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -440,7 +448,7 @@
         $('.produk-add ').select2();
         $('.layout-add').select2();
 
-        $("#head-cb").on('click', function () {
+        $("#head-cb").on('click', function() {
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
@@ -449,7 +457,7 @@
     function ubahData() {
         let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
         let layout = $('#change-layout').val();
-        $.each(checkbox_terpilih, function (index, elm) {
+        $.each(checkbox_terpilih, function(index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('.edit-stok').modal('hide');
@@ -463,14 +471,14 @@
     //     $('.edit-stok').modal('show');
     // });
 
-    // $('.viewStock').click(function (e) {
-    //     $('.modalViewStock').modal('show');
-    // });
-
+    $('.viewStock').click(function(e) {
+        $('.modalViewStock').modal('show');
+    });
+    $('#satuan-tambah').select2();
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.produk-add ').select2();
         $('.layout-add').select2();
         // load data
@@ -484,7 +492,8 @@
             "order": [
                 [0, "desc"]
             ],
-            ajax: '{{ route('gbj.get') }}',
+            ajax: '{{ route('
+            gbj.get ') }}',
             // ajax:{ 'url': '/api/gbj/data'},
             columns: [{
                     data: "DT_RowIndex",
@@ -519,16 +528,17 @@
         });
         // load layout
         $.ajax({
-            url: '{{ route('sel.layout') }}',
+            url: '{{ route('
+            sel.layout ') }}',
             type: 'GET',
             dataType: 'json',
             success: function(res) {
-                if(res) {
+                if (res) {
                     console.log(res);
                     $("#layout_id").empty();
                     $("#layout_id").append('<option value="">-- Pilih Layout--</option>');
                     $.each(res, function(key, value) {
-                        $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+';'+value.lantai+'-'+value.rak+'</option');
+                        $("#layout_id").append('<option value="' + value.id + '">' + value.ruang + ';' + value.lantai + '-' + value.rak + '</option');
                     });
                 } else {
                     $("#layout_id").empty();
@@ -537,16 +547,17 @@
         });
         // load produk
         $.ajax({
-            url: '{{ route('sel.produk') }}',
+            url: '{{ route('
+            sel.produk ') }}',
             type: 'GET',
             dataType: 'json',
             success: function(res) {
-                if(res) {
+                if (res) {
                     console.log(res);
                     $("#produk_id").empty();
                     $("#produk_id").append('<option value="">-- Pilih Produk--</option>');
                     $.each(res, function(key, value) {
-                        $("#produk_id").append('<option value="'+value.id+'">'+value.tipe+'</option');
+                        $("#produk_id").append('<option value="' + value.id + '">' + value.tipe + '</option');
                     });
                 } else {
                     $("#produk_id").empty();
@@ -563,27 +574,27 @@
             $('#modal-create').modal('show');
 
             $('#produk_id').change(function(e) {
-            var id = $(this).val();
-            console.log(id);
-            if(id) {
-                $.ajax({
-                    url: '/api/produk/select-produk/' + id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(res) {
-                        if(res) {
-                            console.log(res);
-                            $('#nama').val(res.tipe);
-                        } else {
-                            // $("#layout_id").empty();
-                            $('#nama').val();
+                var id = $(this).val();
+                console.log(id);
+                if (id) {
+                    $.ajax({
+                        url: '/api/produk/select-produk/' + id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res) {
+                                console.log(res);
+                                $('#nama').val(res.tipe);
+                            } else {
+                                // $("#layout_id").empty();
+                                $('#nama').val();
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
-        });
-        $('body').on('submit', '#produkForm', function (e) {
+        $('body').on('submit', '#produkForm', function(e) {
             e.preventDefault();
             var actionType = $('#Submitmodalcreate').val();
             $('#Submitmodalcreate').html('Sending..');
@@ -592,7 +603,7 @@
                 type: 'POST',
                 url: "{{ route('gbj.post') }}",
                 data: formData,
-                cache:false,
+                cache: false,
                 contentType: false,
                 processData: false,
                 success: (data) => {
@@ -606,15 +617,17 @@
         });
         // edit
         $(document).on('click', '.editmodal', function() {
-        var id = $(this).data('id');
-           console.log(id);
-           // ajax
+            var id = $(this).data('id');
+            console.log(id);
+            // ajax
             $.ajax({
-                type:"POST",
+                type: "POST",
                 url: '/api/gbj/ubah',
-                data: { id: id },
+                data: {
+                    id: id
+                },
                 dataType: 'json',
-                success: function(res){
+                success: function(res) {
                     console.log(res);
                     // var newOption = $("<option selected='selected'></option>").val(res[0].layout_id).text(res[0].layout.ruang + ';' + res[0].layout.lantai + '-' + res[0].layout.rak);
                     // var newOption1 = $("<option selected='selected'></option>").val(res[0].produk_id).text(res[0].produk.nama);

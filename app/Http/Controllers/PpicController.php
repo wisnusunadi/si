@@ -103,6 +103,7 @@ class PpicController extends Controller
                 $data->save();
             }
         }
+        broadcast(new TestEvent("broadcast message"))->toOthers();
 
         return $this->getEvent($request->status, $request);
     }
@@ -129,7 +130,7 @@ class PpicController extends Controller
             $data->save();
         }
 
-        return "success";
+        return "success reset";
     }
 
     public function getGbjQuery()
@@ -148,8 +149,8 @@ class PpicController extends Controller
 
     public function testBroadcast(Request $request)
     {
-        broadcast(new TestEvent($request->message))->toOthers();
-        return "success";
+        broadcast(new TestEvent("broadcast message"))->toOthers();
+        return "success broadcast";
     }
 
     // helper function
@@ -157,8 +158,9 @@ class PpicController extends Controller
     {
         $state = 0;
         if ($state_input == 'perencanaan') $state = 1;
-        if ($state_input == 'persetujuan') $state = 2;
-        if ($state_input == 'perubahan') $state = 3;
+        else if ($state_input == 'persetujuan') $state = 2;
+        else if ($state_input == 'perubahan') $state = 3;
+        else $state = $state_input;
 
         return $state;
     }
@@ -167,8 +169,9 @@ class PpicController extends Controller
     {
         $status = 0;
         if ($status_input == 'penyusunan') $status = 1;
-        if ($status_input == 'pelaksanaan') $status = 2;
-        if ($status_input == 'selesai') $status = 3;
+        else if ($status_input == 'pelaksanaan') $status = 2;
+        else if ($status_input == 'selesai') $status = 3;
+        else $status = $status_input;
 
         return $status;
     }

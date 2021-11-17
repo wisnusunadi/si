@@ -16,6 +16,7 @@ export default {
 
       view: "rencana",
       flag_rencana_persetujuan: false,
+      flag_perubahan: false,
       flag_setuju_perubahan: false,
 
       state: 0,
@@ -28,9 +29,6 @@ export default {
 
   computed: {
     state_rencana: function () {
-      console.log("state_rencana");
-      console.log(this.jadwal_rencana);
-      console.log("end jadwal");
       if (this.jadwal_rencana.length > 0) {
         if (this.jadwal_rencana[0].state.id == 2) return "persetujuan";
         else if (this.jadwal_rencana[0].state.id == 3) return "perubahan";
@@ -45,6 +43,7 @@ export default {
       url: "/api/ppic/schedule/penyusunan",
       params: {
         konfirmasi: 0,
+        state: 2,
       },
     }).then((response) => {
       this.jadwal_rencana = response.data;
@@ -81,15 +80,22 @@ export default {
     clickKirimRencana: function () {
       $("#modal").modal("show");
       this.flag_rencana_persetujuan = true;
+      this.flag_perubahan = false;
       this.state = 2;
       this.status = 1;
     },
 
     clickSetujuPerubahan: function () {
+      this.flag_rencana_persetujuan = false;
+      this.flag_perubahan = true;
+      this.flag_setuju_perubahan = true;
       $("#modal").modal("show");
     },
 
     clickTolakPerubahan: function () {
+      this.flag_rencana_persetujuan = false;
+      this.flag_perubahan = true;
+      this.flag_setuju_perubahan = false;
       $("#modal").modal("show");
     },
 
@@ -116,14 +122,38 @@ export default {
             konfirmasi: 0,
           })
           .then((response) => {
-            this.jadwal_rencana = response.data;
+            this.jadwal_rencana = [];
             this.acc_checked_jadwal_rencana = [];
             this.all_acc_rencana = false;
           });
       }
 
-      if (this.flag_rencana_perubahan) {
+      if (this.flag_perubahan) {
+        if (this.flag_setuju_perubahan) {
+          axios
+            .post("/api/ppic/update-event", {
+              status: "penyusunan",
+              state: 1,
+              konfirmasi: 0,
+            })
+            .then((response) => {
+              this.jadwal_rencana = [];
+            });
+        } else {
+          axios
+            .post("/api/ppic/update-event", {
+              status: "penyusunan",
+              state: 2,
+              konfirmasi: 1,
+            })
+            .then((response) => {
+              this.jadwal_rencana = [];
+            });
+        }
       }
+
+      this.komentar = "";
+      this.jadwal_rencana = [];
     },
 
     handleButtonNo: function () {
@@ -289,8 +319,12 @@ export default {
               v-if="state_rencana === 'perubahan'"
               class="btn-group btn-block"
             >
-              <button class="btn btn-success" @click="() => {}">Setuju</button>
-              <button class="btn btn-danger" @click="() => {}">Tolak</button>
+              <button class="btn btn-success" @click="clickSetujuPerubahan">
+                Setuju
+              </button>
+              <button class="btn btn-danger" @click="clickTolakPerubahan">
+                Tolak
+              </button>
             </div>
           </div>
           <div :class="['tab-pane fade', { 'show active': isPerubahan() }]">
@@ -319,8 +353,12 @@ export default {
               v-if="jadwal_pelaksanaan.length > 0"
               class="btn-group btn-block"
             >
-              <button class="btn btn-success" @click="() => {}">Setuju</button>
-              <button class="btn btn-danger" @click="() => {}">Tolak</button>
+              <button class="btn btn-success" @click="clickSetujuPerubahan">
+                Setuju
+              </button>
+              <button class="btn btn-danger" @click="clickTolakPerubahan">
+                Tolak
+              </button>
             </div>
           </div>
         </div>

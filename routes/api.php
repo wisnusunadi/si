@@ -31,7 +31,7 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/reset', [App\Http\Controllers\PpicController::class, 'resetEvent']);
     Route::get('/get-gbj-query', [App\Http\Controllers\PpicController::class, 'getGbjQuery']);
     Route::get('/get-gbj-datatable', [App\Http\Controllers\PpicController::class, 'getGbjDatatable']);
-    Route::get('test-event', [App\Http\Controllers\PpicController::class, 'testBroadcast']);
+    Route::get('/broadcast', [App\Http\Controllers\PpicController::class, 'testBroadcast']);
 });
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
