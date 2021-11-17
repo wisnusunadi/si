@@ -57,7 +57,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Kode Produk</th>
-                                    <th>Produk</th>
+                                    <th>Nama Produk</th>
                                     <th>Stok Gudang</th>
                                     <th>Stok</th>
                                     <th>Kelompok</th>
@@ -297,38 +297,42 @@
             </div>
             <div class="modal-body">
                 <table class="table scan-produk">
-                    <tr>
-                        <th><input type="checkbox" id="head-cb"></th>
-                        <th>No. Seri</th>
-                        <th>Layout</th>
-                        <th>Aksi</th>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="cb-child" value="1"></td>
-                        <td>5474598674958698645</td>
-                        <td>
-                            <select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="cb-child" value="2"></td>
-                        <td>5474598674958698645</td>
-                        <td>
-                            <select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                        </td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="head-cb"></th>
+                            <th>No. Seri</th>
+                            <th>Layout</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="1"></td>
+                            <td>5474598674958698645</td>
+                            <td>
+                                <select name="" id="" class="form-control">
+                                    <option value="1">Layout 1</option>
+                                    <option value="2">Layout 2</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="2"></td>
+                            <td>5474598674958698645</td>
+                            <td>
+                                <select name="" id="" class="form-control">
+                                    <option value="1">Layout 1</option>
+                                    <option value="2">Layout 2</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <div class="modal-footer">
@@ -424,6 +428,16 @@
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
+    $('.scan-produk').DataTable({
+        "ordering": false,
+        "autoWidth": false,
+        searching: false,
+        "lengthChange": false,
+        "columnDefs": [{
+            "width": "5%",
+            "targets": 0
+        }, ]
+    });
     $('#inputGroupFile02').on('change', function() {
         //get the file name
         var fileName = $(this).val();

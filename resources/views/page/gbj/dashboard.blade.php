@@ -565,109 +565,75 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Jumlah Produk di <span id="layout">Layout 1</span> : <b id="produk">10 Produk</b></h3>
-                                            <div class="card-tools">
-                                                <!-- button with a dropdown -->
-                                                <div class="btn-group">
-                                                <button onclick="myFunction()" type="button" class="dropbtn btn btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                                                    <i class="fas fa-ellipsis-h"></i>
-                                                </button>
-                                                <div class="dropdown dropdown-menu" id="myDropdown" role="menu">
-                                                    <input type="text" class="form-control m-0" placeholder="Cari.." id="myInput" onkeyup="filterFunction()">
-                                                    <a href="#" class="dropdown-item">Semua Layout</a>
-                                                    <a href="#" class="dropdown-item">Layout 1</a>
-                                                    <a href="#" class="dropdown-item">Layout 2</a>
-                                                    <a href="#" class="dropdown-item">Layout 3</a>
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            {{-- Jumlah Stok 20 sampai 10 --}}
-                                            <div class="jml-produk-20-table">
-                                            <table class="table jml-produk-20-tab">
-                                                <thead class="thead-dark">
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Nama Produk</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Layout</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td scope="row">1</td>
-                                                        <td>Produk 1</td>
-                                                        <td>10 Unit</td>
-                                                        <td>Layout 1</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="row">2</td>
-                                                        <td>Produk 2</td>
-                                                        <td>20 Unit</td>
-                                                        <td>Layout 1</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            </div>
-                                            {{-- Jumlah Stok 9 sampai 5 --}}
-                                            <div class="jml-produk-5-table hidden">
-                                            <table class="table jml-produk-5-tab">
-                                                <thead class="thead-dark">
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Nama Produk</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Layout</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td scope="row">1</td>
-                                                        <td>Produk 3</td>
-                                                        <td>10 Unit</td>
-                                                        <td>Layout 3</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="row">2</td>
-                                                        <td>Produk 3</td>
-                                                        <td>20 Unit</td>
-                                                        <td>Layout 3</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            </div>
-                                            {{-- Jumlah Stok 4 sampai 1 --}}
-                                            <div class="jml-produk-4-table hidden">
-                                            <table class="table jml-produk-4-tab">
-                                                <thead class="thead-dark">
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Nama Produk</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Layout</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td scope="row">1</td>
-                                                        <td>Produk 4</td>
-                                                        <td>10 Unit</td>
-                                                        <td>Layout 4</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="row">2</td>
-                                                        <td>Produk 5</td>
-                                                        <td>20 Unit</td>
-                                                        <td>Layout 5</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            </div>
-                                        </div>
+                                    <div class="jml-produk-20-table">
+                                        <table class="table jml-produk-20-tab">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td scope="row">1</td>
+                                                    <td>Produk 1</td>
+                                                    <td>10 Unit</td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row">2</td>
+                                                    <td>Produk 2</td>
+                                                    <td>20 Unit</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
+                                    <div class="jml-produk-5-table hidden">
+                                        <table class="table jml-produk-5-tab">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td scope="row">1</td>
+                                                    <td>Produk 3</td>
+                                                    <td>10 Unit</td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row">2</td>
+                                                    <td>Produk 3</td>
+                                                    <td>20 Unit</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="jml-produk-4-table hidden">
+                                        <table class="table jml-produk-4-tab">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td scope="row">1</td>
+                                                    <td>Produk 4</td>
+                                                    <td>10 Unit</td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row">2</td>
+                                                    <td>Produk 5</td>
+                                                    <td>20 Unit</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -819,6 +785,64 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-dolly-flatbed"></i> Daftar Stok Layout
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-sm"><h5><b>Layout 1</b></h5></div>
+                                        <div class="col-sm text-right">Layout :</div>
+                                        <div class="col-sm">
+                                            <select class="select2 form-control" multiple="multiple">
+                                            <option selected>All Layout</option>
+                                            <option>Layout 1</option>
+                                            <option>Layout 2</option>
+                                            <option>Layout 3</option>
+                                            <option>Layout 4</option>
+                                            <option>Layout 5</option>
+                                            <option>Layout 6</option>
+                                            <option>Layout 7</option>
+                                          </select>
+                                        </div>
+                                    </div>
+                                    <table class="table tableStokLayout">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Produk</th>
+                                                <th>Jumlah</th>
+                                                <th>Layout</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td scope="row">1</td>
+                                                <td>Produk 1</td>
+                                                <td>100 Unit</td>
+                                                <td>Layout 1</td>
+                                            </tr>
+                                            <tr>
+                                                <td scope="row">2</td>
+                                                <td>Produk 2</td>
+                                                <td>100 Unit</td>
+                                                <td>Layout 2</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6"></div>
                     </div>
                 </div>
             </section>
@@ -1196,7 +1220,7 @@
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
                                                 <td>31 Unit</td>
-                                                <td>10-04-2021
+                                                <td>10-04-2021 <br>
                                                     <span class="badge badge-info">Lewat 1 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1206,7 +1230,7 @@
                                                 <td scope="row">2</td>
                                                 <td>Produk 2</td>
                                                 <td>12 Unit</td>
-                                                <td>23-09-2021
+                                                <td>23-09-2021 <br>
                                                     <span class="badge badge-warning">Lewat 2 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1216,7 +1240,7 @@
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
                                                 <td>31 Unit</td>
-                                                <td>10-04-2021
+                                                <td>10-04-2021 <br>
                                                     <span class="badge badge-danger">Lewat 12 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1226,7 +1250,7 @@
                                                 <td scope="row">2</td>
                                                 <td>Produk 2</td>
                                                 <td>12 Unit</td>
-                                                <td>23-09-2021
+                                                <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 10 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1236,7 +1260,7 @@
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
                                                 <td>31 Unit</td>
-                                                <td>10-04-2021
+                                                <td>10-04-2021 <br>
                                                     <span class="badge badge-danger">Lewat 4 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1246,7 +1270,7 @@
                                                 <td scope="row">2</td>
                                                 <td>Produk 2</td>
                                                 <td>12 Unit</td>
-                                                <td>23-09-2021
+                                                <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 8 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1256,7 +1280,7 @@
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
                                                 <td>31 Unit</td>
-                                                <td>10-04-2021
+                                                <td>10-04-2021 <br>
                                                     <span class="badge badge-danger">Lewat 8 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1266,7 +1290,7 @@
                                                 <td scope="row">2</td>
                                                 <td>Produk 2</td>
                                                 <td>12 Unit</td>
-                                                <td>23-09-2021
+                                                <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 7 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1276,7 +1300,7 @@
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
                                                 <td>31 Unit</td>
-                                                <td>10-04-2021
+                                                <td>10-04-2021 <br>
                                                     <span class="badge badge-danger">Lewat 6 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1286,7 +1310,7 @@
                                                 <td scope="row">2</td>
                                                 <td>Produk 2</td>
                                                 <td>12 Unit</td>
-                                                <td>23-09-2021
+                                                <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 5 Hari</span>
                                                 </td>
                                                 <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
@@ -1322,6 +1346,10 @@
     $('.table-produk-batas-receipt-two-day').DataTable({});
     $('.table-produk-batas-receipt-three-day').DataTable({});
     $('.table-produk-batas-receipt-all').DataTable({});
+    $('.tableStokLayout').DataTable({
+        searching: false,
+        "lengthChange": false
+    });
 
     $(document).ready(function () {
         // Penjualan
@@ -1439,7 +1467,9 @@
             $('#receiptoneday').removeClass('active');
             $('.receipttwodaytable').addClass('hidden');
             $('.receiptonedaytable').addClass('hidden');
-        })
+        });
+        $('.select2').select2({});
+
     });
 
         function filterFunction() {
