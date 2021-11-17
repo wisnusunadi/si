@@ -45,7 +45,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-horizontal">
                                         <div class="form-group row">
-                                            <label for="" id="tanggal" class="col-sm-5 text-right">Tanggal</label>
+                                            <label for="" id="tanggal" class="col-sm-5 text-right">Tanggal Masuk</label>
                                             <div class="col-sm-2">
                                                 <input type="text" class="form-control" id="datetimepicker1">
                                             </div>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive ">
                                         {{-- Tanggal Masuk dan Tanggal Keluar --}}
                                         <table class="table table-hover pertanggal" width="100%">
                                             <thead>
@@ -181,7 +181,7 @@
                                                 </div>
                                                 <div class="col-12 d-flex justify-content-end">
                                                     <div class="btn-simpan hapus">
-                                                        <button class="btn btn-success" type="button">Transfer</button>&nbsp;
+                                                        <button class="btn btn-success" type="button">Terima</button>&nbsp;
                                                         <button class="btn btn-info" type="button">Rancang</button>&nbsp;
                                                         <button class="btn btn-secondary " type="button">Batal</button>
                                                     </div>
@@ -505,6 +505,10 @@
 
     $(document).ready(function () {
         $('.table-rancangan').DataTable({});
+        $('.pertanggal').DataTable({
+            "lengthChange": false,
+            "searching": false
+        });
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
