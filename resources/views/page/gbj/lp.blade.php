@@ -45,7 +45,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-horizontal">
                                         <div class="form-group row">
-                                            <label for="" id="tanggal" class="col-sm-5 text-right">Tanggal</label>
+                                            <label for="" id="tanggal" class="col-sm-5 text-right">Tanggal Masuk</label>
                                             <div class="col-sm-2">
                                                 <input type="text" class="form-control" id="datetimepicker1">
                                             </div>
@@ -181,7 +181,7 @@
                                                 </div>
                                                 <div class="col-12 d-flex justify-content-end">
                                                     <div class="btn-simpan hapus">
-                                                        <button class="btn btn-success" type="button">Transfer</button>&nbsp;
+                                                        <button class="btn btn-success" type="button">Terima</button>&nbsp;
                                                         <button class="btn btn-info" type="button">Rancang</button>&nbsp;
                                                         <button class="btn btn-secondary " type="button">Batal</button>
                                                     </div>
@@ -485,7 +485,9 @@
     function addData(tanggal, divisi, tujuan, produk, jumlah) { 
         if (tujuan.length > 30) {
             var a = tujuan.substring(0, 10) + '...';
-        } 
+        }else{
+            var a = tujuan;
+        }
         let tambah_data = '<tr><td>'+tanggal+'</td><td>'+divisi+'</td><td>'+a+'</td><td>'+produk+'</td><td>'+jumlah+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-plus"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
     }

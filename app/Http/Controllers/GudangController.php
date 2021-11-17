@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Models\DetailEkatalog;
 use App\Models\Ekatalog;
+=======
+use App\Models\Divisi;
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\Layout;
 use App\Models\NoseriBarangJadi;
+<<<<<<< HEAD
 use App\Models\Pesanan;
 use App\Models\Produk;
+=======
+use App\Models\Produk;
+use App\Models\Satuan;
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
@@ -21,16 +30,22 @@ class GudangController extends Controller
     // produk gudang
     public function get_data_barang_jadi()
     {
+<<<<<<< HEAD
         $data = GudangBarangJadi::with('produk', 'noseri')->select();
+=======
+        $data = GudangBarangJadi::with('produk', 'satuan')->get();
+        // return response()->json($data);
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
 
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('kelompok', function ($data) {
-                return $data->produk->kelompokproduk->nama;
+            ->addColumn('nama_produk', function ($data) {
+                return $data->produk->nama .' '. $data->nama;
             })
-            ->addColumn('merk', function ($data) {
-                return $data->produk->merk;
+            ->addColumn('kode_produk', function ($data) {
+                return $data->produk->product->kode .''. $data->produk->kode;
             })
+<<<<<<< HEAD
             ->addColumn('satuan', function ($data) {
                 return $data->stok . ' ' . $data->produk->Satuan->nama;
             })
@@ -46,6 +61,14 @@ class GudangController extends Controller
             ->addColumn('kode', function ($data) {
                 return $data->produk->kode ? $data->produk->kode : '-';
             })
+=======
+            ->addColumn('jumlah', function ($data) {
+                return $data->stok .' '.$data->satuan->nama;
+            })
+            ->addColumn('kelompok', function ($data) {
+                return $data->produk->KelompokProduk->nama;
+            })
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
             ->addColumn('action', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -71,8 +94,11 @@ class GudangController extends Controller
             })
             ->rawColumns(['action'])
             ->make(true);
+<<<<<<< HEAD
 
         //return datatables()->of(GudangBarangJadi::select())->toJson();
+=======
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
     }
 
     function StoreBarangJadi(Request $request)
@@ -81,13 +107,21 @@ class GudangController extends Controller
             $request->all(),
             [
                 // 'produk_id' => 'required',
+<<<<<<< HEAD
                 'nama' => 'required',
+=======
+                // 'nama' => 'required',
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
                 // 'stok' => 'required|numeric',
                 // 'ke' => 'required',
             ],
             [
                 // 'produk_id.required' => 'Produk harus diisi',
+<<<<<<< HEAD
                 'nama.required' => 'Nama harus diisi',
+=======
+                // 'nama.required' => 'Nama harus diisi',
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
                 // 'stok.numeric' => 'Stok harus diisi angka',
                 // 'stok.required' => 'Stok harus diisi',
                 // 'ke.required' => 'Tujuan harus diisi',
@@ -101,6 +135,7 @@ class GudangController extends Controller
             if ($id) {
                 $brg_jadi = GudangBarangJadi::find($id);
                 $brg_his = new GudangBarangJadiHis();
+<<<<<<< HEAD
 
                 if (empty($brg_jadi->id)) {
                     return response()->json(['msg' => 'Data not found']);
@@ -169,12 +204,57 @@ class GudangController extends Controller
                 $brg_jadi->deskripsi = $request->deskripsi;
                 $brg_jadi->stok = $request->stok;
                 $brg_jadi->layout_id = $request->layout_id;
+=======
+
+                if (empty($brg_jadi->id)) {
+                    return response()->json(['msg' => 'Data not found']);
+                }
+
+                $brg_jadi->produk_id = $request->produk_id;
+                $brg_jadi->satuan_id = $request->satuan_id;
+                $brg_jadi->nama = $request->nama;
+                $brg_jadi->deskripsi = $request->deskripsi;
+                $brg_jadi->stok = 0;
                 $image = $request->file('gambar');
                 if ($image) {
                     $path = 'upload/gbj/';
                     $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
                     $image->move($path, $nameImage);
+                    $brg_jadi->gambar = $nameImage;
+                }
+                $brg_jadi->dim_p = $request->dim_p;
+                $brg_jadi->dim_l = $request->dim_l;
+                $brg_jadi->dim_t = $request->dim_t;
+                $brg_jadi->status = $request->status;
+                $brg_jadi->updated_at = Carbon::now();
+                $brg_jadi->save();
+
+                $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
+                $brg_his->produk_id = $request->produk_id;
+                $brg_his->satuan_id = $request->satuan_id;
+                $brg_his->nama = $request->nama;
+                $brg_his->deskripsi = $request->deskripsi;
+                $brg_his->stok = 0;
+                $brg_his->status = $request->status;
+                $brg_his->created_at = Carbon::now();
+                $brg_his->save();
+            } else {
+                $brg_jadi = new GudangBarangJadi();
+                $brg_jadi->produk_id = $request->produk_id;
+                $brg_jadi->satuan_id = $request->satuan_id;
+                $brg_jadi->nama = $request->nama;
+                $brg_jadi->stok = 0;
+                $brg_jadi->deskripsi = $request->deskripsi;
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
+                $image = $request->file('gambar');
+                if ($image) {
+                    $path = 'upload/gbj/';
+                    $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                    $image->move($path, $nameImage);
+<<<<<<< HEAD
                     // $nameImage = base64_encode(file_get_contents($image));
+=======
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
                     $brg_jadi->gambar = $nameImage;
                 }
                 $brg_jadi->dim_p = $request->dim_p;
@@ -186,6 +266,7 @@ class GudangController extends Controller
 
                 $brg_his = new GudangBarangJadiHis();
                 $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
+<<<<<<< HEAD
                 $brg_his->produk_id = $request->produk_id;
                 $brg_his->nama = $request->nama;
                 $brg_his->deskripsi = $request->deskripsi;
@@ -207,13 +288,24 @@ class GudangController extends Controller
                 // $noseri->is_aktif = 1;
                 // $noseri->created_at = Carbon::now();
                 // $noseri->save();
+=======
+                $brg_his->satuan_id = $request->satuan_id;
+                $brg_his->produk_id = $request->produk_id;
+                $brg_his->nama = $request->nama;
+                $brg_his->stok = 0;
+                $brg_his->deskripsi = $request->deskripsi;
+                $brg_his->status = $request->status;
+                $brg_his->created_at = Carbon::now();
+                $brg_his->save();
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
             }
             return response()->json(['msg' => 'Successfully']);
         }
     }
 
-    function UpdateBarangJadi(Request $request, $id)
+    function GetBarangJadiByID(Request $request)
     {
+<<<<<<< HEAD
         $validator = Validator::make(
             $request->all(),
             [
@@ -297,33 +389,53 @@ class GudangController extends Controller
             //     $noseri->created_at = Carbon::now();
             // }
             // $noseri->save();
-
-            return response()->json(['msg' => 'Successfully']);
-        }
+=======
+        $data = GudangBarangJadi::with('produk', 'satuan')->where('id', $request->id)->get();
+        $dataid = $data->pluck('produk_id');
+        $datas = Produk::with('product')->where('id', $dataid)->get();
+        return response()->json([
+            'data' => $data,
+            'nama_produk' => $datas
+        ]);
     }
 
-    function DestroyBarangJadi($id)
-    {
-        try {
-            $brg_jadi = GudangBarangJadi::find($id);
-            $brg_his = GudangBarangJadiHis::whereIn('gdg_brg_jadi_id', array($brg_jadi->id));
-            $noseri = NoseriBarangJadi::whereIn('gdg_barang_jadi_id', array($brg_jadi->id));
-
-            if (!empty($brg_jadi)) {
-                $noseri->delete();
-                $brg_his->delete();
-                $brg_jadi->delete();
-                return response()->json(['msg' => 'Successfully']);
-            } else {
-                return response()->json(['msg' => 'Data not found']);
-            }
-        } catch (\Exception $e) {
-            if (empty($brg_jadi)) {
-                return response()->json(['msg' => 'Data not found']);
-            }
-        }
+    function getNoseri(Request $request, $id) {
+        $data = GudangBarangJadi::with('noseri')->where('id', $id)->get();
+        // $data = NoseriBarangJadi::with('gudang', 'from', 'to')->where('gdg_barang_jadi_id', $id)->get();
+        return response()->json($data);
     }
 
+    function getHistory($id) {
+        $data = NoseriBarangJadi::with('from', 'to')->where('id', $id)->get();
+        return response()->json($data);
+    }
+
+    function storeNoseri(Request $request, $id) {
+        dd($request->all());
+        // $Gud = GudangBarangJadi::find($id);
+        // $Gud->layout_id = $request->layout_id;
+        // $Gud->save();
+        // return response()->json('ok');
+    }
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
+
+    // select
+    function select_layout() {
+        $data = Layout::where('jenis_id',1)->get();
+        return response()->json($data);
+    }
+
+    function select_product() {
+        $data = Produk::with('product')->get();
+        return response()->json($data);
+    }
+
+    function select_product_by_id($id) {
+        $data = Produk::with('product')->find($id);
+        return response()->json($data);
+    }
+
+<<<<<<< HEAD
     function GetBarangJadiByID($id)
     {
         try {
@@ -701,4 +813,21 @@ class GudangController extends Controller
                 ->make(true);
         }
     }
+=======
+    function select_satuan() {
+        $data = Satuan::all();
+        return response()->json($data);
+    }
+
+    function select_divisi() {
+        $data = Divisi::all();
+        return response()->json($data);
+    }
+
+    function select_gbj()
+    {
+        $data = GudangBarangJadi::with('produk')->get();
+        return response()->json($data);
+    }
+>>>>>>> e5c47de955275b377c4c940238bea7140e71381e
 }

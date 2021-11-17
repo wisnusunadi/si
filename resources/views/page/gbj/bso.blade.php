@@ -4,19 +4,21 @@
 
 @section('content')
 <style>
-    .nomor-so{
+    .nomor-so {
         background-color: #717FE1;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
-    .nomor-akn{
+
+    .nomor-akn {
         background-color: #DF7458;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
-    .nomor-po{
+
+    .nomor-po {
         background-color: #85D296;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -32,7 +34,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
-                                <h3 class="card-title">Daftar SO Gudang Barang Jadi</h3>
+                                <h3 class="card-title">Transfer Produk Berdasarkan SO</h3>
                             </div>
                         </div>
                     </div>
@@ -57,8 +59,7 @@
                                     {{-- Menggunakan Perkondisian Jika Data Sudah Dirancang Maka Tampil Seperti ini --}}
                                     <td><span class="badge badge-info">Tersimpan ke rancangan</span></td>
                                     <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
+                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
                                                 <button type="button" class="dropdown-item addProduk" id="">
@@ -76,8 +77,7 @@
                                     {{-- Menggunakan Perkondisian Jika Produk Belum Keluar Maka Tampil Seperti ini --}}
                                     <td><span class="badge badge-danger">Produk belum disiapkan</span></td>
                                     <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
+                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                             <div class="dropdown-menu">
                                                 <button type="button" class="dropdown-item addProduk" id="">
@@ -97,8 +97,7 @@
 </div>
 
 <!-- Modal Add-->
-<div class="modal fade" id="addProdukModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
+<div class="modal fade" id="addProdukModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -116,32 +115,32 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <label for="">Nomor SO</label>
-                                            <div class="card nomor-so">
-                                                <div class="card-body" id="no_so">
-                                                    89798797856456
-                                                </div>
-                                              </div>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                <span id="so">89798797856456</span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
-                                            <div class="card-body" id="no_akn">
-                                                89798797856456
+                                            <div class="card-body">
+                                                <span id="akn">89798797856456</span>
                                             </div>
-                                          </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
-                                            <div class="card-body" id="no_po">
-                                                89798797856456
+                                            <div class="card-body">
+                                                <span id="po">89798797856456</span>
                                             </div>
-                                          </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table class="table table-striped add-produk">
+                                <table class="table table-striped add-produk" id="addProduk">
                                     <thead>
                                         <tr>
                                             <th></th>
@@ -159,8 +158,7 @@
                                             <td>100 Unit</td>
                                             <td>ABPM50</td>
                                             <td>ELITECH</td>
-                                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
-                                                        class="fas fa-qrcode"></i> Scan Produk</button></td>
+                                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i class="fas fa-qrcode"></i> Scan Produk</button></td>
                                         </tr>
                                         <tr>
                                             <td></td>
@@ -168,8 +166,7 @@
                                             <td>100 Unit</td>
                                             <td>RGB</td>
                                             <td>ELITECH</td>
-                                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
-                                                        class="fas fa-qrcode"></i> Scan Produk</button></td>
+                                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i class="fas fa-qrcode"></i> Scan Produk</button></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -212,7 +209,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td>36541654654654564</td>
+                            <td>78656562646545646</td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -225,100 +222,30 @@
 
 @section('adminlte_js')
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // $('.addProduk').click(function (e) {
         //     $('#addProdukModal').modal('show');
         // });
-        $(document).on('click', '.addProduk', function() {
-            var id = $(this).data('id');
-           console.log(id);
-           $.ajax({
-                url: "/api/gbj/so/",
-                data: { id: id },
-                type: 'GET',
-                // data: { id: id },
-                dataType: 'json',
-                success: function(res){
-                    console.log(res);
-                    $('#no_so').html(res.data[0].so).show();
-                    $('#no_po').html(res.data[0].no_po).show();
-                    let t = $('.add-produk').DataTable({
-                            processing: true,
-                            destroy: true,
-                            serverSide: true,
-                            ajax: {
-                                url: '/api/gbj/soo/' + res.data[0].id,
-                            },
-                            columns: [
-                                {
-                                    data: 'nama_produk'
-                                },
-                                {
-                                    data: 'nama_produk'
-                                },
-                                {
-                                    data: 'jumlah'
-                                },
-                                {
-                                    data: 'tipe'
-                                },
-                                {
-                                    data: 'merk'
-                                },
-                                {
-                                    data: 'action'
-                                },
-                            ],
-                            'columnDefs': [{
-                                'targets': 0,
-                                'checkboxes': {
-                                    'selectRow': true
-                                }
-                            }],
-                            'select': {
-                                'style': 'multi'
-                            },
-                            'order': [
-                                [1, 'asc']
-                            ],
-                            "oLanguage": {
-                            "sSearch": "Cari:"
-                            },
-                            // $('#no_akn').html(res.data[0].so).show();
-                        });
-                        $.ajax({
-                            url: '/api/gbj/soo/' + res.data[0].id,
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function(res) {
-                                $('#no_akn').html(res.data[0].ekatalog.no_paket).show();
-                                // console.log(res);
-                            }
-                        })
-                    $('#addProdukModal').modal('show');
-                }
-            });
-        });
-        $('.viewProduk').click(function (e) {
-            $('#viewProdukModal').modal('show');
-        });
-        let t = $('.add-produk').DataTable({
-            'columnDefs': [{
-                'targets': 0,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [1, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Cari:"
-            }
-        });
+        // $('.viewProduk').click(function (e) {
+        //     $('#viewProdukModal').modal('show');
+        // });
+        // let t = $('.add-produk').DataTable({
+        //     'columnDefs': [{
+        //         'targets': 0,
+        //         'checkboxes': {
+        //             'selectRow': true
+        //         }
+        //     }],
+        //     'select': {
+        //         'style': 'multi'
+        //     },
+        //     'order': [
+        //         [1, 'asc']
+        //     ],
+        //     "oLanguage": {
+        //     "sSearch": "Cari:"
+        //     }
+        // });
 
         $('.scan-produk').DataTable({
             'columnDefs': [{
@@ -334,68 +261,136 @@
                 [0, 'asc']
             ],
             "oLanguage": {
-            "sSearch": "Masukkan Nomor Seri:"
+                "sSearch": "Masukkan Nomor Seri:"
             }
         });
     });
 
     let a = $('#gudang-barang').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/tfp/data-so',
+        },
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex'
+            },
+            {
+                data: 'so',
+                name: 'so'
+            },
+            {
+                data: 'nama_customer',
+                name: 'nama_customer'
+            },
+            {
+                data: 'tgl_kontrak',
+                name: 'tgl_kontrak'
+            },
+            {
+                data: 'status',
+                name: 'status'
+            },
+            {
+                data: 'button',
+                name: 'button'
+            },
+        ],
+        "columnDefs": [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        }],
+        "order": [
+            [1, 'asc']
+        ],
+        "oLanguage": {
+            "sSearch": "Cari:"
+        }
+    });
+
+    a.on('order.dt search.dt', function() {
+        a.column(0, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function(cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+
+
+    $(document).on('click', '.editmodal', function(e) {
+        var id = $(this).data('id');
+        console.log(id);
+        $.ajax({
+            url: "/api/tfp/header-so/" + id,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.no_po);
+                $('span#akn').text(res.ekatalog.no_paket);
+            }
+        });
+        $('#addProduk').DataTable().destroy();
+        $('#addProduk').DataTable({
+            // retrieve: true,
             processing: true,
-           serverSide: true,
-           autoWidth: false,
-           searchable: false,
-           // pageLength: 5,
-           // scrollX: true,
-           "order": [
-               [0, "desc"]
-           ],
-           ajax: '{{ route('so.get') }}',
-           // ajax:{ 'url': '/api/gbj/data'},
-           columns: [{
-                   data: "DT_RowIndex",
-                   orderable: false,
-                   searchable: false
-               },
-               {
-                   data: 'so',
-                   name: 'so'
-               },
-               {
-                   data: 'nama_customer',
-                   name: 'nama_customer'
-               },
-               {
-                   data: 'batas_out',
-                   name: 'batas_out',
-               },
-               {
-                   data: 'status',
-                   name: 'status'
-               },
-               {
-                   data: 'action',
-                   name: 'action'
-               },
-           ],
-            "columnDefs": [{
-                "searchable": false,
-                "orderable": false,
-                "targets": 0
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" + id,
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [{
+                    data: 'produk',
+                    name: 'produk'
+                },
+                {
+                    data: 'produk',
+                    name: 'produk'
+                },
+                {
+                    data: 'qty',
+                    name: 'qty'
+                },
+                {
+                    data: 'tipe',
+                    name: 'tipe'
+                },
+                {
+                    data: 'merk',
+                    name: 'merk'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
+            ],
+            'columnDefs': [{
+                'targets': 0,
+                'checkboxes': {
+                    'selectRow': true
+                }
             }],
-            "order": [
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
                 [1, 'asc']
             ],
             "oLanguage": {
-            "sSearch": "Cari:"
+                "sSearch": "Cari:"
             }
-        });
-        a.on('order.dt search.dt', function () {
-            a.column(0, {
-                search: 'applied',
-                order: 'applied'
-            }).nodes().each(function (cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
+        })
+        $('#addProdukModal').modal('show');
+    })
+
+    $(document).on('click', '.detailmodal', function(e) {
+        var id = $(this).data('id');
+        console.log(id);
+        $('#viewProdukModal').modal('show');
+    });
 </script>
 @stop

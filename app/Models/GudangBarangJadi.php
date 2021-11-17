@@ -35,7 +35,8 @@ class GudangBarangJadi extends Model
         return $this->belongsTo(Layout::class);
     }
 
-    function Satuan() {
-        return $this->belongsTo(Satuan::class);
+    function satuan()
+    {
+        return $this->belongsTo(Satuan::class, 'satuan_id');
     }
 }
