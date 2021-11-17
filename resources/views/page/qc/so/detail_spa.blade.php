@@ -71,43 +71,44 @@
         <div class="card">
             <div class="card-body">
                 <h4>Info Penjualan SPA</h4>
+                @foreach($data as $d)
                 <div class="row">
                     <div class="col-5">
                         <div class="margin">
                             <div><small class="text-muted">Customer</small></div>
                         </div>
                         <div class="margin">
-                            <b id="distributor">Pak Julianto</b>
+                            <b id="distributor">{{$d->customer->nama}}</b>
                         </div>
                         <div class="margin">
-                            <b id="no_akn">Jl. Raya Tambak Osowilangun No. 6 Benowo</b>
+                            <b id="no_akn">{{$d->customer->alamat}}</b>
                         </div>
                         <div class="margin">
-                            <b id="no_akn">Surabaya - Jawa Timur</b>
+                            <b id="no_akn">{{$d->customer->provinsi->nama}}</b>
                         </div>
                         <div class="margin">
-                            <b id="distributor">081231704170</b>
+                            <b id="distributor">{{$d->customer->telp}}</b>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="margin">
                             <div><small class="text-muted">No SO</small></div>
-                            <div><b id="no_so">SO/EKAT/09/21/00001 </b></div>
+                            <div><b id="no_so">{{$d->pesanan->so}}</b></div>
                         </div>
-                        <div class="margin">
+                        <!-- <div class="margin">
                             <div><small class="text-muted">Batas Uji</small></div>
                             <div><b id="no_so">29-11-2020</b></div>
                             <div><small class="nok"><i class="fas fa-exclamation-circle"></i> Pengujian sisa 3 hari lagi</small></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-2">
                         <div class="margin">
                             <div><small class="text-muted">No PO</small></div>
-                            <div><b id="no_so">PO/ON/09/21/00001</b></div>
+                            <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
                         </div>
                         <div class="margin">
                             <div><small class="text-muted">Tanggal PO</small></div>
-                            <div><b id="no_so">08-09-2020</b></div>
+                            <div><b id="no_so">{{$d->pesanan->tgl_po}}</b></div>
                         </div>
                     </div>
                     <div class="col-2">
@@ -117,6 +118,7 @@
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
         </div>
     </div>

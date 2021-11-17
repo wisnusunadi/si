@@ -292,12 +292,17 @@ class PenjualanController extends Controller
     }
     public function get_data_detail_paket_ekatalog($id)
     {
-        $data  = DetailEkatalog::where('ekatalog_id', $id)
+        $data  = DetailEkatalog::with('gudangbarangjadi')->where('ekatalog_id', $id)
             ->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
                 return $data->penjualanproduk->nama;
+            })
+            ->addColumn('variasi', function ($data) {
+                return implode(',', $data->gudangbarangjadi->pluck('nama')->toArray());
+
+                //return implode(',', $data->detailekatalogproduk->gudangbarangjadi->nama);
             })
             ->addColumn('total', function ($data) {
                 return $data->harga * $data->jumlah;
@@ -305,7 +310,7 @@ class PenjualanController extends Controller
             ->addColumn('button', function ($data) {
                 return '<i class="fas fa-search"></i>';
             })
-            ->rawColumns(['button',])
+            ->rawColumns(['button', 'variasi'])
             ->make(true);
     }
     public function getHariBatasKontrak($value, $limit)

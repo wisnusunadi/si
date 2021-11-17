@@ -342,8 +342,7 @@
                                                                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                             <option value=""></option>
                                                                         </select>
-                                                                        <div id="tes">
-
+                                                                        <div class="detail_jual" id="tes0">
                                                                         </div>
                                                                     </div>
                                                                 </td>
@@ -862,9 +861,7 @@
             }).change(function(i) {
                 var index = $(this).attr('id');
                 var id = $(this).val();
-
-
-
+                console.log(index);
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
@@ -872,16 +869,14 @@
                     success: function(data) {
                         console.log(data);
                         $('#produk_harga' + index).val(formatmoney(data[0].harga));
-                        var tes = $('#tes');
+                        var tes = $('#tes' + index + '');
                         tes.empty();
                         for (var x = 0; x < data[0].produk.length; x++) {
                             tes.append('<p> Detail Produk : ' + data[0].produk[x].nama + '</p>');
-                            tes.append("<select class='variasi' name='variasi[" + x + "]' ></select><small >Stok : - </small>");
-                            $('.variasi').select2({
-
-                            });
+                            tes.append("<select class='variasi' name='variasi[" + x + "]' ></select>");
+                            $('.variasi').select2({});
                             if (data[0].produk[x].gudang_barang_jadi.length <= 1) {
-                                var mySelect = $("select[name='variasi[" + x + "]']").append('<option value=""> ' + data[0].produk[x].nama + '<span style="float:right">2</span></option>');
+                                var mySelect = $("select[name='variasi[" + x + "]']").append('<option value=""> ' + data[0].produk[x].nama + '</option>');
                                 mySelect.trigger("change");
                             } else {
                                 for (var y = 0; y < data[0].produk[x].gudang_barang_jadi.length; y++) {
@@ -973,6 +968,7 @@
                 $(el).find('.variasi').attr('id', 'variasi' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.detail_jual').attr('id', 'tes' + j);
                 select_data();
             });
         }
@@ -985,6 +981,8 @@
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
+                        <div class="detailjual" id="tes0">
+                        </div>
                     </div>
                 </td>
                 <td>

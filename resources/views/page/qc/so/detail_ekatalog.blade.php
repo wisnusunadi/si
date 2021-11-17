@@ -70,12 +70,9 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-<<<<<<< HEAD:resources/views/page/qc/so/detail.blade.php
                 <h4>Info Penjualan </h4>
                 @foreach($data as $d)
-=======
                 <h4>Info Ekatalog</h4>
->>>>>>> d1819145925f9d61db364e7be867dc507bc09dcc:resources/views/page/qc/so/detail_ekatalog.blade.php
                 <div class="row">
                     <div class="col-5">
                         <div class="margin">
@@ -193,7 +190,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>1</td>
                                         <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
                                         <td>2</td>
@@ -216,7 +213,7 @@
                                         <td>5</td>
                                         <td>2</td>
                                         <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -324,7 +321,51 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({});
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/qc/so/detail/' + '{{$d->id}}',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'nama_produk',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'jumlah',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'button',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }]
+
+        });
 
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');

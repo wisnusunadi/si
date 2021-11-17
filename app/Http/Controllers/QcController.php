@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\LaporanQcOutgoing;
+use App\Models\DetailEkatalog;
 use App\Models\Ekatalog;
+use App\Models\GudangBarangJadi;
 use App\Models\Spa;
 use App\Models\Spb;
 use Illuminate\Http\Request;
@@ -14,7 +16,26 @@ use Maatwebsite\Excel\Facades\Excel;
 class QcController extends Controller
 {
     //Get Data
-
+    public function get_data_detail_so($id)
+    {
+        $data = GudangBarangJadi::WHereHas('DetailEkatalog', function ($q) use ($id) {
+            $q->where('ekatalog_id', $id);
+        })->get();
+        // $q->whereNotNull('no_po');
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                return $data->produk->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                return '0';
+            })
+            ->addColumn('button', function ($data) {
+                return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+            })
+            ->rawColumns(['button'])
+            ->make(true);
+    }
     public function get_data_so($value)
     {
         $x = explode(',', $value);
@@ -74,6 +95,9 @@ class QcController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->Pesanan->so;
+            })
             ->addColumn('no_po', function ($data) {
                 return $data->Pesanan->no_po;
             })
@@ -135,10 +159,14 @@ class QcController extends Controller
                     $x =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                 }
             }
+            return view('page.qc.so.detail_ekatalog', ['data' => $data, 'x' => $x]);
         } elseif ($value == 'spa') {
+            $data = Spa::where('id', $id)->get();
+            return view('page.qc.so.detail_spa', ['data' => $data]);
         } else {
+            $data = Spb::where('id', $id)->get();
+            return view('page.qc.so.detail_spb', ['data' => $data]);
         }
-        return view('page.qc.so.detail', ['data' => $data, 'x' => $x]);
     }
 
     public function detail_modal_riwayat_so()

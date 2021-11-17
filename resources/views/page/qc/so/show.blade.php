@@ -103,9 +103,7 @@
                                                 <td>CV. Cipta Jaya Mandiri</td>
                                                 <td>-</td>
                                                 <td><span class="badge green-text">Selesai</span></td>
-                                                <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}">
-                                                        <div><i class="fas fa-eye"></i></div><small>Detail</small>
-                                                    </a></td>
+                                                <td></td>
                                             </tr>
                                             <tr>
                                                 <td>2</td>
@@ -121,12 +119,7 @@
                                                 <td>
                                                     <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="route'qc.so.detail', 'id' => '1'">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
+                                                 
                                                     </div>
                                                     <a href="">
                                                         <div><i class="fas fa-eye"></i></div><small>Detail</small>
@@ -197,6 +190,9 @@
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
+            }, {
+                data: 'so',
+
             }, {
                 data: 'no_po',
 

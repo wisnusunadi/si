@@ -115,9 +115,9 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
         Route::get('/detail/{id}/{value}', [App\Http\Controllers\QCController::class, 'detail_so'])->name('qc.so.detail');
-        Route::view('/detail_ekatalog/{id}', 'page.qc.so.detail_ekatalog')->name('qc.so.detail_ekatalog');
-        Route::view('/detail_spa/{id}', 'page.qc.so.detail_spa')->name('qc.so.detail_spa');
-        Route::view('/detail_spb/{id}', 'page.qc.so.detail_spb')->name('qc.so.detail_spb');
+        // Route::view('/detail_ekatalog/{id}', 'page.qc.so.detail_ekatalog')->name('qc.so.detail_ekatalog');
+        // Route::view('/detail_spa/{id}', 'page.qc.so.detail_spa')->name('qc.so.detail_spa');
+        // Route::view('/detail_spb/{id}', 'page.qc.so.detail_spb')->name('qc.so.detail_spb');
         Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
         Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
