@@ -129,7 +129,7 @@
                                         </div>
                                     </div>
                                     {{-- col --}}
-                                    <div class="col"> <label for="">Instansi</label>
+                                    <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
                                                 RS. Dr. Soetomo
@@ -200,19 +200,19 @@
         'order': [
             [1, 'asc']
         ],
-        "oLanguage": {
-            "sSearch": "Cari:"
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
     $('#view-produk').DataTable({
-        "oLanguage": {
-            "sSearch": "Cari:"
-        }
+        "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
     });
     $('#gudang-barang').DataTable({
-        "oLanguage": {
-            "sSearch": "Cari:"
-        }
+        "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
     });
 </script>
 @stop

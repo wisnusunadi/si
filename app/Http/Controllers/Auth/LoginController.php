@@ -44,8 +44,9 @@ class LoginController extends Controller
             return redirect('/ppic/dashboard');
         }elseif (auth()->user()->divisi->id == 13) {
             return redirect('/gbj/dashboard');
+        }elseif (auth()->user()->divisi->id == 17) {
+            return redirect('/produksi/dashboard');
         }
-
         return redirect('/home');
     }
 }

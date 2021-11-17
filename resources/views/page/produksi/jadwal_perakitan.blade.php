@@ -241,10 +241,8 @@
         calendar.render();
 
         $('.table_produk_perakitan').DataTable({
-        "oLanguage": {
-            "sProcessing": "Memproses...",
-            "sZeroRecords": "Tidak ada data untuk ditampilkan...",
-            "sSearch": "Cari:",
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         },
         "lengthChange": false,
         "ordering": false,
@@ -255,6 +253,9 @@
             "autoWidth": false,
             searching: false,
             "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         });
     })
     function modalRakit() { 

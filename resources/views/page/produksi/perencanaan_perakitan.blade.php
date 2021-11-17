@@ -117,12 +117,15 @@
 
         calendar.render();
         var oTable = $('.table-produk-perakitan').DataTable({
-        "oLanguage": {
-            "sProcessing": "Memproses...",
-            "sZeroRecords": "Tidak ada data untuk ditampilkan...",
-            "sSearch": "Cari:",
-        },
-        "lengthChange": false
+            "paging": true,
+            "lengthChange": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         });
     })
 </script>

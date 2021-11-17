@@ -768,6 +768,12 @@ return [
         // ],
         // // Produksi (17) & Engineering (10) & Maintenence (16)
         [
+            'text'    => 'Dashboard',
+            'icon'    => 'fas fa-layer-group',
+            'url'  => '/produksi/dashboard',
+            'auth' => [17]
+        ],
+        [
             'header' => 'PRODUKSI',
             'auth' => [17, 10, 16]
         ],

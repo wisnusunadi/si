@@ -199,11 +199,9 @@
 <script>
     $('.table_produk_perakitan').DataTable({
         "ordering": false,
-        "oLanguage": {
-            "sProcessing": "Memproses...",
-            "sZeroRecords": "Tidak ada data untuk ditampilkan...",
-            "sSearch": "Cari:",
-        },
+        "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
         "lengthChange": false,
         searching: false,
         });
@@ -211,10 +209,8 @@
         $('.scan-produk').DataTable({
             ordering: false,
             "autoWidth": false,
-            "oLanguage": {
-                "sProcessing": "Memproses...",
-                "sZeroRecords": "Tidak ada data untuk ditampilkan...",
-                "sSearch": "Cari:",
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
             "lengthChange": false,
         });

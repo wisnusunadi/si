@@ -64,6 +64,7 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
 });
 
 Route::middleware('auth')->prefix('/produksi')->group(function () {
+    Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
