@@ -294,7 +294,6 @@
                           <th><input type="checkbox" id="head-cb"></th>
                           <th>Nomor Seri</th>
                           <th>Layout</th>
-                          <th>Aksi</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -305,10 +304,6 @@
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
                               </select></td>
-                              <td>
-                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
-                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
-                            </td>
                       </tr>
                       <tr>
                           <td><input type="checkbox" class="cb-child" value="2"></td>
@@ -317,10 +312,6 @@
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
                               </select></td>
-                              <td>
-                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
-                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
-                            </td>
                       </tr>
                       <tr>
                           <td><input type="checkbox" class="cb-child" value="3"></td>
@@ -329,10 +320,6 @@
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
                               </select></td>
-                              <td>
-                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
-                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
-                            </td>
                       </tr>
                   </tbody>
               </table>
@@ -360,7 +347,6 @@
                           <th><input type="checkbox" id="head-cb"></th>
                           <th>Nomor Seri</th>
                           <th>Layout</th>
-                          <th>Aksi</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -371,10 +357,6 @@
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
                               </select></td>
-                              <td>
-                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
-                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
-                            </td>
                       </tr>
                       <tr>
                           <td><input type="checkbox" class="cb-child" value="2"></td>
@@ -383,10 +365,6 @@
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
                               </select></td>
-                              <td>
-                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
-                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
-                            </td>
                       </tr>
                       <tr>
                           <td><input type="checkbox" class="cb-child" value="3"></td>
@@ -395,10 +373,6 @@
                               <option value="1">Layout 1</option>
                               <option value="2">Layout 2</option>
                               </select></td>
-                              <td>
-                                <button class="btn btn-success"><i class="fas fa-plus"></i></button>&nbsp;
-                                <button class="btn btn-danger"><i class="fas fa-minus"></i></button>
-                            </td>
                       </tr>
                   </tbody>
               </table>
@@ -538,5 +512,11 @@
     function tambahanPerakitan() { 
         $('.tambahan-perakitan').modal('show');
     }
+    $('.scan-produk').DataTable({
+            "ordering":false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+        });
 </script>
 @stop

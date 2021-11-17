@@ -23,18 +23,19 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-produk-perakitan">
+                        <table class="table table_produk_perakitan">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Tgl Mulai</th>
                                     <th>Tgl Selesai</th>
                                     <th>Produk</th>
-                                    <th colspan="2">Jumlah Rakit</th>
+                                    <th>Jumlah Rakit</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td scope="row">16-06-2021</td>
+                                    <td scope="row">16-06-2021 <br><span class="badge badge-primary">Baru</span></td>
                                     <td>18-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
                                     <td>Produk 1</td>
                                     <td>100 Unit <br> <span class="badge badge-dark">Kurang 50 Unit</span></td>
@@ -43,7 +44,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">18-06-2021</td>
+                                    <td scope="row">18-06-2021 <br><span class="badge badge-info">Revisi</span></td>
                                     <td>21-06-2021 <br> <span class="badge badge-danger">Lebih 10 Hari</span></td>
                                     <td>Produk 2</td>
                                     <td>200 Unit</td>
@@ -98,8 +99,6 @@
                                     </div>
                                   </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-sm">
                                 <label for="">Kategori</label>
                                 <div class="card" style="background-color: #FCF9C4">
@@ -108,6 +107,8 @@
                                     </div>
                                   </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-sm">
                                 <label for="">Jumlah Rakit</label>
                                 <div class="card" style="background-color: #FFCC83">
@@ -116,8 +117,6 @@
                                     </div>
                                   </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-sm">
                                 <label for="">Tanggal Mulai</label>
                                 <div class="card" style="background-color: #FFE0B4">
@@ -137,24 +136,36 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped scan-produk">
-                            <thead>
-                                <tr>
-                                    <th>Nomor Seri</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" name="" id="" class="form-control"></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="text" name="" id="" class="form-control"></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="text" name="" id="" class="form-control"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table class="table table-striped scan-produk">
+                                    <thead>
+                                        <tr>
+                                            <th>Nomor Seri</th>
+                                            <th>Nomor Seri</th>
+                                            <th>Nomor Seri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -229,13 +240,14 @@
 
         calendar.render();
 
-        var oTable = $('.table-produk-perakitan').DataTable({
+        $('.table_produk_perakitan').DataTable({
         "oLanguage": {
             "sProcessing": "Memproses...",
             "sZeroRecords": "Tidak ada data untuk ditampilkan...",
             "sSearch": "Cari:",
         },
-        "lengthChange": false
+        "lengthChange": false,
+        "ordering": false,
         });
 
         $('.scan-produk').DataTable({
@@ -260,6 +272,7 @@
             buttons: true,
             dangerMode: true,
         });
-    }
+    };
+    
 </script>
 @stop
