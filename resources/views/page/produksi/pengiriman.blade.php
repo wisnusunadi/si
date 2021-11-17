@@ -77,7 +77,7 @@
 
 <!-- Modal -->
 <div class="modal fade modalRakit" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -152,6 +152,10 @@
                                             <th>Nomor Seri</th>
                                             <th><input type="checkbox" name="" id="head-cb-2"></th>
                                             <th>Nomor Seri</th>
+                                            <th><input type="checkbox" name="" id="head-cb-3"></th>
+                                            <th>Nomor Seri</th>
+                                            <th><input type="checkbox" name="" id="head-cb-4"></th>
+                                            <th>Nomor Seri</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -162,6 +166,10 @@
                                             <td>84651651651562</td>
                                             <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
                                             <td>89784946512123</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
+                                            <td>65666654545465</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
+                                            <td>59689498484548</td>
                                         </tr>
                                         <tr>
                                             <td><input type="checkbox" name="" id="" class="cb-child"></td>
@@ -170,6 +178,10 @@
                                             <td>84651651651562</td>
                                             <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
                                             <td>89784946512123</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
+                                            <td>65666654545465</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
+                                            <td>59689498484548</td>
                                         </tr>
                                         <tr>
                                             <td><input type="checkbox" name="" id="" class="cb-child"></td>
@@ -178,6 +190,34 @@
                                             <td>84651651651562</td>
                                             <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
                                             <td>89784946512123</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
+                                            <td>65666654545465</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
+                                            <td>59689498484548</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
+                                            <td>65462136516515</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
+                                            <td>84651651651562</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
+                                            <td>89784946512123</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
+                                            <td>65666654545465</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
+                                            <td>59689498484548</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
+                                            <td>65462136516515</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
+                                            <td>84651651651562</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
+                                            <td>89784946512123</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
+                                            <td>65666654545465</td>
+                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
+                                            <td>59689498484548</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -229,6 +269,14 @@
         $("#head-cb-2").on('click', function () {
             var isChecked = $("#head-cb-2").prop('checked')
             $('.cb-child-2').prop('checked', isChecked)
+        });
+        $("#head-cb-3").on('click', function () {
+            var isChecked = $("#head-cb-3").prop('checked')
+            $('.cb-child-3').prop('checked', isChecked)
+        });
+        $("#head-cb-4").on('click', function () {
+            var isChecked = $("#head-cb-4").prop('checked')
+            $('.cb-child-4').prop('checked', isChecked)
         });
     }
     function transfer() {

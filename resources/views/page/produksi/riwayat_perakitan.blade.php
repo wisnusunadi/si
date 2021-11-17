@@ -116,7 +116,7 @@
 
 <!-- Modal -->
 <div class="modal fade modal_id" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -180,6 +180,8 @@
                                             <th>Nomor Seri</th>
                                             <th>Nomor Seri</th>
                                             <th>Nomor Seri</th>
+                                            <th>Nomor Seri</th>
+                                            <th>Nomor Seri</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -187,16 +189,36 @@
                                             <td>846464654654</td>
                                             <td>654654654654</td>
                                             <td>957489688845</td>
+                                            <td>984654654565</td>
+                                            <td>652656666544</td>
                                         </tr>
                                         <tr>
                                             <td>846464654654</td>
                                             <td>654654654654</td>
                                             <td>957489688845</td>
+                                            <td>656645644654</td>
+                                            <td>656886451212</td>
                                         </tr>
                                         <tr>
                                             <td>846464654654</td>
                                             <td>654654654654</td>
                                             <td>957489688845</td>
+                                            <td>656645644654</td>
+                                            <td>656886451212</td>
+                                        </tr>
+                                        <tr>
+                                            <td>846464654654</td>
+                                            <td>654654654654</td>
+                                            <td>957489688845</td>
+                                            <td>656645644654</td>
+                                            <td>656886451212</td>
+                                        </tr>
+                                        <tr>
+                                            <td>846464654654</td>
+                                            <td>654654654654</td>
+                                            <td>957489688845</td>
+                                            <td>656645644654</td>
+                                            <td>656886451212</td>
                                         </tr>
                                     </tbody>
                                 </table>

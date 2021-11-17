@@ -72,7 +72,7 @@
 
 <!-- Modal -->
 <div class="modal fade modalRakit" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -144,6 +144,8 @@
                                             <th>Nomor Seri</th>
                                             <th>Nomor Seri</th>
                                             <th>Nomor Seri</th>
+                                            <th>Nomor Seri</th>
+                                            <th>Nomor Seri</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -151,13 +153,33 @@
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
                                         </tr>
                                         <tr>
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
                                         </tr>
                                         <tr>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
+                                            <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>

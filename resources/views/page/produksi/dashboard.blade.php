@@ -57,7 +57,7 @@
                     <div class="card-header">
                         <h5 class="card-title">
                             <i class="far fa-paper-plane mr-1"></i>
-                            Batas Waktu Pengiriman
+                            Batas Waktu Pengiriman SO
                         </h5>
                     </div>
                     <div class="card-body">
@@ -105,8 +105,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 </td>
-                                    <td><button class="btn btn-outline-primary"><i
-                                                class="fas fa-paper-plane" onclick="showModalDetail()"></i></button></td>
+                                    <td><button class="btn btn-outline-primary" onclick="showModalDetail()"><i
+                                        class="fas fa-paper-plane"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -129,8 +129,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 </td>
-                                    <td><button class="btn btn-outline-primary"><i
-                                                class="fas fa-paper-plane" onclick="showModalDetail()"></i></button></td>
+                                    <td><button class="btn btn-outline-primary" onclick="showModalDetail()"><i
+                                        class="fas fa-paper-plane"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -153,8 +153,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 <br> <span class="badge badge-danger">Lebih dari 5 hari</span></td>
-                                    <td><button class="btn btn-outline-primary"><i
-                                                class="fas fa-paper-plane" onclick="showModalDetail()"></i></button></td>
+                                    <td><button class="btn btn-outline-primary" onclick="showModalDetail()"><i
+                                                class="fas fa-paper-plane"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -214,7 +214,7 @@
                                     <td>10-06-2021 <br> <span class="badge badge-info">Kurang 10 Hari</span></td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/pengiriman') }}" class="btn btn-outline-primary"><i
+                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
                                      class="fas fa-paper-plane"></i></a></td>
                                 </tr>
                                 <tr>
@@ -222,7 +222,7 @@
                                     <td>10-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/pengiriman') }}" class="btn btn-outline-primary"><i
+                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
                                      class="fas fa-paper-plane"></i></a></td>
                                 </tr>
                                 <tr>
@@ -230,7 +230,7 @@
                                     <td>10-06-2021 <br> <span class="badge badge-danger">Kurang 1 Hari</span></td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/pengiriman') }}" class="btn btn-outline-primary"><i
+                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
                                      class="fas fa-paper-plane"></i></a></td>
                                 </tr>
                             </tbody>
