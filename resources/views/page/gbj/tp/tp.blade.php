@@ -246,7 +246,8 @@
 
     $(document).ready(function () {
         $('.pertanggal').dataTable({
-            bFilter: false
+            bFilter: false,
+            responsive: true
         });
         $('#gudang-barang').dataTable({
             "oLanguage": {
