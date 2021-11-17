@@ -19,6 +19,18 @@
     .select2 {
         width: 100% !important;
     }
+
+    legend {
+        font-size: 14px;
+    }
+
+    filter {
+        margin: 5px;
+    }
+
+    .blue-bg {
+        background-color: #c8daea;
+    }
 </style>
 @stop
 
@@ -343,6 +355,9 @@
                                                                             <option value=""></option>
                                                                         </select>
                                                                     </div>
+                                                                    <div class="detail_produk" id="detail_produk0">
+
+                                                                    </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
@@ -423,7 +438,6 @@
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
-
                                                                         </select>
                                                                     </div>
                                                                 </td>
@@ -804,6 +818,23 @@
             });
         });
 
+        $('#produktable').on('keyup change', '.variasi', function() {
+            var name = $(this).attr('name');
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
+            val = $('select[name="' + name + '"]').val();
+            id = $('select[name="' + name + '"]').attr('data-id');
+            vals = $('select[name="' + name + '"]').select2('data')[0];
+            var kebutuhan = jumlah * vals.jumlah;
+            if (vals.qt < kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang dari Permintaan');
+            } else if (vals.qt >= kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
+            }
+        })
+
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
                 sisa = number_string.length % 3,
@@ -822,11 +853,16 @@
         }
 
         function select_data() {
+            // $('.penjualan_produk_id').on('change', function() {
+            //     for (i = 0; i < 3; ++i) {
+            //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
+            //     }
+            // });
+
             $('.penjualan_produk_id').select2({
                 placeholder: "Pilih Produk",
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih Produk",
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -838,7 +874,8 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+
+                        //console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -856,20 +893,68 @@
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
                     dataType: 'json',
-                    success: function(data) {
-                        console.log(data);
-                        $('#produk_harga' + index).val(formatmoney(data[0].harga));
+                    success: function(res) {
+                        $('#produk_harga' + index).val(formatmoney(res[0].harga));
+                        console.log(res);
+                        var tes = $('#detail_produk' + index);
+                        tes.empty();
+                        var datas = "";
+                        tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+                        for (var x = 0; x < res[0].produk.length; x++) {
+                            var data = [];
+                            tes.append(`<div>`);
+                            tes.append(`<div class="card-body blue-bg">
+                                        <h6>` + res[0].produk[x].nama + `</h6>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" data-attr="` + index + `` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="` + index + `` + x + `" data-id="` + x + `"></span>
+                                      </div>`);
+                            if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                                data.push({
+                                    id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                    text: res[0].produk[x].nama,
+                                    jumlah: res[0].produk[x].pivot.jumlah,
+                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                });
+                            } else {
+                                for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                    data.push({
+                                        id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                        text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                        jumlah: res[0].produk[x].pivot.jumlah,
+                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                    });
+                                }
+                            }
+                            console.log(data);
+                            $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
+                                placeholder: 'Pilih Variasi',
+                                data: data,
+                                templateResult: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                },
+                                templateSelection: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                }
+                            });
+
+                            $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
+                            tes.append(`</div>`)
+                        }
+                        tes.append(`</fieldset>`);
+                        // tes.html(datas);
                     }
                 });
             });
-
-
         }
+
 
         function totalhargaprd() {
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
                 var subtotal = replaceAll($(this).val(), '.', '');
+                console.log(subtotal);
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
@@ -903,14 +988,29 @@
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
-
+            var ketstok = $(this).closest('tr').find('.ketstok');
+            var variasi = $(this).closest('tr').find('.variasi');
+            var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
                 subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
                 totalhargaprd();
+                for (var i = 0; i < variasi.length; i++) {
+                    var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
+                    var kebutuhan = jumlah * variasires.jumlah;
+                    if (variasires.qt < kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang dari Permintaan');
+                    } else if (variasires.qt >= kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
+                    }
+                }
             } else {
                 subtotal.val(formatmoney("0"));
                 totalhargaprd();
+                variasi.removeClass('is-invalid');
+                ketstok.text('');
             }
         });
 
@@ -938,8 +1038,14 @@
                 var j = c - 1;
                 $(el).find('.penjualan_produk_id').attr('name', 'penjualan_produk_id[' + j + ']');
                 $(el).find('.penjualan_produk_id').attr('id', j);
-                $(el).find('.variasi').attr('name', 'variasi[' + j + ']');
-                $(el).find('.variasi').attr('id', 'variasi' + j);
+                var variasi = $(el).find('.variasi');
+                for (var k = 0; k < variasi.length; k++) {
+                    $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
+                    $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
+                    $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
+                    $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
+                }
+                $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
                 select_data();
@@ -955,6 +1061,7 @@
                             <option value=""></option>
                         </select>
                     </div>
+                    <div id="detail_produk" class="detail_produk"></div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">

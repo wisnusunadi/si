@@ -37,44 +37,46 @@
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Jenis Penjualan</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
-                                                    <label class="form-check-label" for="defaultCheck1">
-                                                        E-Catalogue
-                                                    </label>
+                                    <form id="filter">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Jenis Penjualan</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                        SPA
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                            E-Catalogue
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                        SPB
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            SPA
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="spb" id="defaultCheck2" />
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            SPB
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary" type="submit">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </span>
                             </div>
                         </div>
@@ -93,7 +95,7 @@
                                             <th>Aksi</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>SO/EKAT/X/02/98</td>
                                                 <td>PO/ON/09/21/001</td>
@@ -117,7 +119,16 @@
                                                 <td>-</td>
                                                 <td><span class="badge yellow-text">Sedang Berlangsung</span></td>
                                                 <td>
-                                                    <a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}">
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="route'qc.so.detail', 'id' => '1'">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                    <a href="">
                                                         <div><i class="fas fa-eye"></i></div><small>Detail</small>
                                                     </a>
                                                 </td>
@@ -133,7 +144,7 @@
                                                 <td>CV. Cipta Jaya Mandiri</td>
                                                 <td>-</td>
                                                 <td><span class="badge yellow-text">Sedang Berlangsung</span></td>
-                                                <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}">
+                                                <td><a href="">
                                                         <div><i class="fas fa-eye"></i></div><small>Detail</small>
                                                     </a></td>
                                             </tr>
@@ -148,10 +159,10 @@
                                                 <td>PT. Emiindo Jaya Bersama</td>
                                                 <td>-</td>
                                                 <td><span class="badge red-text">Belum diuji</span></td>
-                                                <td><a href="{{route('qc.so.detail_spb', ['id' => '1'])}}">
+                                                <td><a href="">
                                                         <div><i class="fas fa-eye"></i></div><small>Detail</small>
                                                     </a></td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -167,54 +178,70 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        // var showtable = $('#showtable').DataTable({
-        //     processing: true,
-        //     serverSide: true,
-        //     ajax: {
-        //         'url': '/api/qc/so/data',
-        //         'type': 'POST',
-        //         'headers': {
-        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //         }
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/qc/so/data/semua',
 
-        //     },
-        //     language: {
-        //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-        //     },
-        //     columns: [{
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false
-        //     }, {
-        //         data: 'no_po',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
 
-        //     }, {
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false,
-        //     }, {
-        //         data: 'nama_customer',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'no_po',
 
-        //     }, {
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false
-        //     }, {
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false
-        //     }, {
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false
-        //     }]
-        // })
+            }, {
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false,
+            }, {
+                data: 'nama_customer',
 
+            }, {
+                data: 'ket',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'status',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'button',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }]
+        })
+
+
+        $('#filter').submit(function() {
+            var values = [];
+            $("input:checked").each(function() {
+                values.push($(this).val());
+            });
+            if (values != 0) {
+                var x = values;
+
+            } else {
+                var x = ['semua']
+            }
+            console.log(x);
+            $('#showtable').DataTable().ajax.url(' /api/qc/so/data/' + x).load();
+            return false;
+        });
     })
 </script>
 @stop

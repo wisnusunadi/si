@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2021 at 10:29 AM
+-- Generation Time: Nov 12, 2021 at 10:24 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.27
 
@@ -45,12 +45,12 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `id_provinsi`, `nama`, `telp`, `email`, `alamat`, `npwp`, `ket`, `created_at`, `updated_at`) VALUES
-(1, 11, 'CV. Cipta Jaya Medika', 0, NULL, 'JL. Biliton No. 15 Gubeng - Surabaya', '12.454.456.1-606.000', NULL, NULL, '2021-10-28 23:10:44'),
-(2, 6, 'Gunung Bayan Pratama Coal', 0, NULL, 'Graha Irama Lt. 12, JL. HR. Rasuna said Blok X-1 Kav. 1-2, Kuningan Timur-Setia Budi-Jakarta Selatan 12950', '01.467.051.7-091.000', NULL, '0000-00-00 00:00:00', '2021-10-27 02:59:22'),
-(3, 6, 'Firman Ketaun Perkasa', 0, NULL, 'Graha Irama Lt 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta selatan-DKI Jakarta Raya', '01.856.455.9-063.000', NULL, '0000-00-00 00:00:00', '2021-10-27 18:59:23'),
-(4, 11, 'CV. Golden Elite Technology', 0, '', 'JL. Kalianyar 17 E, Surabaya', '01.922.786.7-611.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(1, 11, 'CV. Cipta Jaya Medika', 890031831903, 'ciptajayamedika@gmail.com', 'JL. Biliton No. 15 Gubeng - Surabaya', '12.454.456.1-606.000', NULL, NULL, '2021-11-10 19:22:48'),
+(2, 6, 'Gunung Bayan Pratama Coal', 890031831903, 'gbayanpratamacoal@gmail.com', 'Graha Irama Lt. 12, JL. HR. Rasuna said Blok X-1 Kav. 1-2, Kuningan Timur-Setia Budi-Jakarta Selatan 12950', '01.467.051.7-091.000', NULL, '0000-00-00 00:00:00', '2021-11-10 19:26:00'),
+(3, 6, 'Firman Ketaun Perkasa', 81792730137, 'tes1@gmail.com', 'Graha Irama Lt 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta selatan-DKI Jakarta Raya', '01.856.455.9-063.000', NULL, '0000-00-00 00:00:00', '2021-11-10 19:09:21'),
+(4, 11, 'CV. Golden Elite Technology', 0, 'cvgoldenelitetech@gmail.com', 'JL. Kalianyar 17 E, Surabaya', '01.922.786.7-611.000', NULL, '0000-00-00 00:00:00', '2021-11-10 19:32:47'),
 (5, 6, 'PT. Indevco Karya Sakti', 0, '', 'JL. P. Jayakarta 131 Blok A No. 31 Mangga Dua selatan, Sawah Besar Jakarta Pusat, DKI Jakarta raya 10730', '01.109.118.8-026.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, 11, 'PT. Indevco Karya Sakti', 0, '', 'JL. Rajawali No. 86, Surabaya', '01.109.118.8-605.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(6, 11, 'PT. Indevco Karya Sakti', 0, 'xx@gmail.com', 'JL. Rajawali No. 86, Surabaya', '01.109.118.8-605.000', 'asd', '0000-00-00 00:00:00', '2021-11-08 21:52:51'),
 (7, 6, 'PT. Firman Ketaun Perkasa', 0, '', 'Graha Irama Lt. 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta selatan-DKI Jakarta Raya', '01.856.455.9-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (8, 6, 'PT. Mas Eltrajaya', 0, '', 'Komplek Grogol Permai, JL. Prof DR. Latumenten Blok C No. 21, Petambunan Jakarta Barat-DKI Jakarta Raya 11460', '02.691.647.8-036.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (9, 18, 'PT. Sarana Sahabat Maju', 0, '', 'JL. Kartini No. 43 C / D-Tanjung Karang Tanjun Karang Pusat-Bandar Lampung 35111', '02.523.217.4-322.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -502,7 +502,9 @@ INSERT INTO `customer` (`id`, `id_provinsi`, `nama`, `telp`, `email`, `alamat`, 
 (454, 34, 'RAYMOND WAROUW', 0, '', 'Jl. Sun Yat Sen No. 24-26 Sei Rengas I,Medan Kota Kota Medan Sumatera Utara', '91.318.446.1-122.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (455, 11, 'CV. MULTI SARANA JAYA', 0, '', 'Jl. Kalijaten Gang I-B/47 RT.09 RW.02 Kalijaten Taman Sidoarjo', '02.102.706.5-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (456, 31, 'PT. ASEGAR MURNI JAYA', 0, '', 'Kel. Tumaluntung Jaga IV, Tumaluntung Tumaluntung Kauditan Kab. Minahasa Utara Sulawesi Utara', '02.700.687.3-823.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(457, 11, 'CV. ROM POER SEJAHTERA', 0, '', 'Jl. Kebonsari V No. 20 RT.006 RW.002 Kebonsari Jambangan Kota Surabaya Jawa Timur 60233', '70.251.870.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(457, 11, 'CV. ROM POER SEJAHTERA', 0, '', 'Jl. Kebonsari V No. 20 RT.006 RW.002 Kebonsari Jambangan Kota Surabaya Jawa Timur 60233', '70.251.870.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(476, 6, 'Dela2', 890031831903, 'septian@gmail.com', 'UIRUIRHIW', '1234346468', NULL, '2021-11-08 18:39:59', '2021-11-08 18:39:59'),
+(477, 3, 'sdfsd', 123, 'dsfs@saxs.com', 'sdfsdf', 'fsdfds', 'sdfsdf', '2021-11-08 21:52:07', '2021-11-08 21:52:07');
 
 -- --------------------------------------------------------
 
@@ -526,10 +528,19 @@ CREATE TABLE `detail_ekatalog` (
 --
 
 INSERT INTO `detail_ekatalog` (`id`, `ekatalog_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
-(59, 20, 10, 1, 66550000, 0, '2021-11-07 20:44:19', '2021-11-07 20:44:19'),
-(60, 20, 52, 2, 298100000, 0, '2021-11-07 20:44:19', '2021-11-07 20:44:19'),
 (61, 21, 20, 2, 125950000, 0, '2021-11-07 21:01:01', '2021-11-07 21:01:01'),
-(62, 21, 49, 1, 284790000, 0, '2021-11-07 21:01:01', '2021-11-07 21:01:01');
+(62, 21, 49, 1, 284790000, 0, '2021-11-07 21:01:01', '2021-11-07 21:01:01'),
+(65, 22, 1, 1, 10780000, 0, '2021-11-08 20:54:36', '2021-11-08 20:54:36'),
+(66, 22, 5, 1, 1760000, 0, '2021-11-08 20:54:36', '2021-11-08 20:54:36'),
+(67, 24, 95, 1, 101530000, 0, '2021-11-08 21:41:50', '2021-11-08 21:41:50'),
+(69, 26, 135, 2, 166100000, 0, '2021-11-09 02:50:45', '2021-11-09 02:50:45'),
+(70, 20, 10, 1, 66550000, 0, '2021-11-10 19:55:55', '2021-11-10 19:55:55'),
+(71, 20, 52, 2, 298100000, 0, '2021-11-10 19:55:55', '2021-11-10 19:55:55'),
+(72, 27, 185, 1, 334400000, 0, '2021-11-11 19:34:29', '2021-11-11 19:34:29'),
+(73, 27, 188, 2, 213290000, 0, '2021-11-11 19:34:29', '2021-11-11 19:34:29'),
+(74, 27, 190, 1, 264000000, 0, '2021-11-11 19:34:29', '2021-11-11 19:34:29'),
+(75, 27, 25, 1, 116270000, 0, '2021-11-11 19:34:29', '2021-11-11 19:34:29'),
+(76, 27, 71, 5, 3300000, 0, '2021-11-11 19:34:29', '2021-11-11 19:34:29');
 
 -- --------------------------------------------------------
 
@@ -928,7 +939,7 @@ INSERT INTO `detail_penjualan_produk` (`produk_id`, `penjualan_produk_id`, `juml
 (67, 21, 2, '2021-11-03 02:36:45', '2021-11-03 02:36:45'),
 (14, 215, 2, '2021-11-03 03:03:58', '2021-11-03 03:04:48'),
 (8, 215, 1, '2021-11-03 03:04:48', '2021-11-03 03:04:48'),
-(1, 1, 1, '2021-11-03 18:02:37', '2021-11-03 18:56:36'),
+(1, 1, 1, '2021-11-03 18:02:37', '2021-11-10 19:52:53'),
 (1, 216, 2, '2021-11-04 00:01:50', '2021-11-04 00:01:50'),
 (4, 216, 2, '2021-11-04 00:01:50', '2021-11-04 00:01:50'),
 (2, 217, 1, '2021-11-04 00:03:57', '2021-11-04 00:03:57'),
@@ -941,7 +952,13 @@ INSERT INTO `detail_penjualan_produk` (`produk_id`, `penjualan_produk_id`, `juml
 (1, 223, 1, '2021-11-04 00:28:01', '2021-11-04 00:28:01'),
 (1, 224, 1, '2021-11-04 00:28:28', '2021-11-04 00:28:28'),
 (2, 225, 1, '2021-11-04 00:45:41', '2021-11-04 00:45:41'),
-(2, 226, 1, '2021-11-05 00:41:35', '2021-11-05 00:41:35');
+(2, 226, 1, '2021-11-05 00:41:35', '2021-11-05 00:41:35'),
+(20, 227, 1, '2021-11-08 18:23:22', '2021-11-08 18:23:22'),
+(20, 228, 12, '2021-11-08 18:27:00', '2021-11-08 18:27:00'),
+(2, 229, 1, '2021-11-08 18:31:20', '2021-11-08 18:31:20'),
+(4, 230, 1, '2021-11-08 18:32:46', '2021-11-08 18:32:46'),
+(5, 231, 1, '2021-11-08 18:36:15', '2021-11-08 18:36:15'),
+(2, 231, 2, '2021-11-08 18:36:15', '2021-11-08 18:36:15');
 
 -- --------------------------------------------------------
 
@@ -967,7 +984,9 @@ CREATE TABLE `detail_spa` (
 INSERT INTO `detail_spa` (`id`, `spa_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
 (34, 31, 83, 2, 81400000, 0, '2021-11-07 20:55:52', '2021-11-07 20:55:52'),
 (35, 31, 32, 1, 1100000, 0, '2021-11-07 20:55:52', '2021-11-07 20:55:52'),
-(36, 32, 70, 10, 836000, 0, '2021-11-07 20:58:25', '2021-11-07 20:58:25');
+(36, 32, 70, 10, 836000, 0, '2021-11-07 20:58:25', '2021-11-07 20:58:25'),
+(37, 33, 132, 2, 850000, 0, NULL, NULL),
+(38, 33, 111, 8, 25000000, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -992,7 +1011,8 @@ CREATE TABLE `detail_spb` (
 
 INSERT INTO `detail_spb` (`id`, `spb_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
 (7, 4, 13, 5, 1760000, 0, '2021-11-07 20:57:19', '2021-11-07 20:57:19'),
-(8, 4, 80, 1, 31900000, 0, '2021-11-07 20:57:19', '2021-11-07 20:57:19');
+(8, 4, 80, 1, 31900000, 0, '2021-11-07 20:57:19', '2021-11-07 20:57:19'),
+(9, 5, 1, 1, 10780000, 0, '2021-11-08 03:06:23', '2021-11-08 03:06:23');
 
 -- --------------------------------------------------------
 
@@ -1072,8 +1092,14 @@ CREATE TABLE `ekatalog` (
 --
 
 INSERT INTO `ekatalog` (`id`, `customer_id`, `provinsi_id`, `pesanan_id`, `no_paket`, `deskripsi`, `instansi`, `alamat`, `satuan`, `status`, `tgl_kontrak`, `tgl_buat`, `ket`, `log`, `created_at`, `updated_at`) VALUES
-(20, 213, 11, 54, 'AK1-P0001', 'Kebutuhan Alat  kesehatan', 'Pemerintah Daerah Kabupaten Jawa Timur', 'Jl GentengKali', 'Satuan Kerja', 'sepakat', '2022-01-01', '2021-11-08', NULL, 'penjualan', '2021-11-07 20:44:19', '2021-11-07 20:53:18'),
-(21, 63, 12, NULL, 'AK1-P989898', 'Deskripsi itulah yang aku mau', 'Pemerintah Daerah Kabupaten Tanjung Jabung Barat', 'Jl Kemana Aja Bla Bla', 'Satuan Kerja Sebenarnya', 'negosiasi', '2022-02-16', '2021-11-03', NULL, 'penjualan', '2021-11-07 21:01:01', '2021-11-07 21:01:01');
+(20, 213, 11, NULL, 'AK1-P0001', 'Kebutuhan Alat Kesehatan', 'Pemerintah Daerah Kabupaten Jawa Timur', 'Jl GentengKali', 'Satuan Kerja', 'sepakat', '2021-12-25', '2021-11-08', NULL, 'penjualan', '2021-11-07 20:44:19', '2021-11-10 19:55:55'),
+(21, 63, 12, NULL, 'AK1-P989898', 'Deskripsi itulah yang aku mau', 'Pemerintah Daerah Kabupaten Tanjung Jabung Barat', 'Jl Kemana Aja Bla Bla', 'Satuan Kerja Sebenarnya', 'negosiasi', '2022-02-16', '2021-11-03', NULL, 'penjualan', '2021-11-07 21:01:01', '2021-11-07 21:01:01'),
+(22, 374, 3, 62, 'AK1-P7891216', 'eqeqeqe', 'Pemerintah Daerah Kabupaten Pelalawan', 'eqeq', 'eqeqe', 'sepakat', '2021-12-01', '2021-11-23', NULL, 'penjualan', '2021-11-08 18:47:41', '2021-11-08 21:05:15'),
+(23, 453, 3, NULL, 'AK1-12121', '2121', 'Pemerintah Daerah Kabupaten Sabu Raijua', 'eqeq', 'eqeqe', 'draft', '2021-11-09', '2021-11-09', NULL, 'penjualan', '2021-11-08 18:51:23', '2021-11-08 18:51:23'),
+(24, 15, 1, 63, 'AK1-P009909', 'Deskripsi', 'Pemerintah Daerah Kabupaten Jawa Timur', 'Kemana Ya', 'Satuann', 'sepakat', '2021-11-24', '2021-10-04', NULL, 'penjualan', '2021-11-08 21:41:50', '2021-11-08 21:42:04'),
+(25, 104, 2, NULL, 'AK1-P45454', 'deskripsi', 'retet', 'sdfsd', 'dsfsfs', 'draft', '2022-02-10', '2021-11-09', NULL, 'penjualan', '2021-11-08 21:59:45', '2021-11-08 21:59:45'),
+(26, 213, 3, NULL, 'AK1-4554', 'df', 'dfdf', 'ddf', 'dsf', 'sepakat', '2021-11-24', '2021-11-09', NULL, 'penjualan', '2021-11-09 02:48:59', '2021-11-09 02:50:45'),
+(27, 1, 11, 65, 'AK1-P099990', 'Kepada Masyarakat Indonesia', 'Pemerintah kabupaten bitung', 'Jl Biliton no 67 Surabaya', 'Instansi Satuan Kerja', 'sepakat', '2021-11-18', '2021-11-12', NULL, 'penjualan', '2021-11-11 19:34:29', '2021-11-11 19:34:29');
 
 -- --------------------------------------------------------
 
@@ -1413,7 +1439,7 @@ CREATE TABLE `penjualan_produk` (
 --
 
 INSERT INTO `penjualan_produk` (`id`, `nama`, `harga`, `created_at`, `updated_at`) VALUES
-(1, 'ABPM500', 10780000, NULL, '2021-11-02 23:39:00'),
+(1, 'ABPM500', 10780000, NULL, '2021-11-10 19:52:53'),
 (2, 'APRON (Full) Per 10pcss', 3245000, '0000-00-00 00:00:00', '2021-11-02 23:56:37'),
 (3, 'APRON (Half) Per 10pcs', 583000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (4, 'BABY DIGIT-ONE', 1551000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -1632,7 +1658,12 @@ INSERT INTO `penjualan_produk` (`id`, `nama`, `harga`, `created_at`, `updated_at
 (223, 'rewew', 34242, '2021-11-04 00:28:01', '2021-11-04 00:28:01'),
 (224, 'rewew', 34242, '2021-11-04 00:28:28', '2021-11-04 00:28:28'),
 (225, 'dela1', 1397000, '2021-11-04 00:45:41', '2021-11-04 00:45:41'),
-(226, 'aaa', 858585858, '2021-11-05 00:41:35', '2021-11-05 00:41:35');
+(226, 'aaa', 858585858, '2021-11-05 00:41:35', '2021-11-05 00:41:35'),
+(227, 'Dela Tes 6', 1241441, '2021-11-08 18:23:22', '2021-11-08 18:23:22'),
+(228, 'Dela Tes 8', 1200000, '2021-11-08 18:27:00', '2021-11-08 18:27:00'),
+(229, 'Dela Tes 8', 424242, '2021-11-08 18:31:20', '2021-11-08 18:31:20'),
+(230, 'd', 322, '2021-11-08 18:32:46', '2021-11-08 18:32:46'),
+(231, 'Dela Tes 8', 12313131, '2021-11-08 18:36:15', '2021-11-08 18:36:15');
 
 -- --------------------------------------------------------
 
@@ -1657,10 +1688,17 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, `created_at`, `updated_at`) VALUES
-(54, 'SO/EKAT/XI/2021/1', 'EMIIINDO123/XXI', '2021-07-01', NULL, NULL, NULL, '2021-11-07 20:53:18', '2021-11-07 20:53:18'),
+(54, 'SO/EKAT/XI/2021/1', 'EMIIINDO123/XXI', '2021-01-01', NULL, NULL, NULL, '2021-11-07 20:53:18', '2021-11-07 20:53:18'),
 (56, 'SO/SPA/XI/2021/1', 'PO1230444', '2021-09-09', NULL, NULL, NULL, '2021-11-07 20:55:52', '2021-11-07 20:55:52'),
-(57, 'SO/SPB/XI/2021/1', 'PO8889', '2021-11-17', NULL, NULL, NULL, '2021-11-07 20:57:19', '2021-11-07 20:57:19'),
-(58, 'SO/SPA/XI/2021/2', 'PO5555', '2021-11-08', 'DO5555', '2021-11-18', NULL, '2021-11-07 20:58:25', '2021-11-07 20:58:25');
+(57, 'SO/SPB/XI/2021/1', 'PO8889', '2021-10-05', NULL, NULL, NULL, '2021-11-07 20:57:19', '2021-11-07 20:57:19'),
+(58, 'SO/SPA/XI/2021/2', 'PO5555', '2021-11-08', 'DO5555', '2021-11-18', NULL, '2021-11-07 20:58:25', '2021-11-07 20:58:25'),
+(59, 'SO/SPB/XI/2021/2', 'PO00001', '2021-11-03', NULL, NULL, 'hf', '2021-11-08 03:06:23', '2021-11-08 03:06:23'),
+(60, 'SO/SPA/XI/2021/3', '5535353', '2021-11-08', NULL, NULL, NULL, '2021-11-08 18:51:52', '2021-11-08 18:51:52'),
+(61, 'SO/EKAT/XI/2021/2', 'ADII/XI123', '2021-11-10', NULL, NULL, NULL, '2021-11-08 20:40:09', '2021-11-08 20:40:09'),
+(62, 'SO/EKAT/XI/2021/3', '5535353', '2021-08-05', 'DO3333', '2021-11-09', NULL, '2021-11-08 21:05:15', '2021-11-08 21:05:15'),
+(63, 'SO/EKAT/XI/2021/4', 'POIYTTT', '2021-11-11', NULL, NULL, NULL, '2021-11-08 21:42:04', '2021-11-08 21:42:04'),
+(64, 'SO/EKAT/XI/2021/5', 'PO56565', '2021-11-24', NULL, NULL, NULL, '2021-11-09 02:50:09', '2021-11-09 02:50:09'),
+(65, 'SO/EKAT/XI/2021/6', 'PO986666', '2021-10-01', NULL, NULL, NULL, '2021-11-12 02:35:40', '2021-11-19 02:35:40');
 
 -- --------------------------------------------------------
 
@@ -1904,6 +1942,17 @@ INSERT INTO `provinsi` (`id`, `nama`, `status`, `created_at`, `updated_at`) VALU
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `qc`
+--
+
+CREATE TABLE `qc` (
+  `id` int(11) NOT NULL,
+  `pesanan_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `spa`
 --
 
@@ -1923,7 +1972,8 @@ CREATE TABLE `spa` (
 
 INSERT INTO `spa` (`id`, `customer_id`, `pesanan_id`, `ket`, `log`, `created_at`, `updated_at`) VALUES
 (31, 395, 56, NULL, 'penjualan', '2021-11-07 20:55:52', '2021-11-07 20:55:52'),
-(32, 38, 58, NULL, 'penjualan', '2021-11-07 20:58:25', '2021-11-07 20:58:25');
+(32, 38, 58, NULL, 'penjualan', '2021-11-07 20:58:25', '2021-11-07 20:58:25'),
+(33, 199, 60, NULL, 'penjualan', '2021-11-08 18:51:52', '2021-11-08 18:51:52');
 
 -- --------------------------------------------------------
 
@@ -1947,7 +1997,8 @@ CREATE TABLE `spb` (
 --
 
 INSERT INTO `spb` (`id`, `customer_id`, `pesanan_id`, `status`, `ket`, `log`, `created_at`, `updated_at`) VALUES
-(4, 413, 57, 'sepakat', NULL, 'penjualan', '2021-11-07 20:57:19', '2021-11-07 20:57:19');
+(4, 413, 57, 'sepakat', NULL, 'penjualan', '2021-11-07 20:57:19', '2021-11-07 20:57:19'),
+(5, 453, 59, 'sepakat', 'hf', 'penjualan', '2021-11-08 03:06:23', '2021-11-08 03:06:23');
 
 -- --------------------------------------------------------
 
@@ -1992,7 +2043,8 @@ INSERT INTO `users` (`id`, `divisi_id`, `nama`, `username`, `email`, `password`,
 (19, 22, 'Dinda Trisakti', 'dindalab01', 'dinda@gmail.com', '$2y$10$LaA8ogkan.qv5HcZxiARwOLMANoT/6mtQ/Nt6feAdlsZ62WPfkCcm', NULL, 'online', NULL, '2021-07-19 02:37:31', '2021-07-19 02:37:31'),
 (21, 11, 'Ali Sukoco', 'aligbj01', 'ali@gmail.com', '$2y$10$3OTTWQBqTTBt6b4WsUFmQevnLsAo7LuPFwRRhGEPCTRc0.MC.YE82', NULL, 'online', NULL, '2021-08-13 01:46:57', '2021-08-13 01:46:57'),
 (22, 13, 'Nur Kholidah', 'idagbj02', 'ida@gmail.com', '$2y$10$YSEicx/W7euW/3GRGI7vmeAM/Aj.bEfn.k7C5Bzddf8FR9dfe0o9W', NULL, 'online', NULL, '2021-08-18 03:09:09', '2021-08-18 03:09:09'),
-(25, 15, 'Erna Cantika', 'ernalog01', 'erna@gmail.com', '$2y$10$HT.EOM9fRDb/I2EJ0YPNTeuhtsxCgXZ99Mpjep1suDE.xRcXUcGNm', NULL, NULL, NULL, '2021-11-04 21:23:57', '2021-11-04 21:23:57');
+(25, 15, 'Erna Cantika', 'ernalog01', 'erna@gmail.com', '$2y$10$HT.EOM9fRDb/I2EJ0YPNTeuhtsxCgXZ99Mpjep1suDE.xRcXUcGNm', NULL, NULL, NULL, '2021-11-04 21:23:57', '2021-11-04 21:23:57'),
+(26, 9, 'Maria Cicillia', 'mariadc01', 'maria@gmail.com', '$2y$10$WCKaqKs7flqvdKS8.qa9J.k8C09JBGWdFQFts74TH9p.kI44.PuBG', NULL, NULL, NULL, '2021-11-10 21:55:46', '2021-11-10 21:55:46');
 
 --
 -- Indexes for dumped tables
@@ -2116,6 +2168,12 @@ ALTER TABLE `provinsi`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `qc`
+--
+ALTER TABLE `qc`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `spa`
 --
 ALTER TABLE `spa`
@@ -2148,25 +2206,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=476;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=478;
 
 --
 -- AUTO_INCREMENT for table `detail_ekatalog`
 --
 ALTER TABLE `detail_ekatalog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `detail_spa`
 --
 ALTER TABLE `detail_spa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `detail_spb`
 --
 ALTER TABLE `detail_spb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `divisi`
@@ -2178,7 +2236,7 @@ ALTER TABLE `divisi`
 -- AUTO_INCREMENT for table `ekatalog`
 --
 ALTER TABLE `ekatalog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -2214,13 +2272,13 @@ ALTER TABLE `noseri_barang_jadi`
 -- AUTO_INCREMENT for table `penjualan_produk`
 --
 ALTER TABLE `penjualan_produk`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=227;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=232;
 
 --
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `produk`
@@ -2235,22 +2293,28 @@ ALTER TABLE `provinsi`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
+-- AUTO_INCREMENT for table `qc`
+--
+ALTER TABLE `qc`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `spa`
 --
 ALTER TABLE `spa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `spb`
 --
 ALTER TABLE `spb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables

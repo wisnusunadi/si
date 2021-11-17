@@ -400,7 +400,6 @@
                 select_data(j);
             });
         }
-
         $(document).on('click', '#addrow', function() {
             $('#createtable tr:last').after(`<tr>
             <td></td>

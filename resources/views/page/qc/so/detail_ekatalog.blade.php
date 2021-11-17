@@ -70,39 +70,44 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
+<<<<<<< HEAD:resources/views/page/qc/so/detail.blade.php
+                <h4>Info Penjualan </h4>
+                @foreach($data as $d)
+=======
                 <h4>Info Ekatalog</h4>
+>>>>>>> d1819145925f9d61db364e7be867dc507bc09dcc:resources/views/page/qc/so/detail_ekatalog.blade.php
                 <div class="row">
                     <div class="col-5">
                         <div class="margin">
                             <div><small class="text-muted">Distributor & Instansi</small></div>
                         </div>
                         <div class="margin">
-                            <b id="distributor">CIPTAJAYA RETAIL INDONESIA PT </b><small>(Distributor)</small>
+                            <b id="distributor">{{$d->customer->nama}}</b><small> (Distributor)</small>
                         </div>
                         <div class="margin">
-                            <div><b id="no_akn">DINAS KESEHATAN PENGENDALIAN PENDUDUK DAN KELUARGA BERENCANA</b></div>
-                            <small>(Pemerintah Daerah Provinsi Kalimantan Selatan)</small>
+                            <div><b id="no_akn">{{$d->satuan}}</b></div>
+                            <small>({{$d->instansi}})</small>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="margin">
                             <div><small class="text-muted">No AKN</small></div>
-                            <div><b id="no_akn">AK1-P2110-4365736</b></div>
+                            <div><b id="no_akn">{{$d->no_paket}}</b></div>
                         </div>
                         <div class="margin">
                             <div><small class="text-muted">No SO</small></div>
-                            <div><b id="no_so">SO/EKAT/09/21/00001 </b></div>
+                            <div><b id="no_so">
+                                    {{$d->pesanan->so}}</b></div>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="margin">
                             <div><small class="text-muted">No PO</small></div>
-                            <div><b id="no_so">PO/ON/09/21/00001</b></div>
+                            <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
                         </div>
                         <div class="margin">
                             <div><small class="text-muted">Batas Uji</small></div>
-                            <div><b id="no_so">29-11-2020</b></div>
-                            <div><small class="nok"><i class="fas fa-exclamation-circle"></i> Pengujian sisa 3 hari lagi</small></div>
+                            {!!$x!!}
                         </div>
                     </div>
                     <div class="col-2">
@@ -112,6 +117,7 @@
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
         </div>
     </div>
