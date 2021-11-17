@@ -30,17 +30,17 @@
                 <div class="card-title">Form Tambah Data</div>
             </div>
             <div class="card-body">
-                @if(session()->has('error') || count($errors) > 0 )
+                @if(Session::has('error') || count($errors) > 0 )
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Gagal menambahkan!</strong> Periksa
+                    <strong>{{Session::get('error')}}</strong> Periksa
                     kembali data yang diinput
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                @elseif(session()->has('success'))
+                @elseif(Session::has('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Berhasil menambahkan data</strong>,
+                    <strong>{{Session::get('success')}}</strong>,
                     Terima kasih
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -48,7 +48,8 @@
                 </div>
                 @endif
                 <div class="content">
-                    <form method="post" action="/api/penjualan/create">
+                    <form method="post" action="{{route('penjualan.penjualan.store')}}">
+                        {{csrf_field()}}
                         <div class="row d-flex justify-content-center">
                             <div class="col-10">
                                 <h4>Info Customer</h4>

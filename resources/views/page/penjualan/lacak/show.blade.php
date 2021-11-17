@@ -79,7 +79,6 @@
                                     <th>No PO</th>
                                     <th>Tanggal</th>
                                     <th>Customer</th>
-                                    <th>No Seri</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -97,6 +96,8 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>No Seri</th>
+                                    <th>Nama Produk</th>
                                     <th>Tanggal</th>
                                     <th>Posisi</th>
                                     <th>Status</th>
@@ -116,6 +117,8 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>No AKN</th>
+                                    <th>No PO</th>
                                     <th>Tanggal</th>
                                     <th>Posisi</th>
                                     <th>Status</th>
@@ -136,9 +139,10 @@
                                 <tr>
                                     <th>No</th>
                                     <th>No SO</th>
+                                    <th>No PO</th>
+                                    <th>Jenis</th>
                                     <th>Tanggal</th>
                                     <th>Posisi</th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -155,7 +159,9 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Tanggal</th>
+                                    <th>No Surat Jalan</th>
+                                    <th>No PO</th>
+                                    <th>Tanggal Kirim</th>
                                     <th>Posisi</th>
                                     <th>Status</th>
                                 </tr>
@@ -201,10 +207,6 @@
                 searchable: false
             }, {
                 data: 'nama_customer',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'noseri',
                 orderable: false,
                 searchable: false
             }, {

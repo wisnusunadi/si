@@ -83,7 +83,9 @@
                 </div>
                 @endif
                 <div class="content">
-                    <form method="post" action="/api/ekatalog/update/{{$e->id}}">
+                    <form method="post" action="{{route('penjualan.penjualan.update_ekatalog', ['id' => $e->id])}}">
+                        {{csrf_field()}}
+                        {{method_field('PUT')}}
                         <div class="row d-flex justify-content-center">
                             <div class="col-10">
                                 <h4>Info Customer</h4>

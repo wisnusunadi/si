@@ -58,7 +58,7 @@
                             </div>
                             <div class="form-group row">
                                 <label for="" class="col-form-label col-4" style="text-align: right">Jalur</label>
-                                <div class="col-5 col-form-label">
+                                <div class="col-8 col-form-label">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input jalur" type="checkbox" id="jalur1" value="darat" name="jalur">
                                         <label class="form-check-label" for="jalur1">Darat</label>
@@ -93,10 +93,10 @@
                                         <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
                                         <label class="form-check-label" for="jurusan2">Per Provinsi</label>
                                     </div>
-                                    <div class="form-check form-check-inline">
+                                    <!-- <div class="form-check form-check-inline">
                                         <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
                                         <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
-                                    </div>
+                                    </div> -->
 
                                     <div class="invalid-feedback" id="msgjurusan">
                                     </div>

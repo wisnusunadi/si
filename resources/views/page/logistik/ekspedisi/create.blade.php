@@ -127,10 +127,10 @@
                                                     <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
                                                     <label class="form-check-label" for="jurusan2">Per Provinsi</label>
                                                 </div>
-                                                <div class="form-check form-check-inline">
+                                                <!-- <div class="form-check form-check-inline">
                                                     <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
                                                     <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="invalid-feedback" id="msgjurusan">
                                                 </div>
@@ -140,7 +140,7 @@
                                         <div class="form-group row hide" id="provinsi_select">
                                             <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
                                             <div class="col-8">
-                                                <select class="select-info form-control custom-select provinsi" name="provinsi" id="provinsi" style="width: 100%;">
+                                                <select class="provinsi form-control" name="provinsi[]" id="provinsi" style="width: 100%;">
                                                 </select>
                                                 <div class="invalid-feedback" id="msgprovinsi">
                                                     @if($errors->has('provinsi'))
@@ -217,7 +217,7 @@
                 // }
                 $("#msgnama_customer").val("");
                 $('#nama_ekspedisi').removeClass('is-invalid');
-                if ($('#telepon').val() != "" && $('#alamat').val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
+                if ($('#telepon').val() != "" && $('#alamat').val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr("disabled");
                 } else {
                     $("#btntambah").attr("disabled", true);
@@ -248,7 +248,7 @@
                     $("#msgtelepon").text("");
                     $("#telepon").removeClass('is-invalid');
                     $("#btntambah").removeAttr('disabled');
-                    if ($("#nama_ekspedisi").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
+                    if ($("#nama_ekspedisi").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     } else {
                         $("#btntambah").attr('disabled', true);
@@ -261,7 +261,7 @@
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 } else {
                     $("#btntambah").attr('disabled', true);
@@ -283,14 +283,14 @@
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
+                    if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#jurusan').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 }
             }
@@ -312,7 +312,7 @@
                 }
                 $('#msgjurusan').text("");
                 $('#jurusan').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]').val() != "" && $('#alamat').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#alamat').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 } else {
                     $("#btntambah").attr('disabled', true);
@@ -325,7 +325,8 @@
         });
 
         $('input[type="checkbox"][name="jalur"]').on('keyup change', function() {
-            if ($('input[type="checkbox"][name="jalur"]').val() != "") {
+            console.log($('input[type="checkbox"][name="jalur"]:checked').val());
+            if ($('input[type="checkbox"][name="jalur"]:checked').length > 0) {
                 $('#msgjalur').text("");
                 $('input[type="checkbox"][name="jalur"]').removeClass("is-invalid");
                 if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('#jurusan').val() != "" && $('#alamat').val() != "") {
@@ -333,14 +334,16 @@
                 } else {
                     $("#btntambah").attr('disabled', true);
                 }
-            } else {
+            } else if ($('input[type="checkbox"][name="jalur"]:checked').length <= 0) {
                 $('#msgjalur').text("Jalur tidak boleh kosong");
-                $('#jalur').addClass("is-invalid");
+                $('input[type="checkbox"][name="jalur"]').addClass("is-invalid");
                 $("#btntambah").attr('disabled', true);
             }
         });
 
         $('.provinsi').select2({
+            multiple: true,
+            placeholder: 'Pilih Provinsi',
             ajax: {
                 minimumResultsForSearch: 20,
                 dataType: 'json',
@@ -364,8 +367,8 @@
                     };
                 },
             },
-        });
 
+        });
 
         $('.kota_kabupaten').select2({
             ajax: {

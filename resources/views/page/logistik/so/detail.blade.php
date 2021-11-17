@@ -233,7 +233,7 @@
     <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-warning">
+                <div class="modal-header bg-info">
                     <h4 class="modal-title">Edit</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -321,7 +321,7 @@
                 $('#no_polisi').val("");
                 $('#nama_pengirim').val("");
                 $('.ekspedisi_id').val("");
-                if ($('#no_sj').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -333,7 +333,7 @@
                 $('#no_polisi').val("");
                 $('#nama_pengirim').val("");
                 $('.ekspedisi_id').val("");
-                if ($('#no_sj').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -341,18 +341,18 @@
             }
         });
 
-        $(document).on('change keyup', '#no_sj', function(event) {
+        $(document).on('change keyup', '#no_invoice', function(event) {
             if ($(this).val() != "") {
-                $('#no_sj').removeClass('is-invalid');
-                $('#msgno_sj').text("");
-                if ($('#no_sj').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
+                $('#no_invoice').removeClass('is-invalid');
+                $('#msgno_invoice').text("");
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
                 }
             } else if ($(this).val() == "") {
-                $('#no_sj').addClass('is-invalid');
-                $('#msgno_sj').text("No Surat Jalan harus diisi");
+                $('#no_invoice').addClass('is-invalid');
+                $('#msgno_invoice').text("No Invoice harus diisi");
                 $('#btnsimpan').attr('disabled', true);
             }
         });
@@ -361,7 +361,7 @@
             if ($(this).val() != "") {
                 $('#tgl_kirim').removeClass('is-invalid');
                 $('#msgtgl_kirim').text("");
-                if ($('#no_sj').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -377,7 +377,7 @@
             if ($(this).val() != "") {
                 $('#nama_pengirim').removeClass('is-invalid');
                 $('#msgnama_pengirim').text("");
-                if ($('#no_sj').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -393,7 +393,7 @@
             if ($(this).val() != "") {
                 $('#no_polisi').removeClass('is-invalid');
                 $('#msgno_polisi').text("");
-                if ($('#no_sj').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -409,7 +409,7 @@
             if ($(this).val() != "") {
                 $('#ekspedisi_id').removeClass('is-invalid');
                 $('#msgekspedisi_id').text("");
-                if ($('#no_sj').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val("") != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val("") != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);

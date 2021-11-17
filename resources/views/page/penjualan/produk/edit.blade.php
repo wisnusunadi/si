@@ -18,7 +18,9 @@
         </div>
         @endif
         @foreach($penjualanproduk as $p)
-        <form action="/api/penjualan_produk/update/{{$p->id}}" method="post">
+        <form action="{{route('penjualan.produk.update', ['id' => $p->id])}}" method="post">
+            {{csrf_field()}}
+            {{method_field('PUT')}}
             <div class="row d-flex justify-content-center">
 
                 <div class="col-11">
