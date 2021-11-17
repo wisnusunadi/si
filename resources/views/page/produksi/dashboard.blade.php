@@ -173,7 +173,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-6 col-md-4">
-                                <div id="transferoneday" class="card active otg" style="background-color: #E6EFFA">
+                                <div id="bataswaktupenyerahan" class="card active otg" style="background-color: #E6EFFA">
                                     <div class="card-body text-center">
                                         <h4>10</h4>
                                         <p class="card-text">Produk Mendekati Batas Waktu Penyerahan ke GBJ</p>
@@ -181,7 +181,7 @@
                                 </div>
                             </div>
                             <div class="col-6 col-md-4">
-                                <div id="transfertwoday" class="card otg" style="background-color: #FEF7EA">
+                                <div id="bataswaktuperakitan" class="card otg" style="background-color: #FEF7EA">
                                     <div class="card-body text-center">
                                         <h4>50</h4>
                                         <p class="card-text">Produk Mendekati Batas Waktu Perakitan</p>
@@ -189,13 +189,122 @@
                                 </div>
                             </div>
                             <div class="col-6 col-md-4">
-                                <div id="transferthreeday" class="card otg" style="background-color: #FCEDE9">
+                                <div id="perubahanperakitan" class="card otg" style="background-color: #FCEDE9">
                                     <div class="card-body text-center">
                                         <h4>60</h4>
                                         <p class="card-text">Produk Mengalami Perubahan Jadwal Perakitan</p>
                                     </div>
                                 </div>
                             </div>
+                       </div>
+                       <div class="produkGbj">
+                        <table class="table table-produk-gbj">
+                            <thead>
+                                <tr>
+                                     <th>Tanggal Mulai</th>
+                                    <th>Tanggal Selesai</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row">10-05-2021</td>
+                                    <td>10-06-2021 <br> <span class="badge badge-info">Kurang 10 Hari</span></td>
+                                    <td>Produk 1</td>
+                                    <td>100 Unit</td>
+                                    <td><a href="{{ url('produksi/pengiriman') }}" class="btn btn-outline-primary"><i
+                                     class="fas fa-paper-plane"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">10-05-2021</td>
+                                    <td>10-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
+                                    <td>Produk 1</td>
+                                    <td>100 Unit</td>
+                                    <td><a href="{{ url('produksi/pengiriman') }}" class="btn btn-outline-primary"><i
+                                     class="fas fa-paper-plane"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">10-05-2021</td>
+                                    <td>10-06-2021 <br> <span class="badge badge-danger">Kurang 1 Hari</span></td>
+                                    <td>Produk 1</td>
+                                    <td>100 Unit</td>
+                                    <td><a href="{{ url('produksi/pengiriman') }}" class="btn btn-outline-primary"><i
+                                     class="fas fa-paper-plane"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                       </div>
+                       <div class="produkPerakitan hidden">
+                           <table class="table table-waktu-perakitan">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Mulai</th>
+                                    <th>Tanggal Selesai</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row">10-05-2021</td>
+                                    <td>10-06-2021 <br> <span class="badge badge-info">Kurang 10 Hari</span></td>
+                                    <td>Produk 2</td>
+                                    <td>100 Unit</td>
+                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
+                                     class="fas fa-paper-plane"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">10-05-2021</td>
+                                    <td>10-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
+                                    <td>Produk 2</td>
+                                    <td>100 Unit</td>
+                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
+                                     class="fas fa-paper-plane"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">10-05-2021</td>
+                                    <td>10-06-2021 <br> <span class="badge badge-danger">Kurang 1 Hari</span></td>
+                                    <td>Produk 2</td>
+                                    <td>100 Unit</td>
+                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
+                                     class="fas fa-paper-plane"></i></a></td>
+                                </tr>
+                            </tbody>
+                           </table>
+                       </div>
+                       <div class="perubahanPerakitan hidden">
+                           <table class="table table-perubahan-perakitan">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Mulai</th>
+                                    <th>Tanggal Selesai</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row">10-05-2021</td>
+                                    <td>10-06-2021 <br> <span class="badge badge-info">09-06-2021</span></td>
+                                    <td>Produk 1</td>
+                                    <td>100 Unit</td>
+                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
+                                     class="fas fa-paper-plane"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">10-05-2021 <br> <span class="badge badge-info">11-06-2021</span></td>
+                                    <td>10-06-2021</td>
+                                    <td>Produk 1</td>
+                                    <td>100 Unit</td>
+                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
+                                     class="fas fa-paper-plane"></i></a></td>
+                                </tr>
+                            </tbody>
+                           </table>
                        </div>
                     </div>
                 </div>
@@ -392,6 +501,34 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
     });
+
+    $(document).on('click','#bataswaktupenyerahan', function () {
+        $('#bataswaktupenyerahan').addClass('active');
+        $('#bataswaktuperakitan').removeClass('active');
+        $('#perubahanperakitan').removeClass('active');
+        $('.produkGbj').removeClass('hidden');
+        $('.produkPerakitan').addClass('hidden');
+        $('.perubahanPerakitan').addClass('hidden');
+    });
+
+    $(document).on('click','#bataswaktuperakitan', function () {
+        $('#bataswaktuperakitan').addClass('active');
+        $('#bataswaktupenyerahan').removeClass('active');
+        $('#perubahanperakitan').removeClass('active');
+        $('.produkPerakitan').removeClass('hidden');
+        $('.produkGbj').addClass('hidden');
+        $('.perubahanPerakitan').addClass('hidden');
+    });
+
+    $(document).on('click','#perubahanperakitan', function () {
+        $('#perubahanperakitan').addClass('active');
+        $('#bataswaktupenyerahan').removeClass('active');
+        $('#bataswaktuperakitan').removeClass('active');
+        $('.perubahanPerakitan').removeClass('hidden');
+        $('.produkGbj').addClass('hidden');
+        $('.produkPerakitan').addClass('hidden');
+    });
+
         $(document).on('click', '#transferoneday', function () {
             $('#transferoneday').addClass('active');
             $('.transferonedaytable').removeClass('hidden');
@@ -425,6 +562,30 @@
             $('.showDetail').modal('show');
         }
         $('.scan-produk').DataTable({
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+    });
+    $('.table-produk-gbj').DataTable({
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+    });
+    $('.table-waktu-perakitan').DataTable({
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+    });
+    $('.table-perubahan-perakitan').DataTable({
             "ordering":false,
             "autoWidth": false,
             "lengthChange": false,
