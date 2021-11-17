@@ -17,7 +17,7 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <span class="float-right">
-                                            <button type="button" class="btn btn-info" id="create">
+                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create" id="create">
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
@@ -64,6 +64,58 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
+                            {{-- <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>ZTP80AS-UPGRADE</td>
+                                    <td>STERILISATOR KERING</td>
+                                    <td>100 Unit</td>
+                                    <td>80 Unit</td>
+                                    <td>Alat Kesehatan</td>
+                                    <td>
+                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <div class="dropdown-menu">
+                                                <button type="button" class="dropdown-item editProduk">
+                                                    <i class="far fa-edit"></i>&nbsp;Edit
+                                                </button>
+                                                <button type="button" class="dropdown-item viewProduk">
+                                                    <i class="far fa-eye"></i>&nbsp;Detail
+                                                </button>
+                                                <button type="button" class="dropdown-item stokProduct">
+                                                    <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>ZTP80AS-UPGRADE</td>
+                                    <td>STERILISATOR KERING</td>
+                                    <td>100 Unit</td>
+                                    <td>80 Unit</td>
+                                    <td>Alat Kesehatan</td>
+                                    <td>
+                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <div class="dropdown-menu">
+                                                <button type="button" class="dropdown-item editProduk">
+                                                    <i class="far fa-edit"></i>&nbsp;Edit
+                                                </button>
+                                                <button type="button" class="dropdown-item viewProduk">
+                                                    <i class="far fa-eye"></i>&nbsp;Detail
+                                                </button>
+                                                <button type="button" class="dropdown-item stokProduct">
+                                                    <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody> --}}
                         </table>
                     </div>
                 </div>
@@ -92,7 +144,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Produk</label>
-                                <select name="" class="form-control produk-add">
+                                <select name="produk_id" id="produk_id" class="form-control produk-add">
                                     <option value="">Buku</option>
                                     <option value="">Bolpoin</option>
                                 </select>
@@ -109,7 +161,7 @@
                         </div>
                         <div class="col">
                             <label for="">Satuan</label>
-                            <select name="" id="satuan-tambah" class="form-control">
+                            <select name="satuan_id" id="satuan_id" class="form-control">
                                 <option value="">mm</option>
                                 <option value="">unit</option>
                             </select>
@@ -117,7 +169,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">Deskripsi</label>
-                        <textarea class="form-control" name="deskripsi" id="deskripsi" id="" cols="5" rows="5"></textarea>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" cols="5" rows="5"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="">Dimensi</label>
@@ -241,11 +293,11 @@
 {{-- Modal View --}}
 
 <!-- Modal -->
-<div class="modal fade" id="modal-view" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade " id="modal-view" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            {{-- <div class="modal-header">
-                <h5 class="modal-title">Produk Sterilisator</h5>
+            <div class="modal-header">
+                <h5 class="modal-title" id="header_data">Produk Sterilisator</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -254,14 +306,14 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="card">
-                            <img class="card-img-top" src="https://images.unsplash.com/photo-1636096111790-01540e4b36fd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80" alt="">
+                            <img class="card-img-top" id="img_prd" src="https://images.unsplash.com/photo-1636096111790-01540e4b36fd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80" alt="">
                         </div>
                     </div>
                     <div class="col-6">
                         <p><b>Nama Produk</b></p>
-                        <p>STERILISATOR KERING</p>
+                        <p id="nama">STERILISATOR KERING</p>
                         <p><b>Deskripsi Produk</b></p>
-                        <p>Inovasi Produk Terbaru dari industri kami</p>
+                        <p id="deskripsi">Inovasi Produk Terbaru dari industri kami</p>
                         <p><b>Dimensi</b></p>
                         <div class="row">
                             <div class="col-sm">Panjang</div>
@@ -274,7 +326,7 @@
                             <div class="col-sm"><span id="tinggi">12</span></div>
                         </div>
                         <p><b>Produk</b></p>
-                        <p>Buku</p>
+                        <p id="produk">Buku</p>
                     </div>
                 </div>
             </div> --}}
@@ -296,26 +348,28 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table scan-produk">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="head-cb"></th>
-                            <th>No. Seri</th>
-                            <th>Layout</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td>5474598674958698645</td>
-                            <td>
-                                <select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select>
-                            </td>
-                            <td>
+                <form action="" id="noseriForm" name="noseriForm">
+                    <table class="table scan-produk">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="head-cb"></th>
+                                <th>No. Seri</th>
+                                <th>Layout</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        {{-- <tr>
+                        <td><input type="checkbox" class="cb-child" value="1"></td>
+                        <td>5474598674958698645</td>
+                        <td>
+                            <select name="" id="" class="form-control">
+                                <option value="1">Layout 1</option>
+                                <option value="2">Layout 2</option>
+                            </select>
+                            </td> <td>
                                 <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
                             </td>
                         </tr>
@@ -330,16 +384,16 @@
                             </td>
                             <td>
                                 <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        </td>
+                    </tr> --}}
+                    </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -366,7 +420,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table">
+
+                <table class="table view-produk">
                     <thead>
                         <tr>
                             <th>Tanggal Masuk</th>
@@ -375,7 +430,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        {{-- <tr>
                             <td scope="row">10-04-2022</td>
                             <td>Divisi IT</td>
                             <td>Uji Coba</td>
@@ -384,7 +439,7 @@
                             <td scope="row">10-04-2022</td>
                             <td>Divisi IT</td>
                             <td>Uji Coba</td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -405,9 +460,9 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="">Layout</label>
-                    <select name="" id="change-layout" class="form-control">
-                        <option value="1">Layout 1</option>
-                        <option value="2">Layout 2</option>
+                    <select name="" id="change_layout" class="form-control">
+                        {{-- <option value="1">Layout 1</option>
+                      <option value="2">Layout 2</option> --}}
                     </select>
                 </div>
             </div>
@@ -428,16 +483,6 @@
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
-    $('.scan-produk').DataTable({
-        "ordering": false,
-        "autoWidth": false,
-        searching: false,
-        "lengthChange": false,
-        "columnDefs": [{
-            "width": "5%",
-            "targets": 0
-        }, ]
-    });
     $('#inputGroupFile02').on('change', function() {
         //get the file name
         var fileName = $(this).val();
@@ -470,7 +515,7 @@
 
     function ubahData() {
         let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
-        let layout = $('#change-layout').val();
+        let layout = $('#change_layout').val();
         $.each(checkbox_terpilih, function(index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
@@ -488,7 +533,313 @@
     $('.viewStock').click(function(e) {
         $('.modalViewStock').modal('show');
     });
-    $('#satuan-tambah').select2();
+    $('#satuan_id').select2();
+</script>
+
+{{-- data --}}
+<script type="text/javascript">
+    // initial
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // load data
+    var datatable = $('#gudang-barang').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/gbj/data',
+        },
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex'
+            },
+            {
+                data: 'kode_produk',
+                name: 'kode_produk'
+            },
+            {
+                data: 'nama_produk',
+                name: 'nama_produk'
+            },
+            {
+                data: 'jumlah'
+            },
+            {
+                data: 'jumlah'
+            },
+            {
+                data: 'kelompok'
+            },
+            {
+                data: 'action'
+            }
+        ]
+    });
+
+    // load produk
+    $.ajax({
+        url: '/api/gbj/sel-product',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            if (res) {
+                console.log(res);
+                $("#produk_id").empty();
+                $("#produk_id").append('<option value="">Pilih Item</option>');
+                $.each(res, function(key, value) {
+                    $("#produk_id").append('<option value="' + value.id + '">' + value.product.nama + ' ' + value.nama + '</option');
+                });
+            } else {
+                $("#produk_id").empty();
+            }
+        }
+    });
+
+    // load satuan
+    $.ajax({
+        url: '/api/gbj/sel-satuan',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            if (res) {
+                console.log(res);
+                $("#satuan_id").empty();
+                $("#satuan_id").append('<option value="">Pilih Item</option>');
+                $.each(res, function(key, value) {
+                    $("#satuan_id").append('<option value="' + value.id + '">' + value.nama + '</option');
+                });
+            } else {
+                $("#satuan_id").empty();
+            }
+        }
+    });
+
+    // load modal create edit
+    $('#create').click(function(e) {
+        $('#Submitmodalcreate').val('create-product');
+        $('#produkForm').trigger("reset");
+        $('#exampleModalLabel').html('Tambah Produk');
+        $('#modal-create').modal('show');
+    });
+
+    // load modal edit
+    $(document).on('click', '.editmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        // ajax
+        $.ajax({
+            type: "POST",
+            url: '/api/gbj/get',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.data[0].nama + '</b>');
+                $('#Submitmodalcreate').val('edit-product');
+                $('#modal-create').modal('show');
+                $('#id').val(res.data[0].id);
+                $('#nama').val(res.data[0].nama);
+                $('textarea#deskripsi').val(res.data[0].deskripsi);
+                $('#stok').val(res.data[0].stok);
+                $('#dim_p').val(res.data[0].dim_p);
+                $('#dim_l').val(res.data[0].dim_l);
+                $('#dim_t').val(res.data[0].dim_t);
+                $('#satuan_id').val(res.data[0].satuan_id);
+                $('#satuan_id').select2().trigger('change');
+                $('#produk_id').val(res.data[0].produk_id);
+                $('#produk_id').select2().trigger('change');
+                $('#produk_id').select2({
+                    disabled: 'readonly'
+                });
+                // var newOption = $('<option selected="selected"></option>').val(res.data[0].produk_id).text(res.nama_produk[0].product.tipe + ' ' + res.nama_produk[0].nama);
+                // $('#produk_id').append(newOption).trigger('change');
+                $('#inputGroupFile02').val(res.data[0].gambar);
+            }
+        });
+    });
+
+    // detail
+    $(document).on('click', '.detailmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        // ajax
+        $.ajax({
+            type: "POST",
+            url: '/api/gbj/get',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+
+                $('#header_data').html('Detail Produk ' + '<b>' + res.data[0].nama + '</b>');
+                $('p#nama').text(res.data[0].nama);
+                $('p#deskripsi').text(res.data[0].deskripsi);
+                $('span#panjang').text(res.data[0].dim_p);
+                $('span#lebar').text(res.data[0].dim_l);
+                $('span#tinggi').text(res.data[0].dim_t);
+                $('p#produk').text(res.nama_produk[0].product.nama + ' ' + res.nama_produk[0].nama);
+                $('img#img_prd').attr("src", "http://localhost:8000/upload/gbj/" + res.data[0].gambar);
+                $('#modal-view').modal('show');
+            }
+        });
+    });
+
+    // proses submit
+    $('body').on('submit', '#produkForm', function(e) {
+        e.preventDefault();
+        var actionType = $('#Submitmodalcreate').val();
+        $('#Submitmodalcreate').html('Sending..');
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "/api/gbj/create",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (data) => {
+                $('#produkForm').trigger('reset');
+                $('#modal-create').modal('hide');
+                $('#Submitmodalcreate').html('Kirim');
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Your data has been saved',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                $('.datatable').DataTable().ajax.reload();
+                location.reload();
+            }
+        });
+    });
+    // var ii = 0;
+    function select_layout() {
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                // ii++;
+                console.log(res);
+                $.each(res, function(key, value) {
+                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    $("#layout_id").append('<option value="' + value.id + '">' + value.ruang + '</option');
+                });
+            }
+        });
+    }
+
+    // modal noseri
+    $(document).on('click', '.stokmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        var i = 0;
+        var b = '';
+
+        $.ajax({
+            url: '/api/gbj/noseri/' + id,
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                $.each(data, function(key, value) {
+                    i++;
+                    b = "<tr ><td><input type='checkbox' class='cb-child' value=" + value.id + "></td><td>" + value.noseri + "<input type='hidden' name='noseri[]' value=" + value.noseri + "><input type='hidden' name='gdg_brg_jadi_id' value=" + value.gdg_barang_jadi_id + "></td><td><select name='layout_id[]' id='layout_id' class='form-control'>" + select_layout() + "</select></td><td><button class='btn btn-info viewStock' data-id='" + value.id + "'><i class='far fa-eye'></i> View</button></td></tr>";
+                    $(".scan-produk").append(b);
+                })
+
+            }
+        });
+        $('.daftar-stok').modal('show');
+    });
+
+    // modal history
+    $(document).on('focus', '.viewStock', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        var i = 0;
+
+        $.ajax({
+            url: '/api/gbj/history/' + id,
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                var a = '';
+
+                $.each(data, function(key, value) {
+                    a = "<tr><td>" + new Date(value.created_at).toLocaleDateString() + "</td><td>" + value.from.nama + "</td><td>" + value.to.nama + "</td></tr>";
+                });
+                $(".view-produk tbody").html(a);
+            }
+        })
+        $('.modalViewStock').modal('show');
+    });
+
+    // load layout
+    $.ajax({
+        url: '/api/gbj/sel-layout',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            console.log(res);
+            $("#change_layout").empty();
+            $.each(res, function(key, value) {
+                $("#change_layout").append('<option value="' + value.id + '">' + value.ruang + '</option');
+                // $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
+            });
+        }
+    });
+
+    // modal ubah layout
+    $(document).on('click', '.editStok', function() {
+        $('.edit-stok').modal('show');
+    });
+
+    $(document).ready(function() {
+        $('#ubahSeri').on('click', function() {
+            // console.log('ok');
+
+            const cekid = [];
+            const noseri = [];
+            const layout = [];
+
+            $('.cb-child').each(function() {
+                if ($(this).is(":checked")) {
+                    cekid.push($(this).val());
+                }
+            });
+
+            $('input[name^="gdg_brg_jadi_id"]').each(function() {
+                noseri.push($(this).val());
+            });
+
+            $('select[name^="layout_id"]').each(function() {
+                layout.push($(this).val());
+            });
+            // console.log(cekid);
+
+            $.ajax({
+                url: '/api/gbj/noseri/' + noseri,
+                type: 'post',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    cekid: cekid,
+                    // noseri : noseri,
+                    layout: layout,
+                },
+                success: function(res) {
+                    console.log(res);
+                }
+            })
+        })
+    })
 </script>
 
 <script type="text/javascript">

@@ -11,15 +11,20 @@ class TFProduksi extends Model
 
     protected $table = 't_tfbj';
 
-    function detail_tf() {
+    protected $fillable = ['ke', 'deskripsi'];
+
+    function detail()
+    {
         return $this->hasMany(TFProduksiDetail::class, 'tfbj_id');
     }
 
-    function his_tf() {
+    function his()
+    {
         return $this->hasMany(TFProduksiHis::class, 'tfbj_id');
     }
 
-    function divisi() {
+    function divisi()
+    {
         return $this->belongsTo(Divisi::class, 'ke');
     }
 }

@@ -11,11 +11,13 @@ class TFProduksiDetail extends Model
 
     protected $table = 't_tfbj_detail';
 
-    // function header() {
-    //     return $this->belongsTo(TFProduksi::class, 'id');
-    // }
+    function header()
+    {
+        return $this->hasOne(TFProduksi::class, 'tfbj_id');
+    }
 
-    function produk() {
+    function produk()
+    {
         return $this->belongsTo(GudangBarangJadi::class, 'gdg_brg_jadi_id');
     }
 }

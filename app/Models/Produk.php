@@ -28,4 +28,8 @@ class Produk extends Model
     public function Satuan() {
         return $this->belongsTo(Satuan::class, 'satuan_id');
     }
+
+    function product() {
+        return $this->belongsTo(Mproduk::class, 'produk_id');
+    }
 }
