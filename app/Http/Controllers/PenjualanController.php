@@ -86,7 +86,22 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . $data->log . '</span>';
+                $datas = "";
+                if ($data->log == "penjualan") {
+                    $datas .= '<span class="red-text badge">';
+                } else if ($data->log == "po") {
+                    $datas .= '<span class="purple-text badge">';
+                } else if ($data->log == "gudang") {
+                    $datas .= '<span class="orange-text badge">';
+                } else if ($data->log == "qc") {
+                    $datas .= '<span class="yellow-text badge">';
+                } else if ($data->log == "logistik") {
+                    $datas .= '<span class="blue-text badge">';
+                } else if ($data->log == "selesai") {
+                    $datas .= '<span class="green-text badge">';
+                }
+                $datas .= ucfirst($data->log) . '</span>';
+                return $datas;
             })
             ->addColumn('button', function ($data) {
                 $name =  $data->getTable();
@@ -163,7 +178,22 @@ class PenjualanController extends Controller
                     return '';
                 })
                 ->addColumn('log', function ($data) {
-                    return '<span class="red-text badge">' . $data->log . '</span>';
+                    $datas = "";
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
+                    return $datas;
                 })
                 ->rawColumns(['log'])
                 ->make(true);
@@ -185,9 +215,23 @@ class PenjualanController extends Controller
                     return $status;
                 })
                 ->addColumn('log', function ($data) {
-                    return '<span class="red-text badge">' . $data->log . '</span>';
+                    $datas = "";
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
+                    return $datas;
                 })
-
                 ->rawColumns(['status', 'log'])
                 ->make(true);
         } elseif ($parameter == 'no_seri') {
@@ -226,7 +270,22 @@ class PenjualanController extends Controller
                     return '';
                 })
                 ->addColumn('log', function ($data) {
-                    return '<span class="red-text badge">' . $data->log . '</span>';
+                    $datas = "";
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
+                    return $datas;
                 })
                 ->rawColumns(['log'])
                 ->make(true);
@@ -339,7 +398,22 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . ucfirst($data->log) . '</span>';
+                $datas = "";
+                if ($data->log == "penjualan") {
+                    $datas .= '<span class="red-text badge">';
+                } else if ($data->log == "po") {
+                    $datas .= '<span class="purple-text badge">';
+                } else if ($data->log == "gudang") {
+                    $datas .= '<span class="orange-text badge">';
+                } else if ($data->log == "qc") {
+                    $datas .= '<span class="yellow-text badge">';
+                } else if ($data->log == "logistik") {
+                    $datas .= '<span class="blue-text badge">';
+                } else if ($data->log == "selesai") {
+                    $datas .= '<span class="green-text badge">';
+                }
+                $datas .= ucfirst($data->log) . '</span>';
+                return $datas;
             })
             ->addColumn('batas_kontrak', function ($data) {
 
@@ -497,7 +571,22 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . $data->log . '</span>';
+                $datas = "";
+                if ($data->log == "penjualan") {
+                    $datas .= '<span class="red-text badge">';
+                } else if ($data->log == "po") {
+                    $datas .= '<span class="purple-text badge">';
+                } else if ($data->log == "gudang") {
+                    $datas .= '<span class="orange-text badge">';
+                } else if ($data->log == "qc") {
+                    $datas .= '<span class="yellow-text badge">';
+                } else if ($data->log == "logistik") {
+                    $datas .= '<span class="blue-text badge">';
+                } else if ($data->log == "selesai") {
+                    $datas .= '<span class="green-text badge">';
+                }
+                $datas .= ucfirst($data->log) . '</span>';
+                return $datas;
             })
             ->addColumn('tglpo', function ($data) {
                 if ($data->Pesanan) {
@@ -566,7 +655,22 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . $data->log . '</span>';
+                $datas = "";
+                if ($data->log == "penjualan") {
+                    $datas .= '<span class="red-text badge">';
+                } else if ($data->log == "po") {
+                    $datas .= '<span class="purple-text badge">';
+                } else if ($data->log == "gudang") {
+                    $datas .= '<span class="orange-text badge">';
+                } else if ($data->log == "qc") {
+                    $datas .= '<span class="yellow-text badge">';
+                } else if ($data->log == "logistik") {
+                    $datas .= '<span class="blue-text badge">';
+                } else if ($data->log == "selesai") {
+                    $datas .= '<span class="green-text badge">';
+                }
+                $datas .= ucfirst($data->log) . '</span>';
+                return $datas;
             })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {

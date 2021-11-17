@@ -49,8 +49,8 @@
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+<section class="content">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -110,12 +110,13 @@
                                         <thead>
                                             <th>No</th>
                                             <th>No SO</th>
-                                            <th>Batas Pengiriman</th>
+                                            <th>Tanggal Pengiriman</th>
                                             <th>Customer</th>
                                             <th>Alamat</th>
                                             <th>Telepon</th>
-                                            <th>Keterangan</th>
+
                                             <th>Status</th>
+                                            <th>Keterangan</th>
                                             <th>Aksi</th>
                                         </thead>
                                         <tbody>
@@ -123,18 +124,18 @@
                                                 <td>1</td>
                                                 <td>SO/EKAT/X/02/98</td>
                                                 <td>
-                                                    <div>31-10-2021</div>
-                                                    <small><i class="fas fa-clock info"></i> Sisa 6 Hari</small>
+                                                    31-10-2021
                                                 </td>
                                                 <td>CV. Cipta Jaya Mandiri</td>
                                                 <td>Jl Dr Wahidin Sudirohusodo</td>
                                                 <td>0841641741979</td>
+
+                                                <td><span class="badge green-text">Selesai</span></td>
                                                 <td>-</td>
-                                                <td><span class="badge red-text">Belum dikirim</span></td>
                                                 <td>
                                                     <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.so.detail', ['id' => '1'])}}">
+                                                        <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-search"></i>
                                                                 Detail
@@ -147,28 +148,26 @@
                                                 <td>2</td>
                                                 <td>SO/SPA/X/02/75</td>
                                                 <td>
-                                                    <div>08-11-2021</div>
-                                                    <small><i class="fas fa-exclamation-circle warning"></i> Sisa 3 Hari</small>
+                                                    08-11-2021
                                                 </td>
                                                 <td>PT. Emiindo Jaya Bersama</td>
                                                 <td>Jl Jaksa Agung Suprapto</td>
                                                 <td>0841641741979</td>
+
+                                                <td><span class="badge green-text">Selesai</span></td>
                                                 <td>-</td>
-                                                <td><span class="badge yellow-text">Sebagian dikirim</span></td>
                                                 <td><a href=""></td>
                                             </tr>
                                             <tr>
                                                 <td>3</td>
                                                 <td>SO/SPB/X/21/75</td>
-                                                <td>
-                                                    <div>03-11-2021</div>
-                                                    <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
-                                                </td>
+                                                <td>03-11-2021</td>
                                                 <td>Bapak Muhajir</td>
                                                 <td>Jl RA Kartini</td>
                                                 <td>0841641741979</td>
+
+                                                <td><span class="badge green-text">Selesai</span></td>
                                                 <td>-</td>
-                                                <td><span class="badge yellow-text">Sebagian dikirim</span></td>
                                                 <td><a href=""></td>
                                             </tr>
                                         </tbody>
@@ -181,7 +180,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 @section('adminlte_js')
 <script>

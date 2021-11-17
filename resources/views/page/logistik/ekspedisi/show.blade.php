@@ -518,11 +518,11 @@
 
         function provinsi() {
             $('.provinsi').select2({
+                placeholder: "Pilih Provinsi",
+                multiple: true,
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih ",
                     dataType: 'json',
-                    theme: "bootstrap",
                     delay: 250,
                     type: 'GET',
                     url: '/api/provinsi/select',

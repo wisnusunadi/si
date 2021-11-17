@@ -20,9 +20,10 @@ use App\Models\Spb;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Alert;
-
 
 class MasterController extends Controller
 {
@@ -47,21 +48,23 @@ class MasterController extends Controller
                 return $data->provinsi->nama;
             })
             ->addColumn('button', function ($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                $datas = "";
+                $datas .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="' . route('penjualan.customer.detail', $data->id) . '">
                     <button class="dropdown-item" type="button">
                       <i class="fas fa-search"></i>
                       Detail
                     </button>
-                </a>
-                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
-                    <button class="dropdown-item" type="button" >
-                      <i class="fas fa-pencil-alt"></i>
-                      Edit
-                    </button>
-                </a>
-                </div>';
+                </a>';
+                $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
+                        </button>
+                    </a>';
+                $datas .= '</div>';
+                return $datas;
             })
             ->rawColumns(['button'])
             ->make(true);
@@ -177,7 +180,22 @@ class MasterController extends Controller
                     }
                 })
                 ->addColumn('status', function ($data) {
-                    return '<span class="red-text badge">' . $data->log . '</span>';
+                    $datas = "";
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
+                    return $datas;
                 })
                 ->rawColumns(['status'])
                 ->make(true);
@@ -311,11 +329,10 @@ class MasterController extends Controller
         $customer->alamat = $request->alamat;
         $customer->ket = $request->keterangan;
         $c = $customer->save();
-
         if ($c) {
-            return redirect('/penjualan/customer/show')->with('success', 'Berhasil mengubah data');
-        } else {
-            return redirect('/penjualan/customer/show')->with('error', 'Gagal mengubah data');
+            return response()->json(['data' => 'success']);
+        } else if (!$c) {
+            return response()->json(['data' => 'error']);
         }
     }
 
@@ -369,9 +386,9 @@ class MasterController extends Controller
         }
         $p = $PenjualanProduk->produk()->sync($produk_array);
         if ($p) {
-            return redirect('/penjualan/produk/show')->with('success', 'Berhasil mengubah data');
-        } else {
-            return redirect('/penjualan/produk/show')->with('error', 'Gagal mengubah data');
+            return response()->json(['data' => 'success']);
+        } else if (!$p) {
+            return response()->json(['data' => 'error']);
         }
     }
     //Other
