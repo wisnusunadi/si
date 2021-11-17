@@ -133,15 +133,9 @@
                                                 <td><span class="badge green-text">Selesai</span></td>
                                                 <td>-</td>
                                                 <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                    </div>
+                                                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('as.so.list', ['id' => '1'])}}" data-id="1">
+                                                        <i class="fas fa-search"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -179,14 +173,56 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-info">
+                        <h4 class="modal-title">Info</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="detail">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 @stop
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({})
+        var showtable = $('#showtable').DataTable({});
 
+        $(document).on('click', '.detailmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
+            $.ajax({
+                url: href,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#detailmodal').modal("show");
+                    $('#detail').html(result).show();
+                    console.log(id);
+                    // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
     })
 </script>
 @stop

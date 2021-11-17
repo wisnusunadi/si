@@ -198,6 +198,7 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.as.so.show')->name('as.so.show');
+        Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
     });
 
     Route::group(['prefix' => '/coo'], function () {

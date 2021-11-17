@@ -11,13 +11,6 @@
 
         }
 
-        @font-face {
-            font-family: 'Cambria';
-            src: url("{{asset('font/Cambria/Cambria.ttf')}}") format("truetype");
-            font-weight: 400;
-            font-style: normal;
-        }
-
         .mdtxt {
             font-size: 18px;
 
@@ -92,7 +85,6 @@
         body {
             background-image: url("{{public_path('assets/image/background_coo.jpg') }}");
             background-size: 100%;
-            font-family: 'Cambria';
         }
     </style>
 </head>
