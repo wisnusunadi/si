@@ -64,6 +64,17 @@
     .nowrap-text {
         white-space: nowrap;
     }
+
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 30ch;
+    }
+
+    .wb {
+        word-break: break-all;
+    }
 </style>
 @stop
 
@@ -126,6 +137,10 @@
                         </div>
                         <div class="col-2">
                             <div class="margin">
+                                <div><small class="text-muted">No Invoice</small></div>
+                                <div><b id="no_resi">9831937492</b></div>
+                            </div>
+                            <div class="margin">
                                 <div><small class="text-muted">Status</small></div>
                                 <div><span class="badge blue-text">Dalam Pengiriman</span></div>
                             </div>
@@ -150,6 +165,7 @@
                                     <th>No</th>
                                     <th>Nama Produk</th>
                                     <th>Jumlah</th>
+                                    <th>No Seri</th>
                                     <th>Keterangan</th>
                                 </tr>
                             </thead>
@@ -158,13 +174,15 @@
                                     <td>1</td>
                                     <td>Elitech MTB 2 MTR</td>
                                     <td>10</td>
-                                    <td></td>
+                                    <td class="minimizechar wb">MTB0129021803, MTB0129021801, MTB0129021802, MTB0129021804, MTB0129021805, MTB0129021807, MTB0129021811, MTB0129021816, MTB0129021823, MTB0129021817</td>
+                                    <td>-</td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
                                     <td>Elitech Pocket Fetal Doppler</td>
                                     <td>1</td>
-                                    <td></td>
+                                    <td class="minimizechar wb">PFD0129021803</td>
+                                    <td>-</td>
                                 </tr>
                             </tbody>
                         </table>

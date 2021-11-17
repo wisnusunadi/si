@@ -631,21 +631,8 @@ class PenjualanController extends Controller
     }
     public function get_data_so()
     {
-        $data  = Pesanan::select()->get();
-        return datatables()->of($data)
-            ->addIndexColumn()
-            ->addColumn('nama_customer', function ($data) {
-                return $data->Ekatalog->Customer->nama;
-            })
-            ->addColumn('jenis', function ($data) {
-                return '   <span class="badge purple-text">E-Catalogue</span>';
-            })
-            ->addColumn('status', function ($data) {
-                return 'sepakat';
-            })
-            ->rawColumns(['jenis'])
-            ->make(true);
     }
+
 
 
     //Create

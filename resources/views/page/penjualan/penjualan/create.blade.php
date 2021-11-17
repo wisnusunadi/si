@@ -342,6 +342,9 @@
                                                                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                             <option value=""></option>
                                                                         </select>
+                                                                        <div id="tes">
+
+                                                                        </div>
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -423,8 +426,8 @@
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
-
                                                                         </select>
+
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -822,6 +825,12 @@
         }
 
         function select_data() {
+            // $('.penjualan_produk_id').on('change', function() {
+            //     for (i = 0; i < 3; ++i) {
+            //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
+            //     }
+            // });
+
             $('.penjualan_produk_id').select2({
                 placeholder: "Pilih Produk",
                 ajax: {
@@ -838,7 +847,8 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+
+                        //console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -852,6 +862,9 @@
             }).change(function(i) {
                 var index = $(this).attr('id');
                 var id = $(this).val();
+
+
+
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
@@ -859,12 +872,30 @@
                     success: function(data) {
                         console.log(data);
                         $('#produk_harga' + index).val(formatmoney(data[0].harga));
+                        var tes = $('#tes');
+                        tes.empty();
+                        for (var x = 0; x < data[0].produk.length; x++) {
+                            tes.append('<p> Detail Produk : ' + data[0].produk[x].nama + '</p>');
+                            tes.append("<select class='variasi' name='variasi[" + x + "]' ></select><small >Stok : - </small>");
+                            $('.variasi').select2({
+
+                            });
+                            if (data[0].produk[x].gudang_barang_jadi.length <= 1) {
+                                var mySelect = $("select[name='variasi[" + x + "]']").append('<option value=""> ' + data[0].produk[x].nama + '<span style="float:right">2</span></option>');
+                                mySelect.trigger("change");
+                            } else {
+                                for (var y = 0; y < data[0].produk[x].gudang_barang_jadi.length; y++) {
+                                    var mySelect = $("select[name='variasi[" + x + "]']").append('<option value=""> ' + data[0].produk[x].gudang_barang_jadi[y].nama + '</option>');
+                                    mySelect.trigger("change");
+                                }
+                            }
+                            //  tes.append('<p> Warna : ' + data[0].produk[0].gudang_barang_jadi[y].nama + 'Stok:' + data[0].produk[0].gudang_barang_jadi[y].stok + '</p>');
+                        }
                     }
                 });
             });
-
-
         }
+
 
         function totalhargaprd() {
             var totalharga = 0;

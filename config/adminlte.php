@@ -1099,6 +1099,30 @@ return [
             'auth' => [15],
         ],
 
+        //DOCUMENT CONTROL
+        [
+            'text' => 'Beranda',
+            'icon' => 'fas fa-home',
+            'url' => '/dc/dashboard',
+            'auth' => [9],
+        ],
+        [
+            'header' => 'PENJUALAN',
+            'auth' => [9]
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'far fa-circle',
+            'url' => '/dc/so/show',
+            'auth' => [9],
+        ],
+        [
+            'text' => 'COO',
+            'icon' => 'far fa-circle',
+            'url' => '/dc/coo/show',
+            'auth' => [9],
+        ],
+
         [
             'text' => 'test',
             'isNavbarRightItem' => true,

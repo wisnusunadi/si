@@ -243,6 +243,41 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $(document).on('submit', '#form-penjualan-produk-update', function(e) {
+            console.log("tes");
+            e.preventDefault();
+            var action = $(this).attr('data-attr');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-penjualan-produk-update').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan ubah data Penjualan Produk',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#showtable').DataTable().ajax.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan ubah data Penjualan Produk',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-customer-update').serialize());
+                }
+            });
+            return false;
+        });
+
         var showtable = $('#showtable').DataTable({
             processing: true,
             serverSide: true,

@@ -17,6 +17,10 @@
         color: #FFC700;
         font-weight: 600;
     }
+
+    .filter {
+        margin: 5px;
+    }
 </style>
 @stop
 
@@ -83,6 +87,7 @@
                                         <thead>
                                             <th>No</th>
                                             <th>No SO</th>
+                                            <th>No PO</th>
                                             <th>Batas Pengujian</th>
                                             <th>Customer</th>
                                             <th>Keterangan</th>
@@ -93,17 +98,19 @@
                                             <!-- <tr>
                                                 <td>1</td>
                                                 <td>SO/EKAT/X/02/98</td>
+                                                <td>PO/ON/09/21/001</td>
                                                 <td>31-10-2021</td>
                                                 <td>CV. Cipta Jaya Mandiri</td>
                                                 <td>-</td>
                                                 <td><span class="badge green-text">Selesai</span></td>
-                                                <td><a href="">
-                                                        <div><i class="fas fa-bell"></i></div><small>Beritahu Logistik</small>
+                                                <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}">
+                                                        <div><i class="fas fa-eye"></i></div><small>Detail</small>
                                                     </a></td>
                                             </tr>
                                             <tr>
                                                 <td>2</td>
                                                 <td>SO/EKAT/X/02/100</td>
+                                                <td>PO/ON/09/21/002</td>
                                                 <td>
                                                     <div class="urgent">31-10-2021</div>
                                                     <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>
@@ -121,11 +128,15 @@
                                                             </button>
                                                         </a>
                                                     </div>
+                                                    <a href="">
+                                                        <div><i class="fas fa-eye"></i></div><small>Detail</small>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>3</td>
                                                 <td>SO/SPA/XI/02/01</td>
+                                                <td>PO/ON/09/21/003</td>
                                                 <td>
                                                     <div class="warning">04-11-2021</div>
                                                     <small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa 2 Hari</small>
@@ -133,11 +144,14 @@
                                                 <td>CV. Cipta Jaya Mandiri</td>
                                                 <td>-</td>
                                                 <td><span class="badge yellow-text">Sedang Berlangsung</span></td>
-                                                <td></td>
+                                                <td><a href="">
+                                                        <div><i class="fas fa-eye"></i></div><small>Detail</small>
+                                                    </a></td>
                                             </tr>
                                             <tr>
                                                 <td>4</td>
                                                 <td>SO/SPB/XI/02/01</td>
+                                                <td>PO/ON/09/21/004</td>
                                                 <td>
                                                     <div>21-09-2021</div>
                                                     <small>Batas sisa 6 Hari</small>
@@ -145,7 +159,9 @@
                                                 <td>PT. Emiindo Jaya Bersama</td>
                                                 <td>-</td>
                                                 <td><span class="badge red-text">Belum diuji</span></td>
-                                                <td></td>
+                                                <td><a href="">
+                                                        <div><i class="fas fa-eye"></i></div><small>Detail</small>
+                                                    </a></td>
                                             </tr> -->
                                         </tbody>
                                     </table>

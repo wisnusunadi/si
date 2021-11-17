@@ -115,6 +115,9 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
         Route::get('/detail/{id}/{value}', [App\Http\Controllers\QCController::class, 'detail_so'])->name('qc.so.detail');
+        Route::view('/detail_ekatalog/{id}', 'page.qc.so.detail_ekatalog')->name('qc.so.detail_ekatalog');
+        Route::view('/detail_spa/{id}', 'page.qc.so.detail_spa')->name('qc.so.detail_spa');
+        Route::view('/detail_spb/{id}', 'page.qc.so.detail_spb')->name('qc.so.detail_spb');
         Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
         Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
@@ -166,6 +169,29 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 });
 
+Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.dc.dashboard')->name('dc.dashboard');
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.dc.so.show')->name('dc.so.show');
+        Route::view('/detail/{id}', 'page.dc.so.detail')->name('dc.so.detail');
+        Route::view('/create/{id}', 'page.dc.so.create')->name('dc.so.create');
+        Route::group(['prefix' => '/laporan'], function () {
+            Route::view('/show', 'page.dc.laporan.show')->name('dc.so.laporan.show');
+        });
+    });
+
+    Route::group(['prefix' => '/coo'], function () {
+        Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
+        Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
+        Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
+        Route::view('/edit/{id}', 'page.dc.coo.edit')->name('dc.coo.edit');
+        Route::get('/pdf', [App\Http\Controllers\DcController::class, 'pdf_coo'])->name('dc.coo.pdf');
+        Route::group(['prefix' => '/laporan'], function () {
+            Route::view('/show', 'page.dc.laporan.show')->name('dc.coo.laporan.show');
+        });
+    });
+});
 
 Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 

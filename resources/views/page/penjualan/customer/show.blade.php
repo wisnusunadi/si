@@ -40,135 +40,168 @@
 @section('content')
 <section class="content">
     <div class="container-fluid">
-<div class="row">
-    <div class="col-12">
-    @if(Session::has('error') || count($errors) > 0 )
-        <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
-            <strong>{{Session::get('error')}}</strong> Periksa
-            kembali data yang diinput
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        @elseif(Session::has('success'))
-        <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
-            <strong>{{Session::get('success')}}</strong>,
-            Terima kasih
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        @endif
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row" style="margin-bottom:10px;">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <a href="{{route('penjualan.customer.create')}}"><button class="btn btn-outline-info">
-                                            <i class="fas fa-plus"></i> Tambah
-                                        </button></a>
-                                </span>
-                                <span class="dropdown float-right filter">
-                                    <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="filterpenjualan">
-                                        <form class="px-4" style="white-space:nowrap;" id="filter">
-                                            <div class="dropdown-header">
-                                                Status
+            <div class="col-12">
+                @if(Session::has('error') || count($errors) > 0 )
+                <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+                    <strong>{{Session::get('error')}}</strong> Periksa
+                    kembali data yang diinput
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @elseif(Session::has('success'))
+                <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+                    <strong>{{Session::get('success')}}</strong>,
+                    Terima kasih
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row" style="margin-bottom:10px;">
+                                    <div class="col-12">
+                                        <span class="float-right filter">
+                                            <a href="{{route('penjualan.customer.create')}}"><button class="btn btn-outline-info">
+                                                    <i class="fas fa-plus"></i> Tambah
+                                                </button></a>
+                                        </span>
+                                        <span class="dropdown float-right filter">
+                                            <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
+                                                <i class="fas fa-filter"></i> Filter
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="filterpenjualan">
+                                                <form class="px-4" style="white-space:nowrap;" id="filter">
+                                                    <div class="dropdown-header">
+                                                        Status
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input type="radio" class="form-check-input" id="dropdownStatus1" value="2" name='filter' />
+                                                            <label class="form-check-label" for="dropdownStatus1">
+                                                                Jawa
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input type="radio" class="form-check-input" id="dropdownStatus2" value="1" name='filter' />
+                                                            <label class="form-check-label" for="dropdownStatus2">
+                                                                Luar Jawa
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input type="radio" class="form-check-input" id="dropdownStatus3" value="0" name='filter' />
+                                                            <label class="form-check-label" for="dropdownStatus3">
+                                                                Semua
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary float-right">
+                                                            Cari
+                                                        </button>
+                                                    </div>
+                                                </form>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus1" value="2" name='filter' />
-                                                    <label class="form-check-label" for="dropdownStatus1">
-                                                        Jawa
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus2" value="1" name='filter' />
-                                                    <label class="form-check-label" for="dropdownStatus2">
-                                                        Luar Jawa
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="0" name='filter' />
-                                                    <label class="form-check-label" for="dropdownStatus3">
-                                                        Semua
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-primary float-right">
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </form>
+                                        </span>
                                     </div>
-                                </span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" id="showtable" style="width:100%;">
+                                                <thead style="text-align:center;">
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nama</th>
+                                                        <th>Alamat</th>
+                                                        <th>Provinsi</th>
+                                                        <th>Email</th>
+                                                        <th>Telp</th>
+                                                        <th>NPWP</th>
+                                                        <th>Keterangan</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-hover" id="showtable" style="width:100%;">
-                                        <thead style="text-align:center;">
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama</th>
-                                                <th>Alamat</th>
-                                                <th>Provinsi</th>
-                                                <th>Email</th>
-                                                <th>Telp</th>
-                                                <th>NPWP</th>
-                                                <th>Keterangan</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                    </div>
 
-                                        </tbody>
-                                    </table>
+                    <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content" style="margin: 10px">
+                                <div class="modal-header bg-warning">
+                                    <h4>Edit</h4>
+                                </div>
+                                <div class="modal-body" id="edit">
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content" style="margin: 10px">
-                        <div class="modal-header bg-warning">
-                            <h4>Edit</h4>
-                        </div>
-                        <div class="modal-body" id="edit">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-</div>
-</div>
 </section>
 @stop
 
 @section('adminlte_js')
 <script>
     $(function() {
+        $(document).on('submit', '#form-customer-update', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('data-attr');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-customer-update').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan edit data',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#showtable').DataTable().ajax.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan edit data',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-customer-update').serialize());
+                }
+            });
+            return false;
+        });
+
         var showtable = $('#showtable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/customer/data/' + 0,
-
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

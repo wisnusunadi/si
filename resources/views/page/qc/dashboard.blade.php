@@ -172,7 +172,7 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                     </td>
                                                     <td><span class="badge red-text">Belum diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -182,7 +182,7 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
                                                     <td><span class="badge red-text">Belum diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
@@ -192,7 +192,7 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
                                                     <td><span class="badge red-text">Belum diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -222,7 +222,7 @@
                                                         <div class="urgent">31-10-2021</div>
                                                         <small><i class="fas fa-exclamation-circle" id="warning"></i> 2 Hari Lagi</small>
                                                     </td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -231,7 +231,7 @@
                                                         <div class="urgent">01-11-2021</div>
                                                         <small><i class="fas fa-exclamation-circle" id="warning"></i> 3 Hari Lagi</small>
                                                     </td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
@@ -240,7 +240,7 @@
                                                         <div class="urgent">12-10-2021</div>
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>4</td>
@@ -249,7 +249,7 @@
                                                         <div class="urgent">11-10-2021</div>
                                                         <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                     </td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -278,7 +278,7 @@
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
                                                     </td>
                                                     <td><span class="badge yellow-text">Sebagian diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -288,7 +288,7 @@
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
                                                     </td>
                                                     <td><span class="badge yellow-text">Sebagian diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
