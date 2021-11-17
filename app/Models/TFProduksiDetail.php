@@ -12,7 +12,7 @@ class TFProduksiDetail extends Model
     protected $table = 't_tfbj_detail';
 
     function header() {
-        return $this->hasOne(TFProduksi::class, 'tfbj_id');
+        return $this->belongsTo(TFProduksi::class, 'tfbj_id');
     }
 
     function produk() {

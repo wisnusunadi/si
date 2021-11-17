@@ -105,6 +105,13 @@ Route::prefix('/gbj')->group(function () {
     Route::post('noseri/{id}', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
 });
 
+Route::prefix('/draft')->group(function () {
+    Route::post('/rancang', [\App\Http\Controllers\GudangController::class, 'storeDraftRancang']);
+
+    // get
+    Route::get('/data', [\App\Http\Controllers\GudangController::class, 'getRancangDraft']);
+});
+
 Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
 
@@ -114,6 +121,7 @@ Route::prefix('/tfp')->group(function () {
     Route::get('data-so', [\App\Http\Controllers\ProduksiController::class, 'getOutSO']);
     Route::get('detail-so/{id}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
     Route::get('header-so/{id}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);
+    Route::get('hisproduk', [\App\Http\Controllers\ProduksiController::class, 'getHistorybyProduk']);
 
     // check
     Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);

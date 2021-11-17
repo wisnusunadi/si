@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Divisi;
+use App\Models\DraftGBJ;
+use App\Models\DraftGbjDetail;
+use App\Models\DraftGbjNoSeri;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\Layout;
@@ -16,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 
 class GudangController extends Controller
 {
+    // get
     public function get_data_barang_jadi()
     {
         $data = GudangBarangJadi::with('produk', 'satuan')->get();
@@ -60,6 +64,43 @@ class GudangController extends Controller
             })
             ->rawColumns(['action'])
             ->make(true);
+    }
+
+    function GetBarangJadiByID(Request $request)
+    {
+        $data = GudangBarangJadi::with('produk', 'satuan')->where('id', $request->id)->get();
+        $dataid = $data->pluck('produk_id');
+        $datas = Produk::with('product')->where('id', $dataid)->get();
+        return response()->json([
+            'data' => $data,
+            'nama_produk' => $datas
+        ]);
+    }
+
+    function getNoseri(Request $request, $id) {
+        $data = GudangBarangJadi::with('noseri')->where('id', $id)->get();
+        // $data = NoseriBarangJadi::with('gudang', 'from', 'to')->where('gdg_barang_jadi_id', $id)->get();
+        return response()->json($data);
+    }
+
+    function getHistory($id) {
+        $data = NoseriBarangJadi::with('from', 'to')->where('id', $id)->get();
+        return response()->json($data);
+    }
+
+    function getRancangDraft() {
+        // $data = DraftGBJ::with('divisi', 'gbj', 'status')->get();
+        // return datatables()->of($data)
+        //     ->make(true);
+    }
+
+    // store
+    function storeNoseri(Request $request, $id) {
+        dd($request->all());
+        // $Gud = GudangBarangJadi::find($id);
+        // $Gud->layout_id = $request->layout_id;
+        // $Gud->save();
+        // return response()->json('ok');
     }
 
     function StoreBarangJadi(Request $request)
@@ -157,34 +198,60 @@ class GudangController extends Controller
         }
     }
 
-    function GetBarangJadiByID(Request $request)
-    {
-        $data = GudangBarangJadi::with('produk', 'satuan')->where('id', $request->id)->get();
-        $dataid = $data->pluck('produk_id');
-        $datas = Produk::with('product')->where('id', $dataid)->get();
-        return response()->json([
-            'data' => $data,
-            'nama_produk' => $datas
-        ]);
-    }
+    function storeDraftRancang(Request $request) {
+        // dd($request->all());
+        // $validator = Validator::make(
+        //     $request->all(),
+        //     [
+        //         // 'produk_id' => 'required',
+        //         // 'nama' => 'required',
+        //         // 'stok' => 'required|numeric',
+        //         // 'ke' => 'required',
+        //     ],
+        //     [
+        //         // 'produk_id.required' => 'Produk harus diisi',
+        //         // 'nama.required' => 'Nama harus diisi',
+        //         // 'stok.numeric' => 'Stok harus diisi angka',
+        //         // 'stok.required' => 'Stok harus diisi',
+        //         // 'ke.required' => 'Tujuan harus diisi',
+        //     ]
+        // );
 
-    function getNoseri(Request $request, $id) {
-        $data = GudangBarangJadi::with('noseri')->where('id', $id)->get();
-        // $data = NoseriBarangJadi::with('gudang', 'from', 'to')->where('gdg_barang_jadi_id', $id)->get();
-        return response()->json($data);
-    }
+        // if ($validator->fails()) {
+        //     return $validator->errors();
+        // } else {
+        //     foreach ($request->dari as $key => $value) {
+        //         $draft = new DraftGBJ();
+        //         // $draft->gbj_id = $request->gbj_id[$key];
+        //         $draft->tgl_masuk = $request->tgl_masuk[$key];
+        //         $draft->dari = $value;
+        //         $draft->tujuan = $request->tujuan[$key];
+        //         // $draft->qty = $request->qty[$key];
+        //         $draft->status_id = 1;
+        //         $draft->created_at = Carbon::now();
+        //         $draft->save();
 
-    function getHistory($id) {
-        $data = NoseriBarangJadi::with('from', 'to')->where('id', $id)->get();
-        return response()->json($data);
-    }
+        //         foreach($request->gbj_id as $i => $v) {
+        //             $detail = new DraftGbjDetail();
+        //             $detail->draft_gbj_id = $draft->id;
+        //             $detail->gbj_id = $request->gbj_id[$key];
+        //             $detail->qty = $request->qty[$key];
+        //             $detail->status_id = 1;
+        //             $detail->created_at = Carbon::now();
+        //             $detail->save();
+        //         }
 
-    function storeNoseri(Request $request, $id) {
-        dd($request->all());
-        // $Gud = GudangBarangJadi::find($id);
-        // $Gud->layout_id = $request->layout_id;
-        // $Gud->save();
-        // return response()->json('ok');
+        //         // $noseri = new DraftGbjNoSeri();
+        //         // $noseri->draft_gbj_id = $draft->id;
+        //         // $noseri->noseri = $request->noseri[$key];
+        //         // $noseri->layout_id = $request->layout_id[$key];
+        //         // $noseri->status = $draft->status_id[$key];
+        //         // $noseri->created_at = Carbon::now();
+        //         // $noseri->save();
+        //     }
+
+        //     return response()->json(['msg' => 'Successfully']);
+        // }
     }
 
     // select

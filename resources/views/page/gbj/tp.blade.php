@@ -277,7 +277,7 @@
                                         <div class="foo blue"></div> : Ke
                                     </p>
                                 </div>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -525,6 +525,24 @@
             bFilter: false
         });
         $('#gudang-barang').dataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: {
+                url: "/api/tfp/hisproduk",
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'kode_produk', name: 'kode_produk'},
+                { data: 'product', name: 'product'},
+                { data: 'stock', name: 'stock'},
+                { data: 'stock', name: 'stock'},
+                { data: 'kelompok', name: 'kelompok'},
+                { data: 'action', name: 'action'},
+            ],
             "oLanguage": {
                 "sSearch": "Cari:"
             }
@@ -540,6 +558,12 @@
     function detailProdukModal() {
         $('.produk-show').removeClass('hidden-product');
     }
+
+    $(document).on('click', '.detailmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        $('.produk-show').removeClass('hidden-product');
+    })
 
 </script>
 @stop

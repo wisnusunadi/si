@@ -141,6 +141,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
+                                <form action="" id="myForm">
                                 <table class="table table-striped add-produk" id="addProduk">
                                     <thead>
                                         <tr>
@@ -179,8 +180,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Transfer</button>
-                <button type="button" class="btn btn-info">Rancang</button>
+                <button type="button" class="btn btn-success" id="btnTf">Transfer</button>
+                <button type="button" class="btn btn-info" id="btnDraft">Rancang</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
         </div>
@@ -219,6 +220,7 @@
                 </table>
             </div>
         </div>
+    </form>
     </div>
 </div>
 @stop
@@ -289,7 +291,7 @@
                 "targets": 0
             }],
             "order": [
-                [1, 'asc']
+                [3, 'desc']
             ],
             "oLanguage": {
             "sSearch": "Cari:"
@@ -319,7 +321,7 @@
             }
         });
         $('#addProduk').DataTable().destroy();
-        $('#addProduk').DataTable({
+        var mytable = $('#addProduk').DataTable({
             // retrieve: true,
             processing: true,
             serverSide: true,
@@ -330,7 +332,7 @@
                 // dataType: "json",
             },
             columns: [
-                { data: 'produk', name: 'produk'},
+                { data: 'ids', name: 'ids'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
                 { data: 'tipe', name: 'tipe'},
@@ -354,7 +356,25 @@
             }
         })
         $('#addProdukModal').modal('show');
-    })
+
+        $(document).on('click', '#btnDraft', function(e) {
+            var rowsel = mytable.column(0).checkboxes.selected();
+            $.each(rowsel, function(index, rowId) {
+                console.log(rowId);
+            });
+        })
+    });
+
+    // $('#myForm').on('submit', function(e) {
+    //     var form = this;
+    //     var rowsel = mytable.column(0).checkboxes.selected();
+    //     $.each(rowsel, function(index, rowId) {
+    //         console.log(rowId);
+    //     });
+    //     e.preventDefault();
+    // })
+
+
 
     $(document).on('click', '.detailmodal', function(e) {
         var id = $(this).data('id');
