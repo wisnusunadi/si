@@ -191,25 +191,36 @@ class ProduksiController extends Controller
 
     function getDetailSO(Request $request, $id)
     {
-        $data = DetailEkatalog::with('Ekatalog', 'PenjualanProduk')->where('ekatalog_id', $id)->get();
-        return datatables()->of($data)
+        $data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
+        $l = [];
+        $v = 0;
+        foreach ($data as $s) {
+            foreach ($s->GudangBarangJadi as $k) {
+                $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
+                $l[$v]['nama_produk'] = $k->produk->nama;
+                $l[$v]['merk'] = $k->produk->merk;
+                $l[$v]['jumlah'] = $k->pivot->jumlah;
+                $v++;
+            }
+        }
+        return datatables()->of($l)
             ->addColumn('produk', function ($data) {
-                return $data->penjualanproduk->nama;
+                return $data['nama_produk'];
             })
             ->addColumn('ids', function($d) {
-                return $d->penjualanproduk->id;
+                return $d['id'];
             })
             ->addColumn('qty', function ($data) {
-                return $data->jumlah;
-            })
-            ->addColumn('tipe', function ($data) {
-                return $data->penjualanproduk->nama;
+                return $data['jumlah'];
             })
             ->addColumn('merk', function ($data) {
-                return $data->penjualanproduk->nama;
+                return $data['merk'];
+            })
+            ->addColumn('tipe', function ($data) {
+                return $data['merk'];
             })
             ->addColumn('action', function ($data) {
-                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data['id'] . '">
                             <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
                             class="fas fa-qrcode"></i> Scan Produk</button>
                             </a>';
@@ -219,6 +230,7 @@ class ProduksiController extends Controller
             })
             ->rawColumns(['action', 'status'])
             ->make(true);
+        // return $data;
     }
 
     function headerSo($id)

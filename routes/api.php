@@ -88,6 +88,8 @@ Route::prefix('/gbj')->group(function () {
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
 
+    Route::get('/test/{id}', [App\Http\Controllers\GudangController::class, 'test']);
+
     // select
     Route::get('sel-product', [\App\Http\Controllers\GudangController::class, 'select_product']);
     Route::get('sel-product/{id}', [\App\Http\Controllers\GudangController::class, 'select_product_by_id']);

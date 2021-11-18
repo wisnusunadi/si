@@ -116,8 +116,8 @@
                                                 <th>Dari/Ke</th>
                                                 <th>Tujuan</th>
                                                 <th>Nomor SO</th>
-                                                <th>Produk</th>
-                                                <th>Jumlah</th>
+                                                {{-- <th>Produk</th>
+                                                <th>Jumlah</th> --}}
                                                 <td>Aksi</td>
                                             </tr>
                                         </thead>
@@ -128,8 +128,8 @@
                                                 <td><span class="badge badge-success">Divisi IT</span></td>
                                                 <td>Uji Coba Produk</td>
                                                 <td>641311666541</td>
-                                                <td>Ambulatory</td>
-                                                <td>100 Unit</td>
+                                                {{-- <td>Ambulatory</td>
+                                                <td>100 Unit</td> --}}
                                                 <td><button class="btn btn-info" onclick="detailtanggal()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
@@ -139,8 +139,8 @@
                                                 <td><span class="badge badge-info">Divisi IT</span></td>
                                                 <td>Uji Coba Produk</td>
                                                 <td>641311666541</td>
-                                                <td>Ambulatory</td>
-                                                <td>100 Unit</td>
+                                                {{-- <td>Ambulatory</td>
+                                                <td>100 Unit</td> --}}
                                                 <td><button class="btn btn-info" onclick="detailtanggal()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
@@ -528,7 +528,7 @@
             }
         }
     });
-
+    $('#history').DataTable().destroy();
     $('#history').dataTable({
             processing: true,
             serverSide: true,
@@ -540,7 +540,7 @@
                 // dataType: "json",
             },
             columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 { data: 'date_in', name: 'date_in'},
                 { data: 'date_out', name: 'date_out'},
                 { data: 'divisi', name: 'divisi'},
@@ -620,30 +620,30 @@
             }
         });
 
-        // $('#datatable').dataTable({
-        //     processing: true,
-        //     serverSide: true,
-        //     responsive: true,
-        //     ajax: {
-        //         url: "/api/transaksi/history-detail/" + id,
-        //         // data: {id: id},
-        //         // type: "post",
-        //         // dataType: "json",
-        //     },
-        //     columns: [
-        //         // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        //         { data: 'so', name: 'so'},
-        //         { data: 'date_in', name: 'date_in'},
-        //         { data: 'date_out', name: 'date_out'},
-        //         { data: 'divisi', name: 'divisi'},
-        //         { data: 'tujuan', name: 'tujuan'},
-        //         { data: 'jumlah', name: 'jumlah'},
-        //         { data: 'action', name: 'action'},
-        //     ],
-        //     "oLanguage": {
-        //         "sSearch": "Cari:"
-        //     }
-        // });
+        $('#datatable').dataTable({
+            // processing: true,
+            // serverSide: true,
+            // responsive: true,
+            // ajax: {
+            //     url: "/api/transaksi/history-detail/" + id,
+            //     // data: {id: id},
+            //     // type: "post",
+            //     // dataType: "json",
+            // },
+            // columns: [
+            //     // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            //     { data: 'so', name: 'so'},
+            //     { data: 'date_in', name: 'date_in'},
+            //     { data: 'date_out', name: 'date_out'},
+            //     { data: 'divisi', name: 'divisi'},
+            //     { data: 'tujuan', name: 'tujuan'},
+            //     { data: 'jumlah', name: 'jumlah'},
+            //     { data: 'action', name: 'action'},
+            // ],
+            "oLanguage": {
+                "sSearch": "Cari:"
+            }
+        });
         $('.produk-show').removeClass('hidden-product');
     })
 

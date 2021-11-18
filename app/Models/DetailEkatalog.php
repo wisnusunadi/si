@@ -18,4 +18,10 @@ class DetailEkatalog extends Model
     {
         return $this->belongsTo(PenjualanProduk::class, 'penjualan_produk_id');
     }
+
+    public function GudangBarangJadi()
+    {
+        return $this->belongsToMany(GudangBarangJadi::class, 'detail_ekatalog_produk')
+            ->withPivot('jumlah');
+    }
 }

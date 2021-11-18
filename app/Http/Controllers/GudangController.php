@@ -509,4 +509,10 @@ class GudangController extends Controller
         $data = GudangBarangJadi::with('produk')->get();
         return response()->json($data);
     }
+
+    // test
+    function test($id) {
+        $data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
+        return $data;
+    }
 }

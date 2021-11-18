@@ -16,7 +16,7 @@ class GudangBarangJadi extends Model
     protected $fillable = ['produk_id', 'variasi', 'stok', 'ruang'];
 
     public function noseri()
-    { 
+    {
         return $this->hasMany(NoseriBarangJadi::class, 'gdg_barang_jadi_id');
     }
 
@@ -37,5 +37,11 @@ class GudangBarangJadi extends Model
 
      function satuan() {
         return $this->belongsTo(Satuan::class, 'satuan_id');
+    }
+
+    public function DetailEkatalog()
+    {
+        return $this->belongsToMany(DetailEkatalog::class, 'detail_ekatalog_produk')
+            ->withPivot('jumlah');
     }
 }
