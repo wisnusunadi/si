@@ -1,11 +1,8 @@
 {
     "/native/js/plugin.js": "/native/js/plugin.js",
-    "/native/js/ppic/jadwal.js": "/native/js/ppic/jadwal.js",
-    "/native/js/ppic/data.js": "/native/js/ppic/data.js",
-    "/native/js/ppic/dashboard.js": "/native/js/ppic/dashboard.js",
-    "/native/js/ppic/manager.js": "/native/js/ppic/manager.js",
     "/native/js/gbj/stok.js": "/native/js/gbj/stok.js",
     "/native/js/gbj/penjualan.js": "/native/js/gbj/penjualan.js",
+    "/native/js/gbj/so.js": "/native/js/gbj/so.js",
     "/native/js/penjualan/produk.js": "/native/js/penjualan/produk.js",
     "/native/js/penjualan/customer.js": "/native/js/penjualan/customer.js",
     "/native/js/penjualan/penjualan.js": "/native/js/penjualan/penjualan.js",

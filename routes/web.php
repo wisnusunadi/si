@@ -48,6 +48,16 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
 Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
+    Route::view('/produk/{any?}', 'page.gbj.produk');
+    Route::view('/so/{any?}', 'page.gbj.so');
+    Route::view('/transferproduk', 'page.gbj.transferproduk');
+    Route::view('/transferproduk', 'page.gbj.transferproduk');
+    Route::view('/bso', 'page.gbj.bso');
+    Route::view('/tso', 'page.gbj.tso');
+    Route::view('/dp', 'page.gbj.dp');
+    Route::view('/lp', 'page.gbj.lp');
+    Route::view('/tp', 'page.gbj.tp'); 
+    Route::view('/dashboard', 'page.gbj.dashboard'); 
 });
 
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {

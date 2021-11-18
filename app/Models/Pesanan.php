@@ -22,4 +22,8 @@ class Pesanan extends Model
     {
         return $this->hasOne(Spb::class);
     }
+
+    function tgbj() {
+        return $this->hasOne(TFProduksi::class);
+    }
 }
