@@ -32,7 +32,6 @@ class QcController extends Controller
             }
         }
 
-
         return datatables()->of($l)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($l) {

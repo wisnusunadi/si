@@ -22,11 +22,18 @@
     }
 
     #urgent {
-        color: red;
+        color: #dc3545;
+        font-weight: 600;
     }
 
     #warning {
         color: #FFC700;
+        font-weight: 600;
+    }
+
+    #info {
+        color: #5F7A90;
+        font-weight: 600;
     }
 
     .minimizechar {
@@ -43,6 +50,63 @@
 
     .dropdown-toggle:active {
         color: #C0C0C0;
+    }
+
+    td.details-control {
+        content: "\f055";
+        font-family: FontAwesome;
+        left: -5px;
+        position: absolute;
+        top: 0;
+    }
+
+    tr.details td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+
+    #detailekat {
+        background-color: #E9DDE5;
+        /* color: #7D6378; */
+        height: 400px;
+        width: auto;
+        overflow-y: scroll;
+    }
+
+    #detailspa {
+        background-color: #FFE6C9;
+        /* color: #7D6378; */
+        height: 400px;
+        width: auto;
+        overflow-y: scroll;
+    }
+
+    #detailspb {
+        background-color: #E1EBF2;
+        /* color: #7D6378; */
+
+    }
+
+    .overflowy {
+        max-height: 450px;
+        width: auto;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
+
+    .removeshadow {
+        box-shadow: none;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .bordertopnone {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        vertical-align: top;
     }
 
     @media screen and (min-width: 1440px) {
@@ -807,7 +871,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/penjualan/data/',
+                'url': '/api/penjualan/data',
                 'method': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -1033,8 +1097,38 @@
             })
         });
 
+        // var detailRows = [];
+
+        // function format() {
+        //     return 'Full name: <br>' +
+        //         'Salary: <br>' +
+        //         'The child row can contain any data you wish, including links, images, inner tables etc.';
+        // }
+
+        // $('#detailtabel tbody').on('click', 'tr td.details-control', function() {
+        //     var tr = $(this).closest('tr');
+        //     var row = dt.row(tr);
+        //     var idx = $.inArray(tr.attr('id'), detailRows);
+
+        //     if (row.child.isShown()) {
+        //         tr.removeClass('details');
+        //         row.child.hide();
+
+        //         // Remove from the 'open' array
+        //         detailRows.splice(idx, 1);
+        //     } else {
+        //         tr.addClass('details');
+        //         row.child(format(row.data())).show();
+
+        //         // Add to the 'open' array
+        //         if (idx === -1) {
+        //             detailRows.push(tr.attr('id'));
+        //         }
+        //     }
+        // });
+
         function detailtabel_ekatalog(id) {
-            $('#detailtabel').DataTable({
+            var dt = $('#detailtabel').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -1044,19 +1138,16 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
+                        "class": "details-control",
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ""
                     },
                     {
                         data: 'nama_produk',
-
                     },
                     {
-                        data: 'variasi',
-                        orderable: false,
-                        searchable: false
+                        data: 'nama_produk',
                     },
                     {
                         data: 'harga',
@@ -1113,7 +1204,14 @@
                     $(api.column(4).footer()).html('Total');
                     $(api.column(5).footer()).html(num_for(total_pesanan));
                 },
-            })
+            });
+
+            // dt.on('draw', function() {
+            //     $.each(detailRows, function(i, id) {
+            //         console.log(id);
+            //         $('#' + id + ' td.details-control').trigger('click');
+            //     });
+            // });
         }
 
         function detailtabel_spa(id) {
