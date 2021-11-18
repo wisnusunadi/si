@@ -45,25 +45,28 @@ class ProduksiController extends Controller
         } else {
             foreach ($request->ke as $key => $value) {
                 $tf_prod = new TFProduksi();
+                $tf_prod->tgl_keluar = Carbon::now();
                 $tf_prod->ke = $value;
                 $tf_prod->deskripsi = $request->deskripsi[$key];
+                $tf_prod->jenis = 'keluar';
                 $tf_prod->created_at = Carbon::now();
                 $tf_prod->save();
 
                 $tf_prod_det = new TFProduksiDetail();
-                $tf_prod_det->tfbj_id = $tf_prod->id;
+                $tf_prod_det->t_gbj_id = $tf_prod->id;
                 $tf_prod_det->gdg_brg_jadi_id = $request->gdg_brg_jadi_id[$key];
                 $tf_prod_det->qty = $request->qty[$key];
+                $tf_prod_det->jenis = 'keluar';
                 $tf_prod_det->created_at = Carbon::now();
                 $tf_prod_det->save();
 
-                $tf_prod_his = new TFProduksiHis();
-                $tf_prod_his->tfbj_id = $tf_prod->id;
-                $tf_prod_his->gdg_brg_jadi_id = $request->gdg_brg_jadi_id[$key];
-                $tf_prod_his->qty = $request->qty[$key];
-                // $tf_prod_his->noseri = $request->noseri[$key];
-                $tf_prod_his->created_at = Carbon::now();
-                $tf_prod_his->save();
+                // $tf_prod_his = new TFProduksiHis();
+                // $tf_prod_his->tfbj_id = $tf_prod->id;
+                // $tf_prod_his->gdg_brg_jadi_id = $request->gdg_brg_jadi_id[$key];
+                // $tf_prod_his->qty = $request->qty[$key];
+                // // $tf_prod_his->noseri = $request->noseri[$key];
+                // $tf_prod_his->created_at = Carbon::now();
+                // $tf_prod_his->save();
             }
 
             $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();

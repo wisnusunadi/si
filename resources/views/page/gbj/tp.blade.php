@@ -68,7 +68,7 @@
                                             <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Dari</label>
-                                                    <select name="" id="" class="form-control">
+                                                    <select name="" id="divisi" class="form-control">
                                                         <option value="">All</option>
                                                         <option value="">Divisi IT</option>
                                                         <option value="">Divisi QC</option>
@@ -108,7 +108,7 @@
                             <div class="col-lg-12">
                                 <div class="table-responsive">
                                     {{-- Tanggal Masuk dan Tanggal Keluar --}}
-                                    <table class="table table-hover pertanggal" width="100%">
+                                    <table class="table table-hover pertanggal" width="100%" id="history">
                                         <thead>
                                             <tr>
                                                 <th>Tanggal Masuk</th>
@@ -207,11 +207,11 @@
             <div class="card" style="background-color: #786FC4; color: white;">
                 <div class="card-body">
                     <h5 class="card-text pb-2"><b>Kode Produk</b></h5>
-                    <p class="card-text">5415313</p>
+                    <p class="card-text" id="kode_produk">5415313</p>
                     <h5 class="card-text pb-2"><b>Nama Produk</b></h5>
-                    <p class="card-text">Ambulatory</p>
+                    <p class="card-text" id="nama_produk">Ambulatory</p>
                     <h5 class="card-text pb-2"><b>Deskripsi</b></h5>
-                    <p class="card-text">Produk Inovatif dan Kreatif</p>
+                    <p class="card-text" id="deskripsi">Produk Inovatif dan Kreatif</p>
                     <h5 class="card-text pb-2"><b>Dimensi</b></h5>
                     <div class="row">
                         <div class="col-sm">
@@ -226,13 +226,13 @@
                     </div>
                     <div class="row">
                         <div class="col-sm">
-                            <p>12 mm</p>
+                            <p id="panjang">12 mm</p>
                         </div>
                         <div class="col-sm">
-                            <p>13 mm</p>
+                            <p id="lebar">13 mm</p>
                         </div>
                         <div class="col-sm">
-                            <p>14 mm</p>
+                            <p id="tinggi">14 mm</p>
                         </div>
                     </div>
                 </div>
@@ -284,7 +284,7 @@
             </div>
             <div class="card-body">
                 <div class="mb-7">
-                    <table class="table">
+                    <table class="table" id="datatable">
                         <thead>
                             <tr>
                                 <th>Nomor SO</th>
@@ -511,6 +511,48 @@
     $('#datetimepicker1').daterangepicker({});
     $('#tanggalmasuk').daterangepicker({});
 
+    $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            if(res) {
+                console.log(res);
+                $("#divisi").empty();
+                $("#divisi").append('<option value="">All</option>');
+                $.each(res, function(key, value) {
+                    $("#divisi").append('<option value="'+value.id+'">'+value.nama+'</option');
+                });
+            } else {
+                $("#divisi").empty();
+            }
+        }
+    });
+
+    $('#history').dataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: {
+                url: "/api/transaksi/all",
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'date_in', name: 'date_in'},
+                { data: 'date_out', name: 'date_out'},
+                { data: 'divisi', name: 'divisi'},
+                { data: 'tujuan', name: 'tujuan'},
+                { data: 'so', name: 'so'},
+                { data: 'action', name: 'action'},
+            ],
+            "oLanguage": {
+                "sSearch": "Cari:"
+            }
+        });
+
 
     function detailtanggal() {
         $('#modal-per-tanggal').modal('show');
@@ -529,7 +571,7 @@
             serverSide: true,
             responsive: true,
             ajax: {
-                url: "/api/tfp/hisproduk",
+                url: "/api/transaksi/history",
                 // data: {id: id},
                 // type: "post",
                 // dataType: "json",
@@ -562,6 +604,46 @@
     $(document).on('click', '.detailmodal', function() {
         var id = $(this).data('id');
         console.log(id);
+
+        $.ajax({
+            url: "/api/transaksi/history-detail/" + id,
+            type: "get",
+            dataType: "json",
+            success: function(res) {
+                console.log(res);
+                $('p#kode_produk').text(res.header[0].kode);
+                $('p#nama_produk').text(res.header[0].nama);
+                $('p#deskripsi').text(res.header[0].deskripsi);
+                $('p#panjang').text(res.header[0].panjang);
+                $('p#lebar').text(res.header[0].lebar);
+                $('p#tinggi').text(res.header[0].tinggi);
+            }
+        });
+
+        // $('#datatable').dataTable({
+        //     processing: true,
+        //     serverSide: true,
+        //     responsive: true,
+        //     ajax: {
+        //         url: "/api/transaksi/history-detail/" + id,
+        //         // data: {id: id},
+        //         // type: "post",
+        //         // dataType: "json",
+        //     },
+        //     columns: [
+        //         // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        //         { data: 'so', name: 'so'},
+        //         { data: 'date_in', name: 'date_in'},
+        //         { data: 'date_out', name: 'date_out'},
+        //         { data: 'divisi', name: 'divisi'},
+        //         { data: 'tujuan', name: 'tujuan'},
+        //         { data: 'jumlah', name: 'jumlah'},
+        //         { data: 'action', name: 'action'},
+        //     ],
+        //     "oLanguage": {
+        //         "sSearch": "Cari:"
+        //     }
+        // });
         $('.produk-show').removeClass('hidden-product');
     })
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailEkatalog;
+use App\Models\DetailEkatalogProduk;
 use App\Models\Divisi;
 use App\Models\DraftGBJ;
 use App\Models\DraftGbjDetail;
@@ -10,11 +12,16 @@ use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\Layout;
 use App\Models\NoseriBarangJadi;
+use App\Models\NoseriTGbj;
+use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Satuan;
+use App\Models\TFProduksi;
+use App\Models\TFProduksiDetail;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class GudangController extends Controller
@@ -92,6 +99,223 @@ class GudangController extends Controller
         // $data = DraftGBJ::with('divisi', 'gbj', 'status')->get();
         // return datatables()->of($data)
         //     ->make(true);
+    }
+
+    function getHistorybyProduk() {
+        $data = GudangBarangJadi::with('produk', 'satuan')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('stock', function($d) {
+                return $d->stok. ' '.$d->satuan->nama;
+            })
+            ->addColumn('kelompok', function($d) {
+                return $d->produk->kelompokproduk->nama;
+            })
+            ->addColumn('product', function($d) {
+                return $d->produk->nama. ' '.$d->nama;
+            })
+            ->addColumn('kode_produk', function($d) {
+                return $d->produk->product->kode .''. $d->produk->kode;
+            })
+            ->addColumn('action', function($d) {
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
+                            <button class="btn btn-info" data-toggle="modal" data-target=".modal-detail"><i
+                            class="far fa-eye"></i> Detail</button>
+                            </a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    function getAllTransaksi() {
+        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->get();
+        $g = datatables()->of($data1)
+            ->addIndexColumn()
+            ->addColumn('so', function($d) {
+                if (isset($d->header->pesanan_id)) {
+                    return $d->header->pesanan->so;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('date_in', function($d) {
+                if (isset($d->header->tgl_masuk)) {
+                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                } else {
+                    return "-";
+                }
+            })
+            ->addColumn('date_out', function($d) {
+                if (isset($d->header->tgl_keluar)) {
+                    return date('d-m-Y', strtotime($d->header->tgl_keluar));
+                } else {
+                    return "-";
+                }
+            })
+            ->addColumn('divisi', function($d) {
+                if ($d->header->jenis == 'keluar') {
+                    return '<span class="badge badge-info">'.$d->header->divisi->nama.'</span>';
+                } else {
+                    return '<span class="badge badge-success">'.$d->header->dari.'</span>';
+                }
+            })
+            ->addColumn('tujuan', function($d) {
+                return $d->header->deskripsi;
+            })
+            ->addColumn('jumlah', function($d) {
+                return $d->qty.' '.$d->produk->satuan->nama;
+            })
+            ->addColumn('action', function($d) {
+                return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
+                            <button type="button" class="btn btn-outline-info" onclick="detailProduk()"><i
+                            class="far fa-eye"> Detail</i></button>
+                        </a>';
+            })
+            ->rawColumns(['divisi', 'action'])
+            ->make(true);
+
+        return $g;
+    }
+
+    function getDetailHistory($id) {
+        $data = GudangBarangJadi::with('produk')->where('id',$id)->get();
+        $d = [];
+        foreach($data as $dd) {
+            $d[] = [
+                'id' => $dd->id,
+                'kode' => $dd->produk->product->kode.''.$dd->produk->kode ? $dd->produk->product->kode.''.$dd->produk->kode : '-',
+                'nama' => $dd->produk->nama.' '.$dd->nama,
+                'deskripsi' => $dd->deskripsi,
+                'panjang' => $dd->dim_p .' mm',
+                'lebar' => $dd->dim_l. ' mm',
+                'tinggi' => $dd->dim_t. ' mm',
+            ];
+        }
+
+        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
+        $g = datatables()->of($data1)
+            ->addIndexColumn()
+            ->addColumn('so', function($d) {
+                if (isset($d->header->pesanan_id)) {
+                    return $d->header->pesanan->so;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('date_in', function($d) {
+                if (isset($d->header->tgl_masuk)) {
+                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                } else {
+                    return "-";
+                }
+            })
+            ->addColumn('date_out', function($d) {
+                if (isset($d->header->tgl_keluar)) {
+                    return date('d-m-Y', strtotime($d->header->tgl_keluar));
+                } else {
+                    return "-";
+                }
+            })
+            ->addColumn('divisi', function($d) {
+                if ($d->header->jenis == 'keluar') {
+                    return '<span class="badge badge-info">'.$d->header->divisi->nama.'</span>';
+                } else {
+                    return '<span class="badge badge-success">'.$d->header->dari.'</span>';
+                }
+            })
+            ->addColumn('tujuan', function($d) {
+                return $d->header->deskripsi;
+            })
+            ->addColumn('jumlah', function($d) {
+                return $d->qty.' '.$d->produk->satuan->nama;
+            })
+            ->addColumn('action', function($d) {
+                return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
+                            <button type="button" class="btn btn-outline-info" onclick="detailProduk()"><i
+                            class="far fa-eye"> Detail</i></button>
+                        </a>';
+            })
+            ->rawColumns(['divisi', 'action'])
+            ->make(true);
+        return response()->json([
+            'header' => $d,
+            'detail' => $g
+        ]);
+    }
+
+    function getRakit() {
+        $data = TFProduksiDetail::with('produk', 'header')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('tgl_masuk', function($d) {
+                if (isset($d->header->tgl_masuk)) {
+                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('product', function($d) {
+                return $d->produk->produk->nama.' '.$d->produk->nama;
+            })
+            ->addColumn('jumlah', function($d) {
+                return $d->qty.' '.$d->produk->satuan->nama;
+            })
+            ->addColumn('action', function($d) {
+                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="far fa-edit"></i>&nbsp;Terima
+                            </button>
+                        </a>
+
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Detail
+                            </button>
+                        </a>
+
+                        </div>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    function getRakitNoseri($id) {
+        $data = NoseriTGbj::with('layout', 'detail')->where('t_gbj_detail_id',$id)->get();
+        return datatables()->of($data)
+            ->addColumn('layout', function($d) {
+                return $d->layout->ruang;
+            })
+            ->addColumn('seri', function($d) {
+                return $d->noseri;
+            })
+            ->addColumn('title', function($d) {
+                return $d->detail->produk->produk->nama.' '.$d->detail->produk->nama;
+            })
+            ->make(true);
+    }
+
+    function getTerimaRakit($id) {
+        $data = NoseriTGbj::with('layout', 'detail')->where('t_gbj_detail_id',$id)->get();
+
+        return datatables()->of($data)
+            ->addColumn('layout', function($d) {
+                return '<select name="layout_id" id="layout_id" class="form-control">
+
+                        </select>';
+            })
+            ->addColumn('seri', function($d) {
+                return $d->noseri;
+            })
+            ->addColumn('checkbox', function($d) {
+                return '<input type="checkbox" class="cb-child" value="'.$d->id.'">';
+            })
+            ->addColumn('title', function($d) {
+                return $d->detail->produk->produk->nama.' '.$d->detail->produk->nama;
+            })
+            ->rawColumns(['checkbox', 'layout'])
+            ->make(true);
     }
 
     // store
