@@ -11,16 +11,9 @@
 
         }
 
-        @font-face {
-            font-family: 'Caladea';
-            src: url("{{public_path('font/Caladea/Caladea-Regular.ttf')}}")format("truetype");
-            font-weight: 400;
-            font-style: normal;
-        }
-
         .mdtxt {
             font-size: 18px;
-            font-family: 'Caladea', serif;
+
         }
 
         .nospace {

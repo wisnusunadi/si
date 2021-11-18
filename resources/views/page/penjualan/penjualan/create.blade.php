@@ -19,6 +19,18 @@
     .select2 {
         width: 100% !important;
     }
+
+    legend {
+        font-size: 14px;
+    }
+
+    filter {
+        margin: 5px;
+    }
+
+    .blue-bg {
+        background-color: #c8daea;
+    }
 </style>
 @stop
 
@@ -342,6 +354,8 @@
                                                                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                             <option value=""></option>
                                                                         </select>
+                                                                    </div>
+                                                                    <div class="detail_produk" id="detail_produk0">
                                                                         <div class="detail_jual" id="tes0">
                                                                         </div>
                                                                     </div>
@@ -426,7 +440,6 @@
                                                                     <div class="form-group">
                                                                         <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
                                                                         </select>
-
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -806,6 +819,23 @@
             });
         });
 
+        $('#produktable').on('keyup change', '.variasi', function() {
+            var name = $(this).attr('name');
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
+            val = $('select[name="' + name + '"]').val();
+            id = $('select[name="' + name + '"]').attr('data-id');
+            vals = $('select[name="' + name + '"]').select2('data')[0];
+            var kebutuhan = jumlah * vals.jumlah;
+            if (vals.qt < kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang dari Permintaan');
+            } else if (vals.qt >= kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
+            }
+        })
+
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
                 sisa = number_string.length % 3,
@@ -834,7 +864,6 @@
                 placeholder: "Pilih Produk",
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih Produk",
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -879,13 +908,34 @@
                                 var mySelect = $("select[name='variasi[" + x + "]']").append('<option value=""> ' + data[0].produk[x].nama + '</option>');
                                 mySelect.trigger("change");
                             } else {
-                                for (var y = 0; y < data[0].produk[x].gudang_barang_jadi.length; y++) {
-                                    var mySelect = $("select[name='variasi[" + x + "]']").append('<option value=""> ' + data[0].produk[x].gudang_barang_jadi[y].nama + '</option>');
-                                    mySelect.trigger("change");
+                                for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                    data.push({
+                                        id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                        text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                        jumlah: res[0].produk[x].pivot.jumlah,
+                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                    });
                                 }
                             }
-                            //  tes.append('<p> Warna : ' + data[0].produk[0].gudang_barang_jadi[y].nama + 'Stok:' + data[0].produk[0].gudang_barang_jadi[y].stok + '</p>');
+                            console.log(data);
+                            $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
+                                placeholder: 'Pilih Variasi',
+                                data: data,
+                                templateResult: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                },
+                                templateSelection: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                }
+                            });
+
+                            $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
+                            tes.append(`</div>`)
                         }
+                        tes.append(`</fieldset>`);
+                        // tes.html(datas);
                     }
                 });
             });
@@ -896,6 +946,7 @@
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
                 var subtotal = replaceAll($(this).val(), '.', '');
+                console.log(subtotal);
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
@@ -929,14 +980,29 @@
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
-
+            var ketstok = $(this).closest('tr').find('.ketstok');
+            var variasi = $(this).closest('tr').find('.variasi');
+            var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
                 subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
                 totalhargaprd();
+                for (var i = 0; i < variasi.length; i++) {
+                    var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
+                    var kebutuhan = jumlah * variasires.jumlah;
+                    if (variasires.qt < kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang dari Permintaan');
+                    } else if (variasires.qt >= kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
+                    }
+                }
             } else {
                 subtotal.val(formatmoney("0"));
                 totalhargaprd();
+                variasi.removeClass('is-invalid');
+                ketstok.text('');
             }
         });
 
@@ -964,8 +1030,14 @@
                 var j = c - 1;
                 $(el).find('.penjualan_produk_id').attr('name', 'penjualan_produk_id[' + j + ']');
                 $(el).find('.penjualan_produk_id').attr('id', j);
-                $(el).find('.variasi').attr('name', 'variasi[' + j + ']');
-                $(el).find('.variasi').attr('id', 'variasi' + j);
+                var variasi = $(el).find('.variasi');
+                for (var k = 0; k < variasi.length; k++) {
+                    $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
+                    $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
+                    $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
+                    $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
+                }
+                $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
                 $(el).find('.detail_jual').attr('id', 'tes' + j);
@@ -984,6 +1056,7 @@
                         <div class="detailjual" id="tes0">
                         </div>
                     </div>
+                    <div id="detail_produk" class="detail_produk"></div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">

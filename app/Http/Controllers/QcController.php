@@ -18,41 +18,42 @@ class QcController extends Controller
     //Get Data
     public function get_data_detail_so($id)
     {
-        // $y = DetailEkatalog::where('ekatalog_Id', $id)->get();
-        // foreach ($y as $r) {
-        //     $r->id;
-        // }
-        $data = GudangBarangJadi::With('DetailEKatalog')->WhereHas('DetailEkatalog', function ($q) use ($id) {
-            $q->whereIN('id', ['5', '6']);
-        })->get();
-
-        // $data = DetailEkatalog::with('GudangBarangJadi')->WhereHas('GudangBarangJadi')->where('ekatalog_id', $id)->get();
-        return datatables()->of($data)
+        $data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
+        // $q->whereNotNull('no_po');
+        // echo json_encode($data);
+        $l = [];
+        $v = 0;
+        foreach ($data as $s) {
+            foreach ($s->GudangBarangJadi as $k) {
+                $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
+                $l[$v]['nama_produk'] = $k->produk->nama;
+                $l[$v]['jumlah'] = $k->pivot->jumlah;
+                $v++;
+            }
+        }
+        return datatables()->of($l)
             ->addIndexColumn()
-            ->addColumn('nama_produk', function ($data) {
-                return $data->produk->nama;
+            ->addColumn('nama_produk', function ($l) {
+                return $l['nama_produk'];
             })
-            ->addColumn('jumlah', function ($data) {
-                // foreach ($data->detailekatalog as $s) {
-                //     return   $s->pivot->jumlah;
-                // }
-                $x = 0;
-                foreach ($data->detailekatalog as $s) {
-                    if ($s->pivot->detail_ekatalog_id == $data->id) {
-                        $x = $s->pivot->jumlah;
-                        return  $x;
-                    } else {
-                        return '0';
-                    }
-                }
-                //return $data->detailekatalog;
+            ->addColumn('jumlah', function ($l) {
+                return $l['jumlah'];
             })
-            ->addColumn('button', function ($data) {
-                return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+            ->addColumn('button', function ($l) {
+                return '<a type="button" class="noserishow" data-id="' . $l['id'] . '"><i class="fas fa-search"></i></a>';
             })
             ->rawColumns(['button'])
             ->make(true);
         //echo json_encode($data);
+    }
+
+    public function get_data_so_qc()
+    {
+        $data = Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get();
+        return datatables()->of($data)
+            ->make(true);
     }
     public function get_data_so($value)
     {

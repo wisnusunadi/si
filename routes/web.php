@@ -79,6 +79,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/penjualan'], function () {
         Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
         Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
+        Route::view('/create_new', 'page.penjualan.penjualan.create_new')->name('penjualan.penjualan.create_new');
 
         Route::post('/store', [App\Http\Controllers\PenjualanController::class, 'create_penjualan'])->name('penjualan.penjualan.store');
         Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
@@ -115,9 +116,9 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
         Route::get('/detail/{id}/{value}', [App\Http\Controllers\QCController::class, 'detail_so'])->name('qc.so.detail');
-        // Route::view('/detail_ekatalog/{id}', 'page.qc.so.detail_ekatalog')->name('qc.so.detail_ekatalog');
-        // Route::view('/detail_spa/{id}', 'page.qc.so.detail_spa')->name('qc.so.detail_spa');
-        // Route::view('/detail_spb/{id}', 'page.qc.so.detail_spb')->name('qc.so.detail_spb');
+        Route::view('/detail_ekatalog/{id}', 'page.qc.so.detail_ekatalog')->name('qc.so.detail_ekatalog');
+        Route::view('/detail_spa/{id}', 'page.qc.so.detail_spa')->name('qc.so.detail_spa');
+        Route::view('/detail_spb/{id}', 'page.qc.so.detail_spb')->name('qc.so.detail_spb');
         Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
         Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
@@ -156,6 +157,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/pengiriman'], function () {
         Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
         Route::view('/detail/{id}', 'page.logistik.pengiriman.detail')->name('logistik.pengiriman.detail');
+        Route::view('/noseri/{id}', 'page.logistik.pengiriman.noseri')->name('logistik.pengiriman.noseri');
         Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
         Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
         Route::get('/edit/{id}/{status}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');
@@ -179,6 +181,26 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.dc.laporan.show')->name('dc.so.laporan.show');
         });
+    });
+
+    Route::group(['prefix' => '/coo'], function () {
+        Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
+        Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
+        Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
+        Route::view('/edit/{id}', 'page.dc.coo.edit')->name('dc.coo.edit');
+        Route::get('/pdf', [App\Http\Controllers\DcController::class, 'pdf_coo'])->name('dc.coo.pdf');
+        Route::group(['prefix' => '/laporan'], function () {
+            Route::view('/show', 'page.dc.laporan.show')->name('dc.coo.laporan.show');
+        });
+    });
+});
+
+Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.as.dashboard')->name('as.dashboard');
+
+    Route::group(['prefix' => '/so'], function () {
+        Route::view('/show', 'page.as.so.show')->name('as.so.show');
+        Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
     });
 
     Route::group(['prefix' => '/coo'], function () {

@@ -86,7 +86,22 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . $data->log . '</span>';
+                $datas = "";
+                if ($data->log == "penjualan") {
+                    $datas .= '<span class="red-text badge">';
+                } else if ($data->log == "po") {
+                    $datas .= '<span class="purple-text badge">';
+                } else if ($data->log == "gudang") {
+                    $datas .= '<span class="orange-text badge">';
+                } else if ($data->log == "qc") {
+                    $datas .= '<span class="yellow-text badge">';
+                } else if ($data->log == "logistik") {
+                    $datas .= '<span class="blue-text badge">';
+                } else if ($data->log == "selesai") {
+                    $datas .= '<span class="green-text badge">';
+                }
+                $datas .= ucfirst($data->log) . '</span>';
+                return $datas;
             })
             ->addColumn('button', function ($data) {
                 $name =  $data->getTable();
@@ -163,7 +178,22 @@ class PenjualanController extends Controller
                     return '';
                 })
                 ->addColumn('log', function ($data) {
-                    return '<span class="red-text badge">' . $data->log . '</span>';
+                    $datas = "";
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
+                    return $datas;
                 })
                 ->rawColumns(['log'])
                 ->make(true);
@@ -185,9 +215,23 @@ class PenjualanController extends Controller
                     return $status;
                 })
                 ->addColumn('log', function ($data) {
-                    return '<span class="red-text badge">' . $data->log . '</span>';
+                    $datas = "";
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
+                    return $datas;
                 })
-
                 ->rawColumns(['status', 'log'])
                 ->make(true);
         } elseif ($parameter == 'no_seri') {
@@ -226,7 +270,22 @@ class PenjualanController extends Controller
                     return '';
                 })
                 ->addColumn('log', function ($data) {
-                    return '<span class="red-text badge">' . $data->log . '</span>';
+                    $datas = "";
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
+                    return $datas;
                 })
                 ->rawColumns(['log'])
                 ->make(true);
@@ -344,7 +403,22 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . ucfirst($data->log) . '</span>';
+                $datas = "";
+                if ($data->log == "penjualan") {
+                    $datas .= '<span class="red-text badge">';
+                } else if ($data->log == "po") {
+                    $datas .= '<span class="purple-text badge">';
+                } else if ($data->log == "gudang") {
+                    $datas .= '<span class="orange-text badge">';
+                } else if ($data->log == "qc") {
+                    $datas .= '<span class="yellow-text badge">';
+                } else if ($data->log == "logistik") {
+                    $datas .= '<span class="blue-text badge">';
+                } else if ($data->log == "selesai") {
+                    $datas .= '<span class="green-text badge">';
+                }
+                $datas .= ucfirst($data->log) . '</span>';
+                return $datas;
             })
             ->addColumn('batas_kontrak', function ($data) {
 
@@ -502,7 +576,22 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . $data->log . '</span>';
+                $datas = "";
+                if ($data->log == "penjualan") {
+                    $datas .= '<span class="red-text badge">';
+                } else if ($data->log == "po") {
+                    $datas .= '<span class="purple-text badge">';
+                } else if ($data->log == "gudang") {
+                    $datas .= '<span class="orange-text badge">';
+                } else if ($data->log == "qc") {
+                    $datas .= '<span class="yellow-text badge">';
+                } else if ($data->log == "logistik") {
+                    $datas .= '<span class="blue-text badge">';
+                } else if ($data->log == "selesai") {
+                    $datas .= '<span class="green-text badge">';
+                }
+                $datas .= ucfirst($data->log) . '</span>';
+                return $datas;
             })
             ->addColumn('tglpo', function ($data) {
                 if ($data->Pesanan) {
@@ -571,7 +660,22 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '<span class="red-text badge">' . $data->log . '</span>';
+                $datas = "";
+                if ($data->log == "penjualan") {
+                    $datas .= '<span class="red-text badge">';
+                } else if ($data->log == "po") {
+                    $datas .= '<span class="purple-text badge">';
+                } else if ($data->log == "gudang") {
+                    $datas .= '<span class="orange-text badge">';
+                } else if ($data->log == "qc") {
+                    $datas .= '<span class="yellow-text badge">';
+                } else if ($data->log == "logistik") {
+                    $datas .= '<span class="blue-text badge">';
+                } else if ($data->log == "selesai") {
+                    $datas .= '<span class="green-text badge">';
+                }
+                $datas .= ucfirst($data->log) . '</span>';
+                return $datas;
             })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {
@@ -639,8 +743,7 @@ class PenjualanController extends Controller
     }
 
 
-
-    //Create
+    // Create
     public function create_penjualan(Request $request)
     {
         if ($request->jenis_penjualan == 'ekatalog') {
@@ -918,63 +1021,64 @@ class PenjualanController extends Controller
     }
     public function create_so_ekatalog(Request $request, $id)
     {
-        $v = Validator::make(
-            $request->all(),
-            [
-                'customer_id' => 'required',
-                'status' => 'required',
-            ],
-            [
-                'customer_id.required' => 'Customer harus di isi',
-                'status.required' => 'Status harus di pilih',
-            ]
-        );
+        $v = "";
+        // Validator::make(
+        //     $request->all(),
+        //     [
+        //         'customer_id' => 'required',
+        //         'status' => 'required',
+        //     ],
+        //     [
+        //         'customer_id.required' => 'Customer harus di isi',
+        //         'status.required' => 'Status harus di pilih',
+        //     ]
+        // );
 
-        if ($v->fails()) {
-            return redirect()->back()->withErrors($v);
+        // if ($v->fails()) {
+        //     return redirect()->back()->withErrors($v);
+        // } else {
+        // $this->validate(
+        //     $request,
+        //     [w
+        //         'customer_id' => 'required',
+        //         'status' => 'required',
+        //         'jumlah.*' => 'required',
+        //         'penjualan_produk_id.*' => 'required'
+        //     ],
+        //     [
+        //         'customer_id.required' => 'Customer harus di isi',
+        //         'status.required' => 'Status harus di pilih',
+        //         'jumlah.required' => 'Jumlah Produk harus di isi',
+        //         'penjualan_produk_id.required' => 'Produk harus di pilih',
+        //     ]
+
+        // );
+        $bool = true;
+        $pesanan =  Pesanan::create([
+            'so' => $this->createSO('EKAT'),
+            'no_po' => $request->no_po,
+            'tgl_po' => $request->tanggal_po,
+            'no_do' => $request->no_do,
+            'tgl_do' => $request->tanggal_do,
+            'ket' => $request->keterangan
+        ]);
+        if (!$pesanan) {
+            $bool = false;
         } else {
-            // $this->validate(
-            //     $request,
-            //     [w
-            //         'customer_id' => 'required',
-            //         'status' => 'required',
-            //         'jumlah.*' => 'required',
-            //         'penjualan_produk_id.*' => 'required'
-            //     ],
-            //     [
-            //         'customer_id.required' => 'Customer harus di isi',
-            //         'status.required' => 'Status harus di pilih',
-            //         'jumlah.required' => 'Jumlah Produk harus di isi',
-            //         'penjualan_produk_id.required' => 'Produk harus di pilih',
-            //     ]
-
-            // );
-            $bool = true;
-            $pesanan =  Pesanan::create([
-                'so' => $this->createSO('EKAT'),
-                'no_po' => $request->no_po,
-                'tgl_po' => $request->tanggal_po,
-                'no_do' => $request->no_do,
-                'tgl_do' => $request->tanggal_do,
-                'ket' => $request->keterangan
-            ]);
-            if (!$pesanan) {
+            $ekatalog = Ekatalog::find($id);
+            $ekatalog->pesanan_id = $pesanan->id;
+            $ekat = $ekatalog->save();
+            if (!$ekat) {
                 $bool = false;
-            } else {
-                $ekatalog = Ekatalog::find($id);
-                $ekatalog->pesanan_id = $pesanan->id;
-                $ekat = $ekatalog->save();
-                if (!$ekat) {
-                    $bool = false;
-                }
-            }
-
-            if ($bool == true) {
-                return redirect()->back()->with('success', 'Berhasil menambahkan PO');
-            } else if ($bool == false) {
-                return redirect()->back()->with('error', 'Gagal menambahkan PO');
             }
         }
+
+        if ($bool == true) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan PO');
+        } else if ($bool == false) {
+            return redirect()->back()->with('error', 'Gagal menambahkan PO');
+        }
+        // }
     }
     //Update
     public function update_penjualan($id, $jenis)
