@@ -49,7 +49,7 @@ class QcController extends Controller
 
     public function get_data_so_qc()
     {
-        $data = Ekatalog::whereHas('Pesanan', function ($q) {
+        $data = Ekatalog::whereHas('Pesanan.', function ($q) {
             $q->whereNotNull('no_po');
         })->get();
         return datatables()->of($data)

@@ -895,18 +895,28 @@
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
                     dataType: 'json',
-                    success: function(data) {
-                        console.log(data);
-                        $('#produk_harga' + index).val(formatmoney(data[0].harga));
-                        var tes = $('#tes' + index + '');
+                    success: function(res) {
+                        $('#produk_harga' + index).val(formatmoney(res[0].harga));
+                        console.log(res);
+                        var tes = $('#detail_produk' + index);
                         tes.empty();
-                        for (var x = 0; x < data[0].produk.length; x++) {
-                            tes.append('<p> Detail Produk : ' + data[0].produk[x].nama + '</p>');
-                            tes.append("<select class='variasi' name='variasi[" + x + "]' ></select>");
-                            $('.variasi').select2({});
-                            if (data[0].produk[x].gudang_barang_jadi.length <= 1) {
-                                var mySelect = $("select[name='variasi[" + x + "]']").append('<option value=""> ' + data[0].produk[x].nama + '</option>');
-                                mySelect.trigger("change");
+                        var datas = "";
+                        tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+                        for (var x = 0; x < res[0].produk.length; x++) {
+                            var data = [];
+                            tes.append(`<div>`);
+                            tes.append(`<div class="card-body blue-bg">
+                                        <h6>` + res[0].produk[x].nama + `</h6>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" data-attr="` + index + `` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="` + index + `` + x + `" data-id="` + x + `"></span>
+                                      </div>`);
+                            if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                                data.push({
+                                    id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                    text: res[0].produk[x].nama,
+                                    jumlah: res[0].produk[x].pivot.jumlah,
+                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                });
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
                                     data.push({

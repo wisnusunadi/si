@@ -799,6 +799,11 @@ class PenjualanController extends Controller
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
+
+                        for ($j = 0; $j < count($request->variasi); $j++) {
+                            $dekat->GudangBarangJadi()->attach($request->variasi[$i][$j], ['jumlah' => 1]);
+                        }
+
                         if (!$dekat) {
                             $bool = false;
                         }
