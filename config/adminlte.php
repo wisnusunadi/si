@@ -1125,6 +1125,49 @@ return [
             'icon' => 'fas fa-sign-out-alt',
         ],
 
+        // GK
+        [
+            'text' => 'Dashboard',
+            'url' => 'gk/dashboard',
+            'icon' => 'fas fa-layer-group',
+            'auth' => [12],
+        ],
+        [
+            'header' => 'Produk',
+            'auth' => [12],
+        ],
+        [
+            'text' => 'Gudang',
+            'url' => 'gk/gudang',
+            'icon' => 'fas fa-boxes',
+            'auth' => [12],
+        ],
+        [
+            'text' => 'Riwayat Transaksi',
+            'url' => 'gk/terima',
+            'icon' => 'fas fa-history',
+            'auth' => [12],
+        ],
+        [
+            'header' => 'Penerimaan',
+            'auth' => [12],
+        ],
+        [
+            'text' => 'Penerimaan Produk',
+            'url' => 'gk/transaksi',
+            'icon' => 'fas fa-dolly',
+            'auth' => [12],
+        ],
+        [
+            'header' => 'Transfer',
+            'auth' => [12],
+        ],
+        [
+            'text' => 'Transfer Produk',
+            'url' => 'gk/transfer',
+            'icon' => 'fas fa-cubes',
+            'auth' => [12],
+        ],
     ],
 
     /*

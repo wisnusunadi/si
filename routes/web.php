@@ -129,10 +129,18 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
     });
 });
-Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
+// Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 
 Route::get('/test/{name?}', function ($name = null) {
     return $name;
+});
+
+Route::middleware('auth')->prefix('/gk')->group(function () {
+    Route::view('/dashboard', 'page.gk.dashboard');
+    Route::view('/gudang', 'page.gk.gudang');
+    Route::view('/terima', 'page.gk.terima');
+    Route::view('/transaksi', 'page.gk.transaksi');
+    Route::view('/transfer', 'page.gk.transfer');
 });
 
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
