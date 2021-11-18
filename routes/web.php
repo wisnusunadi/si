@@ -157,6 +157,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/pengiriman'], function () {
         Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
         Route::view('/detail/{id}', 'page.logistik.pengiriman.detail')->name('logistik.pengiriman.detail');
+        Route::view('/noseri/{id}', 'page.logistik.pengiriman.noseri')->name('logistik.pengiriman.noseri');
         Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
         Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
         Route::get('/edit/{id}/{status}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');

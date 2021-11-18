@@ -207,6 +207,7 @@
                                                                 <th>No</th>
                                                                 <th>Produk</th>
                                                                 <th>Kelompok</th>
+                                                                <th>Jumlah</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -347,7 +348,9 @@
                     {
                         data: 'kelompok'
 
-                    },
+                    }, {
+                        data: 'jumlah'
+                    }
 
                 ],
             });

@@ -118,6 +118,8 @@ class MasterController extends Controller
         $data = Produk::whereHas('PenjualanProduk', function ($q) use ($id) {
             $q->where('id', $id);
         })->get();
+
+
         //$data = PenjualanProduk::with('produk')->where('id', $id)->get();
         // $data = PenjualanProduk::with('Produk')->selectRaw('distinct penjualan_produk.*')->where('id', '5')->get();
         return datatables()->of($data)
@@ -127,6 +129,9 @@ class MasterController extends Controller
             // ->rawColumns(['produk_nama'])
             ->addColumn('kelompok', function ($data) {
                 return $data->KelompokProduk->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->PenjualanProduk->first()->pivot->jumlah;
             })
             ->addIndexColumn()
             ->make(true);

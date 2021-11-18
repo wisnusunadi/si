@@ -188,6 +188,7 @@
                                         <th>Jumlah</th>
                                         <th>No Seri</th>
                                         <th>Keterangan</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -197,6 +198,10 @@
                                         <td>10</td>
                                         <td class="minimizechar wb">MTB0129021803, MTB0129021801, MTB0129021802, MTB0129021804, MTB0129021805, MTB0129021807, MTB0129021811, MTB0129021816, MTB0129021823, MTB0129021817</td>
                                         <td>-</td>
+                                        <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('logistik.pengiriman.noseri', ['id' => '1'])}}" data-id="1">
+                                                <div><i class="fas fa-eye"></i></div>
+                                                <div><small>No Seri</small></div>
+                                            </a></td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
@@ -204,6 +209,11 @@
                                         <td>1</td>
                                         <td class="minimizechar wb">PFD0129021803</td>
                                         <td>-</td>
+                                        <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('logistik.pengiriman.noseri', ['id' => '1'])}}" data-id="1">
+                                                <div><i class="fas fa-eye"></i></div>
+                                                <div><small>No Seri</small></div>
+                                            </a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -212,6 +222,59 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-info">
+                        <h4 class="modal-title">Info</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="detail">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
+@stop
+
+@section('adminlte_js')
+<script>
+    $(function() {
+        var showtable = $('#showtable').DataTable({});
+
+        $(document).on('click', '.detailmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
+            $.ajax({
+                url: href,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#detailmodal').modal("show");
+                    $('#detail').html(result).show();
+                    console.log(id);
+                    // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+    })
+</script>
 @stop
