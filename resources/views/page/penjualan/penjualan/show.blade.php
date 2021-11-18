@@ -1054,6 +1054,11 @@
 
                     },
                     {
+                        data: 'variasi',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'harga',
                         render: $.fn.dataTable.render.number(',', '.', 2),
                         orderable: false,
@@ -1090,14 +1095,14 @@
                     };
                     // computing column Total of the complete result 
                     var jumlah_pesanan = api
-                        .column(3)
+                        .column(4)
                         .data()
                         .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
                     // computing column Total of the complete result 
                     var total_pesanan = api
-                        .column(4)
+                        .column(5)
                         .data()
                         .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
@@ -1105,8 +1110,8 @@
 
                     var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
                     $(api.column(0).footer()).html('Total');
-                    $(api.column(3).footer()).html('Total');
-                    $(api.column(4).footer()).html(num_for(total_pesanan));
+                    $(api.column(4).footer()).html('Total');
+                    $(api.column(5).footer()).html(num_for(total_pesanan));
                 },
             })
         }

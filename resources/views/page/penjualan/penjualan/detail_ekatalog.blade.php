@@ -60,6 +60,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Produk</th>
+                                        <th>Variasi</th>
                                         <th>Harga</th>
                                         <th>Jumlah</th>
                                         <th>Subtotal</th>
@@ -84,7 +85,7 @@
                             </tfoot> -->
                                 <tfoot>
                                     <tr>
-                                        <th width="15%" colspan="4">Total</th>
+                                        <th width="15%" colspan="5">Total</th>
                                         <th width="15%" colspan="2"><input type="text" placeholder="Sub Total" class="form-control" id="subtotal" readonly></th>
                                     </tr>
                                 </tfoot>

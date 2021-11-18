@@ -354,9 +354,14 @@
                                                                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                             <option value=""></option>
                                                                         </select>
+<<<<<<< HEAD
                                                                     </div>
                                                                     <div class="detail_produk" id="detail_produk0">
 
+=======
+                                                                        <div class="detail_jual" id="tes0">
+                                                                        </div>
+>>>>>>> a87d431175ea1edf06277f1b9f323ef8bb3687ad
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -889,10 +894,15 @@
             }).change(function(i) {
                 var index = $(this).attr('id');
                 var id = $(this).val();
+<<<<<<< HEAD
+=======
+                console.log(index);
+>>>>>>> a87d431175ea1edf06277f1b9f323ef8bb3687ad
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
                     dataType: 'json',
+<<<<<<< HEAD
                     success: function(res) {
                         $('#produk_harga' + index).val(formatmoney(res[0].harga));
                         console.log(res);
@@ -915,6 +925,20 @@
                                     jumlah: res[0].produk[x].pivot.jumlah,
                                     qt: res[0].produk[x].gudang_barang_jadi[0].stok
                                 });
+=======
+                    success: function(data) {
+                        console.log(data);
+                        $('#produk_harga' + index).val(formatmoney(data[0].harga));
+                        var tes = $('#tes' + index + '');
+                        tes.empty();
+                        for (var x = 0; x < data[0].produk.length; x++) {
+                            tes.append('<p> Detail Produk : ' + data[0].produk[x].nama + '</p>');
+                            tes.append("<select class='variasi' name='variasi[" + x + "]' ></select>");
+                            $('.variasi').select2({});
+                            if (data[0].produk[x].gudang_barang_jadi.length <= 1) {
+                                var mySelect = $("select[name='variasi[" + x + "]']").append('<option value=""> ' + data[0].produk[x].nama + '</option>');
+                                mySelect.trigger("change");
+>>>>>>> a87d431175ea1edf06277f1b9f323ef8bb3687ad
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
                                     data.push({
@@ -1048,6 +1072,7 @@
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.detail_jual').attr('id', 'tes' + j);
                 select_data();
             });
         }
@@ -1060,6 +1085,8 @@
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
+                        <div class="detailjual" id="tes0">
+                        </div>
                     </div>
                     <div id="detail_produk" class="detail_produk"></div>
                 </td>

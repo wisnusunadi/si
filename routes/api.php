@@ -131,6 +131,7 @@ Route::prefix('/spb')->group(function () {
 Route::prefix('/qc')->group(function () {
     Route::prefix('/so')->group(function () {
         Route::get('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
+        Route::get('detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_so']);
         Route::get('update_modal', [App\Http\Controllers\QcController::class, 'update_modal_so']);
         Route::prefix('/riwayat')->group(function () {
             Route::get('detail_modal', [App\Http\Controllers\QcController::class, 'detail_modal_riwayat_so']);
