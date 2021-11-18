@@ -137,7 +137,9 @@ Route::get('/test/{name?}', function ($name = null) {
 
 Route::middleware('auth')->prefix('/gk')->group(function () {
     Route::view('/dashboard', 'page.gk.dashboard');
-    Route::view('/gudang', 'page.gk.gudang');
+    Route::view('/gudang', 'page.gk.gudang.index');
+    Route::view('/gudang/sparepart/1', 'page.gk.gudang.sparepartEdit');
+    Route::view('/gudang/unit/1', 'page.gk.gudang.unitEdit');
     Route::view('/terima', 'page.gk.terima');
     Route::view('/transaksi', 'page.gk.transaksi');
     Route::view('/transfer', 'page.gk.transfer');

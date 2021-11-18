@@ -1144,7 +1144,7 @@ return [
         ],
         [
             'text' => 'Riwayat Transaksi',
-            'url' => 'gk/terima',
+            'url' => 'gk/transaksi',
             'icon' => 'fas fa-history',
             'auth' => [12],
         ],
@@ -1154,7 +1154,7 @@ return [
         ],
         [
             'text' => 'Penerimaan Produk',
-            'url' => 'gk/transaksi',
+            'url' => 'gk/terima',
             'icon' => 'fas fa-dolly',
             'auth' => [12],
         ],
