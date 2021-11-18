@@ -28,7 +28,30 @@
     .card-center {
         left: 20%;
     }
-
+    .nomor-so{
+        background-color: #717FE1;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-akn{
+        background-color: #DF7458;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-po{
+        background-color: #85D296;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .instansi{
+        background-color: #36425E;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
 </style>
 <div class="row">
     <div class="col-12">
@@ -126,7 +149,7 @@
                                                 <td>641311666541</td>
                                                 <td>Ambulatory</td>
                                                 <td>100 Unit</td>
-                                                <td><button class="btn btn-info" onclick="detailtanggal()"><i
+                                                <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
                                             <tr>
@@ -137,7 +160,7 @@
                                                 <td>641311666541</td>
                                                 <td>Ambulatory</td>
                                                 <td>100 Unit</td>
-                                                <td><button class="btn btn-info" onclick="detailtanggal()"><i
+                                                <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
                                         </tbody>
@@ -193,6 +216,89 @@
     </div>
 </div>
 
+
+
+<!-- Modal -->
+<div class="modal fade modalProduk" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row row-cols-2">
+                            {{-- col --}}
+                            <div class="col"> <label for="">Tanggal Masuk</label>
+                                <div class="card nomor-so">
+                                    <div class="card-body">
+                                        10-04-2022
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- col --}}
+                            <div class="col"> <label for="">Tanggal Keluar</label>
+                                <div class="card nomor-akn">
+                                    <div class="card-body">
+                                        23-09-2022
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- col --}}
+                            <div class="col"> <label for="">Nomor SO</label>
+                                <div class="card nomor-po">
+                                    <div class="card-body">
+                                        89798797856456
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- col --}}
+                            <div class="col"> <label for="">Jumlah Produk</label>
+                                <div class="card instansi">
+                                    <div class="card-body">
+                                        5 Produk
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped add-produk">
+                            <thead>
+                                <tr>
+                                    <th>Nama Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Tipe</th>
+                                    <th>Merk</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                    <td>100 Unit</td>
+                                    <td>ABPM50</td>
+                                    <td>ELITECH</td>
+                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
+                                </tr>
+                                <tr>
+                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                    <td>100 Unit</td>
+                                    <td>RGB</td>
+                                    <td>ELITECH</td>
+                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal Per Tanggal-->
 <div class="modal fade" id="modal-per-tanggal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
     aria-hidden="true">
@@ -244,6 +350,10 @@
         $('.modalDetail').modal('show');
     }
 
+    function detailprodukriwayat() { 
+        $('.modalProduk').modal('show');
+     }
+
     $(document).ready(function () {
         $('.pertanggal').dataTable({
             bFilter: false,
@@ -252,6 +362,11 @@
         $('#gudang-barang').dataTable({
             "oLanguage": {
                 "sSearch": "Cari:"
+            }
+        });
+        $('.add-produk').dataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
         $(document).on("click", "#semua-produk-tab", function () {
