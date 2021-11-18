@@ -18,23 +18,41 @@ class QcController extends Controller
     //Get Data
     public function get_data_detail_so($id)
     {
-        $data = GudangBarangJadi::WHereHas('DetailEkatalog', function ($q) use ($id) {
-            $q->where('ekatalog_id', $id);
+        // $y = DetailEkatalog::where('ekatalog_Id', $id)->get();
+        // foreach ($y as $r) {
+        //     $r->id;
+        // }
+        $data = GudangBarangJadi::With('DetailEKatalog')->WhereHas('DetailEkatalog', function ($q) use ($id) {
+            $q->whereIN('id', ['5', '6']);
         })->get();
-        // $q->whereNotNull('no_po');
+
+        // $data = DetailEkatalog::with('GudangBarangJadi')->WhereHas('GudangBarangJadi')->where('ekatalog_id', $id)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
                 return $data->produk->nama;
             })
             ->addColumn('jumlah', function ($data) {
-                return '0';
+                // foreach ($data->detailekatalog as $s) {
+                //     return   $s->pivot->jumlah;
+                // }
+                $x = 0;
+                foreach ($data->detailekatalog as $s) {
+                    if ($s->pivot->detail_ekatalog_id == $data->id) {
+                        $x = $s->pivot->jumlah;
+                        return  $x;
+                    } else {
+                        return '0';
+                    }
+                }
+                //return $data->detailekatalog;
             })
             ->addColumn('button', function ($data) {
                 return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
             })
             ->rawColumns(['button'])
             ->make(true);
+        //echo json_encode($data);
     }
     public function get_data_so($value)
     {
