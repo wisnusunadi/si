@@ -528,6 +528,7 @@
             }
         }
     });
+    
     $('#history').DataTable().destroy();
     $('#history').dataTable({
             processing: true,
