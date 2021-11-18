@@ -23,14 +23,17 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table_produk_perakitan">
+                        <table class="table table-bordered table_produk_perakitan">
                             <thead class="thead-dark">
+                                <tr>
+                                    <th colspan="2" class="text-center">Tanggal</th>
+                                    <th rowspan="2">Produk</th>
+                                    <th rowspan="2">Jumlah Rakit</th>
+                                    <th rowspan="2">Aksi</th>
+                                </tr>
                                 <tr>
                                     <th>Tgl Mulai</th>
                                     <th>Tgl Selesai</th>
-                                    <th>Produk</th>
-                                    <th>Jumlah Rakit</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>

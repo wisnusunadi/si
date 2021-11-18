@@ -105,8 +105,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 </td>
-                                    <td><button class="btn btn-outline-primary" onclick="showModalDetail()"><i
-                                        class="fas fa-paper-plane"></i></button></td>
+                                    <td><a class="btn btn-outline-primary" href="{{ url('produksi/so') }}"><i
+                                        class="fas fa-paper-plane"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -129,8 +129,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 </td>
-                                    <td><button class="btn btn-outline-primary" onclick="showModalDetail()"><i
-                                        class="fas fa-paper-plane"></i></button></td>
+                                    <td><a class="btn btn-outline-primary" href="{{ url('produksi/so') }}"><i
+                                        class="fas fa-paper-plane"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -153,8 +153,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 <br> <span class="badge badge-danger">Lebih dari 5 hari</span></td>
-                                    <td><button class="btn btn-outline-primary" onclick="showModalDetail()"><i
-                                                class="fas fa-paper-plane"></i></button></td>
+                                    <td><a class="btn btn-outline-primary" href="{{ url('produksi/so') }}"><i
+                                                class="fas fa-paper-plane"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -201,8 +201,9 @@
                         <table class="table table-produk-gbj">
                             <thead>
                                 <tr>
-                                     <th>Tanggal Mulai</th>
+                                    <th>Tanggal Mulai</th>
                                     <th>Tanggal Selesai</th>
+                                    <th>Nomor BPPB</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
                                     <th>Aksi</th>
@@ -212,6 +213,7 @@
                                 <tr>
                                     <td scope="row">10-05-2021</td>
                                     <td>10-06-2021 <br> <span class="badge badge-info">Kurang 10 Hari</span></td>
+                                    <td>3513654365456</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
@@ -220,14 +222,16 @@
                                 <tr>
                                     <td scope="row">10-05-2021</td>
                                     <td>10-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
+                                    <td>3513654365456</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
+                                    <td><a href="{{ url('produksi/pengiriman') }}" class="btn btn-outline-primary"><i
                                      class="fas fa-paper-plane"></i></a></td>
                                 </tr>
                                 <tr>
                                     <td scope="row">10-05-2021</td>
                                     <td>10-06-2021 <br> <span class="badge badge-danger">Kurang 1 Hari</span></td>
+                                    <td>3513654365456</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
@@ -242,6 +246,7 @@
                                 <tr>
                                     <th>Tanggal Mulai</th>
                                     <th>Tanggal Selesai</th>
+                                    <th>Nomor BPPB</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
                                     <th>Aksi</th>
@@ -251,6 +256,7 @@
                                 <tr>
                                     <td scope="row">10-05-2021</td>
                                     <td>10-06-2021 <br> <span class="badge badge-info">Kurang 10 Hari</span></td>
+                                    <td>3513654365456</td>
                                     <td>Produk 2</td>
                                     <td>100 Unit</td>
                                     <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
@@ -259,6 +265,7 @@
                                 <tr>
                                     <td scope="row">10-05-2021</td>
                                     <td>10-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
+                                    <td>64586545464654</td>
                                     <td>Produk 2</td>
                                     <td>100 Unit</td>
                                     <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
@@ -267,6 +274,7 @@
                                 <tr>
                                     <td scope="row">10-05-2021</td>
                                     <td>10-06-2021 <br> <span class="badge badge-danger">Kurang 1 Hari</span></td>
+                                    <td>985654564654654</td>
                                     <td>Produk 2</td>
                                     <td>100 Unit</td>
                                     <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
@@ -281,6 +289,7 @@
                                 <tr>
                                     <th>Tanggal Mulai</th>
                                     <th>Tanggal Selesai</th>
+                                    <th>Nomor BPPB</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
                                     <th>Aksi</th>
@@ -290,6 +299,7 @@
                                 <tr>
                                     <td scope="row">10-05-2021</td>
                                     <td>10-06-2021 <br> <span class="badge badge-info">09-06-2021</span></td>
+                                    <td>654351351553541354</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
@@ -298,6 +308,7 @@
                                 <tr>
                                     <td scope="row">10-05-2021 <br> <span class="badge badge-info">11-06-2021</span></td>
                                     <td>10-06-2021</td>
+                                    <td>354354354321564</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
@@ -312,86 +323,6 @@
         </div>
     </div>
 </section>
-
-<div class="modal fade viewProdukModal" id="" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row row-cols-2">
-                                    {{-- col --}}
-                                    <div class="col"> <label for="">Nomor SO</label>
-                                        <div class="card nomor-so">
-                                            <div class="card-body">
-                                                89798797856456
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{-- col --}}
-                                    <div class="col"> <label for="">Nomor AKN</label>
-                                        <div class="card nomor-akn">
-                                            <div class="card-body">
-                                                89798797856456
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{-- col --}}
-                                    <div class="col"> <label for="">Nomor PO</label>
-                                        <div class="card nomor-po">
-                                            <div class="card-body">
-                                                89798797856456
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{-- col --}}
-                                    <div class="col"> <label for="">Customer</label>
-                                        <div class="card instansi">
-                                            <div class="card-body">
-                                                Rumkital Dr. Ramelan
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-striped" id="view-produk">
-                                    <thead>
-                                        <tr>
-                                            <th>Nama Produk</th>
-                                            <th>Jumlah</th>
-                                            <th>Tipe</th>
-                                            <th>Merk</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>ABPM50</td>
-                                            <td>ELITECH</td>
-                                            <td><button class="btn btn-outline-info" onclick="showDetail()"><i class="far fa-eye"></i> Detail</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Modal -->
 <div class="modal fade showDetail" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -553,10 +484,6 @@
             $('.transfertwodaytable').addClass('hidden');
             $('.transferonedaytable').addClass('hidden');
         });
-
-        function showModalDetail() { 
-            $('.viewProdukModal').modal('show');
-        }
 
         function showDetail() {
             $('.showDetail').modal('show');

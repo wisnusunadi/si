@@ -3,6 +3,30 @@
 @section('title', 'ERP')
 
 @section('content')
+<style>
+    .belum_diterima{
+        float: left;
+        width: auto;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #FFE2E5;
+        background-color: #FFE2E5;
+        color: #F7616B;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+    .sudah_diterima{
+        float: left;
+        width: auto;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #C9F7F5;
+        background-color: #C9F7F5;
+        color: #1CC7CD;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+</style>
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
 <div class="content-header">
@@ -28,40 +52,47 @@
             <div class="card-body">              
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table_produk_perakitan">
+                        <table class="table table-bordered table_produk_perakitan ">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>Tgl Mulai</th>
-                                    <th>Tgl Selesai</th>
-                                    <th>Produk</th>
-                                    <th>Jumlah</th>
-                                    <th></th>
+                                    <th colspan="2" class="text-center">Tanggal</th>
+                                    <th rowspan="2">Produk</th>
+                                    <th rowspan="2">Jumlah</th>
+                                    <th rowspan="2">Status</th>
+                                    <th rowspan="2">Aksi</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Tgl Mulai</th>
+                                    <th class="text-center">Tgl Selesai</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td scope="row">16-06-2021 <br><span class="badge badge-primary">Baru</span></td>
-                                    <td>18-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
+                                    <td scope="row" class="text-center">16-06-2021 <br><span class="badge badge-primary">Baru</span></td>
+                                    <td class="text-center">18-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
                                     <td>Produk 1</td>
                                     <td>100 Unit <br> <span class="badge badge-dark">Kurang 50 Unit</span></td>
+                                    <td class="text-center"><span class="sudah_diterima">Sudah Diterima</span></td>
                                     <td>
                                         <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">18-06-2021 <br><span class="badge badge-info">Revisi</span></td>
-                                    <td>21-06-2021 <br> <span class="badge badge-danger">Lebih 10 Hari</span></td>
+                                    <td scope="row" class="text-center">18-06-2021 <br><span class="badge badge-info">Revisi</span></td>
+                                    <td class="text-center">21-06-2021 <br> <span class="badge badge-danger">Lebih 10 Hari</span></td>
                                     <td>Produk 2</td>
                                     <td>200 Unit</td>
+                                    <td><span class="belum_diterima">Belum Diterima</span></td>
                                     <td>
                                         <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">20-06-2021</td>
-                                    <td>25-06-2021</td>
+                                    <td scope="row" class="text-center">20-06-2021</td>
+                                    <td class="text-center">25-06-2021</td>
                                     <td>Produk 3</td>
                                     <td>300 Unit</td>
+                                    <td><span class="belum_diterima">Belum Diterima</span></td>
                                     <td>
                                         <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
                                     </td>

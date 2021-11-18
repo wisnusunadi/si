@@ -168,7 +168,7 @@
                                         <td>652146416541654</td>
                                         <td scope="row">10-04-2021</td>
                                         <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span><br><span class="badge badge-info">Divisi QC</span></td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"

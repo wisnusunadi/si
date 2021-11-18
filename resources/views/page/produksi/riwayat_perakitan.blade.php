@@ -15,7 +15,7 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row ml-1">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="form-group">
                     <label for="">Pilih Produk</label>
                     <select name="" id="" class="form-control produk" multiple>
@@ -28,12 +28,19 @@
                     </select>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="form-group">
                     <label for="">Tanggal Perakitan</label>
                     <input type="text" name="" id="" class="form-control daterange">
                 </div>
             </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="">Tanggal Pengiriman</label>
+                    <input type="text" name="" id="" class="form-control daterange">
+                </div>
+            </div>
+            <div class="col-sm-3"></div>
         </div>
         <div class="row">
             <div class="col-lg-12">
@@ -54,7 +61,8 @@
                         <table class="table table-history">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>Tanggal & Waktu</th>
+                                    <th>Tanggal & Waktu Perakitan</th>
+                                    <th>Tanggal & Waktu Pengiriman</th>
                                     <th>Nomor BPPB</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
@@ -64,6 +72,7 @@
                                 <tbody>
                                     <tr class="table-dark text-bold">
                                         <td scope="row">Senin 10-04-2021</td>
+                                        <td>Selasa 11-04-2021</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -71,6 +80,7 @@
                                     </tr>
                                     <tr>
                                         <td>07.00</td>
+                                        <td>08.00</td>
                                         <td>564564641654</td>
                                         <td>Produk 1</td>
                                         <td>100 Unit</td>
@@ -78,6 +88,7 @@
                                     </tr>
                                     <tr>
                                         <td>10.00</td>
+                                        <td>11.00</td>
                                         <td>564564641654</td>
                                         <td>Produk 2</td>
                                         <td>100 Unit</td>
@@ -85,6 +96,7 @@
                                     </tr>
                                     <tr class="table-dark text-bold">
                                         <td scope="row">Selasa 23-09-2021</td>
+                                        <td>Rabu 24-09-2021</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -92,6 +104,7 @@
                                     </tr>
                                     <tr>
                                         <td>13.00</td>
+                                        <td>14.00</td>
                                         <td>564564641654</td>
                                         <td>Produk 3</td>
                                         <td>100 Unit</td>
@@ -99,6 +112,7 @@
                                     </tr>
                                     <tr>
                                         <td>15.00</td>
+                                        <td>16.00</td>
                                         <td>564564641654</td>
                                         <td>Produk 4</td>
                                         <td>100 Unit</td>
@@ -129,7 +143,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-sm">
-                                <label for="">Tanggal & Waktu</label>
+                                <label for="">Tanggal & Waktu Perakitan</label>
                                 <div class="card-group">
                                     <div class="card" style="background-color: #C8E1A7">
                                         <div class="card-body">
@@ -144,6 +158,23 @@
                                 </div>
                             </div>
                             <div class="col-sm">
+                                <label for="">Tanggal & Waktu Pengiriman</label>
+                                <div class="card-group">
+                                    <div class="card" style="background-color: #FFECB2">
+                                        <div class="card-body">
+                                            <p class="card-text">Selasa 11-04-2021</p>
+                                        </div>
+                                    </div>
+                                    <div class="card" style="background-color: #FFECB2">
+                                        <div class="card-body">
+                                            <p class="card-text">09.00 WIB</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
                                 <div class="card" style="background-color: #F89F81">
                                     <div class="card-body">
@@ -151,8 +182,6 @@
                                     </div>
                                   </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #FCF9C4">

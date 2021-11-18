@@ -23,25 +23,28 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <table class="table table-produk-perakitan">
+                        <table class="table table-bordered table-produk-perakitan">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>Tgl Mulai</th>
-                                    <th>Tgl Selesai</th>
-                                    <th>Produk</th>
-                                    <th>Jumlah</th>
+                                    <th colspan="2" class="text-center">Tanggal</th>
+                                    <th rowspan="2">Produk</th>
+                                    <th rowspan="2">Jumlah</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Tgl Mulai</th>
+                                    <th class="text-center">Tgl Selesai</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td scope="row">18-11-2021</td>
-                                    <td>20-11-2021</td>
+                                    <td scope="row" class="text-center">18-11-2021</td>
+                                    <td class="text-center">20-11-2021</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">21-11-2021</td>
-                                    <td>23-11-2021</td>
+                                    <td scope="row" class="text-center">21-11-2021</td>
+                                    <td class="text-center">23-11-2021</td>
                                     <td>Produk 2</td>
                                     <td>200 Unit</td>
                                 </tr>

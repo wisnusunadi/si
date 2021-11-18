@@ -121,7 +121,7 @@
                                             <tr>
                                                 <td>10-09-2022</td>
                                                 <td>10-09-2022</td>
-                                                <td><span class="badge badge-success">Divisi IT</span></td>
+                                                <td><span class="badge badge-success">Divisi IT</span><br><span class="badge badge-info">Divisi QC</span></td>
                                                 <td>Uji Coba Produk</td>
                                                 <td>641311666541</td>
                                                 <td>Ambulatory</td>
