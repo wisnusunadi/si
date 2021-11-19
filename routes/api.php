@@ -129,7 +129,7 @@ Route::prefix('/draft')->group(function () {
     Route::get('/data', [\App\Http\Controllers\GudangController::class, 'getRancangDraft']);
 });
 
-Route::prefix('/transaksi')->group(function() {
+Route::prefix('/transaksi')->group(function () {
     Route::get('/all', [\App\Http\Controllers\GudangController::class, 'getAllTransaksi']);
     Route::get('/history', [\App\Http\Controllers\GudangController::class, 'getHistorybyProduk']);
     Route::get('/history-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailHistory']);
@@ -150,7 +150,6 @@ Route::prefix('/tfp')->group(function () {
 
     // check
     Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
-
 });
 
 Route::prefix('/spr')->group(function () {
@@ -198,6 +197,7 @@ Route::prefix('/spb')->group(function () {
 Route::prefix('/qc')->group(function () {
     Route::prefix('/so')->group(function () {
         Route::get('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
+        Route::get('seri/{value}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
         Route::get('data_test', [App\Http\Controllers\QcController::class, 'get_data_so_qc']);
         Route::get('detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_so']);
         Route::get('update_modal', [App\Http\Controllers\QcController::class, 'update_modal_so']);

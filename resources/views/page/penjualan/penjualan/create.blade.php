@@ -356,8 +356,11 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="detail_produk" id="detail_produk0">
+
+                                                                        =======
                                                                         <div class="detail_jual" id="tes0">
                                                                         </div>
+
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -985,7 +988,6 @@
                 totalhargaprd();
             }
         });
-
         $("#produktable").on('keyup change', '.produk_jumlah', function() {
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
@@ -1015,7 +1017,6 @@
                 ketstok.text('');
             }
         });
-
         $("#produktable").on('keyup change', '.produk_harga', function() {
             var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             $(this).val(result);

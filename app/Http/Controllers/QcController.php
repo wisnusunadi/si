@@ -6,6 +6,8 @@ use App\Exports\LaporanQcOutgoing;
 use App\Models\DetailEkatalog;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
+use App\Models\NoseriBarangJadi;
+use App\Models\NoseriTGbj;
 use App\Models\Spa;
 use App\Models\Spb;
 use Illuminate\Http\Request;
@@ -16,6 +18,33 @@ use Maatwebsite\Excel\Facades\Excel;
 class QcController extends Controller
 {
     //Get Data
+    public function get_data_seri_detail_ekatalog()
+    {
+        $data = NoseriBarangJadi::where('id', 4)->get();
+        return view('page.qc.so.edit', ['data' => $data]);
+    }
+    public function get_data_seri_ekatalog($id)
+    {
+        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $id)->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('checkbox', function ($data) {
+                return '  <div class="form-check">
+                <input class=" form-check-input yet nosericheck" type="checkbox" value="" data-id="' . $data->id . '" />
+            </div>';
+            })
+            ->addColumn('seri', function ($data) {
+                return $data->noseri;
+            })
+            ->addColumn('status', function () {
+                return '<i class="fas fa-times-circle nok"></i>';
+            })
+            ->addColumn('button', function () {
+                return '';
+            })
+            ->rawColumns(['checkbox', 'status', 'button'])
+            ->make(true);
+    }
     public function get_data_detail_so($id)
     {
         $data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
@@ -49,7 +78,7 @@ class QcController extends Controller
 
     public function get_data_so_qc()
     {
-        $data = Ekatalog::whereHas('Pesanan.', function ($q) {
+        $data = Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
             $q->whereNotNull('no_po');
         })->get();
         return datatables()->of($data)
@@ -59,54 +88,54 @@ class QcController extends Controller
     {
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $Spa = collect(Spa::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $Spb = collect(Spb::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $Spa = collect(Spa::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
             $data = $Ekatalog->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $Spb = collect(Spb::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
             $data = $Ekatalog->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $Spa = collect(Spa::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $Spb = collect(Spb::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Ekatalog::whereHas('Pesanan', function ($q) {
+            $data = Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get();
         } else if ($value == 'spa') {
-            $data = Spa::whereHas('Pesanan', function ($q) {
+            $data = Spa::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get();
         } else if ($value == 'spb') {
-            $data = Spb::whereHas('Pesanan', function ($q) {
+            $data = Spb::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get();
         } else {
-            $data = Spa::whereHas('Pesanan', function ($q) {
+            $data = Spa::whereHas('Pesanan.Tgbj', function ($q) {
                 $q->whereNotNull('no_po');
             })->get();
         }

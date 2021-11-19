@@ -56,8 +56,8 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/tso', 'page.gbj.tso');
     Route::view('/dp', 'page.gbj.dp');
     Route::view('/lp', 'page.gbj.lp');
-    Route::view('/tp', 'page.gbj.tp'); 
-    Route::view('/dashboard', 'page.gbj.dashboard'); 
+    Route::view('/tp', 'page.gbj.tp');
+    Route::view('/dashboard', 'page.gbj.dashboard');
 });
 
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
@@ -130,7 +130,8 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         Route::view('/detail_spa/{id}', 'page.qc.so.detail_spa')->name('qc.so.detail_spa');
         Route::view('/detail_spb/{id}', 'page.qc.so.detail_spb')->name('qc.so.detail_spb');
         Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
-        Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
+        Route::get('/edit', [App\Http\Controllers\QcController::class, 'get_data_seri_detail_ekatalog'])->name('qc.so.edit');
+
         Route::group(['prefix' => '/riwayat'], function () {
             Route::view('/show', 'page.qc.so.riwayat.show')->name('qc.so.riwayat.show');
         });

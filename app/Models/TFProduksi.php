@@ -9,25 +9,29 @@ class TFProduksi extends Model
 {
     use HasFactory;
 
-    // protected $table = 't_tfbj';
+    protected $table = 't_tfbj';
 
-    protected $table = 't_gbj';
+    //protected $table = 't_gbj';
 
     protected $fillable = ['ke', 'deskripsi'];
 
-    function detail() {
+    function detail()
+    {
         return $this->hasMany(TFProduksiDetail::class, 't_gbj_id');
     }
 
-    function his() {
+    function his()
+    {
         return $this->hasMany(TFProduksiHis::class, 'tfbj_id');
     }
 
-    function divisi() {
+    function divisi()
+    {
         return $this->belongsTo(Divisi::class, 'ke');
     }
 
-    function pesanan() {
+    function pesanan()
+    {
         return $this->belongsTo(Pesanan::class, 'pesanan_id');
     }
 }

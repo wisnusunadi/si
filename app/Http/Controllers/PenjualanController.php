@@ -799,11 +799,9 @@ class PenjualanController extends Controller
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-
-                        for ($j = 0; $j < count($request->variasi); $j++) {
+                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
                             $dekat->GudangBarangJadi()->attach($request->variasi[$i][$j], ['jumlah' => 1]);
                         }
-
                         if (!$dekat) {
                             $bool = false;
                         }
@@ -814,7 +812,6 @@ class PenjualanController extends Controller
             } else {
                 $bool = false;
             }
-
             if ($bool == true) {
                 return redirect()->back()->with('success', 'Berhasil menambahkan Ekatalog');
             } else if ($bool == false) {
@@ -832,7 +829,6 @@ class PenjualanController extends Controller
                 ]);
                 $x = $pesanan->id;
             }
-
             $Spa = Spa::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
