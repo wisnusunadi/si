@@ -39,7 +39,7 @@ class MasterController extends Controller
                       Detail
                     </button>
                 </a>
-                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
+                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
                     <button class="dropdown-item" type="button" >
                       <i class="fas fa-pencil-alt"></i>
                       Edit
@@ -290,7 +290,7 @@ class MasterController extends Controller
         echo json_encode($data);
     }
 
-    //Show Modal 
+    //Show Modal
 
     public function update_customer_modal($id)
     {

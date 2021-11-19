@@ -116,8 +116,8 @@
                                                 <th>Dari/Ke</th>
                                                 <th>Tujuan</th>
                                                 <th>Nomor SO</th>
-                                                {{-- <th>Produk</th>
-                                                <th>Jumlah</th> --}}
+                                                <th>Produk</th>
+                                                <th>Jumlah</th>
                                                 <td>Aksi</td>
                                             </tr>
                                         </thead>
@@ -128,8 +128,8 @@
                                                 <td><span class="badge badge-success">Divisi IT</span></td>
                                                 <td>Uji Coba Produk</td>
                                                 <td>641311666541</td>
-                                                {{-- <td>Ambulatory</td>
-                                                <td>100 Unit</td> --}}
+                                                <td>Ambulatory</td>
+                                                <td>100 Unit</td>
                                                 <td><button class="btn btn-info" onclick="detailtanggal()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
@@ -139,8 +139,8 @@
                                                 <td><span class="badge badge-info">Divisi IT</span></td>
                                                 <td>Uji Coba Produk</td>
                                                 <td>641311666541</td>
-                                                {{-- <td>Ambulatory</td>
-                                                <td>100 Unit</td> --}}
+                                                <td>Ambulatory</td>
+                                                <td>100 Unit</td>
                                                 <td><button class="btn btn-info" onclick="detailtanggal()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
@@ -466,13 +466,13 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Produk Ambulatory</h5>
+                <h5 class="modal-title">Produk <span id="title">Ambulatory</span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table">
+                <table class="table table-seri">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -528,31 +528,45 @@
             }
         }
     });
-    
-    $('#history').DataTable().destroy();
-    $('#history').dataTable({
+
+    $('#divisi').on('change', function(e) {
+        var id = $(this).data('id');
+        console.log(id);
+    })
+
+    // function date_filter()
+
+    $(document).on('click', '.editmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/transaksi/all-detail/" + id,
+            success: function(res) {
+                console.log(res);
+                $('span#title').text(res.data[0].title);
+            }
+        });
+
+        $('.table-seri').DataTable().destroy();
+        $('.table-seri').dataTable({
             processing: true,
             serverSide: true,
-            responsive: true,
             ajax: {
-                url: "/api/transaksi/all",
+                url: "/api/transaksi/all-detail/" + id,
                 // data: {id: id},
                 // type: "post",
                 // dataType: "json",
             },
             columns: [
-                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'date_in', name: 'date_in'},
-                { data: 'date_out', name: 'date_out'},
-                { data: 'divisi', name: 'divisi'},
-                { data: 'tujuan', name: 'tujuan'},
-                { data: 'so', name: 'so'},
-                { data: 'action', name: 'action'},
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'seri', name: 'seri'},
+                { data: 'layout', name: 'layout'},
             ],
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
-        });
+        })
+
+        detailProduk();
+    })
 
 
     function detailtanggal() {
@@ -567,6 +581,33 @@
         $('.pertanggal').dataTable({
             bFilter: false
         });
+
+        $('#history').DataTable().destroy();
+        $('#history').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/transaksi/all",
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'date_in', name: 'date_in'},
+                { data: 'date_out', name: 'date_out'},
+                { data: 'divisi', name: 'divisi'},
+                { data: 'tujuan', name: 'tujuan'},
+                { data: 'so', name: 'so'},
+                { data: 'product', name: 'product'},
+                { data: 'jumlah', name: 'jumlah'},
+                { data: 'action', name: 'action'},
+            ],
+            "oLanguage": {
+                "sSearch": "Cari:"
+            }
+        });
+
         $('#gudang-barang').dataTable({
             processing: true,
             serverSide: true,

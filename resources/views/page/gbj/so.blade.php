@@ -124,6 +124,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
+                    <form action="" method="post">
                         <div class="card">
                             <div class="card-header">
                                 <div class="row row-cols-2">
@@ -191,6 +192,7 @@
                                 </table>
                             </div>
                         </div>
+                    </form>
                     </div>
                 </div>
                 {{-- Tambahkan DataTable --}}
@@ -198,7 +200,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
             </div>
         </div>
     </div>
@@ -336,9 +338,9 @@
             { data: 'status1', name: 'status1'},
             { data: 'action', name: 'action'},
         ],
-        "order": [
-                [3, 'desc']
-            ],
+        // "order": [
+        //         [3, 'desc']
+        //     ],
     });
 
     $(document).on('click', '.editmodal', function(e) {
@@ -353,7 +355,7 @@
             }
         });
         $('.add-produk').DataTable().destroy();
-        $('.add-produk').DataTable({
+        var tab = $('.add-produk').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
@@ -363,7 +365,8 @@
                 // dataType: "json",
             },
             columns: [
-                { data: 'status', name: 'status'},
+                { data: 'ids', name: 'ids'},
+                // { data: 'status', name: 'status'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
                 { data: 'tipe', name: 'tipe'},
@@ -385,6 +388,21 @@
             "oLanguage": {
                 "sSearch": "Cari:"
             }
+        });
+
+        $(document).on('click', '#btnSave', function(e) {
+            e.preventDefault();
+
+            const ids = [];
+
+            var rowsel = tab.column(0).checkboxes.selected();
+            // console.log(rowsel);
+
+            $.each(rowsel, function(i, val) {
+                ids.push(val);
+            })
+
+            console.log(ids);
         })
         $('#addProdukModal').modal('show');
     })
@@ -401,7 +419,7 @@
             }
         });
         $('#view-produk').DataTable().destroy();
-        $('#view-produk').DataTable({
+        var table = $('#view-produk').DataTable({
             processing: true,
             serverSide: true,
             ajax: {

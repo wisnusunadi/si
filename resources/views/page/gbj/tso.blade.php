@@ -386,6 +386,5 @@
         $('.modal-produk').modal('show');
     })
 
-
 </script>
 @stop
