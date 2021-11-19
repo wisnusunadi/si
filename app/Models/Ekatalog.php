@@ -14,10 +14,6 @@ class Ekatalog extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
-    public function DetailEkatalog()
-    {
-        return $this->hasMany(DetailEkatalog::class);
-    }
     public function Pesanan()
     {
         return $this->belongsTo(Pesanan::class, 'pesanan_id');

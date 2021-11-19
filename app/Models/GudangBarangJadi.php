@@ -29,10 +29,9 @@ class GudangBarangJadi extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id');
     }
-    public function DetailEkatalog()
+    public function DetailPesananProduk()
     {
-        return $this->belongsToMany(DetailEkatalog::class, 'detail_ekatalog_produk')
-            ->withPivot('jumlah');
+        return $this->hasMany(DetailPesananProduk::class);
     }
     function Layout()
     {

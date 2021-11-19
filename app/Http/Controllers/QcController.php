@@ -60,6 +60,10 @@ class QcController extends Controller
                 $v++;
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2e4ee9ba34c23939577493e4c33326d06b2d1339
         return datatables()->of($l)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($l) {

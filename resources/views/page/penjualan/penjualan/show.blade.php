@@ -22,11 +22,18 @@
     }
 
     #urgent {
-        color: red;
+        color: #dc3545;
+        font-weight: 600;
     }
 
     #warning {
         color: #FFC700;
+        font-weight: 600;
+    }
+
+    #info {
+        color: #3a7bb0;
+        font-weight: 600;
     }
 
     .minimizechar {
@@ -43,6 +50,56 @@
 
     .dropdown-toggle:active {
         color: #C0C0C0;
+    }
+
+    td.details-control {
+        content: "\f055";
+        font-family: FontAwesome;
+        left: -5px;
+        position: absolute;
+        top: 0;
+    }
+
+    tr.details td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+
+    #detailekat {
+        background-color: #E9DDE5;
+
+    }
+
+    #detailspa {
+        background-color: #FFE6C9;
+    }
+
+    #detailspb {
+        background-color: #E1EBF2;
+        /* color: #7D6378; */
+
+    }
+
+    .overflowy {
+        max-height: 450px;
+        width: auto;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
+
+    .removeshadow {
+        box-shadow: none;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .bordertopnone {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        vertical-align: top;
     }
 
     @media screen and (min-width: 1440px) {
@@ -787,8 +844,10 @@
         <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
-                    <div class="modal-header bg-warning">
-                        <h4>Detail</h4>
+                    <div class="modal-header">
+                        <div id="modal-title">
+                            <h4>Detail</h4>
+                        </div>
                     </div>
                     <div class="modal-body" id="detail">
 
@@ -807,7 +866,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/penjualan/data/',
+                'url': '/api/penjualan/data',
                 'method': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -1013,10 +1072,19 @@
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
                     if (label == 'ekatalog') {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
+                        $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                         detailtabel_ekatalog(id);
                     } else if (label == 'spa') {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+                        $('#detailmodal').find(".modal-header > h4").text('SPA');
                         detailtabel_spa(id);
                     } else {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
+                        $('#detailmodal').find(".modal-header > h4").text('SPB');
                         detailtabel_spb(id);
                     }
 
@@ -1033,8 +1101,38 @@
             })
         });
 
+        // var detailRows = [];
+
+        // function format() {
+        //     return 'Full name: <br>' +
+        //         'Salary: <br>' +
+        //         'The child row can contain any data you wish, including links, images, inner tables etc.';
+        // }
+
+        // $('#detailtabel tbody').on('click', 'tr td.details-control', function() {
+        //     var tr = $(this).closest('tr');
+        //     var row = dt.row(tr);
+        //     var idx = $.inArray(tr.attr('id'), detailRows);
+
+        //     if (row.child.isShown()) {
+        //         tr.removeClass('details');
+        //         row.child.hide();
+
+        //         // Remove from the 'open' array
+        //         detailRows.splice(idx, 1);
+        //     } else {
+        //         tr.addClass('details');
+        //         row.child(format(row.data())).show();
+
+        //         // Add to the 'open' array
+        //         if (idx === -1) {
+        //             detailRows.push(tr.attr('id'));
+        //         }
+        //     }
+        // });
+
         function detailtabel_ekatalog(id) {
-            $('#detailtabel').DataTable({
+            var dt = $('#detailtabel').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -1044,19 +1142,16 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
+                        "class": "details-control",
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ""
                     },
                     {
                         data: 'nama_produk',
-
                     },
                     {
-                        data: 'variasi',
-                        orderable: false,
-                        searchable: false
+                        data: 'nama_produk',
                     },
                     {
                         data: 'harga',
@@ -1113,7 +1208,14 @@
                     $(api.column(4).footer()).html('Total');
                     $(api.column(5).footer()).html(num_for(total_pesanan));
                 },
-            })
+            });
+
+            // dt.on('draw', function() {
+            //     $.each(detailRows, function(i, id) {
+            //         console.log(id);
+            //         $('#' + id + ' td.details-control').trigger('click');
+            //     });
+            // });
         }
 
         function detailtabel_spa(id) {

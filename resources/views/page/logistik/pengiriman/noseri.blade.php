@@ -12,7 +12,7 @@
                         <div class="col-1"></div>
                         <div class="col-3">
                             <div><small class="text-muted">Jumlah</small></div>
-                            <div><b>10000.00 pcs</b></div>
+                            <div><b>1000 pcs</b></div>
                         </div>
                     </div>
                 </div>

@@ -354,6 +354,7 @@
                                                                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                             <option value=""></option>
                                                                         </select>
+<<<<<<< HEAD
                                                                     </div>
                                                                     <div class="detail_produk" id="detail_produk0">
 
@@ -362,6 +363,16 @@
                                                                         </div>
 
                                                                     </div>
+=======
+                                                                        <<<<<<< HEAD </div>
+                                                                            <div class="detail_produk" id="detail_produk0">
+
+                                                                                =======
+                                                                                <div class="detail_jual" id="tes0">
+                                                                                </div>
+                                                                                >>>>>>> a87d431175ea1edf06277f1b9f323ef8bb3687ad
+                                                                            </div>
+>>>>>>> 2e4ee9ba34c23939577493e4c33326d06b2d1339
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
