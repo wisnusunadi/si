@@ -83,7 +83,7 @@
                                             <div id="no_po">
                                                 <b>
                                                     @if($e->Pesanan)
-                                                    @if(!empty($e->Pesanan->tgl_po) || $e->Pesanan->tgl_po != "0000-00-00")
+                                                    @if(empty($e->Pesanan->tgl_po) || $e->Pesanan->tgl_po != "0000-00-00")
                                                     -
                                                     @else
                                                     {{$e->Pesanan->tgl_po}}

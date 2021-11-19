@@ -16,6 +16,14 @@
         margin: 5px;
     }
 
+    .margin-top {
+        margin-top: 5px;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
     @media screen and (min-width: 1440px) {
 
         section {
@@ -23,7 +31,7 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
     }
 
@@ -46,347 +54,405 @@
 @stop
 
 @section('content')
-@foreach($ekatalog as $e)
-<div class="row">
-    <div class="col-12">
-        <div class="card" id="ekatalog">
-            <div class="card-body">
-                <h4 class="margin">Data Penjualan</h4>
-                <div class="row">
-                    <div class="col-12">
+<section class="content">
+    <div class="container-fluid">
+        @foreach($ekatalog as $e)
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card" id="ekatalog">
+                    <div class="card-body">
+                        <h4 class="margin">Data Penjualan </h4>
                         <div class="row">
-                            <div class="col-5">
-                                <div>
-                                    <div class="margin">
-                                        <small class="text-muted">Info Instansi</small>
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div>
+                                            <div class="margin">
+                                                <small class="text-muted">Info Instansi</small>
+                                            </div>
+                                            <div id="instansi" class="margin"><b>{{$e->instansi}}</b></div>
+                                            <div id="satuan_kerja" class="margin"><b>{{$e->satuan}}</b></div>
+                                            <div id="alamat" class="margin"><b>{{$e->Provinsi->nama}}</b></div>
+                                        </div>
+                                        <div class="margin-top">
+                                            <div class="margin">
+                                                <small class="text-muted">Info Customer</small>
+                                            </div>
+                                            <div id="nama_distributor" class="margin"><b>{{$e->customer->nama}}</b></div>
+                                            <div id="alamat" class="margin"><b>{{$e->customer->alamat}}</b></div>
+                                            <div id="alamat" class="margin"><b>{{$e->Customer->Provinsi->nama}}</b></div>
+                                            <div id="alamat" class="margin"><b>{{$e->Customer->telp}}</b></div>
+                                        </div>
                                     </div>
-                                    <div id="nama_distributor" class="margin"><b>{{$e->customer->nama}}</b></div>
-                                    <div id="instansi" class="margin"><b>{{$e->instansi}}</b></div>
-                                    <div id="satuan_kerja" class="margin"><b>{{$e->satuan}}</b></div>
-                                    <div id="alamat" class="margin"><b>{{$e->Provinsi->nama}}</b></div>
-                                </div>
-                                <div>
-                                    <div class="margin">
-                                        <small class="text-muted">Info Customer</small>
+                                    <div class="col-3">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No SO</small></div>
+                                            <div>@if($e->Pesanan)
+                                                @if(!empty($e->Pesanan->so))
+                                                <b>{{$e->Pesanan->so}}</b>
+                                                @else
+                                                <b>-</b>
+                                                @endif
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">No AKN</small></div>
+                                            <div><b>{{$e->no_paket}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Tanggal Order</small>
+                                            </div>
+                                            <div><b>{{date('d-m-Y', strtotime($e->tgl_buat))}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Tanggal Batas Kontrak</small>
+                                            </div>
+                                            <div><b>{{date('d-m-Y', strtotime($e->tgl_kontrak))}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Status</small></div>
+                                            @if($e->status == 'batal')
+                                            <div class="badge red-text">Batal</div>
+                                            @elseif($e->status == 'negosiasi')
+                                            <div class="badge yellow-text">Negosiasi</div>
+                                            @elseif($e->status == 'sepakat')
+                                            <div class="margin-top"><b><span class="green-text">Sepakat</span></b></div>
+                                            @elseif($e->status == 'negosiasi')
+                                            <div class="badge blue-text">Draft</div>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div id="nama_distributor" class="margin"><b>{{$e->customer->nama}}</b></div>
-                                    <div id="alamat" class="margin"><b>{{$e->Customer->Provinsi->nama}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="margin">
-                                    <div><small class="text-muted">No SO</small></div>
-                                    <div>@if($e->Pesanan)
-                                        @if(!empty($e->Pesanan->so))
-                                        {{$e->Pesanan->so}}
-                                        @else
-                                        -
-                                        @endif
-                                        @endif
+                                    <div class="col-3">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No PO</small></div>
+                                            <div>@if($e->Pesanan)
+                                                @if(!empty($e->Pesanan->no_po))
+                                                <b>{{$e->Pesanan->no_po}}</b>
+                                                @else
+                                                <b>-</b>
+                                                @endif
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Tanggal PO</small>
+                                            </div>
+                                            <div><b>
+                                                    @if($e->Pesanan)
+                                                    @if(!empty($e->Pesanan->tgl_po))
+                                                    {{date('d-m-Y', strtotime($e->Pesanan->tgl_po))}}
+                                                    @else
+                                                    -
+                                                    @endif
+                                                    @endif</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">No DO</small></div>
+                                            <div><b>@if($e->Pesanan)
+                                                    @if(!empty($e->Pesanan->no_do))
+                                                    {{$e->Pesanan->no_do}}
+                                                    @else
+                                                    -
+                                                    @endif
+                                                    @endif</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Tanggal DO</small>
+                                            </div>
+                                            <div><b>@if($e->Pesanan)
+                                                    @if(!empty($e->Pesanan->tgl_do))
+                                                    {{date('d-m-Y', strtotime($e->Pesanan->tgl_do))}}
+                                                    @else
+                                                    -
+                                                    @endif
+                                                    @endif</b></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">No AKN</small></div>
-                                    <div>{{$e->no_paket}}</div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">Tanggal Order</small>
-                                    </div>
-                                    <div>{{$e->tgl_buat}}</div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">Tanggal Batas Kontrak</small>
-                                    </div>
-                                    <div>{{$e->tgl_kontrak}}</div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div>
-                                    <b>PO & DO</b>
-                                </div>
-                                <div id="no_po">No PO</div>
-                                <div id="tanggal_po">Tanggal PO</div>
-                                <div id="no_do">No DO</div>
-                                <div id="tanggal_do">Tanggal DO</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header bg-warning">
-                <div class="card-title">Form Ubah Data</div>
-            </div>
-            <div class="card-body">
-                @if(session()->has('error') || count($errors) > 0 )
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Gagal mengubah data!</strong> Periksa
-                    kembali data yang diinput
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @elseif(session()->has('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Berhasil mengubah data</strong>,
-                    Terima kasih
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @endif
-                <div class="content">
-                    <form method="post" action="{{route('penjualan.penjualan.update_ekatalog', ['id' => $e->id])}}">
-                        {{csrf_field()}}
-                        {{method_field('PUT')}}
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-10">
-                                <h4>Info Customer</h4>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="form-horizontal">
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
-                                                <div class="col-5">
-                                                    <select name="customer_id" id="customer_id" class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
-                                                        <option value="{{$e->customer_id}}" selected>{{$e->customer->nama}}</option>
-                                                    </select>
-                                                    <div class="invalid-feedback" id="msgcustomer_id">
-                                                        @if($errors->has('customer_id'))
-                                                        {{ $errors->first('customer_id')}}
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
-                                                <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$e->customer->alamat}}" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
-                                                <div class="col-5">
-                                                    <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$e->customer->telp}}" />
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="card">
+                    <div class="card-header bg-warning">
+                        <div class="card-title">Form Ubah Data</div>
+                    </div>
+                    <div class="card-body">
+                        @if(session()->has('error') || count($errors) > 0 )
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Gagal mengubah data!</strong> Periksa
+                            kembali data yang diinput
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="row d-flex justify-content-center" id="akn">
-                            <div class="col-10">
-                                <h4>Info AKN</h4>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="form-horizontal">
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
+                        @elseif(session()->has('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Berhasil mengubah data</strong>,
+                            Terima kasih
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
+                        <div class="content">
+                            <form method="post" action="{{route('penjualan.penjualan.update_ekatalog', ['id' => $e->id])}}">
+                                {{csrf_field()}}
+                                {{method_field('PUT')}}
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-10">
+                                        <h4>Info Customer</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
+                                                        <div class="col-5">
+                                                            <select name="customer_id" id="customer_id" class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
+                                                                <option value="{{$e->customer_id}}" selected>{{$e->customer->nama}}</option>
+                                                            </select>
+                                                            <div class="invalid-feedback" id="msgcustomer_id">
+                                                                @if($errors->has('customer_id'))
+                                                                {{ $errors->first('customer_id')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
+                                                        <div class="col-7">
+                                                            <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$e->customer->alamat}}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
+                                                        <div class="col-5">
+                                                            <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$e->customer->telp}}" />
+                                                        </div>
+                                                    </div>
 
-                                                <div class="col-5 col-form-label">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                        <label class="form-check-label" for="status_akn4">Draft</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="sepakat" />
-                                                        <label class="form-check-label" for="status_akn1">Sepakat</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="negosiasi" />
-                                                        <label class="form-check-label" for="status_akn2">Negosiasi</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="batal" />
-                                                        <label class="form-check-label" for="status_akn3">Batal</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
-                                                <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$e->instansi}}" />
-                                                    <div class="invalid-feedback" id="msginstansi">
-                                                        @if($errors->has('instansi'))
-                                                        {{ $errors->first('instansi')}}
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
-                                                <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" value="{{$e->alamat}}" />
-                                                    <div class="invalid-feedback" id="msgalamatinstansi">
-                                                        @if($errors->has('alamatinstansi'))
-                                                        {{ $errors->first('alamatinstansi')}}
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
-                                                <div class="col-7">
-                                                    <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
-                                                        <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
-                                                <div class="col-7">
-                                                    <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$e->satuan}}" />
-                                                    <div class=" invalid-feedback" id="msgsatuan_kerja">
-                                                        @if($errors->has('satuan_kerja'))
-                                                        {{ $errors->first('satuan_kerja')}}
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
-                                                <div class="col-5">
-                                                    <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi">{{$e->deskripsi}}</textarea>
-                                                    <div class="invalid-feedback" id="msgdeskripsi">
-                                                        @if($errors->has('deskripsi'))
-                                                        {{ $errors->first('deskripsi')}}
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                                <div class="col-5">
-                                                    <textarea class="form-control col-form-label" name="keterangan">{{$e->ket}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center" id="dataproduk">
-                            <div class="col-10">
-                                <h4>Data Produk</h4>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="table-responsive">
-                                                    <table class="table" style="text-align: center;" id="produktable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th colspan="7">
-                                                                    <button type="button" class="btn btn-primary float-right" id="addrowproduk">
-                                                                        <i class="fas fa-plus"></i>
-                                                                        Produk
-                                                                    </button>
-                                                                </th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th width="5%">No</th>
-                                                                <th width="35%">Nama Paket</th>
-                                                                <th width="15%">Jumlah</th>
-                                                                <th width="20%">Harga</th>
-                                                                <th width="20%">Subtotal</th>
-                                                                <th width="5%">Aksi</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
+                                <div class="row d-flex justify-content-center" id="akn">
+                                    <div class="col-10">
+                                        <h4>Info AKN</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
 
-                                                            @foreach($e->DetailEkatalog as $f)
+                                                        <div class="col-5 col-form-label">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                <label class="form-check-label" for="status_akn4">Draft</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="sepakat" />
+                                                                <label class="form-check-label" for="status_akn1">Sepakat</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="negosiasi" />
+                                                                <label class="form-check-label" for="status_akn2">Negosiasi</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="batal" />
+                                                                <label class="form-check-label" for="status_akn3">Batal</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
+                                                        <div class="col-7">
+                                                            <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$e->instansi}}" />
+                                                            <div class="invalid-feedback" id="msginstansi">
+                                                                @if($errors->has('instansi'))
+                                                                {{ $errors->first('instansi')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
+                                                        <div class="col-7">
+                                                            <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" value="{{$e->alamat}}" />
+                                                            <div class="invalid-feedback" id="msgalamatinstansi">
+                                                                @if($errors->has('alamatinstansi'))
+                                                                {{ $errors->first('alamatinstansi')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
+                                                        <div class="col-7">
+                                                            <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                                <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
+                                                        <div class="col-7">
+                                                            <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$e->satuan}}" />
+                                                            <div class=" invalid-feedback" id="msgsatuan_kerja">
+                                                                @if($errors->has('satuan_kerja'))
+                                                                {{ $errors->first('satuan_kerja')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
+                                                        <div class="col-5">
+                                                            <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi">{{$e->deskripsi}}</textarea>
+                                                            <div class="invalid-feedback" id="msgdeskripsi">
+                                                                @if($errors->has('deskripsi'))
+                                                                {{ $errors->first('deskripsi')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
+                                                        <div class="col-5">
+                                                            <textarea class="form-control col-form-label" name="keterangan">{{$e->ket}}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row d-flex justify-content-center" id="dataproduk">
+                                    <div class="col-10">
+                                        <h4>Data Produk</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table" style="text-align: center;" id="produktable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th colspan="7">
+                                                                            <button type="button" class="btn btn-primary float-right" id="addrowproduk">
+                                                                                <i class="fas fa-plus"></i>
+                                                                                Produk
+                                                                            </button>
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th width="5%">No</th>
+                                                                        <th width="35%">Nama Paket</th>
+                                                                        <th width="15%">Jumlah</th>
+                                                                        <th width="20%">Harga</th>
+                                                                        <th width="20%">Subtotal</th>
+                                                                        <th width="5%">Aksi</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
 
-                                                            <tr>
-                                                                <td>{{$loop->iteration}}</td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
-                                                                            <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group d-flex justify-content-center">
-                                                                        <div class="input-group">
-                                                                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah{{$loop->iteration-1}}" style="width:100%;" value="{{$f->jumlah}}">
-                                                                            <div class="input-group-append">
-                                                                                <span class="input-group-text" id="produk_satuan">pcs</span>
+                                                                    @foreach($e->DetailEkatalog as $f)
+
+                                                                    <tr>
+                                                                        <td>{{$loop->iteration}}</td>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                                                                    <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
+                                                                                </select>
                                                                             </div>
-                                                                        </div>
-                                                                        <small id="produk_ketersediaan"></small>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group d-flex justify-content-center">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text" id="prdhrg">Rp</span>
-                                                                        </div>
-                                                                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group d-flex justify-content-center">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text" id="prdsub">Rp</span>
-                                                                        </div>
-                                                                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
-                                                                </td>
-                                                            </tr>
-                                                            @endforeach
+                                                                            <div class="detail_produk" id="detail_produk{{$loop->iteration - 1}}">
+                                                                                {{$f->GudangBarangJadi}}
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+                                                                                <div class="input-group">
+                                                                                    <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah{{$loop->iteration-1}}" style="width:100%;" value="{{$f->jumlah}}">
+                                                                                    <div class="input-group-append">
+                                                                                        <span class="input-group-text" id="produk_satuan">pcs</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <small id="produk_ketersediaan"></small>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text" id="prdhrg">Rp</span>
+                                                                                </div>
+                                                                                <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text" id="prdsub">Rp</span>
+                                                                                </div>
+                                                                                <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
 
-                                                        </tbody>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th colspan="4" style="text-align:right;">Total Harga</th>
-                                                                <th id="totalhargaprd" class="align-right">Rp.
-                                                                    <?php $x = 0;
-                                                                    foreach ($e->DetailEkatalog as $f) {
-                                                                        $x += $f->harga * $f->jumlah;
-                                                                    }
-                                                                    ?>
-                                                                    {{number_format($x,0,',','.')}}
-                                                                </th>
-                                                            </tr>
-                                                        </tfoot>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                                        <th id="totalhargaprd" class="align-right">Rp.
+                                                                            <?php $x = 0;
+                                                                            foreach ($e->DetailEkatalog as $f) {
+                                                                                $x += $f->harga * $f->jumlah;
+                                                                            }
+                                                                            ?>
+                                                                            {{number_format($x,0,',','.')}}
+                                                                        </th>
+                                                                    </tr>
+                                                                </tfoot>
 
-                                                    </table>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-10">
-                                <span>
-                                    <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
-                                        Batal
-                                    </a>
-                                </span>
-                                <span class="float-right">
-                                    <button type="submit" class="btn btn-warning" id="btnsimpan">
-                                        Simpan
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-10">
+                                        <span>
+                                            <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
+                                                Batal
+                                            </a>
+                                        </span>
+                                        <span class="float-right">
+                                            <button type="submit" class="btn btn-warning" id="btnsimpan">
+                                                Simpan
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
 
-                    </form>
+                            </form>
 
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
+        @endforeach
     </div>
-</div>
-@endforeach
+</section>
 @stop
 
 @section('adminlte_js')
