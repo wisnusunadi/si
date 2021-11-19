@@ -169,7 +169,7 @@ Route::prefix('/noseri')->group(function () {
 Route::prefix('/ekatalog')->group(function () {
     Route::get('data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
     Route::post('pengiriman/data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_pengiriman']);
-    Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_ekatalog']);
+
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_ekatalog']);
     Route::get('detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog']);
     Route::get('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_ekatalog']);
@@ -178,7 +178,6 @@ Route::prefix('/ekatalog')->group(function () {
 });
 Route::prefix('/spa')->group(function () {
     Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
-    Route::get('create', [App\Http\Controllers\PenjualanController::class, 'create_spa']);
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spa']);
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spa']);
@@ -187,7 +186,7 @@ Route::prefix('/spa')->group(function () {
 });
 Route::prefix('/spb')->group(function () {
     Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
-    Route::get('create', [App\Http\Controllers\PenjualanController::class, 'create_spb']);
+
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spb']);
     Route::get('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_spb']);

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 17 Nov 2021 pada 10.56
--- Versi server: 10.4.21-MariaDB
--- Versi PHP: 7.4.25
+-- Generation Time: Nov 19, 2021 at 10:59 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.3.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,15 +24,15 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `customer`
+-- Table structure for table `customer`
 --
 
 CREATE TABLE `customer` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_provinsi` bigint(20) NOT NULL,
   `nama` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `telp` bigint(20) DEFAULT NULL,
-  `email` int(11) DEFAULT NULL,
+  `telp` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `alamat` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `npwp` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ket` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -41,615 +41,475 @@ CREATE TABLE `customer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `customer`
+-- Dumping data for table `customer`
 --
 
 INSERT INTO `customer` (`id`, `id_provinsi`, `nama`, `telp`, `email`, `alamat`, `npwp`, `ket`, `created_at`, `updated_at`) VALUES
-(1, 11, 'CV. Cipta Jaya Medika', 890000000000, 0, 'JL. Biliton No. 15 Gubeng - Surabaya', '12.454.456.1-606.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 6, 'Gunung Bayan Pratama Coal', 890000000000, 0, 'Graha Irama Lt. 12, JL. HR. Rasuna said Blok X-1 Kav. 1-2, Kuningan Timur-Setia Budi-Jakarta Selatan', '01.467.051.7-091.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 6, 'Firman Ketaun Perkasa', 81792730137, 0, 'Graha Irama Lt 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta sela', '01.856.455.9-063.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(4, 11, 'CV. Golden Elite Technology', 0, 0, 'JL. Kalianyar 17 E, Surabaya', '01.922.786.7-611.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 6, 'PT. Indevco Karya Sakti', 0, 0, 'JL. P. Jayakarta 131 Blok A No. 31 Mangga Dua selatan, Sawah Besar Jakarta Pusat, DKI Jakarta raya 1', '01.109.118.8-026.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, 11, 'PT. Indevco Karya Sakti', 0, 0, 'JL. Rajawali No. 86, Surabaya', '01.109.118.8-605.000', 'asd', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(7, 6, 'PT. Firman Ketaun Perkasa', 0, 0, 'Graha Irama Lt. 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta sel', '01.856.455.9-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 6, 'PT. Mas Eltrajaya', 0, 0, 'Komplek Grogol Permai, JL. Prof DR. Latumenten Blok C No. 21, Petambunan Jakarta Barat-DKI Jakarta R', '02.691.647.8-036.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(9, 18, 'PT. Sarana Sahabat Maju', 0, 0, 'JL. Kartini No. 43 C / D-Tanjung Karang Tanjun Karang Pusat-Bandar Lampung 35111', '02.523.217.4-322.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, 1, 'Tri Kartono Andries', 0, 0, 'JL. Teuku Umar No. 24, Denpasar', '06.336.343.6-901.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(11, 6, 'PT. Wahana Barata Mining', 0, 0, 'Graha Irama Lt. 12, JL. HR. Rasuna Said Blok X-1 Kav. 1-2, Kuningan Timur-Setia Budi-Jakarta selatan', '01.711.061.0-062.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(12, 6, 'PT. Pradana Estiara Medical', 0, 0, 'Kapuk Kamal Raya No. 20 A Blok A/3 Kamal Muara-Penjaringan-Jakarta Utara', '02.296.542.0-047.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(13, 11, 'PT. Jatim Watkoraya', 0, 0, 'JL. Kalianyar 15D, Surabaya', '01.469.421.0-611.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(14, 10, 'CV. Sanidata', 0, 0, 'JL. Dr. Cipto No. 174, Semarang', '01.469.421.0-611.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(15, 11, 'PT. Cipta Jaya Medindo', 0, 0, 'JL. Jawa 47 A RT 002 RW 009, Gubeng, Gubeng Surabaya - Jawa Timur', '02.822.869.0-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(16, 6, 'PT. Teja Sekawan', 0, 0, 'JL. Pangeran Jayakarta 131 A No. 36 RT 07 RW 07, Kel. Mangga Dua Selatan, Kec. Sawah Besar, Jakarta ', '01.148.458.1-026.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(17, 11, 'PT. Rama Mulia Cosmetic Industry', 0, 0, 'Ds. Tenaru RT. 011 RW 004, Tenaru-Driyorejo, Gresik-61177', '01.677.559.5-642.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(18, 9, 'PT. Asta Kurnia Abadi', 0, 0, 'JL. Jupiter Utama No. 12, Sekejati Buah Batu, Kota Bandung, Jawa Barat', '02.497.186.3-441.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(19, 11, 'CV. Jaya Abadi', 0, 0, 'Rungkut Alang-Alang 121 RT. 009 RW. 005, Kali Rungkut-Rungkut, Surabaya-60293', '02.993.662.2-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(20, 11, 'PT. Novapharin', 0, 0, 'JL. Kepatihan No. 112, Kepatihan-Menganti, Gresik-Jawa Timur', '01.479.850.8-641.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(21, 3, 'PT. Bersama Tiga Jaya Sukses', 0, 0, 'Ruko Golden Road C 28 No. 23 A, Kel. Lengkung Wetan, Kec. Serpong, Tangerang Selatan-Banten', '66.601.464.2-411.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(22, 11, 'PT. Mega Antar Nusa', 0, 0, 'JL. Achmad Yani Ruko Central Square C-20, RT 005 RW 002 Gedangan, Sidoarjo-61254', '31.695.034.4-643.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(23, 6, 'PT. Tirta Sukses Perkasa', 0, 0, 'The City Tower Lt. 15, JL. MH Thamrin No. 81, Menteng-Menteng, Jakarta Pusat-DKI Jakarta', '03.322.819.8-071.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(24, 11, 'PT. Surya Artha Medica', 0, 0, 'JL. Abdul Wahab Siamin Blok RC-31, Dukuh Pakis-Surabaya', '02.175.719.0-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(25, 11, 'PT. Sorini Agro Asia Corporindo Tbk', 0, 0, 'JL. Raya Surabaya - Malang KM 43 Ngerong Gempol Kab. Pasuruan Jawa Timur', '01.211.173.8-054.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(26, 9, 'PT. Tri Sumber Makmur Indah', 0, 0, 'JL. Raya Pangalengan No. 391 A, Kamasan Banjaran Kab. Bandung, Jawa Barat', '02.267.177.0-441.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(27, 6, 'BUT GS. Engineering & Construction Corporation', 0, 0, 'Gedung BRI II Lt. 17 Suite 1703, JL. Jend. Sudirman Kav. 44-46, Bendungan Hilir, Tanah Abang, Jakart', '02.979.446.8-077.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(28, 6, 'PT. PLN (Persero) Kantor Pusat', 0, 0, 'JL. Trunojoyo Blok M1 / 135 Melawai, Kebayoran Baru-Jakarta Selatan', '01.001.629.3-051.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(29, 11, 'PT. Duta Inti sarana Utama', 0, 0, 'Perum Wisma Indah Blok F No. 2, RT 004 RW 006, Kepanjenior, Kepanjen Kidul, Blitar', '31.497.856.0-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(30, 6, 'PT. Dimas Surya Indonesia', 0, 0, 'JL. Raya Penggilingan Komp. PIK Blok E No. 269, Kel. Penggilingan, Kec. Cakung, Jakarta Timur', '31.683.396.1-004.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(31, 11, 'PT. Sumber Bahagia Sejahtera Abadi', 0, 0, 'JL. Raya Darmo 131-133, Surabaya', '02.377.239.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(32, 6, 'PT. AMPM Health Care Indonesia', 0, 0, 'JL. Cengkeh Kav. XVI No. 29/30 RT 007 RW 007, Pinangsia-Taman Sari, Jakarta Barat', '03.040.550.0-037.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(33, 10, 'CV. Karya Hidup Sentosa', 0, 0, 'JL. Magelang No. 144, Kel. Karangwaru Kec. Tegalrejo, Yogyakarta, 55241 (DIY)', '01.132.866.3-541.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(34, 11, 'Maria Linggiarti', 0, 0, 'JL. Biliton No. 81, Surabaya', '04.211.424.9-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(35, 10, 'PT. Aries Indo Global', 0, 0, 'JL. RE Martadinata Komp. Ruko Muitiara Marina No. 37, Tawangsari, Semarang Barat, Semarang', '02.914.666.9-511.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(36, 13, 'PT. Delta Surya Alkesindo', 0, 0, 'JL. Veteran No. 63 B RT 011, Melayu-Banjarmasin Tengah, Banjarmasin-Kalimantan Selatan', '02.172.532.0-731.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(37, 6, 'PT. Yamhatevy Paran Mandiri', 0, 0, 'JL. Raya Gatot Subroto No. 70 RT 031 Kuripan, Banjarmasin Timur, Banjarmasin-70236', '01.879.157.4-731.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(38, 6, 'PT. Elektro Medika Internasional Indonesia', 0, 0, 'Komp. Pertokoan Pulomas IX No. 6, Pulo Gadung, Pulo Gadung, Jakarta Timur', '01.314.381.3-003.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(39, 9, 'CV. Banyu Adhi Utama', 0, 0, 'Perumahan Permata Archadia Blok C4/24 No. 23 RT 003 RW 023, Sukabumi - Tapos, Depok-Jawa Barat', '31.819.491.7-412.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(40, 11, 'PT. Amadea Devina Farma', 0, 0, 'JL. Rungkut Mejoyo Selatan IV Blok U-3, Kalirungkut, Rungkut, Surabaya-60293', '01.976.398.6-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(41, 6, 'PT. Mitra Tirta Sukses', 0, 0, 'JL. Rajawali Blok BB/07, Komp. Cipinang Indah II RT 015 RW 003, Kel. Pondok Bambu, Kec. Duren Sawit,', '31.255.283.9-008.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(42, 6, 'PT. Cipta Agung Manis', 0, 0, 'JL. Brigjen Katamso No. 10, Kota Bambu Selatan, Palmerah Jakarta Barat-11420', '02.379.872.1-031.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(43, 9, 'CV. Athallah Putra', 0, 0, 'Komp. Graha Pesona Blok C No. 118 RT 004 RW 002, Kel. Cisaranten Wetan Kec. Cinambo, Kota Bandung, J', '72.688.945.4-429.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(44, 6, 'PT. Ultra Prima Abadi', 0, 0, 'Daan Mogot Km 16 Semanan Kalideres, Jakarta Barat', '01.300.822.2-038.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(45, 3, 'PT. CS2 Pola Sehat', 0, 0, 'Yos Sudarso No. 143, Kebon Besar-Batu Ceper, Tangerang', '02.426.679.3-415.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(46, 1, 'PT. Sanidata Indonesia', 0, 0, 'JL. Teuku Umar No. 22, Dauh Puri Klod-Denpasar Barat, Denpasar-Bali, 80114', '31.786.666.3-901.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(47, 11, 'PT. Berkah Karya Thuba', 0, 0, 'Perum Gebang Raya AG No. 010 RT 022 RW 006, Kel. Gebang Kec. Sidoarjo, Sidoarjo-Jawa Timur', '71.852.756.7-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(48, 10, 'CV. Daya Prima', 0, 0, 'JL. Kaligarang No. 1A, Petemon, Gajah Mungkur, Semarang', '01.120.976.4-511.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(49, 10, 'PT. Sanidata Putri Medika', 0, 0, 'JL. Dr. Cipto 174 Karang Tempel, Semarang Timur, Semarang, Jawa Tengah', '01.985.712.7-511.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(50, 10, 'PT. Daya Prima Kartika Multi Sarana', 0, 0, 'JL. Kumudasmoro Utara No. 19D RT. 001 RW. 007 Bangsari Semarang Barat, Kota Semarang Jawa Tengah', '01.551.769.1-503.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(51, 31, 'Bendahara Dinas Kesehatan Kabupaten Kolaka', 0, 0, 'JL. Pancasila No. 12, Kelurahan Latambaga', '00.130.680.2-815.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(52, 11, 'PT. Prasasti Dwimitra', 0, 0, 'Jl. Wisma Tengger XVII No. 05 RT 002 RW 006, Kandangan - Benowo, Surabaya', '31.481.739.6-604.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(53, 11, 'PT. Bima Putra Adirajada Surabaya', 0, 0, 'JL. Demak No. 67 RT 001 RW 009, Tembok Dukuh, Bubutan Surabaya', '76.222.798.1-614.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(54, 13, 'PT. Samudera Jaya Listrik', 0, 0, 'JL. H. Djok Mentaya No. 29 RT 001 RW 001, Kertak Baru Ilir, Banjarmasin Tengah, Kota Banjarmasin, Ka', '76.302.308.2-731.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(55, 28, 'Bend. Pengeluaran Dinas Kesehatan Kab. Toraja Utara', 0, 0, 'JL. Taman Makam Pahlawan, Karassik, Rantepao, Toraja Utara', '00.693.798.1-803.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(56, 12, 'Pemegang Kas RSU H. Daman Huri', 0, 0, 'JL. Murakata No. 04 Bukat, Barabai, Hulu Sungai Tengah, Kalimantan Selatan 71351', '00.368.901.5-733.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(57, 28, 'PT. Ridho Agung Utama', 0, 0, 'JL. Botol Empangan No. 5, Mangkura-Ujung Pandang, Makasar-Sulawesi Selatan', '01.250.395.9-812.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(58, 19, 'Bend. Kantor Kesehatan Pelabuhan', 0, 0, 'Kompleks Pelabuhan Ambon Honipopu-Sirimau-Ambon', '00.014.087.1-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(59, 11, 'PT. Panasea', 0, 0, 'JL. Veteran No. 39 A RT 022 RW 003, Melayu-Banjarmasin Tengah, Banjarmasin', '03.062.885.3-731.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(60, 15, 'PT. Buana Medistra Pharma', 0, 0, 'JL. Cendrawasih No. 56, Pontianak-Kalimantan Barat', '01.667.282.6-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(61, 24, 'PT. Karya Sindo Papua', 0, 0, 'JL. Kapal Depan Perumahan Polda Dok. VIII RT 004 RW 004 Kelimbi Kec. Jayapura Utara Kota Jayapura, P', '72.095.180.5-952.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(62, 11, 'Bend. Puskesmas Balongbendo', 0, 0, 'Mayjen Bambang Yuwono 2 Seduri Balongbendo, Sidoarjo', '00.841.088.8-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(63, 12, 'PT. Mitra Alkesindo Utama', 0, 0, 'JL. Delima No. 27 RT. 049 Sidodadi Samarinda Ulu Samarinda Kalimantan Timur', '02.196.253.5-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(64, 11, 'PT. Rizki Anugerah Multikarya', 0, 0, 'Raya Wiyung Baru MM-II RT 003 RW 006, Jajar Tunggal, Wiyung, Surabaya, Jawa Timur', '31.664.088.7-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(65, 11, 'Bend. Rumah Sakit Umum Malang', 0, 0, 'JL. Jagung Suprapto Samaan, Klojen, Kota Malang-65112', '00.007.579.6-623.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(66, 11, 'Rutin Rumah Sakit Umum Daerah Genteng', 0, 0, 'JL. Hasanudin No. 98, Genteng, Genteng, Banyuwangi', '00.036.186.5-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(67, 31, 'PT. Mitra Medika Sejahtera Bersama', 0, 0, 'JL. N. Yos Sudarso Paal Dua Manado, Sulawesi Utara', '02.701.118.8-821.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(68, 34, 'PT. Multiplus Medilab', 0, 0, 'JL. Danau Marsabut No. 4. Kel. Sel. Agung, Kec. Medan Barat, Medan-Sumatera Utara', '02.716.684.2-111.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(69, 11, 'Bend. Pengeluaran RSUD Dr. Soegiri Lamongan', 0, 0, 'JL. Kusuma Bangsa No. 7 RT 004 RW 005, Tumenggungan-Lamongan 62214', '00.308.068.6-645.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(70, 11, 'Bend. Pengeluaran Dinkes Kab. Mojokerto', 0, 0, 'JL. RA Basumi No. 4 RT 05 RW 03 Jampirogo Sooko Kab. Mojokerto-Jawa Timur', '00.401.793.5-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(71, 11, 'Bend. P.G.A.N. 4TH/MTSN', 0, 0, 'JL. H. A. Samanhudi No. 15 Pacitan, Pacitan, Pacitan', '00.007.079.7-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(72, 11, 'Bend. Pengeluaran Pembantu Puskesmas Sidoarjo', 0, 0, 'JL. Dr. Soetomo No. 14 RT/RW Magersari Sidoarjo, Siodarjo', '00.560.822.9-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(73, 12, 'Bend. RSUD DR. A. Diponegoro Putussibau', 0, 0, 'JL. Kom. Yos Sudarso, Kel. Putusibau kota, Kec. Putussibau Utara, Kab. Kapuas Hulu', '00.329.767.8-706.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(74, 11, 'PT. Permata Hati Lamongan', 0, 0, 'JL. Raya Ofandels RT 0 / RW 0, Paciran, Paciran, Lamongan, Jawa Timur', '31.664.357.6-645.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(75, 11, 'Dinas Kesehatan Kota Surabaya', 0, 0, 'JL. Jemursari 197, Margorejo, Wonocolo, Surabaya', '00.137.508.8-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(76, 11, 'PT. Pilarindo Bakti Pertiwi', 0, 0, 'JL. Gubeng Kertajaya 9 C / 42 A, Airlangga-Gubeng, Surabaya-Jawa Timur', '31.727.008.0-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(77, 6, 'PT. Tamron Akuatik Produk', 0, 0, 'JL. P. Jayakarta 24 No. 23, Mangga Dua Selatan, Sawah Besar, Jakarta Pusat, DKI Jakarta', '74.634.394.6-026.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(78, 11, 'Bend. Pengeluaran SKPD Dinas Kesehatan Kab. Jember', 0, 0, 'JL. Srikoyo 1/3 Bintoro Patrang, Jember, Jawa Timur-Indonesia', '00.318.672.3-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(79, 22, 'Bend. Pemegang Kas Rumah Sakit Umum Daerah Praya', 0, 0, 'JL. Basuki Rahmat No. 11, Praya-Praya Lombok Tengah 83511', '00.334.059.3-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(80, 4, 'Dinas Kesehatan Benteng', 0, 0, 'JL. Raya Bengkulu Curup, Karang Tinggi, Bengkulu Tengah-Bengkulu', '00.815.324.9-328.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(81, 11, 'Donny Lesmana', 0, 0, 'JL. Perum Kenanga Jaya Kav. II/22, Pandanwangi Blimbing-Malang', '25.903.583.0-652.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(82, 11, 'Bend. Operasional Puskesmas Sempu', 0, 0, 'JL. Kalisetail No. 170, Kel. Sempu, Kec. Sempu, Banyuwangi, Jawa Timur', '00.219.934.7-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(83, 11, 'Pemegang Kas Dinas Kesehatan Banyuwangi', 0, 0, 'JL. Letkol Istiqlah No. 42, Singonegaran, Banyuwangi', '00.036.224.4-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(84, 6, 'PT. Sentrasarana Tirtabening', 0, 0, 'JL. Kemukus No. 32 Blok A. Nomor 14-15 RT 004 RW 006 Pinangsia Tamansari, Jakarta Barat-DKI Jakarta', '01.560.371.5-032.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(85, 10, 'PT. Mitra Buana Sejahtera', 0, 0, 'JL. Kaliputih No. 15 RT 001 RW 005, Purwokerto wetan, Purwokerto Timur, Banyumas - Jawa Tengah', '02.625.631.3-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(86, 30, 'Bendahara Puskesmas  Watubangga', 0, 0, 'JL. Cendrawasih No. 17, Watubangga, Kolaka, Sulawesi Tenggara', '80.204.787.8-815.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(87, 11, 'Bend. Biddokkes', 0, 0, 'JL. Ahmad Yani 116, Sby', '00.343.745.6-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(88, 24, 'PT. Sinar Medika Papua', 0, 0, 'Jl. Ampibhi HM No. 664, RT 003 RW 009, Kel. Hamadi Kec. Jayapura Selatan, Kota Jayapura, Papua', '66.531.683.2-952.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(89, 11, 'Pemegang Kas Dinas Kesehatan Kabupaten Blitar', 0, 0, 'JL. Raya Kediri No. 18, Kel. Sanankulon, Kab. Blitar', '00.434.220.2-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(90, 11, 'Bend. Pengeluaran RSD Dr. Haryoto', 0, 0, 'JL. Basuki Rahmat No. 5, Tompokersan, Lumajang, Lumajang', '00.388.905.2-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(91, 5, 'PT. Diva Sumber Berkat', 0, 0, 'JL. Ahmad Zazuli No. 15, Kota Baru-Gondokusuman Yogyakarta', '31.811.842.9-541.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(92, 19, 'PT. Mediska Kencana', 0, 0, 'JL. WR. Soepratman SK 3/4 -20 Ambon', '01.528.473.0-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(93, 11, 'Bendahara Puskesmas Wates', 0, 0, 'JL. Raya Pare No. 74, Wates, Kel. Wates, Kec. Wates, Kab. Kediri, Jawa Timur', '20.011.075.7-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(94, 11, 'Bendahara Puskesmas Kras', 0, 0, 'JL. Satya Bhakti No. 222, Kel. Kras, Kec. Kras, Kab. Kediri-Jawa Timur', '20.011.071.6-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(95, 11, 'Rutin Rumah Sakit Umum Wlingi', 0, 0, 'JL. Dr. Sucipto, Wlingi, Wlingi, Kab. Blitar-86134', '00.034.633.8-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(96, 23, 'Bend. Dinas Kesehatan Kab. Manggarai', 0, 0, 'Ruteng, Lowir, Langke Rembong-Manggarai', '00.009.885.5-924.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(97, 11, 'PT. Alkesmart Indonesia', 0, 0, 'Ruko Taman Jenggala Mas RTB-9, JL. Sunandar PS RT 018 RW 004, Sidokare, Sidoarjo, Jawa Timur', '31.589.440.2-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(98, 11, 'Bendahara Penetapan Rekening Dana Kapitasi JKN UPTD Puskesmas Perak', 0, 0, 'JL. Raya Perak No. 109 RT 002 RW 002, Pagerwojo, Perak Jombang, Jawa Timur', '75.442.939.7-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(99, 11, 'Bendahara Pengeluaran Dinas Kesehatan Kab. Lumajang', 0, 0, 'JL. S. Parman No. 13 Rogotrunan Lumajang Kab. Lumajang Jawa timur', '00.166.477.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(100, 11, 'Bendahara Pengeluaran RSUD Prof Dr. Soekandar', 0, 0, 'JL. Hayam Wuruk No. 25 Kel. Mojosari, Kec. Mojosari, Kab. Mojokerto, Jawa Timur', '00.205.433.6-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(101, 9, 'PT. Global Biomedilab', 0, 0, 'JL. Bogor B9 No. 5 RT/RW 008/015 Karyamulya-Kesambi kota Cirebon -Jawa Barat 45135', '31.402.239.3-426.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(102, 11, 'Bend. Dana Kapitasi JKN Gunungsari', 0, 0, 'JL. Raya Babad-Bojonegoro Km 03 Kel. Gunungsari Kec. Baureno Bojonegoro-Jawa Timur', '71.285.326.6-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(103, 11, 'Bend. Pemegang Kas Pembantu Puskesmas Munjungan', 0, 0, 'Dsn. Munjungan RT 08 Rw 02 Munjungan, Munjungan, Munjungan, Kab. Trenggalek-Jawa Timur', '00.465.676.5-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(104, 11, 'Bend. Kapitasi JKN Kedung Adem', 0, 0, 'JL. Gajah Mada No. 1328, Kel. Kedungadem, Kec. Kedungadem Bojonegoro, Jawa Timur', '71.291.819.2-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(105, 12, 'Kantor Dinas Kesehatan Kab. K. Hulu ', 0, 0, 'JL. Diponegoro No. 9 Kel. Putussibau Kota, Kec. Putussibau Utara Kab. Kapuas Hulu', '00.125.152.9-706.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(106, 12, 'PT. Sinarindo Multi Medika', 0, 0, 'JL. Karna Sosial No. 8 C, RT 001 RW 011 Kel. Akcaya Kec. Pontianak Selatan Pontianak, Kalimantan Bar', '71.902.807.8-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(107, 11, 'Bendahara Pengeluaran RSUD Bhakti Dharma Husada', 0, 0, 'JL. Raya Kendung No. 110-117 Sememi, Benowo, Surabaya', '00.273.596.7-604.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(108, 11, 'PT. Sentrum Dental Sentosa', 0, 0, 'JL. Sumatera No. 129 Gubeng, Gubeng, Gubeng-Surabaya-Jawa Timur', '01.995.267.0-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(109, 11, 'Bend. Pengeluaran Dinas Kesehatan Kota Malang', 0, 0, 'JL. Simpang LA Sucipto 45 Pandanwangi / Blimbing Kota Madya Malang-Jawa Timur', '00.376.724.1-652.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(110, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Kalidawir', 0, 0, 'JL. Melati No. 02 RT 001 RW 001, Kalidawir, Kalidawir, Kab. Tulungagung Jawa Timur', '73.137.178.7-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(111, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Bandung', 0, 0, 'JL. Panglima Sudirman No. 18 Bandung, Bandung, Kab. Tulungagung, Jawa Timur', '30.137.142.3-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(112, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Tlogosari', 0, 0, 'Raya Pakisan No. RT. RW. Kel. Pakisan, Kec. Tlogoasri, Bondowoso, Jawa Timur', '70.860.616.5-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(113, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Maesan', 0, 0, 'Raya Pakisan No. RT. RW. Kel. Maesan Kec. Maesan Bondowoso Jawa Timur', '70.808.245.8-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(114, 11, 'Bendahara BLUD Puskesmas Watulimo', 0, 0, 'JL. Raya Pantai Prigi Prigi Watulimo Kab. Trenggalek Jawa Timur', '71.126.486.1-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(115, 11, 'Rumah Sakit Umum Daerah Ploso', 0, 0, 'JLn. Darmo Sugondo No. 83 RT 001 RW 001 Kelurahan Rejoagung Kecamatan Ploso, Jombang, Jawa Timur', '30.126.327.3-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(116, 11, 'Bendahara Pengeluaran RSUD Pasirian ', 0, 0, 'Jalan Raya Pasirian Pasirian, Pasirian Kab. Lumajang Jawa Timur', '76.815.082.3-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(117, 11, 'Bendahara dan Penetapan Rekening Dana Kapitasi JKN UPTD Puskesmas Plumbon Gambang', 0, 0, 'JL. Raya Plumbon Gambang No. 49 RT 002 RW 003 Plumbon Gambang, Gudo Kab. Jombang Jawa Timur', '75.513.658.7-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(118, 10, 'PT. Evercoss Technology Indonesia', 0, 0, 'JL. RE Martadinata No. 37 Tawangsari, Semarang Barat Kota Semarang, Jawa Tengah', '74.428.910.9-503.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(119, 11, 'PT. Dakota Sarana Indah ', 0, 0, 'Perumahan Citra Pesona Buduran E1 No. 05 RT 037 RW 007 Kel. Sindokepung Kec. Buduran Sidoarjo, Jawa ', '70.895.618.0-643.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(120, 11, 'Bend. Kapitasi JKN Purwosari', 0, 0, 'JL. Raya Ngambon No. 523 RT RW Kel. Purwosari Kec. Purwosari  Bojonegoro, Jawa Timur', '71.293.296.1-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(121, 23, 'Bend. Pengeluaran Rumah Sakit Umum Daerah Umbu Rara Meha Waingapu', 0, 0, 'JL. Adam Malik RT 032 / RW 006 Kambajawa Kota Waingapu, Sumba Timur 87117', '00.134.678.2-926000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(122, 23, 'Rutin Dinas Kesehatan Kab. Nagekeo', 0, 0, 'Danga RT 001 RW 001 Danga, Aesesa Nagekeo', '00.618.119.2-923.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(123, 14, 'Bend. Puskesmas Swadana Menteng', 0, 0, 'JL. Temanggung Tilung No. 59 Menteng, Menteng Jekan Raya Kota Palangkaraya, Kalimantan Tengah', '00.399.467.0-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(124, 14, 'Bendahara Dinas Kesehatan Kab. Kota Waringin Barat', 0, 0, 'Jalan Cilik Riwut II No. 210 Madurejo Arut Selatan Kota Waringin Barat Kalimantan Tengah 74112', '00.363.184.3-713.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(125, 14, 'Bendahara Rumah Sakit Jiwa Kalawa Atei', 0, 0, 'JL. Trans Palangkaraya -Kuala Kurun km 16 RT 004 Bukit Rawi, Kahayan Tengah Pulau Pisau Kalimantan T', '74.073.718.4-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(126, 11, 'Rumah Sakit Bantuan 05.08.05 Surabaya', 0, 0, 'JL. Gubeng Pojok No. 21, Pacar Keling Pacar Keling Tambaksari kota Surabaya Jawa Timur', '02.607.309.8-619.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(127, 11, 'Bend. Peng. Dinas Kesehatan Kab. Kediri', 0, 0, 'JL. Pemenang No. 1 C Kel. Sukorejo Kec. Ngasem Kab. Kediri Jawa timur ', '00.629.755.0-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(128, 6, 'PT. Fajar Surya Swadaya', 0, 0, 'JL. Aipda Ks Tubun Raya No. 66 C RT 001 RW 001 Kel. Slipi Kec. Palmerah Jakarta Barat, DKI Jakarta R', '01.601.258.5-031.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(129, 6, 'PT. Silva Rimba Lestari', 0, 0, 'JL. Aipda Kstubun Raya No. 66 C RT 001 RW 001 Kel. Slipi Kec. Palmerah Jakarta Barat, DKI Jakarta Ra', '02.679.951.0-031.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(130, 4, 'PT. Tiara Anugrah Lestari ', 0, 0, 'JL. Kapuas Raya No. 17 Padang Harapan, Gading Cempaka Kota Bengkulu', '02.040.778.9-311.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(131, 11, 'Bendahara JKN UPT Puskesmas Janti', 0, 0, 'JL. Janti Barat No. 88 RT RW Kel. Sukun Kec. Sukun Kota Malang, Jawa Timur', '70.974.752.1-623.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(132, 11, 'Bend. Rutin Dinas Kesehatan Kota Madiun', 0, 0, 'JL. Trunojoyo No. 120 Nambangan Kidul-Mangun Harjo Madiun - 63128 ', '00.436.763.7-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(133, 11, 'Dinas Pengendalian Pemberdayaa n Perempuan dan Perlindungan Anak Kota Surabaya', 0, 0, 'JL. Kedungsari No. 18', '00.005.896.6-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(134, 11, 'Bend. Pengeluaran Kantor Dinas Kesehatan Kab. Magetan ', 0, 0, 'JL. Imam Bonjol No. 04 Magetan, Magetan, Jawa Timur', '00.034.846.6-646.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(135, 11, 'Bend. JKN Puskesmas Pilangkenceng', 0, 0, 'Raya Kenongorejo No. 774 B Kenongorejo Pilang Kenceng Madiun Jawa Timur ', '71.038.258.1-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(136, 30, 'PT. Triafi Pratama Medika', 0, 0, 'JL. Haluoleo Kom. BTN Wahana E No. 01 RT 000 RW 000 Kel. Mokoau Kec. Kambu Kota Kendari, Sulawesi Te', '66.124.269.3-811.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(137, 11, 'Bendahara Pengeluaran dan Penerimaan Puskesmas Curah Tulis', 0, 0, 'Jalan Balai Desa Curah Tulis No. 182 Kab. Probolinggo', '72.778.622.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(138, 11, 'Bend. Dana Penunjang Pendidikan Universitas Jember', 0, 0, 'JL. Kalimantan No. 37 RT RW Sumbersari-Sumbersari Jember', '00.035.929.9-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(139, 11, 'Bendahara Pengeluaran Puskesmas Besuk', 0, 0, 'JL. Raya Besuk No. RT 005 RW 005 Kel. Besuk Agung Kec. Besuk Kab. Probolinggo, Jawa Timur', '72.878.527.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(140, 11, 'Bend. Puskesmas Krejengan ', 0, 0, 'JL. Raya Krejengan No. 82 RT 001 RW 001 Krejengan Krejengan Kab. Probolinggo', '20.042.217.8-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(141, 10, 'PT. Triangle Motorindo', 0, 0, 'Taman Industri BSB Blok AS No. 9 Jatibarang, Mijen, Semarang', '01.967.295.5-511.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(142, 19, 'Bend. Kap. Jamkesmas Warujayeng', 0, 0, 'JL. A. Yani No. 25 Kel. Warujayeng Kec. Tanjung Anom Kab. Nganjuk', '72.602.737.8-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(143, 11, 'Bend. Puskesmas Panekan ', 0, 0, 'Panekan, Panekan, Panekan Magetan', '00.324.576.8-646.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(144, 11, 'Bend. Puskesmas Kalibaru Kulon', 0, 0, 'JL. Jember No. 39, Kalibaru Kulon, Kalibaru Banyuwangi', '00.166.706.2-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(145, 11, 'Bend. Puskesmas Mojopanggung', 0, 0, 'JL. Brawijaya 21 Mojopanggung, Giri Banyuwangi', '00.219.921.4-527.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(146, 11, 'Bend. Puskesmas Gitik', 0, 0, 'JL. Diponegoro No. 24 RT 000 RW 000 Gitik, Rogojampi, Banyuwangi', '00.836.705.4-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(147, 14, 'Bend. Rutin Dinas Kesehatan Kab. Seruyan', 0, 0, 'JL. Jend. A Yani RT 008 RW 003 Kuala Pembuang Satu-Seruyan Hilir Kab. Seruyan - Kalimantan Tengah', '00.322.218.9-712.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(148, 11, 'Bend. Pemegang Kas Dinas Kesehatan Kab. Loteng', 0, 0, 'JL. Sukarno Hatta (KTR DNS Kesehatan) Praya-Praya Lombok Tengah', '00.334.056-9-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(149, 11, 'Bend. Pengeluaran B.P.T.P.', 0, 0, 'JL. Raya Karang Ploso Km. 4 Ngijo Karang Ploso, Kab. Malang', '00.152.586.4-657.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(150, 10, 'PT. Glorya Medica Abadi', 0, 0, 'JL. Pramuka RT. 001 RW 002 Sudagaran Banyumas, Banyumas, Jawa Tengah 53192', '74.587.956.9-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(151, 11, 'Bendahara Pengeluaran Dinas Kesehatan Kab. Pacitan', 0, 0, 'JL. Letjen Suprapto No. 42 Sidoharjo Pacitan Pacitan', '00.034.897.9-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(152, 11, 'Bendahara JKN Puskesmas Tegalsiwalan', 0, 0, 'JL. Raya Tegalsiwalan No. RT 000 RW 000 Kel. Tegalsiwalan Kec. Tegal Siwalan Kab. Probolinggo, Jawa ', '72.870.327.3-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(153, 11, 'CV. Intantirta Jaya Medika', 0, 0, 'Permata Wiyung Regency  Kav. 59 RT/RW 000/005 Wiyung, Wiyung Surabaya, Jawa Timur 60226', '31.354.856.2-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(154, 9, 'PT. Zeva Valindo Jaya', 0, 0, 'Ruko Harapan Indah Blok EC No. 11 RT 008 RW 017 Pejuang Medan Satria Kotamadya Bekasi', '01.917.805.2-407.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(155, 6, 'PT. Marco Sekawan ', 0, 0, 'JL. Agung Utara I Blok A2/33 RT 005 RW 008 Kel. Sunter Agung Kec. Tanjung Priok Jakarta Utara, DKI J', '03.319.195.8-048.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(156, 22, 'PT. Bintang Mandiri Medica', 0, 0, 'JL. Diponegoro RT 012 Majidi Pancor, Selong, Lombok Timur', '75.432.140.4-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(157, 6, 'Hendi Setyowati', 0, 0, 'JL. Rekreasi No. RT 008 RW 004 Kel. Cilincing Kec. Ciclincing Jakarta Utara, DKI Jakarta', '70.434.673.3-045.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(158, 22, 'Bend. Peng KTR Kesehatan Pelabuhan Kls II Mataram', 0, 0, 'JL. Adi Sucipto No. 13 B Rembiga-Selaparang Kota Mataram', '00.370.896.3-911.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(159, 6, 'Hexagon Metrology Asia Pacific PTE. LTD', 0, 0, 'Kindo Square Unit C-2, JL. Raya Duren Tiga No. 101 Duren Tiga Pancoran,  Jakarta Selatan, DKI-Jakart', '03.215.133.4-053.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(160, 2, 'YAY. Bhakti Wara', 0, 0, 'JL. Sungai Selan km 4 Rangkui-Rangkui Pangkal Pinang', '01.329.098.5-034.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(161, 28, 'PT. Siaga Medika Abadi Karya', 0, 0, 'JL. Abdul Kadir No. 9-D RT 001 RW 008 Balang Baru-Tamalate Makassar', '31.708.360.8-804.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(162, 22, 'RSUD Kabupaten Lombok Utara', 0, 0, 'Raya Tanjung Bayan Tanjung Tanjung Kab. Lombok Utara Tenggara Barat', '00.919.071.1-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(163, 14, 'Bendahara Kantor Kesehatan Pelabuhan Sampit', 0, 0, 'JL. MT. Haryono No. 46, Mentawa Baru Hulu Mentawa Baru Ketapang Kab. Kotawaringin Timur - Kalimantan', '00.008.289.1.712.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(164, 15, 'PT. Mulawarman Mitra Medika', 0, 0, 'JL. M. Yamin No. 2 RT 027 Gunung Kelua, Samarinda Ulu Samarinda-Kaltim', '83.311.490.3-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(165, 11, 'Bend. Pengeluaran Pembantu UPT Puskesmas Blooto', 0, 0, 'JL. Raya Cindo No. 3 RT RW Kel. Blooto Kec. Prajurit Kulon Kota Mojokerto, Jatim', '71.993.151.1-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(166, 22, 'Bend. Pengeluaran BPK RI Perwak. Prov. NTB', 0, 0, 'JL. Udayana No. 22 Karang Baru-Selaparang Kota Mataram', '00.642.829.6-911.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(167, 11, 'Bend. Pengeluaran Pembantu Puskesmas Gondang', 0, 0, 'JL. Raya Gondang RT 0001 RW 0001 Gondang Tulungagung, Jawa Timur', '75.484.335.7-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(168, 11, 'Bend. RSU Sumberejo', 0, 0, 'JL. Raya Sumberrejo 0231 RT 006 RW 002 Sumuragung, Sumberrejo, Mojokerto', '00.641.305.8-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(169, 30, 'PT. Sultratuna Samudra', 0, 0, 'JL. Samudra Komp. Pelabuhan Perikanan Samudra Kendari No. 1 Puday Abeli, Kota Kendari Sulawesi Tengg', '01.539.633.6-811.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(170, 11, 'Bendahara Pengeluaran RSUD Kota Malang ', 0, 0, 'JL. Rajoisa Bumiayu Kedung Kandang Kota Malang Jawa Timur', '72.099.225.4-623.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(171, 22, 'Bend. RSUD Sumbawa Barat', 0, 0, 'JLn. Undru No. 06 RT 04 RW 06 Kel. Kuang Taliwang-Sumbawa Barat', '00.857.607.6-913.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(172, 11, 'Bend. Pengeluaran RSU Haji Surabaya', 0, 0, 'JL. Manyar Kertoadi Klampis Ngasem-Sukolilo, Surabaya-Jawa Timur', '00.587.760.0-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(173, 22, 'Bend. Rutin Dinkes Kodya Mataram', 0, 0, 'JL. Sultan Hasanudin No. 34 Cakranegara Timur-Cakranegara Kota Mataram', '00.183.956.2-914.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(174, 19, 'Rumah Sakit Umum Ambon', 0, 0, 'JL. DR Kayade, Kudamati, Kudamati Nusaniwe, Ambon Maluku', '00.013.803.2-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(175, 11, 'BND. RSUD RA Basoeni Kab. Mojokerto', 0, 0, 'JL. Raya Gedeg No. 17 Gedek, Gedek, Kab. Mojokerto', '20.018.829.0-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(176, 11, 'Pemegang Kas Dinas Kesehatan Kab. Blitar', 0, 0, 'Raya Kediri 18, Sanan Kulon Sanan Kulon, Sanan kulon, Kab. Blitar, Jawa Timur', '00.434.220.0-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(177, 11, 'Bend. RSUD Ngimbang', 0, 0, 'JL. Mayangkara No. 227 RT 000 RW 000 Sendangrejo - Ngimbang  Lamongan', '30.081.743.4-645.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(178, 11, 'Bend. Puskesmas Wongsorejo', 0, 0, 'JL. Raya Situbondo No. 04 Wonorejo, Wongsorejo Banyuwangi', '00.219.916.4-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(179, 11, 'Bend. Kapitasi JKN Sukosewu', 0, 0, 'JL. Raya Klepek No. RT. 000 RW. 000, Kel. Klepek Kec. Sukosewu, Bojonegoro, Jawa Timur', '71.285.648.3-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(180, 11, 'Bendahara BLUD Puskesmas Slawe', 0, 0, 'JL. Raya Prigi RT. 010 RW. 010, Slawe Watulimo, Kab. Trenggalek Jawa Timur', '20.001.767.1-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(181, 11, 'Bend. Dana Kapitasi JKN Mejuwet', 0, 0, 'JL. Dr. Sutomo No. 206 RT 001 RW 001 Kel. Mejuwet Kec. Sumberejo, Bojonegoro, Jawa Timur', '71.298.264.4-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(182, 11, 'Bend. Kapitasi JKN Kasiman', 0, 0, 'JL. Ronggolawe No. 03 RT RW, Kel. Batokan Kec. Kasiman, Bojonegoro, Jawa Timur', '71.293.446.2-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(183, 11, 'Bendahara Umum BLUD Puskesmas Dongko Kab. Trenggalek', 0, 0, 'JL. Raya Dongko Panggul RT. 069 RW. 004 Dongko, Dongko Trenggalek Jawa Timur', '71.598.847.3-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(184, 11, 'Bendahara Kapitasi Jaminan Kesehatan Nasional UPTD Puskesmas Sumobito', 0, 0, 'Jalan Raya Sumobito No. 568 Sumobito Jombang Jawa Timur', '75.463.131.5-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(185, 11, 'Pemegang Kas RSD Kab. Madiun', 0, 0, 'JL. A. Yani Km. 5 Caruban, Bangunsari, Mejayan, Madiun', '00.192.878.7-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(186, 12, 'Bendahara Dinas Kesehatan Sanggau', 0, 0, 'JL. Nenas No. 24 Tanjung Sekayan Kapuas Kab. Sanggau Kalimantan Barat', '00.032.821.1-705.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(187, 11, 'Bend. Puskesmas Maron', 0, 0, 'JL. Asmali 604 RT 010 RW 002 Maron Wetan Maron Kab. Probolinggo', '30.081.655.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(188, 11, 'Bendahara Umum BLUD Puskesmas Tugu', 0, 0, 'JL. Raya Ponorogo KM. 07 RT. 000 RW. 000 Gondang, Tugu Kab. Trenggalek Jawa Timur', '71.547.872.3-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(189, 11, 'Bend. Pengeluaran Dinas Pendidikan Kota Malang', 0, 0, 'JL. Veteran No. 19 Sumbersari Lowok Waru Kotamadya Malang', '00.376.713.4-652.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(190, 23, 'PT. Mahkota Anugrah Karya', 0, 0, 'JL. Bogarpung (Komp. Perum. Puri Kimbul Permai No. 14) RT. 007 RW. 001, Kel. Wolomarang Kec. Alok Ba', '01.768.340.0-921.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(191, 11, 'Bend. Pengeluaran RSU DR. Soetomo', 0, 0, 'JL. Mayjen Prof. DR. Moestopo 6-8 Airlangga - Gubeng Surabaya - Jawa Timur', '00.281.411.9-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(192, 22, 'Bendahara Pengeluaran Rumah Sakit H. L. Manambai Abdul Kadir ', 0, 0, 'Lintas Sumbawa - Bima KM. 5 Brang Bawa Sumbawa Sumbawa Nusa Tenggara Barat', '00.644.429.3-391.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(193, 11, 'Bend. Rutin RSUD DR. Harjono Ponorogo', 0, 0, 'JL. Raya Ponorogo Pacitan Pakunden  Ponorogo, Ponorogo', '00.035.073.6-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(194, 3, 'PT. Pradana Sirona Persada', 0, 0, 'JL. Gatot Subroto Km 7, Jateng, Jatiuwung, KOTA TANGERANG BANTEN', '80.447.610.9-402.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(195, 11, 'Bend. Puskesmas Kabat', 0, 0, 'JL. Raya Kabat No. 08 RT 00 RW 00 Dadapan, Kabat Banyuwangi', '00.386.707.0-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(196, 11, 'Bend. Puskesmas Songgon', 0, 0, 'JL. A. Yani No 65, RT 001 RW 002 Sumberbulu, Songgon Banyuwangi', '00.836.750.0-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(197, 11, 'Bend. Pengeluaran RSUD Asembagus', 0, 0, 'JL. Raya Banyuwangi - Asembagus No. RT. RW. Kel. Wringin Kec. Asembagus Situbondo - Jawa Timur  ', '66.778.036.5-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(198, 11, 'PT. Tirta Jaya Berdikari', 0, 0, 'Kom. PIK Blok B No. 70 RT. 004 RW 010 Kel. Penggilingan Kec. Cakung Kab Jaktim ', '02.998.708.8-004.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(199, 19, 'Bagian Proyek OPRS Rumah Sakit Umum Tulehu', 0, 0, 'Desa Tulehu Kel. Tulehu Kec. Salahutu Maluku Tengah', '00.229.439.5-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(200, 14, 'RSUD DR H Soemarno Sosroatmodjo Kuala Kapuas', 0, 0, 'Jl. Tambun Bunga No. 16  Rt.000 RW.000 Selat Tengah, Selat Kapuas, Kalimantan Tengah', '00.126.118.9-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(201, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Arjasa', 0, 0, 'Jl. Diponegoro No. 1 15 RT.004 RW.001, Kel. Candijati, Kec. Arjasa, Jember, Jawa Timur', '70.906.431.5-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(202, 18, 'PT. Saburai Perdana Barokah', 0, 0, 'Jl. Purnawirawan GG. Swadaya 7 Lorong Ceria No. 100 RT.002, Gunung terang, Tanjungkarang Barat, Band', '02.523.298-4.322.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(203, 1, 'PT. Surya bali Makmur', 0, 0, 'Jl. Diponegoro No. 135-137 Blok B/24 Daun Puri Klod, Denpasar Barat, Bali', '02.252.265.0-904.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(204, 1, 'Bend. Dinkes Kabupaten Jembrana', 0, 0, 'Jl. Surapati No. 1 Dauh Waru, Jembrana, Jembrana, Bali', '00.008.904.5-908.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(205, 11, 'RSUD Dokter Moh. Saleh Kota Probolinggo', 0, 0, 'Jl. Mayjend Panjaitan No. 65 Kel. Sukabumi Kec. Mayangan Kota Probolinggo-67219', '00.166.637-9.625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(206, 19, 'Dinas Kesehatan Kab Seram Bagian Timur', 0, 0, 'Jl. Wailola Bula, Seram Bagian Timur, Maluku', '00.479.133.1-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(207, 20, 'Bendaharawan Rutin RSU Tobelo', 0, 0, 'Jl. Lanbouw Desa Gamsungi, Kec. Tobelo, Kab. Halmahera Utara, Maluku Utara', '00.431.205.4-943.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(208, 15, 'PT. Multi Sarana Alkesindo', 0, 0, 'Jl. KH. Harun Nafsi GG. Karya Bersama Blok A No. 7 RT.16 Rapak Dalam, LOA Janan Ilir, Samarinda, kal', '03.034.334.7-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(209, 20, 'Bendahara DinasKesehatan Halmahera Selatan', 0, 0, 'Mandawong, Mandaong, Bacan Selatan, Kab. Halmahera Selatan', '00.644.852.6-942.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(210, 22, 'Pemegang Kas Kantor Dinas Kesehatan', 0, 0, 'Jl. Kesehatan 02, Kel. Pentaoi, Kec. Mpunda, Kota Bima, Nusa Tenggara Barat', '00.133.479.6-912.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(211, 11, 'Bend. JKN Puskesmas Tembokrejo', 0, 0, 'Jl. PB. Sudirman No. 44 RT. 001 RW.003, Kel. Tembokrejo, Kec. Gumukmas, Jember, Jawa Timur', '70.906.286.3-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(212, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Rowotengah', 0, 0, 'Jl. Gajah Mada No. 77, Kel. Sumber Agung, Kec. Sumber Baru, Jember, Jawa Timur', '70.900.313.1-926.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(213, 6, 'PT. EMIINDO Jaya Bersama', 0, 0, 'Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jak', '84.607.176.9-003.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(214, 1, 'BEND.PENGELUARAN DNS.KESEHATAN KAB.BANGLI (161)', 0, 0, 'JL. BRIGJEN NGURAH RAI (DINAS KESEHATAN), KAWAN KAWAN BANGLI BANGLI BALI', '00.295.329.7-907.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(215, 11, 'BEND. PUSKESMAS TEGALDLIMO', 0, 0, 'JL. KOPTU RUSWANDI TEGALDLIMO, TEGALDLIMO BANYUWANGI', '00.836.704.7-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(216, 12, 'PT DWICENTRA CAHAYA WIGUNA', 0, 0, 'JL. PERDANA KOMP RUKAN PERDANA SQUARE B NO 19, PONTIANAK SELATAN, PONTIANAK, KALIMANTAN BARAT', '02.373.576.4-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(217, 11, 'BEND. RUTIN PUSK SAWOO', 0, 0, 'JL. RAYA SAWOO RT.03 RW.05, SAWOO SAWOO SAWOO KAB. PONOROGO JAWA TIMUR', '00.324.703.8-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(218, 11, 'BENDAHARAWAN PUSKESMAS PAGU', 0, 0, 'JL. SUPRIADI RT.00 RW.00, KEL. PAGU KEC.PAGU KAB. KEDIRI JAWA TIMUR', '00.744.988.7-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(219, 11, 'BENDAHARA PENGELUARAN RUMAH SAKIT KUSTA SUMBERGLAGAH', 0, 0, 'DSN. SUMBERGLAGAH, TANJUNGKENONGO PACET KAB. MOJOKERTO', '00.401.939.4-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(220, 19, 'BEND. Rumah Sakit Umum Daerah (RSUD) Kab. MTB', 0, 0, 'Jl. IR Soekarno Saumlaki-Tanimbar Selatan- MTB', '00.904.236.7-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(221, 11, 'BEND. PENGELUARAN DINAS KESEHATAN KAB. TUBAN', 0, 0, 'JL. BRAWIJAYA NO. 3 KEBONSARI, TUBAN, TUBAN, JAWA TIMUR', '00.035.620.4-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(222, 30, 'BEND. RUTIN DINAS KESEHATAN KOTA PALU', 0, 0, 'JL. BALAIKOTA SELATAN BLOK C NO. 1 TANAMODINDI-PALU SELATAN PALU-SULAWESI TENGAH', '00.412.806.2-831.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(223, 29, 'BEND. RUTIN PADA RSU POSO', 0, 0, 'JL. JENDRAL SUDIRMAN NO. 33 KEL. KASINTUWU, KEC. POSO KOTA UTARA POSO 94611', '00.139.096.2-833.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(224, 20, 'Bend. Politeknik Kesehatan Ternate', 0, 0, 'Jl. Tanah Tinggi Kel. Maliaro, Kec. Ternate Selatan, Ternate', '00.136.195.5-942.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(225, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Patrang', 0, 0, 'Jl. Kaca Piring No. 05 RT. 004 RW. 001, Kel. Gebang, Kec. Patrang, Jember, Jawa Timur', '70.918.681.1-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(226, 11, 'Bendahara Umum BLUD Puskesmas Karangan', 0, 0, 'Jl. Raya Karangan RT. 005 RW. 002, Karangan, Karangan, Trenggalek, Jawa Timur', '71.463.010.0-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(227, 13, 'Dinas Kesehatan ', 0, 0, 'Jl. Yetro Sinseng No. 23 Lanjas, Teweh Tengah, Barito Utara', '00.470.675.0-714.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(228, 14, 'Pemegang Kas Dinkes Kab. Sukamara', 0, 0, 'Jl. Tjilik Riwut KM. 7.5 RT.14 RW.04 Natai Sedawak, Sukamara, Sukamara, Kalimanatan Tengah', '00.363.117.3-713.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(229, 11, 'Bendahara RS Bhayangkara TK III Bondowoso', 0, 0, 'Jl. Jenpol Sucipto Judodiharjo 12 Kel. Blindungan, Kec. Bondowoso, Kab. Bodowoso, Jawa Timur', '00.671.567.6-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(230, 11, 'Bendahara Pengeluaran dan Penerimaan Puskesmas Banyuanyar', 0, 0, 'Jl. Raya Banyuanyar No. 14 Kel. Liprak, Kec. Banyuanyar, Kab. Probolinggo, Jawa Timur', '72.816.817.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(231, 11, 'Bend. Puskesmas Kraksaan', 0, 0, 'Jl. Raya Panglima Sudirman Patokan, Kraksaan, Kab. Probolinggo', '30.051.811.5-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(232, 11, 'Pemegang Kas Dinas Kesehatan Pemkab Bojonegoro', 0, 0, 'Jl. Panglima Sudirman No. 30 Kel. Kepatihan, Kec. Bojonegoro, Kab. Bojonegoro, Jawa Timur', '00.307.759.1-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(233, 11, 'Rumkit Bhayangkara Polda Jatim Di Surabaya', 0, 0, 'Jl. Akhmad Yani Kel. Wonocolo, Kec. Wonocolo, Kab. Surabaya, Jawa Timur', '00.252.302.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(234, 11, 'Bend. Satker Bid Kedokteran & Kesehatan Polda Jatim', 0, 0, 'Jl. Akhmad Yani 116 Kel. Wonocolo, Kec. Wonocolo, Kab. Surabaya, Jawa Timur', '00.343.745.6-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(235, 11, 'PT. Rizky Putra Kasih', 0, 0, 'Perum Singhasari Residence A12 No. 25 RT. 01 RW. 09, Kel. Purwoasri, Kec. Singosari, Malang, Jawa Ti', '73.254.798.9-657.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(236, 14, 'PT. Fresh Water Hillyuda', 0, 0, 'Jl. Delima No. 37 RT. 08, Madurejo, Arut Selatan, Kota Waringin Barat, Kalimantan Tengah', '02.225.153.2-713.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(237, 11, 'Bend. PPK Puskesmas Gempol', 0, 0, 'Jl. Raya Bandulan, Kejapanan, Gempol, Pasuruan', '00.503.571.2-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(238, 22, 'Politeknik Kesehatan Mataram', 0, 0, 'Jl. Praburangkasari Dasan Cermen Sandubaya, Kota Mataram, Nusa Tenggara Barat', '00.009.241.1-911.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(239, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Jelbuk', 0, 0, 'Jl. RA. Kartini No. 26 Kel. Jelbuk, Kec. Jelbuk, Jember, Jawa Timur', '70.903.849.1-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(240, 11, 'PUMC Puskesmas Panarukan', 0, 0, 'Jl. Wringinanom No. 29, Wringinanom, Kel. Wringinanom, Kec. Panarukan, Situbondo, Jawa Timur', '00.151.332.4-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(241, 11, 'Bend. Pengeluaran Politeknik Negeri Banyuwangi', 0, 0, 'Jl. Raya Jember KM. 13, Labanasem Kabat, Banyuwangi, Jawa Timur', '30.150.228.2-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(242, 11, 'Bendahara Pengeluaran Pembantu UPTD Puskesmas Ngantru', 0, 0, 'Jl. Raya Ngantru RT. 005 RW. 001, Ngantru, Ngantru, Kab. Tulungagung, Jawa Timur', '30.080.097.6-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(243, 11, 'Bend. Pembantu Pengeluaran Puskesmas Pandaan', 0, 0, 'Jl. Raya No. 11 Patungasri, Pandaan, Pasuruan', '00.503.554.8-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(244, 15, 'PT. Sumber Rejeki Medika Jaya', 0, 0, 'JL. Adam Malik No. 33 RT 004, Kel. Karang Asam Ulu, Kec. Sungai Kunjang Kota Samarinda, Kalimantan T', '03.210.594.2-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(245, 15, 'PT. Murindo Multi Sarana', 0, 0, 'Jl. AW Syahrani Ruko Pondok Alam Indah No. 5 RT. 26, Sempaja Selatan, Samarinda Utara, Samarinda', '03.034.116.8-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(246, 11, 'Kapitasi JKN Puskesmas Sidayu', 0, 0, 'Jl. Raya Sidayu Kel. Ngawen, Kec. Sidayu, Gresik, Jawa Timur', '71.509.684.8-612.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(247, 11, 'Rumah Sakit Umum Mohammad Noer Pamekasan', 0, 0, 'Jl. Bonorogo No. 17 Barurambat Timur, Pademawu, Kab. Pamekasan, Jawa Timur', '00.172.311.3-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(248, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Andongsari', 0, 0, 'Jl. Kotta Blater No. 12 Andongsari, Ambulu, Kab. Jember, Jawa Timur', '70.883.693.7-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(249, 11, 'Bendahara Dana kapitasi Puskesmas Kaliwates', 0, 0, 'Jl. Jend. Basuki Rahmat No. 199, Kel. Tegal Besar, Kec. Kaliwates, Jember, Jawa Timur', '70.907.154.2-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 11, 'CV. Cipta Jaya Medika', '890000000000', '0', 'JL. Biliton No. 15 Gubeng - Surabaya', '12.454.456.1-606.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, 6, 'Gunung Bayan Pratama Coal', '890000000000', '0', 'Graha Irama Lt. 12, JL. HR. Rasuna said Blok X-1 Kav. 1-2, Kuningan Timur-Setia Budi-Jakarta Selatan', '01.467.051.7-091.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 6, 'Firman Ketaun Perkasa', '81792730137', '0', 'Graha Irama Lt 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta sela', '01.856.455.9-063.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, 11, 'CV. Golden Elite Technology', '0', '0', 'JL. Kalianyar 17 E, Surabaya', '01.922.786.7-611.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(5, 6, 'PT. Indevco Karya Sakti', '0', '0', 'JL. P. Jayakarta 131 Blok A No. 31 Mangga Dua selatan, Sawah Besar Jakarta Pusat, DKI Jakarta raya 1', '01.109.118.8-026.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(6, 11, 'PT. Indevco Karya Sakti', '0', '0', 'JL. Rajawali No. 86, Surabaya', '01.109.118.8-605.000', 'asd', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(7, 6, 'PT. Firman Ketaun Perkasa', '0', '0', 'Graha Irama Lt. 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta sel', '01.856.455.9-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(8, 6, 'PT. Mas Eltrajaya', '0', '0', 'Komplek Grogol Permai, JL. Prof DR. Latumenten Blok C No. 21, Petambunan Jakarta Barat-DKI Jakarta R', '02.691.647.8-036.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(9, 18, 'PT. Sarana Sahabat Maju', '0', '0', 'JL. Kartini No. 43 C / D-Tanjung Karang Tanjun Karang Pusat-Bandar Lampung 35111', '02.523.217.4-322.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(10, 1, 'Tri Kartono Andries', '0', '0', 'JL. Teuku Umar No. 24, Denpasar', '06.336.343.6-901.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(11, 6, 'PT. Wahana Barata Mining', '0', '0', 'Graha Irama Lt. 12, JL. HR. Rasuna Said Blok X-1 Kav. 1-2, Kuningan Timur-Setia Budi-Jakarta selatan', '01.711.061.0-062.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(12, 6, 'PT. Pradana Estiara Medical', '0', '0', 'Kapuk Kamal Raya No. 20 A Blok A/3 Kamal Muara-Penjaringan-Jakarta Utara', '02.296.542.0-047.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(13, 11, 'PT. Jatim Watkoraya', '0', '0', 'JL. Kalianyar 15D, Surabaya', '01.469.421.0-611.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(14, 10, 'CV. Sanidata', '0', '0', 'JL. Dr. Cipto No. 174, Semarang', '01.469.421.0-611.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(15, 11, 'PT. Cipta Jaya Medindo', '0', '0', 'JL. Jawa 47 A RT 002 RW 009, Gubeng, Gubeng Surabaya - Jawa Timur', '02.822.869.0-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(16, 6, 'PT. Teja Sekawan', '0', '0', 'JL. Pangeran Jayakarta 131 A No. 36 RT 07 RW 07, Kel. Mangga Dua Selatan, Kec. Sawah Besar, Jakarta ', '01.148.458.1-026.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(17, 11, 'PT. Rama Mulia Cosmetic Industry', '0', '0', 'Ds. Tenaru RT. 011 RW 004, Tenaru-Driyorejo, Gresik-61177', '01.677.559.5-642.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(18, 9, 'PT. Asta Kurnia Abadi', '0', '0', 'JL. Jupiter Utama No. 12, Sekejati Buah Batu, Kota Bandung, Jawa Barat', '02.497.186.3-441.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(19, 11, 'CV. Jaya Abadi', '0', '0', 'Rungkut Alang-Alang 121 RT. 009 RW. 005, Kali Rungkut-Rungkut, Surabaya-60293', '02.993.662.2-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(20, 11, 'PT. Novapharin', '0', '0', 'JL. Kepatihan No. 112, Kepatihan-Menganti, Gresik-Jawa Timur', '01.479.850.8-641.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(21, 3, 'PT. Bersama Tiga Jaya Sukses', '0', '0', 'Ruko Golden Road C 28 No. 23 A, Kel. Lengkung Wetan, Kec. Serpong, Tangerang Selatan-Banten', '66.601.464.2-411.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(22, 11, 'PT. Mega Antar Nusa', '0', '0', 'JL. Achmad Yani Ruko Central Square C-20, RT 005 RW 002 Gedangan, Sidoarjo-61254', '31.695.034.4-643.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(23, 6, 'PT. Tirta Sukses Perkasa', '0', '0', 'The City Tower Lt. 15, JL. MH Thamrin No. 81, Menteng-Menteng, Jakarta Pusat-DKI Jakarta', '03.322.819.8-071.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(24, 11, 'PT. Surya Artha Medica', '0', '0', 'JL. Abdul Wahab Siamin Blok RC-31, Dukuh Pakis-Surabaya', '02.175.719.0-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(25, 11, 'PT. Sorini Agro Asia Corporindo Tbk', '0', '0', 'JL. Raya Surabaya - Malang KM 43 Ngerong Gempol Kab. Pasuruan Jawa Timur', '01.211.173.8-054.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(26, 9, 'PT. Tri Sumber Makmur Indah', '0', '0', 'JL. Raya Pangalengan No. 391 A, Kamasan Banjaran Kab. Bandung, Jawa Barat', '02.267.177.0-441.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(27, 6, 'BUT GS. Engineering & Construction Corporation', '0', '0', 'Gedung BRI II Lt. 17 Suite 1703, JL. Jend. Sudirman Kav. 44-46, Bendungan Hilir, Tanah Abang, Jakart', '02.979.446.8-077.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(28, 6, 'PT. PLN (Persero) Kantor Pusat', '0', '0', 'JL. Trunojoyo Blok M1 / 135 Melawai, Kebayoran Baru-Jakarta Selatan', '01.001.629.3-051.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(29, 11, 'PT. Duta Inti sarana Utama', '0', '0', 'Perum Wisma Indah Blok F No. 2, RT 004 RW 006, Kepanjenior, Kepanjen Kidul, Blitar', '31.497.856.0-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(30, 6, 'PT. Dimas Surya Indonesia', '0', '0', 'JL. Raya Penggilingan Komp. PIK Blok E No. 269, Kel. Penggilingan, Kec. Cakung, Jakarta Timur', '31.683.396.1-004.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(31, 11, 'PT. Sumber Bahagia Sejahtera Abadi', '0', '0', 'JL. Raya Darmo 131-133, Surabaya', '02.377.239.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(32, 6, 'PT. AMPM Health Care Indonesia', '0', '0', 'JL. Cengkeh Kav. XVI No. 29/30 RT 007 RW 007, Pinangsia-Taman Sari, Jakarta Barat', '03.040.550.0-037.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(33, 10, 'CV. Karya Hidup Sentosa', '0', '0', 'JL. Magelang No. 144, Kel. Karangwaru Kec. Tegalrejo, Yogyakarta, 55241 (DIY)', '01.132.866.3-541.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(34, 11, 'Maria Linggiarti', '0', '0', 'JL. Biliton No. 81, Surabaya', '04.211.424.9-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(35, 10, 'PT. Aries Indo Global', '0', '0', 'JL. RE Martadinata Komp. Ruko Muitiara Marina No. 37, Tawangsari, Semarang Barat, Semarang', '02.914.666.9-511.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(36, 13, 'PT. Delta Surya Alkesindo', '0', '0', 'JL. Veteran No. 63 B RT 011, Melayu-Banjarmasin Tengah, Banjarmasin-Kalimantan Selatan', '02.172.532.0-731.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(37, 6, 'PT. Yamhatevy Paran Mandiri', '0', '0', 'JL. Raya Gatot Subroto No. 70 RT 031 Kuripan, Banjarmasin Timur, Banjarmasin-70236', '01.879.157.4-731.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(38, 6, 'PT. Elektro Medika Internasional Indonesia', '0', '0', 'Komp. Pertokoan Pulomas IX No. 6, Pulo Gadung, Pulo Gadung, Jakarta Timur', '01.314.381.3-003.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(39, 9, 'CV. Banyu Adhi Utama', '0', '0', 'Perumahan Permata Archadia Blok C4/24 No. 23 RT 003 RW 023, Sukabumi - Tapos, Depok-Jawa Barat', '31.819.491.7-412.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(40, 11, 'PT. Amadea Devina Farma', '0', '0', 'JL. Rungkut Mejoyo Selatan IV Blok U-3, Kalirungkut, Rungkut, Surabaya-60293', '01.976.398.6-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(41, 6, 'PT. Mitra Tirta Sukses', '0', '0', 'JL. Rajawali Blok BB/07, Komp. Cipinang Indah II RT 015 RW 003, Kel. Pondok Bambu, Kec. Duren Sawit,', '31.255.283.9-008.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(42, 6, 'PT. Cipta Agung Manis', '0', '0', 'JL. Brigjen Katamso No. 10, Kota Bambu Selatan, Palmerah Jakarta Barat-11420', '02.379.872.1-031.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(43, 9, 'CV. Athallah Putra', '0', '0', 'Komp. Graha Pesona Blok C No. 118 RT 004 RW 002, Kel. Cisaranten Wetan Kec. Cinambo, Kota Bandung, J', '72.688.945.4-429.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(44, 6, 'PT. Ultra Prima Abadi', '0', '0', 'Daan Mogot Km 16 Semanan Kalideres, Jakarta Barat', '01.300.822.2-038.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(45, 3, 'PT. CS2 Pola Sehat', '0', '0', 'Yos Sudarso No. 143, Kebon Besar-Batu Ceper, Tangerang', '02.426.679.3-415.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(46, 1, 'PT. Sanidata Indonesia', '0', '0', 'JL. Teuku Umar No. 22, Dauh Puri Klod-Denpasar Barat, Denpasar-Bali, 80114', '31.786.666.3-901.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(47, 11, 'PT. Berkah Karya Thuba', '0', '0', 'Perum Gebang Raya AG No. 010 RT 022 RW 006, Kel. Gebang Kec. Sidoarjo, Sidoarjo-Jawa Timur', '71.852.756.7-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(48, 10, 'CV. Daya Prima', '0', '0', 'JL. Kaligarang No. 1A, Petemon, Gajah Mungkur, Semarang', '01.120.976.4-511.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(49, 10, 'PT. Sanidata Putri Medika', '0', '0', 'JL. Dr. Cipto 174 Karang Tempel, Semarang Timur, Semarang, Jawa Tengah', '01.985.712.7-511.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(50, 10, 'PT. Daya Prima Kartika Multi Sarana', '0', '0', 'JL. Kumudasmoro Utara No. 19D RT. 001 RW. 007 Bangsari Semarang Barat, Kota Semarang Jawa Tengah', '01.551.769.1-503.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(51, 31, 'Bendahara Dinas Kesehatan Kabupaten Kolaka', '0', '0', 'JL. Pancasila No. 12, Kelurahan Latambaga', '00.130.680.2-815.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(52, 11, 'PT. Prasasti Dwimitra', '0', '0', 'Jl. Wisma Tengger XVII No. 05 RT 002 RW 006, Kandangan - Benowo, Surabaya', '31.481.739.6-604.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(53, 11, 'PT. Bima Putra Adirajada Surabaya', '0', '0', 'JL. Demak No. 67 RT 001 RW 009, Tembok Dukuh, Bubutan Surabaya', '76.222.798.1-614.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(54, 13, 'PT. Samudera Jaya Listrik', '0', '0', 'JL. H. Djok Mentaya No. 29 RT 001 RW 001, Kertak Baru Ilir, Banjarmasin Tengah, Kota Banjarmasin, Ka', '76.302.308.2-731.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(55, 28, 'Bend. Pengeluaran Dinas Kesehatan Kab. Toraja Utara', '0', '0', 'JL. Taman Makam Pahlawan, Karassik, Rantepao, Toraja Utara', '00.693.798.1-803.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(56, 12, 'Pemegang Kas RSU H. Daman Huri', '0', '0', 'JL. Murakata No. 04 Bukat, Barabai, Hulu Sungai Tengah, Kalimantan Selatan 71351', '00.368.901.5-733.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(57, 28, 'PT. Ridho Agung Utama', '0', '0', 'JL. Botol Empangan No. 5, Mangkura-Ujung Pandang, Makasar-Sulawesi Selatan', '01.250.395.9-812.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(58, 19, 'Bend. Kantor Kesehatan Pelabuhan', '0', '0', 'Kompleks Pelabuhan Ambon Honipopu-Sirimau-Ambon', '00.014.087.1-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(59, 11, 'PT. Panasea', '0', '0', 'JL. Veteran No. 39 A RT 022 RW 003, Melayu-Banjarmasin Tengah, Banjarmasin', '03.062.885.3-731.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(60, 15, 'PT. Buana Medistra Pharma', '0', '0', 'JL. Cendrawasih No. 56, Pontianak-Kalimantan Barat', '01.667.282.6-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(61, 24, 'PT. Karya Sindo Papua', '0', '0', 'JL. Kapal Depan Perumahan Polda Dok. VIII RT 004 RW 004 Kelimbi Kec. Jayapura Utara Kota Jayapura, P', '72.095.180.5-952.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(62, 11, 'Bend. Puskesmas Balongbendo', '0', '0', 'Mayjen Bambang Yuwono 2 Seduri Balongbendo, Sidoarjo', '00.841.088.8-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(63, 12, 'PT. Mitra Alkesindo Utama', '0', '0', 'JL. Delima No. 27 RT. 049 Sidodadi Samarinda Ulu Samarinda Kalimantan Timur', '02.196.253.5-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(64, 11, 'PT. Rizki Anugerah Multikarya', '0', '0', 'Raya Wiyung Baru MM-II RT 003 RW 006, Jajar Tunggal, Wiyung, Surabaya, Jawa Timur', '31.664.088.7-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(65, 11, 'Bend. Rumah Sakit Umum Malang', '0', '0', 'JL. Jagung Suprapto Samaan, Klojen, Kota Malang-65112', '00.007.579.6-623.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(66, 11, 'Rutin Rumah Sakit Umum Daerah Genteng', '0', '0', 'JL. Hasanudin No. 98, Genteng, Genteng, Banyuwangi', '00.036.186.5-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(67, 31, 'PT. Mitra Medika Sejahtera Bersama', '0', '0', 'JL. N. Yos Sudarso Paal Dua Manado, Sulawesi Utara', '02.701.118.8-821.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(68, 34, 'PT. Multiplus Medilab', '0', '0', 'JL. Danau Marsabut No. 4. Kel. Sel. Agung, Kec. Medan Barat, Medan-Sumatera Utara', '02.716.684.2-111.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(69, 11, 'Bend. Pengeluaran RSUD Dr. Soegiri Lamongan', '0', '0', 'JL. Kusuma Bangsa No. 7 RT 004 RW 005, Tumenggungan-Lamongan 62214', '00.308.068.6-645.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(70, 11, 'Bend. Pengeluaran Dinkes Kab. Mojokerto', '0', '0', 'JL. RA Basumi No. 4 RT 05 RW 03 Jampirogo Sooko Kab. Mojokerto-Jawa Timur', '00.401.793.5-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(71, 11, 'Bend. P.G.A.N. 4TH/MTSN', '0', '0', 'JL. H. A. Samanhudi No. 15 Pacitan, Pacitan, Pacitan', '00.007.079.7-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(72, 11, 'Bend. Pengeluaran Pembantu Puskesmas Sidoarjo', '0', '0', 'JL. Dr. Soetomo No. 14 RT/RW Magersari Sidoarjo, Siodarjo', '00.560.822.9-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(73, 12, 'Bend. RSUD DR. A. Diponegoro Putussibau', '0', '0', 'JL. Kom. Yos Sudarso, Kel. Putusibau kota, Kec. Putussibau Utara, Kab. Kapuas Hulu', '00.329.767.8-706.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(74, 11, 'PT. Permata Hati Lamongan', '0', '0', 'JL. Raya Ofandels RT 0 / RW 0, Paciran, Paciran, Lamongan, Jawa Timur', '31.664.357.6-645.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(75, 11, 'Dinas Kesehatan Kota Surabaya', '0', '0', 'JL. Jemursari 197, Margorejo, Wonocolo, Surabaya', '00.137.508.8-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(76, 11, 'PT. Pilarindo Bakti Pertiwi', '0', '0', 'JL. Gubeng Kertajaya 9 C / 42 A, Airlangga-Gubeng, Surabaya-Jawa Timur', '31.727.008.0-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(77, 6, 'PT. Tamron Akuatik Produk', '0', '0', 'JL. P. Jayakarta 24 No. 23, Mangga Dua Selatan, Sawah Besar, Jakarta Pusat, DKI Jakarta', '74.634.394.6-026.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(78, 11, 'Bend. Pengeluaran SKPD Dinas Kesehatan Kab. Jember', '0', '0', 'JL. Srikoyo 1/3 Bintoro Patrang, Jember, Jawa Timur-Indonesia', '00.318.672.3-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(79, 22, 'Bend. Pemegang Kas Rumah Sakit Umum Daerah Praya', '0', '0', 'JL. Basuki Rahmat No. 11, Praya-Praya Lombok Tengah 83511', '00.334.059.3-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(80, 4, 'Dinas Kesehatan Benteng', '0', '0', 'JL. Raya Bengkulu Curup, Karang Tinggi, Bengkulu Tengah-Bengkulu', '00.815.324.9-328.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(81, 11, 'Donny Lesmana', '0', '0', 'JL. Perum Kenanga Jaya Kav. II/22, Pandanwangi Blimbing-Malang', '25.903.583.0-652.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(82, 11, 'Bend. Operasional Puskesmas Sempu', '0', '0', 'JL. Kalisetail No. 170, Kel. Sempu, Kec. Sempu, Banyuwangi, Jawa Timur', '00.219.934.7-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(83, 11, 'Pemegang Kas Dinas Kesehatan Banyuwangi', '0', '0', 'JL. Letkol Istiqlah No. 42, Singonegaran, Banyuwangi', '00.036.224.4-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(84, 6, 'PT. Sentrasarana Tirtabening', '0', '0', 'JL. Kemukus No. 32 Blok A. Nomor 14-15 RT 004 RW 006 Pinangsia Tamansari, Jakarta Barat-DKI Jakarta', '01.560.371.5-032.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(85, 10, 'PT. Mitra Buana Sejahtera', '0', '0', 'JL. Kaliputih No. 15 RT 001 RW 005, Purwokerto wetan, Purwokerto Timur, Banyumas - Jawa Tengah', '02.625.631.3-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(86, 30, 'Bendahara Puskesmas  Watubangga', '0', '0', 'JL. Cendrawasih No. 17, Watubangga, Kolaka, Sulawesi Tenggara', '80.204.787.8-815.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(87, 11, 'Bend. Biddokkes', '0', '0', 'JL. Ahmad Yani 116, Sby', '00.343.745.6-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(88, 24, 'PT. Sinar Medika Papua', '0', '0', 'Jl. Ampibhi HM No. 664, RT 003 RW 009, Kel. Hamadi Kec. Jayapura Selatan, Kota Jayapura, Papua', '66.531.683.2-952.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(89, 11, 'Pemegang Kas Dinas Kesehatan Kabupaten Blitar', '0', '0', 'JL. Raya Kediri No. 18, Kel. Sanankulon, Kab. Blitar', '00.434.220.2-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(90, 11, 'Bend. Pengeluaran RSD Dr. Haryoto', '0', '0', 'JL. Basuki Rahmat No. 5, Tompokersan, Lumajang, Lumajang', '00.388.905.2-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(91, 5, 'PT. Diva Sumber Berkat', '0', '0', 'JL. Ahmad Zazuli No. 15, Kota Baru-Gondokusuman Yogyakarta', '31.811.842.9-541.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(92, 19, 'PT. Mediska Kencana', '0', '0', 'JL. WR. Soepratman SK 3/4 -20 Ambon', '01.528.473.0-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(93, 11, 'Bendahara Puskesmas Wates', '0', '0', 'JL. Raya Pare No. 74, Wates, Kel. Wates, Kec. Wates, Kab. Kediri, Jawa Timur', '20.011.075.7-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(94, 11, 'Bendahara Puskesmas Kras', '0', '0', 'JL. Satya Bhakti No. 222, Kel. Kras, Kec. Kras, Kab. Kediri-Jawa Timur', '20.011.071.6-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(95, 11, 'Rutin Rumah Sakit Umum Wlingi', '0', '0', 'JL. Dr. Sucipto, Wlingi, Wlingi, Kab. Blitar-86134', '00.034.633.8-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(96, 23, 'Bend. Dinas Kesehatan Kab. Manggarai', '0', '0', 'Ruteng, Lowir, Langke Rembong-Manggarai', '00.009.885.5-924.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(97, 11, 'PT. Alkesmart Indonesia', '0', '0', 'Ruko Taman Jenggala Mas RTB-9, JL. Sunandar PS RT 018 RW 004, Sidokare, Sidoarjo, Jawa Timur', '31.589.440.2-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(98, 11, 'Bendahara Penetapan Rekening Dana Kapitasi JKN UPTD Puskesmas Perak', '0', '0', 'JL. Raya Perak No. 109 RT 002 RW 002, Pagerwojo, Perak Jombang, Jawa Timur', '75.442.939.7-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(99, 11, 'Bendahara Pengeluaran Dinas Kesehatan Kab. Lumajang', '0', '0', 'JL. S. Parman No. 13 Rogotrunan Lumajang Kab. Lumajang Jawa timur', '00.166.477.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(100, 11, 'Bendahara Pengeluaran RSUD Prof Dr. Soekandar', '0', '0', 'JL. Hayam Wuruk No. 25 Kel. Mojosari, Kec. Mojosari, Kab. Mojokerto, Jawa Timur', '00.205.433.6-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(101, 9, 'PT. Global Biomedilab', '0', '0', 'JL. Bogor B9 No. 5 RT/RW 008/015 Karyamulya-Kesambi kota Cirebon -Jawa Barat 45135', '31.402.239.3-426.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(102, 11, 'Bend. Dana Kapitasi JKN Gunungsari', '0', '0', 'JL. Raya Babad-Bojonegoro Km 03 Kel. Gunungsari Kec. Baureno Bojonegoro-Jawa Timur', '71.285.326.6-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(103, 11, 'Bend. Pemegang Kas Pembantu Puskesmas Munjungan', '0', '0', 'Dsn. Munjungan RT 08 Rw 02 Munjungan, Munjungan, Munjungan, Kab. Trenggalek-Jawa Timur', '00.465.676.5-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(104, 11, 'Bend. Kapitasi JKN Kedung Adem', '0', '0', 'JL. Gajah Mada No. 1328, Kel. Kedungadem, Kec. Kedungadem Bojonegoro, Jawa Timur', '71.291.819.2-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(105, 12, 'Kantor Dinas Kesehatan Kab. K. Hulu ', '0', '0', 'JL. Diponegoro No. 9 Kel. Putussibau Kota, Kec. Putussibau Utara Kab. Kapuas Hulu', '00.125.152.9-706.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(106, 12, 'PT. Sinarindo Multi Medika', '0', '0', 'JL. Karna Sosial No. 8 C, RT 001 RW 011 Kel. Akcaya Kec. Pontianak Selatan Pontianak, Kalimantan Bar', '71.902.807.8-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(107, 11, 'Bendahara Pengeluaran RSUD Bhakti Dharma Husada', '0', '0', 'JL. Raya Kendung No. 110-117 Sememi, Benowo, Surabaya', '00.273.596.7-604.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(108, 11, 'PT. Sentrum Dental Sentosa', '0', '0', 'JL. Sumatera No. 129 Gubeng, Gubeng, Gubeng-Surabaya-Jawa Timur', '01.995.267.0-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(109, 11, 'Bend. Pengeluaran Dinas Kesehatan Kota Malang', '0', '0', 'JL. Simpang LA Sucipto 45 Pandanwangi / Blimbing Kota Madya Malang-Jawa Timur', '00.376.724.1-652.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(110, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Kalidawir', '0', '0', 'JL. Melati No. 02 RT 001 RW 001, Kalidawir, Kalidawir, Kab. Tulungagung Jawa Timur', '73.137.178.7-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(111, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Bandung', '0', '0', 'JL. Panglima Sudirman No. 18 Bandung, Bandung, Kab. Tulungagung, Jawa Timur', '30.137.142.3-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(112, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Tlogosari', '0', '0', 'Raya Pakisan No. RT. RW. Kel. Pakisan, Kec. Tlogoasri, Bondowoso, Jawa Timur', '70.860.616.5-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(113, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Maesan', '0', '0', 'Raya Pakisan No. RT. RW. Kel. Maesan Kec. Maesan Bondowoso Jawa Timur', '70.808.245.8-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(114, 11, 'Bendahara BLUD Puskesmas Watulimo', '0', '0', 'JL. Raya Pantai Prigi Prigi Watulimo Kab. Trenggalek Jawa Timur', '71.126.486.1-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(115, 11, 'Rumah Sakit Umum Daerah Ploso', '0', '0', 'JLn. Darmo Sugondo No. 83 RT 001 RW 001 Kelurahan Rejoagung Kecamatan Ploso, Jombang, Jawa Timur', '30.126.327.3-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(116, 11, 'Bendahara Pengeluaran RSUD Pasirian ', '0', '0', 'Jalan Raya Pasirian Pasirian, Pasirian Kab. Lumajang Jawa Timur', '76.815.082.3-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(117, 11, 'Bendahara dan Penetapan Rekening Dana Kapitasi JKN UPTD Puskesmas Plumbon Gambang', '0', '0', 'JL. Raya Plumbon Gambang No. 49 RT 002 RW 003 Plumbon Gambang, Gudo Kab. Jombang Jawa Timur', '75.513.658.7-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(118, 10, 'PT. Evercoss Technology Indonesia', '0', '0', 'JL. RE Martadinata No. 37 Tawangsari, Semarang Barat Kota Semarang, Jawa Tengah', '74.428.910.9-503.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(119, 11, 'PT. Dakota Sarana Indah ', '0', '0', 'Perumahan Citra Pesona Buduran E1 No. 05 RT 037 RW 007 Kel. Sindokepung Kec. Buduran Sidoarjo, Jawa ', '70.895.618.0-643.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(120, 11, 'Bend. Kapitasi JKN Purwosari', '0', '0', 'JL. Raya Ngambon No. 523 RT RW Kel. Purwosari Kec. Purwosari  Bojonegoro, Jawa Timur', '71.293.296.1-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(121, 23, 'Bend. Pengeluaran Rumah Sakit Umum Daerah Umbu Rara Meha Waingapu', '0', '0', 'JL. Adam Malik RT 032 / RW 006 Kambajawa Kota Waingapu, Sumba Timur 87117', '00.134.678.2-926000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(122, 23, 'Rutin Dinas Kesehatan Kab. Nagekeo', '0', '0', 'Danga RT 001 RW 001 Danga, Aesesa Nagekeo', '00.618.119.2-923.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(123, 14, 'Bend. Puskesmas Swadana Menteng', '0', '0', 'JL. Temanggung Tilung No. 59 Menteng, Menteng Jekan Raya Kota Palangkaraya, Kalimantan Tengah', '00.399.467.0-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(124, 14, 'Bendahara Dinas Kesehatan Kab. Kota Waringin Barat', '0', '0', 'Jalan Cilik Riwut II No. 210 Madurejo Arut Selatan Kota Waringin Barat Kalimantan Tengah 74112', '00.363.184.3-713.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(125, 14, 'Bendahara Rumah Sakit Jiwa Kalawa Atei', '0', '0', 'JL. Trans Palangkaraya -Kuala Kurun km 16 RT 004 Bukit Rawi, Kahayan Tengah Pulau Pisau Kalimantan T', '74.073.718.4-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(126, 11, 'Rumah Sakit Bantuan 05.08.05 Surabaya', '0', '0', 'JL. Gubeng Pojok No. 21, Pacar Keling Pacar Keling Tambaksari kota Surabaya Jawa Timur', '02.607.309.8-619.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(127, 11, 'Bend. Peng. Dinas Kesehatan Kab. Kediri', '0', '0', 'JL. Pemenang No. 1 C Kel. Sukorejo Kec. Ngasem Kab. Kediri Jawa timur ', '00.629.755.0-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(128, 6, 'PT. Fajar Surya Swadaya', '0', '0', 'JL. Aipda Ks Tubun Raya No. 66 C RT 001 RW 001 Kel. Slipi Kec. Palmerah Jakarta Barat, DKI Jakarta R', '01.601.258.5-031.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(129, 6, 'PT. Silva Rimba Lestari', '0', '0', 'JL. Aipda Kstubun Raya No. 66 C RT 001 RW 001 Kel. Slipi Kec. Palmerah Jakarta Barat, DKI Jakarta Ra', '02.679.951.0-031.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(130, 4, 'PT. Tiara Anugrah Lestari ', '0', '0', 'JL. Kapuas Raya No. 17 Padang Harapan, Gading Cempaka Kota Bengkulu', '02.040.778.9-311.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(131, 11, 'Bendahara JKN UPT Puskesmas Janti', '0', '0', 'JL. Janti Barat No. 88 RT RW Kel. Sukun Kec. Sukun Kota Malang, Jawa Timur', '70.974.752.1-623.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(132, 11, 'Bend. Rutin Dinas Kesehatan Kota Madiun', '0', '0', 'JL. Trunojoyo No. 120 Nambangan Kidul-Mangun Harjo Madiun - 63128 ', '00.436.763.7-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(133, 11, 'Dinas Pengendalian Pemberdayaa n Perempuan dan Perlindungan Anak Kota Surabaya', '0', '0', 'JL. Kedungsari No. 18', '00.005.896.6-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(134, 11, 'Bend. Pengeluaran Kantor Dinas Kesehatan Kab. Magetan ', '0', '0', 'JL. Imam Bonjol No. 04 Magetan, Magetan, Jawa Timur', '00.034.846.6-646.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(135, 11, 'Bend. JKN Puskesmas Pilangkenceng', '0', '0', 'Raya Kenongorejo No. 774 B Kenongorejo Pilang Kenceng Madiun Jawa Timur ', '71.038.258.1-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(136, 30, 'PT. Triafi Pratama Medika', '0', '0', 'JL. Haluoleo Kom. BTN Wahana E No. 01 RT 000 RW 000 Kel. Mokoau Kec. Kambu Kota Kendari, Sulawesi Te', '66.124.269.3-811.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(137, 11, 'Bendahara Pengeluaran dan Penerimaan Puskesmas Curah Tulis', '0', '0', 'Jalan Balai Desa Curah Tulis No. 182 Kab. Probolinggo', '72.778.622.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(138, 11, 'Bend. Dana Penunjang Pendidikan Universitas Jember', '0', '0', 'JL. Kalimantan No. 37 RT RW Sumbersari-Sumbersari Jember', '00.035.929.9-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(139, 11, 'Bendahara Pengeluaran Puskesmas Besuk', '0', '0', 'JL. Raya Besuk No. RT 005 RW 005 Kel. Besuk Agung Kec. Besuk Kab. Probolinggo, Jawa Timur', '72.878.527.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(140, 11, 'Bend. Puskesmas Krejengan ', '0', '0', 'JL. Raya Krejengan No. 82 RT 001 RW 001 Krejengan Krejengan Kab. Probolinggo', '20.042.217.8-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(141, 10, 'PT. Triangle Motorindo', '0', '0', 'Taman Industri BSB Blok AS No. 9 Jatibarang, Mijen, Semarang', '01.967.295.5-511.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(142, 19, 'Bend. Kap. Jamkesmas Warujayeng', '0', '0', 'JL. A. Yani No. 25 Kel. Warujayeng Kec. Tanjung Anom Kab. Nganjuk', '72.602.737.8-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(143, 11, 'Bend. Puskesmas Panekan ', '0', '0', 'Panekan, Panekan, Panekan Magetan', '00.324.576.8-646.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(144, 11, 'Bend. Puskesmas Kalibaru Kulon', '0', '0', 'JL. Jember No. 39, Kalibaru Kulon, Kalibaru Banyuwangi', '00.166.706.2-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(145, 11, 'Bend. Puskesmas Mojopanggung', '0', '0', 'JL. Brawijaya 21 Mojopanggung, Giri Banyuwangi', '00.219.921.4-527.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(146, 11, 'Bend. Puskesmas Gitik', '0', '0', 'JL. Diponegoro No. 24 RT 000 RW 000 Gitik, Rogojampi, Banyuwangi', '00.836.705.4-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(147, 14, 'Bend. Rutin Dinas Kesehatan Kab. Seruyan', '0', '0', 'JL. Jend. A Yani RT 008 RW 003 Kuala Pembuang Satu-Seruyan Hilir Kab. Seruyan - Kalimantan Tengah', '00.322.218.9-712.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(148, 11, 'Bend. Pemegang Kas Dinas Kesehatan Kab. Loteng', '0', '0', 'JL. Sukarno Hatta (KTR DNS Kesehatan) Praya-Praya Lombok Tengah', '00.334.056-9-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(149, 11, 'Bend. Pengeluaran B.P.T.P.', '0', '0', 'JL. Raya Karang Ploso Km. 4 Ngijo Karang Ploso, Kab. Malang', '00.152.586.4-657.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(150, 10, 'PT. Glorya Medica Abadi', '0', '0', 'JL. Pramuka RT. 001 RW 002 Sudagaran Banyumas, Banyumas, Jawa Tengah 53192', '74.587.956.9-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(151, 11, 'Bendahara Pengeluaran Dinas Kesehatan Kab. Pacitan', '0', '0', 'JL. Letjen Suprapto No. 42 Sidoharjo Pacitan Pacitan', '00.034.897.9-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(152, 11, 'Bendahara JKN Puskesmas Tegalsiwalan', '0', '0', 'JL. Raya Tegalsiwalan No. RT 000 RW 000 Kel. Tegalsiwalan Kec. Tegal Siwalan Kab. Probolinggo, Jawa ', '72.870.327.3-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(153, 11, 'CV. Intantirta Jaya Medika', '0', '0', 'Permata Wiyung Regency  Kav. 59 RT/RW 000/005 Wiyung, Wiyung Surabaya, Jawa Timur 60226', '31.354.856.2-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(154, 9, 'PT. Zeva Valindo Jaya', '0', '0', 'Ruko Harapan Indah Blok EC No. 11 RT 008 RW 017 Pejuang Medan Satria Kotamadya Bekasi', '01.917.805.2-407.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(155, 6, 'PT. Marco Sekawan ', '0', '0', 'JL. Agung Utara I Blok A2/33 RT 005 RW 008 Kel. Sunter Agung Kec. Tanjung Priok Jakarta Utara, DKI J', '03.319.195.8-048.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(156, 22, 'PT. Bintang Mandiri Medica', '0', '0', 'JL. Diponegoro RT 012 Majidi Pancor, Selong, Lombok Timur', '75.432.140.4-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(157, 6, 'Hendi Setyowati', '0', '0', 'JL. Rekreasi No. RT 008 RW 004 Kel. Cilincing Kec. Ciclincing Jakarta Utara, DKI Jakarta', '70.434.673.3-045.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(158, 22, 'Bend. Peng KTR Kesehatan Pelabuhan Kls II Mataram', '0', '0', 'JL. Adi Sucipto No. 13 B Rembiga-Selaparang Kota Mataram', '00.370.896.3-911.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(159, 6, 'Hexagon Metrology Asia Pacific PTE. LTD', '0', '0', 'Kindo Square Unit C-2, JL. Raya Duren Tiga No. 101 Duren Tiga Pancoran,  Jakarta Selatan, DKI-Jakart', '03.215.133.4-053.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(160, 2, 'YAY. Bhakti Wara', '0', '0', 'JL. Sungai Selan km 4 Rangkui-Rangkui Pangkal Pinang', '01.329.098.5-034.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(161, 28, 'PT. Siaga Medika Abadi Karya', '0', '0', 'JL. Abdul Kadir No. 9-D RT 001 RW 008 Balang Baru-Tamalate Makassar', '31.708.360.8-804.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(162, 22, 'RSUD Kabupaten Lombok Utara', '0', '0', 'Raya Tanjung Bayan Tanjung Tanjung Kab. Lombok Utara Tenggara Barat', '00.919.071.1-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(163, 14, 'Bendahara Kantor Kesehatan Pelabuhan Sampit', '0', '0', 'JL. MT. Haryono No. 46, Mentawa Baru Hulu Mentawa Baru Ketapang Kab. Kotawaringin Timur - Kalimantan', '00.008.289.1.712.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(164, 15, 'PT. Mulawarman Mitra Medika', '0', '0', 'JL. M. Yamin No. 2 RT 027 Gunung Kelua, Samarinda Ulu Samarinda-Kaltim', '83.311.490.3-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(165, 11, 'Bend. Pengeluaran Pembantu UPT Puskesmas Blooto', '0', '0', 'JL. Raya Cindo No. 3 RT RW Kel. Blooto Kec. Prajurit Kulon Kota Mojokerto, Jatim', '71.993.151.1-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(166, 22, 'Bend. Pengeluaran BPK RI Perwak. Prov. NTB', '0', '0', 'JL. Udayana No. 22 Karang Baru-Selaparang Kota Mataram', '00.642.829.6-911.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(167, 11, 'Bend. Pengeluaran Pembantu Puskesmas Gondang', '0', '0', 'JL. Raya Gondang RT 0001 RW 0001 Gondang Tulungagung, Jawa Timur', '75.484.335.7-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(168, 11, 'Bend. RSU Sumberejo', '0', '0', 'JL. Raya Sumberrejo 0231 RT 006 RW 002 Sumuragung, Sumberrejo, Mojokerto', '00.641.305.8-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(169, 30, 'PT. Sultratuna Samudra', '0', '0', 'JL. Samudra Komp. Pelabuhan Perikanan Samudra Kendari No. 1 Puday Abeli, Kota Kendari Sulawesi Tengg', '01.539.633.6-811.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(170, 11, 'Bendahara Pengeluaran RSUD Kota Malang ', '0', '0', 'JL. Rajoisa Bumiayu Kedung Kandang Kota Malang Jawa Timur', '72.099.225.4-623.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(171, 22, 'Bend. RSUD Sumbawa Barat', '0', '0', 'JLn. Undru No. 06 RT 04 RW 06 Kel. Kuang Taliwang-Sumbawa Barat', '00.857.607.6-913.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(172, 11, 'Bend. Pengeluaran RSU Haji Surabaya', '0', '0', 'JL. Manyar Kertoadi Klampis Ngasem-Sukolilo, Surabaya-Jawa Timur', '00.587.760.0-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(173, 22, 'Bend. Rutin Dinkes Kodya Mataram', '0', '0', 'JL. Sultan Hasanudin No. 34 Cakranegara Timur-Cakranegara Kota Mataram', '00.183.956.2-914.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(174, 19, 'Rumah Sakit Umum Ambon', '0', '0', 'JL. DR Kayade, Kudamati, Kudamati Nusaniwe, Ambon Maluku', '00.013.803.2-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(175, 11, 'BND. RSUD RA Basoeni Kab. Mojokerto', '0', '0', 'JL. Raya Gedeg No. 17 Gedek, Gedek, Kab. Mojokerto', '20.018.829.0-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(176, 11, 'Pemegang Kas Dinas Kesehatan Kab. Blitar', '0', '0', 'Raya Kediri 18, Sanan Kulon Sanan Kulon, Sanan kulon, Kab. Blitar, Jawa Timur', '00.434.220.0-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(177, 11, 'Bend. RSUD Ngimbang', '0', '0', 'JL. Mayangkara No. 227 RT 000 RW 000 Sendangrejo - Ngimbang  Lamongan', '30.081.743.4-645.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(178, 11, 'Bend. Puskesmas Wongsorejo', '0', '0', 'JL. Raya Situbondo No. 04 Wonorejo, Wongsorejo Banyuwangi', '00.219.916.4-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(179, 11, 'Bend. Kapitasi JKN Sukosewu', '0', '0', 'JL. Raya Klepek No. RT. 000 RW. 000, Kel. Klepek Kec. Sukosewu, Bojonegoro, Jawa Timur', '71.285.648.3-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(180, 11, 'Bendahara BLUD Puskesmas Slawe', '0', '0', 'JL. Raya Prigi RT. 010 RW. 010, Slawe Watulimo, Kab. Trenggalek Jawa Timur', '20.001.767.1-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(181, 11, 'Bend. Dana Kapitasi JKN Mejuwet', '0', '0', 'JL. Dr. Sutomo No. 206 RT 001 RW 001 Kel. Mejuwet Kec. Sumberejo, Bojonegoro, Jawa Timur', '71.298.264.4-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(182, 11, 'Bend. Kapitasi JKN Kasiman', '0', '0', 'JL. Ronggolawe No. 03 RT RW, Kel. Batokan Kec. Kasiman, Bojonegoro, Jawa Timur', '71.293.446.2-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(183, 11, 'Bendahara Umum BLUD Puskesmas Dongko Kab. Trenggalek', '0', '0', 'JL. Raya Dongko Panggul RT. 069 RW. 004 Dongko, Dongko Trenggalek Jawa Timur', '71.598.847.3-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(184, 11, 'Bendahara Kapitasi Jaminan Kesehatan Nasional UPTD Puskesmas Sumobito', '0', '0', 'Jalan Raya Sumobito No. 568 Sumobito Jombang Jawa Timur', '75.463.131.5-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(185, 11, 'Pemegang Kas RSD Kab. Madiun', '0', '0', 'JL. A. Yani Km. 5 Caruban, Bangunsari, Mejayan, Madiun', '00.192.878.7-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(186, 12, 'Bendahara Dinas Kesehatan Sanggau', '0', '0', 'JL. Nenas No. 24 Tanjung Sekayan Kapuas Kab. Sanggau Kalimantan Barat', '00.032.821.1-705.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(187, 11, 'Bend. Puskesmas Maron', '0', '0', 'JL. Asmali 604 RT 010 RW 002 Maron Wetan Maron Kab. Probolinggo', '30.081.655.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(188, 11, 'Bendahara Umum BLUD Puskesmas Tugu', '0', '0', 'JL. Raya Ponorogo KM. 07 RT. 000 RW. 000 Gondang, Tugu Kab. Trenggalek Jawa Timur', '71.547.872.3-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(189, 11, 'Bend. Pengeluaran Dinas Pendidikan Kota Malang', '0', '0', 'JL. Veteran No. 19 Sumbersari Lowok Waru Kotamadya Malang', '00.376.713.4-652.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(190, 23, 'PT. Mahkota Anugrah Karya', '0', '0', 'JL. Bogarpung (Komp. Perum. Puri Kimbul Permai No. 14) RT. 007 RW. 001, Kel. Wolomarang Kec. Alok Ba', '01.768.340.0-921.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(191, 11, 'Bend. Pengeluaran RSU DR. Soetomo', '0', '0', 'JL. Mayjen Prof. DR. Moestopo 6-8 Airlangga - Gubeng Surabaya - Jawa Timur', '00.281.411.9-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(192, 22, 'Bendahara Pengeluaran Rumah Sakit H. L. Manambai Abdul Kadir ', '0', '0', 'Lintas Sumbawa - Bima KM. 5 Brang Bawa Sumbawa Sumbawa Nusa Tenggara Barat', '00.644.429.3-391.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(193, 11, 'Bend. Rutin RSUD DR. Harjono Ponorogo', '0', '0', 'JL. Raya Ponorogo Pacitan Pakunden  Ponorogo, Ponorogo', '00.035.073.6-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(194, 3, 'PT. Pradana Sirona Persada', '0', '0', 'JL. Gatot Subroto Km 7, Jateng, Jatiuwung, KOTA TANGERANG BANTEN', '80.447.610.9-402.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(195, 11, 'Bend. Puskesmas Kabat', '0', '0', 'JL. Raya Kabat No. 08 RT 00 RW 00 Dadapan, Kabat Banyuwangi', '00.386.707.0-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(196, 11, 'Bend. Puskesmas Songgon', '0', '0', 'JL. A. Yani No 65, RT 001 RW 002 Sumberbulu, Songgon Banyuwangi', '00.836.750.0-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(197, 11, 'Bend. Pengeluaran RSUD Asembagus', '0', '0', 'JL. Raya Banyuwangi - Asembagus No. RT. RW. Kel. Wringin Kec. Asembagus Situbondo - Jawa Timur  ', '66.778.036.5-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(198, 11, 'PT. Tirta Jaya Berdikari', '0', '0', 'Kom. PIK Blok B No. 70 RT. 004 RW 010 Kel. Penggilingan Kec. Cakung Kab Jaktim ', '02.998.708.8-004.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(199, 19, 'Bagian Proyek OPRS Rumah Sakit Umum Tulehu', '0', '0', 'Desa Tulehu Kel. Tulehu Kec. Salahutu Maluku Tengah', '00.229.439.5-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(200, 14, 'RSUD DR H Soemarno Sosroatmodjo Kuala Kapuas', '0', '0', 'Jl. Tambun Bunga No. 16  Rt.000 RW.000 Selat Tengah, Selat Kapuas, Kalimantan Tengah', '00.126.118.9-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(201, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Arjasa', '0', '0', 'Jl. Diponegoro No. 1 15 RT.004 RW.001, Kel. Candijati, Kec. Arjasa, Jember, Jawa Timur', '70.906.431.5-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(202, 18, 'PT. Saburai Perdana Barokah', '0', '0', 'Jl. Purnawirawan GG. Swadaya 7 Lorong Ceria No. 100 RT.002, Gunung terang, Tanjungkarang Barat, Band', '02.523.298-4.322.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(203, 1, 'PT. Surya bali Makmur', '0', '0', 'Jl. Diponegoro No. 135-137 Blok B/24 Daun Puri Klod, Denpasar Barat, Bali', '02.252.265.0-904.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(204, 1, 'Bend. Dinkes Kabupaten Jembrana', '0', '0', 'Jl. Surapati No. 1 Dauh Waru, Jembrana, Jembrana, Bali', '00.008.904.5-908.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(205, 11, 'RSUD Dokter Moh. Saleh Kota Probolinggo', '0', '0', 'Jl. Mayjend Panjaitan No. 65 Kel. Sukabumi Kec. Mayangan Kota Probolinggo-67219', '00.166.637-9.625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(206, 19, 'Dinas Kesehatan Kab Seram Bagian Timur', '0', '0', 'Jl. Wailola Bula, Seram Bagian Timur, Maluku', '00.479.133.1-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(207, 20, 'Bendaharawan Rutin RSU Tobelo', '0', '0', 'Jl. Lanbouw Desa Gamsungi, Kec. Tobelo, Kab. Halmahera Utara, Maluku Utara', '00.431.205.4-943.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(208, 15, 'PT. Multi Sarana Alkesindo', '0', '0', 'Jl. KH. Harun Nafsi GG. Karya Bersama Blok A No. 7 RT.16 Rapak Dalam, LOA Janan Ilir, Samarinda, kal', '03.034.334.7-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(209, 20, 'Bendahara DinasKesehatan Halmahera Selatan', '0', '0', 'Mandawong, Mandaong, Bacan Selatan, Kab. Halmahera Selatan', '00.644.852.6-942.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(210, 22, 'Pemegang Kas Kantor Dinas Kesehatan', '0', '0', 'Jl. Kesehatan 02, Kel. Pentaoi, Kec. Mpunda, Kota Bima, Nusa Tenggara Barat', '00.133.479.6-912.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(211, 11, 'Bend. JKN Puskesmas Tembokrejo', '0', '0', 'Jl. PB. Sudirman No. 44 RT. 001 RW.003, Kel. Tembokrejo, Kec. Gumukmas, Jember, Jawa Timur', '70.906.286.3-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(212, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Rowotengah', '0', '0', 'Jl. Gajah Mada No. 77, Kel. Sumber Agung, Kec. Sumber Baru, Jember, Jawa Timur', '70.900.313.1-926.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(213, 6, 'PT. EMIINDO Jaya Bersama', '0', '0', 'Komplek Perkantoran Pulomas Jalan Perintis Kemerdekaan 10 No. 8, pulo Gadung, Jakarta Timur, DKI Jak', '84.607.176.9-003.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(214, 1, 'BEND.PENGELUARAN DNS.KESEHATAN KAB.BANGLI (161)', '0', '0', 'JL. BRIGJEN NGURAH RAI (DINAS KESEHATAN), KAWAN KAWAN BANGLI BANGLI BALI', '00.295.329.7-907.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(215, 11, 'BEND. PUSKESMAS TEGALDLIMO', '0', '0', 'JL. KOPTU RUSWANDI TEGALDLIMO, TEGALDLIMO BANYUWANGI', '00.836.704.7-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(216, 12, 'PT DWICENTRA CAHAYA WIGUNA', '0', '0', 'JL. PERDANA KOMP RUKAN PERDANA SQUARE B NO 19, PONTIANAK SELATAN, PONTIANAK, KALIMANTAN BARAT', '02.373.576.4-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(217, 11, 'BEND. RUTIN PUSK SAWOO', '0', '0', 'JL. RAYA SAWOO RT.03 RW.05, SAWOO SAWOO SAWOO KAB. PONOROGO JAWA TIMUR', '00.324.703.8-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(218, 11, 'BENDAHARAWAN PUSKESMAS PAGU', '0', '0', 'JL. SUPRIADI RT.00 RW.00, KEL. PAGU KEC.PAGU KAB. KEDIRI JAWA TIMUR', '00.744.988.7-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(219, 11, 'BENDAHARA PENGELUARAN RUMAH SAKIT KUSTA SUMBERGLAGAH', '0', '0', 'DSN. SUMBERGLAGAH, TANJUNGKENONGO PACET KAB. MOJOKERTO', '00.401.939.4-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(220, 19, 'BEND. Rumah Sakit Umum Daerah (RSUD) Kab. MTB', '0', '0', 'Jl. IR Soekarno Saumlaki-Tanimbar Selatan- MTB', '00.904.236.7-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(221, 11, 'BEND. PENGELUARAN DINAS KESEHATAN KAB. TUBAN', '0', '0', 'JL. BRAWIJAYA NO. 3 KEBONSARI, TUBAN, TUBAN, JAWA TIMUR', '00.035.620.4-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(222, 30, 'BEND. RUTIN DINAS KESEHATAN KOTA PALU', '0', '0', 'JL. BALAIKOTA SELATAN BLOK C NO. 1 TANAMODINDI-PALU SELATAN PALU-SULAWESI TENGAH', '00.412.806.2-831.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(223, 29, 'BEND. RUTIN PADA RSU POSO', '0', '0', 'JL. JENDRAL SUDIRMAN NO. 33 KEL. KASINTUWU, KEC. POSO KOTA UTARA POSO 94611', '00.139.096.2-833.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(224, 20, 'Bend. Politeknik Kesehatan Ternate', '0', '0', 'Jl. Tanah Tinggi Kel. Maliaro, Kec. Ternate Selatan, Ternate', '00.136.195.5-942.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(225, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Patrang', '0', '0', 'Jl. Kaca Piring No. 05 RT. 004 RW. 001, Kel. Gebang, Kec. Patrang, Jember, Jawa Timur', '70.918.681.1-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(226, 11, 'Bendahara Umum BLUD Puskesmas Karangan', '0', '0', 'Jl. Raya Karangan RT. 005 RW. 002, Karangan, Karangan, Trenggalek, Jawa Timur', '71.463.010.0-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(227, 13, 'Dinas Kesehatan ', '0', '0', 'Jl. Yetro Sinseng No. 23 Lanjas, Teweh Tengah, Barito Utara', '00.470.675.0-714.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(228, 14, 'Pemegang Kas Dinkes Kab. Sukamara', '0', '0', 'Jl. Tjilik Riwut KM. 7.5 RT.14 RW.04 Natai Sedawak, Sukamara, Sukamara, Kalimanatan Tengah', '00.363.117.3-713.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(229, 11, 'Bendahara RS Bhayangkara TK III Bondowoso', '0', '0', 'Jl. Jenpol Sucipto Judodiharjo 12 Kel. Blindungan, Kec. Bondowoso, Kab. Bodowoso, Jawa Timur', '00.671.567.6-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(230, 11, 'Bendahara Pengeluaran dan Penerimaan Puskesmas Banyuanyar', '0', '0', 'Jl. Raya Banyuanyar No. 14 Kel. Liprak, Kec. Banyuanyar, Kab. Probolinggo, Jawa Timur', '72.816.817.0-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(231, 11, 'Bend. Puskesmas Kraksaan', '0', '0', 'Jl. Raya Panglima Sudirman Patokan, Kraksaan, Kab. Probolinggo', '30.051.811.5-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(232, 11, 'Pemegang Kas Dinas Kesehatan Pemkab Bojonegoro', '0', '0', 'Jl. Panglima Sudirman No. 30 Kel. Kepatihan, Kec. Bojonegoro, Kab. Bojonegoro, Jawa Timur', '00.307.759.1-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(233, 11, 'Rumkit Bhayangkara Polda Jatim Di Surabaya', '0', '0', 'Jl. Akhmad Yani Kel. Wonocolo, Kec. Wonocolo, Kab. Surabaya, Jawa Timur', '00.252.302.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(234, 11, 'Bend. Satker Bid Kedokteran & Kesehatan Polda Jatim', '0', '0', 'Jl. Akhmad Yani 116 Kel. Wonocolo, Kec. Wonocolo, Kab. Surabaya, Jawa Timur', '00.343.745.6-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(235, 11, 'PT. Rizky Putra Kasih', '0', '0', 'Perum Singhasari Residence A12 No. 25 RT. 01 RW. 09, Kel. Purwoasri, Kec. Singosari, Malang, Jawa Ti', '73.254.798.9-657.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(236, 14, 'PT. Fresh Water Hillyuda', '0', '0', 'Jl. Delima No. 37 RT. 08, Madurejo, Arut Selatan, Kota Waringin Barat, Kalimantan Tengah', '02.225.153.2-713.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(237, 11, 'Bend. PPK Puskesmas Gempol', '0', '0', 'Jl. Raya Bandulan, Kejapanan, Gempol, Pasuruan', '00.503.571.2-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(238, 22, 'Politeknik Kesehatan Mataram', '0', '0', 'Jl. Praburangkasari Dasan Cermen Sandubaya, Kota Mataram, Nusa Tenggara Barat', '00.009.241.1-911.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(239, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Jelbuk', '0', '0', 'Jl. RA. Kartini No. 26 Kel. Jelbuk, Kec. Jelbuk, Jember, Jawa Timur', '70.903.849.1-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(240, 11, 'PUMC Puskesmas Panarukan', '0', '0', 'Jl. Wringinanom No. 29, Wringinanom, Kel. Wringinanom, Kec. Panarukan, Situbondo, Jawa Timur', '00.151.332.4-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(241, 11, 'Bend. Pengeluaran Politeknik Negeri Banyuwangi', '0', '0', 'Jl. Raya Jember KM. 13, Labanasem Kabat, Banyuwangi, Jawa Timur', '30.150.228.2-627.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(242, 11, 'Bendahara Pengeluaran Pembantu UPTD Puskesmas Ngantru', '0', '0', 'Jl. Raya Ngantru RT. 005 RW. 001, Ngantru, Ngantru, Kab. Tulungagung, Jawa Timur', '30.080.097.6-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(243, 11, 'Bend. Pembantu Pengeluaran Puskesmas Pandaan', '0', '0', 'Jl. Raya No. 11 Patungasri, Pandaan, Pasuruan', '00.503.554.8-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(244, 15, 'PT. Sumber Rejeki Medika Jaya', '0', '0', 'JL. Adam Malik No. 33 RT 004, Kel. Karang Asam Ulu, Kec. Sungai Kunjang Kota Samarinda, Kalimantan T', '03.210.594.2-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 INSERT INTO `customer` (`id`, `id_provinsi`, `nama`, `telp`, `email`, `alamat`, `npwp`, `ket`, `created_at`, `updated_at`) VALUES
-(250, 11, 'Pengeluaran dan Penerimaan Puskesmas Sukapura', 0, 0, 'Jl. Raya bromo RT. 005, RW. 001, Kel. Sukapura, Kec. Sukapura, Kab. Probolinggo, Jawa Timur', '72.773.062.4-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(251, 11, 'Bend Kapitasi Jkn Temayang', 0, 0, 'Jl. Basuki Rahmad No.308 Rt.000 Rw.000 Kel.Temayang Kec.Temayang Bojonegoro, Jawa Timur', '71.291.643.6-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(252, 11, 'Bend Puskesmas Ambal-Ambil', 0, 0, 'Jl Raya Kabupaten Rt.12 Rw.24 Wrati Kejayan Pasuruan', '00.953.286.2-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(253, 11, 'Bend Rutin Dinas Kesehatan Kota Madiun', 0, 0, 'Jl Trunojoyo No.120 Mambangan Kidul Mangun Harjo Madiun 63128', '00.436.763.7-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(254, 15, 'Pt. Murindo Multi Sarana', 0, 0, 'Jl Aw Syahrani Ruko Pondok Alam Indah No.5 Rt.26 Sempaja Selatan Samarinda Utara ', '03.034.116.8-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(255, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Kasiyan', 0, 0, 'Jl Raya Simpang Tiga No. Rt. Rw. Kel.Kasiyan Kec.Puger Jember Jawa Timur', '70.858.498.2-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(256, 10, 'Pt. Glorya Medica Abadi', 0, 0, 'Jl Pramuka Rt.001 Rw.002 Sudagaran Banyumas Jawa Tengah 53192', '74.587.956.9-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(257, 9, 'Pt. Sam Jaya Perkasa', 0, 0, 'Jl. Pajajaran No.123 A Rt.06 Rw.02 Kel.Arjuna Kec.Cicendo Kota Bandung Jawa Barat', '70.895.848.3-428.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(258, 11, 'Bendahara Dan Kapitasi Jkn Puskesmas Panti ', 0, 0, 'Jl Pb Sudirman No.85 Rt.003 Rw.005 Kel.Panti Kec.Panti Jember Jawa Timur', '71.030.308.2-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(259, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Kanigaran', 0, 0, 'Jl. Cokroaminoto No.29 Rt.001 Rw.002 Kel.Kanigaran Kec.Kanigaran Kota Probolinggo Jawa Timur', '70.574.659.2-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(260, 11, 'Bendahara Pengeluaran Dan Penerimaan Puskesmas Bantaran', 0, 0, 'Jl Raya Bantaran No.43 Rt. Rw. Kel.Bantaran Kec.Bantaran Kab. Probolinggo Jawa Timur', '72.816.640.6-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(261, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Wuluhan', 0, 0, 'Jl Kartini No.4 Rt. Rw. Kel.Dukuh Dempok Kec.Wuluhan Jember Jawa Timur', '70.851.763.6-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(262, 11, 'Bend Dana Kapitasi Jkn Balen', 0, 0, 'Jl Raya Balen No.50 Rt.000 Rw.000 Kel.Balenrejo Kec.Balen Bojonegoro Jawa Timur', '71.285.573.3-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(263, 11, 'Bendahara Pengeluaran Dan Penerimaan Puskesmas Sumber', 0, 0, 'Jl Raya Pandansari Pojok No.137 Rt. Rw. Kel.Pandansari Kec.Sumber Kab.Probolinggo Jawa Timur', '72.897.456.9-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(264, 11, 'Bend Puskesmas Condong', 0, 0, 'Jl Raya Condong Gading Kab.Probolinggo', '30.044.028.6-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(265, 11, 'Bendahara Pengeluaran Dan Penerimaan Puskesmas Jorongan', 0, 0, 'Jl Raya Lumajang No. Rt. Rw. Kel.Jorongan Kec.Leces Kab.Probolinggo Jawa Timur', '72.862.700.1-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(266, 11, 'Bendahara Dana Blud Puskesmas Pule', 0, 0, 'Jl Raya Pule Trenggalek Rt.001 Rw.001 Pule, Pule Trenggalek Jawa Timur ', '72.039.140.8-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(267, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Pakusari', 0, 0, 'Jl Pb Sudirman No.87 No. Rt. Rw. Kel. Pakusari Kec.Pakusari Jember Jawa Timur', '70.892.760.3-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(268, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Bangsalsari', 0, 0, 'Jl A. Yani No. 3 Rt. Rw. Kel.Bangsalsari Jember Jawa Timur', '70.904.018.2-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(269, 11, 'Bendahara Dana Kapitasi Jkn Fktp Puskesmas Rengel', 0, 0, 'Jl Raya Timur No.447 Rt.003 Rw.003 Kel.Sumberejo Kec.Rengel Tuban Jawa Timur', '70.675.615.2-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(270, 11, 'Bendahara Dana Kapitasi Jkn Fktp Puskesmas Merakurak ', 0, 0, 'Jl Pemuda No.42 Rt.006 Rw.001 Kel.Mandirejo Kec.Merakurak Tuban Jawa Timur', '70.665.866.3-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(271, 11, 'Bendahara Dana Kapitasi Jkn Fktp Puskesmas Prambon Tergayang', 0, 0, 'Jl Raya Prambon Tergayang No.637 Rt.0 Rw.0 Kel.Prambon Tergayang Kec.Soko Tuban Jawa Timur', '70.675.482.7-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(272, 11, 'Bend Kapitasi Jkn Kesongo', 0, 0, 'Jl Raya Kesongo No.395 Rt. Rw. Kel.Kesongo Kec.Kedungadem Bojonegoro Jawa Timur', '71.307.613.1-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(273, 11, 'Pemegang Kas Dinas Kesehatan Kab Blitar', 0, 0, 'Raya Kediri 18, Sanan Kulon Sanan Kulon, Sanan Kulon, Kab. Blitar, Jawa Timur', '00.434.220.0-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(274, 11, 'Bend Puskesmas Wonomerto', 0, 0, 'Jl. Bantaran Dsn Krajan No.853 Patalan Wonomerto Kab. Probolinggo', '20.041.126.2-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(275, 11, 'Bendahara Puskesmas Kanigoro', 0, 0, 'Jl Kusuma Bangsa No.001 Rt. Rw. Kel. Kanigoro Kec. Kanigoro Blitar Jawa Timur', '71.348.504.3-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(276, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Umbulsari', 0, 0, 'Jl. Kh Agus Salim No.052 Rt. Rw. Kel.Umbul Sari Kec.Umbulsari Jember Jawa Timur', '70.899.746.5-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(277, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Ledokombo', 0, 0, 'Jl Cumedak No.124 Rt. Rw. Kel.Sumber Lesung Kec.Ledok Ombo Jember Jawa Timur', '70.881.634.3-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(278, 11, 'Bendahara Puskesmas Wonodadi', 0, 0, 'Jl Raya Wonodadi No.4 Rt. Rw. Kel.Wonodadi Kec.Wonodadi Blitar Jawa Timur', '71.348.251.1-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(279, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt. Kecematan Raas', 0, 0, 'Jl. Pelabuhan Panggung No.09 Rt. Rw. Kel.Bbkas Kec.Baas Sumenep Jawa Timur', '72.897.917.0-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(280, 11, 'Pemegang Kas Dinas Kesehatan Kab ', 0, 0, 'Jalan Trunojoyo No.147 Rt.002 Rw.002 Kauman Ponorogo Ponorogo', '00.324.697.2-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(281, 11, 'Bendahara Pengeluaran Rsud Dr.Soedomo Trenggalek', 0, 0, 'Jl. Dr.Sutomo No.2 Trenggalek Rt.000 Rw.000 Kelurahan Tamanan Kecamatan Trenggalek Trenggalek Jawa T', '30.049.851.6-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(282, 11, 'Bendahara Upt Puskesmas Lenteng', 0, 0, 'Jl Raya Lenteng  No. Rt.003 Rw.004 Kel.Lenteng Timur Kec.Lenteng Sumenep Jawa Timur', '71.862.339.0-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(283, 11, 'Bend Dana Kap. Jkn Puskesmas Sapeken', 0, 0, 'Jl Raya Sapeken No.49 Sapeken Sumenep', '76.302.222.5.608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(284, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt Puskesmas Bluto', 0, 0, 'Jl Raya Bluto No.13 Rt. Rw. Kel.Bluto Kec.Bluto Sumenep Jawa Timur', '72.947.349.6-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(285, 11, 'Bendahara Dana Kapitasi Jkn Upt Puskesmas Ganding', 0, 0, 'Jl Raya Guluk-Guluk No.8 Rt. Rw. Kel.Ketawang Larangan Kec.Ganding Sumenep Jawa Timur', '72.606.035.3-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(286, 11, 'Bendahara Rutin Dana Kapitasi Jkn Upt Puskesmas Batuputih', 0, 0, 'Jl Arya Wiraraja Batu Putih Laok Batuputih Kab.Sumenep Jawa Timur', '75.864.991.7-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(287, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt Puskesmas Saronggi', 0, 0, 'Jl Raya Saronggi No. Rt. Rw Kel.Saronggi Kec.Saronggi Sumenep Jawa Timur', '72.665.257.1-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(288, 11, 'Bendahara Dana Kapitasi Jkn Fktp Ramolokan', 0, 0, 'Jl. Kh Agus Salim No.25 Rt. Rw. Kel.Pamolokan Kec.Kota Sumenep Sumenep Jawa Timur', '72.677.154.6-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(289, 11, 'Bendahara Dana Kapitasi Jkn Fktp Utp Puskesmas Ambunten', 0, 0, 'Jl Raya Ambunten No. Rt. Rw. Kel.Ambunten Timur Kec.  Ambunten Sumenep Jawa Timur', '73.111.727.1-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(290, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Puskesmas', 0, 0, 'Jl Raya Guluk-Guluk No. Rt.003 Rw.004 Kel.Guluk-Guluk Kec.Guluk-Guluk Sumenep Jawa Timur', '72.876.129.7-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(291, 11, 'Puskesmas Wonoayu', 0, 0, 'Raya Wonoayu Rt.000 Rw.000 Jimbarankulon Jimbarankulon Wonoayu Sidoarjo Jawa Timur', '00.841.091.2-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(292, 11, 'Bend Pengeluaran Pembantu Puskesmas Sidoarjo', 0, 0, 'Jl Dr Soetomo No.14 Rt. Rw. Magersari Sidoarjo Sidoarjo', '00.560.822.9-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(293, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Lojejer', 0, 0, 'Jl Teuku Umar No.2 Lojejer Wuluhan Kab. Jember Jawa Timur', '70.891.617.6-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(294, 11, 'Bendahara Pengeluaran Blud Puskesmas Wungu', 0, 0, 'Jl Raya Kare No.113 Wungu Wungu Kab.Madiun Jawa Timur', '70.793.186.1-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(295, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Ambulu', 0, 0, 'Jl A. Yani No.60 Ambulu Ambulu Kab. Jember Jawa Timur', '70.931.183.1-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(296, 11, 'Bendahara Jkn Puskesmas Banjarsengon', 0, 0, 'Jl Kasuari No.48 Rt.001 Rw.001 Banjar Sengon Patrang Kab.Jember Jawa Timur', '76.786.411.9-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(297, 11, 'Bendahara Dana Kapitasi Jkn Upt Puskesmas Arjasa', 0, 0, 'Jl Raya Arjasa No. Rt. Rw. Kel.Arjasa Kec.Arjasa Sumenep Jawa Timur 69491', '73.142.215.0-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(298, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Puskesmas', 0, 0, 'Jl Raya Pragaan No. Rt Rw. Kel.Pragaanlaok Kec.Pragaan Sumenep Jawa Timur', '72.876.522.3-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(299, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt Puskesmas Batang-Batang', 0, 0, 'Jl Cemara Udang No. Rt. Rw Kel. Batangbatang Daya Kec.Batang Batang Sumenep Jawa Timur', '72.908.586.0-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(300, 11, 'Bendahara Dana Kapitasi Jkn Upt Puskesmas Rubaru', 0, 0, 'Jl Raya Rubaru Rubaru Rubaru Sumenep Jawa Timur', '73.371.288.9-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(301, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt Puskesmas Moncek', 0, 0, 'Jl Raya Guluk Guluk No. Rt. Rw. Kel. Moncek Tengah Kec. Lenteng Sumenep Jawa Timur', '72.684.926.8-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(302, 11, 'Bend Jkn Puskesmas Tegalombo', 0, 0, 'Jln Pacitan Ponorogo Km 34 No. Rt.013 Rw.003 Kel.Tegalombo Kec. Tegalombo Pacitan Jawa Timur', '70.691.827.3-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(303, 11, 'Bend Puskesmas Prambon', 0, 0, 'Raya Prambon Rt.000 Rw.000 Prambon Prambon Sidoarjo', '00.841.093.8-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(304, 11, 'Bend Pumk Puskesmas Kec.Karangrejo', 0, 0, 'Jl Raya Ngawi No.42 Karangrejo Karangrejo Magetan', '00.324.551.1-646.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(305, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Puger', 0, 0, 'Jl A. Yani No.32 Rt. Rw. Kel.Puger Kulon Kec.Puger Jember Jawa Timur', '70.892.753.8-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(306, 11, 'Bend Jkn Puskesmas Tulakan', 0, 0, 'Dsn Krajan No. Rt.004 Rw.001 Ds Bungur Kec.Tulakan Pacitan Jawa Timur', '70.614.392.2-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(307, 11, 'Bend Pemb Puskesmas Pucanglaban', 0, 0, 'Sarangangin 01 Rt.000 Rw.000 Sumberdadap Pucang Laban Tulungagung', '30.050.340.6-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(308, 11, 'Pt Karsa Semangat Sejahtera', 0, 0, 'Jl Kendalsari Selatan No.82 Rt.001 Rw.003 Penjaringan Sari Rungkut Surabaya 60297', '03.238.291.3-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(309, 10, 'Pt Makmur Technology Indonesia', 0, 0, 'Kawasan Taman Industri Bsb Blok A.5 No.09 Jati Barang Mijen Kota Semarang Jawa Tengah', '80.472.256.9-503.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(310, 11, 'Pt. Bumi Menara Internusa', 0, 0, 'Jl Margomulyo No.4E Tandes Lor - Tandes Surabaya Jawa Timur', '01.454.019.9-631.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(311, 14, 'Pt. Fresh Water Hillyuda', 0, 0, 'Jalan Delima No.37 Rt.06 Madurejo Arut Selatan Kotawaringin Barat Kalimantan Tengah', '02.225.153.2-713.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(312, 11, 'Pt. Rejeki Wira Bersama', 0, 0, 'Manyar Kertoarjo No.56 Rt.001 Rw.006 Manyar Sabrangan Mulyorejo Kota Surabaya Jawa Timur', '75.770.214.7-619.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(313, 11, 'Siti Nuraini Rinangsih', 0, 0, 'Jl. Gumelar Jogaran Dusun Wetan Kali Rt.004/0013 Desa.Balung Lor', '36.091.068.0-196.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(314, 14, 'Yosi Faisal', 0, 0, 'Jl. Kecubung  Iv No 08 Rt.002 Rw.001, Bukit Tunggal - Jekan Raya, Palangkaraya, Kalimantan Tengah', '64.135.154.9-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(315, 11, 'Pt. Sam Elemen Indonesia', 0, 0, 'Ruko 21 Klampis D-8, Klampis Ngasem, Sukolilo, Surabaya, Jawa Timur', '54.528.045.2-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(316, 11, 'Pt. Bumi Menara Internusa (Cabang Malang)', 0, 0, 'Jl. Pahlawan No.1 Dampit-Dampit Malang-Jawa Timur', '01.454.019.9-654.002', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(317, 12, 'PT Kapuas Permata Medifarma', 0, 0, 'Jl. Budi Karya Ruko C5 Rt 004 Rw 023, Pontianak, Kalimantan Barat', '03.352.338.2-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(318, 11, 'Rutine Kantor Kesehatan Pelabuhan Probolinggo', 0, 0, 'Jl. Tanjung Tembaga Baru', '00.036.522.1-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(319, 11, 'Joenry Panggawean.Dr', 0, 0, 'Raya Darmo Permai Selatan 109-111 Rt 003 Rw 011, Lontar-Sambikerep, Surabaya', '06.464.373.7-604.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(320, 11, 'PT. Diasindo Karya Ristrady', 0, 0, 'Jl. Papa Merah 2A Rt/Rw 005/015, Tulusrejo, Lowokwaru, Kotamadya Malang', '03.321.710.0-652.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(321, 11, 'Bend.Rumkit Bhayangkara Polda Jatim Nganjuk', 0, 0, 'Jl. Abdul Rahman Saleh No 52, Kel.Kauman, Kec.Nganjuk, Kab.Nganjuk, Jawa Timur', '00.230.543.1-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(322, 11, 'PT. Rama Emerald Multi Sukses', 0, 0, 'Desa Tenaru, Tenaru Driyorejo, Kab.Gresik, Jawa Timur', '01.438.620.5-641.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(323, 34, 'PT. Sumber Utama Medicalindo', 0, 0, 'Jl. Prof Hm Yamin Sh No 241, Sei Kera Hilir I, Medan Perjuangan, Medan', '31.653.635.8-113.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(324, 1, 'PT. Cahaya Murni Cemerlang', 0, 0, 'Jl. Gatot Subroto Ii D No.1, Dangin Puri Kaja, Denpasar Utara, Bali', '02.217.510.3-901.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(325, 11, 'Bendahara Rsud Slg', 0, 0, 'Jl. Galuh Candra Kirana, Tugurejo, Ngasem, Kab. Kediri, Jawa Timur', '85.972.311.6-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(326, 11, 'PT. Langgeng Jaya Sempurna Abadi', 0, 0, 'Taman Puspa Sari Blok E No 5 Rt 32 Rw 07, Klurak, Candi, Sidoarjo, Jawa Timur', '31.329.701.2-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(327, 11, 'Dinas Kesehatan Daerah Kabupaten Sumenep', 0, 0, 'Sumenep', '00.006.186.1-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(328, 11, 'Bend. Umum Blud Puskesmas Suruh', 0, 0, 'Jalan Routine Jend.Sudirman Rt015, Rw006, Suruh, Suruh, Kab.Trenggalek, Jawa Timur', '71.454.273.5-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(329, 11, 'Rutin Dinas Kesehatan Daerah Tk.Ii Bondowoso', 0, 0, 'Jl.Imam Bonjol No 13, Kademangan, Bondowoso, Jawa Timur', '00.035.993.5-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(330, 11, 'BENDAHARA DANA KAPITASI JKN UPT PUSKESMAS SEKARGADUNG', 0, 0, 'TERUSAN SEKARSONO NO 01 RT.RW. KEL.SEKARGADUNG KEC.PURWOREJO, KOTA PASURUAN, JAWA TIMUR', '71.982.024.3-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(331, 19, 'Bend.Rutin Politeknik Kesehatan Ambon', 0, 0, 'Jl. Dewi Sartika, Kel.Amantelu, Kec.Sirimau, Ambon, Maluku', '00.328.032.8-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(332, 10, 'SRI SURYATI', 0, 0, 'DSN KRAJAN RT. 005 RW. 001 NGABENREJO, GROBOGAN, JAWA TENGAH - 58152', '36.025.620.0-514.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(333, 11, 'Kapitasi JKN Puskesmas Bungah', 0, 0, 'Jl. Raya Bungah No. 15 Kel. Bungah, Kec. Bungah, Gresik, Jawa Timur', '71.514.834.2-612.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(334, 19, 'Bend. Rutin RSUD Namlea', 0, 0, 'Namlea, Kel. Namlea, Kec. Buru Utara Timur, Buru', '00.162.935.1-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(335, 10, 'Puskesmas Wangon I', 0, 0, 'Jl. Raya Barat No. 59 Wangon, Wangon Wangon, Banyumas, jawa tengah', '00.321.193.5-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(336, 3, 'PT. Autochem Industry', 0, 0, 'JL. Gatot Subroto Km 7, Jateng, Jatiuwung, KOTA TANGERANG BANTEN', '01.368.928.6-415.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(337, 11, 'Bend. JKN UOT Puskesmas Bandar', 0, 0, 'Jl. Raya Bandar RT. 001 RW. 004, Bandar, Bandar, Pacitan, Jawa Timur', '70.602.917.0-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(338, 29, 'Bend. Pengeluaran Dinas Kesehatan Kab. Banggai', 0, 0, 'Jl. Ahmad Yani No. 02 Luwuk, Luwuk, Banggai, Sulawesi Tengah', '00.138.388.4-832.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(339, 11, 'Bend. Dinkes Kab. Ngada', 0, 0, 'Jl. Gajah mada No. 2', '00.260.663.0-923.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(340, 6, 'PT. Sarana Bakti Utama', 0, 0, 'SMA 14 No. 47 B RT. 002 RW. 004, Kel. Cililitan, Kec. Kramat Jati, Jakarta Timur, DKI Jakarta', '72.012.168.0-005.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(341, 11, 'Bend. Peng. Pembantu RS Kusta Kediri', 0, 0, 'Jl. Veteran No. 48 Mojoroto, Mojoroto, Kediri', '00.034.641.1-622.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(342, 11, 'Rutin RSU Kab. Magetan', 0, 0, 'Jl. Pahlawan No. 2 Tambran, Tambran, magetan, Magetan, Jawa Timur', '00.034.855.7-646.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(343, 30, 'Bend. Pemegang Kas Unit Dinas Kesehatan Kab. Konawe', 0, 0, 'Jl. Inolobunggadue No. 323, Puunaha', '00.412.387.3-811.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(344, 11, 'Pemegang Kas RSUD Pamekasan', 0, 0, 'Jl. Kesehatan 3-5 , Barurambat Kota, Pamekasan', '00.454.665.1-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(345, 11, 'PT. Swabina Gatra', 0, 0, 'Jl. RA. Katini No. 21-A Sidomoro, Kebomas, Gresik, Jawa Timur - 61122', '01.480.112.0-641.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(346, 11, 'Bendahara Pengeluaran Pembantu pada Kelurahan Taman', 0, 0, 'Jl. Asahan No. 48, Taman, Taman, Madiun, jawa Timur', '00.664.206.0-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(347, 1, 'I Nyoman Budiasa', 0, 0, 'Jl. P. Bangka GG IV No. 9 Kel. Pedungan, Kec. Denpasar Selatan', '5.17E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(348, 9, 'Heri Prasetia. AMK', 0, 0, 'KP Telebud RT. 01 RW.02 Jampang Tengah, Jampang Tengah, Sukabumi, Jawa Barat', '47.830.871.1-405.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(349, 12, 'Kantor Dinas Kesehatan Kab. Kubu Raya', 0, 0, 'Jl. Arteri Supadio Sungai Raya, Sungai Raya, Pontianak', '00.602.550.9-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(350, 20, 'Bend. Pengeluaran RSUD Jailolo', 0, 0, 'Jl. IR. Soekarno Acango, Kec. Jailolo, Kab. Halmahera Barat', '00.829.751.7-943.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(351, 24, 'PT. Parasi Roha Papua', 0, 0, 'Blok J No. 8 KPR BTN Tanah Hitam Asano, Abepura, Jayapura', '02.016.861.3-952.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(352, 11, 'Bendahara Puskesmas Wonorejo', 0, 0, 'Ds. Kolak, Wonorejo, Ngadi Luwih, Kab. Kediri, Jawa Timur', '20.011.211.8-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(353, 15, 'Dinas Kesehatan Kab. Nunukan', 0, 0, 'Jl. RA. Bessing, Komp. Perkantoran Gadis 2 Nunukan, Kalimantan Timur', '15.433.176.3-723.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(354, 11, 'Bend. Pengeluaran Pembantu Pada Kelurahan Kuncen', 0, 0, 'Jl. Masjid Raya No. 16 Madiun', '00.664.205.2-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(355, 11, 'Bend. Pengeluaran Pembantu Pada Kelurahan Josenan', 0, 0, 'Jl. Cokrobasonto RT. 022 Josenan, Taman, Madiun', '00.664.209.4-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(356, 11, 'Bend. Pengeluaran Pembantu Pada Kelurahan Mojorejo', 0, 0, 'Jl. Setia Budi No. 42 Madiun', '00.664.204.5-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(357, 11, 'Bendahara Pengeluaran Blud Puskesmas Klecorejo', 0, 0, 'Jl. Wates Klecorejo, Mejayan, Kab. Madiun, Jawa Timur', '66.320.414.7-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(358, 11, 'Bend. JKN Puskesmas Pakis Baru', 0, 0, 'Dsn. Bulu RT. 003 RW. 006, Kel. Ngromo, Kec. Nawangan, Pacitan, Jawa Timur', '70.651.963.4-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(359, 11, 'Bend. Puskesmas Trosobo', 0, 0, 'Raya Trosobo, Trosobo, Taman Sidoarjo', '00.841.078.9-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(360, 14, 'Bend. RSUD DR. Doris Sylvanus', 0, 0, 'Jl. Tambun Bungai No. 04 Pahandut, Pahandut, Palangkaraya', '00.008.073.9-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(361, 9, 'Torang Panyusunan', 0, 0, 'Jl. Perum Pemda BLC 16 No. 5 RT. 005 RW. 011, Jatiasih, Kotamadya- Bekasi', '59.407.128.4.432.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(362, 11, 'Bend. Pengeluaran Dinas Kesehatan', 0, 0, 'Jl. Dr. Soetomo No. 04 RT/RW Trenggalek, Trenggalek, Jawa Timur', '00.491.855.3-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(363, 11, 'Kelurahan Manisrejo', 0, 0, 'Jl. Tanjung Raya No. 44 Kota Madiun', '00.664.207.8-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(364, 11, 'Bendahara Pengeluaran Pembantu UPTD Puskesmas Sukorame Kota Kediri', 0, 0, 'Jl. Veteran No. 50A Sulorame, Mojoroto, Kota Kediri', '83.633.837.6-622.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(365, 11, 'Bendahara Pengeluaran Pembantu UPT Puskesmas Gedongan', 0, 0, 'Jl. Gajah Mada No. 54 Kel. Gedongan, Kec. Magersari, Kota Mojokerto, Jawa Timur', '71.986.462.1-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(366, 9, 'CV. Multi Usaha Jaya', 0, 0, 'Taman Cikas Blok A4 No. 11 RT. 002 R. 025 Pekayon Jaya, Bekasi Selatan, Kota Bekasi Jawa Barat', '75.828.743.7-432.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(367, 12, 'Windhu Muhammad Ridha', 0, 0, 'Jl. Adi Sucipto RT. 003 RW. 008 Arang Limbung, Sungai Raya, Pontianak', '58.810.563.5-704.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(368, 11, 'Nur Arif Rahmatullah', 0, 0, 'Jl. Cempaka No. 1B RT. 036 RW. 008 Oro-oro Ombo, Kartoharjo, Madiun, Jawa Timur', '76.646.070.3-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(369, 11, 'PT. Daya Matahari Utama', 0, 0, 'Jl. Kertomenanggal III No. 3, Dukuh Menanggal, Gayungan, Surabaya,  Jawa Timur', '02.700.144.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(370, 11, 'PT. Kasuma', 0, 0, 'Jl. Jojoran 1 Perintis 1/39 Surabaya', '03.177.972.1-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(371, 1, 'PT. Bali Agung Waters', 0, 0, 'Jl. Besakih No. 4 Menanga, Rendang, Karangasem', '31.275.605.9-907.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(372, 11, 'Bendahara BLUD RSUD DR Abdoer Rahem', 0, 0, 'Jl. Anggrek No. 68 Patokan, Situbondo', '00.745.935.7-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(373, 11, 'Mulyo Hadi Soesilo', 0, 0, 'Jl. Krembangan Bhakti 1A RT. 005 RW. 002 Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(374, 11, 'Aditya Yoga Satria', 0, 0, 'Dsn. Banjarejo RT 001 RW 001, Banjarejo, Ngadiluwih, Kab. Kediri', '93.816.014.0-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(375, 10, 'PT. Bhineka karya Elektrindo', 0, 0, 'RE Martadinata Ruko Mutiara Marina lantai 2 No. 7 Tawangsari, Semarang Barat, Semarang, Jawa Tengah', '84.361.204.5-503.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(376, 31, 'Harold Immanuel Marcelliano', 0, 0, 'Perumahan BTN Wale Nusantara Blok B No. 51 Lingk. IV Paniki Bawah, Mapanget, Kota Manado, Sulawesi U', '83.705.445.1-821.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(377, 11, 'Nikmah Ernawati', 0, 0, 'Dusun Bogo RT. 002 RW. 008 Bulu Semen, Kab. Kediri Jawa Timur', '74.811.896.5-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(378, 11, 'Septian Akhmad Sugianto', 0, 0, 'Dusun Krajan Tengah RT. 012 RW. 002 Sumberjati, Kecamatan Tempeh', '3.51E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(379, 28, 'PT. Bumi Menara Internusa', 0, 0, 'Kima 15 Kav. R No. 4 C RT. 004 RW. 002 Kel. Daya Kec. Biringkanaya Kota Makasar, Sulawesi Selatan', '01.454.019.9-801.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(380, 18, 'PT. Bumi Menara Internusa', 0, 0, 'IR. Sutami KM 12 Lematang, Tanjung Bintang, Lampung Selatan', '01.454.019.9-325.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(381, 11, 'Bambang Arianto', 0, 0, 'Pandugo II Blok P. II P/6 RT. 003 RW. 009 Penjaringan sari, Rungkut, Surabaya', '09.748.390.3-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(382, 11, 'Rahmatullah', 0, 0, 'Singorejo RT. 001 RW. 004 Dahan rejo, Kebomas', '3.53E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(383, 1, 'PT. Wahyu Artha Medika', 0, 0, 'Jl. Tukad Barito No. 8B, Panjer-Denpasar Selatan, Denpasar - Bali ', '31.342.385.7-903.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(384, 5, 'CV. Krisma Jaya Mandiri', 0, 0, 'Jl. Babarsari No. 26 Caturtunggal, Depok, Sleman-DI Yogyakarta 55281', '31.328.963.9-542.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(385, 10, 'Nugroho Widi Utomo', 0, 0, 'Jl. Medoho Selecta No. 17 RT. 002 RW. 005 Sambirejo, Gayamsari Kota Semarang Jawa Tengah', '85.511.671.1-518.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(386, 10, 'Hanifah Githa Ariani', 0, 0, 'Jl. A. yani D4 RT. 005 RW. 002 Potrobangsan, Magelang Utara, Kota Magelang, Jawa Tengah', '93.610.186.4-524.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(387, 11, 'Rumah Sakit Muhammadiyah Gresik', 0, 0, 'Jl. KH. Kholil No. 88 RT. 005 RW. 001 Kemuteran Gresik', '01.233.476.9-612.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(388, 11, 'Cahyo Nugroho, SH', 0, 0, 'Jl. Gubeng Kertajaya IX C No. 35 RT. 006 RW. 005 Airlangga, Gubeng, Surabaya', '59.833.768.1-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(389, 11, 'Henry Sudigdo', 0, 0, 'Jl. Babatan Pratama 28/XX 100 RT. 008 RW. 008 Babatan, Witung, Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(390, 11, 'Bend. Pengeluaran Dinas Kesehatan Kab. Sidoarjo', 0, 0, 'Jl. Mayjen Sungkono No. 46 Pucang, Sidoarjo                                                         ', '00.034.196.6-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(391, 34, 'PT. Tiga Darma Abadi', 0, 0, 'Jl. Sersan Muslim RT. 07 Paal Merah, Paal Merah Kota Jambi', '81.447.791.5-331.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(392, 6, 'PT. Aneka Industri Gas Medik', 0, 0, 'Komplek Green Sedayu Bizpark Blok GS 5 No. 122 Cakung Timur, Cakung, Jakarta Timur, DKI Jakarta', '92.499.219.1-006.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(393, 11, 'H. Abdul Muin', 0, 0, 'Jl. B. Katamso Gg Salak No. 251A Sukaharja-Delta Pawan Kab. Ketapang', '79.095.676.7-703.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(394, 11, 'PT. Global Surya Kemala', 0, 0, 'Jl. Inspeksi Brantas No. 14 RT. 021 RW. 007 Mojoroto, Kec. Mojoroto Kota Kediri', '02.665.876.5-622.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(395, 11, 'Anggi Setiawan', 0, 0, 'Jl. Mastrip Kr. Pilang 12 Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(396, 11, 'J. Nugroho Eko Putranto/ dr. Ursula', 0, 0, 'Jl. Ploso 9B/11 RT. 009 RW. 005 Ploso, Surabaya', '08.609.781.3-619.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(397, 11, 'PT. Adiguna Label Indonesia', 0, 0, 'Jl. Raya Osowilangun No. 61 Blok D-15 Surabaya', '02.337.908.4-604.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(398, 6, 'PT. Surya Darma Perkasa', 0, 0, 'Jl. Daan Mogot KM 1 No. 99 RT. 006 RW. 005 Kebon Jeruk Jakarta Barat', '01.567.987.1-038.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(399, 11, 'PT. Hartono Raya Motor', 0, 0, 'Jl. Demak 156-170 Gundih-Bubutan Surabaya', '01.108.186.6-631.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(400, 31, 'Ekawati Hartono', 0, 0, 'Perum Labuan Indah Blok E8, Kel. Manembo Nembo, Kec. Matuari Kota Bitung 95545', '77.987.627.5-823.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(401, 11, 'PT. Abadi Hutan Tropis', 0, 0, 'Jl. Dharmahusada Utara I/50 Surabaya', '01.720.929.2-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(402, 10, 'Herje Joenianto, DR, SPM', 0, 0, 'Jl. Dr. Susanto No 113 RT. 01 RW. 01 Kutoharjo, Pati', '08.850.767.6-507.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(403, 11, 'Ilvana Ardiwirastuti', 0, 0, 'Jl. Joyoboyo GG Dahlia RT. 24 RW. 03 Karangrejo, Ngasem, Kediri', '84.952.412.9-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(404, 1, 'PT. Hotel Ramapalace Cottage', 0, 0, 'Grand Istana Rama Hotel Jl. Pantai Kuta, Kuta, Badung - Bali - 80361', '01.460.192.6-904.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(405, 11, 'Dinas Kesehatan Kabupaten Tuban', 0, 0, 'JALAN BRAWIJAYA NOMOR 3 KEBONSARI, TUBAN, TUBAN, JAWA TIMUR', '00.279.607.6-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(406, 10, 'CV. Sani Putri Medika', 0, 0, 'Jl. Soekarno-Hatta No. 75 Palebon, Pedurungan, Semarang', '03.077.227.1-518.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(407, 10, 'CV. Sani Retailindo', 0, 0, 'Jl. DR. Cipto No. 174 A Karang Tempel, Semarang timur, Semarang', '84.263.204.4-504.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(408, 11, 'CV. Hawaii Group', 0, 0, 'Jl. Dupak Mutiara 63 F No. 20 RT. 004 RW. 005 Surabaya', '82.470.050.4-614.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(409, 11, 'Suryanto', 0, 0, 'Jl. Manukan mukti VIII Blok 12A/ No. 15 Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(410, 11, 'PT. Esa Sampoerna', 0, 0, 'Eka Sampoerna Center Lt. 5 Jl. DR. Ir. H. Soekarno No. 195 RT. 002 RW. 009 Surabaya', '01.979.278.7-631.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(411, 10, 'PT. Ares Pratama Medika', 0, 0, 'Jl. S. Parman No. 239 A-B RT. 005 RW. 003 PWT Kulon-PWT Selatan - Banyumas', '02.006.778.1-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(412, 11, 'PT. Berkah Pro Medika', 0, 0, 'Jl. Kebraon Indah Permai 3 L No. 19 RT.007 RW.013 Kebraon karang Pilang Kota Surabaya Jawa Timur 602', '66.251.103.9-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(413, 6, 'Bambang Supardi', 0, 0, 'Taman Cipulir O.2/1 Rt.002/Rw.008 Kel.Cipadu Jaya Kec.Larangan Kota Tangerang', '3.67E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(414, 11, 'Stevanus Budianto', 0, 0, 'Puri Lidah Kulon Indah Blok T2 RT/RW 006/007 Kel. Lidah Kulon Kec. Lakar Santri Kota Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(415, 6, 'Nurdin', 0, 0, 'Jl. Kalianyar VI No. 34 RT.009 RW.002 Kel. Kalianyar Kec.Tambora Jakarta Barat DKI jakarta', '70.048.242.5-033.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(416, 1, 'PT. Borneo EtaM Mandiri', 0, 0, 'Komplek Villa Damai Permai Blok D-4 No. 01 Rt. 032 Gunung Bahagia Balikpapan Selatan Kota Balikpapan', '83.167.930.3-721.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(417, 11, 'PRIYADI KUNCORO, TJIO', 0, 0, 'Virgo No. 40 RT.002 RW.006 Kel. Ploso Kec. Tambak Sari', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(418, 28, 'PT. GHINA HUSADA NUSANTARA', 0, 0, 'Puri Taman Sari Blok L2/8 RT.006 RW.002 Borong, Manggala Makassar - Sulawesi Selatan', '03.289.018.8-805.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(419, 1, 'PT. JAYA CENTRA MEDIKA', 0, 0, 'JL. Gatot Subroto Barat Pemecutan Kaja Denpasar Utara Kota Denpasar Bali', '91.065.609.9-901.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(420, 11, 'CV. ANEKA', 0, 0, 'Jalan Nginden 6F No. 9A RT.008 RW.005 Nginden Jangkungan Sukolilo', '71.881.685.3-806.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(421, 11, 'RS KUSTA SUMBERGLAGAH MOJOKERTO SEKRETARIAT JENDERAL KEMENTERIAN', 0, 0, 'DSN SUMBERGLAGAH TANJUNGKENONGO, PACET', '95.302.731.5-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(422, 15, 'PT. HIDUP BAHAGIA MEDICA', 0, 0, 'JL. P. HIDAYATULLAH NO.46 RT.013 PELABUHAN , SAMARINDA ILIR SAMARINDA', '03.278.558.6-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(423, 11, 'PUSAT KESEHATAN MASYARAKAT BESUK KABUPATEN PROBOLINGGO', 0, 0, 'Jalan Raya Besuk No. 08 RT.005 RW.005 Alaskandang Besuk', '96.416.335.6-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(424, 11, 'DINAS KESEHATAN KABUPATEN PASURUAN', 0, 0, 'Jl. Raya Raci KM 9 Bangil Raci Bangil', '00.140.432.6-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(425, 10, 'PT. GLOBAL DIGITAL NIAGA', 0, 0, 'Jl. Jend. A Yani No. 34 Panjunan, Kota Kudus - Jawa Tengah', '03.000.644.9-506.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(426, 11, 'YAP THJOEN LIEM', 0, 0, 'JL. Dempo 7-8 Rt.003 Rw.006 KeL. Petemon Kec. Sawahan Kota Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(427, 10, 'INTAN FAINZAH HANDAYANI', 0, 0, 'Ds. Pendosawalan Blok A No. 10 RT.022 RW.008 Pendosawalan, KalinyaMatan Kab. Jepara Jawa Tengah', '83.815.592.7-516.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(428, 6, 'HARIO BASKORO', 0, 0, 'Jl. Pulo Asem V No. 34 Rt.004/Rw.001 KeL. Jati Kec. Pulo Gadung Jakarta Timur', '3.28E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(429, 11, 'PT. IKAN KAKAP', 0, 0, 'Jl. Ikan Kakap No. 23 Perak Barat - Krembangan Surabaya - Jawa Timur', '01.232.274.9-605.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(430, 11, 'PT. IKAN DORANG', 0, 0, 'Jl. Ikan Dorang No. 2 Perak Barat - Krembangan Surabaya - Jawa Timur', '01.108.190.8-605.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(431, 11, 'HELDY WILLIAM SUGIHARTO', 0, 0, 'Jl. Wonorejo I/35 Rt. 002 Rw. 003 Kel. Wonorejo Kec. Tegalsari Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(432, 11, 'PT. ENDO INDONESIA', 0, 0, 'Raya Meganti 14 RT/RW 003/001 Kedurus, Karang Pilang Surabaya - Jawa Timur 60223', '02.114.186.6.618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(433, 10, 'CV. CENTRALINDO MEGAH', 0, 0, 'Desa Yamansari RT.003 RW.001 Yamansari Lebaksiu Kab. Tegal Jawa Tengah', '85.227.010.7-501.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(434, 9, 'PT. ZEFA VALINDO JAYA', 0, 0, 'Kawasan Pergudangan Dan Perdagangan Sentra Niaga 5 Blok SN 5 1 No. 12 Pusaka Rakyat Tarumajaya Kab. ', '01.917.805.2-407.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(435, 34, 'ASEP SUNARYA', 0, 0, 'JL. Karya Bakti LK VIII No. 147 Indra Kasih, Medan Tembung Kota Medan Sumatera Utara', '81.910.184.1-113.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(436, 31, 'PT. BANGUN MEDIKA SEJAHTERA', 0, 0, 'JL. TNI Raya No. 91 Tikala Baru, Tikala', '81.929.845.6-821.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(437, 11, 'PT. WIYUNG SEJAHTERA', 0, 0, 'Karangan PDAM/03 RT RW Babatan Wiyung Surabaya', '02.443.023.3-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(438, 18, 'KISWAN RAHARSO', 0, 0, 'Perum bukit kemiling permai Z No. 101 RT.010 RW-Kel.kemiling permai kec.kemiling bandar lampung lamp', '66.676.428.7-322.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(439, 9, 'IRVAN FATHUROHMAN', 0, 0, 'Jl. Ciwastra gg.H.Adnan RT/RW 006/016 KeL. Margasari Kec. Buah Batu Kota Bandung', '3.27E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(440, 9, 'PATRIA SAPUTRA', 0, 0, 'Jalan Bandar Agung Village 3 C No. 10 RT.006 RW.004 Jati Sari, Jatiasih Kota Bekasi Jawa Barat', '91.136.311.7-447.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(441, 6, 'WELLY GOZALI', 0, 0, 'JL. Arteri Pondok Indah No. 31 HK Kebayoran Lama Selatan - Kebayoran Lama Jakarta Selatan - DKI Jaka', '06.968.146.8-013.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(442, 18, 'FINA YUSRIY YANA', 0, 0, 'Mulyasari RT.013/RW.001 Kel.Mulyo Asri Kec. Tulang Bawang Tengah Tulang Bawang Barat', '3.51E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(443, 11, 'RUMAH SAKIT UMUM DAERAH SIMPANG LIMA GUMUL KABUPATEN KEDIRI', 0, 0, 'Jalan Galuh Candra Kirana Tugurejo Tugurejo Ngasem', '00.300.670.7-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(444, 11, 'CV. HANJAYA', 0, 0, 'PENGADAIAN NO. 86 RT.001 RW.001 PURWOSARI , PURWOSARI PASURUAN', '31.744.230.9-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(445, 11, 'PT. BINTANG NUSANTARA MEDIKA', 0, 0, 'PERUM ISTANA CANDI MAS REGENCY G4 NO.21 RT.001 RW.006 NGAMPELSARI, CANDI KAB. SIDOARJO JAWA TIMUR', '81.929.527.0-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(446, 11, 'YAY. PONDOK KASIH', 0, 0, 'JL. KENDANGSARI II/82 KENDANGSARI - TENGGILIS MEJOYO SURABAYA', '01.823.144.9-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(447, 11, 'PT. GUNAWAN DIANJAYA STEEL TBK', 0, 0, 'JL. MARGOMULYO NO. 29 A RT.001 RW.001 TAMBAK SARIOSO ASEMROWO SURABAYA JAWA TIMUR', '01.481.535.1-092.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(448, 22, 'PT. BIBIT UNGGUL', 0, 0, 'JL. RAYA BAYAN DUSUN MONTONG PAL REMPEK GANGA LOMBOK UTARA NUSA TENGGARA BARAT', '02.178.440.0-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(449, 11, 'PT. TIRTA CATUR TUNGGAL', 0, 0, 'Dsn Tembero RT.02 RW.03 Tanggulangin, Kejayan Kabupaten Pasuruan 67172', '03.158.998.9-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(450, 10, 'PT. ADI KARYA OKANE', 0, 0, 'DK TASIKMADU RT.025 RW.007 KEPUTRAN KEMALANG KAB. KLATEN JAWA TENGAH', '92.550.707.1-525.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(451, 6, 'PT. TAWADA HEALTHCARE', 0, 0, 'Jl. Tentara Pelajar Permata Senayan Blok A 18-19 Grogol Utara - Kebayoran Lama Jakarta Selatan - DKI', '01.903.521.1-062.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(452, 6, 'GLORIA AMANDA PUTRI', 0, 0, 'JL. Pejaten Barat No. 18 RT.001 RW.010 Ragunan Pasar Minggu Jakarta Selatan DKI Jakarta 12550', '85.387.309.9-017.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(453, 10, 'ANDY TJEE', 0, 0, 'Begalon RT.002 RW.003 Penularan, Laweyan Kota Surakarta Jawa Tengah', '81.269.473.5-526.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(454, 34, 'RAYMOND WAROUW', 0, 0, 'Jl. Sun Yat Sen No. 24-26 Sei Rengas I,Medan Kota Kota Medan Sumatera Utara', '91.318.446.1-122.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(455, 11, 'CV. MULTI SARANA JAYA', 0, 0, 'Jl. Kalijaten Gang I-B/47 RT.09 RW.02 Kalijaten Taman Sidoarjo', '02.102.706.5-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(456, 31, 'PT. ASEGAR MURNI JAYA', 0, 0, 'Kel. Tumaluntung Jaga IV, Tumaluntung Tumaluntung Kauditan Kab. Minahasa Utara Sulawesi Utara', '02.700.687.3-823.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(457, 11, 'CV. ROM POER SEJAHTERA', 0, 0, 'Jl. Kebonsari V No. 20 RT.006 RW.002 Kebonsari Jambangan Kota Surabaya Jawa Timur 60233', '70.251.870.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(476, 6, 'Dela2', 890000000000, 0, 'UIRUIRHIW', '1234346468', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(477, 3, 'sdfsd', 123, 0, 'sdfsdf', 'fsdfds', 'sdfsdf', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(245, 15, 'PT. Murindo Multi Sarana', '0', '0', 'Jl. AW Syahrani Ruko Pondok Alam Indah No. 5 RT. 26, Sempaja Selatan, Samarinda Utara, Samarinda', '03.034.116.8-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(246, 11, 'Kapitasi JKN Puskesmas Sidayu', '0', '0', 'Jl. Raya Sidayu Kel. Ngawen, Kec. Sidayu, Gresik, Jawa Timur', '71.509.684.8-612.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(247, 11, 'Rumah Sakit Umum Mohammad Noer Pamekasan', '0', '0', 'Jl. Bonorogo No. 17 Barurambat Timur, Pademawu, Kab. Pamekasan, Jawa Timur', '00.172.311.3-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(248, 11, 'Bendahara Dana Kapitasi JKN Puskesmas Andongsari', '0', '0', 'Jl. Kotta Blater No. 12 Andongsari, Ambulu, Kab. Jember, Jawa Timur', '70.883.693.7-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(249, 11, 'Bendahara Dana kapitasi Puskesmas Kaliwates', '0', '0', 'Jl. Jend. Basuki Rahmat No. 199, Kel. Tegal Besar, Kec. Kaliwates, Jember, Jawa Timur', '70.907.154.2-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(250, 11, 'Pengeluaran dan Penerimaan Puskesmas Sukapura', '0', '0', 'Jl. Raya bromo RT. 005, RW. 001, Kel. Sukapura, Kec. Sukapura, Kab. Probolinggo, Jawa Timur', '72.773.062.4-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(251, 11, 'Bend Kapitasi Jkn Temayang', '0', '0', 'Jl. Basuki Rahmad No.308 Rt.000 Rw.000 Kel.Temayang Kec.Temayang Bojonegoro, Jawa Timur', '71.291.643.6-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(252, 11, 'Bend Puskesmas Ambal-Ambil', '0', '0', 'Jl Raya Kabupaten Rt.12 Rw.24 Wrati Kejayan Pasuruan', '00.953.286.2-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(253, 11, 'Bend Rutin Dinas Kesehatan Kota Madiun', '0', '0', 'Jl Trunojoyo No.120 Mambangan Kidul Mangun Harjo Madiun 63128', '00.436.763.7-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(254, 15, 'Pt. Murindo Multi Sarana', '0', '0', 'Jl Aw Syahrani Ruko Pondok Alam Indah No.5 Rt.26 Sempaja Selatan Samarinda Utara ', '03.034.116.8-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(255, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Kasiyan', '0', '0', 'Jl Raya Simpang Tiga No. Rt. Rw. Kel.Kasiyan Kec.Puger Jember Jawa Timur', '70.858.498.2-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(256, 10, 'Pt. Glorya Medica Abadi', '0', '0', 'Jl Pramuka Rt.001 Rw.002 Sudagaran Banyumas Jawa Tengah 53192', '74.587.956.9-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(257, 9, 'Pt. Sam Jaya Perkasa', '0', '0', 'Jl. Pajajaran No.123 A Rt.06 Rw.02 Kel.Arjuna Kec.Cicendo Kota Bandung Jawa Barat', '70.895.848.3-428.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(258, 11, 'Bendahara Dan Kapitasi Jkn Puskesmas Panti ', '0', '0', 'Jl Pb Sudirman No.85 Rt.003 Rw.005 Kel.Panti Kec.Panti Jember Jawa Timur', '71.030.308.2-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(259, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Kanigaran', '0', '0', 'Jl. Cokroaminoto No.29 Rt.001 Rw.002 Kel.Kanigaran Kec.Kanigaran Kota Probolinggo Jawa Timur', '70.574.659.2-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(260, 11, 'Bendahara Pengeluaran Dan Penerimaan Puskesmas Bantaran', '0', '0', 'Jl Raya Bantaran No.43 Rt. Rw. Kel.Bantaran Kec.Bantaran Kab. Probolinggo Jawa Timur', '72.816.640.6-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(261, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Wuluhan', '0', '0', 'Jl Kartini No.4 Rt. Rw. Kel.Dukuh Dempok Kec.Wuluhan Jember Jawa Timur', '70.851.763.6-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(262, 11, 'Bend Dana Kapitasi Jkn Balen', '0', '0', 'Jl Raya Balen No.50 Rt.000 Rw.000 Kel.Balenrejo Kec.Balen Bojonegoro Jawa Timur', '71.285.573.3-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(263, 11, 'Bendahara Pengeluaran Dan Penerimaan Puskesmas Sumber', '0', '0', 'Jl Raya Pandansari Pojok No.137 Rt. Rw. Kel.Pandansari Kec.Sumber Kab.Probolinggo Jawa Timur', '72.897.456.9-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(264, 11, 'Bend Puskesmas Condong', '0', '0', 'Jl Raya Condong Gading Kab.Probolinggo', '30.044.028.6-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(265, 11, 'Bendahara Pengeluaran Dan Penerimaan Puskesmas Jorongan', '0', '0', 'Jl Raya Lumajang No. Rt. Rw. Kel.Jorongan Kec.Leces Kab.Probolinggo Jawa Timur', '72.862.700.1-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(266, 11, 'Bendahara Dana Blud Puskesmas Pule', '0', '0', 'Jl Raya Pule Trenggalek Rt.001 Rw.001 Pule, Pule Trenggalek Jawa Timur ', '72.039.140.8-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(267, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Pakusari', '0', '0', 'Jl Pb Sudirman No.87 No. Rt. Rw. Kel. Pakusari Kec.Pakusari Jember Jawa Timur', '70.892.760.3-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(268, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Bangsalsari', '0', '0', 'Jl A. Yani No. 3 Rt. Rw. Kel.Bangsalsari Jember Jawa Timur', '70.904.018.2-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(269, 11, 'Bendahara Dana Kapitasi Jkn Fktp Puskesmas Rengel', '0', '0', 'Jl Raya Timur No.447 Rt.003 Rw.003 Kel.Sumberejo Kec.Rengel Tuban Jawa Timur', '70.675.615.2-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(270, 11, 'Bendahara Dana Kapitasi Jkn Fktp Puskesmas Merakurak ', '0', '0', 'Jl Pemuda No.42 Rt.006 Rw.001 Kel.Mandirejo Kec.Merakurak Tuban Jawa Timur', '70.665.866.3-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(271, 11, 'Bendahara Dana Kapitasi Jkn Fktp Puskesmas Prambon Tergayang', '0', '0', 'Jl Raya Prambon Tergayang No.637 Rt.0 Rw.0 Kel.Prambon Tergayang Kec.Soko Tuban Jawa Timur', '70.675.482.7-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(272, 11, 'Bend Kapitasi Jkn Kesongo', '0', '0', 'Jl Raya Kesongo No.395 Rt. Rw. Kel.Kesongo Kec.Kedungadem Bojonegoro Jawa Timur', '71.307.613.1-601.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(273, 11, 'Pemegang Kas Dinas Kesehatan Kab Blitar', '0', '0', 'Raya Kediri 18, Sanan Kulon Sanan Kulon, Sanan Kulon, Kab. Blitar, Jawa Timur', '00.434.220.0-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(274, 11, 'Bend Puskesmas Wonomerto', '0', '0', 'Jl. Bantaran Dsn Krajan No.853 Patalan Wonomerto Kab. Probolinggo', '20.041.126.2-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(275, 11, 'Bendahara Puskesmas Kanigoro', '0', '0', 'Jl Kusuma Bangsa No.001 Rt. Rw. Kel. Kanigoro Kec. Kanigoro Blitar Jawa Timur', '71.348.504.3-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(276, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Umbulsari', '0', '0', 'Jl. Kh Agus Salim No.052 Rt. Rw. Kel.Umbul Sari Kec.Umbulsari Jember Jawa Timur', '70.899.746.5-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(277, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Ledokombo', '0', '0', 'Jl Cumedak No.124 Rt. Rw. Kel.Sumber Lesung Kec.Ledok Ombo Jember Jawa Timur', '70.881.634.3-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(278, 11, 'Bendahara Puskesmas Wonodadi', '0', '0', 'Jl Raya Wonodadi No.4 Rt. Rw. Kel.Wonodadi Kec.Wonodadi Blitar Jawa Timur', '71.348.251.1-653.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(279, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt. Kecematan Raas', '0', '0', 'Jl. Pelabuhan Panggung No.09 Rt. Rw. Kel.Bbkas Kec.Baas Sumenep Jawa Timur', '72.897.917.0-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(280, 11, 'Pemegang Kas Dinas Kesehatan Kab ', '0', '0', 'Jalan Trunojoyo No.147 Rt.002 Rw.002 Kauman Ponorogo Ponorogo', '00.324.697.2-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(281, 11, 'Bendahara Pengeluaran Rsud Dr.Soedomo Trenggalek', '0', '0', 'Jl. Dr.Sutomo No.2 Trenggalek Rt.000 Rw.000 Kelurahan Tamanan Kecamatan Trenggalek Trenggalek Jawa T', '30.049.851.6-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(282, 11, 'Bendahara Upt Puskesmas Lenteng', '0', '0', 'Jl Raya Lenteng  No. Rt.003 Rw.004 Kel.Lenteng Timur Kec.Lenteng Sumenep Jawa Timur', '71.862.339.0-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(283, 11, 'Bend Dana Kap. Jkn Puskesmas Sapeken', '0', '0', 'Jl Raya Sapeken No.49 Sapeken Sumenep', '76.302.222.5.608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(284, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt Puskesmas Bluto', '0', '0', 'Jl Raya Bluto No.13 Rt. Rw. Kel.Bluto Kec.Bluto Sumenep Jawa Timur', '72.947.349.6-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(285, 11, 'Bendahara Dana Kapitasi Jkn Upt Puskesmas Ganding', '0', '0', 'Jl Raya Guluk-Guluk No.8 Rt. Rw. Kel.Ketawang Larangan Kec.Ganding Sumenep Jawa Timur', '72.606.035.3-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(286, 11, 'Bendahara Rutin Dana Kapitasi Jkn Upt Puskesmas Batuputih', '0', '0', 'Jl Arya Wiraraja Batu Putih Laok Batuputih Kab.Sumenep Jawa Timur', '75.864.991.7-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(287, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt Puskesmas Saronggi', '0', '0', 'Jl Raya Saronggi No. Rt. Rw Kel.Saronggi Kec.Saronggi Sumenep Jawa Timur', '72.665.257.1-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(288, 11, 'Bendahara Dana Kapitasi Jkn Fktp Ramolokan', '0', '0', 'Jl. Kh Agus Salim No.25 Rt. Rw. Kel.Pamolokan Kec.Kota Sumenep Sumenep Jawa Timur', '72.677.154.6-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(289, 11, 'Bendahara Dana Kapitasi Jkn Fktp Utp Puskesmas Ambunten', '0', '0', 'Jl Raya Ambunten No. Rt. Rw. Kel.Ambunten Timur Kec.  Ambunten Sumenep Jawa Timur', '73.111.727.1-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(290, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Puskesmas', '0', '0', 'Jl Raya Guluk-Guluk No. Rt.003 Rw.004 Kel.Guluk-Guluk Kec.Guluk-Guluk Sumenep Jawa Timur', '72.876.129.7-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(291, 11, 'Puskesmas Wonoayu', '0', '0', 'Raya Wonoayu Rt.000 Rw.000 Jimbarankulon Jimbarankulon Wonoayu Sidoarjo Jawa Timur', '00.841.091.2-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(292, 11, 'Bend Pengeluaran Pembantu Puskesmas Sidoarjo', '0', '0', 'Jl Dr Soetomo No.14 Rt. Rw. Magersari Sidoarjo Sidoarjo', '00.560.822.9-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(293, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Lojejer', '0', '0', 'Jl Teuku Umar No.2 Lojejer Wuluhan Kab. Jember Jawa Timur', '70.891.617.6-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(294, 11, 'Bendahara Pengeluaran Blud Puskesmas Wungu', '0', '0', 'Jl Raya Kare No.113 Wungu Wungu Kab.Madiun Jawa Timur', '70.793.186.1-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(295, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Ambulu', '0', '0', 'Jl A. Yani No.60 Ambulu Ambulu Kab. Jember Jawa Timur', '70.931.183.1-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(296, 11, 'Bendahara Jkn Puskesmas Banjarsengon', '0', '0', 'Jl Kasuari No.48 Rt.001 Rw.001 Banjar Sengon Patrang Kab.Jember Jawa Timur', '76.786.411.9-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(297, 11, 'Bendahara Dana Kapitasi Jkn Upt Puskesmas Arjasa', '0', '0', 'Jl Raya Arjasa No. Rt. Rw. Kel.Arjasa Kec.Arjasa Sumenep Jawa Timur 69491', '73.142.215.0-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(298, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Puskesmas', '0', '0', 'Jl Raya Pragaan No. Rt Rw. Kel.Pragaanlaok Kec.Pragaan Sumenep Jawa Timur', '72.876.522.3-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(299, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt Puskesmas Batang-Batang', '0', '0', 'Jl Cemara Udang No. Rt. Rw Kel. Batangbatang Daya Kec.Batang Batang Sumenep Jawa Timur', '72.908.586.0-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(300, 11, 'Bendahara Dana Kapitasi Jkn Upt Puskesmas Rubaru', '0', '0', 'Jl Raya Rubaru Rubaru Rubaru Sumenep Jawa Timur', '73.371.288.9-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(301, 11, 'Bendahara Dana Kapitasi Jaminan Kesehatan Nasional Upt Puskesmas Moncek', '0', '0', 'Jl Raya Guluk Guluk No. Rt. Rw. Kel. Moncek Tengah Kec. Lenteng Sumenep Jawa Timur', '72.684.926.8-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(302, 11, 'Bend Jkn Puskesmas Tegalombo', '0', '0', 'Jln Pacitan Ponorogo Km 34 No. Rt.013 Rw.003 Kel.Tegalombo Kec. Tegalombo Pacitan Jawa Timur', '70.691.827.3-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(303, 11, 'Bend Puskesmas Prambon', '0', '0', 'Raya Prambon Rt.000 Rw.000 Prambon Prambon Sidoarjo', '00.841.093.8-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(304, 11, 'Bend Pumk Puskesmas Kec.Karangrejo', '0', '0', 'Jl Raya Ngawi No.42 Karangrejo Karangrejo Magetan', '00.324.551.1-646.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(305, 11, 'Bendahara Dana Kapitasi Jkn Puskesmas Puger', '0', '0', 'Jl A. Yani No.32 Rt. Rw. Kel.Puger Kulon Kec.Puger Jember Jawa Timur', '70.892.753.8-626.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(306, 11, 'Bend Jkn Puskesmas Tulakan', '0', '0', 'Dsn Krajan No. Rt.004 Rw.001 Ds Bungur Kec.Tulakan Pacitan Jawa Timur', '70.614.392.2-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(307, 11, 'Bend Pemb Puskesmas Pucanglaban', '0', '0', 'Sarangangin 01 Rt.000 Rw.000 Sumberdadap Pucang Laban Tulungagung', '30.050.340.6-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(308, 11, 'Pt Karsa Semangat Sejahtera', '0', '0', 'Jl Kendalsari Selatan No.82 Rt.001 Rw.003 Penjaringan Sari Rungkut Surabaya 60297', '03.238.291.3-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(309, 10, 'Pt Makmur Technology Indonesia', '0', '0', 'Kawasan Taman Industri Bsb Blok A.5 No.09 Jati Barang Mijen Kota Semarang Jawa Tengah', '80.472.256.9-503.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(310, 11, 'Pt. Bumi Menara Internusa', '0', '0', 'Jl Margomulyo No.4E Tandes Lor - Tandes Surabaya Jawa Timur', '01.454.019.9-631.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(311, 14, 'Pt. Fresh Water Hillyuda', '0', '0', 'Jalan Delima No.37 Rt.06 Madurejo Arut Selatan Kotawaringin Barat Kalimantan Tengah', '02.225.153.2-713.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(312, 11, 'Pt. Rejeki Wira Bersama', '0', '0', 'Manyar Kertoarjo No.56 Rt.001 Rw.006 Manyar Sabrangan Mulyorejo Kota Surabaya Jawa Timur', '75.770.214.7-619.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(313, 11, 'Siti Nuraini Rinangsih', '0', '0', 'Jl. Gumelar Jogaran Dusun Wetan Kali Rt.004/0013 Desa.Balung Lor', '36.091.068.0-196.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(314, 14, 'Yosi Faisal', '0', '0', 'Jl. Kecubung  Iv No 08 Rt.002 Rw.001, Bukit Tunggal - Jekan Raya, Palangkaraya, Kalimantan Tengah', '64.135.154.9-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(315, 11, 'Pt. Sam Elemen Indonesia', '0', '0', 'Ruko 21 Klampis D-8, Klampis Ngasem, Sukolilo, Surabaya, Jawa Timur', '54.528.045.2-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(316, 11, 'Pt. Bumi Menara Internusa (Cabang Malang)', '0', '0', 'Jl. Pahlawan No.1 Dampit-Dampit Malang-Jawa Timur', '01.454.019.9-654.002', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(317, 12, 'PT Kapuas Permata Medifarma', '0', '0', 'Jl. Budi Karya Ruko C5 Rt 004 Rw 023, Pontianak, Kalimantan Barat', '03.352.338.2-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(318, 11, 'Rutine Kantor Kesehatan Pelabuhan Probolinggo', '0', '0', 'Jl. Tanjung Tembaga Baru', '00.036.522.1-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(319, 11, 'Joenry Panggawean.Dr', '0', '0', 'Raya Darmo Permai Selatan 109-111 Rt 003 Rw 011, Lontar-Sambikerep, Surabaya', '06.464.373.7-604.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(320, 11, 'PT. Diasindo Karya Ristrady', '0', '0', 'Jl. Papa Merah 2A Rt/Rw 005/015, Tulusrejo, Lowokwaru, Kotamadya Malang', '03.321.710.0-652.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(321, 11, 'Bend.Rumkit Bhayangkara Polda Jatim Nganjuk', '0', '0', 'Jl. Abdul Rahman Saleh No 52, Kel.Kauman, Kec.Nganjuk, Kab.Nganjuk, Jawa Timur', '00.230.543.1-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(322, 11, 'PT. Rama Emerald Multi Sukses', '0', '0', 'Desa Tenaru, Tenaru Driyorejo, Kab.Gresik, Jawa Timur', '01.438.620.5-641.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(323, 34, 'PT. Sumber Utama Medicalindo', '0', '0', 'Jl. Prof Hm Yamin Sh No 241, Sei Kera Hilir I, Medan Perjuangan, Medan', '31.653.635.8-113.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(324, 1, 'PT. Cahaya Murni Cemerlang', '0', '0', 'Jl. Gatot Subroto Ii D No.1, Dangin Puri Kaja, Denpasar Utara, Bali', '02.217.510.3-901.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(325, 11, 'Bendahara Rsud Slg', '0', '0', 'Jl. Galuh Candra Kirana, Tugurejo, Ngasem, Kab. Kediri, Jawa Timur', '85.972.311.6-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(326, 11, 'PT. Langgeng Jaya Sempurna Abadi', '0', '0', 'Taman Puspa Sari Blok E No 5 Rt 32 Rw 07, Klurak, Candi, Sidoarjo, Jawa Timur', '31.329.701.2-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(327, 11, 'Dinas Kesehatan Daerah Kabupaten Sumenep', '0', '0', 'Sumenep', '00.006.186.1-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(328, 11, 'Bend. Umum Blud Puskesmas Suruh', '0', '0', 'Jalan Routine Jend.Sudirman Rt015, Rw006, Suruh, Suruh, Kab.Trenggalek, Jawa Timur', '71.454.273.5-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(329, 11, 'Rutin Dinas Kesehatan Daerah Tk.Ii Bondowoso', '0', '0', 'Jl.Imam Bonjol No 13, Kademangan, Bondowoso, Jawa Timur', '00.035.993.5-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(330, 11, 'BENDAHARA DANA KAPITASI JKN UPT PUSKESMAS SEKARGADUNG', '0', '0', 'TERUSAN SEKARSONO NO 01 RT.RW. KEL.SEKARGADUNG KEC.PURWOREJO, KOTA PASURUAN, JAWA TIMUR', '71.982.024.3-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(331, 19, 'Bend.Rutin Politeknik Kesehatan Ambon', '0', '0', 'Jl. Dewi Sartika, Kel.Amantelu, Kec.Sirimau, Ambon, Maluku', '00.328.032.8-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(332, 10, 'SRI SURYATI', '0', '0', 'DSN KRAJAN RT. 005 RW. 001 NGABENREJO, GROBOGAN, JAWA TENGAH - 58152', '36.025.620.0-514.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(333, 11, 'Kapitasi JKN Puskesmas Bungah', '0', '0', 'Jl. Raya Bungah No. 15 Kel. Bungah, Kec. Bungah, Gresik, Jawa Timur', '71.514.834.2-612.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(334, 19, 'Bend. Rutin RSUD Namlea', '0', '0', 'Namlea, Kel. Namlea, Kec. Buru Utara Timur, Buru', '00.162.935.1-941.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(335, 10, 'Puskesmas Wangon I', '0', '0', 'Jl. Raya Barat No. 59 Wangon, Wangon Wangon, Banyumas, jawa tengah', '00.321.193.5-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(336, 3, 'PT. Autochem Industry', '0', '0', 'JL. Gatot Subroto Km 7, Jateng, Jatiuwung, KOTA TANGERANG BANTEN', '01.368.928.6-415.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(337, 11, 'Bend. JKN UOT Puskesmas Bandar', '0', '0', 'Jl. Raya Bandar RT. 001 RW. 004, Bandar, Bandar, Pacitan, Jawa Timur', '70.602.917.0-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(338, 29, 'Bend. Pengeluaran Dinas Kesehatan Kab. Banggai', '0', '0', 'Jl. Ahmad Yani No. 02 Luwuk, Luwuk, Banggai, Sulawesi Tengah', '00.138.388.4-832.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(339, 11, 'Bend. Dinkes Kab. Ngada', '0', '0', 'Jl. Gajah mada No. 2', '00.260.663.0-923.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(340, 6, 'PT. Sarana Bakti Utama', '0', '0', 'SMA 14 No. 47 B RT. 002 RW. 004, Kel. Cililitan, Kec. Kramat Jati, Jakarta Timur, DKI Jakarta', '72.012.168.0-005.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(341, 11, 'Bend. Peng. Pembantu RS Kusta Kediri', '0', '0', 'Jl. Veteran No. 48 Mojoroto, Mojoroto, Kediri', '00.034.641.1-622.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(342, 11, 'Rutin RSU Kab. Magetan', '0', '0', 'Jl. Pahlawan No. 2 Tambran, Tambran, magetan, Magetan, Jawa Timur', '00.034.855.7-646.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(343, 30, 'Bend. Pemegang Kas Unit Dinas Kesehatan Kab. Konawe', '0', '0', 'Jl. Inolobunggadue No. 323, Puunaha', '00.412.387.3-811.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(344, 11, 'Pemegang Kas RSUD Pamekasan', '0', '0', 'Jl. Kesehatan 3-5 , Barurambat Kota, Pamekasan', '00.454.665.1-608.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(345, 11, 'PT. Swabina Gatra', '0', '0', 'Jl. RA. Katini No. 21-A Sidomoro, Kebomas, Gresik, Jawa Timur - 61122', '01.480.112.0-641.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(346, 11, 'Bendahara Pengeluaran Pembantu pada Kelurahan Taman', '0', '0', 'Jl. Asahan No. 48, Taman, Taman, Madiun, jawa Timur', '00.664.206.0-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(347, 1, 'I Nyoman Budiasa', '0', '0', 'Jl. P. Bangka GG IV No. 9 Kel. Pedungan, Kec. Denpasar Selatan', '5.17E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(348, 9, 'Heri Prasetia. AMK', '0', '0', 'KP Telebud RT. 01 RW.02 Jampang Tengah, Jampang Tengah, Sukabumi, Jawa Barat', '47.830.871.1-405.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(349, 12, 'Kantor Dinas Kesehatan Kab. Kubu Raya', '0', '0', 'Jl. Arteri Supadio Sungai Raya, Sungai Raya, Pontianak', '00.602.550.9-701.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(350, 20, 'Bend. Pengeluaran RSUD Jailolo', '0', '0', 'Jl. IR. Soekarno Acango, Kec. Jailolo, Kab. Halmahera Barat', '00.829.751.7-943.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(351, 24, 'PT. Parasi Roha Papua', '0', '0', 'Blok J No. 8 KPR BTN Tanah Hitam Asano, Abepura, Jayapura', '02.016.861.3-952.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(352, 11, 'Bendahara Puskesmas Wonorejo', '0', '0', 'Ds. Kolak, Wonorejo, Ngadi Luwih, Kab. Kediri, Jawa Timur', '20.011.211.8-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(353, 15, 'Dinas Kesehatan Kab. Nunukan', '0', '0', 'Jl. RA. Bessing, Komp. Perkantoran Gadis 2 Nunukan, Kalimantan Timur', '15.433.176.3-723.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(354, 11, 'Bend. Pengeluaran Pembantu Pada Kelurahan Kuncen', '0', '0', 'Jl. Masjid Raya No. 16 Madiun', '00.664.205.2-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(355, 11, 'Bend. Pengeluaran Pembantu Pada Kelurahan Josenan', '0', '0', 'Jl. Cokrobasonto RT. 022 Josenan, Taman, Madiun', '00.664.209.4-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(356, 11, 'Bend. Pengeluaran Pembantu Pada Kelurahan Mojorejo', '0', '0', 'Jl. Setia Budi No. 42 Madiun', '00.664.204.5-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(357, 11, 'Bendahara Pengeluaran Blud Puskesmas Klecorejo', '0', '0', 'Jl. Wates Klecorejo, Mejayan, Kab. Madiun, Jawa Timur', '66.320.414.7-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(358, 11, 'Bend. JKN Puskesmas Pakis Baru', '0', '0', 'Dsn. Bulu RT. 003 RW. 006, Kel. Ngromo, Kec. Nawangan, Pacitan, Jawa Timur', '70.651.963.4-647.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(359, 11, 'Bend. Puskesmas Trosobo', '0', '0', 'Raya Trosobo, Trosobo, Taman Sidoarjo', '00.841.078.9-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(360, 14, 'Bend. RSUD DR. Doris Sylvanus', '0', '0', 'Jl. Tambun Bungai No. 04 Pahandut, Pahandut, Palangkaraya', '00.008.073.9-711.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(361, 9, 'Torang Panyusunan', '0', '0', 'Jl. Perum Pemda BLC 16 No. 5 RT. 005 RW. 011, Jatiasih, Kotamadya- Bekasi', '59.407.128.4.432.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(362, 11, 'Bend. Pengeluaran Dinas Kesehatan', '0', '0', 'Jl. Dr. Soetomo No. 04 RT/RW Trenggalek, Trenggalek, Jawa Timur', '00.491.855.3-629.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(363, 11, 'Kelurahan Manisrejo', '0', '0', 'Jl. Tanjung Raya No. 44 Kota Madiun', '00.664.207.8-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(364, 11, 'Bendahara Pengeluaran Pembantu UPTD Puskesmas Sukorame Kota Kediri', '0', '0', 'Jl. Veteran No. 50A Sulorame, Mojoroto, Kota Kediri', '83.633.837.6-622.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(365, 11, 'Bendahara Pengeluaran Pembantu UPT Puskesmas Gedongan', '0', '0', 'Jl. Gajah Mada No. 54 Kel. Gedongan, Kec. Magersari, Kota Mojokerto, Jawa Timur', '71.986.462.1-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(366, 9, 'CV. Multi Usaha Jaya', '0', '0', 'Taman Cikas Blok A4 No. 11 RT. 002 R. 025 Pekayon Jaya, Bekasi Selatan, Kota Bekasi Jawa Barat', '75.828.743.7-432.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(367, 12, 'Windhu Muhammad Ridha', '0', '0', 'Jl. Adi Sucipto RT. 003 RW. 008 Arang Limbung, Sungai Raya, Pontianak', '58.810.563.5-704.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(368, 11, 'Nur Arif Rahmatullah', '0', '0', 'Jl. Cempaka No. 1B RT. 036 RW. 008 Oro-oro Ombo, Kartoharjo, Madiun, Jawa Timur', '76.646.070.3-621.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(369, 11, 'PT. Daya Matahari Utama', '0', '0', 'Jl. Kertomenanggal III No. 3, Dukuh Menanggal, Gayungan, Surabaya,  Jawa Timur', '02.700.144.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(370, 11, 'PT. Kasuma', '0', '0', 'Jl. Jojoran 1 Perintis 1/39 Surabaya', '03.177.972.1-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(371, 1, 'PT. Bali Agung Waters', '0', '0', 'Jl. Besakih No. 4 Menanga, Rendang, Karangasem', '31.275.605.9-907.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(372, 11, 'Bendahara BLUD RSUD DR Abdoer Rahem', '0', '0', 'Jl. Anggrek No. 68 Patokan, Situbondo', '00.745.935.7-656.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(373, 11, 'Mulyo Hadi Soesilo', '0', '0', 'Jl. Krembangan Bhakti 1A RT. 005 RW. 002 Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(374, 11, 'Aditya Yoga Satria', '0', '0', 'Dsn. Banjarejo RT 001 RW 001, Banjarejo, Ngadiluwih, Kab. Kediri', '93.816.014.0-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(375, 10, 'PT. Bhineka karya Elektrindo', '0', '0', 'RE Martadinata Ruko Mutiara Marina lantai 2 No. 7 Tawangsari, Semarang Barat, Semarang, Jawa Tengah', '84.361.204.5-503.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(376, 31, 'Harold Immanuel Marcelliano', '0', '0', 'Perumahan BTN Wale Nusantara Blok B No. 51 Lingk. IV Paniki Bawah, Mapanget, Kota Manado, Sulawesi U', '83.705.445.1-821.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(377, 11, 'Nikmah Ernawati', '0', '0', 'Dusun Bogo RT. 002 RW. 008 Bulu Semen, Kab. Kediri Jawa Timur', '74.811.896.5-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(378, 11, 'Septian Akhmad Sugianto', '0', '0', 'Dusun Krajan Tengah RT. 012 RW. 002 Sumberjati, Kecamatan Tempeh', '3.51E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(379, 28, 'PT. Bumi Menara Internusa', '0', '0', 'Kima 15 Kav. R No. 4 C RT. 004 RW. 002 Kel. Daya Kec. Biringkanaya Kota Makasar, Sulawesi Selatan', '01.454.019.9-801.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(380, 18, 'PT. Bumi Menara Internusa', '0', '0', 'IR. Sutami KM 12 Lematang, Tanjung Bintang, Lampung Selatan', '01.454.019.9-325.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(381, 11, 'Bambang Arianto', '0', '0', 'Pandugo II Blok P. II P/6 RT. 003 RW. 009 Penjaringan sari, Rungkut, Surabaya', '09.748.390.3-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(382, 11, 'Rahmatullah', '0', '0', 'Singorejo RT. 001 RW. 004 Dahan rejo, Kebomas', '3.53E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(383, 1, 'PT. Wahyu Artha Medika', '0', '0', 'Jl. Tukad Barito No. 8B, Panjer-Denpasar Selatan, Denpasar - Bali ', '31.342.385.7-903.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(384, 5, 'CV. Krisma Jaya Mandiri', '0', '0', 'Jl. Babarsari No. 26 Caturtunggal, Depok, Sleman-DI Yogyakarta 55281', '31.328.963.9-542.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(385, 10, 'Nugroho Widi Utomo', '0', '0', 'Jl. Medoho Selecta No. 17 RT. 002 RW. 005 Sambirejo, Gayamsari Kota Semarang Jawa Tengah', '85.511.671.1-518.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(386, 10, 'Hanifah Githa Ariani', '0', '0', 'Jl. A. yani D4 RT. 005 RW. 002 Potrobangsan, Magelang Utara, Kota Magelang, Jawa Tengah', '93.610.186.4-524.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(387, 11, 'Rumah Sakit Muhammadiyah Gresik', '0', '0', 'Jl. KH. Kholil No. 88 RT. 005 RW. 001 Kemuteran Gresik', '01.233.476.9-612.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(388, 11, 'Cahyo Nugroho, SH', '0', '0', 'Jl. Gubeng Kertajaya IX C No. 35 RT. 006 RW. 005 Airlangga, Gubeng, Surabaya', '59.833.768.1-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(389, 11, 'Henry Sudigdo', '0', '0', 'Jl. Babatan Pratama 28/XX 100 RT. 008 RW. 008 Babatan, Witung, Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(390, 11, 'Bend. Pengeluaran Dinas Kesehatan Kab. Sidoarjo', '0', '0', 'Jl. Mayjen Sungkono No. 46 Pucang, Sidoarjo                                                         ', '00.034.196.6-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(391, 34, 'PT. Tiga Darma Abadi', '0', '0', 'Jl. Sersan Muslim RT. 07 Paal Merah, Paal Merah Kota Jambi', '81.447.791.5-331.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(392, 6, 'PT. Aneka Industri Gas Medik', '0', '0', 'Komplek Green Sedayu Bizpark Blok GS 5 No. 122 Cakung Timur, Cakung, Jakarta Timur, DKI Jakarta', '92.499.219.1-006.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(393, 11, 'H. Abdul Muin', '0', '0', 'Jl. B. Katamso Gg Salak No. 251A Sukaharja-Delta Pawan Kab. Ketapang', '79.095.676.7-703.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(394, 11, 'PT. Global Surya Kemala', '0', '0', 'Jl. Inspeksi Brantas No. 14 RT. 021 RW. 007 Mojoroto, Kec. Mojoroto Kota Kediri', '02.665.876.5-622.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(395, 11, 'Anggi Setiawan', '0', '0', 'Jl. Mastrip Kr. Pilang 12 Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(396, 11, 'J. Nugroho Eko Putranto/ dr. Ursula', '0', '0', 'Jl. Ploso 9B/11 RT. 009 RW. 005 Ploso, Surabaya', '08.609.781.3-619.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(397, 11, 'PT. Adiguna Label Indonesia', '0', '0', 'Jl. Raya Osowilangun No. 61 Blok D-15 Surabaya', '02.337.908.4-604.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(398, 6, 'PT. Surya Darma Perkasa', '0', '0', 'Jl. Daan Mogot KM 1 No. 99 RT. 006 RW. 005 Kebon Jeruk Jakarta Barat', '01.567.987.1-038.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(399, 11, 'PT. Hartono Raya Motor', '0', '0', 'Jl. Demak 156-170 Gundih-Bubutan Surabaya', '01.108.186.6-631.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(400, 31, 'Ekawati Hartono', '0', '0', 'Perum Labuan Indah Blok E8, Kel. Manembo Nembo, Kec. Matuari Kota Bitung 95545', '77.987.627.5-823.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(401, 11, 'PT. Abadi Hutan Tropis', '0', '0', 'Jl. Dharmahusada Utara I/50 Surabaya', '01.720.929.2-606.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(402, 10, 'Herje Joenianto, DR, SPM', '0', '0', 'Jl. Dr. Susanto No 113 RT. 01 RW. 01 Kutoharjo, Pati', '08.850.767.6-507.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(403, 11, 'Ilvana Ardiwirastuti', '0', '0', 'Jl. Joyoboyo GG Dahlia RT. 24 RW. 03 Karangrejo, Ngasem, Kediri', '84.952.412.9-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(404, 1, 'PT. Hotel Ramapalace Cottage', '0', '0', 'Grand Istana Rama Hotel Jl. Pantai Kuta, Kuta, Badung - Bali - 80361', '01.460.192.6-904.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(405, 11, 'Dinas Kesehatan Kabupaten Tuban', '0', '0', 'JALAN BRAWIJAYA NOMOR 3 KEBONSARI, TUBAN, TUBAN, JAWA TIMUR', '00.279.607.6-648.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(406, 10, 'CV. Sani Putri Medika', '0', '0', 'Jl. Soekarno-Hatta No. 75 Palebon, Pedurungan, Semarang', '03.077.227.1-518.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(407, 10, 'CV. Sani Retailindo', '0', '0', 'Jl. DR. Cipto No. 174 A Karang Tempel, Semarang timur, Semarang', '84.263.204.4-504.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(408, 11, 'CV. Hawaii Group', '0', '0', 'Jl. Dupak Mutiara 63 F No. 20 RT. 004 RW. 005 Surabaya', '82.470.050.4-614.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(409, 11, 'Suryanto', '0', '0', 'Jl. Manukan mukti VIII Blok 12A/ No. 15 Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(410, 11, 'PT. Esa Sampoerna', '0', '0', 'Eka Sampoerna Center Lt. 5 Jl. DR. Ir. H. Soekarno No. 195 RT. 002 RW. 009 Surabaya', '01.979.278.7-631.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(411, 10, 'PT. Ares Pratama Medika', '0', '0', 'Jl. S. Parman No. 239 A-B RT. 005 RW. 003 PWT Kulon-PWT Selatan - Banyumas', '02.006.778.1-521.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(412, 11, 'PT. Berkah Pro Medika', '0', '0', 'Jl. Kebraon Indah Permai 3 L No. 19 RT.007 RW.013 Kebraon karang Pilang Kota Surabaya Jawa Timur 602', '66.251.103.9-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(413, 6, 'Bambang Supardi', '0', '0', 'Taman Cipulir O.2/1 Rt.002/Rw.008 Kel.Cipadu Jaya Kec.Larangan Kota Tangerang', '3.67E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(414, 11, 'Stevanus Budianto', '0', '0', 'Puri Lidah Kulon Indah Blok T2 RT/RW 006/007 Kel. Lidah Kulon Kec. Lakar Santri Kota Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(415, 6, 'Nurdin', '0', '0', 'Jl. Kalianyar VI No. 34 RT.009 RW.002 Kel. Kalianyar Kec.Tambora Jakarta Barat DKI jakarta', '70.048.242.5-033.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(416, 1, 'PT. Borneo EtaM Mandiri', '0', '0', 'Komplek Villa Damai Permai Blok D-4 No. 01 Rt. 032 Gunung Bahagia Balikpapan Selatan Kota Balikpapan', '83.167.930.3-721.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(417, 11, 'PRIYADI KUNCORO, TJIO', '0', '0', 'Virgo No. 40 RT.002 RW.006 Kel. Ploso Kec. Tambak Sari', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(418, 28, 'PT. GHINA HUSADA NUSANTARA', '0', '0', 'Puri Taman Sari Blok L2/8 RT.006 RW.002 Borong, Manggala Makassar - Sulawesi Selatan', '03.289.018.8-805.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(419, 1, 'PT. JAYA CENTRA MEDIKA', '0', '0', 'JL. Gatot Subroto Barat Pemecutan Kaja Denpasar Utara Kota Denpasar Bali', '91.065.609.9-901.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(420, 11, 'CV. ANEKA', '0', '0', 'Jalan Nginden 6F No. 9A RT.008 RW.005 Nginden Jangkungan Sukolilo', '71.881.685.3-806.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(421, 11, 'RS KUSTA SUMBERGLAGAH MOJOKERTO SEKRETARIAT JENDERAL KEMENTERIAN', '0', '0', 'DSN SUMBERGLAGAH TANJUNGKENONGO, PACET', '95.302.731.5-602.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(422, 15, 'PT. HIDUP BAHAGIA MEDICA', '0', '0', 'JL. P. HIDAYATULLAH NO.46 RT.013 PELABUHAN , SAMARINDA ILIR SAMARINDA', '03.278.558.6-722.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(423, 11, 'PUSAT KESEHATAN MASYARAKAT BESUK KABUPATEN PROBOLINGGO', '0', '0', 'Jalan Raya Besuk No. 08 RT.005 RW.005 Alaskandang Besuk', '96.416.335.6-625.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(424, 11, 'DINAS KESEHATAN KABUPATEN PASURUAN', '0', '0', 'Jl. Raya Raci KM 9 Bangil Raci Bangil', '00.140.432.6-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(425, 10, 'PT. GLOBAL DIGITAL NIAGA', '0', '0', 'Jl. Jend. A Yani No. 34 Panjunan, Kota Kudus - Jawa Tengah', '03.000.644.9-506.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(426, 11, 'YAP THJOEN LIEM', '0', '0', 'JL. Dempo 7-8 Rt.003 Rw.006 KeL. Petemon Kec. Sawahan Kota Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(427, 10, 'INTAN FAINZAH HANDAYANI', '0', '0', 'Ds. Pendosawalan Blok A No. 10 RT.022 RW.008 Pendosawalan, KalinyaMatan Kab. Jepara Jawa Tengah', '83.815.592.7-516.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(428, 6, 'HARIO BASKORO', '0', '0', 'Jl. Pulo Asem V No. 34 Rt.004/Rw.001 KeL. Jati Kec. Pulo Gadung Jakarta Timur', '3.28E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(429, 11, 'PT. IKAN KAKAP', '0', '0', 'Jl. Ikan Kakap No. 23 Perak Barat - Krembangan Surabaya - Jawa Timur', '01.232.274.9-605.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(430, 11, 'PT. IKAN DORANG', '0', '0', 'Jl. Ikan Dorang No. 2 Perak Barat - Krembangan Surabaya - Jawa Timur', '01.108.190.8-605.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(431, 11, 'HELDY WILLIAM SUGIHARTO', '0', '0', 'Jl. Wonorejo I/35 Rt. 002 Rw. 003 Kel. Wonorejo Kec. Tegalsari Surabaya', '3.58E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(432, 11, 'PT. ENDO INDONESIA', '0', '0', 'Raya Meganti 14 RT/RW 003/001 Kedurus, Karang Pilang Surabaya - Jawa Timur 60223', '02.114.186.6.618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(433, 10, 'CV. CENTRALINDO MEGAH', '0', '0', 'Desa Yamansari RT.003 RW.001 Yamansari Lebaksiu Kab. Tegal Jawa Tengah', '85.227.010.7-501.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(434, 9, 'PT. ZEFA VALINDO JAYA', '0', '0', 'Kawasan Pergudangan Dan Perdagangan Sentra Niaga 5 Blok SN 5 1 No. 12 Pusaka Rakyat Tarumajaya Kab. ', '01.917.805.2-407.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(435, 34, 'ASEP SUNARYA', '0', '0', 'JL. Karya Bakti LK VIII No. 147 Indra Kasih, Medan Tembung Kota Medan Sumatera Utara', '81.910.184.1-113.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(436, 31, 'PT. BANGUN MEDIKA SEJAHTERA', '0', '0', 'JL. TNI Raya No. 91 Tikala Baru, Tikala', '81.929.845.6-821.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(437, 11, 'PT. WIYUNG SEJAHTERA', '0', '0', 'Karangan PDAM/03 RT RW Babatan Wiyung Surabaya', '02.443.023.3-618.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(438, 18, 'KISWAN RAHARSO', '0', '0', 'Perum bukit kemiling permai Z No. 101 RT.010 RW-Kel.kemiling permai kec.kemiling bandar lampung lamp', '66.676.428.7-322.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(439, 9, 'IRVAN FATHUROHMAN', '0', '0', 'Jl. Ciwastra gg.H.Adnan RT/RW 006/016 KeL. Margasari Kec. Buah Batu Kota Bandung', '3.27E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(440, 9, 'PATRIA SAPUTRA', '0', '0', 'Jalan Bandar Agung Village 3 C No. 10 RT.006 RW.004 Jati Sari, Jatiasih Kota Bekasi Jawa Barat', '91.136.311.7-447.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(441, 6, 'WELLY GOZALI', '0', '0', 'JL. Arteri Pondok Indah No. 31 HK Kebayoran Lama Selatan - Kebayoran Lama Jakarta Selatan - DKI Jaka', '06.968.146.8-013.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(442, 18, 'FINA YUSRIY YANA', '0', '0', 'Mulyasari RT.013/RW.001 Kel.Mulyo Asri Kec. Tulang Bawang Tengah Tulang Bawang Barat', '3.51E+15', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(443, 11, 'RUMAH SAKIT UMUM DAERAH SIMPANG LIMA GUMUL KABUPATEN KEDIRI', '0', '0', 'Jalan Galuh Candra Kirana Tugurejo Tugurejo Ngasem', '00.300.670.7-655.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(444, 11, 'CV. HANJAYA', '0', '0', 'PENGADAIAN NO. 86 RT.001 RW.001 PURWOSARI , PURWOSARI PASURUAN', '31.744.230.9-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(445, 11, 'PT. BINTANG NUSANTARA MEDIKA', '0', '0', 'PERUM ISTANA CANDI MAS REGENCY G4 NO.21 RT.001 RW.006 NGAMPELSARI, CANDI KAB. SIDOARJO JAWA TIMUR', '81.929.527.0-617.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(446, 11, 'YAY. PONDOK KASIH', '0', '0', 'JL. KENDANGSARI II/82 KENDANGSARI - TENGGILIS MEJOYO SURABAYA', '01.823.144.9-615.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(447, 11, 'PT. GUNAWAN DIANJAYA STEEL TBK', '0', '0', 'JL. MARGOMULYO NO. 29 A RT.001 RW.001 TAMBAK SARIOSO ASEMROWO SURABAYA JAWA TIMUR', '01.481.535.1-092.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(448, 22, 'PT. BIBIT UNGGUL', '0', '0', 'JL. RAYA BAYAN DUSUN MONTONG PAL REMPEK GANGA LOMBOK UTARA NUSA TENGGARA BARAT', '02.178.440.0-915.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(449, 11, 'PT. TIRTA CATUR TUNGGAL', '0', '0', 'Dsn Tembero RT.02 RW.03 Tanggulangin, Kejayan Kabupaten Pasuruan 67172', '03.158.998.9-624.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(450, 10, 'PT. ADI KARYA OKANE', '0', '0', 'DK TASIKMADU RT.025 RW.007 KEPUTRAN KEMALANG KAB. KLATEN JAWA TENGAH', '92.550.707.1-525.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(451, 6, 'PT. TAWADA HEALTHCARE', '0', '0', 'Jl. Tentara Pelajar Permata Senayan Blok A 18-19 Grogol Utara - Kebayoran Lama Jakarta Selatan - DKI', '01.903.521.1-062.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(452, 6, 'GLORIA AMANDA PUTRI', '0', '0', 'JL. Pejaten Barat No. 18 RT.001 RW.010 Ragunan Pasar Minggu Jakarta Selatan DKI Jakarta 12550', '85.387.309.9-017.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(453, 10, 'ANDY TJEE', '0', '0', 'Begalon RT.002 RW.003 Penularan, Laweyan Kota Surakarta Jawa Tengah', '81.269.473.5-526.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(454, 34, 'RAYMOND WAROUW', '0', '0', 'Jl. Sun Yat Sen No. 24-26 Sei Rengas I,Medan Kota Kota Medan Sumatera Utara', '91.318.446.1-122.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(455, 11, 'CV. MULTI SARANA JAYA', '0', '0', 'Jl. Kalijaten Gang I-B/47 RT.09 RW.02 Kalijaten Taman Sidoarjo', '02.102.706.5-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(456, 31, 'PT. ASEGAR MURNI JAYA', '0', '0', 'Kel. Tumaluntung Jaga IV, Tumaluntung Tumaluntung Kauditan Kab. Minahasa Utara Sulawesi Utara', '02.700.687.3-823.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(457, 11, 'CV. ROM POER SEJAHTERA', '0', '0', 'Jl. Kebonsari V No. 20 RT.006 RW.002 Kebonsari Jambangan Kota Surabaya Jawa Timur 60233', '70.251.870.5-609.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(476, 6, 'Dela2', '890000000000', '0', 'UIRUIRHIW', '1234346468', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(477, 3, 'sdfsd', '123', '0', 'sdfsdf', 'fsdfds', 'sdfsdf', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `detail_ekatalog`
---
-
-CREATE TABLE `detail_ekatalog` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `ekatalog_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `penjualan_produk_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `jumlah` int(11) NOT NULL,
-  `harga` int(11) NOT NULL,
-  `ongkir` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data untuk tabel `detail_ekatalog`
---
-
-INSERT INTO `detail_ekatalog` (`id`, `ekatalog_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
-(1, 1, 76, 2, 6127698, 0, NULL, NULL),
-(2, 1, 13, 1, 5216740, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 2, 74, 3, 7364108, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(4, 2, 117, 3, 6066666, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 3, 102, 1, 14819012, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, 3, 118, 5, 14021949, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(7, 4, 38, 4, 15768011, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 4, 15, 4, 5887850, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(9, 5, 115, 1, 18797440, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, 5, 96, 4, 8319992, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(11, 6, 83, 5, 4575266, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(12, 6, 8, 4, 4673806, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(13, 7, 38, 5, 15499783, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(14, 7, 101, 2, 17543515, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(15, 8, 39, 2, 3530970, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(16, 8, 13, 1, 6559468, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(17, 9, 105, 5, 13409786, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(18, 9, 23, 4, 7646424, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(19, 10, 107, 2, 11079296, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(20, 10, 97, 3, 5021416, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(21, 11, 13, 2, 18132073, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(22, 11, 23, 1, 9639454, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(23, 12, 86, 3, 5069434, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(24, 12, 63, 5, 13884925, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(25, 13, 51, 3, 12754065, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(26, 13, 43, 5, 17042948, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(29, 15, 47, 4, 9175951, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(30, 15, 67, 3, 6924142, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(31, 16, 79, 3, 4749666, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(32, 16, 26, 5, 19482165, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(33, 17, 101, 5, 16174467, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(34, 17, 108, 2, 6965451, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(35, 18, 33, 5, 8762815, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(36, 18, 102, 4, 8279002, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(39, 20, 107, 5, 10926519, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(40, 20, 63, 2, 9121512, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(41, 21, 28, 5, 7292091, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(42, 21, 105, 2, 15212905, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(43, 22, 15, 1, 19841154, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(44, 22, 30, 1, 17691740, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(45, 23, 52, 3, 17959480, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(46, 23, 77, 5, 17664583, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(47, 24, 45, 5, 19976874, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(48, 24, 94, 5, 19405142, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(49, 25, 61, 1, 15095701, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(50, 25, 79, 4, 3781883, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(51, 26, 43, 4, 16323326, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(52, 26, 60, 5, 8148289, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(53, 27, 6, 3, 5886235, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(54, 27, 103, 3, 19072520, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(55, 28, 103, 3, 8949583, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(56, 28, 7, 3, 19971942, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(57, 29, 40, 4, 11935266, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(58, 29, 56, 1, 11114948, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(59, 30, 55, 5, 17567882, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(60, 30, 57, 1, 18294470, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(61, 31, 69, 5, 12929874, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(62, 31, 34, 1, 19691839, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(63, 32, 35, 1, 15823168, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(64, 32, 90, 3, 4201451, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(65, 33, 76, 1, 8076406, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(66, 33, 48, 1, 13652989, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(69, 35, 15, 1, 3402779, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(70, 35, 60, 1, 1842645, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(71, 36, 114, 3, 14858161, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(72, 36, 58, 3, 15195295, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(73, 37, 23, 5, 6323062, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(74, 38, 57, 3, 3582735, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(75, 39, 103, 3, 15548708, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(76, 40, 15, 2, 5394242, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(77, 41, 28, 4, 14559800, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(78, 42, 113, 1, 9599543, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(79, 43, 90, 2, 8977270, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(80, 44, 7, 4, 15216876, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(81, 45, 114, 4, 9075095, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(82, 46, 25, 2, 6333534, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(83, 47, 35, 5, 8185673, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(84, 48, 22, 1, 8174168, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(85, 49, 77, 5, 18203940, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(86, 50, 77, 1, 4618148, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(87, 51, 71, 1, 3134578, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `detail_ekatalog_produk`
---
-
-CREATE TABLE `detail_ekatalog_produk` (
-  `detail_ekatalog_id` bigint(20) UNSIGNED NOT NULL,
-  `gudang_barang_jadi_id` bigint(20) UNSIGNED NOT NULL,
-  `jumlah` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data untuk tabel `detail_ekatalog_produk`
---
-
-INSERT INTO `detail_ekatalog_produk` (`detail_ekatalog_id`, `gudang_barang_jadi_id`, `jumlah`) VALUES
-(1, 108, 2),
-(1, 204, 2),
-(2, 20, 1),
-(3, 108, 3),
-(3, 196, 3),
-(4, 142, 3),
-(4, 196, 3),
-(5, 130, 1),
-(6, 142, 5),
-(6, 196, 5),
-(6, 204, 5),
-(7, 74, 4),
-(7, 196, 4),
-(8, 24, 4),
-(9, 139, 1),
-(10, 127, 4),
-(10, 196, 4),
-(10, 204, 4);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `detail_penjualan_produk`
+-- Table structure for table `detail_penjualan_produk`
 --
 
 CREATE TABLE `detail_penjualan_produk` (
@@ -661,7 +521,7 @@ CREATE TABLE `detail_penjualan_produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `detail_penjualan_produk`
+-- Dumping data for table `detail_penjualan_produk`
 --
 
 INSERT INTO `detail_penjualan_produk` (`produk_id`, `penjualan_produk_id`, `jumlah`, `created_at`, `updated_at`) VALUES
@@ -1050,284 +910,371 @@ INSERT INTO `detail_penjualan_produk` (`produk_id`, `penjualan_produk_id`, `juml
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `detail_spa`
+-- Table structure for table `detail_pesanan`
 --
 
-CREATE TABLE `detail_spa` (
+CREATE TABLE `detail_pesanan` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `spa_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `penjualan_produk_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `pesanan_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `penjualan_produk_id` bigint(20) UNSIGNED NOT NULL,
   `jumlah` int(11) NOT NULL,
-  `harga` int(11) NOT NULL,
-  `ongkir` int(11) NOT NULL,
+  `harga` bigint(20) NOT NULL,
+  `ongkir` bigint(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `detail_spa`
+-- Dumping data for table `detail_pesanan`
 --
 
-INSERT INTO `detail_spa` (`id`, `spa_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
-(1, 1, 103, 3, 2095122, 0, NULL, NULL),
-(2, 1, 105, 1, 1670696, 0, NULL, NULL),
-(3, 1, 93, 2, 1700756, 0, NULL, NULL),
-(4, 1, 88, 1, 1607762, 0, NULL, NULL),
-(5, 1, 26, 2, 1626079, 0, NULL, NULL),
-(6, 2, 39, 1, 1973593, 0, NULL, NULL),
-(7, 2, 54, 1, 1939174, 0, NULL, NULL),
-(8, 2, 151, 3, 2051611, 0, NULL, NULL),
-(9, 2, 153, 2, 1584025, 0, NULL, NULL),
-(10, 2, 169, 1, 1865739, 0, NULL, NULL),
-(11, 2, 168, 2, 1696735, 0, NULL, NULL),
-(12, 3, 158, 3, 2004253, 0, NULL, NULL),
-(13, 3, 110, 3, 2031547, 0, NULL, NULL),
-(14, 4, 199, 2, 1971222, 0, NULL, NULL),
-(15, 5, 63, 2, 1549867, 0, NULL, NULL),
-(16, 6, 59, 2, 1539379, 0, NULL, NULL),
-(17, 7, 13, 2, 1575483, 0, NULL, NULL),
-(18, 8, 184, 3, 1761772, 0, NULL, NULL),
-(19, 9, 55, 2, 1610072, 0, NULL, NULL),
-(20, 10, 149, 2, 2028724, 0, NULL, NULL),
-(21, 11, 121, 1, 1660649, 0, NULL, NULL),
-(22, 12, 98, 2, 1848199, 0, NULL, NULL),
-(23, 13, 186, 2, 1866560, 0, NULL, NULL),
-(24, 14, 3, 2, 2002199, 0, NULL, NULL),
-(25, 15, 124, 2, 2052461, 0, NULL, NULL),
-(26, 16, 23, 1, 2054282, 0, NULL, NULL),
-(27, 17, 164, 1, 1995222, 0, NULL, NULL),
-(28, 18, 141, 3, 1539592, 0, NULL, NULL),
-(29, 19, 78, 1, 1746122, 0, NULL, NULL),
-(30, 20, 168, 1, 1900937, 0, NULL, NULL),
-(31, 21, 165, 1, 1947617, 0, NULL, NULL),
-(32, 22, 181, 1, 1741231, 0, NULL, NULL),
-(33, 23, 180, 3, 1969424, 0, NULL, NULL),
-(34, 24, 199, 1, 1582810, 0, NULL, NULL),
-(35, 25, 155, 3, 1915978, 0, NULL, NULL),
-(36, 26, 33, 2, 2006010, 0, NULL, NULL),
-(37, 27, 86, 3, 1850062, 0, NULL, NULL),
-(38, 28, 79, 1, 1790629, 0, NULL, NULL),
-(39, 29, 46, 2, 1935661, 0, NULL, NULL),
-(40, 30, 181, 3, 2004625, 0, NULL, NULL),
-(41, 30, 121, 3, 1921896, 0, NULL, NULL),
-(42, 31, 107, 1, 1557542, 0, NULL, NULL),
-(43, 33, 23, 1, 1639170, 0, NULL, NULL),
-(44, 34, 155, 2, 1978840, 0, NULL, NULL),
-(45, 35, 89, 1, 1863132, 0, NULL, NULL),
-(46, 36, 187, 1, 1502595, 0, NULL, NULL),
-(47, 37, 68, 1, 1937514, 0, NULL, NULL),
-(48, 38, 45, 3, 1808453, 0, NULL, NULL),
-(49, 38, 59, 2, 1620999, 0, NULL, NULL),
-(50, 39, 141, 2, 1841191, 0, NULL, NULL),
-(51, 39, 72, 2, 2040467, 0, NULL, NULL),
-(52, 40, 49, 2, 2013262, 0, NULL, NULL),
-(53, 40, 198, 1, 1943663, 0, NULL, NULL),
-(54, 41, 130, 2, 1988230, 0, NULL, NULL),
-(55, 41, 47, 1, 1856366, 0, NULL, NULL),
-(56, 41, 35, 3, 1665715, 0, NULL, NULL),
-(57, 41, 166, 2, 1853407, 0, NULL, NULL),
-(58, 42, 157, 2, 1791656, 0, NULL, NULL),
-(59, 42, 83, 1, 1586120, 0, NULL, NULL),
-(60, 42, 123, 2, 1819394, 0, NULL, NULL),
-(61, 43, 197, 1, 1942438, 0, NULL, NULL),
-(62, 43, 151, 2, 1859189, 0, NULL, NULL),
-(63, 43, 126, 1, 1922098, 0, NULL, NULL),
-(64, 44, 156, 3, 1713598, 0, NULL, NULL),
-(65, 44, 67, 1, 1613303, 0, NULL, NULL),
-(66, 44, 120, 3, 1571287, 0, NULL, NULL),
-(67, 45, 1, 1, 1952220, 0, NULL, NULL),
-(68, 45, 199, 2, 1762683, 0, NULL, NULL),
-(69, 45, 93, 1, 1956605, 0, NULL, NULL),
-(70, 51, 5, 2, 1751887, 0, NULL, NULL),
-(71, 52, 43, 1, 1805883, 0, NULL, NULL),
-(72, 53, 128, 3, 1960608, 0, NULL, NULL),
-(73, 54, 128, 3, 1828019, 0, NULL, NULL),
-(74, 55, 76, 2, 1657567, 0, NULL, NULL),
-(75, 56, 177, 2, 1621701, 0, NULL, NULL),
-(76, 57, 99, 3, 1956173, 0, NULL, NULL),
-(77, 58, 132, 1, 1617302, 0, NULL, NULL),
-(78, 59, 87, 3, 2075264, 0, NULL, NULL),
-(79, 60, 69, 1, 2001826, 0, NULL, NULL),
-(80, 60, 172, 3, 1573452, 0, NULL, NULL),
-(81, 61, 33, 3, 1538714, 0, NULL, NULL),
-(82, 61, 46, 2, 1530141, 0, NULL, NULL),
-(83, 62, 76, 3, 2006813, 0, NULL, NULL),
-(84, 62, 195, 3, 2052432, 0, NULL, NULL),
-(85, 63, 17, 1, 2010673, 0, NULL, NULL),
-(86, 63, 32, 2, 1950928, 0, NULL, NULL),
-(87, 64, 121, 1, 1694065, 0, NULL, NULL),
-(88, 64, 191, 2, 1657385, 0, NULL, NULL),
-(89, 65, 135, 1, 1915311, 0, NULL, NULL),
-(90, 65, 11, 3, 1693791, 0, NULL, NULL),
-(91, 66, 49, 3, 1913591, 0, NULL, NULL),
-(92, 67, 104, 2, 1888061, 0, NULL, NULL),
-(93, 68, 191, 1, 1957736, 0, NULL, NULL),
-(94, 69, 38, 2, 1942076, 0, NULL, NULL),
-(95, 70, 192, 1, 1609599, 0, NULL, NULL),
-(96, 71, 124, 2, 1656348, 0, NULL, NULL),
-(97, 72, 83, 3, 2089022, 0, NULL, NULL),
-(98, 73, 49, 2, 1835208, 0, NULL, NULL),
-(99, 74, 58, 2, 1854224, 0, NULL, NULL),
-(100, 75, 41, 3, 1561209, 0, NULL, NULL),
-(101, 75, 120, 3, 1644332, 0, NULL, NULL),
-(102, 76, 24, 2, 1913840, 0, NULL, NULL),
-(103, 76, 124, 1, 2055475, 0, NULL, NULL),
-(104, 77, 96, 3, 1765153, 0, NULL, NULL),
-(105, 78, 67, 3, 1644828, 0, NULL, NULL);
+INSERT INTO `detail_pesanan` (`id`, `pesanan_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
+(1, 1, 76, 2, 6127698, 0, NULL, NULL),
+(2, 1, 13, 1, 5216740, 0, NULL, NULL),
+(3, 2, 74, 3, 7364108, 0, NULL, NULL),
+(4, 2, 117, 3, 6066666, 0, NULL, NULL),
+(5, 3, 102, 1, 14819012, 0, NULL, NULL),
+(6, 3, 118, 5, 14021949, 0, NULL, NULL),
+(7, 4, 38, 4, 15768011, 0, NULL, NULL),
+(8, 4, 15, 4, 5887850, 0, NULL, NULL),
+(9, 5, 115, 1, 18797440, 0, NULL, NULL),
+(10, 5, 96, 4, 8319992, 0, NULL, NULL),
+(11, 6, 83, 5, 4575266, 0, NULL, NULL),
+(12, 6, 8, 4, 4673806, 0, NULL, NULL),
+(13, 7, 38, 5, 15499783, 0, NULL, NULL),
+(14, 7, 101, 2, 17543515, 0, NULL, NULL),
+(15, 8, 39, 2, 3530970, 0, NULL, NULL),
+(16, 8, 13, 1, 6559468, 0, NULL, NULL),
+(17, 9, 105, 5, 13409786, 0, NULL, NULL),
+(18, 9, 23, 4, 7646424, 0, NULL, NULL),
+(19, 10, 107, 2, 11079296, 0, NULL, NULL),
+(20, 10, 97, 3, 5021416, 0, NULL, NULL),
+(21, 11, 13, 2, 18132073, 0, NULL, NULL),
+(22, 11, 23, 1, 9639454, 0, NULL, NULL),
+(23, 12, 86, 3, 5069434, 0, NULL, NULL),
+(24, 12, 63, 5, 13884925, 0, NULL, NULL),
+(25, 13, 51, 3, 12754065, 0, NULL, NULL),
+(26, 13, 43, 5, 17042948, 0, NULL, NULL),
+(27, 15, 47, 4, 9175951, 0, NULL, NULL),
+(28, 15, 67, 3, 6924142, 0, NULL, NULL),
+(29, 16, 79, 3, 4749666, 0, NULL, NULL),
+(30, 16, 26, 5, 19482165, 0, NULL, NULL),
+(31, 17, 101, 5, 16174467, 0, NULL, NULL),
+(32, 17, 108, 2, 6965451, 0, NULL, NULL),
+(33, 18, 33, 5, 8762815, 0, NULL, NULL),
+(34, 18, 102, 4, 8279002, 0, NULL, NULL),
+(35, 20, 107, 5, 10926519, 0, NULL, NULL),
+(36, 20, 63, 2, 9121512, 0, NULL, NULL),
+(37, 21, 28, 5, 7292091, 0, NULL, NULL),
+(38, 21, 105, 2, 15212905, 0, NULL, NULL),
+(39, 22, 15, 1, 19841154, 0, NULL, NULL),
+(40, 22, 30, 1, 17691740, 0, NULL, NULL),
+(41, 23, 52, 3, 17959480, 0, NULL, NULL),
+(42, 23, 77, 5, 17664583, 0, NULL, NULL),
+(43, 24, 45, 5, 19976874, 0, NULL, NULL),
+(44, 24, 94, 5, 19405142, 0, NULL, NULL),
+(45, 25, 61, 1, 15095701, 0, NULL, NULL),
+(46, 25, 79, 4, 3781883, 0, NULL, NULL),
+(47, 26, 43, 4, 16323326, 0, NULL, NULL),
+(48, 26, 60, 5, 8148289, 0, NULL, NULL),
+(49, 27, 6, 3, 5886235, 0, NULL, NULL),
+(50, 27, 103, 3, 19072520, 0, NULL, NULL),
+(51, 28, 103, 3, 8949583, 0, NULL, NULL),
+(52, 28, 7, 3, 19971942, 0, NULL, NULL),
+(53, 29, 40, 4, 11935266, 0, NULL, NULL),
+(54, 29, 56, 1, 11114948, 0, NULL, NULL),
+(55, 30, 55, 5, 17567882, 0, NULL, NULL),
+(56, 30, 57, 1, 18294470, 0, NULL, NULL),
+(57, 31, 69, 5, 12929874, 0, NULL, NULL),
+(58, 31, 34, 1, 19691839, 0, NULL, NULL),
+(59, 32, 35, 1, 15823168, 0, NULL, NULL),
+(60, 32, 90, 3, 4201451, 0, NULL, NULL),
+(61, 33, 76, 1, 8076406, 0, NULL, NULL),
+(62, 33, 48, 1, 13652989, 0, NULL, NULL),
+(63, 35, 15, 1, 3402779, 0, NULL, NULL),
+(64, 35, 60, 1, 1842645, 0, NULL, NULL),
+(65, 36, 114, 3, 14858161, 0, NULL, NULL),
+(66, 36, 58, 3, 15195295, 0, NULL, NULL),
+(67, 37, 23, 5, 6323062, 0, NULL, NULL),
+(68, 38, 57, 3, 3582735, 0, NULL, NULL),
+(69, 39, 103, 3, 15548708, 0, NULL, NULL),
+(70, 40, 15, 2, 5394242, 0, NULL, NULL),
+(71, 41, 28, 4, 14559800, 0, NULL, NULL),
+(72, 42, 113, 1, 9599543, 0, NULL, NULL),
+(73, 43, 90, 2, 8977270, 0, NULL, NULL),
+(74, 44, 7, 4, 15216876, 0, NULL, NULL),
+(75, 45, 114, 4, 9075095, 0, NULL, NULL),
+(76, 46, 25, 2, 6333534, 0, NULL, NULL),
+(77, 47, 35, 5, 8185673, 0, NULL, NULL),
+(78, 48, 22, 1, 8174168, 0, NULL, NULL),
+(79, 49, 77, 5, 18203940, 0, NULL, NULL),
+(80, 50, 77, 1, 4618148, 0, NULL, NULL),
+(81, 51, 71, 1, 3134578, 0, NULL, NULL),
+(87, 53, 39, 1, 1973593, 0, NULL, NULL),
+(88, 53, 54, 1, 1939174, 0, NULL, NULL),
+(89, 53, 151, 3, 2051611, 0, NULL, NULL),
+(90, 53, 153, 2, 1584025, 0, NULL, NULL),
+(91, 53, 169, 1, 1865739, 0, NULL, NULL),
+(92, 53, 168, 2, 1696735, 0, NULL, NULL),
+(93, 54, 158, 3, 2004253, 0, NULL, NULL),
+(94, 54, 110, 3, 2031547, 0, NULL, NULL),
+(95, 55, 199, 2, 1971222, 0, NULL, NULL),
+(96, 56, 63, 2, 1549867, 0, NULL, NULL),
+(97, 57, 59, 2, 1539379, 0, NULL, NULL),
+(98, 58, 13, 2, 1575483, 0, NULL, NULL),
+(99, 59, 184, 3, 1761772, 0, NULL, NULL),
+(100, 60, 55, 2, 1610072, 0, NULL, NULL),
+(101, 61, 149, 2, 2028724, 0, NULL, NULL),
+(102, 62, 121, 1, 1660649, 0, NULL, NULL),
+(103, 63, 98, 2, 1848199, 0, NULL, NULL),
+(104, 64, 186, 2, 1866560, 0, NULL, NULL),
+(105, 65, 3, 2, 2002199, 0, NULL, NULL),
+(106, 66, 124, 2, 2052461, 0, NULL, NULL),
+(107, 67, 23, 1, 2054282, 0, NULL, NULL),
+(108, 68, 164, 1, 1995222, 0, NULL, NULL),
+(109, 69, 141, 3, 1539592, 0, NULL, NULL),
+(110, 70, 78, 1, 1746122, 0, NULL, NULL),
+(111, 71, 168, 1, 1900937, 0, NULL, NULL),
+(112, 72, 165, 1, 1947617, 0, NULL, NULL),
+(113, 73, 181, 1, 1741231, 0, NULL, NULL),
+(114, 74, 180, 3, 1969424, 0, NULL, NULL),
+(115, 75, 199, 1, 1582810, 0, NULL, NULL),
+(116, 76, 155, 3, 1915978, 0, NULL, NULL),
+(117, 77, 33, 2, 2006010, 0, NULL, NULL),
+(118, 78, 86, 3, 1850062, 0, NULL, NULL),
+(119, 79, 79, 1, 1790629, 0, NULL, NULL),
+(120, 80, 46, 2, 1935661, 0, NULL, NULL),
+(121, 81, 181, 3, 2004625, 0, NULL, NULL),
+(122, 81, 121, 3, 1921896, 0, NULL, NULL),
+(123, 82, 107, 1, 1557542, 0, NULL, NULL),
+(124, 84, 23, 1, 1639170, 0, NULL, NULL),
+(125, 85, 155, 2, 1978840, 0, NULL, NULL),
+(126, 86, 89, 1, 1863132, 0, NULL, NULL),
+(127, 87, 187, 1, 1502595, 0, NULL, NULL),
+(128, 88, 68, 1, 1937514, 0, NULL, NULL),
+(129, 89, 45, 3, 1808453, 0, NULL, NULL),
+(130, 89, 59, 2, 1620999, 0, NULL, NULL),
+(131, 90, 141, 2, 1841191, 0, NULL, NULL),
+(132, 90, 72, 2, 2040467, 0, NULL, NULL),
+(133, 91, 49, 2, 2013262, 0, NULL, NULL),
+(134, 91, 198, 1, 1943663, 0, NULL, NULL),
+(135, 92, 130, 2, 1988230, 0, NULL, NULL),
+(136, 92, 47, 1, 1856366, 0, NULL, NULL),
+(137, 92, 35, 3, 1665715, 0, NULL, NULL),
+(138, 92, 166, 2, 1853407, 0, NULL, NULL),
+(139, 93, 157, 2, 1791656, 0, NULL, NULL),
+(140, 93, 83, 1, 1586120, 0, NULL, NULL),
+(141, 93, 123, 2, 1819394, 0, NULL, NULL),
+(142, 94, 197, 1, 1942438, 0, NULL, NULL),
+(143, 94, 151, 2, 1859189, 0, NULL, NULL),
+(144, 94, 126, 1, 1922098, 0, NULL, NULL),
+(145, 95, 156, 3, 1713598, 0, NULL, NULL),
+(146, 95, 67, 1, 1613303, 0, NULL, NULL),
+(147, 95, 120, 3, 1571287, 0, NULL, NULL),
+(148, 96, 1, 1, 1952220, 0, NULL, NULL),
+(149, 96, 199, 2, 1762683, 0, NULL, NULL),
+(150, 96, 93, 1, 1956605, 0, NULL, NULL),
+(151, 102, 5, 2, 1751887, 0, NULL, NULL),
+(152, 103, 43, 1, 1805883, 0, NULL, NULL),
+(153, 104, 128, 3, 1960608, 0, NULL, NULL),
+(154, 105, 128, 3, 1828019, 0, NULL, NULL),
+(155, 106, 76, 2, 1657567, 0, NULL, NULL),
+(156, 107, 177, 2, 1621701, 0, NULL, NULL),
+(157, 108, 99, 3, 1956173, 0, NULL, NULL),
+(158, 109, 132, 1, 1617302, 0, NULL, NULL),
+(159, 110, 87, 3, 2075264, 0, NULL, NULL),
+(160, 111, 69, 1, 2001826, 0, NULL, NULL),
+(161, 111, 172, 3, 1573452, 0, NULL, NULL),
+(162, 112, 33, 3, 1538714, 0, NULL, NULL),
+(163, 112, 46, 2, 1530141, 0, NULL, NULL),
+(164, 113, 76, 3, 2006813, 0, NULL, NULL),
+(165, 113, 195, 3, 2052432, 0, NULL, NULL),
+(166, 114, 17, 1, 2010673, 0, NULL, NULL),
+(167, 114, 32, 2, 1950928, 0, NULL, NULL),
+(168, 115, 121, 1, 1694065, 0, NULL, NULL),
+(169, 115, 191, 2, 1657385, 0, NULL, NULL),
+(170, 116, 135, 1, 1915311, 0, NULL, NULL),
+(171, 116, 11, 3, 1693791, 0, NULL, NULL),
+(172, 117, 49, 3, 1913591, 0, NULL, NULL),
+(173, 118, 104, 2, 1888061, 0, NULL, NULL),
+(174, 119, 191, 1, 1957736, 0, NULL, NULL),
+(175, 120, 38, 2, 1942076, 0, NULL, NULL),
+(176, 121, 192, 1, 1609599, 0, NULL, NULL),
+(177, 122, 124, 2, 1656348, 0, NULL, NULL),
+(178, 123, 83, 3, 2089022, 0, NULL, NULL),
+(179, 124, 49, 2, 1835208, 0, NULL, NULL),
+(180, 125, 58, 2, 1854224, 0, NULL, NULL),
+(181, 126, 41, 3, 1561209, 0, NULL, NULL),
+(182, 126, 120, 3, 1644332, 0, NULL, NULL),
+(183, 127, 24, 2, 1913840, 0, NULL, NULL),
+(184, 127, 124, 1, 2055475, 0, NULL, NULL),
+(185, 128, 96, 3, 1765153, 0, NULL, NULL),
+(186, 129, 67, 3, 1644828, 0, NULL, NULL),
+(200, 133, 124, 1, 1574864, 0, NULL, NULL),
+(201, 134, 102, 1, 1607211, 0, NULL, NULL),
+(202, 135, 113, 3, 1502362, 0, NULL, NULL),
+(203, 136, 142, 1, 1599914, 0, NULL, NULL),
+(204, 137, 97, 2, 1585666, 0, NULL, NULL),
+(205, 138, 180, 3, 1699552, 0, NULL, NULL),
+(206, 139, 172, 2, 1631841, 0, NULL, NULL),
+(207, 140, 78, 3, 1797718, 0, NULL, NULL),
+(208, 141, 178, 2, 1868680, 0, NULL, NULL),
+(209, 142, 183, 3, 2006955, 0, NULL, NULL),
+(210, 143, 184, 1, 1574786, 0, NULL, NULL),
+(211, 144, 102, 1, 1566089, 0, NULL, NULL),
+(212, 145, 24, 3, 1887048, 0, NULL, NULL),
+(213, 146, 193, 3, 1551107, 0, NULL, NULL),
+(214, 147, 87, 1, 1773586, 0, NULL, NULL),
+(215, 148, 11, 3, 1697346, 0, NULL, NULL),
+(216, 149, 162, 3, 1918481, 0, NULL, NULL),
+(217, 150, 9, 3, 1522946, 0, NULL, NULL),
+(218, 151, 106, 3, 1808982, 0, NULL, NULL),
+(219, 152, 198, 2, 1645850, 0, NULL, NULL),
+(220, 153, 154, 2, 1787983, 0, NULL, NULL),
+(221, 154, 125, 3, 1535898, 0, NULL, NULL),
+(222, 155, 61, 3, 1597335, 0, NULL, NULL),
+(223, 156, 24, 3, 1517876, 0, NULL, NULL),
+(224, 157, 41, 3, 1678803, 0, NULL, NULL),
+(225, 158, 35, 3, 1769103, 0, NULL, NULL),
+(226, 159, 33, 1, 1673522, 0, NULL, NULL),
+(227, 159, 144, 1, 1602196, 0, NULL, NULL),
+(228, 160, 176, 3, 2029889, 0, NULL, NULL),
+(229, 162, 64, 1, 1586956, 0, NULL, NULL),
+(230, 163, 38, 2, 1855358, 0, NULL, NULL),
+(231, 164, 178, 2, 1592488, 0, NULL, NULL),
+(232, 165, 42, 3, 1919328, 0, NULL, NULL),
+(233, 166, 19, 2, 1917081, 0, NULL, NULL),
+(234, 167, 62, 2, 1746862, 0, NULL, NULL),
+(235, 167, 137, 3, 1732135, 0, NULL, NULL),
+(236, 168, 117, 2, 1543620, 0, NULL, NULL),
+(237, 168, 170, 3, 1959810, 0, NULL, NULL),
+(238, 169, 144, 3, 1659826, 0, NULL, NULL),
+(239, 169, 138, 2, 1999835, 0, NULL, NULL),
+(240, 170, 104, 3, 2006921, 0, NULL, NULL),
+(241, 170, 2, 2, 1687254, 0, NULL, NULL),
+(242, 170, 195, 1, 1522758, 0, NULL, NULL),
+(243, 170, 17, 1, 1811003, 0, NULL, NULL),
+(244, 171, 107, 3, 2058353, 0, NULL, NULL),
+(245, 171, 150, 2, 1614654, 0, NULL, NULL),
+(246, 171, 139, 2, 1999048, 0, NULL, NULL),
+(247, 172, 15, 2, 1904564, 0, NULL, NULL),
+(248, 172, 84, 2, 1610443, 0, NULL, NULL),
+(249, 172, 43, 3, 1532907, 0, NULL, NULL),
+(250, 173, 200, 2, 1507138, 0, NULL, NULL),
+(251, 173, 96, 1, 1850484, 0, NULL, NULL),
+(252, 173, 120, 3, 1718094, 0, NULL, NULL),
+(253, 174, 128, 1, 2094966, 0, NULL, NULL),
+(254, 174, 105, 1, 1795535, 0, NULL, NULL),
+(255, 174, 161, 1, 1791002, 0, NULL, NULL),
+(256, 180, 93, 3, 1713140, 0, NULL, NULL),
+(257, 181, 161, 3, 1878243, 0, NULL, NULL),
+(258, 182, 75, 2, 2017905, 0, NULL, NULL),
+(259, 183, 180, 3, 1524744, 0, NULL, NULL),
+(260, 184, 22, 1, 1695040, 0, NULL, NULL),
+(261, 185, 44, 1, 1793640, 0, NULL, NULL),
+(262, 186, 123, 1, 1795281, 0, NULL, NULL),
+(263, 187, 9, 3, 1589927, 0, NULL, NULL),
+(264, 188, 119, 2, 1742842, 0, NULL, NULL),
+(265, 189, 2, 1, 2077475, 0, NULL, NULL),
+(266, 189, 158, 2, 2019997, 0, NULL, NULL),
+(267, 190, 21, 1, 1521332, 0, NULL, NULL),
+(268, 190, 48, 3, 1692740, 0, NULL, NULL),
+(269, 191, 1, 1, 1789371, 0, NULL, NULL),
+(270, 191, 178, 1, 2024768, 0, NULL, NULL),
+(271, 192, 139, 2, 1696890, 0, NULL, NULL),
+(272, 192, 92, 3, 1775323, 0, NULL, NULL),
+(273, 193, 135, 2, 1524927, 0, NULL, NULL),
+(274, 193, 106, 2, 1950189, 0, NULL, NULL),
+(275, 194, 148, 2, 1533372, 0, NULL, NULL),
+(276, 194, 33, 3, 1733211, 0, NULL, NULL),
+(277, 195, 55, 3, 2033503, 0, NULL, NULL),
+(278, 196, 139, 2, 1597038, 0, NULL, NULL),
+(279, 197, 196, 1, 1537640, 0, NULL, NULL),
+(280, 198, 52, 3, 1564161, 0, NULL, NULL),
+(281, 199, 13, 2, 1817607, 0, NULL, NULL),
+(282, 200, 26, 3, 1710879, 0, NULL, NULL),
+(283, 201, 180, 2, 1944704, 0, NULL, NULL),
+(284, 202, 152, 2, 1728293, 0, NULL, NULL),
+(285, 203, 141, 3, 1642517, 0, NULL, NULL),
+(286, 204, 150, 2, 1738531, 0, NULL, NULL),
+(287, 204, 162, 2, 1516972, 0, NULL, NULL),
+(288, 205, 6, 3, 1735862, 0, NULL, NULL),
+(289, 205, 157, 1, 1729519, 0, NULL, NULL),
+(290, 206, 184, 2, 2076759, 0, NULL, NULL),
+(291, 207, 179, 2, 2026989, 0, NULL, NULL),
+(292, 208, 37, 1, 1680007, 0, NULL, NULL),
+(293, 209, 62, 1, 2083614, 0, NULL, NULL),
+(294, 210, 59, 2, 1631815, 0, NULL, NULL),
+(295, 211, 61, 2, 1803433, 0, NULL, NULL),
+(296, 212, 48, 2, 1958299, 0, NULL, NULL),
+(297, 213, 114, 3, 1981024, 0, NULL, NULL),
+(298, 214, 50, 1, 1514732, 0, NULL, NULL),
+(299, 215, 193, 2, 1836738, 0, NULL, NULL),
+(300, 210, 108, 2, 1979416, 0, NULL, NULL),
+(301, 211, 184, 3, 1808360, 0, NULL, NULL),
+(302, 212, 147, 3, 2061002, 0, NULL, NULL),
+(303, 213, 168, 2, 1522970, 0, NULL, NULL),
+(304, 197, 9, 3, 1905860, 0, NULL, NULL),
+(305, 198, 17, 1, 1782351, 0, NULL, NULL),
+(306, 199, 54, 1, 1786304, 0, NULL, NULL),
+(307, 200, 165, 2, 1576336, 0, NULL, NULL),
+(308, 201, 148, 3, 1928017, 0, NULL, NULL),
+(309, 202, 43, 2, 1630911, 0, NULL, NULL),
+(310, 203, 148, 3, 1917937, 0, NULL, NULL),
+(311, 204, 107, 2, 2063654, 0, NULL, NULL),
+(312, 204, 70, 1, 1560909, 0, NULL, NULL),
+(313, 52, 26, 2, 1626079, 0, '2021-11-19 07:37:08', '2021-11-19 07:37:08'),
+(314, 52, 88, 1, 1607762, 0, '2021-11-19 07:37:08', '2021-11-19 07:37:08'),
+(315, 52, 93, 2, 1700756, 0, '2021-11-19 07:37:08', '2021-11-19 07:37:08'),
+(316, 52, 103, 3, 2095122, 0, '2021-11-19 07:37:08', '2021-11-19 07:37:08'),
+(321, 131, 1, 3, 1852538, 0, '2021-11-19 07:40:18', '2021-11-19 07:40:18'),
+(322, 131, 80, 1, 1869600, 0, '2021-11-19 07:40:18', '2021-11-19 07:40:18'),
+(323, 131, 103, 3, 2011950, 0, '2021-11-19 07:40:18', '2021-11-19 07:40:18'),
+(324, 131, 142, 2, 1518730, 0, '2021-11-19 07:40:18', '2021-11-19 07:40:18'),
+(325, 131, 185, 2, 1605878, 0, '2021-11-19 07:40:18', '2021-11-19 07:40:18'),
+(326, 132, 63, 2, 1536831, 0, '2021-11-19 07:41:04', '2021-11-19 07:41:04'),
+(327, 132, 138, 2, 2037402, 0, '2021-11-19 07:41:04', '2021-11-19 07:41:04');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `detail_spb`
+-- Table structure for table `detail_pesanan_produk`
 --
 
-CREATE TABLE `detail_spb` (
+CREATE TABLE `detail_pesanan_produk` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `spb_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `penjualan_produk_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `jumlah` int(11) NOT NULL,
-  `harga` int(11) NOT NULL,
-  `ongkir` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `detail_pesanan_id` bigint(20) UNSIGNED NOT NULL,
+  `gudang_barang_jadi_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `detail_spb`
+-- Dumping data for table `detail_pesanan_produk`
 --
 
-INSERT INTO `detail_spb` (`id`, `spb_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
-(1, 1, 67, 2, 2033919, 0, NULL, NULL),
-(2, 1, 60, 2, 1569950, 0, NULL, NULL),
-(3, 1, 194, 2, 1575488, 0, NULL, NULL),
-(4, 1, 188, 3, 1613732, 0, NULL, NULL),
-(5, 1, 147, 3, 1681711, 0, NULL, NULL),
-(6, 2, 80, 1, 1869600, 0, NULL, NULL),
-(7, 2, 1, 3, 1852538, 0, NULL, NULL),
-(8, 2, 185, 2, 1605878, 0, NULL, NULL),
-(9, 2, 103, 3, 2011950, 0, NULL, NULL),
-(10, 2, 142, 2, 1518730, 0, NULL, NULL),
-(11, 2, 187, 3, 1752817, 0, NULL, NULL),
-(12, 3, 138, 2, 2037402, 0, NULL, NULL),
-(13, 3, 63, 1, 1536831, 0, NULL, NULL),
-(14, 4, 124, 1, 1574864, 0, NULL, NULL),
-(15, 5, 102, 1, 1607211, 0, NULL, NULL),
-(16, 6, 113, 3, 1502362, 0, NULL, NULL),
-(17, 7, 142, 1, 1599914, 0, NULL, NULL),
-(18, 8, 97, 2, 1585666, 0, NULL, NULL),
-(19, 9, 180, 3, 1699552, 0, NULL, NULL),
-(20, 10, 172, 2, 1631841, 0, NULL, NULL),
-(21, 11, 78, 3, 1797718, 0, NULL, NULL),
-(22, 12, 178, 2, 1868680, 0, NULL, NULL),
-(23, 13, 183, 3, 2006955, 0, NULL, NULL),
-(24, 14, 184, 1, 1574786, 0, NULL, NULL),
-(25, 15, 102, 1, 1566089, 0, NULL, NULL),
-(26, 16, 24, 3, 1887048, 0, NULL, NULL),
-(27, 17, 193, 3, 1551107, 0, NULL, NULL),
-(28, 18, 87, 1, 1773586, 0, NULL, NULL),
-(29, 19, 11, 3, 1697346, 0, NULL, NULL),
-(30, 20, 162, 3, 1918481, 0, NULL, NULL),
-(31, 21, 9, 3, 1522946, 0, NULL, NULL),
-(32, 22, 106, 3, 1808982, 0, NULL, NULL),
-(33, 23, 198, 2, 1645850, 0, NULL, NULL),
-(34, 24, 154, 2, 1787983, 0, NULL, NULL),
-(35, 25, 125, 3, 1535898, 0, NULL, NULL),
-(36, 26, 61, 3, 1597335, 0, NULL, NULL),
-(37, 27, 24, 3, 1517876, 0, NULL, NULL),
-(38, 28, 41, 3, 1678803, 0, NULL, NULL),
-(39, 29, 35, 3, 1769103, 0, NULL, NULL),
-(40, 30, 33, 1, 1673522, 0, NULL, NULL),
-(41, 30, 144, 1, 1602196, 0, NULL, NULL),
-(42, 31, 176, 3, 2029889, 0, NULL, NULL),
-(43, 33, 64, 1, 1586956, 0, NULL, NULL),
-(44, 34, 38, 2, 1855358, 0, NULL, NULL),
-(45, 35, 178, 2, 1592488, 0, NULL, NULL),
-(46, 36, 42, 3, 1919328, 0, NULL, NULL),
-(47, 37, 19, 2, 1917081, 0, NULL, NULL),
-(48, 38, 62, 2, 1746862, 0, NULL, NULL),
-(49, 38, 137, 3, 1732135, 0, NULL, NULL),
-(50, 39, 117, 2, 1543620, 0, NULL, NULL),
-(51, 39, 170, 3, 1959810, 0, NULL, NULL),
-(52, 40, 144, 3, 1659826, 0, NULL, NULL),
-(53, 40, 138, 2, 1999835, 0, NULL, NULL),
-(54, 41, 104, 3, 2006921, 0, NULL, NULL),
-(55, 41, 2, 2, 1687254, 0, NULL, NULL),
-(56, 41, 195, 1, 1522758, 0, NULL, NULL),
-(57, 41, 17, 1, 1811003, 0, NULL, NULL),
-(58, 42, 107, 3, 2058353, 0, NULL, NULL),
-(59, 42, 150, 2, 1614654, 0, NULL, NULL),
-(60, 42, 139, 2, 1999048, 0, NULL, NULL),
-(61, 43, 15, 2, 1904564, 0, NULL, NULL),
-(62, 43, 84, 2, 1610443, 0, NULL, NULL),
-(63, 43, 43, 3, 1532907, 0, NULL, NULL),
-(64, 44, 200, 2, 1507138, 0, NULL, NULL),
-(65, 44, 96, 1, 1850484, 0, NULL, NULL),
-(66, 44, 120, 3, 1718094, 0, NULL, NULL),
-(67, 45, 128, 1, 2094966, 0, NULL, NULL),
-(68, 45, 105, 1, 1795535, 0, NULL, NULL),
-(69, 45, 161, 1, 1791002, 0, NULL, NULL),
-(70, 51, 93, 3, 1713140, 0, NULL, NULL),
-(71, 52, 161, 3, 1878243, 0, NULL, NULL),
-(72, 53, 75, 2, 2017905, 0, NULL, NULL),
-(73, 54, 180, 3, 1524744, 0, NULL, NULL),
-(74, 55, 22, 1, 1695040, 0, NULL, NULL),
-(75, 56, 44, 1, 1793640, 0, NULL, NULL),
-(76, 57, 123, 1, 1795281, 0, NULL, NULL),
-(77, 58, 9, 3, 1589927, 0, NULL, NULL),
-(78, 59, 119, 2, 1742842, 0, NULL, NULL),
-(79, 60, 2, 1, 2077475, 0, NULL, NULL),
-(80, 60, 158, 2, 2019997, 0, NULL, NULL),
-(81, 61, 21, 1, 1521332, 0, NULL, NULL),
-(82, 61, 48, 3, 1692740, 0, NULL, NULL),
-(83, 62, 1, 1, 1789371, 0, NULL, NULL),
-(84, 62, 178, 1, 2024768, 0, NULL, NULL),
-(85, 63, 139, 2, 1696890, 0, NULL, NULL),
-(86, 63, 92, 3, 1775323, 0, NULL, NULL),
-(87, 64, 135, 2, 1524927, 0, NULL, NULL),
-(88, 64, 106, 2, 1950189, 0, NULL, NULL),
-(89, 65, 148, 2, 1533372, 0, NULL, NULL),
-(90, 65, 33, 3, 1733211, 0, NULL, NULL),
-(91, 66, 55, 3, 2033503, 0, NULL, NULL),
-(92, 67, 139, 2, 1597038, 0, NULL, NULL),
-(93, 68, 196, 1, 1537640, 0, NULL, NULL),
-(94, 69, 52, 3, 1564161, 0, NULL, NULL),
-(95, 70, 13, 2, 1817607, 0, NULL, NULL),
-(96, 71, 26, 3, 1710879, 0, NULL, NULL),
-(97, 72, 180, 2, 1944704, 0, NULL, NULL),
-(98, 73, 152, 2, 1728293, 0, NULL, NULL),
-(99, 74, 141, 3, 1642517, 0, NULL, NULL),
-(100, 75, 150, 2, 1738531, 0, NULL, NULL),
-(101, 75, 162, 2, 1516972, 0, NULL, NULL),
-(102, 76, 6, 3, 1735862, 0, NULL, NULL),
-(103, 76, 157, 1, 1729519, 0, NULL, NULL),
-(104, 77, 184, 2, 2076759, 0, NULL, NULL),
-(105, 78, 179, 2, 2026989, 0, NULL, NULL),
-(106, 79, 37, 1, 1680007, 1, NULL, NULL),
-(107, 80, 62, 1, 2083614, 2, NULL, NULL),
-(108, 81, 59, 2, 1631815, 3, NULL, NULL),
-(109, 82, 61, 2, 1803433, 4, NULL, NULL),
-(110, 83, 48, 2, 1958299, 5, NULL, NULL),
-(111, 84, 114, 3, 1981024, 6, NULL, NULL),
-(112, 85, 50, 1, 1514732, 7, NULL, NULL),
-(113, 86, 193, 2, 1836738, 8, NULL, NULL),
-(114, 81, 108, 2, 1979416, 9, NULL, NULL),
-(115, 82, 184, 3, 1808360, 10, NULL, NULL),
-(116, 83, 147, 3, 2061002, 11, NULL, NULL),
-(117, 84, 168, 2, 1522970, 12, NULL, NULL),
-(118, 68, 9, 3, 1905860, 13, NULL, NULL),
-(119, 69, 17, 1, 1782351, 14, NULL, NULL),
-(120, 70, 54, 1, 1786304, 15, NULL, NULL),
-(121, 71, 165, 2, 1576336, 16, NULL, NULL),
-(122, 72, 148, 3, 1928017, 17, NULL, NULL),
-(123, 73, 43, 2, 1630911, 18, NULL, NULL),
-(124, 74, 148, 3, 1917937, 19, NULL, NULL),
-(125, 75, 107, 2, 2063654, 20, NULL, NULL),
-(126, 75, 70, 1, 1560909, 21, NULL, NULL);
+INSERT INTO `detail_pesanan_produk` (`id`, `detail_pesanan_id`, `gudang_barang_jadi_id`) VALUES
+(1, 1, 108),
+(2, 1, 204),
+(3, 2, 20),
+(4, 3, 108),
+(5, 3, 196),
+(6, 4, 142),
+(7, 4, 196),
+(8, 5, 130),
+(9, 6, 142),
+(10, 6, 196),
+(11, 6, 204),
+(12, 7, 74),
+(13, 7, 196),
+(14, 8, 24),
+(15, 9, 139),
+(16, 10, 127),
+(17, 10, 196),
+(18, 10, 204);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `divisi`
+-- Table structure for table `divisi`
 --
 
 CREATE TABLE `divisi` (
@@ -1339,7 +1286,7 @@ CREATE TABLE `divisi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `divisi`
+-- Dumping data for table `divisi`
 --
 
 INSERT INTO `divisi` (`id`, `nama`, `kode`, `created_at`, `updated_at`) VALUES
@@ -1375,7 +1322,7 @@ INSERT INTO `divisi` (`id`, `nama`, `kode`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `ekatalog`
+-- Table structure for table `ekatalog`
 --
 
 CREATE TABLE `ekatalog` (
@@ -1386,6 +1333,7 @@ CREATE TABLE `ekatalog` (
   `no_paket` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `instansi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alamat` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `satuan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_kontrak` date DEFAULT NULL,
   `tgl_buat` date DEFAULT NULL,
@@ -1397,63 +1345,68 @@ CREATE TABLE `ekatalog` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `ekatalog`
+-- Dumping data for table `ekatalog`
 --
 
-INSERT INTO `ekatalog` (`id`, `customer_id`, `provinsi_id`, `pesanan_id`, `no_paket`, `deskripsi`, `instansi`, `satuan`, `tgl_kontrak`, `tgl_buat`, `ket`, `created_at`, `updated_at`, `status`, `log`) VALUES
-(1, 449, 3, 1, 'AK1-P2102-3671852', 'Pengadaan Belanja Modal BLUD', 'Pemerintah Daerah Kabupaten Solok Selatan', 'Rumah Sakit Umum Daerah', '2021-02-09', '2021-02-09', NULL, NULL, NULL, 'sepakat', 'penjualan'),
-(2, 276, 14, 2, 'AK1-P2102-3672676', 'Belanja Modal Alat Kedokteran Gigi (ALKES DAN GIGI DAN MULUT)', 'Pemerintah Daerah kabupaten Tabanan', 'DINAS KESEHATAN KABUPATEN TABANAN', '2021-02-10', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(3, 319, 9, 3, 'AK1-P2102-3672860', 'Penyediaan Alat Kesehatan Untuk Mendukung RS Darurat Prop. Sulut, Babel dan RSUD DR. Zaenal Abidin Aceh', 'Kementerian Kesehatan', 'DIREKTORAT FASILITAS PELAYANAN KESEHATAN', '2021-02-10', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(4, 400, 14, 4, 'AK1-P2102-3673572', 'Belanja Modal Alat Kedokteran Umum RSUD Daha Sejahtera', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', 'Dinas Kesehatan', '2021-02-10', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(5, 147, 21, 5, 'AK1-P2102-3673706', 'Belanja Modal Pengadaan Alat-Alat Rumah Sakit (APBD)', 'Pemerintah Daerah Kabupaten Sleman', 'DINAS KESEHATAN', '2021-02-10', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(6, 66, 4, 6, 'AK1-P2102-3677900', 'Pengadaan Polindes Kit', 'Pemerintah Daerah Kabupaten Bojonegoro', 'DINAS KESEHATAN', '2021-02-11', '2021-02-11', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(7, 149, 19, 7, 'AK1-P2102-3679002', 'Pengadaan Polindes Kit', 'Pemerintah Daerah Kota Tangerang', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(8, 317, 2, 8, 'AK1-P2102-3680185', 'Pengadaan Alat Laboratorium Poltekkes Kemenkes Surabya Tahun 2021', 'Pemerintah Daerah Provinsi Jawa Tengah', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(9, 226, 15, 9, 'AK1-P2102-3680796', 'BELANJA ALAT KESEHATAN BLUD PUSKESMAS KARANG TENGAH', 'Pemerintah Daerah Kabupaten Dharmasraya', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(10, 419, 16, 10, 'AK1-P2102-3681600', 'Pengadaan ABBM Laboratorium Poltekkes Kemenkes Palembang Tahun 2021', 'Pemerintah Daerah Provinsi DKI Jakarta', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(11, 181, 8, 11, 'AK1-P2102-3681944', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kota Surakarta', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(12, 263, 2, 12, 'AK1-P2102-3684536', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Berau', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(13, 248, 7, 13, 'AK1-P2102-3685030', 'Belanja Modal Alat Kedokteran Anak - Timbangan Bayi Digital', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(15, 344, 5, 15, 'AK1-P2102-3685557', 'Belanja Modal Alat Kedokteran Lainnya', 'Pemerintah Daerah Kabupaten Asahan', 'POLITEKNIK KESEHATAN PALEMBANG', '2021-05-18', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(16, 385, 19, 16, 'AK1-P2102-3689641', 'Penatalaksanaan Perbekalan Kesehatan Pakai Habis Di Pelayanan Kesehatan Milik Pemerintah Provinsi DKI Jakarta', 'Pemerintah Daerah Kabupaten Tangerang', 'POLITEKNIK KESEHATAN JOGYAKARTA', '2021-05-19', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(17, 265, 2, 17, 'AK1-P2102-3689641', 'Penatalaksanaan Perbekalan Kesehatan Pakai Habis Di Pelayanan Kesehatan Milik Pemerintah Provinsi DKI Jakarta', 'Pemerintah Daerah Provinsi Banten', 'POLITEKNIK KESEHATAN JOGYAKARTA', '2021-05-20', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(18, 365, 2, 18, 'AK1-P2102-3690088', 'Belanja Modal BLUD', 'Pemerintah Daerah Kabupaten Solok Selatan', 'RSJD DR RM SOEDJARWADI', '2021-05-21', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(20, 193, 9, 20, 'AK1-P2102-3691356', 'Belanja Modal Alat Kesehatan Kebidanan dan Penyakit Kandungan - Penguatan Penurunan Angka Kematian Ibu dan Bayi (DAK 2021) - Set Persalinan (Doppler)', 'Kementerian Kesehatan', 'DINAS KESEHATAN', '2021-05-23', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(21, 169, 23, 21, 'AK1-P2102-3691378', 'Belanja Modal Peralatan dan Mesin - Bidan Kit (Doppler)', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', 'Kementerian Kesehatan', '2021-05-24', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(22, 427, 24, 22, 'AK1-P2102-3691380', 'Belanja Modal Alat Kesehatan Kebidanan dan Penyakit Kandungan - Penguatan Penurunan Angka Kematian Ibu dan Bayi (DAK 2021) - Set Persalinan (Doppler)', 'Pemerintah Daerah Kabupaten Sleman', 'DINAS KESEHATAN', '2021-05-25', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(23, 2, 12, 23, 'AK1-P2103-3692381', 'Alat kedokteran lainnya', 'Pemerintah Daerah Kabupaten Bojonegoro', 'PUSAT KESEHATAN MASYARAKAT KECAMATAN CLINCING JAKUT', '2021-05-26', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(24, 319, 17, 24, 'AK1-P2103-3693134', 'Pengadaan Alat Labaratorium_RM', 'Pemerintah Daerah Kota Tangerang', 'PUSAT KESEHATAN MASYARAKAT KECAMATAN CLINCING JAKUT', '2021-05-27', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(25, 111, 2, 25, 'AK1-P2103-3693543', 'Pengadaan Alat Bantu Belajar Mengajar (ABBM) untuk Laboratorium Pada Poltekkes Kemenkes Palangka Raya Tahun 2021', 'Pemerintah Daerah Provinsi Jawa Tengah', 'RUMAH SAKIT UMUM DAERAH TAMAN SARI', '2021-05-28', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(26, 62, 19, 26, 'AK1-P2103-3693562', 'Pengadaan Alat Kesehatan Pelayanan Rawat Inap (DAK)', 'Pemerintah Daerah Kabupaten Dharmasraya', 'UPT Puskesmas Sibela', '2021-05-29', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(27, 454, 1, 27, 'AK1-P2103-3694440', 'Pengadaan Alat Laboratorium_RM', 'Pemerintah Daerah Provinsi DKI Jakarta', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-05-30', '2021-02-19', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(28, 158, 13, 28, 'AK1-P2103-3694852', 'Pengadaan untuk Alat Kedokteran/Kesehatan', 'Pemerintah Daerah Kota Surakarta', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-05-31', '2021-02-19', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(29, 298, 9, 29, 'AK1-P2103-3695107', 'Pengadaan Alat Laboratorium (BLU)', 'Pemerintah Daerah Kabupaten Berau', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-06-01', '2021-02-20', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(30, 201, 18, 30, 'AK1-P2103-3695736', 'Pengadaan Pulse Oxymeter (Ruang Bismo dan Bekisar) RSJ Dr.Radjiman Wediodiningrat Lawang Tahun 2021', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', 'DINAS KESEHATAN', '2021-06-02', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(31, 105, 22, 31, 'AK1-P2103-3695752', 'Pengadaan Alat Kesehatan Pelayanan Rawat Inap (DAK)', 'Kepolisian Negara Republik Indonesia', 'POLITEKNIK KESEHATAN MANADO', '2021-06-03', '2021-02-24', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(32, 157, 20, 32, 'AK1-P2103-3696445', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Asahan', 'POLITEKNIK KESEHATAN PALANGKARAYA', '2021-06-04', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(33, 13, 25, 33, 'AK1-P2103-3696534', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Tangerang', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-05', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(35, 82, 23, 35, 'AK1-P2103-3696838', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Solok Selatan', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-07', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(36, 424, 11, 36, 'AK1-P2103-3697328', 'Pengadaan ABBM Laboratorium', 'Pemerintah Daerah kabupaten Tabanan', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-08', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(37, 178, 8, 37, 'AK1-P2103-3697463', 'Pengadaan ABBM Laboratorium', 'Kementerian Kesehatan', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-09', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(38, 90, 19, 38, 'AK1-P2103-3697463', 'Pengadaan ABBM Laboratorium', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', 'RUMKIT BHAYANGKARA BONDOWOSO', '2021-06-10', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(39, 79, 14, 39, 'AK1-P2103-3698088', 'Belanja Modal Pengadaan Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Sleman', 'POLITEKNIK KESEHATAN MANADO', '2021-06-11', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(40, 189, 25, 40, 'AK1-P2103-3698708', 'Belanja Modal Aset Tetap Lainnya', 'Pemerintah Daerah Kabupaten Bojonegoro', 'RSUD H ABDUL MANAN SIMATUPANG', '2021-06-12', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(41, 108, 8, 41, 'AK1-P2103-3699131', 'Belanja Modal Alat Kesehatan Umum Lainnya (Ruang CSSD,Ruang Laboratorium, Ruang Radiologi, Ruang Operasi)', 'Pemerintah Daerah Kota Tangerang', 'POLITEKNIK KESEHATAN MANADO', '2021-06-13', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(42, 406, 9, 42, 'AK1-P2103-3699131', 'Belanja Modal Alat Kesehatan Umum Lainnya (Ruang CSSD,Ruang Laboratorium, Ruang Radiologi, Ruang Operasi)', 'Pemerintah Daerah Provinsi Jawa Tengah', 'RUMAH SAKIT JIWA DR RADJIMAN WEDIODININGRAT LAWANG', '2021-06-14', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(43, 50, 21, 43, 'AK1-P2103-3699476', 'Belanja Pakai Habis Kesehatan', 'Pemerintah Daerah Kabupaten Dharmasraya', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-15', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(44, 214, 23, 44, 'AK1-P2103-3701368', 'Belanja modal alat kedokteran umum', 'Pemerintah Daerah Provinsi DKI Jakarta', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-16', '2021-02-27', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(45, 209, 15, 45, 'AK1-P2103-3702108', 'Belanja Modal Alat Ukur/Tes Klinis Lain - Thermometer Digital Infrared - RSUD Talisayan', 'Pemerintah Daerah Kota Surakarta', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-17', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(46, 340, 15, 46, 'AK1-P2103-3702134', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Kabupaten Berau', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-18', '2021-02-28', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(47, 346, 14, 47, 'AK1-P2103-3702265', 'Belanja Bahan ', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-19', '2021-02-28', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(48, 384, 25, 48, 'AK1-P2103-3703110', 'Belanja Alkes Pakai Habis e-catalog Puskesmas Kecamatan Menteng 2021', 'Kepolisian Negara Republik Indonesia', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-20', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(49, 321, 4, 49, 'AK1-P2103-3703286', 'Belanja Barang Medis Habis Pakai Penunjang Medis Ekatalog', 'Pemerintah Daerah Kabupaten Asahan', 'DINAS KESEHATAN', '2021-06-21', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(50, 25, 15, 50, 'AK1-P2103-3704150', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Tangerang', 'DINAS KESEHATAN', '2021-06-22', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(51, 278, 2, 51, 'AK1-P2103-3704763', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Provinsi Banten', 'DINAS KESEHATAN', '2021-06-23', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan');
+INSERT INTO `ekatalog` (`id`, `customer_id`, `provinsi_id`, `pesanan_id`, `no_paket`, `deskripsi`, `instansi`, `alamat`, `satuan`, `tgl_kontrak`, `tgl_buat`, `ket`, `created_at`, `updated_at`, `status`, `log`) VALUES
+(1, 449, 3, 1, 'AK1-P2102-3671852', 'Pengadaan Belanja Modal BLUD', 'Pemerintah Daerah Kabupaten Solok Selatan', '', 'Rumah Sakit Umum Daerah', '2021-02-09', '2021-02-09', NULL, NULL, NULL, 'sepakat', 'penjualan'),
+(2, 276, 14, 2, 'AK1-P2102-3672676', 'Belanja Modal Alat Kedokteran Gigi (ALKES DAN GIGI DAN MULUT)', 'Pemerintah Daerah kabupaten Tabanan', '', 'DINAS KESEHATAN KABUPATEN TABANAN', '2021-02-10', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(3, 319, 9, 3, 'AK1-P2102-3672860', 'Penyediaan Alat Kesehatan Untuk Mendukung RS Darurat Prop. Sulut, Babel dan RSUD DR. Zaenal Abidin Aceh', 'Kementerian Kesehatan', '', 'DIREKTORAT FASILITAS PELAYANAN KESEHATAN', '2021-02-10', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(4, 400, 14, 4, 'AK1-P2102-3673572', 'Belanja Modal Alat Kedokteran Umum RSUD Daha Sejahtera', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', '', 'Dinas Kesehatan', '2021-02-10', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(5, 147, 21, 5, 'AK1-P2102-3673706', 'Belanja Modal Pengadaan Alat-Alat Rumah Sakit (APBD)', 'Pemerintah Daerah Kabupaten Sleman', '', 'DINAS KESEHATAN', '2021-02-10', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(6, 66, 4, 6, 'AK1-P2102-3677900', 'Pengadaan Polindes Kit', 'Pemerintah Daerah Kabupaten Bojonegoro', '', 'DINAS KESEHATAN', '2021-02-11', '2021-02-11', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(7, 149, 19, 7, 'AK1-P2102-3679002', 'Pengadaan Polindes Kit', 'Pemerintah Daerah Kota Tangerang', '', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(8, 317, 2, 8, 'AK1-P2102-3680185', 'Pengadaan Alat Laboratorium Poltekkes Kemenkes Surabya Tahun 2021', 'Pemerintah Daerah Provinsi Jawa Tengah', '', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(9, 226, 15, 9, 'AK1-P2102-3680796', 'BELANJA ALAT KESEHATAN BLUD PUSKESMAS KARANG TENGAH', 'Pemerintah Daerah Kabupaten Dharmasraya', '', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(10, 419, 16, 10, 'AK1-P2102-3681600', 'Pengadaan ABBM Laboratorium Poltekkes Kemenkes Palembang Tahun 2021', 'Pemerintah Daerah Provinsi DKI Jakarta', '', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(11, 181, 8, 11, 'AK1-P2102-3681944', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kota Surakarta', '', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(12, 263, 2, 12, 'AK1-P2102-3684536', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Berau', '', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(13, 248, 7, 13, 'AK1-P2102-3685030', 'Belanja Modal Alat Kedokteran Anak - Timbangan Bayi Digital', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', '', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(15, 344, 5, 15, 'AK1-P2102-3685557', 'Belanja Modal Alat Kedokteran Lainnya', 'Pemerintah Daerah Kabupaten Asahan', '', 'POLITEKNIK KESEHATAN PALEMBANG', '2021-05-18', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(16, 385, 19, 16, 'AK1-P2102-3689641', 'Penatalaksanaan Perbekalan Kesehatan Pakai Habis Di Pelayanan Kesehatan Milik Pemerintah Provinsi DKI Jakarta', 'Pemerintah Daerah Kabupaten Tangerang', '', 'POLITEKNIK KESEHATAN JOGYAKARTA', '2021-05-19', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(17, 265, 2, 17, 'AK1-P2102-3689641', 'Penatalaksanaan Perbekalan Kesehatan Pakai Habis Di Pelayanan Kesehatan Milik Pemerintah Provinsi DKI Jakarta', 'Pemerintah Daerah Provinsi Banten', '', 'POLITEKNIK KESEHATAN JOGYAKARTA', '2021-05-20', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(18, 365, 2, 18, 'AK1-P2102-3690088', 'Belanja Modal BLUD', 'Pemerintah Daerah Kabupaten Solok Selatan', '', 'RSJD DR RM SOEDJARWADI', '2021-05-21', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(20, 193, 9, 20, 'AK1-P2102-3691356', 'Belanja Modal Alat Kesehatan Kebidanan dan Penyakit Kandungan - Penguatan Penurunan Angka Kematian Ibu dan Bayi (DAK 2021) - Set Persalinan (Doppler)', 'Kementerian Kesehatan', '', 'DINAS KESEHATAN', '2021-05-23', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(21, 169, 23, 21, 'AK1-P2102-3691378', 'Belanja Modal Peralatan dan Mesin - Bidan Kit (Doppler)', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', '', 'Kementerian Kesehatan', '2021-05-24', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(22, 427, 24, 22, 'AK1-P2102-3691380', 'Belanja Modal Alat Kesehatan Kebidanan dan Penyakit Kandungan - Penguatan Penurunan Angka Kematian Ibu dan Bayi (DAK 2021) - Set Persalinan (Doppler)', 'Pemerintah Daerah Kabupaten Sleman', '', 'DINAS KESEHATAN', '2021-05-25', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(23, 2, 12, 23, 'AK1-P2103-3692381', 'Alat kedokteran lainnya', 'Pemerintah Daerah Kabupaten Bojonegoro', '', 'PUSAT KESEHATAN MASYARAKAT KECAMATAN CLINCING JAKUT', '2021-05-26', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(24, 319, 17, 24, 'AK1-P2103-3693134', 'Pengadaan Alat Labaratorium_RM', 'Pemerintah Daerah Kota Tangerang', '', 'PUSAT KESEHATAN MASYARAKAT KECAMATAN CLINCING JAKUT', '2021-05-27', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(25, 111, 2, 25, 'AK1-P2103-3693543', 'Pengadaan Alat Bantu Belajar Mengajar (ABBM) untuk Laboratorium Pada Poltekkes Kemenkes Palangka Raya Tahun 2021', 'Pemerintah Daerah Provinsi Jawa Tengah', '', 'RUMAH SAKIT UMUM DAERAH TAMAN SARI', '2021-05-28', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(26, 62, 19, 26, 'AK1-P2103-3693562', 'Pengadaan Alat Kesehatan Pelayanan Rawat Inap (DAK)', 'Pemerintah Daerah Kabupaten Dharmasraya', '', 'UPT Puskesmas Sibela', '2021-05-29', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(27, 454, 1, 27, 'AK1-P2103-3694440', 'Pengadaan Alat Laboratorium_RM', 'Pemerintah Daerah Provinsi DKI Jakarta', '', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-05-30', '2021-02-19', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(28, 158, 13, 28, 'AK1-P2103-3694852', 'Pengadaan untuk Alat Kedokteran/Kesehatan', 'Pemerintah Daerah Kota Surakarta', '', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-05-31', '2021-02-19', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(29, 298, 9, 29, 'AK1-P2103-3695107', 'Pengadaan Alat Laboratorium (BLU)', 'Pemerintah Daerah Kabupaten Berau', '', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-06-01', '2021-02-20', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(30, 201, 18, 30, 'AK1-P2103-3695736', 'Pengadaan Pulse Oxymeter (Ruang Bismo dan Bekisar) RSJ Dr.Radjiman Wediodiningrat Lawang Tahun 2021', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', '', 'DINAS KESEHATAN', '2021-06-02', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(31, 105, 22, 31, 'AK1-P2103-3695752', 'Pengadaan Alat Kesehatan Pelayanan Rawat Inap (DAK)', 'Kepolisian Negara Republik Indonesia', '', 'POLITEKNIK KESEHATAN MANADO', '2021-06-03', '2021-02-24', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(32, 157, 20, 32, 'AK1-P2103-3696445', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Asahan', '', 'POLITEKNIK KESEHATAN PALANGKARAYA', '2021-06-04', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(33, 13, 25, 33, 'AK1-P2103-3696534', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Tangerang', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-05', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(35, 82, 23, 35, 'AK1-P2103-3696838', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Solok Selatan', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-07', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(36, 424, 11, 36, 'AK1-P2103-3697328', 'Pengadaan ABBM Laboratorium', 'Pemerintah Daerah kabupaten Tabanan', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-08', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(37, 178, 8, 37, 'AK1-P2103-3697463', 'Pengadaan ABBM Laboratorium', 'Kementerian Kesehatan', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-09', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(38, 90, 19, 38, 'AK1-P2103-3697463', 'Pengadaan ABBM Laboratorium', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', '', 'RUMKIT BHAYANGKARA BONDOWOSO', '2021-06-10', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(39, 79, 14, 39, 'AK1-P2103-3698088', 'Belanja Modal Pengadaan Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Sleman', '', 'POLITEKNIK KESEHATAN MANADO', '2021-06-11', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(40, 189, 25, 40, 'AK1-P2103-3698708', 'Belanja Modal Aset Tetap Lainnya', 'Pemerintah Daerah Kabupaten Bojonegoro', '', 'RSUD H ABDUL MANAN SIMATUPANG', '2021-06-12', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(41, 108, 8, 41, 'AK1-P2103-3699131', 'Belanja Modal Alat Kesehatan Umum Lainnya (Ruang CSSD,Ruang Laboratorium, Ruang Radiologi, Ruang Operasi)', 'Pemerintah Daerah Kota Tangerang', '', 'POLITEKNIK KESEHATAN MANADO', '2021-06-13', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(42, 406, 9, 42, 'AK1-P2103-3699131', 'Belanja Modal Alat Kesehatan Umum Lainnya (Ruang CSSD,Ruang Laboratorium, Ruang Radiologi, Ruang Operasi)', 'Pemerintah Daerah Provinsi Jawa Tengah', '', 'RUMAH SAKIT JIWA DR RADJIMAN WEDIODININGRAT LAWANG', '2021-06-14', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(43, 50, 21, 43, 'AK1-P2103-3699476', 'Belanja Pakai Habis Kesehatan', 'Pemerintah Daerah Kabupaten Dharmasraya', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-15', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(44, 214, 23, 44, 'AK1-P2103-3701368', 'Belanja modal alat kedokteran umum', 'Pemerintah Daerah Provinsi DKI Jakarta', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-16', '2021-02-27', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(45, 209, 15, 45, 'AK1-P2103-3702108', 'Belanja Modal Alat Ukur/Tes Klinis Lain - Thermometer Digital Infrared - RSUD Talisayan', 'Pemerintah Daerah Kota Surakarta', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-17', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(46, 340, 15, 46, 'AK1-P2103-3702134', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Kabupaten Berau', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-18', '2021-02-28', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(47, 346, 14, 47, 'AK1-P2103-3702265', 'Belanja Bahan ', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-19', '2021-02-28', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(48, 384, 25, 48, 'AK1-P2103-3703110', 'Belanja Alkes Pakai Habis e-catalog Puskesmas Kecamatan Menteng 2021', 'Kepolisian Negara Republik Indonesia', '', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-20', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(49, 321, 4, 49, 'AK1-P2103-3703286', 'Belanja Barang Medis Habis Pakai Penunjang Medis Ekatalog', 'Pemerintah Daerah Kabupaten Asahan', '', 'DINAS KESEHATAN', '2021-06-21', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(50, 25, 15, 50, 'AK1-P2103-3704150', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Tangerang', '', 'DINAS KESEHATAN', '2021-06-22', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(51, 278, 2, 51, 'AK1-P2103-3704763', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Provinsi Banten', '', 'DINAS KESEHATAN', '2021-06-23', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(53, 444, 2, NULL, 'AK1-85', 'sd', 's', 's', 's', '2022-02-17', '2021-11-12', NULL, '2021-11-17 23:47:27', '2021-11-17 23:47:27', 'sepakat', 'penjualan'),
+(62, 359, 27, NULL, 'AK1-ppt', 'd', 'Instansi', 'alamat', 'sa', '2022-01-20', '2021-11-01', NULL, '2021-11-18 00:21:37', '2021-11-18 00:21:37', 'sepakat', 'penjualan'),
+(63, 359, 27, NULL, 'AK1-ppt', 'd', 'Instansi', 'alamat', 'sa', '2022-01-20', '2021-11-01', NULL, '2021-11-18 00:31:15', '2021-11-18 00:31:15', 'sepakat', 'penjualan'),
+(64, 73, 27, NULL, 'AK1-pptsss', 'd', 'Instansi', 'alamat', 'sa', '2022-01-20', '2021-11-01', NULL, '2021-11-18 00:31:54', '2021-11-18 00:31:54', 'sepakat', 'penjualan'),
+(65, 199, 2, NULL, 'AK1-324', 'asd', 'asd', 'asd', 'asd', '2021-11-27', '2021-11-10', NULL, '2021-11-18 09:58:40', '2021-11-18 09:58:40', 'sepakat', 'penjualan');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `failed_jobs`
+-- Table structure for table `failed_jobs`
 --
 
 CREATE TABLE `failed_jobs` (
@@ -1469,7 +1422,7 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `gdg_barang_jadi`
+-- Table structure for table `gdg_barang_jadi`
 --
 
 CREATE TABLE `gdg_barang_jadi` (
@@ -1490,7 +1443,7 @@ CREATE TABLE `gdg_barang_jadi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `gdg_barang_jadi`
+-- Dumping data for table `gdg_barang_jadi`
 --
 
 INSERT INTO `gdg_barang_jadi` (`id`, `produk_id`, `nama`, `deskripsi`, `stok`, `satuan_id`, `layout_id`, `gambar`, `dim_p`, `dim_l`, `dim_t`, `status`, `created_at`, `updated_at`) VALUES
@@ -1714,7 +1667,7 @@ INSERT INTO `gdg_barang_jadi` (`id`, `produk_id`, `nama`, `deskripsi`, `stok`, `
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `gdg_barang_jadi_his`
+-- Table structure for table `gdg_barang_jadi_his`
 --
 
 CREATE TABLE `gdg_barang_jadi_his` (
@@ -1737,7 +1690,7 @@ CREATE TABLE `gdg_barang_jadi_his` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `gdg_barang_jadi_his`
+-- Dumping data for table `gdg_barang_jadi_his`
 --
 
 INSERT INTO `gdg_barang_jadi_his` (`id`, `gdg_brg_jadi_id`, `produk_id`, `nama`, `deskripsi`, `stok`, `satuan_id`, `layout_id`, `dari`, `ke`, `status`, `tgl_masuk`, `tujuan`, `jenis`, `created_at`, `updated_at`) VALUES
@@ -1747,7 +1700,7 @@ INSERT INTO `gdg_barang_jadi_his` (`id`, `gdg_brg_jadi_id`, `produk_id`, `nama`,
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `jadwal_perakitan`
+-- Table structure for table `jadwal_perakitan`
 --
 
 CREATE TABLE `jadwal_perakitan` (
@@ -1767,7 +1720,7 @@ CREATE TABLE `jadwal_perakitan` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kelompok_produk`
+-- Table structure for table `kelompok_produk`
 --
 
 CREATE TABLE `kelompok_produk` (
@@ -1779,7 +1732,7 @@ CREATE TABLE `kelompok_produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `kelompok_produk`
+-- Dumping data for table `kelompok_produk`
 --
 
 INSERT INTO `kelompok_produk` (`id`, `jenis_id`, `nama`, `created_at`, `updated_at`) VALUES
@@ -1789,7 +1742,7 @@ INSERT INTO `kelompok_produk` (`id`, `jenis_id`, `nama`, `created_at`, `updated_
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `migrations`
+-- Table structure for table `migrations`
 --
 
 CREATE TABLE `migrations` (
@@ -1801,7 +1754,7 @@ CREATE TABLE `migrations` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `m_gs`
+-- Table structure for table `m_gs`
 --
 
 CREATE TABLE `m_gs` (
@@ -1821,7 +1774,7 @@ CREATE TABLE `m_gs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `m_gs`
+-- Dumping data for table `m_gs`
 --
 
 INSERT INTO `m_gs` (`id`, `sparepart_id`, `nama`, `deskripsi`, `stok`, `layout_id`, `gambar`, `dim_p`, `dim_l`, `dim_t`, `status`, `created_at`, `updated_at`) VALUES
@@ -8860,7 +8813,7 @@ INSERT INTO `m_gs` (`id`, `sparepart_id`, `nama`, `deskripsi`, `stok`, `layout_i
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `m_jenis_gks`
+-- Table structure for table `m_jenis_gks`
 --
 
 CREATE TABLE `m_jenis_gks` (
@@ -8871,7 +8824,7 @@ CREATE TABLE `m_jenis_gks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `m_jenis_gks`
+-- Dumping data for table `m_jenis_gks`
 --
 
 INSERT INTO `m_jenis_gks` (`id`, `nama`, `created_at`, `updated_at`) VALUES
@@ -8882,7 +8835,7 @@ INSERT INTO `m_jenis_gks` (`id`, `nama`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `m_layout`
+-- Table structure for table `m_layout`
 --
 
 CREATE TABLE `m_layout` (
@@ -8896,7 +8849,7 @@ CREATE TABLE `m_layout` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `m_layout`
+-- Dumping data for table `m_layout`
 --
 
 INSERT INTO `m_layout` (`id`, `ruang`, `lantai`, `rak`, `jenis_id`, `created_at`, `updated_at`) VALUES
@@ -8906,7 +8859,7 @@ INSERT INTO `m_layout` (`id`, `ruang`, `lantai`, `rak`, `jenis_id`, `created_at`
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `m_produk`
+-- Table structure for table `m_produk`
 --
 
 CREATE TABLE `m_produk` (
@@ -8918,7 +8871,7 @@ CREATE TABLE `m_produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `m_produk`
+-- Dumping data for table `m_produk`
 --
 
 INSERT INTO `m_produk` (`id`, `kode`, `nama`, `created_at`, `updated_at`) VALUES
@@ -9019,7 +8972,7 @@ INSERT INTO `m_produk` (`id`, `kode`, `nama`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `m_satuan`
+-- Table structure for table `m_satuan`
 --
 
 CREATE TABLE `m_satuan` (
@@ -9030,7 +8983,7 @@ CREATE TABLE `m_satuan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `m_satuan`
+-- Dumping data for table `m_satuan`
 --
 
 INSERT INTO `m_satuan` (`id`, `nama`, `created_at`, `updated_at`) VALUES
@@ -9041,7 +8994,7 @@ INSERT INTO `m_satuan` (`id`, `nama`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `m_sparepart`
+-- Table structure for table `m_sparepart`
 --
 
 CREATE TABLE `m_sparepart` (
@@ -9054,7 +9007,7 @@ CREATE TABLE `m_sparepart` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `m_sparepart`
+-- Dumping data for table `m_sparepart`
 --
 
 INSERT INTO `m_sparepart` (`id`, `kelompok_produk_id`, `kode`, `nama`, `created_at`, `updated_at`) VALUES
@@ -16092,7 +16045,7 @@ INSERT INTO `m_sparepart` (`id`, `kelompok_produk_id`, `kode`, `nama`, `created_
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `m_state`
+-- Table structure for table `m_state`
 --
 
 CREATE TABLE `m_state` (
@@ -16107,7 +16060,7 @@ CREATE TABLE `m_state` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `m_status`
+-- Table structure for table `m_status`
 --
 
 CREATE TABLE `m_status` (
@@ -16120,7 +16073,7 @@ CREATE TABLE `m_status` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `m_status`
+-- Dumping data for table `m_status`
 --
 
 INSERT INTO `m_status` (`id`, `nama`, `jenis_id`, `is_aktif`, `created_at`, `updated_at`) VALUES
@@ -16130,7 +16083,7 @@ INSERT INTO `m_status` (`id`, `nama`, `jenis_id`, `is_aktif`, `created_at`, `upd
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `noseri_barang_jadi`
+-- Table structure for table `noseri_barang_jadi`
 --
 
 CREATE TABLE `noseri_barang_jadi` (
@@ -16146,7 +16099,7 @@ CREATE TABLE `noseri_barang_jadi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `noseri_barang_jadi`
+-- Dumping data for table `noseri_barang_jadi`
 --
 
 INSERT INTO `noseri_barang_jadi` (`id`, `gdg_barang_jadi_id`, `dari`, `ke`, `noseri`, `jenis`, `is_aktif`, `created_at`, `updated_at`) VALUES
@@ -16348,7 +16301,21 @@ INSERT INTO `noseri_barang_jadi` (`id`, `gdg_barang_jadi_id`, `dari`, `ke`, `nos
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `password_resets`
+-- Table structure for table `noseri_detail_pesanan`
+--
+
+CREATE TABLE `noseri_detail_pesanan` (
+  `id` int(11) NOT NULL,
+  `detail_pesanan_produk_id` bigint(20) UNSIGNED NOT NULL,
+  `t_tfbj_noseri_id` bigint(20) UNSIGNED NOT NULL,
+  `status` enum('ok','nok') NOT NULL,
+  `tgl_uji` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets`
 --
 
 CREATE TABLE `password_resets` (
@@ -16360,7 +16327,7 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `penjualan_produk`
+-- Table structure for table `penjualan_produk`
 --
 
 CREATE TABLE `penjualan_produk` (
@@ -16372,7 +16339,7 @@ CREATE TABLE `penjualan_produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `penjualan_produk`
+-- Dumping data for table `penjualan_produk`
 --
 
 INSERT INTO `penjualan_produk` (`id`, `nama`, `harga`, `created_at`, `updated_at`) VALUES
@@ -16582,7 +16549,7 @@ INSERT INTO `penjualan_produk` (`id`, `nama`, `harga`, `created_at`, `updated_at
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `personal_access_tokens`
+-- Table structure for table `personal_access_tokens`
 --
 
 CREATE TABLE `personal_access_tokens` (
@@ -16600,7 +16567,7 @@ CREATE TABLE `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pesanan`
+-- Table structure for table `pesanan`
 --
 
 CREATE TABLE `pesanan` (
@@ -16616,7 +16583,7 @@ CREATE TABLE `pesanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `pesanan`
+-- Dumping data for table `pesanan`
 --
 
 INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, `created_at`, `updated_at`) VALUES
@@ -16695,12 +16662,12 @@ INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, 
 (73, 'SO/SPA/XI/2021/22', 'POSPA22', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (74, 'SO/SPA/XI/2021/23', 'POSPA23', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (75, 'SO/SPA/XI/2021/24', 'POSPA24', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(76, 'SO/SPA/XI/2021/25', 'POSPA25', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(76, 'SO/SPA/XI/2021/25', 'POSPA25', '2021-11-02', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (77, 'SO/SPA/XI/2021/26', 'POSPA26', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (78, 'SO/SPA/XI/2021/27', 'POSPA27', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (79, 'SO/SPA/XI/2021/28', 'POSPA28', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (80, 'SO/SPA/XI/2021/29', 'POSPA29', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(81, 'SO/SPA/XI/2021/30', 'POSPA30', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(81, 'SO/SPA/XI/2021/30', 'POSPA30', '2021-11-03', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (82, 'SO/SPA/XI/2021/31', 'POSPA31', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (83, 'SO/SPA/XI/2021/32', 'POSPA32', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (84, 'SO/SPA/XI/2021/33', 'POSPA33', '0000-00-00', '', '0000-00-00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -16756,10 +16723,10 @@ INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, 
 (134, 'SO/SPB/XI/2021/5', 'POSPB83', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
 (135, 'SO/SPB/XI/2021/6', 'POSPB84', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
 (136, 'SO/SPB/XI/2021/7', 'POSPB85', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
-(137, 'SO/SPB/XI/2021/8', 'POSPB86', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
+(137, 'SO/SPB/XI/2021/8', 'POSPB86', '2021-11-03', NULL, NULL, NULL, NULL, NULL),
 (138, 'SO/SPB/XI/2021/9', 'POSPB87', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
 (139, 'SO/SPB/XI/2021/10', 'POSPB88', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
-(140, 'SO/SPB/XI/2021/11', 'POSPB89', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
+(140, 'SO/SPB/XI/2021/11', 'POSPB89', '2021-11-02', NULL, NULL, NULL, NULL, NULL),
 (141, 'SO/SPB/XI/2021/12', 'POSPB90', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
 (142, 'SO/SPB/XI/2021/13', 'POSPB91', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
 (143, 'SO/SPB/XI/2021/14', 'POSPB92', '0000-00-00', NULL, NULL, NULL, NULL, NULL),
@@ -16839,7 +16806,7 @@ INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `produk`
+-- Table structure for table `produk`
 --
 
 CREATE TABLE `produk` (
@@ -16858,7 +16825,7 @@ CREATE TABLE `produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `produk`
+-- Dumping data for table `produk`
 --
 
 INSERT INTO `produk` (`id`, `produk_id`, `kelompok_produk_id`, `kode`, `merk`, `nama`, `nama_coo`, `no_akd`, `ket`, `status`, `created_at`, `updated_at`) VALUES
@@ -17024,7 +16991,7 @@ INSERT INTO `produk` (`id`, `produk_id`, `kelompok_produk_id`, `kode`, `merk`, `
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `provinsi`
+-- Table structure for table `provinsi`
 --
 
 CREATE TABLE `provinsi` (
@@ -17036,7 +17003,7 @@ CREATE TABLE `provinsi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `provinsi`
+-- Dumping data for table `provinsi`
 --
 
 INSERT INTO `provinsi` (`id`, `nama`, `status`, `created_at`, `updated_at`) VALUES
@@ -17078,7 +17045,7 @@ INSERT INTO `provinsi` (`id`, `nama`, `status`, `created_at`, `updated_at`) VALU
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `spa`
+-- Table structure for table `spa`
 --
 
 CREATE TABLE `spa` (
@@ -17092,7 +17059,7 @@ CREATE TABLE `spa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `spa`
+-- Dumping data for table `spa`
 --
 
 INSERT INTO `spa` (`id`, `customer_id`, `pesanan_id`, `ket`, `log`, `created_at`, `updated_at`) VALUES
@@ -17178,7 +17145,7 @@ INSERT INTO `spa` (`id`, `customer_id`, `pesanan_id`, `ket`, `log`, `created_at`
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `spb`
+-- Table structure for table `spb`
 --
 
 CREATE TABLE `spb` (
@@ -17192,7 +17159,7 @@ CREATE TABLE `spb` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `spb`
+-- Dumping data for table `spb`
 --
 
 INSERT INTO `spb` (`id`, `customer_id`, `pesanan_id`, `ket`, `log`, `created_at`, `updated_at`) VALUES
@@ -17286,7 +17253,7 @@ INSERT INTO `spb` (`id`, `customer_id`, `pesanan_id`, `ket`, `log`, `created_at`
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_draft_gbj`
+-- Table structure for table `t_draft_gbj`
 --
 
 CREATE TABLE `t_draft_gbj` (
@@ -17300,26 +17267,41 @@ CREATE TABLE `t_draft_gbj` (
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `t_draft_gbj`
+--
+
+INSERT INTO `t_draft_gbj` (`id`, `tgl_masuk`, `dari`, `tujuan`, `status_id`, `is_aktif`, `created_at`, `updated_at`) VALUES
+(12, '2021-01-01', 14, 'sdsds', 1, 1, '2021-11-18 02:40:11', NULL);
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_draft_gbj_detail`
+-- Table structure for table `t_draft_gbj_detail`
 --
 
 CREATE TABLE `t_draft_gbj_detail` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `draft_gbj_id` bigint(20) UNSIGNED DEFAULT NULL,
   `gbj_id` bigint(20) UNSIGNED DEFAULT NULL,
   `qty` int(11) DEFAULT NULL,
   `status_id` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `draft_gbj_id` bigint(20) UNSIGNED DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `t_draft_gbj_detail`
+--
+
+INSERT INTO `t_draft_gbj_detail` (`id`, `draft_gbj_id`, `gbj_id`, `qty`, `status_id`, `created_at`, `updated_at`) VALUES
+(17, 12, 5, 4, 1, NULL, NULL),
+(18, 12, 7, 2, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_draft_gbj_noseri`
+-- Table structure for table `t_draft_gbj_noseri`
 --
 
 CREATE TABLE `t_draft_gbj_noseri` (
@@ -17336,7 +17318,7 @@ CREATE TABLE `t_draft_gbj_noseri` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_gk`
+-- Table structure for table `t_gk`
 --
 
 CREATE TABLE `t_gk` (
@@ -17355,7 +17337,7 @@ CREATE TABLE `t_gk` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_gs_his`
+-- Table structure for table `t_gs_his`
 --
 
 CREATE TABLE `t_gs_his` (
@@ -17373,7 +17355,7 @@ CREATE TABLE `t_gs_his` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `t_gs_his`
+-- Dumping data for table `t_gs_his`
 --
 
 INSERT INTO `t_gs_his` (`id`, `gs_id`, `sparepart_id`, `nama`, `deskripsi`, `stok`, `layout_id`, `status`, `jenis`, `created_at`, `updated_at`) VALUES
@@ -24412,7 +24394,7 @@ INSERT INTO `t_gs_his` (`id`, `gs_id`, `sparepart_id`, `nama`, `deskripsi`, `sto
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_tfbj`
+-- Table structure for table `t_tfbj`
 --
 
 CREATE TABLE `t_tfbj` (
@@ -24426,18 +24408,19 @@ CREATE TABLE `t_tfbj` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `t_tfbj`
+-- Dumping data for table `t_tfbj`
 --
 
 INSERT INTO `t_tfbj` (`id`, `pesanan_id`, `ke`, `deskripsi`, `is_aktif`, `created_at`, `updated_at`) VALUES
 (51, 1, NULL, 'Transfer Permintaan Barang', 1, NULL, NULL),
 (83, NULL, 25, 'test', 0, '2021-11-17 07:25:50', '2021-11-17 07:25:50'),
-(84, NULL, 27, 'test beli', 0, '2021-11-17 07:25:52', '2021-11-17 07:25:52');
+(84, NULL, 27, 'test beli', 0, '2021-11-17 07:25:52', '2021-11-17 07:25:52'),
+(85, 3, NULL, 'Trf', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_tfbj_detail`
+-- Table structure for table `t_tfbj_detail`
 --
 
 CREATE TABLE `t_tfbj_detail` (
@@ -24451,7 +24434,7 @@ CREATE TABLE `t_tfbj_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `t_tfbj_detail`
+-- Dumping data for table `t_tfbj_detail`
 --
 
 INSERT INTO `t_tfbj_detail` (`id`, `tfbj_id`, `gdg_brg_jadi_id`, `qty`, `is_aktif`, `created_at`, `updated_at`) VALUES
@@ -24464,7 +24447,7 @@ INSERT INTO `t_tfbj_detail` (`id`, `tfbj_id`, `gdg_brg_jadi_id`, `qty`, `is_akti
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_tfbj_his`
+-- Table structure for table `t_tfbj_his`
 --
 
 CREATE TABLE `t_tfbj_his` (
@@ -24479,7 +24462,7 @@ CREATE TABLE `t_tfbj_his` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `t_tfbj_his`
+-- Dumping data for table `t_tfbj_his`
 --
 
 INSERT INTO `t_tfbj_his` (`id`, `tfbj_id`, `gdg_brg_jadi_id`, `qty`, `noseri`, `is_aktif`, `created_at`, `updated_at`) VALUES
@@ -24489,34 +24472,19 @@ INSERT INTO `t_tfbj_his` (`id`, `tfbj_id`, `gdg_brg_jadi_id`, `qty`, `noseri`, `
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `t_tfbj_noseri`
+-- Table structure for table `t_tfbj_noseri`
 --
 
 CREATE TABLE `t_tfbj_noseri` (
   `id` int(11) NOT NULL,
   `t_tfbj_detail_id` bigint(20) UNSIGNED NOT NULL,
-  `noseri_id` varchar(100) NOT NULL
+  `noseri_id` bigint(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `t_tfbj_noseri`
---
-
-INSERT INTO `t_tfbj_noseri` (`id`, `t_tfbj_detail_id`, `noseri_id`) VALUES
-(1, 63, '123'),
-(2, 63, '0'),
-(3, 64, '0'),
-(4, 64, '0'),
-(5, 65, 'SERI0001'),
-(6, 65, 'SERI0002'),
-(11, 66, 'SERI003'),
-(12, 66, 'SERI004'),
-(13, 67, 'SERI0005');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -24534,12 +24502,12 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `divisi_id`, `nama`, `username`, `email`, `password`, `foto`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 14, 'Dela', 'delait04', 'dela@gmail.com', '$2y$10$iAoWIipcduQIPvYIYxVEs.wDxAMV3dJt.hTh2znjdBtDhY5tWKclO', '', 'offline', '', '2021-02-15 23:25:09', '2021-02-15 23:25:09'),
-(2, 17, 'Uci Puspita', 'uciprd02', 'uci@gmail.com', '$2y$10$8ge5gLaiS5mKF5Lz6DwhsOUVFMm19ZvW4B0eVAArADBrnSOaGH402', 'Uci Puspita Sari.jpg', 'offline', '', '2021-02-15 23:28:06', '2021-02-15 23:28:06'),
+(2, 17, 'Uci Puspita', 'uciprd02', 'uci@gmail.com', '$2y$10$8ge5gLaiS5mKF5Lz6DwhsOUVFMm19ZvW4B0eVAArADBrnSOaGH402', '', 'offline', '', '2021-02-15 23:28:06', '2021-02-15 23:28:06'),
 (3, 24, 'Farah Diska B', 'farahppic01', 'farah@gmail.com', '$2y$10$p1pBKg1kGFn88H8YwvKPDe7De/RQP4C/szz6tWYcXzZEW4pUm5jMu', '', 'offline', '', '2021-02-15 23:30:16', '2021-02-15 23:30:16'),
 (5, 7, 'Muzdalifah', 'ifaadm05', 'ifa@gmail.com', '$2y$10$97vPP5Zm7sXD0S5BmVxqC.DK/Tzv3/dlZN7V9PF1AactBbNOMompe', '', 'online', '', '2021-02-24 23:53:37', '2021-02-24 23:53:37'),
 (6, 1, 'Ari Wijaya', 'ari_wijaya82', 'ariwijaya.its@gmail.com', '$2y$10$SFitjt0T0Al2UZlq6dslUOP/jZs/E.ZliliZxsmHp8KHtWfgYtar.', '', 'online', '', '2021-02-25 01:55:17', '2021-02-25 01:55:17'),
@@ -24555,12 +24523,13 @@ INSERT INTO `users` (`id`, `divisi_id`, `nama`, `username`, `email`, `password`,
 (18, 3, 'Kusnardiana Rahayu', 'anna', 'anna@gmail.com', '$2y$10$uj/8E40i4jrsP9dKE.S.IO0WwYDp7TlPDA/FQUbCnomytcxyky81S', '', 'online', '', '2021-07-14 22:22:53', '2021-07-14 22:22:53'),
 (19, 22, 'Dinda Trisakti', 'dindalab01', 'dinda@gmail.com', '$2y$10$LaA8ogkan.qv5HcZxiARwOLMANoT/6mtQ/Nt6feAdlsZ62WPfkCcm', '', 'online', '', '2021-07-19 02:37:31', '2021-07-19 02:37:31'),
 (21, 11, 'Ali Sukoco', 'aligbj01', 'ali@gmail.com', '$2y$10$3OTTWQBqTTBt6b4WsUFmQevnLsAo7LuPFwRRhGEPCTRc0.MC.YE82', '', 'online', '', '2021-08-13 01:46:57', '2021-08-13 01:46:57'),
-(22, 13, 'Nur Kholidah', 'idagbj02', 'ida@gmail.com', '$2y$10$YSEicx/W7euW/3GRGI7vmeAM/Aj.bEfn.k7C5Bzddf8FR9dfe0o9W', '', 'online', '', '2021-08-18 03:09:09', '2021-08-18 03:09:09');
+(22, 13, 'Nur Kholidah', 'idagbj02', 'ida@gmail.com', '$2y$10$YSEicx/W7euW/3GRGI7vmeAM/Aj.bEfn.k7C5Bzddf8FR9dfe0o9W', '', 'online', '', '2021-08-18 03:09:09', '2021-08-18 03:09:09'),
+(23, 12, 'dimas', 'dimasit83', 'dimas@gmail.com', '$2y$10$Ja8sex7tQyHnYLZNZhBppOVv2HT2VrLDGuUXJx1OqT18PMTzWYK2O', '', 'offline', NULL, NULL, '2021-11-18 04:43:58');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `websockets_statistics_entries`
+-- Table structure for table `websockets_statistics_entries`
 --
 
 CREATE TABLE `websockets_statistics_entries` (
@@ -24578,58 +24547,43 @@ CREATE TABLE `websockets_statistics_entries` (
 --
 
 --
--- Indeks untuk tabel `customer`
+-- Indexes for table `customer`
 --
 ALTER TABLE `customer`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_provinsi` (`id_provinsi`);
 
 --
--- Indeks untuk tabel `detail_ekatalog`
---
-ALTER TABLE `detail_ekatalog`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `detail_ekatalog_ekatalog_id_foreign` (`ekatalog_id`),
-  ADD KEY `detail_ekatalog_penjualan_produk_id_foreign` (`penjualan_produk_id`);
-
---
--- Indeks untuk tabel `detail_ekatalog_produk`
---
-ALTER TABLE `detail_ekatalog_produk`
-  ADD KEY `detail_ekatalog_id` (`detail_ekatalog_id`,`gudang_barang_jadi_id`),
-  ADD KEY `detail_ekatalog_produk_FK_1` (`gudang_barang_jadi_id`);
-
---
--- Indeks untuk tabel `detail_penjualan_produk`
+-- Indexes for table `detail_penjualan_produk`
 --
 ALTER TABLE `detail_penjualan_produk`
   ADD KEY `detail_penjualan_produk_produk_id_foreign` (`produk_id`),
   ADD KEY `detail_penjualan_produk_penjualan_produk_id_foreign` (`penjualan_produk_id`);
 
 --
--- Indeks untuk tabel `detail_spa`
+-- Indexes for table `detail_pesanan`
 --
-ALTER TABLE `detail_spa`
+ALTER TABLE `detail_pesanan`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `detail_spa_spa_id_foreign` (`spa_id`),
-  ADD KEY `detail_spa_penjualan_produk_id_foreign` (`penjualan_produk_id`);
+  ADD KEY `pesanan_id` (`pesanan_id`,`penjualan_produk_id`),
+  ADD KEY `penjualan_produk_id` (`penjualan_produk_id`);
 
 --
--- Indeks untuk tabel `detail_spb`
+-- Indexes for table `detail_pesanan_produk`
 --
-ALTER TABLE `detail_spb`
+ALTER TABLE `detail_pesanan_produk`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `detail_spb_spb_id_foreign` (`spb_id`),
-  ADD KEY `detail_spb_penjualan_produk_id_foreign` (`penjualan_produk_id`);
+  ADD KEY `detail_pesanan_id` (`detail_pesanan_id`,`gudang_barang_jadi_id`),
+  ADD KEY `detail_pesanan_produk_ibfk_2` (`gudang_barang_jadi_id`);
 
 --
--- Indeks untuk tabel `divisi`
+-- Indexes for table `divisi`
 --
 ALTER TABLE `divisi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `ekatalog`
+-- Indexes for table `ekatalog`
 --
 ALTER TABLE `ekatalog`
   ADD PRIMARY KEY (`id`),
@@ -24638,14 +24592,14 @@ ALTER TABLE `ekatalog`
   ADD KEY `eekatalog_FK_2` (`pesanan_id`);
 
 --
--- Indeks untuk tabel `failed_jobs`
+-- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
--- Indeks untuk tabel `gdg_barang_jadi`
+-- Indexes for table `gdg_barang_jadi`
 --
 ALTER TABLE `gdg_barang_jadi`
   ADD PRIMARY KEY (`id`),
@@ -24655,7 +24609,7 @@ ALTER TABLE `gdg_barang_jadi`
   ADD KEY `gdg_barang_jadi_FK_1` (`status`);
 
 --
--- Indeks untuk tabel `gdg_barang_jadi_his`
+-- Indexes for table `gdg_barang_jadi_his`
 --
 ALTER TABLE `gdg_barang_jadi_his`
   ADD PRIMARY KEY (`id`),
@@ -24667,27 +24621,27 @@ ALTER TABLE `gdg_barang_jadi_his`
   ADD KEY `gdg_barang_jadi_his_FK` (`satuan_id`);
 
 --
--- Indeks untuk tabel `jadwal_perakitan`
+-- Indexes for table `jadwal_perakitan`
 --
 ALTER TABLE `jadwal_perakitan`
   ADD PRIMARY KEY (`id`),
   ADD KEY `jadwal_perakitan_produk_id_foreign` (`produk_id`);
 
 --
--- Indeks untuk tabel `kelompok_produk`
+-- Indexes for table `kelompok_produk`
 --
 ALTER TABLE `kelompok_produk`
   ADD PRIMARY KEY (`id`),
   ADD KEY `kelompok_produk_jenis_id_foreign` (`jenis_id`);
 
 --
--- Indeks untuk tabel `migrations`
+-- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `m_gs`
+-- Indexes for table `m_gs`
 --
 ALTER TABLE `m_gs`
   ADD PRIMARY KEY (`id`),
@@ -24695,53 +24649,53 @@ ALTER TABLE `m_gs`
   ADD KEY `m_gs_layout_id_foreign` (`layout_id`);
 
 --
--- Indeks untuk tabel `m_jenis_gks`
+-- Indexes for table `m_jenis_gks`
 --
 ALTER TABLE `m_jenis_gks`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `m_layout`
+-- Indexes for table `m_layout`
 --
 ALTER TABLE `m_layout`
   ADD PRIMARY KEY (`id`),
   ADD KEY `m_layout_jenis_id_foreign` (`jenis_id`);
 
 --
--- Indeks untuk tabel `m_produk`
+-- Indexes for table `m_produk`
 --
 ALTER TABLE `m_produk`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `m_satuan`
+-- Indexes for table `m_satuan`
 --
 ALTER TABLE `m_satuan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `m_sparepart`
+-- Indexes for table `m_sparepart`
 --
 ALTER TABLE `m_sparepart`
   ADD PRIMARY KEY (`id`),
   ADD KEY `m_sparepart_kelompok_produk_id_foreign` (`kelompok_produk_id`);
 
 --
--- Indeks untuk tabel `m_state`
+-- Indexes for table `m_state`
 --
 ALTER TABLE `m_state`
   ADD PRIMARY KEY (`id`),
   ADD KEY `m_state_jenis_id_foreign` (`jenis_id`);
 
 --
--- Indeks untuk tabel `m_status`
+-- Indexes for table `m_status`
 --
 ALTER TABLE `m_status`
   ADD PRIMARY KEY (`id`),
   ADD KEY `m_status_jenis_id_foreign` (`jenis_id`);
 
 --
--- Indeks untuk tabel `noseri_barang_jadi`
+-- Indexes for table `noseri_barang_jadi`
 --
 ALTER TABLE `noseri_barang_jadi`
   ADD PRIMARY KEY (`id`),
@@ -24750,32 +24704,39 @@ ALTER TABLE `noseri_barang_jadi`
   ADD KEY `noseri_barang_jadi_ke_foreign` (`ke`);
 
 --
--- Indeks untuk tabel `password_resets`
+-- Indexes for table `noseri_detail_pesanan`
+--
+ALTER TABLE `noseri_detail_pesanan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `detail_pesanan_produk_id` (`detail_pesanan_produk_id`,`t_tfbj_noseri_id`);
+
+--
+-- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
--- Indeks untuk tabel `penjualan_produk`
+-- Indexes for table `penjualan_produk`
 --
 ALTER TABLE `penjualan_produk`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `personal_access_tokens`
+-- Indexes for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`);
 
 --
--- Indeks untuk tabel `pesanan`
+-- Indexes for table `pesanan`
 --
 ALTER TABLE `pesanan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `produk`
+-- Indexes for table `produk`
 --
 ALTER TABLE `produk`
   ADD PRIMARY KEY (`id`),
@@ -24783,13 +24744,13 @@ ALTER TABLE `produk`
   ADD KEY `kelompok_produk_id` (`kelompok_produk_id`);
 
 --
--- Indeks untuk tabel `provinsi`
+-- Indexes for table `provinsi`
 --
 ALTER TABLE `provinsi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `spa`
+-- Indexes for table `spa`
 --
 ALTER TABLE `spa`
   ADD PRIMARY KEY (`id`),
@@ -24797,7 +24758,7 @@ ALTER TABLE `spa`
   ADD KEY `spa_FK` (`customer_id`);
 
 --
--- Indeks untuk tabel `spb`
+-- Indexes for table `spb`
 --
 ALTER TABLE `spb`
   ADD PRIMARY KEY (`id`),
@@ -24805,7 +24766,7 @@ ALTER TABLE `spb`
   ADD KEY `spb_FK` (`customer_id`);
 
 --
--- Indeks untuk tabel `t_draft_gbj`
+-- Indexes for table `t_draft_gbj`
 --
 ALTER TABLE `t_draft_gbj`
   ADD PRIMARY KEY (`id`),
@@ -24813,7 +24774,7 @@ ALTER TABLE `t_draft_gbj`
   ADD KEY `t_draft_gbj_status_FK_1` (`status_id`);
 
 --
--- Indeks untuk tabel `t_draft_gbj_detail`
+-- Indexes for table `t_draft_gbj_detail`
 --
 ALTER TABLE `t_draft_gbj_detail`
   ADD PRIMARY KEY (`id`),
@@ -24822,7 +24783,7 @@ ALTER TABLE `t_draft_gbj_detail`
   ADD KEY `t_draft_gbj_detail_FK` (`draft_gbj_id`);
 
 --
--- Indeks untuk tabel `t_draft_gbj_noseri`
+-- Indexes for table `t_draft_gbj_noseri`
 --
 ALTER TABLE `t_draft_gbj_noseri`
   ADD PRIMARY KEY (`id`),
@@ -24831,7 +24792,7 @@ ALTER TABLE `t_draft_gbj_noseri`
   ADD KEY `NewTable_FK_2` (`draft_gbj_id`);
 
 --
--- Indeks untuk tabel `t_gk`
+-- Indexes for table `t_gk`
 --
 ALTER TABLE `t_gk`
   ADD PRIMARY KEY (`id`),
@@ -24840,7 +24801,7 @@ ALTER TABLE `t_gk`
   ADD KEY `t_gk_sparepart_id_foreign` (`sparepart_id`);
 
 --
--- Indeks untuk tabel `t_gs_his`
+-- Indexes for table `t_gs_his`
 --
 ALTER TABLE `t_gs_his`
   ADD PRIMARY KEY (`id`),
@@ -24849,7 +24810,7 @@ ALTER TABLE `t_gs_his`
   ADD KEY `t_gs_his_layout_id_foreign` (`layout_id`);
 
 --
--- Indeks untuk tabel `t_tfbj`
+-- Indexes for table `t_tfbj`
 --
 ALTER TABLE `t_tfbj`
   ADD PRIMARY KEY (`id`),
@@ -24857,7 +24818,7 @@ ALTER TABLE `t_tfbj`
   ADD KEY `t_tfbj_FK` (`pesanan_id`);
 
 --
--- Indeks untuk tabel `t_tfbj_detail`
+-- Indexes for table `t_tfbj_detail`
 --
 ALTER TABLE `t_tfbj_detail`
   ADD PRIMARY KEY (`id`),
@@ -24865,7 +24826,7 @@ ALTER TABLE `t_tfbj_detail`
   ADD KEY `t_tfbj_detail_gdg_brg_jadi_id_foreign` (`gdg_brg_jadi_id`);
 
 --
--- Indeks untuk tabel `t_tfbj_his`
+-- Indexes for table `t_tfbj_his`
 --
 ALTER TABLE `t_tfbj_his`
   ADD PRIMARY KEY (`id`),
@@ -24873,14 +24834,15 @@ ALTER TABLE `t_tfbj_his`
   ADD KEY `t_tfbj_his_gdg_brg_jadi_id_foreign` (`gdg_brg_jadi_id`);
 
 --
--- Indeks untuk tabel `t_tfbj_noseri`
+-- Indexes for table `t_tfbj_noseri`
 --
 ALTER TABLE `t_tfbj_noseri`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `t_tfbj_detail_id` (`t_tfbj_detail_id`);
+  ADD KEY `t_tfbj_detail_id` (`t_tfbj_detail_id`),
+  ADD KEY `noseri_id` (`noseri_id`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -24889,296 +24851,282 @@ ALTER TABLE `users`
   ADD KEY `users_divisi_id_foreign` (`divisi_id`);
 
 --
--- Indeks untuk tabel `websockets_statistics_entries`
+-- Indexes for table `websockets_statistics_entries`
 --
 ALTER TABLE `websockets_statistics_entries`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `customer`
+-- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=478;
 
 --
--- AUTO_INCREMENT untuk tabel `detail_ekatalog`
+-- AUTO_INCREMENT for table `detail_pesanan`
 --
-ALTER TABLE `detail_ekatalog`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+ALTER TABLE `detail_pesanan`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=328;
 
 --
--- AUTO_INCREMENT untuk tabel `detail_spa`
+-- AUTO_INCREMENT for table `detail_pesanan_produk`
 --
-ALTER TABLE `detail_spa`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+ALTER TABLE `detail_pesanan_produk`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT untuk tabel `detail_spb`
---
-ALTER TABLE `detail_spb`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
-
---
--- AUTO_INCREMENT untuk tabel `divisi`
+-- AUTO_INCREMENT for table `divisi`
 --
 ALTER TABLE `divisi`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT untuk tabel `ekatalog`
+-- AUTO_INCREMENT for table `ekatalog`
 --
 ALTER TABLE `ekatalog`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
--- AUTO_INCREMENT untuk tabel `failed_jobs`
+-- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `gdg_barang_jadi`
+-- AUTO_INCREMENT for table `gdg_barang_jadi`
 --
 ALTER TABLE `gdg_barang_jadi`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
 
 --
--- AUTO_INCREMENT untuk tabel `gdg_barang_jadi_his`
+-- AUTO_INCREMENT for table `gdg_barang_jadi_his`
 --
 ALTER TABLE `gdg_barang_jadi_his`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `jadwal_perakitan`
+-- AUTO_INCREMENT for table `jadwal_perakitan`
 --
 ALTER TABLE `jadwal_perakitan`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `kelompok_produk`
+-- AUTO_INCREMENT for table `kelompok_produk`
 --
 ALTER TABLE `kelompok_produk`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
 
 --
--- AUTO_INCREMENT untuk tabel `migrations`
+-- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- AUTO_INCREMENT untuk tabel `m_gs`
+-- AUTO_INCREMENT for table `m_gs`
 --
 ALTER TABLE `m_gs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7024;
 
 --
--- AUTO_INCREMENT untuk tabel `m_jenis_gks`
+-- AUTO_INCREMENT for table `m_jenis_gks`
 --
 ALTER TABLE `m_jenis_gks`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `m_layout`
+-- AUTO_INCREMENT for table `m_layout`
 --
 ALTER TABLE `m_layout`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT untuk tabel `m_produk`
+-- AUTO_INCREMENT for table `m_produk`
 --
 ALTER TABLE `m_produk`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
--- AUTO_INCREMENT untuk tabel `m_satuan`
+-- AUTO_INCREMENT for table `m_satuan`
 --
 ALTER TABLE `m_satuan`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `m_sparepart`
+-- AUTO_INCREMENT for table `m_sparepart`
 --
 ALTER TABLE `m_sparepart`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7026;
 
 --
--- AUTO_INCREMENT untuk tabel `m_state`
+-- AUTO_INCREMENT for table `m_state`
 --
 ALTER TABLE `m_state`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `m_status`
+-- AUTO_INCREMENT for table `m_status`
 --
 ALTER TABLE `m_status`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT untuk tabel `noseri_barang_jadi`
+-- AUTO_INCREMENT for table `noseri_barang_jadi`
 --
 ALTER TABLE `noseri_barang_jadi`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=197;
 
 --
--- AUTO_INCREMENT untuk tabel `penjualan_produk`
+-- AUTO_INCREMENT for table `noseri_detail_pesanan`
+--
+ALTER TABLE `noseri_detail_pesanan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `penjualan_produk`
 --
 ALTER TABLE `penjualan_produk`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=217;
 
 --
--- AUTO_INCREMENT untuk tabel `personal_access_tokens`
+-- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `pesanan`
+-- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=216;
 
 --
--- AUTO_INCREMENT untuk tabel `produk`
+-- AUTO_INCREMENT for table `produk`
 --
 ALTER TABLE `produk`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
--- AUTO_INCREMENT untuk tabel `provinsi`
+-- AUTO_INCREMENT for table `provinsi`
 --
 ALTER TABLE `provinsi`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
--- AUTO_INCREMENT untuk tabel `spa`
+-- AUTO_INCREMENT for table `spa`
 --
 ALTER TABLE `spa`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
--- AUTO_INCREMENT untuk tabel `spb`
+-- AUTO_INCREMENT for table `spb`
 --
 ALTER TABLE `spb`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
--- AUTO_INCREMENT untuk tabel `t_draft_gbj`
+-- AUTO_INCREMENT for table `t_draft_gbj`
 --
 ALTER TABLE `t_draft_gbj`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT untuk tabel `t_draft_gbj_detail`
+-- AUTO_INCREMENT for table `t_draft_gbj_detail`
 --
 ALTER TABLE `t_draft_gbj_detail`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT untuk tabel `t_draft_gbj_noseri`
+-- AUTO_INCREMENT for table `t_draft_gbj_noseri`
 --
 ALTER TABLE `t_draft_gbj_noseri`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `t_gk`
+-- AUTO_INCREMENT for table `t_gk`
 --
 ALTER TABLE `t_gk`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `t_gs_his`
+-- AUTO_INCREMENT for table `t_gs_his`
 --
 ALTER TABLE `t_gs_his`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7035;
 
 --
--- AUTO_INCREMENT untuk tabel `t_tfbj`
+-- AUTO_INCREMENT for table `t_tfbj`
 --
 ALTER TABLE `t_tfbj`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
--- AUTO_INCREMENT untuk tabel `t_tfbj_detail`
+-- AUTO_INCREMENT for table `t_tfbj_detail`
 --
 ALTER TABLE `t_tfbj_detail`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
--- AUTO_INCREMENT untuk tabel `t_tfbj_his`
+-- AUTO_INCREMENT for table `t_tfbj_his`
 --
 ALTER TABLE `t_tfbj_his`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
--- AUTO_INCREMENT untuk tabel `t_tfbj_noseri`
+-- AUTO_INCREMENT for table `t_tfbj_noseri`
 --
 ALTER TABLE `t_tfbj_noseri`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT untuk tabel `websockets_statistics_entries`
+-- AUTO_INCREMENT for table `websockets_statistics_entries`
 --
 ALTER TABLE `websockets_statistics_entries`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `customer`
+-- Constraints for table `customer`
 --
 ALTER TABLE `customer`
   ADD CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`id_provinsi`) REFERENCES `provinsi` (`id`) ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `detail_ekatalog`
---
-ALTER TABLE `detail_ekatalog`
-  ADD CONSTRAINT `detail_ekatalog_ekatalog_id_foreign` FOREIGN KEY (`ekatalog_id`) REFERENCES `ekatalog` (`id`),
-  ADD CONSTRAINT `detail_ekatalog_penjualan_produk_id_foreign` FOREIGN KEY (`penjualan_produk_id`) REFERENCES `penjualan_produk` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `detail_ekatalog_produk`
---
-ALTER TABLE `detail_ekatalog_produk`
-  ADD CONSTRAINT `detail_ekatalog_produk_FK` FOREIGN KEY (`detail_ekatalog_id`) REFERENCES `detail_ekatalog` (`id`),
-  ADD CONSTRAINT `detail_ekatalog_produk_FK_1` FOREIGN KEY (`gudang_barang_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `detail_penjualan_produk`
+-- Constraints for table `detail_penjualan_produk`
 --
 ALTER TABLE `detail_penjualan_produk`
   ADD CONSTRAINT `detail_penjualan_produk_penjualan_produk_id_foreign` FOREIGN KEY (`penjualan_produk_id`) REFERENCES `penjualan_produk` (`id`),
   ADD CONSTRAINT `detail_penjualan_produk_produk_id_foreign` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `detail_spa`
+-- Constraints for table `detail_pesanan`
 --
-ALTER TABLE `detail_spa`
-  ADD CONSTRAINT `detail_spa_penjualan_produk_id_foreign` FOREIGN KEY (`penjualan_produk_id`) REFERENCES `penjualan_produk` (`id`),
-  ADD CONSTRAINT `detail_spa_spa_id_foreign` FOREIGN KEY (`spa_id`) REFERENCES `spa` (`id`);
+ALTER TABLE `detail_pesanan`
+  ADD CONSTRAINT `detail_pesanan_ibfk_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `detail_pesanan_ibfk_2` FOREIGN KEY (`penjualan_produk_id`) REFERENCES `penjualan_produk` (`id`) ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `detail_spb`
+-- Constraints for table `detail_pesanan_produk`
 --
-ALTER TABLE `detail_spb`
-  ADD CONSTRAINT `detail_spb_penjualan_produk_id_foreign` FOREIGN KEY (`penjualan_produk_id`) REFERENCES `penjualan_produk` (`id`),
-  ADD CONSTRAINT `detail_spb_spb_id_foreign` FOREIGN KEY (`spb_id`) REFERENCES `spb` (`id`);
+ALTER TABLE `detail_pesanan_produk`
+  ADD CONSTRAINT `detail_pesanan_produk_ibfk_2` FOREIGN KEY (`gudang_barang_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`),
+  ADD CONSTRAINT `detail_pesanan_produk_ibfk_3` FOREIGN KEY (`detail_pesanan_id`) REFERENCES `detail_pesanan` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `ekatalog`
+-- Constraints for table `ekatalog`
 --
 ALTER TABLE `ekatalog`
   ADD CONSTRAINT `eekatalog_FK` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
@@ -25186,7 +25134,7 @@ ALTER TABLE `ekatalog`
   ADD CONSTRAINT `eekatalog_FK_2` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `gdg_barang_jadi`
+-- Constraints for table `gdg_barang_jadi`
 --
 ALTER TABLE `gdg_barang_jadi`
   ADD CONSTRAINT `gdg_barang_jadi_FK` FOREIGN KEY (`satuan_id`) REFERENCES `m_satuan` (`id`),
@@ -25195,7 +25143,7 @@ ALTER TABLE `gdg_barang_jadi`
   ADD CONSTRAINT `gdg_barang_jadi_produk_id_foreign` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `gdg_barang_jadi_his`
+-- Constraints for table `gdg_barang_jadi_his`
 --
 ALTER TABLE `gdg_barang_jadi_his`
   ADD CONSTRAINT `gdg_barang_jadi_his_FK` FOREIGN KEY (`satuan_id`) REFERENCES `m_satuan` (`id`),
@@ -25206,149 +25154,53 @@ ALTER TABLE `gdg_barang_jadi_his`
   ADD CONSTRAINT `gdg_barang_jadi_his_produk_id_foreign` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `jadwal_perakitan`
+-- Constraints for table `jadwal_perakitan`
 --
 ALTER TABLE `jadwal_perakitan`
   ADD CONSTRAINT `jadwal_perakitan_produk_id_foreign` FOREIGN KEY (`produk_id`) REFERENCES `gdg_barang_jadi` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `kelompok_produk`
+-- Constraints for table `kelompok_produk`
 --
 ALTER TABLE `kelompok_produk`
   ADD CONSTRAINT `kelompok_produk_jenis_id_foreign` FOREIGN KEY (`jenis_id`) REFERENCES `m_jenis_gks` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `m_gs`
+-- Constraints for table `m_gs`
 --
 ALTER TABLE `m_gs`
   ADD CONSTRAINT `m_gs_layout_id_foreign` FOREIGN KEY (`layout_id`) REFERENCES `m_layout` (`id`),
   ADD CONSTRAINT `m_gs_sparepart_id_foreign` FOREIGN KEY (`sparepart_id`) REFERENCES `m_sparepart` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `m_layout`
+-- Constraints for table `m_layout`
 --
 ALTER TABLE `m_layout`
   ADD CONSTRAINT `m_layout_jenis_id_foreign` FOREIGN KEY (`jenis_id`) REFERENCES `m_jenis_gks` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `m_sparepart`
---
-ALTER TABLE `m_sparepart`
-  ADD CONSTRAINT `m_sparepart_kelompok_produk_id_foreign` FOREIGN KEY (`kelompok_produk_id`) REFERENCES `kelompok_produk` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `m_state`
+-- Constraints for table `m_state`
 --
 ALTER TABLE `m_state`
   ADD CONSTRAINT `m_state_jenis_id_foreign` FOREIGN KEY (`jenis_id`) REFERENCES `m_jenis_gks` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `m_status`
+-- Constraints for table `noseri_detail_pesanan`
 --
-ALTER TABLE `m_status`
-  ADD CONSTRAINT `m_status_jenis_id_foreign` FOREIGN KEY (`jenis_id`) REFERENCES `m_jenis_gks` (`id`);
+ALTER TABLE `noseri_detail_pesanan`
+  ADD CONSTRAINT `noseri_detail_pesanan_ibfk_1` FOREIGN KEY (`detail_pesanan_produk_id`) REFERENCES `detail_pesanan_produk` (`id`) ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `noseri_barang_jadi`
---
-ALTER TABLE `noseri_barang_jadi`
-  ADD CONSTRAINT `noseri_barang_jadi_dari_foreign` FOREIGN KEY (`dari`) REFERENCES `divisi` (`id`),
-  ADD CONSTRAINT `noseri_barang_jadi_gdg_barang_jadi_id_foreign` FOREIGN KEY (`gdg_barang_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`),
-  ADD CONSTRAINT `noseri_barang_jadi_ke_foreign` FOREIGN KEY (`ke`) REFERENCES `divisi` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `produk`
---
-ALTER TABLE `produk`
-  ADD CONSTRAINT `produk_FK` FOREIGN KEY (`produk_id`) REFERENCES `m_produk` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `spa`
+-- Constraints for table `spa`
 --
 ALTER TABLE `spa`
-  ADD CONSTRAINT `spa_FK` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
-  ADD CONSTRAINT `spa_FK_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`),
-  ADD CONSTRAINT `spa_pesanan_id_foreign` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`);
+  ADD CONSTRAINT `spa_ibfk_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`) ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `spb`
+-- Constraints for table `spb`
 --
 ALTER TABLE `spb`
-  ADD CONSTRAINT `spb_FK` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
-  ADD CONSTRAINT `spb_FK_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`),
-  ADD CONSTRAINT `spb_pesanan_id_foreign` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_draft_gbj`
---
-ALTER TABLE `t_draft_gbj`
-  ADD CONSTRAINT `t_draft_gbj_dari_FK_2` FOREIGN KEY (`dari`) REFERENCES `divisi` (`id`),
-  ADD CONSTRAINT `t_draft_gbj_status_FK_1` FOREIGN KEY (`status_id`) REFERENCES `m_status` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_draft_gbj_detail`
---
-ALTER TABLE `t_draft_gbj_detail`
-  ADD CONSTRAINT `t_draft_gbj_detail_FK` FOREIGN KEY (`draft_gbj_id`) REFERENCES `t_draft_gbj` (`id`),
-  ADD CONSTRAINT `t_draft_gbj_detail_FK_1` FOREIGN KEY (`status_id`) REFERENCES `m_status` (`id`),
-  ADD CONSTRAINT `t_draft_gbj_detail_FK_2` FOREIGN KEY (`gbj_id`) REFERENCES `gdg_barang_jadi` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_draft_gbj_noseri`
---
-ALTER TABLE `t_draft_gbj_noseri`
-  ADD CONSTRAINT `NewTable_FK` FOREIGN KEY (`layout_id`) REFERENCES `m_layout` (`id`),
-  ADD CONSTRAINT `NewTable_FK_1` FOREIGN KEY (`status_id`) REFERENCES `m_status` (`id`),
-  ADD CONSTRAINT `NewTable_FK_2` FOREIGN KEY (`draft_gbj_id`) REFERENCES `t_draft_gbj` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_gk`
---
-ALTER TABLE `t_gk`
-  ADD CONSTRAINT `t_gk_gdg_barang_jadi_id_foreign` FOREIGN KEY (`gdg_barang_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`),
-  ADD CONSTRAINT `t_gk_jenis_id_foreign` FOREIGN KEY (`jenis_id`) REFERENCES `m_jenis_gks` (`id`),
-  ADD CONSTRAINT `t_gk_sparepart_id_foreign` FOREIGN KEY (`sparepart_id`) REFERENCES `m_sparepart` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_gs_his`
---
-ALTER TABLE `t_gs_his`
-  ADD CONSTRAINT `t_gs_his_gs_id_foreign` FOREIGN KEY (`gs_id`) REFERENCES `m_gs` (`id`),
-  ADD CONSTRAINT `t_gs_his_layout_id_foreign` FOREIGN KEY (`layout_id`) REFERENCES `m_layout` (`id`),
-  ADD CONSTRAINT `t_gs_his_sparepart_id_foreign` FOREIGN KEY (`sparepart_id`) REFERENCES `m_sparepart` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_tfbj`
---
-ALTER TABLE `t_tfbj`
-  ADD CONSTRAINT `t_tfbj_FK` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`),
-  ADD CONSTRAINT `t_tfbj_ke_foreign` FOREIGN KEY (`ke`) REFERENCES `divisi` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_tfbj_detail`
---
-ALTER TABLE `t_tfbj_detail`
-  ADD CONSTRAINT `t_tfbj_detail_gdg_brg_jadi_id_foreign` FOREIGN KEY (`gdg_brg_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`),
-  ADD CONSTRAINT `t_tfbj_detail_tfbj_id_foreign` FOREIGN KEY (`tfbj_id`) REFERENCES `t_tfbj` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_tfbj_his`
---
-ALTER TABLE `t_tfbj_his`
-  ADD CONSTRAINT `t_tfbj_his_gdg_brg_jadi_id_foreign` FOREIGN KEY (`gdg_brg_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`),
-  ADD CONSTRAINT `t_tfbj_his_tfbj_id_foreign` FOREIGN KEY (`tfbj_id`) REFERENCES `t_tfbj` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `t_tfbj_noseri`
---
-ALTER TABLE `t_tfbj_noseri`
-  ADD CONSTRAINT `t_tfbj_noseri_FK` FOREIGN KEY (`t_tfbj_detail_id`) REFERENCES `t_tfbj_detail` (`id`);
-
---
--- Ketidakleluasaan untuk tabel `users`
---
-ALTER TABLE `users`
-  ADD CONSTRAINT `users_divisi_id_foreign` FOREIGN KEY (`divisi_id`) REFERENCES `divisi` (`id`);
+  ADD CONSTRAINT `spb_ibfk_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\LaporanQcOutgoing;
 use App\Models\DetailEkatalog;
+use App\Models\DetailPesanan;
+use App\Models\DetailPesananProduk;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\NoseriBarangJadi;
@@ -47,35 +49,52 @@ class QcController extends Controller
     }
     public function get_data_detail_so($id)
     {
-        $data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
+        //$data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
+        $data = DetailPesananProduk::where('detail_pesanan_id', 1)->get();
+
+
         // $q->whereNotNull('no_po');
         // echo json_encode($data);
-        $l = [];
-        $v = 0;
-        foreach ($data as $s) {
-            foreach ($s->GudangBarangJadi as $k) {
-                $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
-                $l[$v]['nama_produk'] = $k->produk->nama;
-                $l[$v]['jumlah'] = $k->pivot->jumlah;
-                $v++;
-            }
-        }
-<<<<<<< HEAD
-=======
+        // $l = [];
+        // $v = 0;
+        // foreach ($data as $s) {
+        //     foreach ($s->GudangBarangJadi as $k) {
+        //         $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
+        //         $l[$v]['nama_produk'] = $k->produk->nama;
+        //         $l[$v]['jumlah'] = $k->pivot->jumlah;
+        //         $v++;
+        //     }
+        // }
 
->>>>>>> 2e4ee9ba34c23939577493e4c33326d06b2d1339
-        return datatables()->of($l)
+
+
+        //echo json_encode($data);
+        // $l = [];
+        // $v = 0;
+        // foreach ($data as $s) {
+        //     foreach ($s->GudangBarangJadi as $k) {
+        //         $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
+        //         $l[$v]['nama_produk'] = $k->produk->nama;
+        //         $l[$v]['jumlah'] = $k->pivot->jumlah;
+        //         $v++;
+        //     }
+        // }
+        return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('nama_produk', function ($l) {
-                return $l['nama_produk'];
+            ->addColumn('nama_produk', function ($data) {
+                if (empty($data->gudangbarangjadi->nama)) {
+                    return $data->gudangbarangjadi->produk->nama;
+                } else {
+                    return $data->gudangbarangjadi->nama;
+                }
             })
-            ->addColumn('jumlah', function ($l) {
-                return $l['jumlah'];
-            })
-            ->addColumn('button', function ($l) {
-                return '<a type="button" class="noserishow" data-id="' . $l['id'] . '"><i class="fas fa-search"></i></a>';
-            })
-            ->rawColumns(['button'])
+            // ->addColumn('jumlah', function ($l) {
+            //     return $l['jumlah'];
+            // })
+            // ->addColumn('button', function ($l) {
+            //     return '<a type="button" class="noserishow" data-id="' . $l['id'] . '"><i class="fas fa-search"></i></a>';
+            // })
+            // ->rawColumns(['button'])
             ->make(true);
         //echo json_encode($data);
     }
@@ -143,7 +162,6 @@ class QcController extends Controller
                 $q->whereNotNull('no_po');
             })->get();
         }
-
 
         return datatables()->of($data)
             ->addIndexColumn()
