@@ -277,7 +277,6 @@ class MasterController extends Controller
         //         'jumlah.required' => 'Jumlah Produk harus di isi',
         //     ]
         // );
-
         $harga_convert =  str_replace('.', "", $request->harga);
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,

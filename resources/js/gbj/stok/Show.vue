@@ -589,9 +589,6 @@
 <script>
 import axios from "axios";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
-import "select2";
-import "select2/dist/css/select2.css";
-console.log("test");
 
 export default {
     mounted: function() {

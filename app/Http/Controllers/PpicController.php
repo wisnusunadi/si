@@ -12,6 +12,9 @@ use App\Models\Produk;
 use App\Models\JadwalPerakitan;
 use App\Models\GudangBarangJadi;
 
+// event
+use App\Events\TestEvent;
+
 class PpicController extends Controller
 {
     // API
@@ -120,5 +123,11 @@ class PpicController extends Controller
         $query = $this->getGbjQuery();
 
         return DataTables::of($query)->addIndexColumn()->make(true);
+    }
+
+    public function testBroadcast(Request $request)
+    {
+        broadcast(new TestEvent($request->message))->toOthers();
+        return "success";
     }
 }

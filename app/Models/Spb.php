@@ -14,10 +14,6 @@ class Spb extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
-    public function DetailSpb()
-    {
-        return $this->hasMany(DetailSpb::class);
-    }
     public function Pesanan()
     {
         return $this->belongsTo(Pesanan::class, 'pesanan_id');

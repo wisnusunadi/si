@@ -1,5 +1,6 @@
 <script>
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import axios from "axios";
 // import axios from "axios";
 
 export default {
@@ -16,7 +17,6 @@ export default {
   },
 
   mounted: function () {
-    console.log("test");
     axios({
       method: "get",
       url: "/api/ppic/schedule/penyusunan",
@@ -25,7 +25,6 @@ export default {
       },
     }).then((response) => {
       this.jadwal_rencana = response.data;
-      console.log(this.jadwal);
     });
 
     axios({
@@ -36,6 +35,24 @@ export default {
       },
     }).then((response) => {
       this.jadwal_pelaksanaan = response.data;
+    });
+
+    EchoObj.private("test").listen("TestEvent", (response) => {
+      this.$swal({
+        icon: "success",
+        text: "Message: " + response.message,
+      });
+
+      axios({
+        method: "get",
+        url: "/api/ppic/schedule/penyusunan",
+        params: {
+          proses_konfirmasi: 1,
+        },
+      }).then((response) => {
+        this.jadwal_rencana = response.data;
+        console.log(this.jadwal_rencana);
+      });
     });
   },
 
@@ -66,6 +83,12 @@ export default {
 
     handleButtonYes: function () {
       $("#modal").modal("hide");
+
+      axios.post("/api/ppic/update-event", {
+        params: {
+          event: this.checked_jadwal_rencana,
+        },
+      });
     },
 
     handleButtonNo: function () {
@@ -142,7 +165,7 @@ export default {
             </table>
             <div
               v-if="checked_jadwal_rencana.length > 0"
-              class="btn-group btn-block"
+              class="d-flex justify-content-around"
             >
               <button class="btn btn-success" @click="clickSetujuRencana">
                 Setuju
@@ -185,8 +208,8 @@ export default {
               </tbody>
             </table>
             <div
+              class="d-flex content-justify-around"
               v-if="checked_jadwal_pelaksanaan.length > 0"
-              class="btn-group btn-block"
             >
               <button class="btn btn-success" @click="clickSetujuRencana">
                 Setuju

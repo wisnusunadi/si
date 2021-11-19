@@ -68,7 +68,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>
-                            @foreach($data->DetailEkatalog as $e)
+                            @foreach($data->pesanan->detailpesanan as $e)
                             <div class="card removeshadow">
                                 <div class="card-body">
                                     <h6>{{$e->PenjualanProduk->nama}}</h6>
@@ -91,17 +91,15 @@
                                         <div class="col-12">
                                             <div class="text-muted">Variasi</div>
                                             <ul class="list-group">
-
-                                                @foreach($e->GudangBarangJadi as $l)
+                                                @foreach($e->DetailPesananProduk as $l)
                                                 <li class="list-group-item">
                                                     <b>
                                                         @if($l->nama != "")
-                                                        {{$l->Produk->nama}} {{$l->nama}}
+                                                        {{$l->GudangBarangJadi->Produk->nama}} {{$l->GudangBarangJadi->nama}}
                                                         @else
-                                                        {{$l->Produk->nama}}
+                                                        {{$l->GudangBarangJadi->Produk->nama}}
                                                         @endif
                                                     </b>
-                                                    <a class="float-right badge blue-text">{{$l->pivot->jumlah * $e->jumlah}}</a>
                                                 </li>
                                                 @endforeach
                                             </ul>

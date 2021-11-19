@@ -317,7 +317,7 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    @foreach($e->Detailspa as $f)
+                                                                    @foreach($e->pesanan->detailpesanan as $f)
                                                                     <tr>
                                                                         <td>{{$loop->iteration}}</td>
                                                                         <td>
@@ -365,7 +365,7 @@
                                                                         <th colspan="4" style="text-align:right;">Total Harga</th>
                                                                         <th id="totalhargaprd" class="align-right">Rp.
                                                                             <?php $x = 0;
-                                                                            foreach ($e->Detailspa as $f) {
+                                                                            foreach ($e->pesanan->detailpesanan as $f) {
                                                                                 $x += $f->harga * $f->jumlah;
                                                                             }
                                                                             ?>

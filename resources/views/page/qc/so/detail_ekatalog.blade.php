@@ -251,7 +251,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table" style="text-align:center;" id="noseritable">
+                            <table class="table" style="text-align:center; width:100%" id="noseritable">
                                 <thead>
                                     <th>#</th>
                                     <th>No</th>
@@ -260,7 +260,7 @@
                                     <th>Aksi</th>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>
                                             <div class="form-check">
                                                 <input class="form-check-input ok" type="checkbox" value="" id="" disabled />
@@ -292,7 +292,7 @@
                                         <td>TD0015012021003</td>
                                         <td><i class="fas fa-times-circle nok"></i></td>
                                         <td></td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -367,33 +367,78 @@
 
         });
 
+
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
+            console.log(data);
+            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data).load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
             console.log(data);
         })
 
-        function load_noseritable(id) {
-            $('#noseritable').DataTable({});
-        }
 
-        $('.nosericheck').on('change', function() {
+        $('#noseritable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/qc/so/seri/0',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'checkbox',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'seri',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'status',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'button',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+
+
+        $('#noseritable ').on('change', '.nosericheck', function() {
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').removeAttr('disabled');
+
             } else if ($('.nosericheck:checked').length <= 0) {
                 $('#cekbrg').attr('disabled', true);
             }
 
         })
-
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
+            var data = $(this).attr('data-id');
+            console.log(data);
             $.ajax({
-                url: "/api/qc/so/update_modal",
+                url: "/qc/so/edit",
                 beforeSend: function() {
                     $('#loader').show();
                 },

@@ -24,6 +24,18 @@
         text-align: center;
     }
 
+    legend {
+        font-size: 14px;
+    }
+
+    filter {
+        margin: 5px;
+    }
+
+    .blue-bg {
+        background-color: #c8daea;
+    }
+
     @media screen and (min-width: 1440px) {
 
         section {
@@ -56,7 +68,6 @@
 @section('content')
 <section class="content">
     <div class="container-fluid">
-        @foreach($ekatalog as $e)
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card" id="ekatalog">
@@ -328,119 +339,144 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row d-flex justify-content-center" id="dataproduk">
-                                    <div class="col-10">
-                                        <h4>Data Produk</h4>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="table-responsive">
-                                                            <table class="table" style="text-align: center;" id="produktable">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th colspan="7">
-                                                                            <button type="button" class="btn btn-primary float-right" id="addrowproduk">
-                                                                                <i class="fas fa-plus"></i>
-                                                                                Produk
-                                                                            </button>
-                                                                        </th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th width="5%">No</th>
-                                                                        <th width="35%">Nama Paket</th>
-                                                                        <th width="15%">Jumlah</th>
-                                                                        <th width="20%">Harga</th>
-                                                                        <th width="20%">Subtotal</th>
-                                                                        <th width="5%">Aksi</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-center" id="dataproduk">
+                        <div class="col-10">
+                            <h4>Data Produk</h4>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table class="table" style="text-align: center;" id="produktable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="7">
+                                                                <button type="button" class="btn btn-primary float-right" id="addrowproduk">
+                                                                    <i class="fas fa-plus"></i>
+                                                                    Produk
+                                                                </button>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th width="5%">No</th>
+                                                            <th width="35%">Nama Paket</th>
+                                                            <th width="15%">Jumlah</th>
+                                                            <th width="20%">Harga</th>
+                                                            <th width="20%">Subtotal</th>
+                                                            <th width="5%">Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php $produkpenjualan = 0; ?>
+                                                        @foreach($e->pesanan->detailpesanan as $f)
 
-                                                                    @foreach($e->DetailEkatalog as $f)
+                                                        <tr>
+                                                            <td>{{$loop->iteration}}</td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                                                        <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="detail_produk" id="detail_produk{{ $loop->iteration - 1 }}">
+                                                                    <fieldset>
+                                                                        <legend><b>Detail Produk</b></legend>
+                                                                        <?php $variasi = 0; ?>
+                                                                        @foreach($f->DetailPesananProduk as $g)
+                                                                        <div>
+                                                                            <div class="card-body blue-bg">
+                                                                                <h6>{{$g->GudangBarangJadi->Produk->nama}}</h6>
+                                                                                <select class="form-control variasi" name="variasi[{{$produkpenjualan}}][{{$variasi}}]" style="width:100%;" data-attr="{{$produkpenjualan}}{{$variasi}}" data-id="{{$variasi}}">
+                                                                                    <option value="{{$g->GudangBarangJadi->id}}">
 
-                                                                    <tr>
-                                                                        <td>{{$loop->iteration}}</td>
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
-                                                                                    <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
+                                                                                        @if(!empty($g->GudangBarangJadi->nama))
+                                                                                        {{$g->GudangBarangJadi->Produk->nama}} {{$g->GudangBarangJadi->nama}}
+                                                                                        @else
+                                                                                        {{$g->GudangBarangJadi->Produk->nama}}
+                                                                                        @endif
+                                                                                    </option>
                                                                                 </select>
+                                                                                <span class=" invalid-feedback d-block ketstok" name="ketstok[{{$produkpenjualan}}][{{$variasi}}]" id="ketstok{{$produkpenjualan}}{{$variasi}}" data-attr="{{$produkpenjualan}}{{$variasi}}" data-id="{{$variasi}}"></span>
                                                                             </div>
-                                                                            <div class="detail_produk" id="detail_produk{{$loop->iteration - 1}}">
-                                                                                {{$f->GudangBarangJadi}}
-                                                                            </div>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group">
-                                                                                    <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah{{$loop->iteration-1}}" style="width:100%;" value="{{$f->jumlah}}">
-                                                                                    <div class="input-group-append">
-                                                                                        <span class="input-group-text" id="produk_satuan">pcs</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <small id="produk_ketersediaan"></small>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text" id="prdhrg">Rp</span>
-                                                                                </div>
-                                                                                <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
-                                                                            </div>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text" id="prdsub">Rp</span>
-                                                                                </div>
-                                                                                <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
-                                                                            </div>
-                                                                        </td>
-                                                                        <td>
-                                                                            <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    @endforeach
+                                                                        </div>
+                                                                        <?php $variasi = $variasi + 1; ?>
+                                                                        @endforeach
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="detailjual" id="tes0">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group">
+                                                                        <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah{{$loop->iteration-1}}" style="width:100%;" value="{{$f->jumlah}}">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text" id="produk_satuan">pcs</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <small id="produk_ketersediaan"></small>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="prdhrg">Rp</span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="prdsub">Rp</span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        <?php $produkpenjualan = $produkpenjualan + 1; ?>
+                                                        @endforeach
 
-                                                                </tbody>
-                                                                <tfoot>
-                                                                    <tr>
-                                                                        <th colspan="4" style="text-align:right;">Total Harga</th>
-                                                                        <th id="totalhargaprd" class="align-right">Rp.
-                                                                            <?php $x = 0;
-                                                                            foreach ($e->DetailEkatalog as $f) {
-                                                                                $x += $f->harga * $f->jumlah;
-                                                                            }
-                                                                            ?>
-                                                                            {{number_format($x,0,',','.')}}
-                                                                        </th>
-                                                                    </tr>
-                                                                </tfoot>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                            <th id="totalhargaprd" class="align-right">Rp.
+                                                                <?php $x = 0;
+                                                                foreach ($e->pesanan->detailpesanan as $f) {
+                                                                    $x += $f->harga * $f->jumlah;
+                                                                }
+                                                                ?>
+                                                                {{number_format($x,0,',','.')}}
+                                                            </th>
+                                                        </tr>
+                                                    </tfoot>
 
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-10">
-                                        <span>
-                                            <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
-                                                Batal
-                                            </a>
-                                        </span>
-                                        <span class="float-right">
-                                            <button type="submit" class="btn btn-warning" id="btnsimpan">
-                                                Simpan
-                                            </button>
-                                        </span>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <span>
+                                        <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
+                                            Batal
+                                        </a>
+                                    </span>
+                                    <span class="float-right">
+                                        <button type="submit" class="btn btn-warning" id="btnsimpan">
+                                            Simpan
+                                        </button>
+                                    </span>
                                 </div>
+                            </div>
 
                             </form>
 
@@ -450,7 +486,7 @@
 
             </div>
         </div>
-        @endforeach
+
     </div>
 </section>
 @stop
@@ -600,14 +636,19 @@
                 $(el).find("td:eq(0)").html(++c);
                 var j = c - 1;
                 $(el).find('.penjualan_produk_id').attr('name', 'penjualan_produk_id[' + j + ']');
-                $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
-                $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
-                $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                 $(el).find('.penjualan_produk_id').attr('id', j);
-                $(el).find('.variasi').attr('name', 'variasi[' + j + ']');
-                $(el).find('.variasi').attr('id', 'variasi' + j);
+                var variasi = $(el).find('.variasi');
+                for (var k = 0; k < variasi.length; k++) {
+                    $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
+                    $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
+                    $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
+                    $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
+                }
+                $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
+                $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
-                select_data(j);
+                $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
+                select_data($(el).find('.penjualan_produk_id').attr('id'));
             });
         }
 
@@ -630,16 +671,49 @@
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
-
+            var ketstok = $(this).closest('tr').find('.ketstok');
+            var variasi = $(this).closest('tr').find('.variasi');
+            var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
                 subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
                 totalhargaprd();
+                for (var i = 0; i < variasi.length; i++) {
+                    var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
+                    var kebutuhan = jumlah * variasires.jumlah;
+                    if (variasires.qt < kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang dari Permintaan');
+                    } else if (variasires.qt >= kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
+                    }
+                }
             } else {
                 subtotal.val(formatmoney("0"));
                 totalhargaprd();
+                variasi.removeClass('is-invalid');
+                ketstok.text('');
             }
         });
+
+        $('#produktable').on('keyup change', '.variasi', function() {
+            var name = $(this).attr('name');
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
+            val = $('select[name="' + name + '"]').val();
+            id = $('select[name="' + name + '"]').attr('data-id');
+            vals = $('select[name="' + name + '"]').select2('data')[0];
+            var kebutuhan = jumlah * vals.jumlah;
+            if (vals.qt < kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang dari Permintaan');
+            } else if (vals.qt >= kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
+            }
+        })
+
 
         $("#produktable").on('keyup change', '.produk_harga', function() {
             var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -665,7 +739,10 @@
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
+                        <div class="detailjual" id="tes0">
+                        </div>
                     </div>
+                    <div id="detail_produk" class="detail_produk"></div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
@@ -817,7 +894,7 @@
                         };
                     },
                 }
-            }).change(function() {
+            }).change(function(i) {
                 var index = $(this).attr('id');
                 var id = $(this).val();
                 console.log(index);
@@ -826,13 +903,113 @@
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
                     dataType: 'json',
-                    success: function(data) {
-                        console.log(data);
-                        $('#produk_harga' + index).val(formatmoney(data[0].harga));
+                    success: function(res) {
+                        $('#produk_harga' + index).val(formatmoney(res[0].harga));
+                        console.log(res);
+                        var tes = $('#detail_produk' + index);
+                        tes.empty();
+                        var datas = "";
+                        tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+                        for (var x = 0; x < res[0].produk.length; x++) {
+                            var data = [];
+                            tes.append(`<div>`);
+                            tes.append(`<div class="card-body blue-bg">
+                                        <h6>` + res[0].produk[x].nama + `</h6>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" data-attr="` + index + `` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="` + index + `` + x + `" data-id="` + x + `"></span>
+                                      </div>`);
+                            if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                                data.push({
+                                    id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                    text: res[0].produk[x].nama,
+                                    jumlah: res[0].produk[x].pivot.jumlah,
+                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                });
+                            } else {
+                                for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                    data.push({
+                                        id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                        text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                        jumlah: res[0].produk[x].pivot.jumlah,
+                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                    });
+                                }
+                            }
+                            console.log(data);
+                            $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
+                                placeholder: 'Pilih Variasi',
+                                data: data,
+                                templateResult: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                },
+                                templateSelection: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                }
+                            });
+
+                            $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
+                            tes.append(`</div>`)
+                        }
+                        tes.append(`</fieldset>`);
                     }
                 });
             });
         }
+        load_variasi();
+
+        function load_variasi() {
+            produk = [];
+            produk = <?php echo json_encode($e->Pesanan->DetailPesanan); ?>;
+            for (var w = 0; w < produk.length; w++) {
+                $.ajax({
+                    url: '/api/penjualan_produk/select/' + produk[w]['penjualan_produk_id'],
+                    type: 'GET',
+                    dataType: 'json',
+                    async: false,
+                    success: function(res) {
+                        for (var x = 0; x < res[0].produk.length; x++) {
+                            var data = [];
+                            if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                                data.push({
+                                    id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                    text: res[0].produk[x].nama,
+                                    jumlah: res[0].produk[x].pivot.jumlah,
+                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                });
+                            } else {
+                                for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                    data.push({
+                                        id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                        text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                        jumlah: res[0].produk[x].pivot.jumlah,
+                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                    });
+                                }
+                            }
+                            $('select[name="variasi[' + w + '][' + x + ']"]').select2({
+                                placeholder: 'Pilih Variasi',
+                                data: data,
+                                templateResult: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                },
+                                templateSelection: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                }
+                            });
+
+                            $('select[name="variasi[' + w + '][' + x + ']"]').trigger("change");
+                            console.log('select[name="variasi[' + w + '][' + x + ']"]');
+                        }
+                    }
+                });
+            }
+
+        }
+
     });
 </script>
 @stop

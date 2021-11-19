@@ -37,6 +37,8 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/get-gbj-query', [App\Http\Controllers\PpicController::class, 'getGbjQuery']);
     Route::get('/get-gbj-datatable', [App\Http\Controllers\PpicController::class, 'getGbjDatatable']);
     Route::get('/jadwal', [App\Http\Controllers\PpicController::class, 'getJadwalPerakitan']);
+    Route::get('test-event', [App\Http\Controllers\PpicController::class, 'testBroadcast']);
+    Route::get('update-confirmation', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
 });
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
@@ -98,6 +100,70 @@ Route::prefix('/laporan')->group(function () {
 });
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
+    Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
+    Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
+    Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
+
+    // select
+    Route::get('sel-product', [\App\Http\Controllers\GudangController::class, 'select_product']);
+    Route::get('sel-product/{id}', [\App\Http\Controllers\GudangController::class, 'select_product_by_id']);
+    Route::get('sel-satuan', [\App\Http\Controllers\GudangController::class, 'select_satuan']);
+    Route::get('sel-layout', [\App\Http\Controllers\GudangController::class, 'select_layout']);
+    Route::get('sel-divisi', [\App\Http\Controllers\GudangController::class, 'select_divisi']);
+    Route::get('sel-gbj', [\App\Http\Controllers\GudangController::class, 'select_gbj']);
+
+    // so
+    Route::post('/createNon', [App\Http\Controllers\GudangController::class, 'tanpaSo']);
+
+    // noseri
+    Route::get('noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getNoseri']);
+    Route::get('history/{id}', [\App\Http\Controllers\GudangController::class, 'getHistory']);
+    Route::post('noseri/{id}', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
+});
+
+Route::prefix('/draft')->group(function () {
+    Route::post('/rancang', [\App\Http\Controllers\GudangController::class, 'storeDraftRancang']);
+
+    // get
+    Route::get('/data', [\App\Http\Controllers\GudangController::class, 'getRancangDraft']);
+});
+
+Route::prefix('/transaksi')->group(function () {
+    Route::get('/all', [\App\Http\Controllers\GudangController::class, 'getAllTransaksi']);
+    Route::get('/history', [\App\Http\Controllers\GudangController::class, 'getHistorybyProduk']);
+    Route::get('/history-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailHistory']);
+});
+
+Route::prefix('/tfp')->group(function () {
+    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
+
+    // get
+    Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
+    Route::get('noseri/{id}', [\App\Http\Controllers\ProduksiController::class, 'getNoseri']);
+    Route::get('data-so', [\App\Http\Controllers\ProduksiController::class, 'getOutSO']);
+    Route::get('detail-so/{id}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
+    Route::get('header-so/{id}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);
+    Route::get('rakit', [\App\Http\Controllers\GudangController::class, 'getRakit']);
+    Route::get('rakit-noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getRakitNoseri']);
+    Route::get('rakit-terima/{id}', [\App\Http\Controllers\GudangController::class, 'getTerimaRakit']);
+
+    // check
+    Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
+});
+
+Route::prefix('/spr')->group(function () {
+    Route::get('/data', [App\Http\Controllers\SparepartController::class, 'get']);
+    Route::post('/create', [App\Http\Controllers\SparepartController::class, 'store']);
+    Route::post('/edit/{id}', [App\Http\Controllers\SparepartController::class, 'update']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
+    Route::get('/data/{id}', [App\Http\Controllers\SparepartController::class, 'getId']);
+    Route::delete('/test', [App\Http\Controllers\SparepartController::class, 'deleteImage']);
+});
+
+Route::prefix('/noseri')->group(function () {
+    Route::post('/edit/{id}', [App\Http\Controllers\NoseriController::class, 'UpdateNoSeri']);
+    Route::delete('/delete/{id}', [App\Http\Controllers\NoseriController::class, 'DestroyNoSeri']);
 });
 
 Route::prefix('/ekatalog')->group(function () {
@@ -131,6 +197,8 @@ Route::prefix('/spb')->group(function () {
 Route::prefix('/qc')->group(function () {
     Route::prefix('/so')->group(function () {
         Route::get('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
+        Route::get('seri/{value}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
+        Route::get('data_test', [App\Http\Controllers\QcController::class, 'get_data_so_qc']);
         Route::get('detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_so']);
         Route::get('update_modal', [App\Http\Controllers\QcController::class, 'update_modal_so']);
         Route::prefix('/riwayat')->group(function () {

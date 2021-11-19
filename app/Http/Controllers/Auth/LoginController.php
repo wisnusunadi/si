@@ -48,6 +48,8 @@ class LoginController extends Controller
             return redirect('/qc/dashboard');
         } else if (auth()->user()->divisi->id == 26) {
             return redirect('/penjualan/dashboard');
+        } elseif (auth()->user()->divisi->id == 13) {
+            return redirect('/gbj/dashboard');
         }
 
 

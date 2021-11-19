@@ -871,6 +871,9 @@ class PenjualanController extends Controller
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
+                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                            $dekat->GudangBarangJadi()->attach($request->variasi[$i][$j], ['jumlah' => 1]);
+                        }
                         if (!$dekat) {
                             $bool = false;
                         }
@@ -881,7 +884,6 @@ class PenjualanController extends Controller
             } else {
                 $bool = false;
             }
-
             if ($bool == true) {
                 return redirect()->back()->with('success', 'Berhasil menambahkan Ekatalog');
             } else if ($bool == false) {
@@ -899,7 +901,6 @@ class PenjualanController extends Controller
                 ]);
                 $x = $pesanan->id;
             }
-
             $Spa = Spa::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
@@ -1156,13 +1157,13 @@ class PenjualanController extends Controller
     public function update_penjualan($id, $jenis)
     {
         if ($jenis == 'ekatalog') {
-            $ekatalog = Ekatalog::with('DetailEkatalog')->where('id', $id)->get();
-            return view('page.penjualan.penjualan.edit_ekatalog', ['ekatalog' => $ekatalog]);
+            $ekatalog = Ekatalog::find($id);
+            return view('page.penjualan.penjualan.edit_ekatalog', ['e' => $ekatalog]);
         } else if ($jenis == 'spa') {
-            $spa = Spa::with('DetailSpa')->where('id', $id)->get();
+            $spa = Spa::where('id', $id)->get();
             return view('page.penjualan.penjualan.edit_spa', ['spa' => $spa]);
         } else {
-            $spb = Spb::with('DetailSpb')->where('id', $id)->get();
+            $spb = Spb::where('id', $id)->get();
             return view('page.penjualan.penjualan.edit_spb', ['spb' => $spb]);
         }
     }

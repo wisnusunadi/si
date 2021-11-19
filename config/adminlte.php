@@ -261,46 +261,47 @@ return [
                 ],
             ]
         ],
-        [
-            'text'  =>  'Laporan',
-            'icon'  =>  'fas fa-file',
-            'auth'  => [24],
-            'submenu'   =>  [
-                [
-                    'text'  =>  'Pembelian',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
-                [
-                    'text'  =>  'Perakitan dan Pengemasan',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
-                [
-                    'text'  =>  'Pemeriksaan, Pengujian, dan Pemeriksaan Pengemasan QA',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
+        
+        // [
+        //     'text'  =>  'Laporan',
+        //     'icon'  =>  'fas fa-file',
+        //     'auth'  => [24],
+        //     'submenu'   =>  [
+        //         [
+        //             'text'  =>  'Pembelian',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
+        //         [
+        //             'text'  =>  'Perakitan dan Pengemasan',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
+        //         [
+        //             'text'  =>  'Pemeriksaan, Pengujian, dan Pemeriksaan Pengemasan QA',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
 
-                [
-                    'text'  =>  'Kerja GK',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
+        //         [
+        //             'text'  =>  'Kerja GK',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
 
-                [
-                    'text'  =>  'Penjualan',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
+        //         [
+        //             'text'  =>  'Penjualan',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
 
-                [
-                    'text'  =>  'Marketing',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '#'
-                ],
-            ]
-        ],
+        //         [
+        //             'text'  =>  'Marketing',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '#'
+        //         ],
+        //     ]
+        // ],
         [
             'text' => 'Perakitan',
             'url'  => '/ppic/data/perakitan',
@@ -334,30 +335,30 @@ return [
                 ],
             ]
         ],
-        [
-            'text' => 'BOM',
-            'url'  => '/ppic/bom',
-            'icon' => 'fas fa-list',
-            'auth' => [24]
-        ],
-        [
-            'text'    => 'BPPB',
-            'icon'    => 'fas fa-project-diagram',
-            'url' => '/bppb',
-            'auth' => [24],
-            'submenu'   =>  [
-                [
-                    'text'  =>  'Pelaksanaan',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/bppb/pelaksanaan',
-                ],
-                [
-                    'text'  =>  'Selesai',
-                    'icon'  =>  'far fa-circle',
-                    'url'   =>  '/ppic/bppb/selesai'
-                ],
-            ]
-        ],
+        // [
+        //     'text' => 'BOM',
+        //     'url'  => '/ppic/bom',
+        //     'icon' => 'fas fa-list',
+        //     'auth' => [24]
+        // ],
+        // [
+        //     'text'    => 'BPPB',
+        //     'icon'    => 'fas fa-project-diagram',
+        //     'url' => '/bppb',
+        //     'auth' => [24],
+        //     'submenu'   =>  [
+        //         [
+        //             'text'  =>  'Pelaksanaan',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '/ppic/bppb/pelaksanaan',
+        //         ],
+        //         [
+        //             'text'  =>  'Selesai',
+        //             'icon'  =>  'far fa-circle',
+        //             'url'   =>  '/ppic/bppb/selesai'
+        //         ],
+        //     ]
+        // ],
 
         // Manager Teknik
         [
@@ -1017,39 +1018,84 @@ return [
             'auth' => [22],
         ],
         [
-            'header' => 'Produksi',
-            'auth' => [13]
-        ],
-        [
-            'text' => 'BPPB',
-            'url' => '/bppb',
-            'icon' => 'fas fa-circle',
+            'text' => 'Dashboard',
+            'url' => '/gbj/dashboard',
+            'icon' => 'fas fa-layer-group',
             'auth' => [13],
         ],
+        // [
+        //     'header' => 'Produksi',
+        //     'auth' => [13]
+        // ],
+        // [
+        //     'text' => 'BPPB',
+        //     'url' => '/bppb',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
         [
             'header' => 'Stok',
             'auth' => [13]
         ],
+        // GBJ
         [
             'text' => 'Produk',
-            'url' => '/produk',
-            'icon' => 'fas fa-circle',
+            'url' => '/gbj/produk',
+            'icon' => 'fas fa-boxes',
             'auth' => [13],
         ],
+        // [
+        //     'text' => 'Stok',
+        //     'url' => '/gbj/stok',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
         [
-            'text' => 'Stok',
-            'url' => '/gbj/stok',
-            'icon' => 'fas fa-circle',
-            'auth' => [13],
+            'text' => 'Riwayat Transaksi',
+            'url' => '/gbj/tp',
+            'icon' => 'fas fa-history',
+            'auth' => [13, 17],
         ],
         [
-            'header' => 'Permintaan',
+            'header' => 'Penerimaan',
             'auth' => [13]
         ],
         [
-            'text' => 'Penjualan',
-            'url' => '/gbj/penjualan',
-            'icon' => 'fas fa-circle',
+            'text' => 'Dalam Perakitan',
+            'url' => '/gbj/dp',
+            'icon' => 'fas fa-truck-loading',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Selain Perakitan',
+            'url' => '/gbj/lp',
+            'icon' => 'fas fa-box-open',
+            'auth' => [13],
+        ],
+        [
+            'header' => 'Penjualan',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Sales Order',
+            'url' => '/gbj/so',
+            'icon' => 'fas fa-people-carry',
+            'auth' => [13],
+        ],
+        [
+            'header' => 'Pengeluaran',
+            'auth' => [13]
+        ],
+        [
+            'text' => 'Berdasarkan SO',
+            'url' => '/gbj/bso',
+            'icon' => 'fas fa-swatchbook',
+            'auth' => [13],
+        ],
+        [
+            'text' => 'Tanpa SO',
+            'url' => '/gbj/tso',
+            'icon' => 'fas fa-book-open',
             'auth' => [13],
         ],
 

@@ -354,6 +354,7 @@
                                                                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                             <option value=""></option>
                                                                         </select>
+
                                                                     </div>
                                                                     <div class="detail_produk" id="detail_produk0">
                                                                     </div>
@@ -1046,7 +1047,7 @@
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
-                $(el).find('.detail_jual').attr('id', 'tes' + j);
+                $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                 select_data();
             });
         }
