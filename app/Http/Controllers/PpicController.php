@@ -22,7 +22,7 @@ class PpicController extends Controller
     {
         $month = date('m');
         $year = date('Y');
-        $event = JadwalPerakitan::with('Produk', 'Status', 'State')->orderBy('tanggal_mulai', 'asc');
+        $event = JadwalPerakitan::with('Produk.produk', 'Status', 'State')->orderBy('tanggal_mulai', 'asc');
 
         if (isset($request->state)) {
             $state = $this->convertState($request->state);
@@ -43,14 +43,25 @@ class PpicController extends Controller
         } else if ($status == "selesai") {
             $event = $event->where('tanggal_mulai', '<', "$year-$month-01");
             $this->updateStatus($event, 3); // selesai
+        } else if ($status == "datatables") {
+            return DataTables::of($event)->addIndexColumn()->make(true);
         }
 
         return $event->get();
     }
 
-    public function getProduk()
+    public function getProduk($id = null)
     {
-        $model = GudangBarangJadi::all();
+        if ($id != null) {
+            $gbj_stok = 0;
+            $gk_stok = 0; // Gudangkarantina::find($id)->stok
+
+            if (GudangBarangJadi::find($id)) $gbj_stok = GudangBarangJadi::find($id)->stok;
+
+            return ['gbj_stok' => $gbj_stok, 'gk_stok' => $gk_stok];
+        }
+
+        $model = GudangBarangJadi::with('produk')->get();
 
         return $model;
     }
@@ -89,17 +100,18 @@ class PpicController extends Controller
 
         if (isset($request->acc) && isset($request->reject)) {
             foreach ($request->acc as $data) {
-                JadwalPerakitan::find($data['id'])->update(['konfirmasi' => 1]);
+                JadwalPerakitan::find($data['id'])->update(['konfirmasi' => 1, 'state' => $request->state]);
             }
 
             foreach ($request->reject as $data) {
-                JadwalPerakitan::find($data['id'])->update(['konfirmasi' => 2]);
+                JadwalPerakitan::find($data['id'])->update(['konfirmasi' => 2, 'state' => $request->state]);
             }
         } else {
             $event = JadwalPerakitan::where('status', $status)->get();
             foreach ($event as $data) {
                 if (isset($request->state)) $data->state = $state;
-                $data->konfirmasi = 0;
+                if (isset($request->konfirmasi)) $data->konfirmasi = $request->konfirmasi;
+                else $data->konfirmasi = 0;
                 $data->save();
             }
         }

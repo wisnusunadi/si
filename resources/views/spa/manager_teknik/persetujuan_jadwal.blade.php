@@ -3,7 +3,7 @@
 @section('title', 'PPIC App')
 
 @section('content_header')
-<h1 class="m-0 text-dark">PPIC Data Gudang</h1>
+<h1 class="m-0 text-dark">Permintaan Persetujuaan Jadwal Perakitan</h1>
 @stop
 
 @section('content')

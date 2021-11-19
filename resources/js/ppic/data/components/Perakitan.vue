@@ -24,7 +24,66 @@ export default {
   },
 
   mounted: function () {
-    $("#perakitan-table").DataTable({});
+    $("#perakitan-table").DataTable({
+      ajax: "/api/ppic/schedule/datatables",
+      processing: true,
+      serverSide: true,
+      pageLength: 8,
+      lengthChange: false,
+      ordering: false,
+      info: false,
+      columns: [
+        {
+          data: "DT_RowIndex",
+          orderable: false,
+          searchable: false,
+        },
+        {
+          data: function (row) {
+            return `${row.produk.produk.tipe} ${row.produk.nama}`;
+          },
+        },
+        {
+          data: "jumlah",
+        },
+        {
+          data: "tanggal_mulai",
+        },
+        {
+          data: "tanggal_selesai",
+        },
+        {
+          data: function (row) {
+            let val;
+            if (row.status.id == 1) val = 0;
+            else if (row.status.id == 2) val = 50;
+            else if (row.status.id == 3) val = 100;
+
+            return `<div class="progress progress-sm">
+                    <div
+                      class="progress-bar bg-green"
+                      role="progressbar"
+                      aria-valuenow="${val}"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: ${val}%"
+                    ></div>
+                  </div>
+                  <small> ${val}% Complete </small>`;
+          },
+        },
+        {
+          data: function (row) {
+            if (row.status.id === 1)
+              return `<span class="badge badge-pill badge-warning">Perencanaan</span>`;
+            if (row.status.id === 2)
+              return `<span class="badge badge-pill badge-info">Pelaksanaan</span>`;
+            if (row.status.id === 3)
+              return `<span class="badge badge-pill badge-success">Selesai</span>`;
+          },
+        },
+      ],
+    });
   },
 };
 </script>
@@ -102,221 +161,6 @@ export default {
                 <th>Selesai</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-if="this.filter('perencanaan')">
-                <td>1</td>
-                <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                <td>100</td>
-                <td>2021-09-01</td>
-                <td>2021-09-03</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="20"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 20%"
-                    ></div>
-                  </div>
-                  <small> 20% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-warning"
-                    >Perencanaan</span
-                  >
-                </td>
-              </tr>
-              <tr v-if="this.filter('perencanaan')">
-                <td>2</td>
-                <td>MEDICAL APRON</td>
-                <td>100</td>
-                <td>2021-09-04</td>
-                <td>2021-09-07</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="0"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 0%"
-                    ></div>
-                  </div>
-                  <small> 0% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-warning"
-                    >Perencanaan</span
-                  >
-                </td>
-              </tr>
-              <tr v-if="this.filter('perencanaan')">
-                <td>3</td>
-                <td>TIMBANGAN BAYI MEKANIK</td>
-                <td>50</td>
-                <td>2021-09-08</td>
-                <td>2021-09-10</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="0"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 0%"
-                    ></div>
-                  </div>
-                  <small> 0% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-warning"
-                    >Perencanaan</span
-                  >
-                </td>
-              </tr>
-              <tr v-if="this.filter('pelaksanaan')">
-                <td>4</td>
-                <td>BABY SCALE</td>
-                <td>200</td>
-                <td>2021-10-01</td>
-                <td>2021-10-03</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="50"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 50%"
-                    ></div>
-                  </div>
-                  <small> 50% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-info">Pelaksanaan</span>
-                </td>
-              </tr>
-              <tr v-if="this.filter('pelaksanaan')">
-                <td>5</td>
-                <td>MEDICAL APRON</td>
-                <td>100</td>
-                <td>2021-10-04</td>
-                <td>2021-10-07</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="50"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 50%"
-                    ></div>
-                  </div>
-                  <small> 50% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-info">Pelaksanaan</span>
-                </td>
-              </tr>
-              <tr v-if="this.filter('pelaksanaan')">
-                <td>6</td>
-                <td>TIMBANGAN BAYI MEKANIK</td>
-                <td>50</td>
-                <td>2021-10-08</td>
-                <td>2021-10-10</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="50"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 50%"
-                    ></div>
-                  </div>
-                  <small> 50% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-info">Pelaksanaan</span>
-                </td>
-              </tr>
-              <tr v-if="this.filter('selesai')">
-                <td>7</td>
-                <td>BABY SCALE</td>
-                <td>200</td>
-                <td>2021-11-01</td>
-                <td>2021-11-03</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="100"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 100%"
-                    ></div>
-                  </div>
-                  <small> 100% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-success">Selesai</span>
-                </td>
-              </tr>
-              <tr v-if="this.filter('selesai')">
-                <td>8</td>
-                <td>MEDICAL APRON</td>
-                <td>100</td>
-                <td>2021-11-04</td>
-                <td>2021-11-07</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="100"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 100%"
-                    ></div>
-                  </div>
-                  <small> 100% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-success">Selesai</span>
-                </td>
-              </tr>
-              <tr v-if="this.filter('selesai')">
-                <td>9</td>
-                <td>TIMBANGAN BAYI MEKANIK</td>
-                <td>50</td>
-                <td>2021-11-08</td>
-                <td>2021-11-10</td>
-                <td>
-                  <div class="progress progress-sm">
-                    <div
-                      class="progress-bar bg-green"
-                      role="progressbar"
-                      aria-valuenow="100"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 100%"
-                    ></div>
-                  </div>
-                  <small> 100% Complete </small>
-                </td>
-                <td>
-                  <span class="badge badge-pill badge-success">Selesai</span>
-                </td>
-              </tr>
-            </tbody>
           </table>
         </div>
       </div>

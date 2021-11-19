@@ -11,7 +11,7 @@ export default {
       return [
         {
           data: this.$store.state.jadwal.map((event) => ({
-            x: event.produk.nama,
+            x: `${event.produk.produk.tipe} ${event.produk.nama}`,
             y: [
               new Date(event.tanggal_mulai).getTime(),
               new Date(event.tanggal_selesai).getTime(),

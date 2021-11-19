@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('/ppic')->group(function () {
     Route::get('/schedule/{status?}', [App\Http\Controllers\PpicController::class, 'getEvent']);
-    Route::get('/product', [App\Http\Controllers\PpicController::class, 'getProduk']);
+    Route::get('/product/{id?}', [App\Http\Controllers\PpicController::class, 'getProduk']);
     Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
     Route::post('/delete-event', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
     Route::post('/update-event', [App\Http\Controllers\PpicController::class, 'updateEvent']);
