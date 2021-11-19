@@ -32,7 +32,7 @@
     }
 
     #info {
-        color: #5F7A90;
+        color: #3a7bb0;
         font-weight: 600;
     }
 
@@ -66,18 +66,11 @@
 
     #detailekat {
         background-color: #E9DDE5;
-        /* color: #7D6378; */
-        height: 400px;
-        width: auto;
-        overflow-y: scroll;
+
     }
 
     #detailspa {
         background-color: #FFE6C9;
-        /* color: #7D6378; */
-        height: 400px;
-        width: auto;
-        overflow-y: scroll;
     }
 
     #detailspb {
@@ -851,8 +844,10 @@
         <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
-                    <div class="modal-header bg-warning">
-                        <h4>Detail</h4>
+                    <div class="modal-header">
+                        <div id="modal-title">
+                            <h4>Detail</h4>
+                        </div>
                     </div>
                     <div class="modal-body" id="detail">
 
@@ -1077,10 +1072,19 @@
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
                     if (label == 'ekatalog') {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
+                        $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                         detailtabel_ekatalog(id);
                     } else if (label == 'spa') {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+                        $('#detailmodal').find(".modal-header > h4").text('SPA');
                         detailtabel_spa(id);
                     } else {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
+                        $('#detailmodal').find(".modal-header > h4").text('SPB');
                         detailtabel_spb(id);
                     }
 

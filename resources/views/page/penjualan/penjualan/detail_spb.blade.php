@@ -1,19 +1,16 @@
-<div class="row">
+<div class="row filter">
     <div class="col-12">
-
-        <div class="row">
+        <div class="row filter">
             <div class="col-5">
+                <h5>Info</h5>
                 <div class="card">
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item">
-                                <h5><b>SPB</b></h5>
-                            </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item bordertopnone">
                                 <a>Nama Customer</a>
                                 <b class="float-right" id="nama_customer">{{$data->customer->nama}}</b>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item bordertopnone">
                                 <a>No PO</a>
                                 <b class="float-right" id="no_po">
                                     @if ($data->Pesanan)
@@ -21,7 +18,7 @@
                                     @endif
                                 </b>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item bordertopnone">
                                 <a>Tanggal PO</a>
                                 <b class="float-right" id="tanggal_pemesanan">
                                     @if ($data->Pesanan)
@@ -29,13 +26,13 @@
                                     @endif
                                 </b>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item bordertopnone">
                                 <a>Status</a>
                                 <b class="float-right" id="status">@if ($data->log)
                                     {{ $data->log}}
                                     @endif</b>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item bordertopnone">
                                 <a class="text-muted" id="keterangan">{{$data->ket}}</a>
                             </li>
                         </ul>
@@ -44,7 +41,7 @@
             </div>
             <div class="col-7">
                 <h5>Detail Pemesanan</h5>
-                <div class="card overflowy">
+                <div class="card overflowy" id="detailspb">
                     <div class="card-body">
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>

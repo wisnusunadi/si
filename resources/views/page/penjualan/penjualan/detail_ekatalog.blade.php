@@ -1,12 +1,13 @@
-<div class="row">
+<div class="row filter">
     <div class="col-12">
+        <h4><b>E-Catalogue</b></h4>
         <div class="row">
             <div class="col-5">
                 <div class="card">
                     <div class="card-body">
                         <ul class="list-group">
                             <li class="list-group-item bordertopnone">
-                                <h5><b>E-Catalogue</b></h5>
+                                <h5>Info</h5>
                             </li>
                             <li class="list-group-item bordertopnone">
                                 <a>No PO</a>
@@ -63,7 +64,7 @@
 
             <div class="col-7">
                 <h5>Detail Pemesanan</h5>
-                <div class="card overflowy">
+                <div class="card overflowy" id="detailekat">
                     <div class="card-body">
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>

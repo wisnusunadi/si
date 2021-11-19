@@ -12,8 +12,35 @@
         display: none !important;
     }
 
-    .margin-xs {
-        margin-left: 10px;
+    .margin {
+        margin: 5px;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        section {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+
+        label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
     }
 </style>
 @stop
@@ -22,29 +49,56 @@
 @foreach($ekatalog as $e)
 <div class="row">
     <div class="col-12">
-        <div class="card hide" id="ekatalog">
+        <div class="card" id="ekatalog">
             <div class="card-body">
-                <h4 class="margin-xs">Data Penjualan <small class="text-muted">(SOEKAT4918401)</small></h4>
-                <div class="row margin-xs">
+                <h4 class="margin">Data Penjualan</h4>
+                <div class="row">
                     <div class="col-12">
                         <div class="row">
                             <div class="col-5">
                                 <div>
-                                    <b>Info Customer</b>
+                                    <div class="margin">
+                                        <small class="text-muted">Info Instansi</small>
+                                    </div>
+                                    <div id="nama_distributor" class="margin"><b>{{$e->customer->nama}}</b></div>
+                                    <div id="instansi" class="margin"><b>{{$e->instansi}}</b></div>
+                                    <div id="satuan_kerja" class="margin"><b>{{$e->satuan}}</b></div>
+                                    <div id="alamat" class="margin"><b>{{$e->Provinsi->nama}}</b></div>
                                 </div>
-                                <div id="nama_distributor">{{$e->customer->nama}}</div>
-                                <div id="instansi">{{$e->instansi}}</div>
-                                <div id="satuan_kerja">{{$e->satuan}}</div>
-                                <div id="alamat">{{$e->alamat}}</div>
+                                <div>
+                                    <div class="margin">
+                                        <small class="text-muted">Info Customer</small>
+                                    </div>
+                                    <div id="nama_distributor" class="margin"><b>{{$e->customer->nama}}</b></div>
+                                    <div id="alamat" class="margin"><b>{{$e->Customer->Provinsi->nama}}</b></div>
+                                </div>
                             </div>
                             <div class="col-3">
-                                <div>
-                                    <b>Info AKN</b>
+                                <div class="margin">
+                                    <div><small class="text-muted">No SO</small></div>
+                                    <div>@if($e->Pesanan)
+                                        @if(!empty($e->Pesanan->so))
+                                        {{$e->Pesanan->so}}
+                                        @else
+                                        -
+                                        @endif
+                                        @endif
+                                    </div>
                                 </div>
-                                <div id="no_paket">{{$e->no_paket}}</div>
-                                <div id="tanggal_pemesanan">{{$e->tgl_buat}}</div>
-                                <div id="batas_kontrak">{{$e->tgl_kontrak}}</div>
-                                <div class="badge red-text" id="status">{{$e->status}}</div>
+                                <div class="margin">
+                                    <div><small class="text-muted">No AKN</small></div>
+                                    <div>{{$e->no_paket}}</div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tanggal Order</small>
+                                    </div>
+                                    <div>{{$e->tgl_buat}}</div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tanggal Batas Kontrak</small>
+                                    </div>
+                                    <div>{{$e->tgl_kontrak}}</div>
+                                </div>
                             </div>
                             <div class="col-3">
                                 <div>
