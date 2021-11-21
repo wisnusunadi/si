@@ -453,7 +453,7 @@
                                             <tr>
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
-                                                <td>200 Unit 
+                                                <td>200 Unit
                                                     <br>
                                                     <span class="badge badge-danger">Kurang 100 Unit</span>
                                                 </td>
@@ -543,7 +543,7 @@
                                         <div class="col">
                                             <div id="jml-produk-20" class="card active otg" style="background-color: #FEF7EA">
                                                 <div class="card-body text-center">
-                                                    <h4>10</h4>
+                                                    <h4 id="prd1">10</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 10 sampai 20</p>
                                                 </div>
                                             </div>
@@ -551,7 +551,7 @@
                                         <div class="col">
                                             <div id="jml-produk-5" class="card otg" style="background-color: #FFBD67">
                                                 <div class="card-body text-center">
-                                                    <h4>10</h4>
+                                                    <h4 id="prd2">10</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 5 sampai 9</p>
                                                 </div>
                                             </div>
@@ -559,7 +559,7 @@
                                         <div class="col">
                                             <div id="jml-produk-4" class="card otg" style="background-color: #FF6464">
                                                 <div class="card-body text-center">
-                                                    <h4>10</h4>
+                                                    <h4 id="prd3">10</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 1 sampai 4</p>
                                                 </div>
                                             </div>
@@ -644,7 +644,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-3-bulan" class="card otg active" style="background-color: #FEF7EA">
                                                 <div class="card-body text-center">
-                                                    <h4>10</h4>
+                                                    <h4 id="prd4">10</h4>
                                                     <p class="card-text font-weight">Produk masuk 3 bulan sampai 6 bulan</p>
                                                 </div>
                                             </div>
@@ -652,7 +652,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-6-bulan" class="card otg" style="background-color: #FFBD67">
                                                 <div class="card-body text-center">
-                                                    <h4>10</h4>
+                                                    <h4 id="prd5">10</h4>
                                                     <p class="card-text font-weight">Produk masuk 6 bulan sampai 1 tahun</p>
                                                 </div>
                                             </div>
@@ -660,7 +660,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-1-tahun" class="card otg" style="background-color: #FA8282">
                                                 <div class="card-body text-center">
-                                                    <h4>10</h4>
+                                                    <h4 id="prd6">10</h4>
                                                     <p class="card-text font-weight">Produk masuk 1 tahun sampai 3 tahun</p>
                                                 </div>
                                             </div>
@@ -668,7 +668,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-3-tahun" class="card otg" style="background-color: #FF6464">
                                                 <div class="card-body text-center">
-                                                    <h4>10</h4>
+                                                    <h4 id="prd7">10</h4>
                                                     <p class="card-text font-weight">Produk masuk lebih dari 3 tahun</p>
                                                 </div>
                                             </div>
@@ -676,7 +676,7 @@
                                     </div>
                                     {{-- Produk Masuk 3 Bulan --}}
                                     <div class="produk-masuk-3-bulan-table">
-                                        <table class="table waktu-produk">
+                                        <table class="table waktu-produk1" id="tab3bulan">
                                             <thead class="thead-light">
                                                 <tr>
                                                     <th>No</th>
@@ -703,7 +703,7 @@
                                     </div>
                                     {{-- Produk Masuk 6 Bulan --}}
                                     <div class="produk-masuk-6-bulan-table hidden">
-                                    <table class="table waktu-produk ">
+                                    <table class="table waktu-produk2" id="tab6bulan">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>No</th>
@@ -730,7 +730,7 @@
                                     </div>
                                     {{-- Produk Masuk 1 Tahun --}}
                                     <div class="produk-masuk-1-tahun-table hidden">
-                                    <table class="table waktu-produk ">
+                                    <table class="table waktu-produk3" id="tab1tahun">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>No</th>
@@ -757,7 +757,7 @@
                                     </div>
                                     {{-- Produk Masuk 3 Tahun --}}
                                     <div class="produk-masuk-3-tahun-table hidden">
-                                    <table class="table waktu-produk">
+                                    <table class="table waktu-produk4" id="tab3tahun">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>No</th>
@@ -856,7 +856,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receiptoneday" class="card active otg" style="background-color: #FEF7EA">
                                         <div class="card-body text-center">
-                                            <h4>10</h4>
+                                            <h4 id="r1">10</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 1 Hari</p>
                                         </div>
                                     </div>
@@ -864,7 +864,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receipttwoday" class="card otg" style="background-color: #FFBD67">
                                         <div class="card-body text-center">
-                                            <h4>50</h4>
+                                            <h4 id="r2">50</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 2 Hari</p>
                                         </div>
                                     </div>
@@ -872,7 +872,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receiptthreeday" class="card otg" style="background-color: #FF6464">
                                         <div class="card-body text-center">
-                                            <h4>60</h4>
+                                            <h4 id="r3">60</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 3 Hari</p>
                                         </div>
                                     </div>
@@ -1338,13 +1338,7 @@
     $('.table-produk-batas-transfer-three-day').DataTable({});
     $('.table-jml-stok').DataTable({});
     $('.jml-produk').DataTable({});
-    $('.waktu-produk').DataTable({});
-    $('.jml-produk-20-tab').DataTable({});
-    $('.jml-produk-5-tab').DataTable({});
-    $('.jml-produk-4-tab').DataTable({});
-    $('.table-produk-batas-receipt-one-day').DataTable({});
-    $('.table-produk-batas-receipt-two-day').DataTable({});
-    $('.table-produk-batas-receipt-three-day').DataTable({});
+    // $('.waktu-produk').DataTable({});
     $('.table-produk-batas-receipt-all').DataTable({});
     $('.tableStokLayout').DataTable({
         searching: false,
@@ -1352,6 +1346,237 @@
     });
 
     $(document).ready(function () {
+        // header
+        $.ajax({
+            url: "/api/dashboard-gbj/stok/1020/h",
+            success: function(res) {
+                console.log(res);
+                $('h4#prd1').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/stok/59/h",
+            success: function(res) {
+                console.log(res);
+                $('h4#prd2').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/stok/14/h",
+            success: function(res) {
+                console.log(res);
+                $('h4#prd3').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/in/36/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#prd4').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/in/612/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#prd5').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/in/1236/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#prd6').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/in/36plus/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#prd7').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/terimaproduk1/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#r1').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/terimaproduk2/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#r2').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/terimaproduk2/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#r3').text(res);
+            }
+        })
+
+        // data
+        $('.jml-produk-20-tab').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/stok/1020',
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'prd'},
+                {data: 'jml'},
+            ]
+        });
+        $('.jml-produk-5-tab').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/stok/59',
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'prd'},
+                {data: 'jml'},
+            ]
+        });
+        $('.jml-produk-4-tab').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/stok/14',
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'prd'},
+                {data: 'jml'},
+            ]
+        });
+        $('.table-produk-batas-receipt-one-day').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/terimaproduk1',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'product'},
+                {data: 'jumlah'},
+                {data: 'tgl_masuk'},
+                {data: 'action'},
+            ]
+        });
+        $('.table-produk-batas-receipt-two-day').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/terimaproduk2',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'product'},
+                {data: 'jumlah'},
+                {data: 'tgl_masuk'},
+                {data: 'action'},
+            ]
+        });
+        $('.table-produk-batas-receipt-three-day').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/terimaproduk3',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'product'},
+                {data: 'jumlah'},
+                {data: 'tgl_masuk'},
+                {data: 'action'},
+            ]
+        });
+        $('.waktu-produk1').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/in/36',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'product'},
+                {data: 'jumlah'},
+                {data: 'tgl_masuk'},
+                // {data: 'action'},
+            ]
+        });
+        $('.waktu-produk2').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/in/612',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'product'},
+                {data: 'jumlah'},
+                {data: 'tgl_masuk'},
+                // {data: 'action'},
+            ]
+        });
+        $('.waktu-produk3').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/in/1236',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'product'},
+                {data: 'jumlah'},
+                {data: 'tgl_masuk'},
+                // {data: 'action'},
+            ]
+        });
+        $('.waktu-produk4').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/dashboard-gbj/in/36plus',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'product'},
+                {data: 'jumlah'},
+                {data: 'tgl_masuk'},
+                // {data: 'action'},
+            ]
+        });
+
         // Penjualan
         $(document).on('click', '#transferoneday', function () {
             $('#transferoneday').addClass('active');

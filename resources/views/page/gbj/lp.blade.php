@@ -130,7 +130,7 @@
                                                                                     Masuk</label>
                                                                                 <div class="col-12">
                                                                                     <input type="date"
-                                                                                        class="form-control tanggal">
+                                                                                        class="form-control tanggal" name="tgl_masuk">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group row top-min">
@@ -138,7 +138,7 @@
                                                                                     class="col-12 font-weight-bold col-form-label">Dari</label>
                                                                                 <div class="col-12">
                                                                                     <select class="form-control division"
-                                                                                        name="division">
+                                                                                        name="dari" id="dari">
                                                                                         <option value="Divisi IT">Divisi IT
                                                                                         </option>
                                                                                         <option value="Divisi QC">Divisi QC
@@ -152,7 +152,7 @@
                                                                                 <label for=""
                                                                                     class="col-12 font-weight-bold col-form-label">Keterangan</label>
                                                                                 <div class="col-12">
-                                                                                    <textarea name="tujuan" id=""
+                                                                                    <textarea name="deskripsi" id="deskripsi"
                                                                                         class="form-control tujuan"></textarea>
                                                                                 </div>
                                                                             </div>
@@ -189,7 +189,7 @@
                                             <div class="col-12 d-flex justify-content-end">
                                                 <div class="btn-simpan hapus">
                                                     <button class="btn btn-success" type="button">Terima</button>&nbsp;
-                                                    <button class="btn btn-info" type="button">Rancang</button>&nbsp;
+                                                    <button class="btn btn-info" type="button" id="btnDraft">Rancang</button>&nbsp;
                                                     <button class="btn btn-secondary " type="button">Batal</button>
                                                 </div>
                                             </div>
@@ -225,7 +225,7 @@
                                 <label for="">Tanggal Masuk</label>
                                 <div class="card nomor-so">
                                     <div class="card-body">
-                                        10-04-2020
+                                        <span id="in">10-04-2020</span>
                                     </div>
                                 </div>
                             </div>
@@ -233,7 +233,7 @@
                                 <label for="">Dari</label>
                                 <div class="card nomor-akn">
                                     <div class="card-body">
-                                        Divisi IT
+                                        <span id="from">Divisi IT</span>
                                     </div>
                                 </div>
                             </div>
@@ -241,7 +241,7 @@
                                 <label for="">Tujuan</label>
                                 <div class="card nomor-po">
                                     <div class="card-body">
-                                        Uji Coba Produk
+                                       <span id="tujuan">Uji Coba Produk</span>
                                     </div>
                                 </div>
                             </div>
@@ -442,7 +442,7 @@
     }(jQuery));
     $(document).ready(function () {
         $('.division').select2();
-        $('.product').select2();
+        $('.productt').select2();
 
         $(".number-input").inputFilter(function (value) {
             return /^\d*$/.test(value);
@@ -459,9 +459,27 @@
             }
         });
     });
-
+    var i = 0;
     function addData() {
-        let tambah_data = '<tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+        $.ajax({
+            url: '/api/gbj/sel-gbj',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $(".productt").empty();
+                    $(".productt").append('<option value="">Pilih Item</option>');
+                    $.each(res, function(key, value) {
+                        $(".productt").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
+                    });
+                } else {
+                    $(".productt").empty();
+                }
+            }
+        });
+        i++;
+        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty['+i+']" name="qty['+i+']"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function (e) {
@@ -475,18 +493,146 @@
         }
     });
 
+    $(document).on('click', '.editmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: '/api/draft/data',
+            type: "post",
+            data: {
+                id: id,
+            },
+            success: function(res) {
+                console.log(res);
+                $('span#in').text(res.data[0].in);
+                $('span#from').text(res.data[0].from);
+                $('span#tujuan').text(res.data[0].tujuan);
+            },
+
+        });
+        $('.table-rancangan').DataTable().destroy();
+        $('.table-rancangan').DataTable({
+            processing: true,
+            serverSide: true,
+            "lengthChange": false,
+            "searching": false,
+            ajax: {
+                url: '/api/draft/data',
+                type: "post",
+                data: {
+                    id: id,
+                },
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'nama_produk'},
+                {data: 'jml'},
+                {data: 'action'},
+            ]
+        });
+        modalRancangan();
+    });
+
+    $(document).on('click', '.detail', function(e) {
+        var id = $(this).data('id');
+        console.log(id);
+
+        tambahanRancangan();
+    })
+
 
     $(document).ready(function () {
-        $('.table-rancangan').DataTable({});
-        $('.pertanggal').DataTable({
+
+        var table = $('.pertanggal').DataTable({
+            processing: true,
+            serverSide: true,
             "lengthChange": false,
-            "searching": false
+            "searching": false,
+            ajax: {
+                url: '/api/draft/data',
+                type: "post",
+            },
+            columns: [
+                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'in', name: 'in'},
+                { data: 'from', name: 'from'},
+                { data: 'tujuan'},
+                { data: 'action'}
+            ],
+
+        });
+
+        // var datee = new DateTime($('#datetimepicker1'), {
+        //     format: 'dd mm YYYY' });
+
+        $('#datetimepicker1').on('change', function() {
+            table.draw();
         });
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
+
+        // divisi
+        $.ajax({
+            url: '/api/gbj/sel-divisi',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $(".division").empty();
+                    $(".division").append('<option value="">Pilih Item</option>');
+                    $.each(res, function(key, value) {
+                        $(".division").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    });
+                } else {
+                    $(".division").empty();
+                }
+            }
+        });
+
+    });
+
+    $(document).on('click', '#btnDraft', function(e) {
+        e.preventDefault();
+
+        const prd = [];
+        const jml = [];
+
+        $('select[name^="gdg_brg_jadi_id"]').each(function() {
+            prd.push($(this).val());
+        });
+
+        $('input[name^="qty"]').each(function() {
+            jml.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/api/draft/rancang",
+            type: "post",
+            data: {
+                "_token" : "{{ csrf_token() }}",
+                tgl_masuk : $('.tanggal').val(),
+                dari: $('#dari').val(),
+                deskripsi: $('#deskripsi').val(),
+                gdg_brg_jadi_id: prd,
+                qty: jml,
+            },
+            success: function(res) {
+                console.log(res);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
+            }
+        })
     });
 
     function ubahData() {

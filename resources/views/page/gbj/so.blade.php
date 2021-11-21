@@ -124,6 +124,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
+                    <form action="" method="post">
                         <div class="card">
                             <div class="card-header">
                                 <div class="row row-cols-2">
@@ -131,7 +132,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="soo">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -139,7 +140,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="aknn">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +148,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="poo">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -155,7 +156,7 @@
                                     <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansii">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -191,6 +192,7 @@
                                 </table>
                             </div>
                         </div>
+                    </form>
                     </div>
                 </div>
                 {{-- Tambahkan DataTable --}}
@@ -198,7 +200,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
             </div>
         </div>
     </div>
@@ -225,7 +227,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="so">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -233,7 +235,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -241,7 +243,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -249,7 +251,7 @@
                                     <div class="col"> <label for="">Instansi</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansi">RS. Dr. Soetomo</span>
                                             </div>
                                         </div>
                                     </div>
@@ -295,14 +297,14 @@
 
 @section('adminlte_js')
 <script>
-    $(document).ready(function () {
-        $('.addProduk').click(function (e) {
-            $('#addProdukModal').modal('show');
-        });
-        $('.viewProduk').click(function (e) {
-            $('#viewProdukModal').modal('show');
-        });
-    });
+    // $(document).ready(function () {
+    //     $('.addProduk').click(function (e) {
+    //         $('#addProdukModal').modal('show');
+    //     });
+    //     $('.viewProduk').click(function (e) {
+    //         $('#viewProdukModal').modal('show');
+    //     });
+    // });
 
     $('.add-produk').DataTable({
         'columnDefs': [{
@@ -321,15 +323,120 @@
             "sSearch": "Cari:"
         }
     });
-    $('#view-produk').DataTable({
-        "oLanguage": {
-            "sSearch": "Cari:"
-        }
-    });
+
     $('#gudang-barang').DataTable({
-        "oLanguage": {
-            "sSearch": "Cari:"
-        }
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/tfp/data-so',
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            { data: 'so', name: 'so'},
+            { data: 'nama_customer', name: 'nama_customer'},
+            { data: 'tgl_kontrak', name: 'tgl_kontrak'},
+            { data: 'status1', name: 'status1'},
+            { data: 'action', name: 'action'},
+        ],
+        // "order": [
+        //         [3, 'desc']
+        //     ],
     });
+
+    $(document).on('click', '.editmodal', function(e) {
+        var id = $(this).data('id');
+        $.ajax({
+            url: "/api/tfp/header-so/" +id,
+            success: function(res) {
+                console.log(res);
+                $('span#soo').text(res.so);
+                $('span#poo').text(res.no_po);
+                $('span#aknn').text(res.ekatalog.no_paket);
+            }
+        });
+        $('.add-produk').DataTable().destroy();
+        var tab = $('.add-produk').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id,
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'ids', name: 'ids'},
+                // { data: 'status', name: 'status'},
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'tipe', name: 'tipe'},
+                { data: 'merk', name: 'merk'},
+
+            ],
+            'columnDefs': [{
+            'targets': 0,
+                'checkboxes': {
+                    'selectRow': true
+                }
+            }],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
+                [1, 'asc']
+            ],
+            "oLanguage": {
+                "sSearch": "Cari:"
+            }
+        });
+
+        $(document).on('click', '#btnSave', function(e) {
+            e.preventDefault();
+
+            const ids = [];
+
+            var rowsel = tab.column(0).checkboxes.selected();
+            // console.log(rowsel);
+
+            $.each(rowsel, function(i, val) {
+                ids.push(val);
+            })
+
+            console.log(ids);
+        })
+        $('#addProdukModal').modal('show');
+    })
+
+    $(document).on('click', '.detailmodal', function(e) {
+        var id = $(this).data('id');
+        $.ajax({
+            url: "/api/tfp/header-so/" +id,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.no_po);
+                $('span#akn').text(res.ekatalog.no_paket);
+            }
+        });
+        $('#view-produk').DataTable().destroy();
+        var table = $('#view-produk').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id,
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'tipe', name: 'tipe'},
+                { data: 'merk', name: 'merk'},
+                { data: 'status', name: 'status'},
+            ],
+        })
+        $('#viewProdukModal').modal('show');
+    })
 </script>
 @stop

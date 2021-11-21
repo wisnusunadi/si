@@ -22,7 +22,7 @@ class GudangBarangJadi extends Model
 
     function history()
     {
-        return $this->hasMany(GudangBarangJadiHis::class, 'gdg_brg_jadi_id'); 
+        return $this->hasMany(GudangBarangJadiHis::class, 'gdg_brg_jadi_id');
     }
 
     public function produk()
@@ -32,6 +32,16 @@ class GudangBarangJadi extends Model
 
     function Layout()
     {
-        return $this->belongsTo(Layout::class);
+        return $this->belongsTo(Layout::class, 'layout_id');
+    }
+
+     function satuan() {
+        return $this->belongsTo(Satuan::class, 'satuan_id');
+    }
+
+    public function DetailEkatalog()
+    {
+        return $this->belongsToMany(DetailEkatalog::class, 'detail_ekatalog_produk')
+            ->withPivot('jumlah');
     }
 }
