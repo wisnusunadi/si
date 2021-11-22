@@ -47,7 +47,7 @@
                 <nav>
                     <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                            aria-controls="home" aria-selected="true">Rancangan Transfer</a>
+                            aria-controls="home" aria-selected="true">Daftar Transfer</a>
                         <a id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                             aria-selected="false">Pembuatan Transfer</a>
                     </div>

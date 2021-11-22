@@ -128,7 +128,7 @@
                                     </div>
                                     <div class="card">
                                         <div class="card-body">
-                                            <p class="card-text">Keterangan Kolom <b>Tangggal:</b></p>
+                                            <p class="card-text">Keterangan Kolom <b>Tanggal:</b></p>
                                                     <p class="card-text">
                                                         <div class="foo green"></div> : Tanggal Masuk
                                                     </p>

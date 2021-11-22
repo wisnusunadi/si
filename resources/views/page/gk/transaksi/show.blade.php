@@ -359,14 +359,9 @@ const myChart = new Chart(ctx, {
         labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
         datasets: [{
             label: 'Dari',
-            data: [15, 20, 30, 15, 25, 30, 20, 15, 20, 30, 10, 25],
+            data: [15, 20, 30, 15, 29, 38, 35, 15, 18, 34, 10, 45],
             backgroundColor: [
                 'rgba(255, 159, 64, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(75, 192, 192, 0.2)'
             ],
             borderWidth: 1
         },
@@ -375,11 +370,6 @@ const myChart = new Chart(ctx, {
             data: [11, 15, 20, 10, 25, 30, 20, 15, 20, 30, 13, 25],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
             ],
             borderWidth: 1
         },
