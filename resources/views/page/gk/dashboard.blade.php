@@ -310,6 +310,54 @@
                                         <td>Produk 2</td>
                                         <td>20 Unit</td>
                                     </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>10-04-2021</td>
+                                        <td>Produk 1</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>23-09-2021</td>
+                                        <td>Produk 2</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>10-04-2021</td>
+                                        <td>Produk 1</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>23-09-2021</td>
+                                        <td>Produk 2</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>10-04-2021</td>
+                                        <td>Produk 1</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>23-09-2021</td>
+                                        <td>Produk 2</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>10-04-2021</td>
+                                        <td>Produk 1</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>23-09-2021</td>
+                                        <td>Produk 2</td>
+                                        <td>20 Unit</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -325,6 +373,54 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>10-04-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>10 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>23-09-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>20 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>10-04-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>10 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>23-09-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>20 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>10-04-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>10 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>23-09-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>20 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>10-04-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>10 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>23-09-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>20 Unit</td>
+                                </tr>
                                 <tr>
                                     <td scope="row">1</td>
                                     <td>10-04-2021</td>
@@ -398,6 +494,18 @@
                                     <td scope="row">2</td>
                                     <td>23-09-2021</td>
                                     <td>Produk 4</td>
+                                    <td>20 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>10-04-2021</td>
+                                    <td>Produk 3</td>
+                                    <td>10 Unit</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>23-09-2021</td>
+                                    <td>Produk 3</td>
                                     <td>20 Unit</td>
                                 </tr>
                             </tbody>
@@ -672,7 +780,7 @@
                                 </div>
                             </span>
                         </div>
-                        <table class="table tableStokLayout">
+                        <table class="table tableKerusakan">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -884,9 +992,18 @@
             "columnDefs":[{
                 "targets": '_all',
                 "createdCell": function (td, cellData, rowData, row, ) { 
-                    $(td).css('padding', '15px');
+                    $(td).css('padding', '18.3px');
                 }
             }],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $('.tableKerusakan').DataTable({
+            "ordering": true,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }

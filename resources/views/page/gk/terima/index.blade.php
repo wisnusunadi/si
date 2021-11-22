@@ -47,7 +47,7 @@
                 <nav>
                     <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                            aria-controls="home" aria-selected="true">Rancangan Penerimaan</a>
+                            aria-controls="home" aria-selected="true">Daftar Penerimaan</a>
                         <a id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                             aria-selected="false">Pembuatan Penerimaan</a>
                     </div>
@@ -89,6 +89,11 @@
     </div>
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
         <section class="content">
+            <div class="row">
+                .col-lg-4
+            </div>
+        </section>
+        {{-- <section class="content">
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
                     <div class="row">
@@ -198,7 +203,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
     </div>
 </div>
 
