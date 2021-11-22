@@ -140,6 +140,46 @@
                                         <td>Produk 3</td>
                                         <td>20 Unit</td>
                                     </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>Produk 3</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>Produk 3</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>Produk 3</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>Produk 3</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>Produk 3</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>Produk 3</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>Produk 3</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>Produk 3</td>
+                                        <td>20 Unit</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -153,6 +193,46 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>Produk 4</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>Produk 5</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>Produk 4</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>Produk 5</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>Produk 4</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>Produk 5</td>
+                                        <td>20 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>Produk 4</td>
+                                        <td>10 Unit</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>Produk 5</td>
+                                        <td>20 Unit</td>
+                                    </tr>
                                     <tr>
                                         <td scope="row">1</td>
                                         <td>Produk 4</td>
@@ -438,61 +518,61 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td scope="row">1</td>
+                                    <td>1</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td>Layout 1</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">2</td>
+                                    <td>2</td>
                                     <td>Produk 2</td>
                                     <td>100 Unit</td>
                                     <td>Layout 2</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">1</td>
+                                    <td>1</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td>Layout 1</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">2</td>
+                                    <td>2</td>
                                     <td>Produk 2</td>
                                     <td>100 Unit</td>
                                     <td>Layout 2</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">1</td>
+                                    <td>1</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td>Layout 1</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">2</td>
+                                    <td>2</td>
                                     <td>Produk 2</td>
                                     <td>100 Unit</td>
                                     <td>Layout 2</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">1</td>
+                                    <td>1</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td>Layout 1</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">2</td>
+                                    <td>2</td>
                                     <td>Produk 2</td>
                                     <td>100 Unit</td>
                                     <td>Layout 2</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">1</td>
+                                    <td>1</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit</td>
                                     <td>Layout 1</td>
                                 </tr>
                                 <tr>
-                                    <td scope="row">2</td>
+                                    <td>2</td>
                                     <td>Produk 2</td>
                                     <td>100 Unit</td>
                                     <td>Layout 2</td>
@@ -703,64 +783,6 @@
         </div>
     </div>
 </section>
-{{-- <section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="fas fa-dolly-flatbed"></i> Daftar Stok Layout
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-sm"><h5><b>Layout 1</b></h5></div>
-                            <div class="col-sm text-right">Layout :</div>
-                            <div class="col-sm">
-                                <select class="select2 form-control" multiple="multiple">
-                                <option selected>All Layout</option>
-                                <option>Layout 1</option>
-                                <option>Layout 2</option>
-                                <option>Layout 3</option>
-                                <option>Layout 4</option>
-                                <option>Layout 5</option>
-                                <option>Layout 6</option>
-                                <option>Layout 7</option>
-                              </select>
-                            </div>
-                        </div>
-                        <table class="table tableStokLayout">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Layout</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 1</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 2</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6"></div>
-        </div>
-    </div>
-</section> --}}
 @stop
 @section('adminlte_js')
 <script>
@@ -831,21 +853,25 @@
         })
         $('.select2').select2({});
         $('.jml-produk-20-tab').DataTable({
+            "lengthChange": false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
         $('.jml-produk-5-tab').DataTable({
+            "lengthChange": false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
         $('.jml-produk-4-tab').DataTable({
+            "lengthChange": false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
         $('.waktu-produk').DataTable({
+            "lengthChange": false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
@@ -855,6 +881,12 @@
             "autoWidth": false,
             searching: false,
             "lengthChange": false,
+            "columnDefs":[{
+                "targets": '_all',
+                "createdCell": function (td, cellData, rowData, row, ) { 
+                    $(td).css('padding', '15px');
+                }
+            }],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
