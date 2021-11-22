@@ -253,37 +253,6 @@
         }
     });
 
-    $(document).on('click', '.editmodal', function() {
-        var id = $(this).data('id');
-        console.log(id);
-
-        // $.ajax({
-        //     url: "/api/transaksi/all-detail/" + id,
-        //     success: function(res) {
-        //         console.log(res);
-        //         $('span#title').text(res.data[0].title);
-        //     }
-        // });
-        // $('.table-seri').DataTable().destroy();
-        // $('.table-seri').dataTable({
-        //     processing: true,
-        //     serverSide: true,
-        //     ajax: {
-        //         url: "/api/transaksi/all-detail/" + id,
-        //         // data: {id: id},
-        //         // type: "post",
-        //         // dataType: "json",
-        //     },
-        //     columns: [
-        //         { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        //         { data: 'seri', name: 'seri'},
-        //         { data: 'layout', name: 'layout'},
-        //     ],
-        // })
-        // detailProduk();
-        detailtanggal();
-    })
-
 
     function detailtanggal() {
         $('#modal-per-tanggal').modal('show');
@@ -355,47 +324,45 @@
         $(document).on("click", "#produk-tab", function () {
             $('.produk-show').addClass('hidden-product');
         });
-        $('.table-seri').dataTable({
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
-        });
+
     });
 
     function detailProdukModal() {
         $('.produk-show').removeClass('hidden-product');
     }
 
-    $(document).on('click', '.detailmodal', function() {
+    $(document).on('click', '.editmodal', function() {
         var id = $(this).data('id');
         console.log(id);
-        
-        // $('#datatable').dataTable({
-        //     // processing: true,
-        //     // serverSide: true,
-        //     // responsive: true,
-        //     // ajax: {
-        //     //     url: "/api/transaksi/history-detail/" + id,
-        //     //     // data: {id: id},
-        //     //     // type: "post",
-        //     //     // dataType: "json",
-        //     // },
-        //     // columns: [
-        //     //     // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        //     //     { data: 'so', name: 'so'},
-        //     //     { data: 'date_in', name: 'date_in'},
-        //     //     { data: 'date_out', name: 'date_out'},
-        //     //     { data: 'divisi', name: 'divisi'},
-        //     //     { data: 'tujuan', name: 'tujuan'},
-        //     //     { data: 'jumlah', name: 'jumlah'},
-        //     //     { data: 'action', name: 'action'},
-        //     // ],
-        //     "oLanguage": {
-        //         "sSearch": "Cari:"
-        //     }
-        // });
-        $('.produk-show').removeClass('hidden-product');
-    })
 
+        $.ajax({
+            url: "/api/transaksi/all-detail/" + id,
+            success: function(res) {
+                console.log(res);
+                $('span#title').text(res.data[0].title);
+            }
+        });
+        $('.table-seri').DataTable().destroy();
+        $('.table-seri').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/transaksi/all-detail/" + id,
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'seri', name: 'seri'},
+                { data: 'layout', name: 'layout'},
+            ],
+            "oLanguage": {
+                "sSearch": "Cari:"
+            }
+        });
+        
+        detailtanggal();
+    })
 </script>
 @stop

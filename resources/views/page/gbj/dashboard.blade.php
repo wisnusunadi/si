@@ -1536,7 +1536,9 @@
             // console.log('ok');
             $('.tableStokLayout').DataTable().column(3).search($(this).val()).draw();
         })
-
+        $('.table-produk-batas-receipt-one-day').DataTable().destroy();
+        $('.table-produk-batas-receipt-two-day').DataTable().destroy();
+        $('.table-produk-batas-receipt-three-day').DataTable().destroy();
         $('.table-produk-batas-receipt-one-day').DataTable({
             processing: true,
             serverSide: true,
