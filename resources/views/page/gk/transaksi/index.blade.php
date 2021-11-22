@@ -80,7 +80,14 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
-                                                    <label class="mr-3 mb-0 d-none d-md-block" for="">Dari</label>
+                                                    <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
+                                                    <input type="text" name="" id="datetimepicker1"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 my-2 my-md-0">
+                                                <div class="d-flex align-items-center">
+                                                    <label class="mr-3 mb-0 d-none d-md-block" for="">Dari / Ke</label>
                                                     <select name="" id="" class="form-control">
                                                         <option value="">All</option>
                                                         <option value="">Divisi IT</option>
@@ -99,13 +106,6 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 my-2 my-md-0">
-                                                <div class="d-flex align-items-center">
-                                                    <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
-                                                    <input type="text" name="" id="datetimepicker1"
-                                                        class="form-control">
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
@@ -114,15 +114,28 @@
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
-                                        <p class="card-text">
-                                            <div class="foo green"></div> : Dari
-                                        </p>
-                                        <p class="card-text">
-                                            <div class="foo blue"></div> : Ke
-                                        </p>
+                                <div class="card-group">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
+                                                    <p class="card-text">
+                                                        <div class="foo green"></div> : Dari
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <div class="foo blue"></div> : Ke
+                                                    </p>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p class="card-text">Keterangan Kolom <b>Tangggal:</b></p>
+                                                    <p class="card-text">
+                                                        <div class="foo green"></div> : Tanggal Masuk
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <div class="foo blue"></div> : Tanggal Keluar
+                                                    </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -134,32 +147,26 @@
                                     <table class="table table-bordered pertanggal" width="100%">
                                         <thead>
                                             <tr>
-                                                <th colspan="2" class="text-center">Tanggal</th>
-                                                <th rowspan="2" style="width: 220px">Dari/Ke</th>
-                                                <th rowspan="2">Jenis Produk</th>
-                                                <th rowspan="2">Aksi</th>
-                                            </tr>
-                                            <tr>
-                                                <th>Tanggal Masuk</th>
-                                                <th>Tanggal Keluar</th>
+                                                <th style="width:220px">Tanggal</th>
+                                                <th style="width:220px">Dari/Ke</th>
+                                                <th>Jenis</th>
+                                                <th>Produk</th>
+                                                <th>Unit</th>
+                                                <th>Jumlah</th>
+                                                <th>Tujuan</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>10-09-2022</td>
-                                                <td>10-09-2022</td>
+                                                <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
                                                 <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
-                                                <td>Sparepart 1</td>
-                                                <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
-                                                            class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>10-09-2022</td>
-                                                <td>10-09-2022</td>
-                                                <td><span class="badge badge-info">Divisi IT</span></td>
-                                                <td>Unit 2</td>
-                                                <td><button class="btn btn-info" onclick="detailprodukUnit()"><i
-                                                            class="far fa-eye"></i> Detail</button></td>
+                                                <td>Sparepart</td>
+                                                <td>Produk 1</td>
+                                                <td>Unit 1</td>
+                                                <td>100 Unit</td>
+                                                <td>Uji Coba</td>
+                                                <td><button class="btn btn-outline-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -247,160 +254,6 @@
 </div>
 
 
-
-<!-- Modal -->
-<div class="modal fade modalSparepart" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content ">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row row-cols-2">
-                            {{-- col --}}
-                            <div class="col"> <label for="">Tanggal Masuk</label>
-                                <div class="card nomor-so">
-                                    <div class="card-body">
-                                        10-04-2022
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Tanggal Keluar</label>
-                                <div class="card nomor-akn">
-                                    <div class="card-body">
-                                        23-09-2022
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Jenis Produk</label>
-                                <div class="card nomor-po">
-                                    <div class="card-body">
-                                        Sparepart 1
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Jumlah Produk</label>
-                                <div class="card instansi">
-                                    <div class="card-body">
-                                        5 Produk
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-striped add-produk">
-                            <thead>
-                                <tr>
-                                    <th>Nama Produk</th>
-                                    <th>Unit</th>
-                                    <th>Jumlah</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                    <td>Unit 1</td>
-                                    <td>100 Unit</td>
-                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
-                                </tr>
-                                <tr>
-                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                    <td>Unit 1</td>
-                                    <td>100 Unit</td>
-                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade modalUnit" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content ">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row row-cols-2">
-                            {{-- col --}}
-                            <div class="col"> <label for="">Tanggal Masuk</label>
-                                <div class="card nomor-so">
-                                    <div class="card-body">
-                                        10-04-2022
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Tanggal Keluar</label>
-                                <div class="card nomor-akn">
-                                    <div class="card-body">
-                                        23-09-2022
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Jenis Produk</label>
-                                <div class="card nomor-po">
-                                    <div class="card-body">
-                                        Unit 1
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Jumlah Produk</label>
-                                <div class="card instansi">
-                                    <div class="card-body">
-                                        5 Produk
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-striped add-produk">
-                            <thead>
-                                <tr>
-                                    <th>Nama Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                    <td>100 Unit</td>
-                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
-                                </tr>
-                                <tr>
-                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                    <td>100 Unit</td>
-                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Modal Per Tanggal-->
 <div class="modal fade" id="modal-per-tanggal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
     aria-hidden="true">
@@ -453,18 +306,6 @@
     function detailtanggal() {
         $('#modal-per-tanggal').modal('show');
     }
-
-    function detailProduk() {
-        $('.modalDetail').modal('show');
-    }
-
-    function detailprodukriwayat() { 
-        $('.modalSparepart').modal('show');
-     }
-
-     function detailprodukUnit() { 
-        $('.modalUnit').modal('show');
-     }
 
     $(document).ready(function () {
         $('.pertanggal').dataTable({

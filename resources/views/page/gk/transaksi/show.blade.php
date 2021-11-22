@@ -63,23 +63,6 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
-                {{-- <div class="card mb-3">
-                    <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80" class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <p class="card-title"><h2 class="text-bold">Nama Produk</h2>
-                        <h6 class="text-muted">Kode Produk</h6></p>
-                        <h5 class="card-text text-bold pt-2">Deskripsi</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit
-                          amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor
-                          purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper
-                          eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque
-                          fermentum dui faucibus in ornare quam viverra</p>
-                        <h5 class="card-text text-bold pt-1">Dimensi</h5>
-                        <p class="text-bold" style="margin-bottom: 0">Panjang x Lebar x Tinggi</p>
-                        <p><span class="panjang">50</span> x <span class="lebar">10</span> x <span
-                                class="tinggi">10</span></p>
-                    </div>
-                </div> --}}
                 <div class="card mb-3">
                     <div class="row no-gutters">
                       <div class="col-md-4">
@@ -111,7 +94,7 @@
                     <div class="card-title">
                         <div class="ml-3 mr-3">
                             <div class="row align-items-center">
-                                <div class="col-lg-9 col-xl-8">
+                                <div class="col-lg-7 col-xl-6">
                                     <div class="row align-items-center">
                                         <div class="col-md-4">
                                             <div class="input-icon">
@@ -133,16 +116,29 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-xl-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
-                                            <p class="card-text">
-                                                <div class="foo green"></div> : Dari
-                                            </p>
-                                            <p class="card-text">
-                                                <div class="foo blue"></div> : Ke
-                                            </p>
+                                <div class="col-lg-5 col-xl-6">
+                                    <div class="card-group">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
+                                                        <p class="card-text">
+                                                            <div class="foo green"></div> : Dari
+                                                        </p>
+                                                        <p class="card-text">
+                                                            <div class="foo blue"></div> : Ke
+                                                        </p>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <p class="card-text">Keterangan Kolom <b>Tangggal:</b></p>
+                                                        <p class="card-text">
+                                                            <div class="foo green"></div> : Tanggal Masuk
+                                                        </p>
+                                                        <p class="card-text">
+                                                            <div class="foo blue"></div> : Tanggal Keluar
+                                                        </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -154,8 +150,7 @@
                             <table class="table tableProdukView">
                                 <thead>
                                     <tr>
-                                        <th>Tanggal Masuk</th>
-                                        <th>Tanggal Keluar</th>
+                                        <th style="width: 150px">Tanggal</th>
                                         <th>Dari/Ke</th>
                                         <th>Tujuan</th>
                                         <th>Jumlah</th>
@@ -164,9 +159,80 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span><br><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span></span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td>Untuk Uji Coba</td>
+                                        <td>100 Unit</td>
+                                        <td><button type="button" class="btn btn-outline-info"
+                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
