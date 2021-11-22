@@ -56,6 +56,7 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th colspan="2" class="text-center">Tanggal</th>
+                                    <th rowspan="2">Nomor BPPB</th>
                                     <th rowspan="2">Produk</th>
                                     <th rowspan="2">Jumlah</th>
                                     <th rowspan="2">Status</th>
@@ -70,6 +71,7 @@
                                 <tr>
                                     <td scope="row" class="text-center">16-06-2021 <br><span class="badge badge-primary">Baru</span></td>
                                     <td class="text-center">18-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
+                                    <td>6543524635465464</td>
                                     <td>Produk 1</td>
                                     <td>100 Unit <br> <span class="badge badge-dark">Kurang 50 Unit</span></td>
                                     <td class="text-center"><span class="sudah_diterima">Sudah Diterima</span></td>
@@ -80,6 +82,7 @@
                                 <tr>
                                     <td scope="row" class="text-center">18-06-2021 <br><span class="badge badge-info">Revisi</span></td>
                                     <td class="text-center">21-06-2021 <br> <span class="badge badge-danger">Lebih 10 Hari</span></td>
+                                    <td>6543524635465464</td>
                                     <td>Produk 2</td>
                                     <td>200 Unit</td>
                                     <td><span class="belum_diterima">Belum Diterima</span></td>
@@ -90,6 +93,7 @@
                                 <tr>
                                     <td scope="row" class="text-center">20-06-2021</td>
                                     <td class="text-center">25-06-2021</td>
+                                    <td>6543524635465464</td>
                                     <td>Produk 3</td>
                                     <td>300 Unit</td>
                                     <td><span class="belum_diterima">Belum Diterima</span></td>

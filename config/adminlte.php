@@ -1154,7 +1154,7 @@ return [
         ],
         [
             'text' => 'Penerimaan Produk',
-            'url' => 'gk/terima',
+            'url' => 'gk/terimaProduk',
             'icon' => 'fas fa-dolly',
             'auth' => [12],
         ],

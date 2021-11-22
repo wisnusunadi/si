@@ -52,6 +52,9 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
+    .filter{
+        margin: 5px;
+    }
 </style>
 <div class="row">
     <div class="col-12">
@@ -76,15 +79,6 @@
                                     <div class="col-lg-9 col-xl-8">
                                         <div class="row align-items-center">
                                             <div class="col-md-4 my-2 my-md-0">
-                                                <div class="input-icon">
-                                                    <input type="text" class="form-control" placeholder="Cari..."
-                                                        id="kt_datatable_search_query">
-                                                    <span>
-                                                        <i class="flaticon2-search-1 text-muted"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Dari</label>
                                                     <select name="" id="" class="form-control">
@@ -92,6 +86,16 @@
                                                         <option value="">Divisi IT</option>
                                                         <option value="">Divisi QC</option>
                                                         <option value="">Divisi SO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 my-2 my-md-0">
+                                                <div class="d-flex align-items-center">
+                                                    <label class="mr-3 mb-0 d-none d-md-block" for="">Jenis Produk</label>
+                                                    <select name="" id="" class="form-control">
+                                                        <option value="">All</option>
+                                                        <option value="">Sparepart</option>
+                                                        <option value="">Unit</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -127,24 +131,25 @@
                             <div class="col-lg-12">
                                 <div class="table-responsive">
                                     {{-- Tanggal Masuk dan Tanggal Keluar --}}
-                                    <table class="table table-hover pertanggal" width="100%">
+                                    <table class="table table-bordered pertanggal" width="100%">
                                         <thead>
+                                            <tr>
+                                                <th colspan="2" class="text-center">Tanggal</th>
+                                                <th rowspan="2" style="width: 220px">Dari/Ke</th>
+                                                <th rowspan="2">Jenis Produk</th>
+                                                <th rowspan="2">Aksi</th>
+                                            </tr>
                                             <tr>
                                                 <th>Tanggal Masuk</th>
                                                 <th>Tanggal Keluar</th>
-                                                <th>Dari/Ke</th>
-                                                <th>Tujuan</th>
-                                                <th>Nomor SO</th>
-                                                <td>Aksi</td>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>10-09-2022</td>
                                                 <td>10-09-2022</td>
-                                                <td><span class="badge badge-success">Divisi IT</span><br><span class="badge badge-info">Divisi QC</span></td>
-                                                <td>Uji Coba Produk</td>
-                                                <td>641311666541</td>
+                                                <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                                <td>Sparepart 1</td>
                                                 <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
@@ -152,9 +157,8 @@
                                                 <td>10-09-2022</td>
                                                 <td>10-09-2022</td>
                                                 <td><span class="badge badge-info">Divisi IT</span></td>
-                                                <td>Uji Coba Produk</td>
-                                                <td>641311666541</td>
-                                                <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
+                                                <td>Unit 2</td>
+                                                <td><button class="btn btn-info" onclick="detailprodukUnit()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
                                         </tbody>
@@ -164,6 +168,44 @@
                         </div>
                     </div>
                     <div class="tab-pane fade card-body" id="produk" role="tabpanel" aria-labelledby="produk-tab">
+                        <div class="col-xl-12 d-flex justify-content-end">
+                            <span class="float-right filter">
+                                <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Jenis Produk</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                <label class="form-check-label" for="jenis1">
+                                                    All
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                <label class="form-check-label" for="jenis1">
+                                                    Sparepart
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
+                                                <label class="form-check-label" for="jenis2">
+                                                    Unit
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
                         <div class="table-produk">
                             <table class="table table-bordered" id="gudang-barang">
                                 <thead>
@@ -171,9 +213,7 @@
                                         <th>No</th>
                                         <th>Kode Produk</th>
                                         <th>Produk</th>
-                                        <th>Stok Gudang</th>
-                                        <th>Stok</th>
-                                        <th>Kelompok</th>
+                                        <th>Jenis Produk</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -182,10 +222,8 @@
                                         <td>1</td>
                                         <td>ZTP80AS-UPGRADE</td>
                                         <td>STERILISATOR KERING</td>
-                                        <td>100 Unit</td>
-                                        <td>80 Unit</td>
-                                        <td>Alat Kesehatan</td>
-                                        <td><a class="btn btn-info" href="{{ url('gbj/tp/1') }}"><i
+                                        <td>Sparepart</td>
+                                        <td><a class="btn btn-info" href="{{ url('gk/transaksi/1') }}"><i
                                                     class="far fa-eye"></i> Detail</a>
                                         </td>
                                     </tr>
@@ -193,10 +231,8 @@
                                         <td>1</td>
                                         <td>ZTP80AS-UPGRADE</td>
                                         <td>STERILISATOR KERING</td>
-                                        <td>100 Unit</td>
-                                        <td>80 Unit</td>
-                                        <td>Alat Kesehatan</td>
-                                        <td><a class="btn btn-info" href="{{ url('gbj/tp/1') }}"><i
+                                        <td>Unit</td>
+                                        <td><a class="btn btn-info" href="{{ url('gk/transaksi/1') }}"><i
                                                     class="far fa-eye"></i> Detail</a>
                                         </td>
                                     </tr>
@@ -213,7 +249,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade modalProduk" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modalSparepart" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content ">
             <div class="modal-header">
@@ -242,10 +278,88 @@
                                 </div>
                             </div>
                             {{-- col --}}
-                            <div class="col"> <label for="">Nomor SO</label>
+                            <div class="col"> <label for="">Jenis Produk</label>
                                 <div class="card nomor-po">
                                     <div class="card-body">
-                                        89798797856456
+                                        Sparepart 1
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- col --}}
+                            <div class="col"> <label for="">Jumlah Produk</label>
+                                <div class="card instansi">
+                                    <div class="card-body">
+                                        5 Produk
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped add-produk">
+                            <thead>
+                                <tr>
+                                    <th>Nama Produk</th>
+                                    <th>Unit</th>
+                                    <th>Jumlah</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                    <td>Unit 1</td>
+                                    <td>100 Unit</td>
+                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
+                                </tr>
+                                <tr>
+                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                    <td>Unit 1</td>
+                                    <td>100 Unit</td>
+                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modalUnit" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row row-cols-2">
+                            {{-- col --}}
+                            <div class="col"> <label for="">Tanggal Masuk</label>
+                                <div class="card nomor-so">
+                                    <div class="card-body">
+                                        10-04-2022
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- col --}}
+                            <div class="col"> <label for="">Tanggal Keluar</label>
+                                <div class="card nomor-akn">
+                                    <div class="card-body">
+                                        23-09-2022
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- col --}}
+                            <div class="col"> <label for="">Jenis Produk</label>
+                                <div class="card nomor-po">
+                                    <div class="card-body">
+                                        Unit 1
                                     </div>
                                 </div>
                             </div>
@@ -265,8 +379,6 @@
                                 <tr>
                                     <th>Nama Produk</th>
                                     <th>Jumlah</th>
-                                    <th>Tipe</th>
-                                    <th>Merk</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -274,15 +386,11 @@
                                 <tr>
                                     <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                     <td>100 Unit</td>
-                                    <td>ABPM50</td>
-                                    <td>ELITECH</td>
                                     <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
                                 </tr>
                                 <tr>
                                     <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                     <td>100 Unit</td>
-                                    <td>RGB</td>
-                                    <td>ELITECH</td>
                                     <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
                                 </tr>
                             </tbody>
@@ -309,17 +417,23 @@
                     <thead>
                         <tr>
                             <th>No Seri</th>
+                            <th>Kerusakan</th>
+                            <th>Tingkat Kerusakan</th>
                             <th>Layout</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td scope="row">65465465465</td>
+                            <td>Kerusakan Komponen</td>
+                            <td>Level 1</td>
                             <td>Layout 1</td>
                         </tr>
                         <tr>
                             <td scope="row">65465465465</td>
-                            <td>Layout 2</td>
+                            <td>Kerusakan Komponen</td>
+                            <td>Level 1</td>
+                            <td>Layout 1</td>
                         </tr>
                     </tbody>
                 </table>
@@ -345,17 +459,34 @@
     }
 
     function detailprodukriwayat() { 
-        $('.modalProduk').modal('show');
+        $('.modalSparepart').modal('show');
+     }
+
+     function detailprodukUnit() { 
+        $('.modalUnit').modal('show');
      }
 
     $(document).ready(function () {
         $('.pertanggal').dataTable({
-            bFilter: false,
-            responsive: true
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         });
         $('#gudang-barang').dataTable({
-            "oLanguage": {
-                "sSearch": "Cari:"
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
         $('.add-produk').dataTable({
@@ -370,8 +501,8 @@
             $('.produk-show').addClass('hidden-product');
         });
         $('.table-seri').dataTable({
-            "oLanguage": {
-                "sSearch": "Cari:"
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
     });

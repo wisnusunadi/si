@@ -66,7 +66,7 @@
                     <div class="col-sm">
                         <div class="row">
                             {{-- col --}}
-                            <div class="col"> <label for="">Kode Sparepart</label>
+                            <div class="col"> <label for="">Kode Unit</label>
                                 <div class="card nomor-so">
                                     <div class="card-body">
                                         89798797856456
@@ -74,10 +74,10 @@
                                 </div>
                             </div>
                             {{-- col --}}
-                            <div class="col"> <label for="">Nama Sparepart</label>
+                            <div class="col"> <label for="">Nama Unit</label>
                                 <div class="card nomor-akn">
                                     <div class="card-body">
-                                        Sparepart 1
+                                        Unit 1
                                     </div>
                                 </div>
                             </div>
