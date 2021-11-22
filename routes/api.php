@@ -48,6 +48,7 @@ Route::prefix('/kota_kabupaten')->group(function () {
 });
 Route::prefix('/customer')->group(function () {
     Route::get('data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
+    Route::get('nama/{id}/{val}', [App\Http\Controllers\MasterController::class, 'get_nama_customer']);
     Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_pesanan']);
     // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_customer']);
     Route::get('update_modal/{id}', [App\Http\Controllers\MasterController::class, 'update_customer_modal']);
@@ -75,7 +76,7 @@ Route::prefix('/penjualan_produk')->group(function () {
     Route::get('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_penjualan_produk']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_detail_penjualan_produk']);
     Route::get('update_modal/{id}', [App\Http\Controllers\MasterController::class, 'update_penjualan_produk_modal']);
-    Route::get('check/{id}', [App\Http\Controllers\MasterController::class, 'check_penjualan_produk']);
+    Route::get('check/{id}/{val}', [App\Http\Controllers\MasterController::class, 'check_penjualan_produk']);
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk']);
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_id']);
 });

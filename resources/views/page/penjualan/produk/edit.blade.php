@@ -70,7 +70,7 @@
                                                 <div class="form-group row">
                                                     <div class="col-12">
                                                         <select class="select-info select2 form-control " name="produk_id[]" id="{{$loop->iteration-1}}" style="width:100%">
-                                                            <option value="{{$s->id}}" selected>{{$s->tipe}}</option>
+                                                            <option value="{{$s->id}}" selected>{{$s->nama}}</option>
                                                         </select>
                                                     </div>
                                                 </div>

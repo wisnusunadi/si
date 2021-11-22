@@ -269,7 +269,7 @@
                     searchable: false
                 },
                 {
-                    data: 'npwp',
+                    data: 'ket',
                     className: 'minimizechar',
                     orderable: false,
                     searchable: false
@@ -320,26 +320,31 @@
 
 
         $(document).on('keyup change', 'input[name="nama_customer"]', function() {
+            var id = $('#form-customer-update').attr('data-id');
             if ($(this).val() == "") {
                 $("#msgnama_customer").text("Nama tidak boleh kosong");
                 $('#nama_customer').addClass('is-invalid');
             } else if ($(this).val() != "") {
-                // if (checkCustomer($('#nama_customer').val()) >= 1) {
-                //     $("#msgnama_customer").text("Nama sudah terpakai");
-                //     $('#nama_customer").addClass('is-invalid');
-                //     $("#btnsimpan").attr("disabled", true);
-                // } else {
-                //     $("#msgnama_customer").text("");
-                //     $('#nama_customer").removeClass('is-invalid');
-                //     $("#btnsimpan").removeAttr("disabled");
-                // }
-                $("#msgnama_customer").val("");
-                $('#nama_customer').removeClass('is-invalid');
-                if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "") {
-                    $("#btnsimpan").removeAttr("disabled");
-                } else {
-                    $("#btnsimpan").attr("disabled", true);
-                }
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '/api/customer/nama/' + id + '/' + $(this).val(),
+                    success: function(data) {
+                        if (data.data >= 1) {
+                            $("#msgnama_customer").text("Nama sudah terpakai");
+                            $('#nama_customer').addClass('is-invalid');
+                            $("#btnsimpan").attr("disabled", true);
+                        } else {
+                            $("#msgnama_customer").text("");
+                            $('#nama_customer').removeClass('is-invalid');
+                            if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
+                                $("#btnsimpan").removeAttr("disabled");
+                            } else {
+                                $("#btnsimpan").attr("disabled", true);
+                            }
+                        }
+                    }
+                });
             }
         })
 
@@ -397,24 +402,30 @@
 
         $(document).on('keyup change', 'input[name="npwp"]', function() {
             if ($(this).val() == "") {
-                $("#msgnpwp").text("Nama tidak boleh kosong");
+                $("#msgnpwp").text("NPWP tidak boleh kosong");
                 $('#npwp').addClass('is-invalid');
             } else if ($(this).val() != "") {
                 // if (checkCustomer($('#npwp').val()) >= 1) {
                 //     $("#msgnpwp").text("Nama sudah terpakai");
                 //     $('#npwp").addClass('is-invalid');
-                //     $("#btnsimpan").attr("disabled", true);
+                //     $("#btntambah").attr("disabled", true);
                 // } else {
                 //     $("#msgnpwp").text("");
                 //     $('#npwp").removeClass('is-invalid');
-                //     $("#btnsimpan").removeAttr("disabled");
+                //     $("#btntambah").removeAttr("disabled");
                 // }
-                $("#msgnpwp").val("");
-                $('#npwp').removeClass('is-invalid');
-                if ($('#telepon').val() != "" && $('#nama_customer').val() != "" && $('#alamat').val() != "") {
-                    $("#btnsimpan").removeAttr("disabled");
+                if (!/^[0-9.-]+$/.test($(this).val())) {
+                    $('#msgnpwp').text("Masukkan NPWP dengan benar");
+                    $('#npwp').addClass("is-invalid");
+                    $("#btnsimpan").attr('disabled', true);
                 } else {
-                    $("#btnsimpan").attr("disabled", true);
+                    $("#msgnpwp").text("");
+                    $('#npwp').removeClass('is-invalid');
+                    if ($('#telepon').val() != "" && $('#nama_customer').val() != "" && $('#alamat').val() != "") {
+                        $("#btnsimpan").removeAttr("disabled");
+                    } else {
+                        $("#btnsimpan").attr("disabled", true);
+                    }
                 }
             }
         });

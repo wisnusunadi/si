@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 use Alert;
 
 class MasterController extends Controller
@@ -95,6 +96,17 @@ class MasterController extends Controller
             })
             ->rawColumns(['button'])
             ->make(true);
+    }
+
+    public function get_nama_customer($id, $val)
+    {
+        if ($id != "0") {
+            $c = Customer::where('nama', $val)->whereNotIn('id', [$id])->count();
+            return response()->json(['data' => $c]);
+        } else {
+            $c = Customer::where('nama', $val)->count();
+            return response()->json(['data' => $c]);
+        }
     }
     //public function get_data_detail_penjualan_produk($id)
     //{
@@ -176,9 +188,13 @@ class MasterController extends Controller
                 })
                 ->addColumn('tglpo', function ($data) {
                     if ($data->Pesanan) {
-                        return $data->Pesanan->tgl_po;
+                        if (empty($data->Pesanan->tgl_po) || $data->Pesanan->tgl_po == "0000-00-00") {
+                            return '-';
+                        } else {
+                            return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
+                        }
                     } else {
-                        return '';
+                        return '-';
                     }
                 })
                 ->addColumn('status', function ($data) {
@@ -405,10 +421,15 @@ class MasterController extends Controller
         $data = Customer::where('nama', $value)->get();
         echo json_encode($data);
     }
-    public function check_penjualan_produk($value)
+    public function check_penjualan_produk($id, $value)
     {
-        $data = PenjualanProduk::where('nama', $value)->get();
-        echo json_encode($data);
+        if ($id != "0") {
+            $data = PenjualanProduk::where('nama', $value)->whereNotIn('id', [$id])->count();
+            return response()->json(['jumlah' => $data]);
+        } else {
+            $data = PenjualanProduk::where('nama', $value)->count();
+            return response()->json(['jumlah' => $data]);
+        }
     }
 
     //Show Modal 
@@ -432,8 +453,8 @@ class MasterController extends Controller
     //Select
     public function select_produk(Request $request)
     {
-        $data = Produk::where('tipe', 'LIKE', '%' . $request->input('term', '') . '%')
-            ->orderby('tipe', 'ASC')->get();
+        $data = Produk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
     public function select_produk_id($id)

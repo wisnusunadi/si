@@ -577,45 +577,33 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                if ($data->status == 'sepakat' && $data->pesanan == '') {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                $return = "";
+                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
                 <button class="dropdown-item" type="button">
                       <i class="fas fa-search"></i>
                       Details
                     </button>
-                </a>
-                <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
-                    <button class="dropdown-item" type="button" >
-                      <i class="fas fa-pencil-alt"></i>
-                      Edit
-                    </button>
-                </a>
-                <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
-                <button class="dropdown-item" type="button" >
-                <i class="fas fa-plus"></i>
-                  Tambah PO
-                </button>
-            </a>
-                </div>';
-                } else {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
-                      Details
-                    </button>
-                </a>
-                <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
-                    <button class="dropdown-item" type="button" >
-                      <i class="fas fa-pencil-alt"></i>
-                      Edit
-                    </button>
-                </a>
-                </div>';
+                </a>';
+                if ($data->log == "penjualan") {
+                    $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
+                        </button>
+                    </a>';
+                    if ($data->status == 'sepakat' && $data->pesanan == '') {
+                        $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
+                            <button class="dropdown-item" type="button" >
+                            <i class="fas fa-plus"></i>
+                            Tambah PO
+                            </button>
+                        </a>';
+                    }
                 }
+                $return .= '</div>';
+                return $return;
             })
             ->rawColumns(['button', 'status', 'tgl_kontrak'])
             ->make(true);
@@ -672,45 +660,40 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                if ($data->Pesanan) {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
-                    <button class="dropdown-item" type="button">
-                          <i class="fas fa-search"></i>
-                          Details
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
+
+                $return = "";
+                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
+                <button class="dropdown-item" type="button">
+                      <i class="fas fa-search"></i>
+                      Details
+                    </button>
+                </a>';
+                if (!empty($data->Pesanan)) {
+                    if ($data->log == "penjualan" || $data->log == "po") {
+                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
                         </button>
-                    </a>
-                    </div>';
+                    </a>';
+                    }
                 } else {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
-                    <button class="dropdown-item" type="button">
-                          <i class="fas fa-search"></i>
-                          Details
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
+                    $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
                         </button>
                     </a>
                     <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
-                    <button class="dropdown-item" type="button" >
-                    <i class="fas fa-plus"></i>
-                      Tambah PO
-                    </button>
-                </a>
-                    </div>';
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-plus"></i>
+                        Tambah PO
+                        </button>
+                    </a>';
                 }
+                $return .= '</div>';
             })
             ->rawColumns(['button', 'status'])
             ->make(true);

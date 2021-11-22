@@ -99,7 +99,7 @@
                                     <div class="small-box purple-text">
                                         <div class="inner">
                                             <h3>3</h3>
-                                            <p>AKN Tanpa SO</p>
+                                            <p>Belum Memiliki SO</p>
                                         </div>
                                         <div class="icon">
                                             <i class="fas fa-tasks"></i>

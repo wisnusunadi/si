@@ -105,10 +105,10 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td><span class="badge" id="kelompok_produk"></span></td>
+                                                            <td><span class="badge" name="kelompok_produk[]" id="kelompok_produk0"></span></td>
                                                             <td>
                                                                 <div class="form-group d-flex justify-content-center">
-                                                                    <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
+                                                                    <input type="number" class="form-control" name="jumlah[]" id="jumlah0" style="width: 50%" />
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -147,9 +147,6 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function() {
-
-
-
         select_data();
 
         function numberRows($t) {
@@ -157,7 +154,10 @@
             $t.find("tr").each(function(ind, el) {
                 $(el).find("td:eq(0)").html(++c);
                 var j = c - 1;
-                $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
+                $(el).find('.jumlah').attr('name', 'jumlah[' + j + ']');
+                $(el).find('.jumlah').attr('id', 'jumlah' + j);
+                $(el).find('.kelompok_produk').attr('name', 'kelompok_produk[' + j + ']');
+                $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
                 $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                 $(el).find('.produk_id').attr('id', j);
                 select_data();
@@ -166,22 +166,24 @@
 
         $('#addrow').on('click', function() {
             $('#createtable tr:last').after(`<tr>
-            <td></td>
-            <td>
-                <div class="form-group">
-                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0">
-                    </select>
-                </div>
-            </td>
-            <td><span class="badge" id="kelompok_produk"></span></td>
-            <td>
-                <div class="form-group d-flex justify-content-center">
-                    <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
-                </div>
-            </td>
-            <td>
-                <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
-            </td>
+                <td></td>
+                <td>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <select class="select-info form-control produk_id " name="produk_id[]" id="0">
+                            </select>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="badge kelompok_produk" name="kelompok_produk[]" id="kelompok_produk0"></span></td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control jumlah" name="jumlah[]" id="jumlah0" style="width: 50%" />
+                    </div>
+                </td>
+                <td>
+                    <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+                </td>
             </tr>`);
             numberRows($("#createtable"));
         });
@@ -213,14 +215,28 @@
 
         $('#nama_paket').on('keyup change', function() {
             if ($(this).val() != "") {
-                $('#msgnama_paket').text("");
-                $('#nama_paket').removeClass("is-invalid");
-                console.log($("#createtable tbody").length);
-                if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
-                    $('#btntambah').removeClass('disabled');
-                } else {
-                    $('#btntambah').addClass('disabled');
-                }
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '/api/penjualan_produk/check/0/' + $(this).val(),
+                    success: function(data) {
+                        if (data.jumlah >= 1) {
+                            $("#msgnama_paket").text("Nama sudah terpakai");
+                            $('#nama_paket').addClass('is-invalid');
+                            $('#btntambah').addClass('disabled');
+                        } else {
+                            $('#msgnama_paket').text("");
+                            $('#nama_paket').removeClass("is-invalid");
+                            console.log($("#createtable tbody").length);
+                            if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
+                                $('#btntambah').removeClass('disabled');
+                            } else {
+                                $('#btntambah').addClass('disabled');
+                            }
+                        }
+                    }
+                });
+
             } else if ($(this).val() == "") {
                 $('#msgnama_paket').text("Nama Paket Harus diisi");
                 $('#nama_paket').addClass("is-invalid");
@@ -249,14 +265,27 @@
                             results: $.map(data, function(obj) {
                                 return {
                                     id: obj.id,
-                                    text: obj.tipe
+                                    text: obj.nama
                                 };
                             })
                         };
                     },
                 }
             }).change(function() {
-
+                var value = $(this).val();
+                var index = $(this).attr('id');
+                console.log(index);
+                // var id = $(#produk_id).val();
+                $.ajax({
+                    url: '/api/produk/select/' + value,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
+                        console.log(data[0].kelompok_produk.nama);
+                    }
+                });
             });
         }
     });

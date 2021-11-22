@@ -273,7 +273,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert($('#form-customer-update').serialize());
+                    alert($('#form-penjualan-produk-update').serialize());
                 }
             });
             return false;
@@ -471,7 +471,7 @@
                             results: $.map(data, function(obj) {
                                 return {
                                     id: obj.id,
-                                    text: obj.tipe
+                                    text: obj.nama
                                 };
                             })
                         };
@@ -494,15 +494,29 @@
             });
         }
         $(document).on('keyup change', '#nama_paket', function() {
+            var id = $('#form-penjualan-produk-update').attr('data-id');
             if ($(this).val() != "") {
-                $('#msgnama_paket').text("");
-                $('#nama_paket').removeClass("is-invalid");
-                console.log($("#createtable tbody").length);
-                if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
-                    $('#btnsimpan').removeClass('disabled');
-                } else {
-                    $('#btnsimpan').addClass('disabled');
-                }
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '/api/penjualan_produk/check/' + id + '/' + $(this).val(),
+                    success: function(data) {
+                        if (data.jumlah >= 1) {
+                            $("#msgnama_paket").text("Nama sudah terpakai");
+                            $('#nama_paket').addClass('is-invalid');
+                            $('#btnsimpan').addClass('disabled');
+                        } else {
+                            $('#msgnama_paket').text("");
+                            $('#nama_paket').removeClass("is-invalid");
+                            console.log($("#createtable tbody").length);
+                            if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
+                                $('#btnsimpan').removeClass('disabled');
+                            } else {
+                                $('#btnsimpan').addClass('disabled');
+                            }
+                        }
+                    }
+                });
             } else if ($(this).val() == "") {
                 $('#msgnama_paket').text("Nama Paket Harus diisi");
                 $('#nama_paket').addClass("is-invalid");

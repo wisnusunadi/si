@@ -1,4 +1,4 @@
-<form data-attr="{{ route('penjualan.customer.update', $customer->id) }}" method="POST" id="form-customer-update">
+<form data-attr="{{ route('penjualan.customer.update', $customer->id) }}" data-id="{{$customer->id}}" method="POST" id="form-customer-update">
     @method('PUT')
     <div class="row d-flex justify-content-center">
         <div class="col-11">
@@ -36,12 +36,16 @@
                                 <label for="npwp" class="col-4 col-form-label" style="text-align:right;">NPWP</label>
                                 <div class="col-5">
                                     <input type="text" class="form-control" placeholder="Masukkan NPWP" id="npwp" name="npwp" value="{{old('npwp', $customer->npwp)}}" />
+                                    <div class="invalid-feedback" id="msgnpwp">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="alamat" class="col-4 col-form-label" style="text-align:right;">Alamat</label>
                                 <div class="col-8">
                                     <input type="text" class="form-control" placeholder="Masukkan Alamat" id="alamat" name="alamat" value="{{old('alamat', $customer->alamat)}}" />
+                                    <div class="invalid-feedback" id="msgalamat">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -50,20 +54,25 @@
                                     <select class="select2 select-info form-control custom-select provinsi" name="provinsi" id="provinsi" style="width:100%">
                                         <option value="{{$customer->id_provinsi}}" selected>{{$customer->provinsi->nama}}</option>
                                     </select>
-
+                                    <div class="invalid-feedback" id="msgprovinsi">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="email" class="col-4 col-form-label" style="text-align:right;">Email</label>
                                 <div class="col-8">
                                     <input type="text" class="form-control" placeholder="Masukkan Email" id="email" name="email" value="{{old('email', $customer->email)}}" />
+                                    <div class="invalid-feedback" id="msgemail">
+                                    </div>
                                 </div>
+
                             </div>
                             <div class="form-group row">
                                 <label for="telepon" class="col-4 col-form-label" style="text-align:right;">No Telp</label>
                                 <div class="col-5">
                                     <input type="text" class="form-control" placeholder="Masukkan Telepon" id="telepon" name="telepon" value="{{old('telepon', $customer->telp)}}" />
-
+                                    <div class="invalid-feedback" id="msgtelepon">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
