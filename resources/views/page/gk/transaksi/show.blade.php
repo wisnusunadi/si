@@ -94,6 +94,10 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Grafik Jumlah Terima / Keluar (Nama Produk) Per Tahun
+                        </h3>
                         <div class="card-tools">
                             <div class="form-group row">
                                 <label for="years" class="col-md-5 col-form-label">Tahun</label>
