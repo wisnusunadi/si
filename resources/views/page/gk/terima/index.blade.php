@@ -90,11 +90,6 @@
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
         <section class="content">
             <div class="row">
-                .col-lg-4
-            </div>
-        </section>
-        {{-- <section class="content">
-            <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
                     <div class="row">
                         <div class="col-12">
@@ -203,7 +198,7 @@
                     </div>
                 </div>
             </div>
-        </section> --}}
+        </section>
     </div>
 </div>
 
