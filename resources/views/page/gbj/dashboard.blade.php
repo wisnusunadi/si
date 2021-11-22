@@ -1441,13 +1441,15 @@
                     $(".layout").empty();
                     $(".layout").append('<option value="" selected>All Layout</option>');
                     $.each(res, function(key, value) {
-                        $(".layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                        $(".layout").append('<option value="'+value.ruang+'">'+value.ruang+'</option');
                     });
                 } else {
                     $(".layout").empty();
                 }
             }
         });
+
+
 
         // data
         // penjualan
@@ -1530,6 +1532,11 @@
             ]
 
         });
+        $('.layout').change(function () {
+            // console.log('ok');
+            $('.tableStokLayout').DataTable().column(3).search($(this).val()).draw();
+        })
+
         $('.table-produk-batas-receipt-one-day').DataTable({
             processing: true,
             serverSide: true,

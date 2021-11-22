@@ -56,10 +56,11 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/tso', 'page.gbj.tso');
     Route::view('/dp', 'page.gbj.dp');
     Route::view('/lp', 'page.gbj.lp');
-    Route::view('/dashboard', 'page.gbj.dashboard'); 
+    Route::view('/dashboard', 'page.gbj.dashboard');
     route::group(['prefix' => '/tp'], function () {
         Route::view('/', 'page.gbj.tp.tp');
-        Route::view('/1', 'page.gbj.tp.show');
+        // Route::view('/{id}', 'page.gbj.tp.show');
+        Route::get('/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailHistory1']);
     });
 });
 

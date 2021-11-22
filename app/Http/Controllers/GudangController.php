@@ -118,10 +118,8 @@ class GudangController extends Controller
                 return $d->produk->product->kode . '' . $d->produk->kode;
             })
             ->addColumn('action', function ($d) {
-                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
-                            <button class="btn btn-info" data-toggle="modal" data-target=".modal-detail"><i
-                            class="far fa-eye"></i> Detail</button>
-                            </a>';
+                return '<a class="btn btn-info" href="'.url('gbj/tp/'.$d->id.'').'"><i
+                        class="far fa-eye"></i> Detail</a>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -171,8 +169,8 @@ class GudangController extends Controller
             })
             ->addColumn('action', function ($d) {
                 return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
-                            <button type="button" class="btn btn-outline-info"><i
-                            class="far fa-eye"> Detail</i></button>
+                <button class="btn btn-info"><i
+                class="far fa-eye"></i> Detail</button>
                         </a>';
             })
             ->rawColumns(['divisi', 'action'])
@@ -205,22 +203,24 @@ class GudangController extends Controller
 
     function getDetailHistory($id)
     {
-        $data = GudangBarangJadi::with('produk')->where('id', $id)->get();
-        $d = [];
-        foreach ($data as $dd) {
-            $d[] = [
-                'id' => $dd->id,
-                'kode' => $dd->produk->product->kode . '' . $dd->produk->kode ? $dd->produk->product->kode . '' . $dd->produk->kode : '-',
-                'nama' => $dd->produk->nama . ' ' . $dd->nama,
-                'deskripsi' => $dd->deskripsi,
-                'panjang' => $dd->dim_p . ' mm',
-                'lebar' => $dd->dim_l . ' mm',
-                'tinggi' => $dd->dim_t . ' mm',
-            ];
-        }
+        // $data = GudangBarangJadi::with('produk')->where('id', $id)->get();
+        // return $data;
+        // $d = [];
+        // foreach ($data as $dd) {
+        //     $d[] = [
+        //         'id' => $dd->id,
+        //         'kode' => $dd->produk->product->kode . '' . $dd->produk->kode ? $dd->produk->product->kode . '' . $dd->produk->kode : '-',
+        //         'nama' => $dd->produk->nama . ' ' . $dd->nama,
+        //         'deskripsi' => $dd->deskripsi,
+        //         'panjang' => $dd->dim_p . ' mm',
+        //         'lebar' => $dd->dim_l . ' mm',
+        //         'tinggi' => $dd->dim_t . ' mm',
+        //     ];
+        // }
 
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
-        $g = datatables()->of($data1)
+        // return $data1;
+        return datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
                 if (isset($d->header->pesanan_id)) {
@@ -264,10 +264,13 @@ class GudangController extends Controller
             })
             ->rawColumns(['divisi', 'action'])
             ->make(true);
-        return response()->json([
-            'header' => $d,
-            'detail' => $g
-        ]);
+
+    }
+
+    function getDetailHistory1($id) {
+        $data = GudangBarangJadi::with('produk')->where('id', $id)->get();
+        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
+        return view('page.gbj.tp.show', compact('data', 'data1'));
     }
 
     function getRakit()
@@ -791,7 +794,7 @@ class GudangController extends Controller
             })
             ->addColumn('layout', function ($d) {
                 if (isset($d->layout_id)) {
-                    return $d->layout->ruang . ';' . $d->layout->lantai . '/' . $d->layout->rak;
+                    return $d->layout->ruang;
                 } else {
                     return '-';
                 }
