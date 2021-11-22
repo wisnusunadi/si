@@ -803,7 +803,7 @@
                                         <div class="col-sm"><h5><b>Layout 1</b></h5></div>
                                         <div class="col-sm text-right">Layout :</div>
                                         <div class="col-sm">
-                                            <select class="select2 form-control" multiple="multiple">
+                                            <select class="select2 form-control layout" multiple="multiple">
                                             <option selected>All Layout</option>
                                             <option>Layout 1</option>
                                             <option>Layout 2</option>
@@ -1333,17 +1333,14 @@
 
 @section('adminlte_js')
 <script>
-    $('.table-produk-batas-transfer-one-day').DataTable({});
-    $('.table-produk-batas-transfer-two-day').DataTable({});
-    $('.table-produk-batas-transfer-three-day').DataTable({});
     $('.table-jml-stok').DataTable({});
     $('.jml-produk').DataTable({});
     // $('.waktu-produk').DataTable({});
-    $('.table-produk-batas-receipt-all').DataTable({});
-    $('.tableStokLayout').DataTable({
-        searching: false,
-        "lengthChange": false
-    });
+
+    // $('.tableStokLayout').DataTable({
+    //     searching: false,
+    //     "lengthChange": false
+    // });
 
     $(document).ready(function () {
         // header
@@ -1426,7 +1423,7 @@
         })
 
         $.ajax({
-            url: "/api/dashboard-gbj/terimaproduk2/h",
+            url: "/api/dashboard-gbj/terimaproduk3/h",
             type: "post",
             success: function(res) {
                 console.log(res);
@@ -1434,10 +1431,51 @@
             }
         })
 
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $(".layout").empty();
+                    $(".layout").append('<option value="" selected>All Layout</option>');
+                    $.each(res, function(key, value) {
+                        $(".layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    });
+                } else {
+                    $(".layout").empty();
+                }
+            }
+        });
+
         // data
+        // penjualan
+        $('.table-produk-batas-transfer-one-day').DataTable({
+
+        });
+        $('.table-produk-batas-transfer-two-day').DataTable({});
+        $('.table-produk-batas-transfer-three-day').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '/api/dashboard-gbj/list',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'so'},
+                {data: 'nama_customer'},
+                {data: 'tgl_kontrak'},
+                {data: 'action'},
+            ]
+        });
+        // produk
         $('.jml-produk-20-tab').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/stok/1020',
             },
@@ -1450,6 +1488,7 @@
         $('.jml-produk-5-tab').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/stok/59',
             },
@@ -1462,6 +1501,7 @@
         $('.jml-produk-4-tab').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/stok/14',
             },
@@ -1471,9 +1511,29 @@
                 {data: 'jml'},
             ]
         });
+        $('.tableStokLayout').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            searching: false,
+            "lengthChange": false,
+            ajax: {
+                url: '/api/dashboard-gbj/byproduct',
+                type: "get",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'prd'},
+                {data: 'jml'},
+                {data: 'layout'},
+                // {data: 'action'},
+            ]
+
+        });
         $('.table-produk-batas-receipt-one-day').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/terimaproduk1',
                 type: "post",
@@ -1489,6 +1549,7 @@
         $('.table-produk-batas-receipt-two-day').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/terimaproduk2',
                 type: "post",
@@ -1504,8 +1565,26 @@
         $('.table-produk-batas-receipt-three-day').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/terimaproduk3',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'product'},
+                {data: 'jumlah'},
+                {data: 'tgl_masuk'},
+                {data: 'action'},
+            ]
+        });
+        // receive
+        $('.table-produk-batas-receipt-all').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '/api/dashboard-gbj/terimaall',
                 type: "post",
             },
             columns: [
@@ -1519,6 +1598,7 @@
         $('.waktu-produk1').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/in/36',
                 type: "post",
@@ -1534,6 +1614,7 @@
         $('.waktu-produk2').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/in/612',
                 type: "post",
@@ -1549,6 +1630,7 @@
         $('.waktu-produk3').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/in/1236',
                 type: "post",
@@ -1564,6 +1646,7 @@
         $('.waktu-produk4').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/dashboard-gbj/in/36plus',
                 type: "post",
@@ -1576,6 +1659,7 @@
                 // {data: 'action'},
             ]
         });
+
 
         // Penjualan
         $(document).on('click', '#transferoneday', function () {
