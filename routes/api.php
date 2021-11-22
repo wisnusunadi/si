@@ -141,6 +141,7 @@ Route::prefix('/dashboard-gbj')->group(function() {
     Route::post('/in/1236', [\App\Http\Controllers\GudangController::class, 'getProduk1236']);
     Route::post('/in/36plus', [\App\Http\Controllers\GudangController::class, 'getProduk36Plus']);
     Route::get('/byproduct', [\App\Http\Controllers\GudangController::class, 'getProdukByLayout']);
+    Route::get('/test', [\App\Http\Controllers\GudangController::class, 'test']);
 
     // terima
     Route::post('/terimaproduk1/h', [\App\Http\Controllers\GudangController::class, 'hh1']);

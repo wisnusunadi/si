@@ -607,9 +607,10 @@ class GudangController extends Controller
 
     function h4()
     {
+
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(3), Carbon::now()->startOfMonth()])
-                ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(6), Carbon::now()->startOfMonth()]);
+            $q->whereBetween('tgl_masuk', [Carbon::now()->subMonths(6), Carbon::now()->subMonths(3)]);
+                // ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(6), Carbon::now()->startOfMonth()]);
         })->get();
 
         return count($data);
@@ -618,8 +619,8 @@ class GudangController extends Controller
     function h5()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(6), Carbon::now()->startOfMonth()])
-                ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(1), Carbon::now()->startOfYear()]);
+            $q->whereBetween('tgl_masuk', [Carbon::now()->subMonths(12), Carbon::now()->subMonths(6)]);
+                // ->where('tgl_masuk', [Carbon::now()->startOfYear()->subYears(1), Carbon::now()->startOfYear()]);
         })->get();
 
         return count($data);
@@ -628,8 +629,8 @@ class GudangController extends Controller
     function h6()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(1), Carbon::now()->startOfYear()])
-                ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(3), Carbon::now()->startOfYear()]);
+            $q->whereBetween('tgl_masuk', [Carbon::now()->subYears(3), Carbon::now()->subYears(1)]);
+                // ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(3), Carbon::now()->startOfYear()]);
         })->get();
 
         return count($data);
@@ -638,7 +639,7 @@ class GudangController extends Controller
     function h7()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->where('tgl_masuk', '<=', Carbon::now()->startOfYear()->subYear(3));
+            $q->where('tgl_masuk', '<=', Carbon::now()->subYear(3));
         })->get();
 
         return count($data);
@@ -689,8 +690,8 @@ class GudangController extends Controller
     function getProdukIn36()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(3), Carbon::now()->startOfMonth()])
-                ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(6), Carbon::now()->startOfMonth()]);
+            $q->whereBetween('tgl_masuk', [Carbon::now()->subMonths(6), Carbon::now()->subMonths(3)]);
+                // ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(6), Carbon::now()->startOfMonth()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -713,8 +714,8 @@ class GudangController extends Controller
     function getProdukIn612()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(6), Carbon::now()->startOfMonth()])
-                ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(1), Carbon::now()->startOfYear()]);
+            $q->whereBetween('tgl_masuk', [Carbon::now()->subMonths(12), Carbon::now()->subMonths(6)]);
+                // ->where('tgl_masuk', [Carbon::now()->startOfYear()->subYears(1), Carbon::now()->startOfYear()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -737,8 +738,8 @@ class GudangController extends Controller
     function getProduk1236()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(1), Carbon::now()->startOfYear()])
-                ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(3), Carbon::now()->startOfYear()]);
+            $q->whereBetween('tgl_masuk', [Carbon::now()->subYears(3), Carbon::now()->subYears(1)]);
+                // ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(3), Carbon::now()->startOfYear()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -761,7 +762,7 @@ class GudangController extends Controller
     function getProduk36Plus()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->where('tgl_masuk', '<=', Carbon::now()->startOfYear()->subYear(3));
+            $q->where('tgl_masuk', '<=', Carbon::now()->subYear(3));
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -834,8 +835,8 @@ class GudangController extends Controller
     {
         // $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            // $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(1) );
-            $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(1), Carbon::now()->startOfDay()]);
+            $q->where('tgl_masuk', '>=', Carbon::now()->subDays()->format('Y-m-d') );
+            // $q->whereBetween('tgl_masuk', [Carbon::now()->subDays(1), Carbon::now()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -864,8 +865,8 @@ class GudangController extends Controller
     {
         // $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            // $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(2) );
-            $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(2), Carbon::now()->startOfDay()]);
+            $q->where('tgl_masuk', '>=', Carbon::now()->subDays(2)->format('Y-m-d') );
+            // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(2), Carbon::now()->startOfDay()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -894,17 +895,19 @@ class GudangController extends Controller
     {
         // $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(3));
+            $q->where('tgl_masuk', '<=', Carbon::now()->subDays(3)->format('Y-m-d'));
             // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(3), Carbon::now()->startOfDay()] );
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    $diff = abs(strtotime(Carbon::now()) - strtotime($d->header->tgl_masuk));
-                    $years = floor($diff / (365 * 60 * 60 * 24));
-                    $months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
-                    $c = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+                    $c = Carbon::now()->diffInDays($d->header->tgl_masuk);
+                    // $diff = abs(strtotime(Carbon::now()->format('d-m-Y')) - strtotime($d->header->tgl_masuk));
+                    // $years = floor($diff / (365 * 60 * 60 * 24));
+                    // $months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+                    // $c = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+                    // return $diff;
                     return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $c . ' Hari</span>';
                 } else {
                     return '-';
@@ -932,10 +935,7 @@ class GudangController extends Controller
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
 
-                    $diff = abs(strtotime(Carbon::now()) - strtotime($d->header->tgl_masuk));
-                    $years = floor($diff / (365 * 60 * 60 * 24));
-                    $months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
-                    $a = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+                    $a = Carbon::now()->diffInDays($d->header->tgl_masuk);
 
                     if ($a == 1) {
                         // return 'a';
@@ -1049,5 +1049,10 @@ class GudangController extends Controller
 
     function outSO()
     {
+    }
+
+    function test()
+    {
+        return Carbon::now()->subDays(1);
     }
 }

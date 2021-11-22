@@ -253,7 +253,6 @@
         }
     });
 
-
     function detailtanggal() {
         $('#modal-per-tanggal').modal('show');
     }
@@ -361,7 +360,7 @@
                 "sSearch": "Cari:"
             }
         });
-        
+
         detailtanggal();
     })
 </script>
