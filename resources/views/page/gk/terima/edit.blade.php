@@ -82,9 +82,9 @@
                                 <table class="table table-hover add_sparepart_table">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th>Nama Produk</th>
-                                            <th>Unit</th>
-                                            <th>Jumlah</th>
+                                            <th style="width: 180px">Nama Produk</th>
+                                            <th style="width: 180px">Unit</th>
+                                            <th style="width: 150px">Jumlah</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -113,9 +113,8 @@
                                 <table class="table table-hover add_unit_table">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th>Nama Produk</th>
-                                            <th style="width: 110px">Jumlah</th>
-                                            <th>Tujuan</th>
+                                            <th style="width: 180px">Nama Produk</th>
+                                            <th>Jumlah</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -131,9 +130,9 @@
     </div>
     <div class="col-xl-12 d-flex justify-content-end">
         <div class="btn-simpan mb-3">
-            <button class="btn btn-success" type="button">Terima</button>&nbsp;
-            <button class="btn btn-info" type="button">Rancang</button>&nbsp;
-            <button class="btn btn-secondary " type="button">Batal</button>
+            <button class="btn btn-success" onclick="terima()" type="button">Terima</button>&nbsp;
+            <button class="btn btn-info" onclick="rancang()" type="button">Rancang</button>&nbsp;
+            <button class="btn btn-secondary" onclick="batal()" type="button">Batal</button>
         </div>
     </div>
      </div>
@@ -354,16 +353,93 @@
         }
     });
     $(document).on('click','.add_sparepart', function () {
-        let table_sparepart = '<tr><td><select name="" id="" class="form-control"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_sparepart = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
+        $('.produk').select2();
+        $('.unit').select2();
     });
     $(document).on('click','.add_unit', function () {
-        let table_unit = '<tr><td><select name="" id="" class="form-control"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><input type="text" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
+        $('.produk').select2();
     });
     $(document).on('click', '.btn-delete', function (e) {
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
     });
+    $('.dari').select2({});
+
+    function terima() { 
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di terima tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Terima!',
+                    'Data berhasil diterima!',
+                    'success'
+                )
+            }else{
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil diterima!',
+                    'error'
+                )
+            }
+        });
+     }
+    function rancang() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di rancang tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Rancang!',
+                    'Data berhasil diterima!',
+                    'success'
+                );
+            }else{
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil diterima!',
+                    'error'
+                );
+            }
+        });
+    }
+    function batal() { 
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di batalkan tidak dapat dikembalikan!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Batal!',
+                    'Data berhasil dibatalkan!',
+                    'success'
+                    );
+            }else{
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil dibatalkan!',
+                    'error'
+                    );
+            }
+        });
+    }
 </script>
 @stop

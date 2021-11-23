@@ -58,10 +58,6 @@
                                 <option value="Divisi Perakitan">Divisi Perakitan</option>
                             </select>
                         </div>
-                        <div class="form-group col">
-                            <label for="tujuan">Tujuan</label>
-                            <input type="text" class="form-control">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -118,8 +114,7 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>Nama Produk</th>
-                                            <th style="width: 110px">Jumlah</th>
-                                            <th>Tujuan</th>
+                                            <th>Jumlah</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -135,9 +130,9 @@
     </div>
     <div class="col-xl-12 d-flex justify-content-end">
         <div class="btn-simpan mb-3">
-            <button class="btn btn-success" type="button">Terima</button>&nbsp;
-            <button class="btn btn-info" type="button">Rancang</button>&nbsp;
-            <button class="btn btn-secondary " type="button">Batal</button>
+            <button class="btn btn-success" type="button" onclick="modalTerima()">Terima</button>&nbsp;
+            <button class="btn btn-info" type="button" onclick="modalRancang()">Rancang</button>&nbsp;
+            <button class="btn btn-secondary " type="button" onclick="batal()">Batal</button>
         </div>
     </div>
      </div>
@@ -325,6 +320,46 @@
         </div>
     </div>
 </div>
+
+{{-- Modal Index --}}
+<div class="modal fade modal_transfer" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title judul_modal">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="form-group">
+                            <label for="">Tujuan</label>
+                            <input type="text" class="form-control catatan">
+                        </div>
+                        <button class="btn btn-primary tambah_catatan" id="">Tambah Catatan</button>
+                    </div>
+                    <div class="col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">List Catatan Tujuan</div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                    </ul>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary simpan">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 @section('adminlte_js')
 <script>
@@ -337,16 +372,6 @@
     function addUnit() {
         $('.modalAddUnit').modal('show');
     }
-
-    function transfer() {
-        Swal.fire({
-            title: "Apakah anda yakin?",
-            text: "Data yang sudah di transfer tidak dapat diubah!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        });
-    };
 
     $('.scan-produk').DataTable({
         "ordering": false,
@@ -370,7 +395,131 @@
         var check = $('tbody.tambah_data tr').length;
     });
     $(document).ready(function () {
-        $('#produk').select2({});
+        $('.dari').select2({});
+        $('.produk').select2({});
     });
+
+    function modalTerima() {
+        $('.modal_transfer').modal('show');
+        $('.catatan').val('');
+        $('.list-group').children().remove();
+        $('.judul_modal').text('Silahkan isi tujuan transfer produk');
+        $(document).on('click','.tambah_catatan', function () {
+            var catatan = $('.catatan').val();
+            $.ajax({
+                success: function (response) {
+                    $('.list-group').append('<li class="list-group-item d-flex justify-content-between">'+catatan+'<div class="d-flex justify-content-end"><a href="#" class="remove">x</a></div></li>');
+                    $('.catatan').val('');
+                }
+            });
+        });
+        $(document).on('click', '.remove', function () {
+            $(this).parent().parent().remove();
+        });
+
+        $(document).on('click','.simpan', function () {
+            Swal.fire({
+                title: "Apakah anda yakin?",
+                text: "Data yang sudah di transfer tidak dapat diubah!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+            }).then((success) => {
+                if (success) {
+                    Swal.fire(
+                        'Data berhasil di transfer!',
+                        '',
+                        'success'
+                    );
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }else{
+                    Swal.fire(
+                        'Data gagal di transfer!',
+                        '',
+                        'error'
+                    );
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
+    }
+    function modalRancang() {
+        $('.modal_transfer').modal('show');
+        $('.list-group').children().remove();
+        $('.judul_modal').text('Silahkan isi tujuan rancangan produk');
+        $(document).on('click','.tambah_catatan', function () {
+            var catatan = $('.catatan').val();
+            $('.list-group').append('<li class="list-group-item d-flex justify-content-between">'+catatan+'<div class="d-flex justify-content-end"><a href="#" class="remove">x</a></div></li>');
+            $('.catatan').val('');
+        });
+        $(document).on('click', '.remove', function () {
+            $(this).parent().parent().remove();
+        });
+        $(document).on('click', '.simpan', function () {
+            Swal.fire({
+                title: "Apakah anda yakin?",
+                text: "Data yang sudah di rancangan tidak dapat diubah!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+            }).then((success) => {
+                if (success) {
+                    Swal.fire(
+                        'Data berhasil di rancangan!',
+                        '',
+                        'success'
+                    );
+                                        setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }else{
+                    Swal.fire(
+                        'Data gagal di rancangan!',
+                        '',
+                        'error'
+                    );
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
+    }   
+    function batal() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di batalkan tidak dapat dikembalikan!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Batal!',
+                    'Data berhasil dibatalkan!',
+                    'success'
+                    );
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+            }else{
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil dibatalkan!',
+                    'error'
+                    );
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+            }
+        });
+    }
 </script>
 @stop
