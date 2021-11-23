@@ -197,6 +197,7 @@ Route::prefix('/qc')->group(function () {
     Route::prefix('/so')->group(function () {
         Route::get('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
         Route::get('seri/{value}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
+        Route::get('seri/select/{value}/{value2}', [App\Http\Controllers\QcController::class, 'get_data_select_seri']);
         Route::get('data_test', [App\Http\Controllers\QcController::class, 'get_data_so_qc']);
         Route::get('detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_so']);
         Route::get('update_modal', [App\Http\Controllers\QcController::class, 'update_modal_so']);

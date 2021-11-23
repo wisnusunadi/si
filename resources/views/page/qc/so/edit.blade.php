@@ -53,14 +53,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        <!-- <tr>
                                             <td>1</td>
                                             <td>TD0201210001</td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
                                             <td>TD0201210002</td>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>
@@ -78,4 +78,5 @@
             </div>
         </div>
     </div>
+    {{$id}}
 </form>
