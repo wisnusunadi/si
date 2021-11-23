@@ -344,7 +344,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                <h5 class="modal-title"><b>Detail Produk <span id="title">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -479,8 +479,13 @@
             }
         });
         i++;
-        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty['+i+']" name="qty['+i+']"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty['+i+']" name="qty['+i+']"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" data-id="'+$('.productt').val()+'" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
+    }
+
+    function addSeri() {
+        // i++;
+        // let seri_data = '<tr id="seri'+i+'"><td><input type="checkbox" class="cb-child" value="'+i+'"></td><td><input type="text" name="noseri['+i+']" id="noseri['+i+']" class="form-control"></td><td><select name="layout_id['+i+']" id="layout_idd['+i+']" class="form-control"><option value="1">Layout 1</option><option value="2">Layout 2</option></select></td></tr>'
     }
     $(document).on('click', '.btn-delete', function (e) {
         e.preventDefault();
@@ -663,6 +668,15 @@
         searching: false,
         "lengthChange": false,
     });
+
+    $(document).on('click', '#btnPlus', function() {
+        const prd = [];
+
+        var prdid = $('.productt').val();
+        var jml = $('.number-input').val();
+        // for()
+        tambahanPerakitan();
+    })
 
 </script>
 @stop

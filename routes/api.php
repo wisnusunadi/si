@@ -159,6 +159,7 @@ Route::prefix('/dashboard-gbj')->group(function() {
 Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
     Route::post('/byso', [\App\Http\Controllers\ProduksiController::class, 'TfbySO']);
+    Route::post('/create-noseri', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
 
     // get
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
@@ -169,6 +170,7 @@ Route::prefix('/tfp')->group(function () {
     Route::get('rakit', [\App\Http\Controllers\GudangController::class, 'getRakit']);
     Route::get('rakit-noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getRakitNoseri']);
     Route::get('rakit-terima/{id}', [\App\Http\Controllers\GudangController::class, 'getTerimaRakit']);
+    Route::post('/seri-so', [\App\Http\Controllers\ProduksiController::class, 'getNoseriSO']);
 
     // check
     Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);

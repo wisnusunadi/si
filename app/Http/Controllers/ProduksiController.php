@@ -256,7 +256,7 @@ class ProduksiController extends Controller
                 return $d['id'];
             })
             ->addColumn('qty', function ($data) {
-                return $data['jumlah'].'<input type="hidden" name="qty[]" id="qty[]" value="'.$data['jumlah'].'">';
+                return $data['jumlah'].'<input type="hidden" class="jumlah" name="qty[]" id="qty" value="'.$data['jumlah'].'">';
             })
             ->addColumn('merk', function ($data) {
                 return $data['merk'];
@@ -311,8 +311,16 @@ class ProduksiController extends Controller
             ->make(true);
     }
 
-    function getNoseriSO() {
-
+    function getNoseriSO(Request $request) {
+        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->get();
+        return datatables()->of($data)
+            ->addColumn('seri', function($d) {
+                return $d->noseri;
+            })
+            ->addColumn('checkbox', function($d) {
+                return $d->id;
+            })
+            ->make(true);
     }
 
     // check

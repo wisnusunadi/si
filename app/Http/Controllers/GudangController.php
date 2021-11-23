@@ -331,15 +331,19 @@ class GudangController extends Controller
     function getTerimaRakit($id)
     {
         $data = NoseriTGbj::with('layout', 'detail')->where('t_gbj_detail_id', $id)->get();
-
+        $layout = Layout::where('jenis_id', 1)->get();
         return datatables()->of($data)
-            ->addColumn('layout', function ($d) {
-                return '<select name="layout_id" id="layout_id" class="form-control">
-
+            ->addColumn('layout', function ($d) use($layout) {
+                $opt = '';
+                foreach($layout as $l) {
+                    $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
+                }
+                return '<select name="layout_id[]" id="layout_id[]" class="form-control">
+                        ' . $opt . '
                         </select>';
             })
             ->addColumn('seri', function ($d) {
-                return $d->noseri;
+                return $d->noseri.'<input type="hidden" name="noseri[]" id="noseri[]" value="'.$d->noseri.'">';
             })
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
@@ -347,7 +351,7 @@ class GudangController extends Controller
             ->addColumn('title', function ($d) {
                 return $d->detail->produk->produk->nama . ' ' . $d->detail->produk->nama;
             })
-            ->rawColumns(['checkbox', 'layout'])
+            ->rawColumns(['checkbox', 'layout', 'seri'])
             ->make(true);
     }
 
@@ -358,10 +362,10 @@ class GudangController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_produk', function ($d) {
-                    return $d->produk->produk->nama . ' ' . $d->produk->nama;
+                    return $d->produk->produk->nama . ' ' . $d->produk->nama.'<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="'.$d->gdg_brg_jadi_id.'">';
                 })
                 ->addColumn('jml', function ($d) {
-                    return $d->qty . ' ' . $d->produk->satuan->nama;
+                    return $d->qty . ' ' . $d->produk->satuan->nama.'<input type="hidden" name="qty[]" id="qty" value="'.$d->qty.'">';
                 })
                 ->addColumn('action', function ($d) {
                     return '<a data-toggle="modal" data-target="#detail" class="detail" data-attr=""  data-id="' . $d->id . '">
@@ -378,7 +382,7 @@ class GudangController extends Controller
                 ->addColumn('tujuan', function ($d) {
                     return $d->header->deskripsi;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'nama_produk', 'jml'])
                 ->make(true);
         } else {
             $data = TFProduksi::with('detail', 'darii')->where(['jenis' => 'masuk', 'status_id' => 1])->get();
@@ -404,13 +408,34 @@ class GudangController extends Controller
     }
 
     // store
-    function storeNoseri(Request $request, $id)
+    function storeNoseri(Request $request)
     {
-        dd($request->all());
-        // $Gud = GudangBarangJadi::find($id);
-        // $Gud->layout_id = $request->layout_id;
-        // $Gud->save();
-        // return response()->json('ok');
+        foreach($request->noseri as $key => $value) {
+            $detail = TFProduksiDetail::find($request->t_gbj_detail_id);
+            $detail->status_id = 3;
+            $detail->updated_at = Carbon::now();
+            $detail->save();
+
+            $header = TFProduksi::find($detail->t_gbj_id);
+            $header->tgl_masuk = Carbon::now();
+            $header->status_id = 3;
+            $header->updated_at = Carbon::now();
+            $header->save();
+
+            $noserigbj = new NoseriBarangJadi();
+            $noserigbj->gdg_barang_jadi_id = $detail->gdg_brg_jadi_id;
+            $noserigbj->ke = $header->ke;
+            $noserigbj->noseri = $value;
+            $noserigbj->jenis = 'MASUK';
+            $noserigbj->created_at = Carbon::now();
+            $noserigbj->save();
+        }
+
+        $gdg = GudangBarangJadi::find($detail->gdg_brg_jadi_id);
+        $gdg->stok = $gdg->stok + $detail->qty;
+        $gdg->save();
+
+        return response()->json(['msg', 'Successfully']);
     }
 
     function StoreBarangJadi(Request $request)
@@ -448,7 +473,7 @@ class GudangController extends Controller
                 $brg_jadi->satuan_id = $request->satuan_id;
                 $brg_jadi->nama = $request->nama;
                 $brg_jadi->deskripsi = $request->deskripsi;
-                $brg_jadi->stok = 0;
+                // $brg_jadi->stok = 0;
                 $image = $request->file('gambar');
                 if ($image) {
                     $path = 'upload/gbj/';
@@ -468,7 +493,7 @@ class GudangController extends Controller
                 $brg_his->satuan_id = $request->satuan_id;
                 $brg_his->nama = $request->nama;
                 $brg_his->deskripsi = $request->deskripsi;
-                $brg_his->stok = 0;
+                // $brg_his->stok = 0;
                 $brg_his->status = $request->status;
                 $brg_his->created_at = Carbon::now();
                 $brg_his->save();
@@ -536,16 +561,7 @@ class GudangController extends Controller
 
     function storeFinalRancang(Request $request)
     {
-        $h = TFProduksi::find($request->id);
-        // $h->status_id = 2;
-        // $h->updated_at = Carbon::now();
-        // $h->save();
-        $d = TFProduksiDetail::whereIn('t_gbj_id', $h->id)->get();
-        return $d;
-        // foreach($d as $v) {
-        //    echo $v['qty'];
-        // }
-        // return $h;
+        
     }
 
     // select

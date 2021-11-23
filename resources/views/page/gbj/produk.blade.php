@@ -151,6 +151,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="">Produk</label>
+                            <input type="hidden" name="produk_id" id="produk_idd">
                             <select name="produk_id" id="produk_id" class="form-control produk-add">
                                 <option value="">Buku</option>
                                 <option value="">Bolpoin</option>
@@ -641,6 +642,7 @@
                 $('#satuan_id').val(res.data[0].satuan_id);
                 $('#satuan_id').select2().trigger('change');
                 $('#produk_id').val(res.data[0].produk_id);
+                $('#produk_idd').val(res.data[0].produk_id);
                 $('#produk_id').select2().trigger('change');
                 $('#produk_id').select2({disabled: 'readonly'});
                 // var newOption = $('<option selected="selected"></option>').val(res.data[0].produk_id).text(res.nama_produk[0].product.tipe + ' ' + res.nama_produk[0].nama);

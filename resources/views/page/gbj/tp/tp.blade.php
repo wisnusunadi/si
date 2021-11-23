@@ -298,6 +298,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
+            autoWidth: false,
             ajax: {
                 url: "/api/transaksi/history",
                 // data: {id: id},

@@ -74,6 +74,7 @@
                 <table class="table table-striped scan-produk">
                     <thead>
                         <tr>
+                            <input type="hidden" name="t_gbj_detail_id[]" id="t_gbj_detail_id[]">
                             <th><input type="checkbox" id="head-cb"></th>
                             <th>Nomor Seri</th>
                             <th>Layout</th>
@@ -110,7 +111,7 @@
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                  <button type="button" class="btn btn-primary">Simpan</button>
+                  <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
               </div>
           </div>
       </div>
@@ -170,6 +171,7 @@
                             <td>654165654</td>
                             <td>Layout 1</td>
                           </tr>
+
                       </tbody>
                   </table>
               </div>
@@ -180,10 +182,28 @@
 
 @section('adminlte_js')
 <script>
-    $('.table-seri').DataTable({
-        "oLanguage": {
-        "sSearch": "Cari:"}
+    // $('.table-seri').DataTable({
+    //     "oLanguage": {
+    //     "sSearch": "Cari:"}
+    // });
+    $.ajax({
+        url: '/api/gbj/sel-layout',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            if(res) {
+                console.log(res);
+                $("#change-layout").empty();
+                // $("#divisi").append('<option value="">All</option>');
+                $.each(res, function(key, value) {
+                    $("#change-layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                });
+            } else {
+                $("#change-layout").empty();
+            }
+        }
     });
+
     $('.dalam-perakitan').DataTable({
         processing: true,
         serverSide: true,
@@ -221,9 +241,9 @@
         });
         $('#ubah-layout').modal('hide');
     }
-
+    var id = '';
     $(document).on('click', '.editmodal', function() {
-        var id = $(this).data('id');
+        id = $(this).data('id');
         console.log(id);
 
         $.ajax({
@@ -250,23 +270,23 @@
             }
         });
 
-        $.ajax({
-            url: '/api/gbj/sel-layout',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $("#layout_id").empty();
-                    // $("#divisi").append('<option value="">All</option>');
-                    $.each(res, function(key, value) {
-                        $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                    });
-                } else {
-                    $("#layout_id").empty();
-                }
-            }
-        });
+        // $.ajax({
+        //     url: '/api/gbj/sel-layout',
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     success: function(res) {
+        //         if(res) {
+        //             console.log(res);
+        //             $("#layout_id").empty();
+        //             // $("#divisi").append('<option value="">All</option>');
+        //             $.each(res, function(key, value) {
+        //                 $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
+        //             });
+        //         } else {
+        //             $("#layout_id").empty();
+        //         }
+        //     }
+        // });
 
         openModalTerima();
     });
@@ -308,6 +328,45 @@
         $('.detail-layout').modal('show');
     }
 
+    $(document).on('click', '#btnSave', function(e) {
+        e.preventDefault();
 
+        const ids = [];
+        const noseri = [];
+        const layout = [];
+        const idd = id;
+
+        // var idd = $('#t_gbj_detail_id').val(id);
+
+        $('.cb-child').each(function() {
+            if ($(this).is(":checked")) {
+                ids.push($(this).val());
+            }
+        });
+
+        $('input[name^="noseri"]').each(function() {
+            noseri.push($(this).val());
+        });
+
+        $('select[name^="layout_id"]').each(function() {
+            layout.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/api/tfp/create-noseri",
+            type: "post",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                t_gbj_detail_id: idd,
+                noseri : noseri,
+                layout_id : layout
+            },
+            success: function(res) {
+                console.log(res);
+            }
+        })
+
+        // console.log('ok');
+    })
 </script>
 @stop

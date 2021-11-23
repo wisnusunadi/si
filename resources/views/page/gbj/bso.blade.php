@@ -215,7 +215,7 @@
                         <tr>
                             <td>78656562646545646</td>
                             <td></td>
-
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -253,23 +253,23 @@
         //     }
         // });
 
-        $('.scan-produk').DataTable({
-            'columnDefs': [{
-                'targets': 1,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [0, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Masukkan Nomor Seri:"
-            }
-        });
+        // $('.scan-produk').DataTable({
+        //     'columnDefs': [{
+        //         'targets': 1,
+        //         'checkboxes': {
+        //             'selectRow': true
+        //         }
+        //     }],
+        //     'select': {
+        //         'style': 'multi'
+        //     },
+        //     'order': [
+        //         [0, 'asc']
+        //     ],
+        //     "oLanguage": {
+        //     "sSearch": "Masukkan Nomor Seri:"
+        //     }
+        // });
     });
 
     let a = $('#gudang-barang').DataTable({
@@ -399,20 +399,40 @@
         })
     });
 
-    // $('#myForm').on('submit', function(e) {
-    //     var form = this;
-    //     var rowsel = mytable.column(0).checkboxes.selected();
-    //     $.each(rowsel, function(index, rowId) {
-    //         console.log(rowId);
-    //     });
-    //     e.preventDefault();
-    // })
-
-
-
     $(document).on('click', '.detailmodal', function(e) {
         var id = $(this).data('id');
         console.log(id);
+        $('.scan-produk').DataTable().destroy();
+        $('.scan-produk').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/seri-so",
+                data: {gdg_barang_jadi_id: id},
+                type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'seri', name: 'seri'},
+                { data: 'checkbox', name: 'checkbox'},
+            ],
+            'columnDefs': [{
+                'targets': 1,
+                'checkboxes': {
+                    'selectRow': true
+                }
+            }],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
+                [0, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Masukkan Nomor Seri:"
+            }
+        });
+
         $('#viewProdukModal').modal('show');
     });
 </script>
