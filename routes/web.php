@@ -56,10 +56,21 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/tso', 'page.gbj.tso');
     Route::view('/dp', 'page.gbj.dp');
     Route::view('/lp', 'page.gbj.lp');
-    Route::view('/tp', 'page.gbj.tp'); 
     Route::view('/dashboard', 'page.gbj.dashboard'); 
+    route::group(['prefix' => '/tp'], function () {
+        Route::view('/', 'page.gbj.tp.tp');
+        Route::view('/1', 'page.gbj.tp.show');
+    });
 });
 
+Route::middleware('auth')->prefix('/produksi')->group(function () {
+    Route::view('/dashboard', 'page.produksi.dashboard');
+    Route::view('/so', 'page.produksi.so');
+    Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
+    Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
+    Route::view('/riwayat_perakitan', 'page.produksi.riwayat_perakitan');
+    Route::view('/pengiriman', 'page.produksi.pengiriman');
+});
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
 //     Route::view('/produk/{any?}', 'page.penjualan.produk');
 //     Route::view('/customer/{any?}', 'page.penjualan.customer');
@@ -118,10 +129,23 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         Route::view('/edit', 'page.qc.so.edit')->name('qc.so.edit');
     });
 });
-Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
+// Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
 
 Route::get('/test/{name?}', function ($name = null) {
     return $name;
+});
+
+Route::middleware('auth')->prefix('/gk')->group(function () {
+    Route::view('/dashboard', 'page.gk.dashboard');
+    Route::view('/gudang', 'page.gk.gudang.index');
+    Route::view('/gudang/sparepart/1', 'page.gk.gudang.sparepartEdit');
+    Route::view('/gudang/unit/1', 'page.gk.gudang.unitEdit');
+    Route::view('/terimaProduk', 'page.gk.terima.index');
+    Route::view('/terimaProduk/1', 'page.gk.terima.edit');
+    Route::view('/transfer', 'page.gk.transfer.index');
+    Route::view('/transfer/1', 'page.gk.transfer.edit');
+    Route::view('/transaksi', 'page.gk.transaksi.index');
+    Route::view('/transaksi/1', 'page.gk.transaksi.show');
 });
 
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {

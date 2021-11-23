@@ -153,7 +153,7 @@
                                         </div>
                                     </div>
                                     {{-- col --}}
-                                    <div class="col"> <label for="">Instansi</label>
+                                    <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
                                                 <span id="instansii">89798797856456</span>

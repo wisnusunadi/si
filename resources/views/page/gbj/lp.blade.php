@@ -130,7 +130,7 @@
                                                                                     Masuk</label>
                                                                                 <div class="col-12">
                                                                                     <input type="date"
-                                                                                        class="form-control tanggal" name="tgl_masuk">
+                                                                                        class="form-control tanggal">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group row top-min">
@@ -138,7 +138,7 @@
                                                                                     class="col-12 font-weight-bold col-form-label">Dari</label>
                                                                                 <div class="col-12">
                                                                                     <select class="form-control division"
-                                                                                        name="dari" id="dari">
+                                                                                        name="division">
                                                                                         <option value="Divisi IT">Divisi IT
                                                                                         </option>
                                                                                         <option value="Divisi QC">Divisi QC
@@ -152,7 +152,7 @@
                                                                                 <label for=""
                                                                                     class="col-12 font-weight-bold col-form-label">Keterangan</label>
                                                                                 <div class="col-12">
-                                                                                    <textarea name="deskripsi" id="deskripsi"
+                                                                                    <textarea name="tujuan" id=""
                                                                                         class="form-control tujuan"></textarea>
                                                                                 </div>
                                                                             </div>
@@ -189,7 +189,7 @@
                                             <div class="col-12 d-flex justify-content-end">
                                                 <div class="btn-simpan hapus">
                                                     <button class="btn btn-success" type="button">Terima</button>&nbsp;
-                                                    <button class="btn btn-info" type="button" id="btnDraft">Rancang</button>&nbsp;
+                                                    <button class="btn btn-info" type="button">Rancang</button>&nbsp;
                                                     <button class="btn btn-secondary " type="button">Batal</button>
                                                 </div>
                                             </div>
@@ -225,7 +225,7 @@
                                 <label for="">Tanggal Masuk</label>
                                 <div class="card nomor-so">
                                     <div class="card-body">
-                                        <span id="in">10-04-2020</span>
+                                        10-04-2020
                                     </div>
                                 </div>
                             </div>
@@ -459,27 +459,9 @@
             }
         });
     });
-    var i = 0;
+
     function addData() {
-        $.ajax({
-            url: '/api/gbj/sel-gbj',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $(".productt").empty();
-                    $(".productt").append('<option value="">Pilih Item</option>');
-                    $.each(res, function(key, value) {
-                        $(".productt").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
-                    });
-                } else {
-                    $(".productt").empty();
-                }
-            }
-        });
-        i++;
-        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty['+i+']" name="qty['+i+']"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+        let tambah_data = '<tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function (e) {
