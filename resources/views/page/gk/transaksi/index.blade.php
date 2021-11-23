@@ -114,30 +114,17 @@
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="card-group">
                                     <div class="card">
                                         <div class="card-body">
-                                            <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
+                                            <p class="card-text">Keterangan Isi Kolom<b>:</b></p>
                                                     <p class="card-text">
-                                                        <div class="foo green"></div> : Dari
+                                                        <div class="foo green"></div> : Penerimaan
                                                     </p>
                                                     <p class="card-text">
-                                                        <div class="foo blue"></div> : Ke
+                                                        <div class="foo blue"></div> : Transfer
                                                     </p>
                                         </div>
                                     </div>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <p class="card-text">Keterangan Kolom <b>Tanggal:</b></p>
-                                                    <p class="card-text">
-                                                        <div class="foo green"></div> : Tanggal Masuk
-                                                    </p>
-                                                    <p class="card-text">
-                                                        <div class="foo blue"></div> : Tanggal Keluar
-                                                    </p>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -159,8 +146,18 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                                <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                                <td><span class="badge badge-success">10-04-2022</span></span></td>
+                                                <td><span class="badge badge-success">Divisi IT</span></span></td>
+                                                <td>Sparepart</td>
+                                                <td>Produk 1</td>
+                                                <td>Unit 1</td>
+                                                <td>100 Unit</td>
+                                                <td>Uji Coba</td>
+                                                <td><button class="btn btn-outline-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button></td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="badge badge-info">23-09-2022</span></span></td>
+                                                <td><span class="badge badge-info">Divisi QC</span></span></td>
                                                 <td>Sparepart</td>
                                                 <td>Produk 1</td>
                                                 <td>Unit 1</td>

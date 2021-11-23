@@ -63,23 +63,6 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
-                {{-- <div class="card mb-3">
-                    <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80" class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <p class="card-title"><h2 class="text-bold">Nama Produk</h2>
-                        <h6 class="text-muted">Kode Produk</h6></p>
-                        <h5 class="card-text text-bold pt-2">Deskripsi</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit
-                          amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor
-                          purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper
-                          eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque
-                          fermentum dui faucibus in ornare quam viverra</p>
-                        <h5 class="card-text text-bold pt-1">Dimensi</h5>
-                        <p class="text-bold" style="margin-bottom: 0">Panjang x Lebar x Tinggi</p>
-                        <p><span class="panjang">50</span> x <span class="lebar">10</span> x <span
-                                class="tinggi">10</span></p>
-                    </div>
-                </div> --}}
                 <div class="card mb-3">
                     <div class="row no-gutters">
                       <div class="col-md-4">

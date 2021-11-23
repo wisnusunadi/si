@@ -229,8 +229,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Produk</th>
-                                                    <th>Jumlah</th>
+                                                    <th>Nomor SO</th>
+                                                    <th>Customer</th>
                                                     <th>Batas Transfer</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -325,8 +325,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Produk</th>
-                                                    <th>Jumlah</th>
+                                                    <th>Nomor SO</th>
+                                                    <th>Customer</th>
                                                     <th>Batas Transfer</th>
                                                     <th>Aksi</th>
                                                 </tr>

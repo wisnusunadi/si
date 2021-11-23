@@ -166,8 +166,7 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th>Nama Produk</th>
-                                                    <th style="width: 110px">Jumlah</th>
-                                                    <th>Tujuan</th>
+                                                    <th>Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -408,11 +407,11 @@
         }
     });
     $(document).on('click','.add_sparepart', function () {
-        let table_sparepart = '<tr><td><select name="" id="" class="form-control"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_sparepart = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
     });
     $(document).on('click','.add_unit', function () {
-        let table_unit = '<tr><td><select name="" id="" class="form-control"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><input type="text" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
     });
     $(document).on('click', '.btn-delete', function (e) {
@@ -430,6 +429,8 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+        $('.dari').select2({});
+        $('.produk').select2({});
     });
 </script>
 @stop

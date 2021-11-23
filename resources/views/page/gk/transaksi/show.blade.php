@@ -96,7 +96,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-chart-pie mr-1"></i>
-                            Grafik Jumlah Terima / Keluar (Nama Produk) Per Tahun
+                            Grafik Jumlah Terima / Transfer (Nama Produk) Per Tahun
                         </h3>
                         <div class="card-tools">
                             <div class="form-group row">
@@ -122,7 +122,7 @@
                     <div class="card-title">
                         <div class="ml-3 mr-3">
                             <div class="row align-items-center">
-                                <div class="col-lg-7 col-xl-6">
+                                <div class="col-lg-9 col-xl-8">
                                     <div class="row align-items-center">
                                         <div class="col-md-4">
                                             <div class="input-icon">
@@ -144,29 +144,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-5 col-xl-6">
-                                    <div class="card-group">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
-                                                        <p class="card-text">
-                                                            <div class="foo green"></div> : Dari
-                                                        </p>
-                                                        <p class="card-text">
-                                                            <div class="foo blue"></div> : Ke
-                                                        </p>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <p class="card-text">Keterangan Kolom <b>Tanggal:</b></p>
-                                                        <p class="card-text">
-                                                            <div class="foo green"></div> : Tanggal Masuk
-                                                        </p>
-                                                        <p class="card-text">
-                                                            <div class="foo blue"></div> : Tanggal Keluar
-                                                        </p>
-                                            </div>
+                                <div class="col-lg-3 col-xl-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p class="card-text">Keterangan Isi Kolom</p>
+                                            <p class="card-text">
+                                                <div class="foo green"></div> : Penerimaan
+                                            </p>
+                                            <p class="card-text">
+                                                <div class="foo blue"></div> : Transfer
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -188,79 +175,79 @@
                                 <tbody>
                                     <tr>
                                         <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span></span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span> / <span class="badge badge-info">23-10-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> / <span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
@@ -358,7 +345,7 @@ const myChart = new Chart(ctx, {
     data: {
         labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
         datasets: [{
-            label: 'Dari',
+            label: 'Terima',
             data: [15, 20, 30, 15, 29, 38, 35, 15, 18, 34, 10, 45],
             backgroundColor: [
                 'rgba(255, 159, 64, 0.2)',
@@ -366,7 +353,7 @@ const myChart = new Chart(ctx, {
             borderWidth: 1
         },
         {
-            label: 'Ke',
+            label: 'Transfer',
             data: [11, 15, 20, 10, 25, 30, 20, 15, 20, 30, 13, 25],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
