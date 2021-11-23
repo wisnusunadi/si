@@ -325,7 +325,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/qc/so/detail/' + '{{$d->id}}',
+                'url': '/api/qc/so/detail/' + '{{$d->pesanan->id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -344,11 +344,6 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'jumlah',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }, {
                 data: 'DT_RowIndex',
                 className: 'nowrap-text align-center',
                 orderable: false,
@@ -359,7 +354,12 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'button',
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'DT_RowIndex',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
