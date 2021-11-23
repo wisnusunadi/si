@@ -160,6 +160,7 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
     Route::post('/byso', [\App\Http\Controllers\ProduksiController::class, 'TfbySO']);
     Route::post('/create-noseri', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
+    Route::post('/create-final', [\App\Http\Controllers\GudangController::class, 'storeFinalRancang']);
 
     // get
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);

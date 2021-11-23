@@ -215,7 +215,7 @@
                         <tr>
                             <td>78656562646545646</td>
                             <td></td>
-                            
+
                         </tr>
                     </tbody>
                 </table>
@@ -435,5 +435,7 @@
 
         $('#viewProdukModal').modal('show');
     });
+
+    
 </script>
 @stop

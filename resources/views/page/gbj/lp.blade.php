@@ -279,7 +279,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
             </div>
         </div>
     </div>
@@ -497,9 +497,9 @@
             $('.btn-simpan').addClass('hapus');
         }
     });
-
+    var id = '';
     $(document).on('click', '.editmodal', function() {
-        var id = $(this).data('id');
+        id = $(this).data('id');
         console.log(id);
 
         $.ajax({
@@ -676,6 +676,23 @@
         var jml = $('.number-input').val();
         // for()
         tambahanPerakitan();
+    })
+
+    $(document).on('click', '#btnSave', function() {
+        // console.log(id);
+
+        $.ajax({
+            url: "/api/tfp/create-final",
+            type: "post",
+            data: {
+                "_token": "{{csrf_token()}}",
+                id: id,
+            },
+            success: function(res) {
+                console.log(res);
+                // location.reload();
+            }
+        })
     })
 
 </script>

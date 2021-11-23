@@ -561,7 +561,14 @@ class GudangController extends Controller
 
     function storeFinalRancang(Request $request)
     {
-        
+        $header = TFProduksi::find($request->id);
+        $header->status_id = 2;
+        $header->updated_at = Carbon::now();
+        $header->save();
+        $dd = TFProduksiDetail::where('t_gbj_id', $header->id)->get()->toArray();
+        // // $dd['status_id'] = 2;
+        TFProduksiDetail::where('t_gbj_id', $header->id)->update(['status_id' => 2]);
+        return response()->json(['msg' => 'Successfully']);
     }
 
     // select
