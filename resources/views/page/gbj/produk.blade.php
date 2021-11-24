@@ -3,7 +3,6 @@
 @section('title', 'ERP')
 
 @section('content')
-<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -17,14 +16,12 @@
                             <div class="col-4 d-flex justify-content-end">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        @if (Auth::user()->divisi_id == 13)
                                         <span class="float-right">
                                             <button type="button" class="btn btn-info" data-toggle="modal"
                                                 data-target="#modal-create">
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
-                                        @endif
                                         <span class="float-right filter">
                                             <button class="btn btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fas fa-filter"></i> Filter Kelompok

@@ -49,11 +49,11 @@
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="tanggal">Tanggal Masuk</label>
-                            <input type="date" name="" id="datePicker" class="form-control" placeholder="">
+                            <input type="date" name="" id="datePicker" class="form-control" placeholder="" readonly>
                         </div>
                         <div class="form-group col">
                             <label for="dari">Dari</label>
-                            <select class="form-control dari" name="dari">
+                            <select class="form-control dari" name="dari" disabled>
                                 <option value="Divisi IT">Divisi IT</option>
                                 <option value="Divisi QC">Divisi QC</option>
                                 <option value="Divisi Perakitan">Divisi Perakitan</option>

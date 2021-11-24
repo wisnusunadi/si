@@ -1172,41 +1172,10 @@ return [
             'auth' => [2],
             'submenu' => [
                 [
-                    'text' => 'Perakitan',
-                    'icon' => 'fas fa-circle',
-                    'auth' => [2],
-                    'submenu' => [
-                        [
-                            'text' => 'Perencanaan Perakitan',
-                            'url'  => 'produksi/perencanaan_perakitan',
-                            'icon' => 'far fa-circle',
-                            'auth' => [2]
-                        ],
-                        [
-                            'text' => 'Perakitan Berlangsung',
-                            'url'  => 'produksi/jadwal_perakitan',
-                            'icon' => 'far fa-circle',
-                            'auth' => [2]
-                        ],
-                        [
-                            'text' => 'Riwayat Perakitan',
-                            'url'  => 'produksi/riwayat_perakitan',
-                            'icon' => 'far fa-circle',
-                            'auth' => [2]
-                        ],
-                    ]
-                ],
-                [
-                    'text' => 'Gudang',
-                    'url'  => '/produksi/pengiriman',
-                    'icon' => 'far fa-circle',
-                    'auth' => [2]
-                ],
-                [
-                    'text' => 'Sales Order',
-                    'url'  => '/produksi/so',
-                    'icon' => 'far fa-circle',
-                    'auth' => [2]
+                        'text' => 'Riwayat Perakitan',
+                        'url'  => 'produksi/riwayat_perakitan',
+                        'icon' => 'far fa-circle',
+                        'auth' => [2]
                 ],
             ],
         ],
@@ -1216,32 +1185,8 @@ return [
             'auth' => [2],
             'submenu' => [
                 [
-                    'text' => 'Produk',
-                    'url'  => '/gbj/produk',
-                    'icon' => 'far fa-circle',
-                    'auth' => [2]
-                ],
-                [
                     'text' => 'Riwayat Transaksi',
                     'url'  => '/gbj/tp',
-                    'icon' => 'far fa-circle',
-                    'auth' => [2]
-                ],
-                [
-                    'text' => 'Dalam Perakitan',
-                    'url'  => '/gbj/dp',
-                    'icon' => 'far fa-circle',
-                    'auth' => [2]
-                ],
-                [
-                    'text' => 'Sales Order',
-                    'url'  => '/gbj/lp',
-                    'icon' => 'far fa-circle',
-                    'auth' => [2]
-                ],
-                [
-                    'text' => 'Berdasarkan SO',
-                    'url'  => '/gbj/bso',
                     'icon' => 'far fa-circle',
                     'auth' => [2]
                 ],
@@ -1252,12 +1197,6 @@ return [
             'icon'    => 'fas fa-tools',
             'auth' => [2],
             'submenu' => [
-                [
-                    'text' => 'Gudang',
-                    'url'  => 'gk/gudang',
-                    'icon' => 'far fa-circle',
-                    'auth' => [2]
-                ],
                 [
                     'text' => 'Riwayat Transaksi',
                     'url'  => 'gk/transaksi',
