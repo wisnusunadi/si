@@ -571,6 +571,13 @@ class GudangController extends Controller
         return response()->json(['msg' => 'Successfully']);
     }
 
+    function storeCekSO(Request $request) {
+        dd($request->all());
+        // foreach($request->gudang_barang_jadi_id as $key => $value) {
+        //     $cek = DetailPesananProduk::
+        // }
+    }
+
     // select
     function select_layout()
     {

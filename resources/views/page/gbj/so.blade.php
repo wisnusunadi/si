@@ -403,6 +403,17 @@
                 ids.push(val);
             })
 
+            $.ajax({
+                url: "/api/so/cek",
+                type: "post",
+                data: {
+                    gbj_id: ids,
+                }
+                success: function(res) {
+                    console.log(res);
+                }
+            })
+
             console.log(ids);
         })
         $('#addProdukModal').modal('show');
