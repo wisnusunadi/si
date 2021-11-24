@@ -12,6 +12,59 @@
     #historitabel {
         text-align: center;
     }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .margin-all {
+        margin: 5px;
+    }
+
+    .margin-side {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    #profileImage {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #4682B4;
+        font-size: 22px;
+        color: #fff;
+        text-align: center;
+        line-height: 100px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+
+    @media screen and (min-width: 1440px) {
+        section {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        section {
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
@@ -20,13 +73,30 @@
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+<section class="section">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-4">
+                <h5>Info</h5>
                 <div class="card">
                     <div class="card-body">
-                        <ul class="list-group">
+                        <div class="row">
+                            <div class="col-12 align-center">
+                                <div id="profileImage" class="center margin-all"></div>
+                                <div class="margin-all">
+                                    <h5><b>{{$customer->nama}}</b></h5>
+                                </div>
+                                <div class="margin-all"><b>{{$customer->alamat}}</b></div>
+                                <div class="margin-all"><b>{{$customer->Provinsi->nama}}</b></div>
+                                <div class="margin-all">
+                                    <span class="margin-side"><i class="fas fa-phone text-muted margin-side"></i> <b>{{$customer->telp}}</b></span>
+                                    <span class="margin-side"><i class="fas fa-envelope text-muted margin-side"></i><b>@if(!empty($customer->email)) {{$customer->email}} @else - @endif</b></span>
+                                </div>
+                                <div class="margin-all"><a class="text-muted margin-side">NPWP :</a><b>{{$customer->npwp}}</b></div>
+                                <div class="margin-all"><a class="text-muted">{{$customer->ket}}</a></div>
+                            </div>
+                        </div>
+                        <!-- <ul class="list-group">
                             <li class="list-group-item">
                                 <span style="font-size: 24px"><b>Info</b></span>
                             </li>
@@ -50,7 +120,7 @@
                                 <a>Keterangan</a>
                                 <b class="float-right" id="keterangan">{{$customer->ket}}</b>
                             </li>
-                        </ul>
+                        </ul> -->
                     </div>
                 </div>
             </div>
@@ -59,7 +129,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table" id="showtable" style="width: 100%;">
+                            <table class="table align-center" id="showtable" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -71,30 +141,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- <tr>
-                                    <td>1</td>
-                                    <td>SO-SPA10210001</td>
-                                    <td>PO/ON/10/21/0001</td>
-                                    <td>09-10-2021</td>
-                                    <td>SPA</td>
-                                    <td><span class="badge orange-text">QC</span></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>SO-EKAT08210005</td>
-                                    <td>PO/ON/08/21/0005</td>
-                                    <td>02-08-2021</td>
-                                    <td>E-Catalogue</td>
-                                    <td><span class="badge green-text">Selesai</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>SO-SPB08210005</td>
-                                    <td>PO/ON/08/21/0005</td>
-                                    <td>02-08-2021</td>
-                                    <td>SPB</td>
-                                    <td><span class="badge red-text">PO</span></td>
-                                </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -103,7 +149,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 
 @section('adminlte_js')
@@ -129,22 +175,31 @@
                     searchable: false
                 },
                 {
-                    data: 'DT_RowIndex'
+                    data: 'so'
                 },
                 {
-                    data: 'DT_RowIndex',
-
+                    data: 'nopo',
                 },
                 {
-                    data: 'DT_RowIndex',
-
+                    data: 'tglpo',
                 },
                 {
-                    data: 'DT_RowIndex',
+                    data: 'jenis',
+                },
+                {
+                    data: 'status',
 
                 }
             ]
         });
+        var cust = <?php echo json_encode($customer->nama); ?>;
+        var cust = cust.replace('.', '').replace('PT ', '').replace('CV ', '').replace('& ', '').replace('(', '').replace(')', '');
+        var init = cust.split(" ");
+        var initial = "";
+        for (var i = 0; i < init.length; i++) {
+            initial = initial + init[i].charAt(0);
+        }
+        var profileImage = $('#profileImage').text(initial);
     });
 </script>
 @stop

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pesanan extends Model
 {
     protected $table = 'pesanan';
-    protected $fillable = ['no_po', 'tgl_po', 'no_do', 'tgl_do', 'ket'];
+    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket'];
 
     public function Ekatalog()
     {
@@ -21,5 +21,14 @@ class Pesanan extends Model
     public function Spb()
     {
         return $this->hasOne(Spb::class);
+    }
+    public function DetailPesanan()
+    {
+        return $this->hasMany(DetailPesanan::class);
+    }
+
+    function tgbj()
+    {
+        return $this->hasOne(TFProduksi::class);
     }
 }

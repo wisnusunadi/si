@@ -25,6 +25,7 @@ window.axios = require("axios");
 
 // library
 window.$ = window.jQuery = require("jquery");
+const swal = window.swal = require('sweetalert2');
 import "bootstrap/dist/js/bootstrap.bundle";
 import "datatables.net-bs4/js/dataTables.bootstrap4.min";
 import "chart.js/dist/chart";

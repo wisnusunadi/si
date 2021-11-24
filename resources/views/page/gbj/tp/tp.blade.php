@@ -87,7 +87,7 @@
                                             <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Dari</label>
-                                                    <select name="" id="" class="form-control">
+                                                    <select name="" id="divisi" class="form-control">
                                                         <option value="">All</option>
                                                         <option value="">Divisi IT</option>
                                                         <option value="">Divisi QC</option>
@@ -127,7 +127,7 @@
                             <div class="col-lg-12">
                                 <div class="table-responsive">
                                     {{-- Tanggal Masuk dan Tanggal Keluar --}}
-                                    <table class="table table-hover pertanggal" width="100%">
+                                    <table class="table table-hover pertanggal" width="100%" id="history">
                                         <thead>
                                             <tr>
                                                 <th>Tanggal Masuk</th>
@@ -205,6 +205,143 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row produk-show hidden-product">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card mt-2 ml-5 mr-5 card-center" style="width: 13rem;">
+                <img class="card-img-top"
+                    src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"
+                    alt="">
+            </div>
+            <div class="card" style="background-color: #786FC4; color: white;">
+                <div class="card-body">
+                    <h5 class="card-text pb-2"><b>Kode Produk</b></h5>
+                    <p class="card-text" id="kode_produk">5415313</p>
+                    <h5 class="card-text pb-2"><b>Nama Produk</b></h5>
+                    <p class="card-text" id="nama_produk">Ambulatory</p>
+                    <h5 class="card-text pb-2"><b>Deskripsi</b></h5>
+                    <p class="card-text" id="deskripsi">Produk Inovatif dan Kreatif</p>
+                    <h5 class="card-text pb-2"><b>Dimensi</b></h5>
+                    <div class="row">
+                        <div class="col-sm">
+                            <p>Panjang</p>
+                        </div>
+                        <div class="col-sm">
+                            <p>Lebar</p>
+                        </div>
+                        <div class="col-sm">
+                            <p>Tinggi</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <p id="panjang">12 mm</p>
+                        </div>
+                        <div class="col-sm">
+                            <p id="lebar">13 mm</p>
+                        </div>
+                        <div class="col-sm">
+                            <p id="tinggi">14 mm</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-title">
+                <div class="mb-7 mt-5 ml-3">
+                    <div class="row align-items-center">
+                        <div class="col-lg-9 col-xl-8">
+                            <div class="row align-items-center">
+                                <div class="col-md-4 my-2 my-md-0">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Cari..."
+                                            id="kt_datatable_search_query">
+                                        <span>
+                                            <i class="flaticon2-search-1 text-muted"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-2 my-md-0">
+                                    <div class="d-flex align-items-center">
+                                        <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
+                                        <input type="text" name="" id="tanggalmasuk" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 my-2 my-md-0">
+                                    <a href="#" class="btn btn-outline-primary">Search</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
+                                    <p class="card-text">
+                                        <div class="foo green"></div> : Dari
+                                    </p>
+                                    <p class="card-text">
+                                        <div class="foo blue"></div> : Ke
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="mb-7">
+                    <table class="table" id="datatable">
+                        <thead>
+                            <tr>
+                                <th>Nomor SO</th>
+                                <th>Tanggal Masuk</th>
+                                <th>Tanggal Keluar</th>
+                                <th>Dari/Ke</th>
+                                <th>Tujuan</th>
+                                <th>Jumlah</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>652146416541654</td>
+                                <td scope="row">10-04-2021</td>
+                                <td>23-09-2021</td>
+                                <td><span class="badge badge-success">Divisi IT</span></td>
+                                <td>Untuk Uji Coba</td>
+                                <td>100 Unit</td>
+                                <td><button type="button" class="btn btn-outline-info" onclick="detailProduk()"><i
+                                            class="far fa-eye"> Detail</i></button></td>
+                            </tr>
+                            <tr>
+                                <td>652146416541654</td>
+                                <td scope="row">10-04-2021</td>
+                                <td>23-09-2021</td>
+                                <td><span class="badge badge-info">Divisi QC</span></td>
+                                <td>Untuk Uji Coba</td>
+                                <td>100 Unit</td>
+                                <td><button type="button" class="btn btn-outline-info" onclick="detailProduk()"><i
+                                            class="far fa-eye"> Detail</i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <ul class="pagination pagination-sm m-0 float-right">
+                    <li class="page-item"><a class="page-link" href="#">«</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">»</a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -335,6 +472,48 @@
 <script>
     $('#datetimepicker1').daterangepicker({});
 
+    $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            if(res) {
+                console.log(res);
+                $("#divisi").empty();
+                $("#divisi").append('<option value="">All</option>');
+                $.each(res, function(key, value) {
+                    $("#divisi").append('<option value="'+value.id+'">'+value.nama+'</option');
+                });
+            } else {
+                $("#divisi").empty();
+            }
+        }
+    });
+
+    $('#history').dataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: {
+                url: "/api/transaksi/all",
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'date_in', name: 'date_in'},
+                { data: 'date_out', name: 'date_out'},
+                { data: 'divisi', name: 'divisi'},
+                { data: 'tujuan', name: 'tujuan'},
+                { data: 'so', name: 'so'},
+                { data: 'action', name: 'action'},
+            ],
+            "oLanguage": {
+                "sSearch": "Cari:"
+            }
+        });
+
 
     function detailtanggal() {
         $('#modal-per-tanggal').modal('show');
@@ -354,6 +533,24 @@
             responsive: true
         });
         $('#gudang-barang').dataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: {
+                url: "/api/transaksi/history",
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'kode_produk', name: 'kode_produk'},
+                { data: 'product', name: 'product'},
+                { data: 'stock', name: 'stock'},
+                { data: 'stock', name: 'stock'},
+                { data: 'kelompok', name: 'kelompok'},
+                { data: 'action', name: 'action'},
+            ],
             "oLanguage": {
                 "sSearch": "Cari:"
             }
@@ -379,6 +576,52 @@
     function detailProdukModal() {
         $('.produk-show').removeClass('hidden-product');
     }
+
+    $(document).on('click', '.detailmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/transaksi/history-detail/" + id,
+            type: "get",
+            dataType: "json",
+            success: function(res) {
+                console.log(res);
+                $('p#kode_produk').text(res.header[0].kode);
+                $('p#nama_produk').text(res.header[0].nama);
+                $('p#deskripsi').text(res.header[0].deskripsi);
+                $('p#panjang').text(res.header[0].panjang);
+                $('p#lebar').text(res.header[0].lebar);
+                $('p#tinggi').text(res.header[0].tinggi);
+            }
+        });
+
+        // $('#datatable').dataTable({
+        //     processing: true,
+        //     serverSide: true,
+        //     responsive: true,
+        //     ajax: {
+        //         url: "/api/transaksi/history-detail/" + id,
+        //         // data: {id: id},
+        //         // type: "post",
+        //         // dataType: "json",
+        //     },
+        //     columns: [
+        //         // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        //         { data: 'so', name: 'so'},
+        //         { data: 'date_in', name: 'date_in'},
+        //         { data: 'date_out', name: 'date_out'},
+        //         { data: 'divisi', name: 'divisi'},
+        //         { data: 'tujuan', name: 'tujuan'},
+        //         { data: 'jumlah', name: 'jumlah'},
+        //         { data: 'action', name: 'action'},
+        //     ],
+        //     "oLanguage": {
+        //         "sSearch": "Cari:"
+        //     }
+        // });
+        $('.produk-show').removeClass('hidden-product');
+    })
 
 </script>
 @stop

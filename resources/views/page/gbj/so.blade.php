@@ -132,7 +132,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="soo">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -140,7 +140,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="aknn">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +148,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="poo">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -156,7 +156,7 @@
                                     <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansii">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -226,7 +226,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="so">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -234,7 +234,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -242,7 +242,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -250,7 +250,7 @@
                                     <div class="col"> <label for="">Instansi</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansi">RS. Dr. Soetomo</span>
                                             </div>
                                         </div>
                                     </div>
@@ -296,14 +296,14 @@
 
 @section('adminlte_js')
 <script>
-    $(document).ready(function () {
-        $('.addProduk').click(function (e) {
-            $('#addProdukModal').modal('show');
-        });
-        $('.viewProduk').click(function (e) {
-            $('#viewProdukModal').modal('show');
-        });
-    });
+    // $(document).ready(function () {
+    //     $('.addProduk').click(function (e) {
+    //         $('#addProdukModal').modal('show');
+    //     });
+    //     $('.viewProduk').click(function (e) {
+    //         $('#viewProdukModal').modal('show');
+    //     });
+    // });
 
     $('.add-produk').DataTable({
         'columnDefs': [{

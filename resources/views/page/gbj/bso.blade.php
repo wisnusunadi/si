@@ -119,7 +119,7 @@
                                         <label for="">Nomor SO</label>
                                             <div class="card nomor-so">
                                                 <div class="card-body">
-                                                    89798797856456
+                                                    <span id="so">89798797856456</span>
                                                 </div>
                                               </div>
                                     </div>
@@ -127,7 +127,7 @@
                                         <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn">89798797856456</span>
                                             </div>
                                           </div>
                                     </div>
@@ -135,14 +135,15 @@
                                         <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po">89798797856456</span>
                                             </div>
                                           </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table class="table table-striped add-produk">
+                                <form action="" id="myForm">
+                                <table class="table table-striped add-produk" id="addProduk">
                                     <thead>
                                         <tr>
                                             <th></th>
@@ -180,8 +181,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Transfer</button>
-                <button type="button" class="btn btn-info">Rancang</button>
+                <button type="button" class="btn btn-success" id="btnTf">Transfer</button>
+                <button type="button" class="btn btn-info" id="btnDraft">Rancang</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
         </div>
@@ -220,6 +221,7 @@
                 </table>
             </div>
         </div>
+    </form>
     </div>
 </div>
 @stop
@@ -227,29 +229,29 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function () {
-        $('.addProduk').click(function (e) {
-            $('#addProdukModal').modal('show');
-        });
-        $('.viewProduk').click(function (e) {
-            $('#viewProdukModal').modal('show');
-        });
-        let t = $('.add-produk').DataTable({
-            'columnDefs': [{
-                'targets': 0,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [1, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Cari:"
-            }
-        });
+        // $('.addProduk').click(function (e) {
+        //     $('#addProdukModal').modal('show');
+        // });
+        // $('.viewProduk').click(function (e) {
+        //     $('#viewProdukModal').modal('show');
+        // });
+        // let t = $('.add-produk').DataTable({
+        //     'columnDefs': [{
+        //         'targets': 0,
+        //         'checkboxes': {
+        //             'selectRow': true
+        //         }
+        //     }],
+        //     'select': {
+        //         'style': 'multi'
+        //     },
+        //     'order': [
+        //         [1, 'asc']
+        //     ],
+        //     "oLanguage": {
+        //     "sSearch": "Cari:"
+        //     }
+        // });
 
         $('.scan-produk').DataTable({
             'columnDefs': [{
@@ -271,6 +273,19 @@
     });
 
     let a = $('#gudang-barang').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/tfp/data-so',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                { data: 'tgl_kontrak', name: 'tgl_kontrak'},
+                { data: 'status', name: 'status'},
+                { data: 'button', name: 'button'},
+            ],
             "columnDefs": [{
                 "searchable": false,
                 "orderable": false,
@@ -282,19 +297,95 @@
             }
             ],
             "order": [
+                [3, 'desc']
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"
+            }
+    });
+
+    a.on('order.dt search.dt', function () {
+        a.column(0, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+
+
+    $(document).on('click', '.editmodal', function(e) {
+        var id = $(this).data('id');
+        console.log(id);
+        $.ajax({
+            url: "/api/tfp/header-so/" +id,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.no_po);
+                $('span#akn').text(res.ekatalog.no_paket);
+            }
+        });
+        $('#addProduk').DataTable().destroy();
+        var mytable = $('#addProduk').DataTable({
+            // retrieve: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id,
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'ids', name: 'ids'},
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'tipe', name: 'tipe'},
+                { data: 'merk', name: 'merk'},
+                { data: 'action', name: 'action'},
+            ],
+            'columnDefs': [{
+                'targets': 0,
+                'checkboxes': {
+                    'selectRow': true
+                }
+            }],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
                 [1, 'asc']
             ],
             "oLanguage": {
             "sSearch": "Cari:"
             }
-        });
-        a.on('order.dt search.dt', function () {
-            a.column(0, {
-                search: 'applied',
-                order: 'applied'
-            }).nodes().each(function (cell, i) {
-                cell.innerHTML = i + 1;
+        })
+        $('#addProdukModal').modal('show');
+
+        $(document).on('click', '#btnDraft', function(e) {
+            var rowsel = mytable.column(0).checkboxes.selected();
+            $.each(rowsel, function(index, rowId) {
+                console.log(rowId);
             });
-        }).draw();
+        })
+    });
+
+    // $('#myForm').on('submit', function(e) {
+    //     var form = this;
+    //     var rowsel = mytable.column(0).checkboxes.selected();
+    //     $.each(rowsel, function(index, rowId) {
+    //         console.log(rowId);
+    //     });
+    //     e.preventDefault();
+    // })
+
+
+
+    $(document).on('click', '.detailmodal', function(e) {
+        var id = $(this).data('id');
+        console.log(id);
+        $('#viewProdukModal').modal('show');
+    });
 </script>
 @stop

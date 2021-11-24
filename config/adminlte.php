@@ -233,6 +233,12 @@ return [
             'icon'        => 'nav-icon fa fa-home',
             'auth'        => [24]
         ],
+        [
+            'text'        => 'Beranda',
+            'url'         => '/qc/dashboard',
+            'icon'        => 'nav-icon fa fa-home',
+            'auth'        => [23]
+        ],
         // PPIC (24)
         [
             'header' => 'Data',
@@ -436,18 +442,18 @@ return [
             'icon' => 'far fa-circle',
             'auth' => [26]
         ],
-        [
-            'text' => 'Nama & Alamat',
-            'url'  => '/nama_alamat',
-            'icon' => 'fas fa-table',
-            'auth' => [26]
-        ],
-        [
-            'text' => 'Jasa Ekspedisi',
-            'url'  => '/jasa_eks',
-            'icon' => 'fas fa-table',
-            'auth' => [26]
-        ],
+        // [
+        //     'text' => 'Nama & Alamat',
+        //     'url'  => '/nama_alamat',
+        //     'icon' => 'fas fa-table',
+        //     'auth' => [26]
+        // ],
+        // [
+        //     'text' => 'Jasa Ekspedisi',
+        //     'url'  => '/jasa_eks',
+        //     'icon' => 'fas fa-table',
+        //     'auth' => [26]
+        // ],
         [
             'header' => 'TRANSAKSI',
             'auth'   => [26]
@@ -455,120 +461,120 @@ return [
         [
             'text' => 'Penjualan',
             'url'  => '/penjualan/penjualan/show',
-            'icon' => 'fas fa-dollar-sign',
+            'icon' => 'far fa-circle',
             'auth' => [26]
         ],
-        [
-            'text' => 'Sales Order',
-            'url'  => '/penjualan/so/show',
-            'icon' => 'fas fa-file-invoice-dollar',
-            'auth' => [26]
-        ],
-        [
-            'text'    => 'Daftar Pesanan',
-            'icon'    => 'fas fa-table',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'E-Katalog',
-                    'url'  => '/penjualan_online',
-                ],
-                [
-                    'text' => 'E-Commerce',
-                    'url'  => '/penjualan_online_ecom',
-                ],
-                [
-                    'text' => 'Offline',
-                    'url'  => '/penjualan_offline',
-                ]
-            ],
-        ],
-        [
-            'text'    => 'Surat Penawaran',
-            'icon'    => 'fas fa-table',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'E-Commerce',
-                    'url'  => '/penawaran_ecom',
-                ],
-                [
-                    'text' => 'Offline',
-                    'url'  => '/penawaran_offline',
-                ]
-            ],
-        ],
-        [
-            'text'    => 'PO / DO',
-            'icon'    => 'fas fa-table',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'E-Katalog',
-                    'url'  => '/podo_online',
-                ],
-                [
-                    'text' => 'Offline',
-                    'url'  => '/podo_offline',
-                ]
-            ],
-        ],
-        // penjualan (26) & produksi (17)
+        // [
+        //     'text' => 'Sales Order',
+        //     'url'  => '/penjualan/so/show',
+        //     'icon' => 'fas fa-file-invoice-dollar',
+        //     'auth' => [26]
+        // ],
+        // [
+        //     'text'    => 'Daftar Pesanan',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Katalog',
+        //             'url'  => '/penjualan_online',
+        //         ],
+        //         [
+        //             'text' => 'E-Commerce',
+        //             'url'  => '/penjualan_online_ecom',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/penjualan_offline',
+        //         ]
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'Surat Penawaran',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Commerce',
+        //             'url'  => '/penawaran_ecom',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/penawaran_offline',
+        //         ]
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'PO / DO',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Katalog',
+        //             'url'  => '/podo_online',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/podo_offline',
+        //         ]
+        //     ],
+        // ],
+        // // penjualan (26) & produksi (17)
         // [
         //     'text' => 'Produk',
         //     'url'  => '/produk',
         //     'icon' => 'fas fa-table',
         //     'auth' => [14, 17, 26]
         // ],
-        // // produksi (17) & QC(23)
-        // [
-        //     'text' => 'Data Karyawan',
-        //     'icon' => 'fas fa-users',
-        //     'auth' => [14, 17, 23, 28],
-        //     'submenu' => [
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Jadwal Kerja Operator',
-        //             'url'  => '/karyawan',
-        //             'auth' => [],
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Daftar Karyawan',
-        //             'url'  => '/daftar_karyawan',
-        //             'auth' => [28],
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Permohonan Penugasan',
-        //             'url'  => '/karyawan/peminjaman',
-        //             'auth' => [],
-        //         ],
-        //     ],
-        // ],
-        // [
-        //     'text'    => 'Inventory',
-        //     'icon'    => 'fas fa-boxes',
-        //     'auth' => [14, 17],
-        //     'submenu' => [
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Master Inventory',
-        //             'auth' => [14],
-        //             'url'  => '/inventory/divisi',
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Inventory',
-        //             'url'  => '/inventory',
-        //         ],
-        //         [
-        //             'icon' => 'far fa-circle',
-        //             'text' => 'Permintaan Peminjaman',
-        //             'url'  => '/inventory/peminjaman',
-        //         ],
-        //     ],
-        // ],
+        // produksi (17) & QC(23)
+        [
+            'text' => 'Data Karyawan',
+            'icon' => 'fas fa-users',
+            'auth' => [14, 17, 23, 28],
+            'submenu' => [
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Jadwal Kerja Operator',
+                    'url'  => '/karyawan',
+                    'auth' => [],
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Daftar Karyawan',
+                    'url'  => '/daftar_karyawan',
+                    'auth' => [28],
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Permohonan Penugasan',
+                    'url'  => '/karyawan/peminjaman',
+                    'auth' => [],
+                ],
+            ],
+        ],
+        [
+            'text'    => 'Inventory',
+            'icon'    => 'fas fa-boxes',
+            'auth' => [14, 17],
+            'submenu' => [
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Master Inventory',
+                    'auth' => [14],
+                    'url'  => '/inventory/divisi',
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Inventory',
+                    'url'  => '/inventory',
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Permintaan Peminjaman',
+                    'url'  => '/inventory/peminjaman',
+                ],
+            ],
+        ],
         [
             'text'    => 'Peminjaman',
             'icon'    => 'fas fa-boxes',
@@ -1026,10 +1032,23 @@ return [
         ],
         [
             'text' => 'Sales Order',
-            'icon' => 'fas fa-circle',
+            'icon' => 'far fa-circle',
             'url' => '/qc/so/show',
             'auth' => [23],
         ],
+        [
+            'text' => 'Riwayat Pengujian',
+            'icon' => 'far fa-circle',
+            'url' => '/qc/so/riwayat/show',
+            'auth' => [23],
+        ],
+        [
+            'text' => 'Laporan',
+            'icon' => 'far fa-circle',
+            'url' => '/qc/so/laporan/show',
+            'auth' => [23],
+        ],
+
         [
             'text'    => 'Permintaan',
             'icon'    => 'fas fa-box-open',
@@ -1127,6 +1146,101 @@ return [
             'icon' => 'fas fa-book-open',
             'auth' => [13],
         ],
+
+        //LOGISTIK
+        [
+            'text' => 'Beranda',
+            'icon' => 'fas fa-home',
+            'url' => '/logistik/dashboard',
+            'auth' => [15],
+        ],
+        [
+            'header' => 'DATA',
+            'auth' => [15]
+        ],
+        [
+            'text' => 'Jasa Ekspedisi',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/ekspedisi/show',
+            'auth' => [15],
+        ],
+        [
+            'header' => 'PENJUALAN',
+            'auth' => [15]
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/so/show',
+            'auth' => [15],
+        ],
+        [
+            'text' => 'Pengiriman',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/pengiriman/show',
+            'auth' => [15],
+        ],
+        [
+            'text' => 'Riwayat Pengiriman',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/pengiriman/riwayat/show',
+            'auth' => [15],
+        ],
+        [
+            'text' => 'Laporan',
+            'icon' => 'far fa-circle',
+            'url' => '/logistik/laporan/show',
+            'auth' => [15],
+        ],
+
+        //DOCUMENT CONTROL
+        [
+            'text' => 'Beranda',
+            'icon' => 'fas fa-home',
+            'url' => '/dc/dashboard',
+            'auth' => [9],
+        ],
+        [
+            'header' => 'PENJUALAN',
+            'auth' => [9]
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'far fa-circle',
+            'url' => '/dc/so/show',
+            'auth' => [9],
+        ],
+        [
+            'text' => 'COO',
+            'icon' => 'far fa-circle',
+            'url' => '/dc/coo/show',
+            'auth' => [9],
+        ],
+
+        //AFTER SALES PERBAIKAN
+        [
+            'header' => 'DATA',
+            'auth' => [8]
+        ],
+        [
+            'text' => 'Customer',
+            'icon' => 'far fa-circle',
+            'url' => '/penjualan/customer/show',
+            'auth' => [8],
+        ],
+        [
+            'text' => 'Sales Order',
+            'icon' => 'far fa-circle',
+            'url' => '/as/so/show',
+            'auth' => [8],
+        ],
+        [
+            'text' => 'Lacak',
+            'icon' => 'far fa-circle',
+            'url' => '/penjualan/lacak/show',
+            'auth' => [8],
+        ],
+
         [
             'text' => 'test',
             'isNavbarRightItem' => true,
