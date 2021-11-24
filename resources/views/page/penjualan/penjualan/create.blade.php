@@ -9,7 +9,7 @@
 @section('adminlte_css')
 <style>
     .hide {
-        display: none !important;
+        display: none !important
     }
 
     .align-right {
