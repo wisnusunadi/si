@@ -3,6 +3,7 @@
 @section('title', 'ERP')
 
 @section('content')
+<input type="hidden" name="" id="auth" value="13">
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -490,6 +491,14 @@
                 { "width": "5%", "targets": 0},
             ]
     });
+    $('#gudang-barang').DataTable({
+        "columnDefs": [
+            {
+                "targets": [5],
+                "visible": document.getElementById('auth').value == '2' ? true : false
+            }
+        ]
+    })
     $('#inputGroupFile02').on('change', function () {
         //get the file name
         var fileName = $(this).val();

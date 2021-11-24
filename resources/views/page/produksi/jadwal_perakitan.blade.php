@@ -5,6 +5,7 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-md-6">
         <div class="card">
@@ -271,6 +272,11 @@
         },
         "lengthChange": false,
         "ordering": false,
+        "columnDefs": [
+        {
+            "targets": [4],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }]
         });
 
         $('.scan-produk').DataTable({

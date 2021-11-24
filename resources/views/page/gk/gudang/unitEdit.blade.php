@@ -57,7 +57,7 @@
     }
 
 </style>
-
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
@@ -241,7 +241,13 @@
     "responsive": true,
     "language": {
       "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-    }
+    },
+    "columnDefs": [
+        {
+            "targets": [9],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }
+    ]
   });
 </script>
 @stop

@@ -3,6 +3,7 @@
 @section('title', 'ERP')
 
 @section('content')
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="card">
     <div class="card-header">
       <h3 class="card-title">Produk dari Perakitan </h3>
@@ -186,7 +187,13 @@
     });
     $('.dalam-perakitan').DataTable({
         "oLanguage": {
-        "sSearch": "Cari:"}
+        "sSearch": "Cari:"},
+        "columnDefs": [
+        {
+            "targets": [4],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }
+    ]
     });
     $('.scan-produk').DataTable({
             "oLanguage": {

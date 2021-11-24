@@ -29,6 +29,7 @@
         font-size: 18px
     }
 </style>
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -329,7 +330,13 @@
     $('#gudang-barang').DataTable({
         "oLanguage": {
             "sSearch": "Cari:"
+        },
+                "columnDefs": [
+        {
+            "targets": [5],
+            "visible": document.getElementById('auth').value == '2' ? false : true
         }
+    ]
     });
 </script>
 @stop

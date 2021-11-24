@@ -775,7 +775,7 @@ return [
         ],
         [
             'header' => 'PRODUKSI',
-            'auth' => [17, 10, 16]
+            'auth' => [17, 10, 16, 2]
         ],
         // [
         //     'text'    => 'Jadwal Kerja Produksi',
@@ -792,25 +792,25 @@ return [
         [
             'text'    => 'Perakitan',
             'icon'    => 'fas fa-cogs',
-            'auth' => [17],
+            'auth' => [17,2],
             'submenu' => [
                 [
                     'icon' => 'far fa-circle',
                     'text' => 'Perencanaan Perakitan',
                     'url' => 'produksi/perencanaan_perakitan',
-                    'auth' => [17],
+                    'auth' => [17,2],
                 ],
                 [
                     'icon' => 'far fa-circle',
                     'text' => 'Perakitan Berlangsung',
                     'url' => 'produksi/jadwal_perakitan',
-                    'auth' => [17],
+                    'auth' => [17,2],
                 ],
                 [
                     'icon' => 'far fa-circle',
                     'text' => 'Riwayat Perakitan',
                     'url' => 'produksi/riwayat_perakitan',
-                    'auth' => [17],
+                    'auth' => [17,2],
                 ],
                 // [
                 //     'icon' => 'far fa-circle',
@@ -828,7 +828,17 @@ return [
             'text'    => 'Gudang',
             'icon'    => 'fas fa-cubes',
             'url'  => '/produksi/pengiriman',
-            'auth' => [17],
+            'auth' => [17,2],
+        ],
+        [
+            'header' => 'Penjualan',
+            'auth' => [17]
+        ],
+        [
+            'text' => 'Sales Order',
+            'url' => '/produksi/so',
+            'icon' => 'fas fa-people-carry',
+            'auth' => [17,2],
         ],
         [
             'text'    => 'Perakitan',
@@ -1052,12 +1062,16 @@ return [
             'header' => 'Stok',
             'auth' => [13]
         ],
+        [
+            'header' => 'GBJ',
+            'auth' => [2]
+        ],
         // GBJ
         [
             'text' => 'Produk',
             'url' => '/gbj/produk',
             'icon' => 'fas fa-boxes',
-            'auth' => [13],
+            'auth' => [13, 2],
         ],
         // [
         //     'text' => 'Stok',
@@ -1069,7 +1083,7 @@ return [
             'text' => 'Riwayat Transaksi',
             'url' => '/gbj/tp',
             'icon' => 'fas fa-history',
-            'auth' => [13],
+            'auth' => [13, 2],
         ],
         [
             'header' => 'Penerimaan',
@@ -1079,7 +1093,7 @@ return [
             'text' => 'Dalam Perakitan',
             'url' => '/gbj/dp',
             'icon' => 'fas fa-truck-loading',
-            'auth' => [13],
+            'auth' => [13,2],
         ],
         [
             'text' => 'Selain Perakitan',
@@ -1089,19 +1103,13 @@ return [
         ],
         [
             'header' => 'Penjualan',
-            'auth' => [13,17]
+            'auth' => [13]
         ],
         [
             'text' => 'Sales Order',
             'url' => '/gbj/so',
             'icon' => 'fas fa-people-carry',
-            'auth' => [13],
-        ],
-        [
-            'text' => 'Sales Order',
-            'url' => '/produksi/so',
-            'icon' => 'fas fa-people-carry',
-            'auth' => [17],
+            'auth' => [13,2],
         ],
         [
             'header' => 'Pengeluaran',
@@ -1111,7 +1119,7 @@ return [
             'text' => 'Berdasarkan SO',
             'url' => '/gbj/bso',
             'icon' => 'fas fa-swatchbook',
-            'auth' => [13],
+            'auth' => [13,2],
         ],
         [
             'text' => 'Tanpa SO',
@@ -1125,6 +1133,10 @@ return [
             'icon' => 'fas fa-sign-out-alt',
         ],
 
+        [
+            'header' => 'GK',
+            'auth' => [2]
+        ],
         // GK
         [
             'text' => 'Dashboard',
@@ -1140,13 +1152,13 @@ return [
             'text' => 'Gudang',
             'url' => 'gk/gudang',
             'icon' => 'fas fa-boxes',
-            'auth' => [12],
+            'auth' => [12,2],
         ],
         [
             'text' => 'Riwayat Transaksi',
             'url' => 'gk/transaksi',
             'icon' => 'fas fa-history',
-            'auth' => [12],
+            'auth' => [12,2],
         ],
         [
             'header' => 'Penerimaan',
