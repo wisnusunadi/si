@@ -33,6 +33,7 @@ import "select2/dist/js/select2.full";
 // import Swal from 'sweetalert2';
 // import swal from 'sweetalert2';
 
+import "fullcalendar";
 
 window.OverlayScrollbars = require("overlayscrollbars");
 

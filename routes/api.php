@@ -105,6 +105,8 @@ Route::prefix('/gbj')->group(function () {
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
 
+    Route::get('/test/{id}', [App\Http\Controllers\GudangController::class, 'test']);
+
     // select
     Route::get('sel-product', [\App\Http\Controllers\GudangController::class, 'select_product']);
     Route::get('sel-product/{id}', [\App\Http\Controllers\GudangController::class, 'select_product_by_id']);
@@ -124,19 +126,30 @@ Route::prefix('/gbj')->group(function () {
 
 Route::prefix('/draft')->group(function () {
     Route::post('/rancang', [\App\Http\Controllers\GudangController::class, 'storeDraftRancang']);
+    Route::post('/final', [\App\Http\Controllers\GudangController::class, 'storeFinalRancang']);
 
     // get
-    Route::get('/data', [\App\Http\Controllers\GudangController::class, 'getRancangDraft']);
+    Route::post('/data', [\App\Http\Controllers\GudangController::class, 'getDraftPerakitan']);
 });
 
 Route::prefix('/transaksi')->group(function () {
     Route::get('/all', [\App\Http\Controllers\GudangController::class, 'getAllTransaksi']);
     Route::get('/history', [\App\Http\Controllers\GudangController::class, 'getHistorybyProduk']);
     Route::get('/history-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailHistory']);
+    Route::get('/all-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailAll']);
+});
+
+Route::prefix('/dashboard-gbj')->group(function () {
+    Route::get('/stok/1020', [\App\Http\Controllers\GudangController::class, 'getProdukstok1020']);
+    Route::get('/stok/59', [\App\Http\Controllers\GudangController::class, 'getProdukstok59']);
+    Route::get('/stok/14', [\App\Http\Controllers\GudangController::class, 'getProdukstok14']);
+
+    Route::get('/in/36', [\App\Http\Controllers\GudangController::class, 'getProdukIn36']);
 });
 
 Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
+    Route::post('/byso', [\App\Http\Controllers\ProduksiController::class, 'TfbySO']);
 
     // get
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);

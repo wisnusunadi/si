@@ -180,6 +180,10 @@
 
 @section('adminlte_js')
 <script>
+    $('.table-seri').DataTable({
+        "oLanguage": {
+        "sSearch": "Cari:"}
+    });
     $('.dalam-perakitan').DataTable({
         processing: true,
         serverSide: true,

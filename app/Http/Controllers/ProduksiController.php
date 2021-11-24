@@ -77,7 +77,49 @@ class ProduksiController extends Controller
                 GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
             }
 
-            return response()->json(['msg' => 'Successfully', ]);
+            return response()->json(['msg' => 'Successfully',]);
+        }
+    }
+
+    function TfbySO(Request $request)
+    {
+        $data = TFProduksi::where('pesanan_id', $request->pesanan_id)->get();
+        if (count($data) > 0) {
+            // foreach($data as $v) {
+            //     $v->pesanan_id = $request->pesanan_id;
+            //     $v->tgl_keluar = Carbon::now();
+            //     $v->ke = 23;
+            //     $v->jenis = 'keluar';
+            //     $v->status_id = 1;
+            //     $v->created_at = Carbon::now();
+            //     $v->save();
+            // }
+
+            return response()->json(['msg' => 'Data Sudah Ada']);
+        } else {
+            $d = new TFProduksi();
+            $d->pesanan_id = $request->pesanan_id;
+            $d->tgl_keluar = Carbon::now();
+            $d->ke = 23;
+            $d->jenis = 'keluar';
+            $d->status_id = 1;
+            $d->state_id = 2;
+            $d->created_at = Carbon::now();
+            $d->save();
+
+            foreach ($request->gdg_brg_jadi_id as $key => $value) {
+                $dd = new TFProduksiDetail();
+                $dd->t_gbj_id = $d->id;
+                $dd->gdg_brg_jadi_id = $value;
+                $dd->qty = $request->qty[$key];
+                $dd->jenis = 'keluar';
+                $dd->status_id = 1;
+                $dd->state_id = 2;
+                $dd->created_at = Carbon::now();
+                $dd->save();
+            }
+
+            return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
         }
     }
 
@@ -191,25 +233,39 @@ class ProduksiController extends Controller
 
     function getDetailSO(Request $request, $id)
     {
-        $data = DetailEkatalog::with('Ekatalog', 'PenjualanProduk')->where('ekatalog_id', $id)->get();
-        return datatables()->of($data)
+        $data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
+        $l = [];
+        $v = 0;
+        $i = 0;
+        foreach ($data as $s) {
+            foreach ($s->GudangBarangJadi as $k) {
+                $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
+                $l[$v]['nama_produk'] = $k->produk->nama;
+                $l[$v]['merk'] = $k->produk->merk;
+                $l[$v]['jumlah'] = $k->pivot->jumlah;
+                $v++;
+            }
+        }
+        // $i++;
+        return datatables()->of($l)
             ->addColumn('produk', function ($data) {
-                return $data->penjualanproduk->nama;
+
+                return $data['nama_produk'].'<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id[]" value="'.$data['id'].'">';
             })
-            ->addColumn('ids', function($d) {
-                return $d->penjualanproduk->id;
+            ->addColumn('ids', function ($d) {
+                return $d['id'];
             })
             ->addColumn('qty', function ($data) {
-                return $data->jumlah;
-            })
-            ->addColumn('tipe', function ($data) {
-                return $data->penjualanproduk->nama;
+                return $data['jumlah'].'<input type="hidden" name="qty[]" id="qty[]" value="'.$data['jumlah'].'">';
             })
             ->addColumn('merk', function ($data) {
-                return $data->penjualanproduk->nama;
+                return $data['merk'];
+            })
+            ->addColumn('tipe', function ($data) {
+                return $data['merk'];
             })
             ->addColumn('action', function ($data) {
-                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data['id'] . '">
                             <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
                             class="fas fa-qrcode"></i> Scan Produk</button>
                             </a>';
@@ -217,8 +273,9 @@ class ProduksiController extends Controller
             ->addColumn('status', function ($data) {
                 return '<span class="badge badge-danger">Belum Diinput</span>';
             })
-            ->rawColumns(['action', 'status'])
+            ->rawColumns(['action', 'status', 'produk', 'qty'])
             ->make(true);
+        // return $data;
     }
 
     function headerSo($id)
@@ -227,23 +284,24 @@ class ProduksiController extends Controller
         return $data;
     }
 
-    function getHistorybyProduk() {
+    function getHistorybyProduk()
+    {
         $data = GudangBarangJadi::with('produk', 'satuan')->get();
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('stock', function($d) {
-                return $d->stok. ' '.$d->satuan->nama;
+            ->addColumn('stock', function ($d) {
+                return $d->stok . ' ' . $d->satuan->nama;
             })
-            ->addColumn('kelompok', function($d) {
+            ->addColumn('kelompok', function ($d) {
                 return $d->produk->kelompokproduk->nama;
             })
-            ->addColumn('product', function($d) {
-                return $d->produk->nama. ' '.$d->nama;
+            ->addColumn('product', function ($d) {
+                return $d->produk->nama . ' ' . $d->nama;
             })
-            ->addColumn('kode_produk', function($d) {
-                return $d->produk->product->kode .''. $d->produk->kode;
+            ->addColumn('kode_produk', function ($d) {
+                return $d->produk->product->kode . '' . $d->produk->kode;
             })
-            ->addColumn('action', function($d) {
+            ->addColumn('action', function ($d) {
                 return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
                             <button class="btn btn-info" data-toggle="modal" data-target=".modal-detail"><i
                             class="far fa-eye"></i> Detail</button>
@@ -251,6 +309,10 @@ class ProduksiController extends Controller
             })
             ->rawColumns(['action'])
             ->make(true);
+    }
+
+    function getNoseriSO() {
+
     }
 
     // check
@@ -262,7 +324,12 @@ class ProduksiController extends Controller
 
     function test()
     {
-        $data = PenjualanProduk::with('Produk', 'DetailEkatalog')->get();
-        return $data;
+        $data = TFProduksi::where('pesanan_id', 2)->get();
+        if (count($data) > 0) {
+            return 'Data Sudah ada';
+        } else {
+            return 'Data belum ada';
+        }
+        // return $data;
     }
 }

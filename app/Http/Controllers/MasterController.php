@@ -411,7 +411,7 @@ class MasterController extends Controller
         echo json_encode($data);
     }
 
-    //Show Modal 
+    //Show Modal
 
     public function update_customer_modal($id)
     {
