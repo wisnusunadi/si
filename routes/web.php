@@ -148,6 +148,10 @@ Route::middleware('auth')->prefix('/gk')->group(function () {
     Route::view('/transaksi/1', 'page.gk.transaksi.show');
 });
 
+Route::middleware(['auth'])->prefix('/direksi')->group(function () {
+    Route::view('/dashboard', 'page.direksi.dashboard');
+});
+
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
 //     Route::view('/stok', 'page.gbj.stok_show');
 // });
