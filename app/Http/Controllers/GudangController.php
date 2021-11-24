@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailEkatalog;
 use App\Models\DetailEkatalogProduk;
+use App\Models\DetailPesananProduk;
 use App\Models\Divisi;
 use App\Models\DraftGBJ;
 use App\Models\DraftGbjDetail;
@@ -21,9 +22,10 @@ use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
-use Carbon\Carbon;
+// use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -203,21 +205,6 @@ class GudangController extends Controller
 
     function getDetailHistory($id)
     {
-        // $data = GudangBarangJadi::with('produk')->where('id', $id)->get();
-        // return $data;
-        // $d = [];
-        // foreach ($data as $dd) {
-        //     $d[] = [
-        //         'id' => $dd->id,
-        //         'kode' => $dd->produk->product->kode . '' . $dd->produk->kode ? $dd->produk->product->kode . '' . $dd->produk->kode : '-',
-        //         'nama' => $dd->produk->nama . ' ' . $dd->nama,
-        //         'deskripsi' => $dd->deskripsi,
-        //         'panjang' => $dd->dim_p . ' mm',
-        //         'lebar' => $dd->dim_l . ' mm',
-        //         'tinggi' => $dd->dim_t . ' mm',
-        //     ];
-        // }
-
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
         // return $data1;
         return datatables()->of($data1)
@@ -258,13 +245,26 @@ class GudangController extends Controller
             })
             ->addColumn('action', function ($d) {
                 return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
-                            <button type="button" class="btn btn-outline-info" onclick="detailProduk()"><i
+                            <button type="button" class="btn btn-outline-info"><i
                             class="far fa-eye"> Detail</i></button>
                         </a>';
             })
             ->rawColumns(['divisi', 'action'])
             ->make(true);
 
+    }
+
+    function getDetailHistorySeri($id) {
+        $data = NoseriTGbj::with('seri', 'layout')->where('t_gbj_detail_id', $id)->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('noser', function($d) {
+                return $d->seri->noseri;
+            })
+            ->addColumn('posisi', function($d) {
+                return $d->layout->ruang;
+            })
+            ->make(true);
     }
 
     function getDetailHistory1($id) {
@@ -1026,65 +1026,50 @@ class GudangController extends Controller
 
     function he3()
     {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->where('tgl_kontrak', '<=', Carbon::now()->startOfDay()->subDays(3) )->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return count($data);
     }
 
     function list_tf3()
     {
-        $Ekatalog = collect(Ekatalog::with('Pesanan')->where('tgl_kontrak', '<=', Carbon::now()->startOfDay()->subDays(3) )->get());
-        $Spa = collect(Spa::with('Pesanan')->get());
-        $Spb = collect(Spb::with('Pesanan')->get());
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->where('tgl_kontrak', '<=', Carbon::now()->startOfDay()->subDays(3) )->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
         $data = $Ekatalog->merge($Spa)->merge($Spb);
-        // $d = $data->whereBetween('tgl_kontrak', [Carbon::now()->startOfDay()->subDays(1), Carbon::now()->startOfDay()] );
-        // return $Ekatalog;
+
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('jenis', function ($data) {
-                $name =  $data->getTable();
-                if ($name == 'ekatalog') {
-                    return 'E-Catalogue';
-                } else if ($name == 'spa') {
-                    return 'SPA';
-                } else {
-                    return 'SPB';
-                }
+            ->addColumn('so', function ($data) {
+                return $data->Pesanan->so;
+            })
+            ->addColumn('no_po', function ($data) {
+                return $data->Pesanan->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
                 return $data->Customer->nama;
             })
-            ->addColumn('no_paket', function ($data) {
-                if (isset($data->no_paket)) {
-                    return $data->no_paket;
-                } else {
-                    return '';
-                }
+            ->addColumn('tgl_batas', function($d) {
+                $a = Carbon::now()->diffInDays($d->tgl_kontrak);
+                return $d->tgl_kontrak.'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
             })
-            ->addColumn('tgl_order', function ($data) {
-                if (isset($data->tgl_buat)) {
-                    return $data->tgl_buat;
-                } else {
-                    return $data->tgl_po;;
-                }
-            })
-            ->addColumn('tgl_kontrak', function ($data) {
-                if (isset($data->tgl_kontrak)) {
-                    return date('d-m-Y', strtotime($data->tgl_kontrak));
-                } else {
-                    return '';
-                }
-            })
-            ->addColumn('so', function ($data) {
-                if ($data->Pesanan) {
-                    return $data->Pesanan->so;
-                } else {
-                    return '';
-                }
-            })
-            ->addColumn('nopo', function ($data) {
-                if ($data->Pesanan) {
-                    return $data->Pesanan->no_po;
-                } else {
-                    return '';
-                }
+            ->addColumn('status', function () {
+                return '<span class="badge yellow-text">Sedang Berlangsung</span>';
             })
             ->addColumn('action', function ($d) {
                 return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr=""  data-id="' . $d->pesanan_id . '">
@@ -1093,8 +1078,35 @@ class GudangController extends Controller
                              </button>
                          </a>';
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'status', 'tgl_batas'])
             ->make(true);
+    }
+
+    function detailsale($id) {
+        $data = DetailPesananProduk::with('noseridetailpesanan')->where('detail_pesanan_id', $id)->get();
+        return datatables()->of($data)
+        ->addIndexColumn()
+        ->addColumn('nama_produk', function ($data) {
+            if (empty($data->gudangbarangjadi->nama)) {
+                return $data->gudangbarangjadi->produk->nama;
+            } else {
+                return $data->gudangbarangjadi->nama;
+            }
+        })
+        ->addColumn('jumlah', function ($data) {
+            return $data->detailpesanan->jumlah;
+        })
+        ->addColumn('tipe', function ($data) {
+            return $data->gudangbarangjadi->produk->nama;
+        })
+        ->addColumn('merk', function ($data) {
+            return $data->gudangbarangjadi->produk->merk;
+        })
+        ->addColumn('button', function ($data) {
+            return '<a type="button" class="noserishow" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
+        })
+        ->rawColumns(['button'])
+        ->make(true);
     }
 
     function outSO()

@@ -319,8 +319,8 @@
                 success: function(res) {
                     console.log(res);
                     $('span#so').text(res.so);
-                    $('span#po').text(res.no_po);
-                    $('span#akn').text(res.ekatalog.no_paket);
+                    $('span#po').text(res.po);
+                    $('span#akn').text(res.akn);
                 }
         });
         $('#addProduk').DataTable().destroy();

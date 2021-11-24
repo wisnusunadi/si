@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailEkatalog;
+use App\Models\DetailPesananProduk;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
@@ -149,60 +150,27 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Ekatalog::with('Pesanan')->get());
-        $Spa = collect(Spa::with('Pesanan')->get());
-        $Spb = collect(Spb::with('Pesanan')->get());
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('jenis', function ($data) {
-                $name =  $data->getTable();
-                if ($name == 'ekatalog') {
-                    return 'E-Catalogue';
-                } else if ($name == 'spa') {
-                    return 'SPA';
-                } else {
-                    return 'SPB';
-                }
+            ->addColumn('so', function ($data) {
+                return $data->Pesanan->so;
+            })
+            ->addColumn('no_po', function ($data) {
+                return $data->Pesanan->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
                 return $data->Customer->nama;
-            })
-            ->addColumn('no_paket', function ($data) {
-                if (isset($data->no_paket)) {
-                    return $data->no_paket;
-                } else {
-                    return '';
-                }
-            })
-            ->addColumn('tgl_order', function ($data) {
-                if (isset($data->tgl_buat)) {
-                    return $data->tgl_buat;
-                } else {
-                    return $data->tgl_po;;
-                }
-            })
-            ->addColumn('tgl_kontrak', function ($data) {
-                if (isset($data->tgl_kontrak)) {
-                    return date('d-m-Y', strtotime($data->tgl_kontrak));
-                } else {
-                    return '';
-                }
-            })
-            ->addColumn('so', function ($data) {
-                if ($data->Pesanan) {
-                    return $data->Pesanan->so;
-                } else {
-                    return '';
-                }
-            })
-            ->addColumn('nopo', function ($data) {
-                if ($data->Pesanan) {
-                    return $data->Pesanan->no_po;
-                } else {
-                    return '';
-                }
             })
             ->addColumn('status', function ($data) {
                 return '<span class="badge badge-danger">Produk belum disiapkan</span>';
@@ -242,55 +210,50 @@ class ProduksiController extends Controller
 
     function getDetailSO(Request $request, $id)
     {
-        $data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
-        $l = [];
-        $v = 0;
-        $i = 0;
-        foreach ($data as $s) {
-            foreach ($s->GudangBarangJadi as $k) {
-                $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
-                $l[$v]['nama_produk'] = $k->produk->nama;
-                $l[$v]['merk'] = $k->produk->merk;
-                $l[$v]['jumlah'] = $k->pivot->jumlah;
-                $v++;
+        $data = DetailPesananProduk::with('noseridetailpesanan')->where('detail_pesanan_id', $id)->get();
+        return datatables()->of($data)
+        ->addIndexColumn()
+        ->addColumn('produk', function ($data) {
+            if (empty($data->gudangbarangjadi->nama)) {
+                return $data->gudangbarangjadi->produk->nama.'<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id[]" value="'.$data->gudang_barang_jadi_id.'">';
+            } else {
+                return $data->gudangbarangjadi->nama.'<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id[]" value="'.$data->gudang_barang_jadi_id.'">';
             }
-        }
-        // $i++;
-        return datatables()->of($l)
-            ->addColumn('produk', function ($data) {
-
-                return $data['nama_produk'].'<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id[]" value="'.$data['id'].'">';
-            })
-            ->addColumn('ids', function ($d) {
-                return $d['id'];
-            })
-            ->addColumn('qty', function ($data) {
-                return $data['jumlah'].'<input type="hidden" class="jumlah" name="qty[]" id="qty" value="'.$data['jumlah'].'">';
-            })
-            ->addColumn('merk', function ($data) {
-                return $data['merk'];
-            })
-            ->addColumn('tipe', function ($data) {
-                return $data['merk'];
-            })
-            ->addColumn('action', function ($data) {
-                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data['id'] . '">
-                            <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
-                            class="fas fa-qrcode"></i> Scan Produk</button>
-                            </a>';
-            })
-            ->addColumn('status', function ($data) {
-                return '<span class="badge badge-danger">Belum Diinput</span>';
-            })
-            ->rawColumns(['action', 'status', 'produk', 'qty'])
-            ->make(true);
-        // return $data;
+        })
+        ->addColumn('qty', function ($data) {
+            return $data->detailpesanan->jumlah.'<input type="hidden" class="jumlah" name="qty[]" id="qty" value="'.$data->detailpesanan->jumlah.'">';
+        })
+        ->addColumn('tipe', function ($data) {
+            return $data->gudangbarangjadi->produk->nama;
+        })
+        ->addColumn('merk', function ($data) {
+            return $data->gudangbarangjadi->produk->merk;
+        })
+        ->addColumn('ids', function ($d) {
+                    return $d->gudang_barang_jadi_id;
+                })
+        ->addColumn('action', function ($data) {
+            return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data['id'] . '">
+                        <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
+                        class="fas fa-qrcode"></i> Scan Produk</button>
+                        </a>';
+        })
+        ->addColumn('status', function ($data) {
+            return '<span class="badge badge-danger">Belum Diinput</span>';
+        })
+        ->rawColumns(['action', 'status', 'produk', 'qty'])
+        ->make(true);
     }
 
     function headerSo($id)
     {
         $data = Pesanan::with('Ekatalog')->find($id);
-        return $data;
+        return response()->json([
+            'so' => $data->so,
+            'po' => $data->no_po,
+            'akn' => $data->Ekatalog->no_paket,
+            'customer' => $data->Ekatalog->Customer->nama,
+        ]);
     }
 
     function getHistorybyProduk()

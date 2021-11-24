@@ -136,6 +136,7 @@ Route::prefix('/transaksi')->group(function () {
     Route::get('/all', [\App\Http\Controllers\GudangController::class, 'getAllTransaksi']);
     Route::get('/history', [\App\Http\Controllers\GudangController::class, 'getHistorybyProduk']);
     Route::get('/history-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailHistory']);
+    Route::get('/history-detail-seri/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailHistorySeri']);
     Route::get('/all-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailAll']);
 });
 
@@ -170,7 +171,9 @@ Route::prefix('/dashboard-gbj')->group(function() {
     Route::post('/terimaall', [\App\Http\Controllers\GudangController::class, 'getPenerimaanAll']);
 
     // penjualan
+    Route::post('/list/h', [\App\Http\Controllers\GudangController::class, 'he3']);
     Route::post('/list', [\App\Http\Controllers\GudangController::class, 'list_tf3']);
+    Route::get('/list-detail/{id}', [\App\Http\Controllers\GudangController::class, 'detailsale']);
 });
 
 Route::prefix('/tfp')->group(function () {

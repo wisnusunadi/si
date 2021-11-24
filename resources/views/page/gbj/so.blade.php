@@ -350,8 +350,9 @@
             success: function(res) {
                 console.log(res);
                 $('span#soo').text(res.so);
-                $('span#poo').text(res.no_po);
-                $('span#aknn').text(res.ekatalog.no_paket);
+                $('span#poo').text(res.po);
+                $('span#aknn').text(res.akn);
+                $('span#instansii').text(res.customer);
             }
         });
         $('.add-produk').DataTable().destroy();
@@ -414,8 +415,9 @@
             success: function(res) {
                 console.log(res);
                 $('span#so').text(res.so);
-                $('span#po').text(res.no_po);
-                $('span#akn').text(res.ekatalog.no_paket);
+                $('span#po').text(res.po);
+                $('span#akn').text(res.akn);
+                $('span#instansi').text(res.customer);
             }
         });
         $('#view-produk').DataTable().destroy();

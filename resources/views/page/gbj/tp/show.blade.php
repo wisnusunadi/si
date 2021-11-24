@@ -63,6 +63,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
+                @foreach($data as $d)
                 <div class="card mb-3">
                     <div class="row no-gutters">
                       <div class="col-md-4">
@@ -293,7 +294,7 @@
 @stop
 @section('adminlte_js')
 <script>
-    $('.table-seri').DataTable({});
+
     // $('.tableProdukView').DataTable({
     //     searching: false,
     //     "lengthChange": false
@@ -317,6 +318,25 @@
     function detailProduk() {
         $('.modalDetail').modal('show');
     }
+
+    $(document).on('click', '.editmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        $('.table-seri').DataTable({
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {
+                url: "/api/transaksi/history-detail-seri/" + id,
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'noser'},
+                {data: 'posisi'},
+            ]
+        });
+        detailProduk();
+    })
 
     $(document).ready(function () {
         var id = $('#ids').val();

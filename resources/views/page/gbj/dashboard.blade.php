@@ -98,7 +98,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transferoneday" class="card active otg" style="background-color: #E6EFFA">
                                         <div class="card-body text-center">
-                                            <h4>10</h4>
+                                            <h4 id="he1">10</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 1 Hari</p>
                                         </div>
                                     </div>
@@ -106,7 +106,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transfertwoday" class="card otg" style="background-color: #FEF7EA">
                                         <div class="card-body text-center">
-                                            <h4>50</h4>
+                                            <h4 id="he2">50</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 2 Hari</p>
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transferthreeday" class="card otg" style="background-color: #FCEDE9">
                                         <div class="card-body text-center">
-                                            <h4>60</h4>
+                                            <h4 id="he3">60</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 3 Hari</p>
                                         </div>
                                     </div>
@@ -1403,7 +1403,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="so">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1411,7 +1411,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1419,7 +1419,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1427,7 +1427,7 @@
                                     <div class="col"> <label for="">Instansi</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansi">RS. Dr. Soetomo</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1441,7 +1441,7 @@
                                             <th>Jumlah</th>
                                             <th>Tipe</th>
                                             <th>Merk</th>
-                                            <th>Status</th>
+                                            {{-- <th>Status</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1450,14 +1450,14 @@
                                             <td>100</td>
                                             <td>ABPM50</td>
                                             <td>ELITECH</td>
-                                            <td><span class="badge badge-success">Sudah Diinput</span></td>
+                                            {{-- <td><span class="badge badge-success">Sudah Diinput</span></td> --}}
                                         </tr>
                                         <tr>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                             <td>100</td>
                                             <td>RGB</td>
                                             <td>ELITECH</td>
-                                            <td><span class="badge badge-danger">Belum Diinput</span></td>
+                                            {{-- <td><span class="badge badge-danger">Belum Diinput</span></td> --}}
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1572,6 +1572,15 @@
         })
 
         $.ajax({
+            url: "/api/dashboard-gbj/list/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#he3').text(res);
+            }
+        })
+
+        $.ajax({
             url: '/api/gbj/sel-layout',
             type: 'GET',
             dataType: 'json',
@@ -1609,7 +1618,7 @@
                 {data: 'DT_RowIndex'},
                 {data: 'so'},
                 {data: 'nama_customer'},
-                {data: 'tgl_kontrak'},
+                {data: 'tgl_batas'},
                 {data: 'action'},
             ]
         });
@@ -1754,9 +1763,10 @@
             },
             columns: [
                 {data: 'DT_RowIndex'},
+                {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-                {data: 'tgl_masuk'},
+
                 // {data: 'action'},
             ]
         });
@@ -1770,9 +1780,10 @@
             },
             columns: [
                 {data: 'DT_RowIndex'},
+                {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-                {data: 'tgl_masuk'},
+
                 // {data: 'action'},
             ]
         });
@@ -1786,9 +1797,10 @@
             },
             columns: [
                 {data: 'DT_RowIndex'},
+                {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-                {data: 'tgl_masuk'},
+
                 // {data: 'action'},
             ]
         });
@@ -1802,9 +1814,10 @@
             },
             columns: [
                 {data: 'DT_RowIndex'},
+                {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-                {data: 'tgl_masuk'},
+
                 // {data: 'action'},
             ]
         });
@@ -1814,58 +1827,36 @@
             var id = $(this).data('id');
             console.log(id);
 
+            $.ajax({
+                url: "/api/tfp/header-so/" +id,
+                success: function(res) {
+                    console.log(res);
+                    $('span#so').text(res.so);
+                    $('span#po').text(res.po);
+                    $('span#akn').text(res.akn);
+                    $('span#instansi').text(res.customer);
+                }
+            });
+            $('#view-produk').DataTable().destroy();
+            $('#view-produk').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                ajax: {
+                    url: "/api/dashboard-gbj/list-detail/" + id,
+                },
+                columns: [
+                    { data: "nama_produk" },
+                    { data: "jumlah" },
+                    { data: "tipe" },
+                    { data: "merk" },
+                ],
+                "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                    }
+            });
             modalSO();
         })
-
-        // $(document).on('click', '.editmodal2', function() {
-        //     // console.log('ok1');
-        //     var id = $(this).data('id');
-        //     console.log(id);
-        //     $('.table-seri').DataTable().destroy();
-        //     $('.table-seri').DataTable({
-        //         processing: true,
-        //         serverSide: true,
-        //         autoWidth: false,
-        //         ajax: {
-        //             url: "/api/dashboard-gbj/noseri",
-        //             type: "post",
-        //             data: { id: id},
-        //         },
-        //         column: [
-        //             {data: "noser"},
-        //             {data: "posisi"},
-        //         ],
-        //         "language": {
-        //                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        //             }
-        //     });
-        //     modalPenerimaan();
-        // })
-
-        // $(document).on('click', '.editmodal3', function() {
-        //     // console.log('ok1');
-        //     var id = $(this).data('id');
-        //     console.log(id);
-        //     $('.table-seri').DataTable().destroy();
-        //     $('.table-seri').DataTable({
-        //         processing: true,
-        //         serverSide: true,
-        //         autoWidth: false,
-        //         ajax: {
-        //             url: "/api/dashboard-gbj/noseri",
-        //             type: "post",
-        //             data: { id: id},
-        //         },
-        //         column: [
-        //             {data: "noser"},
-        //             {data: "posisi"},
-        //         ],
-        //         "language": {
-        //                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        //             }
-        //     });
-        //     modalPenerimaan();
-        // })
 
         $(document).on('click', '.editmodal', function() {
             // console.log('ok1');
