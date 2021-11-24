@@ -46,6 +46,7 @@ class MasterController extends Controller
                 return $data->provinsi->nama;
             })
             ->addColumn('button', function ($data) {
+                $divisi_id = Auth::user()->divisi->id;
                 $datas = "";
                 $datas .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -55,12 +56,14 @@ class MasterController extends Controller
                       Detail
                     </button>
                 </a>';
-                $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
+                if ($divisi_id == "26") {
+                    $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
                         <button class="dropdown-item" type="button" >
                         <i class="fas fa-pencil-alt"></i>
                         Edit
                         </button>
                     </a>';
+                }
                 $datas .= '</div>';
                 return $datas;
             })

@@ -44,6 +44,10 @@
         max-width: 13ch;
     }
 
+    .hide {
+        display: none;
+    }
+
     .dropdown-toggle:hover {
         color: #4682B4;
     }
@@ -144,6 +148,7 @@
     <div class="container-fluid">
         <div class="col-12">
             <div class="row">
+                <div id="auth" class="hide">{{Auth::user()->divisi->id}}</div>
                 <div class="col-12">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -163,12 +168,15 @@
                         <div class="tab-pane fade show active card-body" id="semua-penjualan" role="tabpanel" aria-labelledby="semua-penjualan-tab">
                             <div class="row">
                                 <div class="col-12">
+                                    @if(Auth::user()->divisi->id == "26")
+
                                     <span class="float-right filter">
                                         <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
                                                 <i class="fas fa-plus"></i> Tambah
                                             </button>
                                         </a>
                                     </span>
+                                    @endif
                                     <span class="float-right filter">
                                         <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-filter"></i> Filter
@@ -908,7 +916,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/ekatalog/data/' + 0,
+                'url': '/penjualan/penjualan/ekatalog/data/' + 0,
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -935,8 +943,6 @@
                     data: 'nopo',
 
                 },
-
-
                 {
                     data: 'tgl_buat',
 
@@ -964,7 +970,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/spa/data/',
+                'url': '/penjualan/penjualan/spa/data/',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -1007,7 +1013,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/spb/data/',
+                'url': '/penjualan/penjualan/spb/data/',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

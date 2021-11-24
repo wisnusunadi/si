@@ -68,6 +68,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>
+                            @if(isset($data->Pesanan))
                             @foreach($data->pesanan->detailpesanan as $e)
                             <div class="card removeshadow">
                                 <div class="card-body">
@@ -91,6 +92,7 @@
                                         <div class="col-12">
                                             <div class="text-muted">Variasi</div>
                                             <ul class="list-group">
+                                                @isset($e->DetailPesananProduk)
                                                 @foreach($e->DetailPesananProduk as $l)
                                                 <li class="list-group-item">
                                                     <b>
@@ -102,13 +104,16 @@
                                                     </b>
                                                 </li>
                                                 @endforeach
+                                                @endif
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             @endforeach
+
                             <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
+                            @endif
                             <!-- <table class="table" id="detailtabel"> -->
                             <!-- <thead>
                                     <tr>

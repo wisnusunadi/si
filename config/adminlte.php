@@ -1270,6 +1270,95 @@ return [
             'header' => 'Transfer',
             'auth' => [12],
         ],
+
+        //DIREKSI
+        [
+            'text'    => 'Penjualan',
+            'icon'    => 'fas fa-mail-bulk',
+            'auth' => [2],
+            'submenu' => [
+                [
+                    'text' => 'Penjualan',
+                    'url'  => '/penjualan/penjualan/show',
+                    'icon' => 'far fa-circle',
+                    'auth' => [2]
+                ],
+                [
+                    'text' => 'Customer',
+                    'url'  => '/penjualan/customer/show',
+                    'icon' => 'far fa-circle',
+                    'auth' => [2]
+                ],
+            ],
+        ],
+        [
+            'text'    => 'QC',
+            'icon'    => 'fas fa-clipboard-check',
+            'auth' => [2],
+            'submenu' => [
+                [
+                    'text' => 'Sales Order',
+                    'icon' => 'far fa-circle',
+                    'url' => '/qc/so/show',
+                    'auth' => [2],
+                ],
+                [
+                    'text' => 'Riwayat Pengujian',
+                    'icon' => 'far fa-circle',
+                    'url' => '/qc/so/riwayat/show',
+                    'auth' => [2],
+                ],
+            ],
+        ],
+        [
+            'text'    => 'Logistik',
+            'icon'    => 'fas fa-shipping-fast',
+            'auth' => [2],
+            'submenu' => [
+                [
+                    'text' => 'Pengiriman',
+                    'icon' => 'far fa-circle',
+                    'url' => '/logistik/pengiriman/show',
+                    'auth' => [2],
+                ],
+                [
+                    'text' => 'Riwayat Pengiriman',
+                    'icon' => 'far fa-circle',
+                    'url' => '/logistik/pengiriman/riwayat/show',
+                    'auth' => [2],
+                ],
+            ],
+        ],
+        [
+            'text'    => 'DC',
+            'icon'    => 'fas fa-certificate',
+            'auth' => [2],
+            'submenu' => [
+                [
+                    'text' => 'COO',
+                    'icon' => 'far fa-circle',
+                    'url' => '/dc/coo/show',
+                    'auth' => [2],
+                ],
+            ],
+        ],
+
+        [
+            'text'    => 'After Sales',
+            'icon'    => 'fas fa-headset',
+            'auth' => [2],
+            'submenu' => [
+                [
+                    'text' => 'Lacak',
+                    'icon' => 'far fa-circle',
+                    'url' => '/penjualan/lacak/show',
+                    'auth' => [2],
+                ],
+            ],
+        ],
+
+
+
         [
             'text' => 'Transfer Produk',
             'url' => 'gk/transfer',

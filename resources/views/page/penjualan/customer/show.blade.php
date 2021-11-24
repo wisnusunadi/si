@@ -90,11 +90,13 @@
                             <div class="card-body">
                                 <div class="row" style="margin-bottom:10px;">
                                     <div class="col-12">
+                                        @if(Auth::user()->divisi->id == "26")
                                         <span class="float-right filter">
                                             <a href="{{route('penjualan.customer.create')}}"><button class="btn btn-outline-info">
                                                     <i class="fas fa-plus"></i> Tambah
                                                 </button></a>
                                         </span>
+                                        @endif
                                         <span class="dropdown float-right filter">
                                             <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
                                                 <i class="fas fa-filter"></i> Filter
@@ -226,7 +228,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/customer/data/' + 0,
+                'url': '/penjualan/customer/data/' + 0,
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

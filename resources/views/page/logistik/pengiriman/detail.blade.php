@@ -188,7 +188,9 @@
                                         <th>Jumlah</th>
                                         <th>No Seri</th>
                                         <th>Keterangan</th>
+                                        @if(Auth::user()->divisi->id == "15")
                                         <th>Aksi</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -198,10 +200,12 @@
                                         <td>10</td>
                                         <td class="minimizechar wb">MTB0129021803, MTB0129021801, MTB0129021802, MTB0129021804, MTB0129021805, MTB0129021807, MTB0129021811, MTB0129021816, MTB0129021823, MTB0129021817</td>
                                         <td>-</td>
+                                        @if(Auth::user()->divisi->id == "15")
                                         <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('logistik.pengiriman.noseri', ['id' => '1'])}}" data-id="1">
                                                 <div><i class="fas fa-eye"></i></div>
                                                 <div><small>No Seri</small></div>
                                             </a></td>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <td>2</td>
@@ -209,11 +213,13 @@
                                         <td>1</td>
                                         <td class="minimizechar wb">PFD0129021803</td>
                                         <td>-</td>
+                                        @if(Auth::user()->divisi->id == "15")
                                         <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('logistik.pengiriman.noseri', ['id' => '1'])}}" data-id="1">
                                                 <div><i class="fas fa-eye"></i></div>
                                                 <div><small>No Seri</small></div>
                                             </a>
                                         </td>
+                                        @endif
                                     </tr>
                                 </tbody>
                             </table>

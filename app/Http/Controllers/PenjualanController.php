@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Validator;
 use League\Fractal\Resource\Item;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 use function PHPUnit\Framework\assertIsNotArray;
 
@@ -500,6 +501,7 @@ class PenjualanController extends Controller
 
     public function get_data_ekatalog($value)
     {
+
         $x = explode(',', $value);
 
         if ($value == 0 || $value == 'kosong') {
@@ -579,6 +581,7 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
+                $divisi_id = Auth::user()->divisi->id;
                 $return = "";
                 $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -588,30 +591,32 @@ class PenjualanController extends Controller
                       Details
                     </button>
                 </a>';
-                if ($data->log == "penjualan") {
-                    $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
+                if ($divisi_id == "26") {
+                    if ($data->log == "penjualan") {
+                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                         <i class="fas fa-pencil-alt"></i>
                         Edit
                         </button>
                     </a>';
 
-                    if ($data->status == 'sepakat') {
-                        if ($data->Pesanan == '') {
-                            $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
+                        if ($data->status == 'sepakat') {
+                            if ($data->Pesanan == '') {
+                                $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
                             <button class="dropdown-item" type="button" >
                             <i class="fas fa-plus"></i>
                             Tambah PO
                             </button>
                         </a>';
-                        } else {
-                            if ($data->Pesanan->so == '') {
-                                $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
+                            } else {
+                                if ($data->Pesanan->so == '') {
+                                    $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
                                     <button class="dropdown-item" type="button" >
                                     <i class="fas fa-plus"></i>
                                     Tambah PO
                                     </button>
                                 </a>';
+                                }
                             }
                         }
                     }
@@ -674,7 +679,7 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-
+                $divisi_id = Auth::user()->divisi->id;
                 $return = "";
                 $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -684,17 +689,19 @@ class PenjualanController extends Controller
                       Details
                     </button>
                 </a>';
-                if (!empty($data->Pesanan)) {
-                    if ($data->log == "penjualan" || $data->log == "po") {
-                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
+                if ($divisi_id == "26") {
+                    if (!empty($data->Pesanan)) {
+                        if ($data->log == "penjualan" || $data->log == "po") {
+                            $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
                         </button>
                     </a>';
-                    }
-                } else {
-                    $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
+                        }
+                    } else {
+
+                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
@@ -706,6 +713,7 @@ class PenjualanController extends Controller
                         Tambah PO
                         </button>
                     </a>';
+                    }
                 }
                 $return .= '</div>';
                 return $return;
@@ -765,45 +773,44 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                if ($data->Pesanan) {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
-                    <button class="dropdown-item" type="button">
-                          <i class="fas fa-search"></i>
-                          Details
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
+                $divisi_id = Auth::user()->divisi->id;
+                $return = "";
+                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
+                <button class="dropdown-item" type="button">
+                      <i class="fas fa-search"></i>
+                      Details
+                    </button>
+                </a>';
+                if ($divisi_id == "26") {
+                    if (!empty($data->Pesanan)) {
+                        if ($data->log == "penjualan" || $data->log == "po") {
+                            $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
                         </button>
-                    </a>
-                    </div>';
-                } else {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
-                    <button class="dropdown-item" type="button">
-                          <i class="fas fa-search"></i>
-                          Details
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
+                    </a>';
+                        }
+                    } else {
+
+                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                           <i class="fas fa-pencil-alt"></i>
                           Edit
                         </button>
                     </a>
                     <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
-                    <button class="dropdown-item" type="button" >
-                    <i class="fas fa-plus"></i>
-                      Tambah PO
-                    </button>
-                </a>
-                    </div>';
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-plus"></i>
+                        Tambah PO
+                        </button>
+                    </a>';
+                    }
                 }
+                $return .= '</div>';
+                return $return;
             })
             ->rawColumns(['button', 'status'])
             ->make(true);

@@ -213,6 +213,7 @@
                                                         Detail
                                                     </button>
                                                 </a>
+                                                @if(Auth::user()->divisi->id == "15")
                                                 <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'dalam_pengiriman'])}}" data-id="">
                                                     <button class="dropdown-item" type="button">
                                                         <i class="fas fa-pencil-alt"></i>
@@ -225,6 +226,7 @@
                                                         Laporan PDF
                                                     </button>
                                                 </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -240,10 +242,12 @@
                                         </td>
                                         <td class="minimizechar">Bapak Hutapea</td>
                                         <td class="minimizechar">Sumatera Utara</td>
-                                        <td><a href="" id="pengirimanhref">
+                                        <td>@if(Auth::user()->divisi->id == "15")
+                                            <a href="" id="pengirimanhref">
                                                 <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
                                                 <div><small class="text-muted">Pengiriman</small></div>
                                             </a>
+                                            @endif
                                         </td>
                                         <td>
                                             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -254,13 +258,16 @@
                                                         Detail
                                                     </button>
                                                 </a>
+                                                @if(Auth::user()->divisi->id == "15")
                                                 <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
                                                     <button class="dropdown-item" type="button">
                                                         <i class="fas fa-pencil-alt"></i>
                                                         Edit
                                                     </button>
                                                 </a>
+                                                @endif
                                             </div>
+
                                         </td>
                                     </tr>
                                     <tr>
@@ -275,10 +282,11 @@
                                         </td>
                                         <td class="minimizechar">Pemerintah Kab Badung</td>
                                         <td class="minimizechar">Bali</td>
-                                        <td><a href="" id="pengirimanhref">
+                                        <td>
+                                            @if(Auth::user()->divisi->id == "15")<a href="" id="pengirimanhref">
                                                 <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
                                                 <div><small class="text-muted">Pengiriman</small></div>
-                                            </a>
+                                            </a>@endif
                                         </td>
                                         <td>
                                             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -289,12 +297,14 @@
                                                         Detail
                                                     </button>
                                                 </a>
+                                                @if(Auth::user()->divisi->id == "15")
                                                 <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
                                                     <button class="dropdown-item" type="button">
                                                         <i class="fas fa-pencil-alt"></i>
                                                         Edit
                                                     </button>
                                                 </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
