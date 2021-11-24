@@ -167,6 +167,7 @@ return [
         /*
          * Package Service Providers...
          */
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -220,7 +221,9 @@ return [
         'RateLimiter' => Illuminate\Support\Facades\RateLimiter::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
         // 'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Request' => Illuminate\Support\Facades\Request::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
         'Response' => Illuminate\Support\Facades\Response::class,
         'Route' => Illuminate\Support\Facades\Route::class,
         'Schema' => Illuminate\Support\Facades\Schema::class,

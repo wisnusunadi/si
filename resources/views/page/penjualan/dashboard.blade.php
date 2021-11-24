@@ -25,12 +25,24 @@
         white-space: nowrap;
     }
 
+    .nowrap {
+        white-space: nowrap;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
     #urgent {
         color: red;
     }
 
     #warning {
         color: #FFC700;
+    }
+
+    #info {
+        color: #3a7bb0;
     }
 
     .fa-search:hover {
@@ -67,10 +79,65 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <h4>Penjualan 2021</h4>
+                                    <h4></h4>
+                                    <div class="chart">
+                                        <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    </div>
                                 </div>
-                                <div class="chart">
-                                    <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box purple-text">
+                                        <div class="inner">
+                                            <h3>3</h3>
+                                            <p>AKN Tanpa SO</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-tasks"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box orange-text">
+                                        <div class="inner">
+                                            <h3>4</h3>
+                                            <p>SO Belum Diproses Gudang</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-boxes"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box yellow-text">
+                                        <div class="inner">
+                                            <h3>2</h3>
+                                            <p>SO Belum Diproses QC</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <div class="small-box green-text">
+                                        <div class="inner">
+                                            <h3>2</h3>
+                                            <p>SO Belum Diproses Logistik</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +150,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <h4>Batas Pengiriman</h4>
+                                    <h4>Batas Pengiriman E-Catalogue</h4>
                                 </div>
                             </div>
                             <div class="row">
@@ -135,6 +202,56 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>Lewat Batas Penyelesaian Per Divisi</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="divisitable" style="width:100%;">
+                                            <thead class="align-center">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>Divisi</th>
+                                                    <th>Batas Selesai</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="nowrap align-center">1</td>
+                                                    <td class="nowrap align-center">SOSPA102100001</td>
+                                                    <td class="align-center"><span class="badge yellow-text">Logistik</span></td>
+                                                    <td class="align-center">
+                                                        <div>06-11-2021</div>
+                                                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 5 Hari</div>
+                                                    </td>
+                                                    <td class="align-center"><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="nowrap align-center">2</td>
+                                                    <td class="nowrap align-center">SOSPA102100001</td>
+                                                    <td class="align-center"><span class="badge orange-text">QC</span></td>
+                                                    <td class="align-center">
+                                                        <div>04-11-2021</div>
+                                                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 7 Hari</div>
+                                                    </td>
+                                                    <td class="align-center"><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""><i class="fas fa-search"></i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -152,10 +269,10 @@
     </div>
 </div>
 @stop
-
 @section('adminlte_js')
 <script>
     $(function() {
+        $('#divisitable').DataTable({});
         var pengirimantable = $('#pengirimantable').DataTable({
             processing: true,
             serverSide: true,
@@ -177,19 +294,19 @@
                     searchable: false
                 },
                 {
-                    data: 'DT_RowIndex',
+                    data: 'so',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
                 },
                 {
-                    data: 'DT_RowIndex',
+                    data: 'no_po',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
                 },
                 {
-                    data: 'DT_RowIndex',
+                    data: 'status',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
@@ -200,7 +317,7 @@
 
                 },
                 {
-                    data: 'DT_RowIndex',
+                    data: 'button',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
@@ -212,10 +329,14 @@
 <script>
     $(function() {
         $(document).on('click', '.detailmodal', function(event) {
+
             event.preventDefault();
             var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            var label = $(this).data("target");
+
             $.ajax({
-                url: "",
+                url: href,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -223,7 +344,14 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    $("#detailform").attr("action", href);
+                    if (label == 'ekatalog') {
+                        detailtabel_ekatalog(id);
+                    } else if (label == 'spa') {
+                        detailtabel_spa(id);
+                    } else {
+                        detailtabel_spb(id);
+                    }
+
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -236,70 +364,156 @@
                 timeout: 8000
             })
         });
+
+        function detailtabel_ekatalog(id) {
+            $('#detailtabel').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/ekatalog/paket/detail/' + id,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
+
+                    },
+                    {
+                        data: 'harga',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'jumlah',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'total',
+                        render: $.fn.dataTable.render.number(',', '.', 2),
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api(),
+                        data;
+                    // converting to interger to find total
+                    var intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+                    // computing column Total of the complete result 
+                    var jumlah_pesanan = api
+                        .column(3)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    // computing column Total of the complete result 
+                    var total_pesanan = api
+                        .column(4)
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                    $(api.column(0).footer()).html('Total');
+                    $(api.column(3).footer()).html('Total');
+                    $(api.column(4).footer()).html(num_for(total_pesanan));
+                },
+            })
+        }
+
     });
 </script>
 <script>
-    // var ctx = document.getElementById("areaChart");
-    // var tensi_sistolik_chart = new Chart(ctx, {
-    //     type: 'line',
-    //     data: {
-    //         labels: [],
-    //         datasets: [{
-    //             label: 'Sistolik',
-    //             data: [],
-    //             borderWidth: 2,
-    //             backgroundColor: 'transparent',
-    //             borderColor: 'red',
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             xAxes: [],
-    //             yAxes: [{
-    //                 ticks: {
-    //                     beginAtZero: true
-    //                 }
-    //             }]
-    //         }
-    //     }
-    // });
-    var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
+    $(document).ready(function() {
+        $.ajax({
+            url: "/api/penjualan/chart",
+            method: "GET",
+            success: function(data) {
+                console.log(data.ekatalog_graph);
+                var ctx = document.getElementById("myChart");
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+                        datasets: [{
+                                label: "E-Catalogue",
+                                backgroundColor: "#7D6378",
+                                data: [data.ekatalog_graph[1].count, data.ekatalog_graph[2].count, data.ekatalog_graph[3].count, data.ekatalog_graph[4].count, data.ekatalog_graph[5].count, data.ekatalog_graph[6].count, data.ekatalog_graph[7].count, data.ekatalog_graph[8].count, data.ekatalog_graph[9].count, data.ekatalog_graph[10].count, data.ekatalog_graph[11].count, data.ekatalog_graph[12].count],
+                                borderColor: '#7D6378',
+                            },
+                            {
+                                label: "SPA",
+                                backgroundColor: "#EA8B1B",
+                                data: [data.spa_graph[1].count, data.spa_graph[2].count, data.spa_graph[3].count, data.spa_graph[4].count, data.spa_graph[5].count, data.spa_graph[6].count, data.spa_graph[7].count, data.spa_graph[8].count, data.spa_graph[9].count, data.spa_graph[10].count, data.spa_graph[11].count, data.spa_graph[12].count],
+                                borderColor: '#EA8B1B',
+                            },
+                            {
+                                label: "SPB",
+                                backgroundColor: "#5F7A90",
+                                data: [data.spb_graph[1].count, data.spb_graph[2].count, data.spb_graph[3].count, data.spb_graph[4].count, data.spb_graph[5].count, data.spb_graph[6].count, data.spb_graph[7].count, data.spb_graph[8].count, data.spb_graph[9].count, data.spb_graph[10].count, data.spb_graph[11].count, data.spb_graph[12].count],
+                                borderColor: '#5F7A90',
+                            }
+                        ]
+                    },
+                    options: {
+                        animations: {
+                            tension: {
+                                duration: 4000,
+                                easing: 'linear',
+                                from: 1,
+                                to: 0,
+                                loop: true
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Grafik Penjualan Tahunan'
+                            }
+                        },
+                        scales: {
+
+                            // y: { // defining min and max so hiding the dataset does not change scale range
+                            //     min: 0,
+                            //     max: 2,
+                            //     stepSize: 1,
+                            // }
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }]
+                });
             }
-        }
+        });
     });
+</script>
+<script>
+
 </script>
 
 @stop

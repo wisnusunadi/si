@@ -29,13 +29,17 @@ class GudangBarangJadi extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id');
     }
-
+    public function DetailPesananProduk()
+    {
+        return $this->hasMany(DetailPesananProduk::class);
+    }
     function Layout()
     {
         return $this->belongsTo(Layout::class, 'layout_id');
     }
 
-     function satuan() {
+    function satuan()
+    {
         return $this->belongsTo(Satuan::class, 'satuan_id');
     }
 

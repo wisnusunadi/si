@@ -15,6 +15,22 @@
     .align-right {
         text-align: right;
     }
+
+    .select2 {
+        width: 100% !important;
+    }
+
+    legend {
+        font-size: 14px;
+    }
+
+    filter {
+        margin: 5px;
+    }
+
+    .blue-bg {
+        background-color: #c8daea;
+    }
 </style>
 @stop
 
@@ -26,17 +42,17 @@
                 <div class="card-title">Form Tambah Data</div>
             </div>
             <div class="card-body">
-                @if(session()->has('error') || count($errors) > 0 )
+                @if(Session::has('error') || count($errors) > 0 )
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Gagal menambahkan!</strong> Periksa
+                    <strong>{{Session::get('error')}}</strong> Periksa
                     kembali data yang diinput
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                @elseif(session()->has('success'))
+                @elseif(Session::has('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Berhasil menambahkan data</strong>,
+                    <strong>{{Session::get('success')}}</strong>,
                     Terima kasih
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -44,7 +60,8 @@
                 </div>
                 @endif
                 <div class="content">
-                    <form method="post" action="/api/penjualan/create">
+                    <form method="post" action="{{route('penjualan.penjualan.store')}}">
+                        {{csrf_field()}}
                         <div class="row d-flex justify-content-center">
                             <div class="col-10">
                                 <h4>Info Customer</h4>
@@ -126,6 +143,24 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
+                                                <div class="col-7">
+                                                    <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" />
+                                                    <div class="invalid-feedback" id="msgalamatinstansi">
+                                                        @if($errors->has('alamatinstansi'))
+                                                        {{ $errors->first('alamatinstansi')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
+                                                <div class="col-7">
+                                                    <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
                                                 <div class="col-7">
                                                     <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
@@ -136,10 +171,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="form-group row">
                                                 <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
                                                 <div class="col-5 col-form-label">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
+                                                        <label class="form-check-label" for="satuan4">Draft</label>
+                                                    </div>
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
                                                         <label class="form-check-label" for="satuan1">Sepakat</label>
@@ -152,6 +190,7 @@
                                                         <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
                                                         <label class="form-check-label" for="satuan3">Batal</label>
                                                     </div>
+
                                                     <div class="invalid-feedback" id="msgstatus">
                                                         @if($errors->has('status'))
                                                         {{ $errors->first('status')}}
@@ -213,28 +252,6 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
-                                            <div class="col-4">
-                                                <input type="date" class="form-control col-form-label @error('nontanggal_pemesanan') is-invalid @enderror" id="nontanggal_pemesanan" name="nontanggal_pemesanan" />
-                                                <div class="invalid-feedback" id="msgnontanggal_pemesanan">
-                                                    @if($errors->has('nontanggal_pemesanan'))
-                                                    {{ $errors->first('nontanggal_pemesanan')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Sales Order</label>
-                                            <div class="col-4">
-                                                <input type="text" class="form-control col-form-label @error('no_so') is-invalid @enderror" id="no_so" name="no_so" />
-                                                <div class="invalid-feedback" id="msgno_so">
-                                                    @if($errors->has('no_so'))
-                                                    {{ $errors->first('no_so')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
                                             <div class="col-4">
                                                 <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
@@ -295,7 +312,7 @@
                                         <div class="form-group row">
                                             <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
                                             <div class="col-5">
-                                                <textarea class="form-control col-form-label" id="nonketerangan"></textarea>
+                                                <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -338,6 +355,13 @@
                                                                             <option value=""></option>
                                                                         </select>
                                                                     </div>
+                                                                    <div class="detail_produk" id="detail_produk0">
+
+
+                                                                        <div class="detail_jual" id="tes0">
+                                                                        </div>
+
+                                                                    </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
@@ -352,12 +376,18 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
-                                                                        <input type="number" class="form-control produk_harga" id="produk_harga0" name="produk_harga[]" style="width:100%;" />
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">Rp</span>
+                                                                        </div>
+                                                                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" />
                                                                     </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
-                                                                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" readonly />
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">Rp</span>
+                                                                        </div>
+                                                                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -412,7 +442,6 @@
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
-                                                                            <option value=""></option>
                                                                         </select>
                                                                     </div>
                                                                 </td>
@@ -464,7 +493,7 @@
                                     </a>
                                 </span>
                                 <span class="float-right">
-                                    <button type="submit" class="btn btn-info" id="btntambah" disabled>
+                                    <button type="submit" class="btn btn-info" id="btntambah">
                                         Tambah
                                     </button>
                                 </span>
@@ -479,7 +508,6 @@
 @stop
 
 @section('adminlte_js')
-
 <script>
     $(function() {
         select_data();
@@ -507,8 +535,6 @@
         }
 
         function reset_penjualan() {
-            $("#nontanggal_pemesanan").val("");
-            $("#no_so").val("");
             $("#no_po").val("");
             $("#tanggal_po").val("");
             $('input[type="radio"][name="do"]').prop("checked", false);
@@ -549,8 +575,8 @@
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
             } else if ($(this).val() == "spb") {
-                $("#datapart").removeClass("hide");
-                $("#dataproduk").addClass("hide");
+                $("#datapart").addClass("hide");
+                $("#dataproduk").removeClass("hide");
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
             }
@@ -564,7 +590,7 @@
                 $("#do_detail_no").removeClass("hide");
                 $("#do_detail_tgl").removeClass("hide");
             } else if ($(this).val() == "no") {
-                if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "") {
+                if ($("#no_po").val() != "" && $("#tanggal_po").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -607,8 +633,18 @@
 
         $('input[type="radio"][name="status"]').on('change', function() {
             if ($(this).val() != "") {
+                if ($(this).val() == "draft") {
+                    $("#produktable tbody").empty();
+                    $('#produktable tbody').append(trproduktable());
+                    numberRowsProduk($("#produktable"));
+                    $("#totalhargaprd").text("Rp. 0");
+                    $("#dataproduk").addClass("hide");
+                } else {
+                    $("#dataproduk").removeClass("hide");
+                }
                 if ($("#tanggal_pemesanan").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#instansi").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
                     $('#btntambah').removeAttr("disabled");
+
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
@@ -665,41 +701,19 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
-        $('#nontanggal_pemesanan').on('keyup change', function() {
-            if ($(this).val() != "") {
-                $("#msgnontanggal_pemesanan").text("");
-                $("#nontanggal_pemesanan").removeClass('is-invalid');
-                if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_so").val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
-                        $('#btntambah').removeAttr("disabled");
-                    } else {
-                        $('#btntambah').attr("disabled", true);
-                    }
-                } else {
-                    if ($("#no_so").val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "") {
-                        $('#btntambah').removeAttr("disabled");
-                    } else {
-                        $('#btntambah').attr("disabled", true);
-                    }
-                }
-            } else if ($(this).val() == "") {
-                $("#msgnontanggal_pemesanan").text("Isi Tanggal Pemesanan");
-                $("#nontanggal_pemesanan").addClass('is-invalid');
-            }
-        });
         $('#no_po').on('keyup', function() {
             if ($(this).val() != "") {
                 $("#msgno_po").text("");
                 $("#no_po").removeClass('is-invalid');
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                    if ($("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
                         $('#btntambah').attr("disabled", true);
                     }
                 } else {
 
-                    if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#tanggal_po").val() != "") {
+                    if ($("#tanggal_po").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
 
@@ -717,14 +731,13 @@
                 $("#msgtanggal_po").text("");
                 $("#tanggal_po").removeClass('is-invalid');
                 if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#no_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                    if ($("#no_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
                         $('#btntambah').removeAttr("disabled");
                     } else {
                         $('#btntambah').attr("disabled", true);
                     }
                 } else {
-
-                    if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#no_po").val() != "") {
+                    if ($("#no_po").val() != "") {
 
                         $('#btntambah').removeAttr("disabled");
                     } else {
@@ -742,7 +755,7 @@
             if ($(this).val() != "") {
                 $("#msgno_do").text("");
                 $("#no_do").removeClass('is-invalid');
-                if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#tanggal_po").val() != "" && $("#tanggal_do").val() != "") {
+                if ($("#tanggal_po").val() != "" && $("#tanggal_do").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -758,7 +771,7 @@
             if ($(this).val() != "") {
                 $("#msgtanggal_do").text("");
                 $("#tanggal_do").removeClass('is-invalid');
-                if ($("#no_so").val() != "" && $("#nontanggal_pemesanan").val() != "" && $("#no_po").val() != "" && $("#no_do").val() != "") {
+                if ($("#no_po").val() != "" && $("#no_do").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -809,11 +822,51 @@
             });
         });
 
+        $('#produktable').on('keyup change', '.variasi', function() {
+            var name = $(this).attr('name');
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
+            val = $('select[name="' + name + '"]').val();
+            id = $('select[name="' + name + '"]').attr('data-id');
+            vals = $('select[name="' + name + '"]').select2('data')[0];
+            var kebutuhan = jumlah * vals.jumlah;
+            if (vals.qt < kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang dari Permintaan');
+            } else if (vals.qt >= kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
+            }
+        })
+
+        function formatmoney(bilangan) {
+            var number_string = bilangan.toString(),
+                sisa = number_string.length % 3,
+                rupiah = number_string.substr(0, sisa),
+                ribuan = number_string.substr(sisa).match(/\d{3}/g);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            return rupiah;
+        }
+
+        function replaceAll(string, search, replace) {
+            return string.split(search).join(replace);
+        }
+
         function select_data() {
+            // $('.penjualan_produk_id').on('change', function() {
+            //     for (i = 0; i < 3; ++i) {
+            //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
+            //     }
+            // });
+
             $('.penjualan_produk_id').select2({
+                placeholder: "Pilih Produk",
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih Produk",
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -825,7 +878,8 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+
+                        //console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -839,24 +893,73 @@
             }).change(function(i) {
                 var index = $(this).attr('id');
                 var id = $(this).val();
+                console.log(index);
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
                     dataType: 'json',
-                    success: function(data) {
-                        console.log(data);
-                        $('#produk_harga' + index).val(data[0].harga);
+                    success: function(res) {
+                        $('#produk_harga' + index).val(formatmoney(res[0].harga));
+                        console.log(res);
+                        var tes = $('#detail_produk' + index);
+                        tes.empty();
+                        var datas = "";
+                        tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+                        for (var x = 0; x < res[0].produk.length; x++) {
+                            var data = [];
+                            tes.append(`<div>`);
+                            tes.append(`<div class="card-body blue-bg">
+                                        <h6>` + res[0].produk[x].nama + `</h6>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" data-attr="` + index + `` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="` + index + `` + x + `" data-id="` + x + `"></span>
+                                      </div>`);
+                            if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                                data.push({
+                                    id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                    text: res[0].produk[x].nama,
+                                    jumlah: res[0].produk[x].pivot.jumlah,
+                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                });
+                            } else {
+                                for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                    data.push({
+                                        id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                        text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                        jumlah: res[0].produk[x].pivot.jumlah,
+                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                    });
+                                }
+                            }
+                            console.log(data);
+                            $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
+                                placeholder: 'Pilih Variasi',
+                                data: data,
+                                templateResult: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                },
+                                templateSelection: function(data) {
+                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                    return $span;
+                                }
+                            });
+
+                            $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
+                            tes.append(`</div>`)
+                        }
+                        tes.append(`</fieldset>`);
+                        // tes.html(datas);
                     }
                 });
             });
-
         }
 
 
         function totalhargaprd() {
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
-                var subtotal = $(this).val();
+                var subtotal = replaceAll($(this).val(), '.', '');
+                console.log(subtotal);
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
@@ -865,25 +968,10 @@
         function totalhargapart() {
             var totalharga = 0;
             $('#parttable').find('tr .part_subtotal').each(function() {
-                var subtotal = $(this).val();
+                var subtotal = replaceAll($(this).val(), '.', '');
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargapart").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
-        }
-
-        function numberRowsProduk($t) {
-            var c = 0 - 2;
-            $t.find("tr").each(function(ind, el) {
-                $(el).find("td:eq(0)").html(++c);
-                var j = c - 1;
-                $(el).find('.penjualan_produk_id').attr('name', 'penjualan_produk_id[' + j + ']');
-                $(el).find('.penjualan_produk_id').attr('id', j);
-                $(el).find('.variasi').attr('name', 'variasi[' + j + ']');
-                $(el).find('.variasi').attr('id', 'variasi' + j);
-                $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
-                $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
-                select_data();
-            });
         }
 
         $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
@@ -892,7 +980,11 @@
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
 
             if (jumlah != "" && harga != "") {
-                subtotal.val(jumlah * harga);
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargaprd();
+            } else {
+                subtotal.val(formatmoney("0"));
                 totalhargaprd();
             }
         });
@@ -900,32 +992,82 @@
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
-
+            var ketstok = $(this).closest('tr').find('.ketstok');
+            var variasi = $(this).closest('tr').find('.variasi');
+            var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
             if (jumlah != "" && harga != "") {
-                subtotal.val(jumlah * harga);
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
                 totalhargaprd();
+                for (var i = 0; i < variasi.length; i++) {
+                    var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
+                    var kebutuhan = jumlah * variasires.jumlah;
+                    if (variasires.qt < kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang dari Permintaan');
+                    } else if (variasires.qt >= kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
+                    }
+                }
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargaprd();
+                variasi.removeClass('is-invalid');
+                ketstok.text('');
             }
         });
-
         $("#produktable").on('keyup change', '.produk_harga', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
             if (jumlah != "" && harga != "") {
-                subtotal.val(jumlah * harga);
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargaprd();
+            } else {
+                subtotal.val(formatmoney("0"));
                 totalhargaprd();
             }
         });
 
-        $('#addrowproduk').on('click', function() {
-            $('#produktable tbody tr:last').after(`<tr>
+        //PRODUK TABLE
+        function numberRowsProduk($t) {
+            var c = 0 - 2;
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.penjualan_produk_id').attr('name', 'penjualan_produk_id[' + j + ']');
+                $(el).find('.penjualan_produk_id').attr('id', j);
+                var variasi = $(el).find('.variasi');
+                for (var k = 0; k < variasi.length; k++) {
+                    $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
+                    $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
+                    $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
+                    $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
+                }
+                $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
+                $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
+                $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.detail_jual').attr('id', 'tes' + j);
+                select_data();
+            });
+        }
+
+        function trproduktable() {
+            var data = `<tr>
                 <td></td>
                 <td>
                     <div class="form-group">
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
+                        <div class="detailjual" id="tes0">
+                        </div>
                     </div>
+                    <div id="detail_produk" class="detail_produk"></div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
@@ -940,25 +1082,44 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control produk_harga" id="produk_harga0" name="produk_harga[]" style="width:100%;" />
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control produk_subtotal" id="produk_subtotal" name="produk_subtotal[]" style="width:100%;" />
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
                 <td>
                     <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
-            </tr>`);
-            numberRowsProduk($("#produktable"));
+            </tr>`;
+            return data;
+        }
+
+        $('#addrowproduk').on('click', function() {
+            if ($('#produktable > tbody > tr').length <= 0) {
+                $('#produktable tbody').append(trproduktable());
+                numberRowsProduk($("#produktable"));
+            } else {
+                $('#produktable tbody tr:last').after(trproduktable());
+                numberRowsProduk($("#produktable"));
+            }
         });
 
         $('#produktable').on('click', '#removerowproduk', function(e) {
             $(this).closest('tr').remove();
             numberRowsProduk($("#produktable"));
             totalhargaprd();
+            if ($('#produktable > tbody > tr').length <= 0) {
+                $("#totalhargaprd").text("0");
+            }
         });
 
         function numberRowsPart($t) {
@@ -996,6 +1157,11 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control" name="part_harga" id="part_harga[]" placeholder="Masukkan Harga" />
+                                            
                         <input type="number" class="form-control part_harga" id="part_harga" name="part_harga[]" style="width:100%;" />
                     </div>
                 </td>
@@ -1020,6 +1186,7 @@
                 subtotal.val(jumlah * harga);
                 totalhargapart();
             }
+
         });
 
         $("#parttable").on('keyup change', '.part_harga', function() {
@@ -1038,6 +1205,33 @@
             totalhargapart();
         });
 
+        $('.provinsi').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/provinsi/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
     });
 </script>
 @stop
