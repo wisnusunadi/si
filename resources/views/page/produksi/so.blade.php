@@ -29,6 +29,7 @@
         font-size: 18px
     }
 </style>
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -212,7 +213,12 @@
     $('#gudang-barang').DataTable({
         "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
+            },
+            "columnDefs": [
+        {
+            "targets": [5],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }]
     });
 </script>
 @stop
