@@ -9,17 +9,5 @@ class TFProduksiDetail extends Model
 {
     use HasFactory;
 
-    protected $table = 't_gbj_detail';
-
-    function header() {
-        return $this->belongsTo(TFProduksi::class, 't_gbj_id');
-    }
-
-    function produk() {
-        return $this->belongsTo(GudangBarangJadi::class, 'gdg_brg_jadi_id');
-    }
-
-    function noseri() {
-        return $this->hasMany(NoseriTGbj::class, 't_gbj_detail_id');
-    }
+    protected $table = 't_tfbj_detail';
 }

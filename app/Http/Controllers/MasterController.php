@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Models\DetailEkatalog;
 use App\Models\DetailPenjualanProduk;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
@@ -12,16 +11,9 @@ use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Provinsi;
-use App\Models\Spa;
-use App\Models\Spb;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
-use Alert;
 
 class MasterController extends Controller
 {
@@ -30,42 +22,30 @@ class MasterController extends Controller
     {
         return datatables()->of(Produk::with('KelompokProduk'))->toJson();
     }
-    public function get_data_customer($value)
+    public function get_data_customer()
     {
-        $x = explode(',', $value);
-        if ($value == 0 || $value == 'kosong') {
-            $data = Customer::select();
-        } else {
-            $data = Customer::whereHas('Provinsi', function ($q) use ($x) {
-                $q->whereIN('status', $x);
-            })->get();
-        }
+        $data = Customer::select();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('prov', function ($data) {
                 return $data->provinsi->nama;
             })
             ->addColumn('button', function ($data) {
-                $divisi_id = Auth::user()->divisi->id;
-                $datas = "";
-                $datas .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="' . route('penjualan.customer.detail', $data->id) . '">
                     <button class="dropdown-item" type="button">
                       <i class="fas fa-search"></i>
                       Detail
                     </button>
-                </a>';
-                if ($divisi_id == "26") {
-                    $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
-                        <button class="dropdown-item" type="button" >
-                        <i class="fas fa-pencil-alt"></i>
-                        Edit
-                        </button>
-                    </a>';
-                }
-                $datas .= '</div>';
-                return $datas;
+                </a>
+                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
+                    <button class="dropdown-item" type="button" >
+                      <i class="fas fa-pencil-alt"></i>
+                      Edit
+                    </button>
+                </a>
+                </div>';
             })
             ->rawColumns(['button'])
             ->make(true);
@@ -82,9 +62,6 @@ class MasterController extends Controller
         }
         return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('nama', function ($data) {
-                return $data->nama;
-            })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -100,19 +77,8 @@ class MasterController extends Controller
                     </a>
                 </div>';
             })
-            ->rawColumns(['nama', 'button'])
+            ->rawColumns(['button'])
             ->make(true);
-    }
-
-    public function get_nama_customer($id, $val)
-    {
-        if ($id != "0") {
-            $c = Customer::where('nama', $val)->whereNotIn('id', [$id])->count();
-            return response()->json(['data' => $c]);
-        } else {
-            $c = Customer::where('nama', $val)->count();
-            return response()->json(['data' => $c]);
-        }
     }
     //public function get_data_detail_penjualan_produk($id)
     //{
@@ -136,8 +102,6 @@ class MasterController extends Controller
         $data = Produk::whereHas('PenjualanProduk', function ($q) use ($id) {
             $q->where('id', $id);
         })->get();
-
-
         //$data = PenjualanProduk::with('produk')->where('id', $id)->get();
         // $data = PenjualanProduk::with('Produk')->selectRaw('distinct penjualan_produk.*')->where('id', '5')->get();
         return datatables()->of($data)
@@ -146,94 +110,20 @@ class MasterController extends Controller
             // })
             // ->rawColumns(['produk_nama'])
             ->addColumn('kelompok', function ($data) {
-                $return = "";
-                if ($data->KelompokProduk->nama == 'Alat Kesehatan') {
-                    $return .= '<span class="badge blue-text">';
-                } else if ($data->KelompokProduk->nama == 'Water Treatment') {
-                    $return .= '<span class="badge orange-text">';
-                } else {
-                    $return .= '<span class="badge purple-text">';
-                }
-                $return .= $data->KelompokProduk->nama;
-                $return .= '</span>';
-
-                return $return;
-            })
-            ->addColumn('jumlah', function ($data) {
-                return $data->PenjualanProduk->first()->pivot->jumlah;
+                return $data->KelompokProduk->nama;
             })
             ->addIndexColumn()
-            ->rawColumns(['kelompok'])
             ->make(true);
     }
     public function get_data_pesanan($id)
     {
-        // $data  = Ekatalog::with('pesanan')
-        //     ->where('customer_id', $id)
-        //     ->get();
-
-        $Ekatalog = collect(Ekatalog::with('Pesanan')->where('customer_id', $id)->get());
-        $Spa = collect(Spa::with('Pesanan')->where('customer_id', $id)->get());
-        $Spb = collect(Spb::with('Pesanan')->where('customer_id', $id)->get());
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $data  = Ekatalog::with('pesanan')
+            ->where('customer_id', $id)
+            ->get();
 
         if ($data)
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('jenis', function ($data) {
-                    $name =  $data->getTable();
-                    if ($name == 'ekatalog') {
-                        return 'E-Catalogue';
-                    } else if ($name == 'spa') {
-                        return 'SPA';
-                    } else {
-                        return 'SPB';
-                    }
-                })
-                ->addColumn('so', function ($data) {
-                    if ($data->Pesanan) {
-                        return $data->Pesanan->so;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('nopo', function ($data) {
-                    if ($data->Pesanan) {
-                        return $data->Pesanan->no_po;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('tglpo', function ($data) {
-                    if ($data->Pesanan) {
-                        if (empty($data->Pesanan->tgl_po) || $data->Pesanan->tgl_po == "0000-00-00") {
-                            return '-';
-                        } else {
-                            return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
-                        }
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('status', function ($data) {
-                    $datas = "";
-                    if ($data->log == "penjualan") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->log == "po") {
-                        $datas .= '<span class="purple-text badge">';
-                    } else if ($data->log == "gudang") {
-                        $datas .= '<span class="orange-text badge">';
-                    } else if ($data->log == "qc") {
-                        $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->log == "logistik") {
-                        $datas .= '<span class="blue-text badge">';
-                    } else if ($data->log == "selesai") {
-                        $datas .= '<span class="green-text badge">';
-                    }
-                    $datas .= ucfirst($data->log) . '</span>';
-                    return $datas;
-                })
-                ->rawColumns(['status'])
                 ->make(true);
     }
     //Create
@@ -277,7 +167,7 @@ class MasterController extends Controller
         //         'nama.required|unique:customer' => 'Nama Customer harus di isi',
         //     ]
         // );
-        $c = Customer::create([
+        Customer::create([
             'nama' => $request->nama_customer,
             'telp' => $request->telepon,
             'alamat' => $request->alamat,
@@ -286,13 +176,6 @@ class MasterController extends Controller
             'npwp' => $request->npwp,
             'ket' => $request->keterangan,
         ]);
-
-        if ($c) {
-            // Alert::success('Berhasil', 'Berhasil menambahkan data');
-            return redirect()->back()->with('success', 'success');
-        } else {
-            return redirect()->back()->with('error', 'error');
-        }
     }
     public function create_penjualan_produk(Request $request)
     {
@@ -311,26 +194,12 @@ class MasterController extends Controller
         //         'jumlah.required' => 'Jumlah Produk harus di isi',
         //     ]
         // );
+
         $harga_convert =  str_replace('.', "", $request->harga);
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
             'harga' => $harga_convert
         ]);
-        $bool = true;
-        if ($PenjualanProduk) {
-            for ($i = 0; $i < count($request->produk_id); $i++) {
-                $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
-            }
-        } else {
-            $bool = false;
-        }
-
-        if ($bool == true) {
-            return redirect()->back()->with('success', 'success');
-        } else if ($bool == false) {
-            return redirect()->back()->with('error', 'Detail Penjualan error');
-        }
-
 
         // for ($i = 0; $i < count($request->produk_id); $i++) {
         //     DetailPenjualanProduk::create([
@@ -363,11 +232,12 @@ class MasterController extends Controller
         $customer->telp = $request->telepon;
         $customer->alamat = $request->alamat;
         $customer->ket = $request->keterangan;
-        $c = $customer->save();
-        if ($c) {
-            return response()->json(['data' => 'success']);
-        } else if (!$c) {
-            return response()->json(['data' => 'error']);
+        $customer->save();
+
+        if ($customer) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
         }
     }
 
@@ -384,12 +254,7 @@ class MasterController extends Controller
         $produk->no_akd = $request->no_akd;
         $produk->ket = $request->ket;
         $produk->status = $request->status;
-        $p = $produk->save();
-        if ($p) {
-            return redirect()->back()->with('success', 'Berhasil mengubah data');
-        } else {
-            return redirect()->back()->with('error', 'Gagal mengubah data');
-        }
+        $produk->save();
     }
     public function delete_produk($id)
     {
@@ -406,26 +271,6 @@ class MasterController extends Controller
         // $produk = DetailPenjualanProduk::findOrFail($id);
         // $produk->delete();
     }
-
-    public function update_penjualan_produk(Request $request, $id)
-    {
-        $harga_convert =  str_replace(',', "", $request->harga);
-        $PenjualanProduk = PenjualanProduk::find($id);
-        $PenjualanProduk->nama = $request->nama_paket;
-        $PenjualanProduk->harga = $harga_convert;
-        $PenjualanProduk->save();
-
-        $produk_array = [];
-        for ($i = 0; $i < count($request->produk_id); $i++) {
-            $produk_array[$request->produk_id[$i]] = ['jumlah' => $request->jumlah[$i]];
-        }
-        $p = $PenjualanProduk->produk()->sync($produk_array);
-        if ($p) {
-            return response()->json(['data' => 'success']);
-        } else if (!$p) {
-            return response()->json(['data' => 'error']);
-        }
-    }
     //Other
 
     //Check
@@ -439,18 +284,13 @@ class MasterController extends Controller
         $data = Customer::where('nama', $value)->get();
         echo json_encode($data);
     }
-    public function check_penjualan_produk($id, $value)
+    public function check_penjualan_produk($value)
     {
-        if ($id != "0") {
-            $data = PenjualanProduk::where('nama', $value)->whereNotIn('id', [$id])->count();
-            return response()->json(['jumlah' => $data]);
-        } else {
-            $data = PenjualanProduk::where('nama', $value)->count();
-            return response()->json(['jumlah' => $data]);
-        }
+        $data = PenjualanProduk::where('nama', $value)->get();
+        echo json_encode($data);
     }
 
-    //Show Modal
+    //Show Modal 
 
     public function update_customer_modal($id)
     {
@@ -471,8 +311,8 @@ class MasterController extends Controller
     //Select
     public function select_produk(Request $request)
     {
-        $data = Produk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-            ->orderby('nama', 'ASC')->get();
+        $data = Produk::where('tipe', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('tipe', 'ASC')->get();
         echo json_encode($data);
     }
     public function select_produk_id($id)
@@ -507,9 +347,8 @@ class MasterController extends Controller
     }
     public function select_penjualan_produk_id($id)
     {
-        $data = PenjualanProduk::with('Produk.GudangBarangJadi')->where('id', $id)
+        $data = PenjualanProduk::where('id', $id)
             ->get();
-
         echo json_encode($data);
     }
 }

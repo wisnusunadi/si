@@ -10,8 +10,4 @@ class TFProduksiHis extends Model
     use HasFactory;
 
     protected $table = 't_tfbj_his';
-
-    function header() {
-        return $this->hasOne(TFProduksi::class, 'tfbj_id');
-    }
 }

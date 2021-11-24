@@ -13,8 +13,4 @@ class Provinsi extends Model
     {
         return $this->hasMany(Customer::class);
     }
-    public function Ekatalog()
-    {
-        return $this->hasMany(Ekatalog::class);
-    }
 }

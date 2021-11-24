@@ -473,7 +473,7 @@
                                             <tr>
                                                 <td scope="row">1</td>
                                                 <td>Produk 1</td>
-                                                <td>200 Unit
+                                                <td>200 Unit 
                                                     <br>
                                                     <span class="badge badge-danger">Kurang 100 Unit</span>
                                                 </td>
@@ -550,7 +550,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> 
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
             <section class="content">
@@ -1347,7 +1347,7 @@
         </div>
     </div>
 </div>
-
+ 
 {{-- Modal Penerimaan --}}
 <div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -1627,7 +1627,7 @@
             }
         }
         }
-        function modalPenerimaan() {
+        function modalPenerimaan() { 
             $('.detail-layout').modal('show');
         }
         function modalSO() {

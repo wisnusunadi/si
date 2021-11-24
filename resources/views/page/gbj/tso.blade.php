@@ -23,7 +23,7 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Tujuan</label>
                                             <div class="col-12">
-                                                <select class="form-control ke" name="ke" id="ke">
+                                                <select class="form-control division" name="division">
                                                     <option value="Divisi IT">Divisi IT</option>
                                                     <option value="Divisi QC">Divisi QC</option>
                                                     <option value="Divisi Perakitan">Divisi Perakitan</option>
@@ -33,13 +33,13 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Keterangan</label>
                                             <div class="col-12">
-                                                <textarea name="deskripsi" id="deskripsi" class="form-control deskripsi"></textarea>
+                                                <textarea name="tujuan" id="" class="form-control tujuan"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Produk</label>
                                             <div class="col-12">
-                                                <select class="form-control product" name="gdg_brg_jadi_id" id="gdg_brg_jadi_id">
+                                                <select class="form-control product" name="produk">
                                                     <option value="AMBULATORY BLOOD PRESSURE MONITOR">AMBULATORY BLOOD PRESSURE MONITOR</option>
                                                     <option value="AIR STERILIZER AND PURIFIER">AIR STERILIZER AND PURIFIER</option>
                                                     <option value="BACKUP POWER">BACKUP POWER</option>
@@ -49,9 +49,9 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Stok</label>
                                             <div class="col-12">
-                                                <input type="text" name="qty" id="qty"
-                                                    class="form-control number-input input-notzero qty">
-                                                {{-- <span class="form-text text-muted">Stok Input Maks. 20</span> --}}
+                                                <input type="text" name="stok" id=""
+                                                    class="form-control number-input input-notzero stok">
+                                                <span class="form-text text-muted">Stok Input Maks. 20</span>
                                                 <input type="text" class="stok-gudang" value="20" hidden>
                                             </div>
                                         </div>
@@ -88,7 +88,7 @@
                             </table>
                         </div>
                         <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-primary btn-simpan" type="submit" data-toggle="modal"
+                            <button class="btn btn-primary btn-simpan" type="button" data-toggle="modal"
                                 data-target="#modalNotes" hidden>Simpan</button>
                         </div>
                     </div>
@@ -129,7 +129,6 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
@@ -157,7 +156,7 @@
         };
     }(jQuery));
     $(document).ready(function () {
-        $('.ke').select2();
+        $('.division').select2();
         $('.product').select2();
 
         $(".number-input").inputFilter(function (value) {
@@ -165,110 +164,39 @@
             var value = $(this).val();
         });
 
-        // load produk
-        $.ajax({
-            url: '/api/gbj/sel-gbj',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $("#gdg_brg_jadi_id").empty();
-                    $("#gdg_brg_jadi_id").append('<option value="">Pilih Item</option>');
-                    $.each(res, function(key, value) {
-                        $("#gdg_brg_jadi_id").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
-                    });
-                } else {
-                    $("#gdg_brg_jadi_id").empty();
-                }
-            }
-        });
-
-        // load divisi
-        $.ajax({
-            url: '/api/gbj/sel-divisi',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $("#ke").empty();
-                    $("#ke").append('<option value="">Pilih Item</option>');
-                    $.each(res, function(key, value) {
-                        $("#ke").append('<option value="'+value.id+'">'+value.nama+'</option');
-                    });
-                } else {
-                    $("#ke").empty();
-                }
-            }
-        });
     });
 
-    $(document).on('click','.btn-tambah', function (e) {
-        e.preventDefault();
-
-        let divisi = $('.ke').val();
-        let d_divisi = $('.ke').find(':selected').text();
-        let deskripsi = $('.deskripsi').val();
+    $(document).on('click','.btn-tambah', function () {
+        let divisi = $('.division').val();
+        let tujuan = $('.tujuan').val();
         let produk = $('.product').val();
-        let d_produk = $('.product').find(':selected').text();
-        let stok = parseInt($('.qty').val());
-        // let stok_gudang = parseInt($('.stok-gudang').val());
-
+        let stok = parseInt($('.stok').val());
+        let stok_gudang = parseInt($('.stok-gudang').val());
         $.ajax({
-            url: "/api/tfp/cekStok",
-            type:"POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                ke: divisi,
-                deskripsi: deskripsi,
-                gdg_brg_jadi_id: produk,
-                qty: stok,
-            },
-            success: function (res) {
-                console.log(res);
-                if(res.stok < stok) {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: 'Stok Tidak Mencukupi',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    // console.log('tidak');
-                } else {
-                    // console.log('ok');
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Successfully',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
-                    $('#post_ke').val(divisi);
-                    $('#post_deskripsi').val(deskripsi);
-                    $('#post_produk').val(produk);
-                    $('#post_qty').val(stok);
+            success: function () { 
+                if (stok < stok_gudang) {
+                    addData(divisi, tujuan, produk, stok)
+                }else{
+                    Swal.fire(
+                        'Stok Tidak Mencukupi',
+                        '',
+                        'error'
+                    )
                 }
             $('.btn-simpan').prop('hidden', false);
             }
         });
     });
 
-    var i = 0;
-    function addData(divisi,d_divisi, deskripsi, d_produk, produk, stok) {
-        if (deskripsi.length > 30) {
-            var a = deskripsi.substring(0, 10) + '...';
+    function addData(divisi, tujuan, produk, stok) {
+        if (tujuan.length > 30) {
+            var a = tujuan.substring(0, 10) + '...';
         }else{
-            var a = deskripsi;
+            var a = tujuan;
         }
-
-        i++;
-        // console.log(deskripsi.length);
-        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        console.log(tujuan.length);
+        let tambah_data = '<tr><td>'+divisi+'</td><td>'+a+'</td><td>'+produk+'</td><td>'+stok+'</td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
-
     }
     $(document).on('click', '.btn-delete', function(e){
         e.preventDefault();
@@ -281,110 +209,22 @@
         }
     });
 
-    $(document).on('click', '.btn-simpan', function(e) {
-        e.preventDefault();
-
-        let a = $('#post_ke').val();
-        let b = $('#post_deskripsi').val();
-        let c = $('#post_produk').val();
-        let d = parseInt($('#post_qty').val());
-        let stok_gudang = parseInt($('.stok-gudang').val());
-
-        // let divisi = $('.ke').val();
-        // let deskripsi = $('.deskripsi').val();
-        // let produk = $('.product').val();
-        // let stok = parseInt($('.qty').val());
-        // let stok_gudang = parseInt($('.stok-gudang').val());
-
-        let ke = [];
-        let desk = [];
-        let gdg = [];
-        let stok = [];
-
-        $('input[name^="ke"]').each(function() {
-            ke.push($(this).val());
-        });
-        console.log(ke);
-
-        $('input[name^="deskripsi"]').each(function() {
-            desk.push($(this).val());
-        });
-
-        $('input[name^="gdg_brg_jadi_id"]').each(function() {
-            gdg.push($(this).val());
-        });
-
-        $('input[name^="qty"]').each(function() {
-            stok.push($(this).val());
-        });
-
-        $.ajax({
-            url: "/api/tfp/create",
-            type:"POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                ke: ke,
-                deskripsi: desk,
-                gdg_brg_jadi_id: gdg,
-                qty: stok,
+    $('.scan-produk').DataTable({
+            'columnDefs': [{
+                'targets': 1,
+                'checkboxes': {
+                    'selectRow': true
+                }
+            }],
+            'select': {
+                'style': 'multi'
             },
-            success: function (res) {
-                console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
+            'order': [
+                [0, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Scan Nomor Seri:"
             }
         });
-        // console.log('ok');
-    })
-
-    $(document).on('click', '.noseriModal', function(e) {
-        var id = $(this).data('id');
-        console.log(id);
-
-        $.ajax({
-            url: "/api/tfp/noseri/" + id,
-            type: "get",
-            // data : {id : id},
-            dataType: 'json',
-            success: function(res) {
-                console.log(res);
-
-                $('.scan-produk').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: '/api/tfp/noseri/' + id,
-                    },
-                    columns: [
-                        { data: 'noseri', name: 'noseri'},
-                        { data: 'checkbox', name: 'checkbox'},
-                    ],
-                    'columnDefs': [{
-                        'targets': 1,
-                        'checkboxes': {
-                            'selectRow': true
-                        },
-                    }],
-                    'select': {
-                        'style': 'multi'
-                    },
-                    'order': [
-                        [0, 'asc']
-                    ],
-                    "oLanguage": {
-                    "sSearch": "Scan Nomor Seri:"
-                    }
-                });
-            }
-        })
-        $('.modal-produk').modal('show');
-    })
-
 </script>
 @stop
