@@ -1,6 +1,5 @@
-<form method="POST" action="">
-    @method('PUT')
-
+<form method="POST" action="/qc/so/create/{{$id}}/{{$tfgbj_id}}/{{$pesanan_id}}/{{$produk_id}}" id="edit_qc">
+    @csrf
     <div class="row d-flex justify-content-center">
         <div class="col-11">
             <div class="card">
@@ -78,5 +77,5 @@
             </div>
         </div>
     </div>
-    {{$id}}
+    {{$produk_id}}
 </form>

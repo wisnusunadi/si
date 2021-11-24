@@ -9,9 +9,9 @@ class TFProduksi extends Model
 {
     use HasFactory;
 
-    protected $table = 't_tfbj';
+    //protected $table = 't_tfbj';
 
-    //protected $table = 't_gbj';
+    protected $table = 't_gbj';
 
     protected $fillable = ['ke', 'deskripsi'];
 
@@ -29,6 +29,7 @@ class TFProduksi extends Model
     {
         return $this->belongsTo(Divisi::class, 'ke');
     }
+
     function darii()
     {
         return $this->belongsTo(Divisi::class, 'dari');
