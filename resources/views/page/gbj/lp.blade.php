@@ -451,20 +451,69 @@
 
     });
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
     $(document).on('click', '.btn-tambah', function () {
         $.ajax({
             success: function () {
                 addData()
+<<<<<<< HEAD
+=======
+=======
+    $(document).on('click','.btn-tambah', function () {
+        let tanggal = $('.tanggal').val();
+        let divisi = $('.division').val();
+        let d_divisi = $('.division').find(':selected').text();
+        let tujuan = $('.tujuan').val();
+        let produk = $('.product').val();
+        let d_produk = $('.product').find(':selected').text();
+        let jumlah = parseInt($('.stok').val());
+        $.ajax({
+            success: function () {
+                addData(tanggal, divisi, d_divisi, tujuan, produk, d_produk, jumlah)
+
+                $('#post_tgl').val(tanggal);
+                $('#post_ke').val(divisi);
+                $('#post_tujuan').val(tujuan);
+                $('#post_produk').val(produk);
+                $('#post_qty').val(jumlah);
+>>>>>>> origin/della
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
                 $('.btn-simpan').removeClass('hapus');
             }
         });
     });
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 
     function addData() {
         let tambah_data = '<tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function (e) {
+<<<<<<< HEAD
+=======
+=======
+    var i = 0;
+    var k = 0;
+    function addData(tanggal, divisi, d_divisi, tujuan, produk, d_produk, jumlah) {
+        if (tujuan.length > 30) {
+            var a = tujuan.substring(0, 10) + '...';
+        }else{
+            var a = tujuan;
+        }
+        i++;
+        let tambah_data = '<tr id=row'+i+'><td>'+tanggal+'<input type="hidden" name="tgl_masuk['+i+']" id="post_tgl'+i+'" value="'+tanggal+'"></td><td>'+d_divisi+'<input type="hidden" name="dari['+i+']" id="post_ke'+i+'" value="'+divisi+'"></td><td>'+tujuan+'<input type="hidden" name="tujuan['+i+']" id="post_tujuan'+i+'" value="'+tujuan+'"></td><td>'+d_produk+'<input type="hidden" name="gbj_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+jumlah+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+jumlah+'"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" data-id="'+produk+'" onclick="tambahanPerakitan()"><i class="fas fa-plus"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        $('tbody.tambah_data').append(tambah_data);
+    }
+
+    $(document).on('click', '.btn-delete', function(e){
+>>>>>>> origin/della
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
         e.preventDefault();
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
@@ -475,9 +524,44 @@
         }
     });
 
+<<<<<<< HEAD
     $(document).on('click', '.editmodal', function() {
         var id = $(this).data('id');
         console.log(id);
+=======
+<<<<<<< HEAD
+=======
+    // cancel
+    $(document).on('click', '#btnCancel', function(e){
+
+        // console.log('ok');
+        location.reload();
+    });
+
+    // draft
+    $(document).on('click', '#btnDraft', function(e){
+        e.preventDefault();
+
+        let a = $('#post_tgl').val();
+        let b = $('#post_ke').val();
+        let c = $('#post_tujuan').val();
+        let d = $('#post_produk').val();
+        let ee = parseInt($('#post_qty').val());
+
+        let tgl = [];
+        let dari = [];
+        let tujuan = [];
+        let prd = [];
+        let jml = [];
+
+        $('input[name^=tgl_masuk]').each(function() {
+            tgl.push($(this).val());
+        })
+
+        $('input[name^=dari]').each(function() {
+            dari.push($(this).val());
+        })
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 
         $.ajax({
             url: '/api/draft/data',
@@ -523,6 +607,10 @@
         tambahanRancangan();
     })
 
+<<<<<<< HEAD
+=======
+>>>>>>> origin/della
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 
     $(document).ready(function () {
 
@@ -639,12 +727,22 @@
     function tambahanPerakitan() {
         $('.tambahan-perakitan').modal('show');
     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
     $('.scan-produk').DataTable({
         "ordering": false,
         "autoWidth": false,
         searching: false,
         "lengthChange": false,
     });
+<<<<<<< HEAD
+=======
+=======
+
+>>>>>>> origin/della
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 
 </script>
 @stop

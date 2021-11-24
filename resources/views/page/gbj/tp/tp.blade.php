@@ -209,7 +209,10 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 <<<<<<< HEAD:resources/views/page/gbj/tp.blade.php
+=======
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 <div class="row produk-show hidden-product">
     <div class="col-md-4">
         <div class="card">
@@ -347,8 +350,11 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 =======
 >>>>>>> 993c403b85758d6690fe1ade67e173cb80a9ff68:resources/views/page/gbj/tp/tp.blade.php
+=======
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 
 
 

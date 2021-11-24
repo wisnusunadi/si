@@ -185,6 +185,7 @@
 <script>
     $('.table-seri').DataTable({
         "oLanguage": {
+<<<<<<< HEAD
             "sSearch": "Cari:"
         }
     });
@@ -215,6 +216,15 @@
             "sSearch": "Cari:"
         },
         "columnDefs": [{
+=======
+        "sSearch": "Cari:"}
+    });
+    $('.dalam-perakitan').DataTable({
+        "oLanguage": {
+        "sSearch": "Cari:"},
+        "columnDefs": [
+        {
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
             "targets": [4],
             "visible": document.getElementById('auth').value == '2' ? false : true
         }]

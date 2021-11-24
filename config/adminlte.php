@@ -464,6 +464,7 @@ return [
             'icon' => 'far fa-circle',
             'auth' => [26]
         ],
+<<<<<<< HEAD
         [
             'text'    => 'Daftar Pesanan',
             'icon'    => 'fas fa-table',
@@ -569,6 +570,119 @@ return [
         //         ],
         //     ],
         // ],
+=======
+        // [
+        //     'text' => 'Sales Order',
+        //     'url'  => '/penjualan/so/show',
+        //     'icon' => 'fas fa-file-invoice-dollar',
+        //     'auth' => [26]
+        // ],
+        // [
+        //     'text'    => 'Daftar Pesanan',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Katalog',
+        //             'url'  => '/penjualan_online',
+        //         ],
+        //         [
+        //             'text' => 'E-Commerce',
+        //             'url'  => '/penjualan_online_ecom',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/penjualan_offline',
+        //         ]
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'Surat Penawaran',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Commerce',
+        //             'url'  => '/penawaran_ecom',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/penawaran_offline',
+        //         ]
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'PO / DO',
+        //     'icon'    => 'fas fa-table',
+        //     'auth' => [26],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'E-Katalog',
+        //             'url'  => '/podo_online',
+        //         ],
+        //         [
+        //             'text' => 'Offline',
+        //             'url'  => '/podo_offline',
+        //         ]
+        //     ],
+        // ],
+        // // penjualan (26) & produksi (17)
+        // [
+        //     'text' => 'Produk',
+        //     'url'  => '/produk',
+        //     'icon' => 'fas fa-table',
+        //     'auth' => [14, 17, 26]
+        // ],
+        // produksi (17) & QC(23)
+        [
+            'text' => 'Data Karyawan',
+            'icon' => 'fas fa-users',
+            'auth' => [14, 17, 23, 28],
+            'submenu' => [
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Jadwal Kerja Operator',
+                    'url'  => '/karyawan',
+                    'auth' => [],
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Daftar Karyawan',
+                    'url'  => '/daftar_karyawan',
+                    'auth' => [28],
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Permohonan Penugasan',
+                    'url'  => '/karyawan/peminjaman',
+                    'auth' => [],
+                ],
+            ],
+        ],
+        [
+            'text'    => 'Inventory',
+            'icon'    => 'fas fa-boxes',
+            'auth' => [14, 17],
+            'submenu' => [
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Master Inventory',
+                    'auth' => [14],
+                    'url'  => '/inventory/divisi',
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Inventory',
+                    'url'  => '/inventory',
+                ],
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Permintaan Peminjaman',
+                    'url'  => '/inventory/peminjaman',
+                ],
+            ],
+        ],
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
         [
             'text'    => 'Peminjaman',
             'icon'    => 'fas fa-boxes',

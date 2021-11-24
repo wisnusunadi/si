@@ -56,11 +56,16 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/tso', 'page.gbj.tso');
     Route::view('/dp', 'page.gbj.dp');
     Route::view('/lp', 'page.gbj.lp');
+<<<<<<< HEAD
     Route::view('/dashboard', 'page.gbj.dashboard');
     route::group(['prefix' => '/tp'], function () {
         Route::view('/', 'page.gbj.tp.tp');
         Route::view('/1', 'page.gbj.tp.show');
     });
+=======
+    Route::view('/tp', 'page.gbj.tp');
+    Route::view('/dashboard', 'page.gbj.dashboard');
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 });
 
 Route::middleware('auth')->prefix('/produksi')->group(function () {
@@ -241,6 +246,10 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
         });
     });
 });
+<<<<<<< HEAD
+=======
+// Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 
 Route::get('/test/{name?}', function ($name = null) {
     return $name;

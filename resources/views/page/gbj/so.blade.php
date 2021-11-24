@@ -324,6 +324,7 @@
             "sSearch": "Cari:"
         }
     });
+<<<<<<< HEAD
 
     $('#gudang-barang').DataTable({
         processing: true,
@@ -491,5 +492,23 @@
         })
         $('#viewProdukModal').modal('show');
     })
+=======
+    $('#view-produk').DataTable({
+        "oLanguage": {
+            "sSearch": "Cari:"
+        }
+    });
+    $('#gudang-barang').DataTable({
+        "oLanguage": {
+            "sSearch": "Cari:"
+        },
+                "columnDefs": [
+        {
+            "targets": [5],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }
+    ]
+    });
+>>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
 </script>
 @stop
