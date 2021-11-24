@@ -124,6 +124,7 @@ Route::prefix('/transaksi')->group(function() {
 });
 
 Route::prefix('/dashboard-gbj')->group(function() {
+    Route::get('/noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getNoseriTerima']);
     // produk
     Route::get('/stok/1020/h', [\App\Http\Controllers\GudangController::class, 'h1']);
     Route::get('/stok/59/h', [\App\Http\Controllers\GudangController::class, 'h2']);

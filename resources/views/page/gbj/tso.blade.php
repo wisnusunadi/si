@@ -300,6 +300,7 @@
         let desk = [];
         let gdg = [];
         let stok = [];
+        let seri = [];
 
         $('input[name^="ke"]').each(function() {
             ke.push($(this).val());
@@ -330,14 +331,14 @@
             },
             success: function (res) {
                 console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
+                // Swal.fire({
+                //     position: 'center',
+                //     icon: 'success',
+                //     title: res.msg,
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // })
+                // location.reload();
             }
         });
         // console.log('ok');
@@ -354,10 +355,10 @@
             dataType: 'json',
             success: function(res) {
                 console.log(res);
-
+                $('.scan-produk').DataTable().destroy();
                 $('.scan-produk').DataTable({
                     processing: true,
-                    serverSide: true,
+                    serverSide: false,
                     ajax: {
                         url: '/api/tfp/noseri/' + id,
                     },

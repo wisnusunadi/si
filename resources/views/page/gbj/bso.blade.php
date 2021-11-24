@@ -228,6 +228,7 @@
 
 @section('adminlte_js')
 <script>
+    var mytable = '';
     $(document).ready(function () {
         // $('.addProduk').click(function (e) {
         //     $('#addProdukModal').modal('show');
@@ -270,7 +271,95 @@
         //     "sSearch": "Masukkan Nomor Seri:"
         //     }
         // });
+
+        $(document).on('click', '.detailmodal', function(e) {
+        var id = $(this).data('id');
+        console.log(id);
+        $('.scan-produk').DataTable().destroy();
+        mytable = $('.scan-produk').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/seri-so",
+                data: {gdg_barang_jadi_id: id},
+                type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'seri', name: 'seri'},
+                { data: 'checkbox', name: 'checkbox'},
+            ],
+            'columnDefs': [{
+                'targets': 1,
+                'checkboxes': {
+                    'selectRow': true
+                }
+            }],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
+                [0, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Masukkan Nomor Seri:"
+            }
+        });
+
+        $('#viewProdukModal').modal('show');
     });
+    });
+
+    var id = '';
+        $(document).on('click', '.editmodal', function(e) {
+        id = $(this).data('id');
+            console.log(id);
+            $.ajax({
+                url: "/api/tfp/header-so/" +id,
+                success: function(res) {
+                    console.log(res);
+                    $('span#so').text(res.so);
+                    $('span#po').text(res.no_po);
+                    $('span#akn').text(res.ekatalog.no_paket);
+                }
+        });
+        $('#addProduk').DataTable().destroy();
+        $('#addProduk').DataTable({
+            // retrieve: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id,
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                // { data: 'ids', name: 'ids'},
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'tipe', name: 'tipe'},
+                { data: 'merk', name: 'merk'},
+                { data: 'action', name: 'action'},
+            ],
+            // 'columnDefs': [{
+            //     'targets': 0,
+            //     'checkboxes': {
+            //         'selectRow': true
+            //     }
+            // }],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
+                [1, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"
+            }
+        })
+        $('#addProdukModal').modal('show');
+        });
 
     let a = $('#gudang-barang').DataTable({
             processing: true,
@@ -308,62 +397,19 @@
         });
     }).draw();
 
-
-    $(document).on('click', '.editmodal', function(e) {
-        var id = $(this).data('id');
-        console.log(id);
-        $.ajax({
-            url: "/api/tfp/header-so/" +id,
-            success: function(res) {
-                console.log(res);
-                $('span#so').text(res.so);
-                $('span#po').text(res.no_po);
-                $('span#akn').text(res.ekatalog.no_paket);
-            }
-        });
-        $('#addProduk').DataTable().destroy();
-        var mytable = $('#addProduk').DataTable({
-            // retrieve: true,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "/api/tfp/detail-so/" +id,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
-            },
-            columns: [
-                // { data: 'ids', name: 'ids'},
-                { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
-                { data: 'tipe', name: 'tipe'},
-                { data: 'merk', name: 'merk'},
-                { data: 'action', name: 'action'},
-            ],
-            // 'columnDefs': [{
-            //     'targets': 0,
-            //     'checkboxes': {
-            //         'selectRow': true
-            //     }
-            // }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [1, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Cari:"
-            }
-        })
-        $('#addProdukModal').modal('show');
-
-        $(document).on('click', '#btnDraft', function(e) {
+    $(document).on('click', '#btnDraft', function(e) {
             e.preventDefault();
 
             const ids = [];
             const qtyy = [];
+            const noseri = [];
 
+            // var rowsel = mytable.column(1).checkboxes.selected();
+            // $.each(rowsel, function(index, rowId) {
+            //     // console.log(rowId);
+            //     // noseri.push(rowId);
+            //     noseri.push($('#noseri').val());
+            // });
             $('input[name^="gdg_brg_jadi_id"]').each(function() {
                 ids.push($(this).val());
             });
@@ -371,11 +417,22 @@
             $('input[name^="qty"]').each(function() {
                 qtyy.push($(this).val());
             });
+
+            $('input[name^="noseri"]').each(function() {
+                noseri.push($(this).val());
+            });
+
+            // for(var o = 0; o < ids.length; o++) {
+            //     $('input[name^="noseri_id"]').each(function() {
+            //         ids[o] = noseri.push($(this).val());
+            //     });
+            // }
+
             // $.each(jml, function(index, rowIdd) {
             //     console.log(index);
             //     // qtyy.push(rowId);
             // });
-
+            console.log(ids.length);
             $.ajax({
                 url: "/api/tfp/byso",
                 type: "post",
@@ -384,58 +441,21 @@
                     pesanan_id: id,
                     gdg_brg_jadi_id: ids,
                     qty: qtyy,
+                    noseri: noseri,
                 },
                 success: function(res) {
                     console.log(res);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: res.msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+                    // Swal.fire({
+                    //     position: 'center',
+                    //     icon: 'success',
+                    //     title: res.msg,
+                    //     showConfirmButton: false,
+                    //     timer: 1500
+                    // })
+                    // location.reload();
                 }
             })
         })
-    });
 
-    $(document).on('click', '.detailmodal', function(e) {
-        var id = $(this).data('id');
-        console.log(id);
-        $('.scan-produk').DataTable().destroy();
-        $('.scan-produk').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "/api/tfp/seri-so",
-                data: {gdg_barang_jadi_id: id},
-                type: "post",
-                // dataType: "json",
-            },
-            columns: [
-                { data: 'seri', name: 'seri'},
-                { data: 'checkbox', name: 'checkbox'},
-            ],
-            'columnDefs': [{
-                'targets': 1,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [0, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Masukkan Nomor Seri:"
-            }
-        });
-
-        $('#viewProdukModal').modal('show');
-    });
-
-    
 </script>
 @stop

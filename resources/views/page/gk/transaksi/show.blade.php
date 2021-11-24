@@ -52,12 +52,14 @@
     section {
         font-family: "Source Sans Pro"
     }
-    img{
+
+    img {
         /* Jika Gambar Disamping */
         width: 280px;
         /* Jika Gambar Diatas */
         /* width: 100px; */
     }
+
 </style>
 <section class="content">
     <div class="container-fluid">
@@ -65,27 +67,55 @@
             <div class="col-xl-5">
                 <div class="card mb-3">
                     <div class="row no-gutters">
-                      <div class="col-md-4">
-                        <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80" alt="...">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body ml-5">
-                          <div class="card-title">
-                              <input type="hidden" name="id" id="ids" value="{{ $d->id }}">
-                            <h2 class="text-bold" id="nama_produk">{{ $d->produk->nama }} {{ $d->nama }}</h2>
-                            <h6 class="text-muted" id="kode_produk">{{ $d->produk->product->kode . '' . $d->produk->kode ? $d->produk->product->kode . '' . $d->produk->kode : '-' }}</h6>
-                          </div>
-                          <h5 class="card-text text-bold pt-2">Deskripsi</h5>
-                          <p class="card-text" id="deskripsi">{{ $d->deskripsi }}</p>
-                          <h5 class="card-text text-bold pt-1">Dimensi</h5>
-                          <p class="text-bold" style="margin-bottom: 0">Panjang x Lebar x Tinggi</p>
-                          <p><span class="panjang">{{ $d->dim_p }}</span> x <span class="lebar">{{ $d->dim_l }}</span> x <span
-                                  class="tinggi">{{ $d->dim_}}</span></p>
+                        <div class="col-md-4">
+                            <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"
+                                alt="...">
                         </div>
-                      </div>
+                        <div class="col-md-8">
+                            <div class="card-body ml-5">
+                                <div class="card-title">
+                                    <h2 class="text-bold">Nama Produk</h2>
+                                    <h6 class="text-muted">Kode Produk</h6>
+                                </div>
+                                <h5 class="card-text text-bold pt-2">Deskripsi</h5>
+                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam,
+                                    purus sit
+                                    amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor
+                                    purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper
+                                    eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque
+                                    fermentum dui faucibus in ornare quam viverra</p>
+                                <h5 class="card-text text-bold pt-1">Dimensi</h5>
+                                <p class="text-bold" style="margin-bottom: 0">Panjang x Lebar x Tinggi</p>
+                                <p><span class="panjang">50</span> x <span class="lebar">10</span> x <span
+                                        class="tinggi">10</span></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                @endforeach
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Grafik Jumlah Terima / Transfer (Nama Produk) Per Tahun
+                        </h3>
+                        <div class="card-tools">
+                            <div class="form-group row">
+                                <label for="years" class="col-md-5 col-form-label">Tahun</label>
+                                <div class="col-md-7">
+                                    <select name="" id="" class="form-control">
+                                        <option value="">2020</option>
+                                        <option value="">2021</option>
+                                        <option value="">2022</option>
+                                        <option value="">2023</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="myChart" width="400" height="220"></canvas>
+                    </div>
+                </div>
             </div>
             <div class="col-xl-7">
                 <div class="card">
@@ -117,12 +147,12 @@
                                 <div class="col-lg-3 col-xl-4">
                                     <div class="card">
                                         <div class="card-body">
-                                            <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
+                                            <p class="card-text">Keterangan Isi Kolom</p>
                                             <p class="card-text">
-                                                <div class="foo green"></div> : Dari
+                                                <div class="foo green"></div> : Penerimaan
                                             </p>
                                             <p class="card-text">
-                                                <div class="foo blue"></div> : Ke
+                                                <div class="foo blue"></div> : Transfer
                                             </p>
                                         </div>
                                     </div>
@@ -135,9 +165,7 @@
                             <table class="table tableProdukView">
                                 <thead>
                                     <tr>
-                                        <th>Nomor SO</th>
-                                        <th>Tanggal Masuk</th>
-                                        <th>Tanggal Keluar</th>
+                                        <th style="width: 150px">Tanggal</th>
                                         <th>Dari/Ke</th>
                                         <th>Tujuan</th>
                                         <th>Jumlah</th>
@@ -146,100 +174,80 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
+                                        <td><span class="badge badge-success">10-04-2022</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
                                                 onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
                                     </tr>
                                     <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-info">23-09-2022</span></td>
+                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
@@ -270,6 +278,8 @@
                         <tr>
                             <th>No</th>
                             <th>Nomor Seri</th>
+                            <th>Kerusakan</th>
+                            <th>Tingkat Kerusakan</th>
                             <th>Layout</th>
                         </tr>
                     </thead>
@@ -277,11 +287,15 @@
                         <tr>
                             <td scope="row">1</td>
                             <td>54131313151</td>
+                            <td>Kerusakan Panel</td>
+                            <td>Level 3</td>
                             <td>Layout 1</td>
                         </tr>
                         <tr>
                             <td scope="row">2</td>
                             <td>54131313151</td>
+                            <td>Kerusakan Panel</td>
+                            <td>Level 3</td>
                             <td>Layout 1</td>
                         </tr>
                     </tbody>
@@ -293,11 +307,18 @@
 @stop
 @section('adminlte_js')
 <script>
-    $('.table-seri').DataTable({});
-    // $('.tableProdukView').DataTable({
-    //     searching: false,
-    //     "lengthChange": false
-    // });
+    $('.table-seri').DataTable({
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
+    });
+    $('.tableProdukView').DataTable({
+        searching: false,
+        "lengthChange": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
+    });
     $('#nav-deskripsi-tab').click(function (e) {
         e.preventDefault();
         $('.is-active').addClass('font-weight-bold');
@@ -318,39 +339,37 @@
         $('.modalDetail').modal('show');
     }
 
-    $(document).ready(function () {
-        var id = $('#ids').val();
-        console.log(id);
-        $('.tableProdukView').DataTable().destroy();
-        $('.tableProdukView').dataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            searching: false,
-            "lengthChange": false,
-            autoWidth: false,
-            ajax: {
-                url: "/api/transaksi/history-detail/" + id,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
-            },
-            columns: [
-                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'so', name: 'so'},
-                { data: 'date_in', name: 'date_in'},
-                { data: 'date_out', name: 'date_out'},
-                { data: 'divisi', name: 'divisi'},
-                { data: 'tujuan', name: 'tujuan'},
-                { data: 'jumlah', name: 'jumlah'},
-                { data: 'action', name: 'action'},
+    const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+        datasets: [{
+            label: 'Terima',
+            data: [15, 20, 30, 15, 29, 38, 35, 15, 18, 34, 10, 45],
+            backgroundColor: [
+                'rgba(255, 159, 64, 0.2)',
             ],
-            "oLanguage": {
-                "sSearch": "Cari:"
+            borderWidth: 1
+        },
+        {
+            label: 'Transfer',
+            data: [11, 15, 20, 10, 25, 30, 20, 15, 20, 30, 13, 25],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderWidth: 1
+        },
+    ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: false
             }
-        });
-
-    })
+        }
+    }
+});
 
 </script>
 @stop

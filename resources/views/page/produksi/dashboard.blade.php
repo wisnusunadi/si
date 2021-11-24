@@ -105,8 +105,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 </td>
-                                    <td><a class="btn btn-outline-primary" href="{{ url('produksi/so') }}"><i
-                                        class="fas fa-paper-plane"></i></a></td>
+                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                        class="fas fa-paper-plane"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -129,8 +129,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 </td>
-                                    <td><a class="btn btn-outline-primary" href="{{ url('produksi/so') }}"><i
-                                        class="fas fa-paper-plane"></i></a></td>
+                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                        class="fas fa-paper-plane"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -153,8 +153,8 @@
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 <br> <span class="badge badge-danger">Lebih dari 5 hari</span></td>
-                                    <td><a class="btn btn-outline-primary" href="{{ url('produksi/so') }}"><i
-                                                class="fas fa-paper-plane"></i></a></td>
+                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                class="fas fa-paper-plane"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -390,6 +390,94 @@
         </div>
     </div>
 </div>
+
+{{-- Modal SO --}}
+<div class="modal fade viewProdukModal" id="" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row row-cols-2">
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor SO</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Customer</label>
+                                        <div class="card instansi">
+                                            <div class="card-body">
+                                                RS. Dr. Soetomo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped" id="view-produk">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Tipe</th>
+                                            <th>Merk</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>ABPM50</td>
+                                            <td>ELITECH</td>
+                                            <td><span class="badge badge-success">Sudah di cek</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>RGB</td>
+                                            <td>ELITECH</td>
+                                            <td><span class="badge badge-danger">Belum di cek</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_js')
@@ -520,5 +608,8 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
     });
+    function modalSO() { 
+        $('.viewProdukModal').modal('show');
+    }
 </script>
 @stop

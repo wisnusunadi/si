@@ -141,9 +141,12 @@ Route::middleware('auth')->prefix('/gk')->group(function () {
     Route::view('/gudang', 'page.gk.gudang.index');
     Route::view('/gudang/sparepart/1', 'page.gk.gudang.sparepartEdit');
     Route::view('/gudang/unit/1', 'page.gk.gudang.unitEdit');
-    Route::view('/terima', 'page.gk.terima');
-    Route::view('/transaksi', 'page.gk.transaksi');
-    Route::view('/transfer', 'page.gk.transfer');
+    Route::view('/terimaProduk', 'page.gk.terima.index');
+    Route::view('/terimaProduk/1', 'page.gk.terima.edit');
+    Route::view('/transfer', 'page.gk.transfer.index');
+    Route::view('/transfer/1', 'page.gk.transfer.edit');
+    Route::view('/transaksi', 'page.gk.transaksi.index');
+    Route::view('/transaksi/1', 'page.gk.transaksi.show');
 });
 
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {

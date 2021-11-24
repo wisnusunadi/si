@@ -18,4 +18,8 @@ class NoseriTGbj extends Model
     function layout() {
         return $this->belongsTo(Layout::class, 'layout_id');
     }
+
+    function seri() {
+        return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
+    }
 }

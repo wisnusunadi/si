@@ -4,6 +4,30 @@
 
 @section('content')
 <style>
+    .nomor-so{
+        background-color: #717FE1;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-akn{
+        background-color: #DF7458;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .nomor-po{
+        background-color: #85D296;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
+    .instansi{
+        background-color: #36425E;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px
+    }
         .topnav a {
         float: left;
         display: block;
@@ -119,82 +143,82 @@
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>68545465465</td>
-                                                    <td>100 Unit</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
                                                                 class="fas fa-paper-plane"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>4654564654654</td>
-                                                    <td>59 Unit</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>5456456155156</td>
-                                                    <td>100 Unit</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>4654564654654</td>
-                                                    <td>59 Unit</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>5456456155156</td>
-                                                    <td>100 Unit</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>4654564654654</td>
-                                                    <td>59 Unit</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>5456456155156</td>
-                                                    <td>100 Unit</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>4654564654654</td>
-                                                    <td>59 Unit</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>5456456155156</td>
-                                                    <td>100 Unit</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>4654564654654</td>
-                                                    <td>59 Unit</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -205,8 +229,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Produk</th>
-                                                    <th>Jumlah</th>
+                                                    <th>Nomor SO</th>
+                                                    <th>Customer</th>
                                                     <th>Batas Transfer</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -214,83 +238,83 @@
                                             <tbody>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
+                                                    <td>68545465465</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>Customer 1</td>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
+                                                    <td>5456456155156</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>Customer 1</td>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
+                                                    <td>5456456155156</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>Customer 1</td>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
+                                                    <td>5456456155156</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>Customer 1</td>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
+                                                    <td>5456456155156</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>Customer 1</td>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -301,8 +325,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Produk</th>
-                                                    <th>Jumlah</th>
+                                                    <th>Nomor SO</th>
+                                                    <th>Customer</th>
                                                     <th>Batas Transfer</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -310,104 +334,100 @@
                                             <tbody>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>
-                                                        10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 5 Hari</span>
+                                                    <td>68545465465</td>
+                                                    <td>RS Dr.Soetomo</td>
+                                                    <td>10-04-2021 <br>
+                                                    <span class="badge badge-danger">Melewati 3 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 6 Hari</span>
-                                                    </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
+                                                    <td>23-09-2021<br>
+                                                        <span class="badge badge-danger">Melewati 5 Hari</span></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 7 Hari</span>
+                                                    <td>5456456155156</td>
+                                                    <td>RS Dr.Soetomo</td>
+                                                    <td>10-04-2021<br>
+                                                        <span class="badge badge-danger">Melewati 3 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 8 Hari</span>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
+                                                    <td>23-09-2021<br>
+                                                        <span class="badge badge-danger">Melewati 4 Hari</span>
+
                                                     </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 9 Hari</span>
+                                                    <td>5456456155156</td>
+                                                    <td>RS Dr.Soetomo</td>
+                                                    <td>10-04-2021<br>
+                                                        <span class="badge badge-danger">Melewati 9 Hari</span>
+
                                                     </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 19 Hari</span>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
+                                                    <td>23-09-2021<br>
+                                                        <span class="badge badge-danger">Melewati 10 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
+                                                    <td>5456456155156</td>
+                                                    <td>RS Dr.Soetomo</td>
                                                     <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 11 Hari</span>
-                                                    </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                        <span class="badge badge-danger">Melewati 7 Hari</span></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 6 Hari</span>
-                                                    </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
+                                                    <td>23-09-2021<br>
+                                                        <span class="badge badge-danger">Melewati 3 Hari</span></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 4 Hari</span>
-                                                    </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td>5456456155156</td>
+                                                    <td>RS Dr.Soetomo</td>
+                                                    <td>10-04-2021<br>
+                                                        <span class="badge badge-danger">Melewati 19 Hari</span></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 16 Hari</span>
-                                                    </td>
-                                                    <td><a href="{{ url('gbj/so') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td>4654564654654</td>
+                                                    <td>RS. Dr. Ramelan</td>
+                                                    <td>23-09-2021<br>
+                                                        <span class="badge badge-danger">Melewati 3 Hari</span></td>
+                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -903,80 +923,80 @@
                                                     <td>Produk 1</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>100 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>59 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -999,80 +1019,80 @@
                                                     <td>Produk 1</td>
                                                     <td>50 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>100 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>50 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>100 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>50 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>100 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>50 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>100 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>50 Unit</td>
                                                     <td>10-04-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>100 Unit</td>
                                                     <td>23-09-2021</td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1094,101 +1114,101 @@
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 15 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 14 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 12 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 10 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 4 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 8 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 8 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 7 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">1</td>
                                                     <td>Produk 1</td>
                                                     <td>31 Unit</td>
-                                                    <td>10-04-2021
+                                                    <td>10-04-2021 <br>
                                                         <span class="badge badge-danger">Lewat 6 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                                 <tr>
                                                     <td scope="row">2</td>
                                                     <td>Produk 2</td>
                                                     <td>12 Unit</td>
-                                                    <td>23-09-2021
+                                                    <td>23-09-2021 <br>
                                                         <span class="badge badge-danger">Lewat 5 Hari</span>
                                                     </td>
-                                                    <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
+                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                                class="fas fa-paper-plane"></i></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1223,8 +1243,8 @@
                                                 <td>10-04-2021 <br>
                                                     <span class="badge badge-info">Lewat 1 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
@@ -1233,8 +1253,8 @@
                                                 <td>23-09-2021 <br>
                                                     <span class="badge badge-warning">Lewat 2 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">1</td>
@@ -1243,8 +1263,8 @@
                                                 <td>10-04-2021 <br>
                                                     <span class="badge badge-danger">Lewat 12 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
@@ -1253,8 +1273,8 @@
                                                 <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 10 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">1</td>
@@ -1263,8 +1283,8 @@
                                                 <td>10-04-2021 <br>
                                                     <span class="badge badge-danger">Lewat 4 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
@@ -1273,8 +1293,8 @@
                                                 <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 8 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">1</td>
@@ -1283,8 +1303,8 @@
                                                 <td>10-04-2021 <br>
                                                     <span class="badge badge-danger">Lewat 8 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
@@ -1293,8 +1313,8 @@
                                                 <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 7 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">1</td>
@@ -1303,8 +1323,8 @@
                                                 <td>10-04-2021 <br>
                                                     <span class="badge badge-danger">Lewat 6 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td scope="row">2</td>
@@ -1313,8 +1333,8 @@
                                                 <td>23-09-2021 <br>
                                                     <span class="badge badge-danger">Lewat 5 Hari</span>
                                                 </td>
-                                                <td><a href="{{ url('gbj/dp') }}" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></a></td>
+                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
+                                                            class="fas fa-paper-plane"></i></button></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1328,7 +1348,127 @@
     </div>
 </div>
 
+{{-- Modal Penerimaan --}}
+<div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-seri">
+                    <thead>
+                        <tr>
+                            <th>No Seri</th>
+                            <th>Layout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>654165654</td>
+                            <td>Layout 1</td>
+                        </tr>
+                        <tr>
+                          <td>654165654</td>
+                          <td>Layout 1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
+{{-- Modal SO --}}
+<div class="modal fade" id="viewProdukModal" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row row-cols-2">
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor SO</label>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor AKN</label>
+                                        <div class="card nomor-akn">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Nomor PO</label>
+                                        <div class="card nomor-po">
+                                            <div class="card-body">
+                                                89798797856456
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- col --}}
+                                    <div class="col"> <label for="">Instansi</label>
+                                        <div class="card instansi">
+                                            <div class="card-body">
+                                                RS. Dr. Soetomo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped" id="view-produk">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Tipe</th>
+                                            <th>Merk</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>ABPM50</td>
+                                            <td>ELITECH</td>
+                                            <td><span class="badge badge-success">Sudah Diinput</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
+                                            <td>100</td>
+                                            <td>RGB</td>
+                                            <td>ELITECH</td>
+                                            <td><span class="badge badge-danger">Belum Diinput</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_js')
@@ -1669,6 +1809,89 @@
             ]
         });
 
+        $(document).on('click', '.salemodal', function() {
+            // console.log('ok1');
+            var id = $(this).data('id');
+            console.log(id);
+
+            modalSO();
+        })
+
+        // $(document).on('click', '.editmodal2', function() {
+        //     // console.log('ok1');
+        //     var id = $(this).data('id');
+        //     console.log(id);
+        //     $('.table-seri').DataTable().destroy();
+        //     $('.table-seri').DataTable({
+        //         processing: true,
+        //         serverSide: true,
+        //         autoWidth: false,
+        //         ajax: {
+        //             url: "/api/dashboard-gbj/noseri",
+        //             type: "post",
+        //             data: { id: id},
+        //         },
+        //         column: [
+        //             {data: "noser"},
+        //             {data: "posisi"},
+        //         ],
+        //         "language": {
+        //                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        //             }
+        //     });
+        //     modalPenerimaan();
+        // })
+
+        // $(document).on('click', '.editmodal3', function() {
+        //     // console.log('ok1');
+        //     var id = $(this).data('id');
+        //     console.log(id);
+        //     $('.table-seri').DataTable().destroy();
+        //     $('.table-seri').DataTable({
+        //         processing: true,
+        //         serverSide: true,
+        //         autoWidth: false,
+        //         ajax: {
+        //             url: "/api/dashboard-gbj/noseri",
+        //             type: "post",
+        //             data: { id: id},
+        //         },
+        //         column: [
+        //             {data: "noser"},
+        //             {data: "posisi"},
+        //         ],
+        //         "language": {
+        //                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        //             }
+        //     });
+        //     modalPenerimaan();
+        // })
+
+        $(document).on('click', '.editmodal', function() {
+            // console.log('ok1');
+            var id = $(this).data('id');
+            console.log(id);
+            $('.table-seri').DataTable().destroy();
+            $('.table-seri').DataTable({
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                ajax: {
+                    url: "/api/dashboard-gbj/noseri/" + id,
+                    // type: "post",
+                    // data: { id: id},
+                },
+                column: [
+                    {data: "noser"},
+                    {data: "posisi"},
+                ],
+                "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                    }
+            });
+            modalPenerimaan();
+        })
+
 
         // Penjualan
         $(document).on('click', '#transferoneday', function () {
@@ -1805,5 +2028,44 @@
             }
         }
         }
+        function modalPenerimaan() {
+            $('.detail-layout').modal('show');
+        }
+        function modalSO() {
+            $('#viewProdukModal').modal('show');
+        }
+
+
+
+        // $(document).on('click', '.editmodal2', function() {
+        //     console.log('ok2');
+        //     var id = $(this).data('id');
+        //     console.log(id);
+        //     modalPenerimaan();
+        // })
+
+        // $(document).on('click', '.editmodal3', function() {
+        //     console.log('ok3');
+        //     var id = $(this).data('id');
+        //     console.log(id);
+        //     modalPenerimaan();
+        // })
+
+        // $(document).on('click', '.editmodal', function() {
+        //     console.log('ok4');
+        //     var id = $(this).data('id');
+        //     console.log(id);
+        //     modalPenerimaan();
+        // })
+        // $('.table-seri').DataTable({
+        //     "language": {
+        //             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        //         }
+        // });
+        // $('#view-produk').DataTable({
+        //     "language": {
+        //             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        //         }
+        // });
 </script>
 @stop

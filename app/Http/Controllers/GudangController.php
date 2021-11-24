@@ -609,6 +609,21 @@ class GudangController extends Controller
     }
 
     // dashboard
+
+    function getNoseriTerima(Request $request, $id) {
+        $data = NoseriTGbj::whereHas('detail', function($q) use($id) {
+            $q->where('gdg_brg_jadi_id', $id);
+        })->get();
+        // $data = NoseriTGbj::with('detail', 'layout', 'seri')->get();
+        return datatables()->of($data)
+            ->addColumn('noser', function($d) {
+                return $d->seri->noseri;
+            })
+            ->addColumn('posisi', function($d) {
+                return $d->layout->ruang;
+            })
+            ->make(true);
+    }
     // produk
     function h1()
     {
@@ -877,8 +892,11 @@ class GudangController extends Controller
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<a href="' . url("gbj/dp") . '" class="btn btn-outline-primary"><i
-                class="fas fa-paper-plane"></i></a>';
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal1" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                            <button class="btn btn-outline-primary" type="button" >
+                            <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </a>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -907,8 +925,11 @@ class GudangController extends Controller
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<a href="' . url("gbj/dp") . '" class="btn btn-outline-primary"><i
-                class="fas fa-paper-plane"></i></a>';
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal2" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                            <button class="btn btn-outline-primary" type="button" >
+                            <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </a>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -943,8 +964,11 @@ class GudangController extends Controller
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<a href="' . url("gbj/dp") . '" class="btn btn-outline-primary"><i
-                class="fas fa-paper-plane"></i></a>';
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal3" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                            <button class="btn btn-outline-primary" type="button" >
+                            <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </a>';
             })
             ->rawColumns(['action', 'tgl_masuk'])
             ->make(true);
@@ -981,8 +1005,11 @@ class GudangController extends Controller
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<a href="' . url("gbj/dp") . '" class="btn btn-outline-primary"><i
-                class="fas fa-paper-plane"></i></a>';
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                            <button class="btn btn-outline-primary" type="button" >
+                            <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </a>';
             })
             ->rawColumns(['action', 'tgl_masuk'])
             ->make(true);
@@ -1060,9 +1087,9 @@ class GudangController extends Controller
                 }
             })
             ->addColumn('action', function ($d) {
-                return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->pesanan_id . '">
+                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr=""  data-id="' . $d->pesanan_id . '">
                              <button class="btn btn-outline-primary" type="button" >
-                             <i class="fas fa-paper-plane"></i>
+                                <i class="fas fa-paper-plane"></i>
                              </button>
                          </a>';
             })

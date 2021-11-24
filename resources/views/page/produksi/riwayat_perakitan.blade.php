@@ -53,7 +53,7 @@
                             </div>
                             <div class="col-6">
                                 <h3 class="font-weight-bold">1000</h3>
-                                <h4 class="font-weight-normal text-muted">Produk yang Dibuat</h4>
+                                <h4 class="font-weight-normal text-muted">Unit Dirakit</h4>
                         </div>
                     </div>
                     <div class="card-body">
