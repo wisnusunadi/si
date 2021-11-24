@@ -86,8 +86,6 @@
     .dropdown-toggle:active {
         color: #C0C0C0;
     }
-
-    #pengirimanhref:hover {}
 </style>
 @stop
 
