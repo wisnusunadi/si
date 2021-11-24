@@ -20,17 +20,18 @@
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
     .my-custom-scrollbar {
-    position: relative;
-    height: 200px;
-    overflow: auto;
+        position: relative;
+        height: 550px;
+        overflow: auto;
     }
     .table-wrapper-scroll-y {
     display: block;
     }
-    table th {
+    table thead th {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
+    z-index: 30;
     }
     
 </style>
@@ -42,114 +43,100 @@
 
 <section class="content">
     <div class="row">
-        <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card card-primary b-radius">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12 mt-3">
-                                    <form method="post">
-                                        <div class="form-group">
-                                            <label for="">Tanggal Masuk</label>
-                                            <input type="date" name="" id="datePicker" class="form-control"
-                                                placeholder="">
-                                        </div>
-                                        <div class="form-group row top-min">
-                                            <label for=""
-                                                class="col-12 font-weight-bold col-form-label">Dari</label>
-                                            <div class="col-12">
-                                                <select class="form-control dari" name="dari">
-                                                    <option value="Divisi IT">Divisi IT</option>
-                                                    <option value="Divisi QC">Divisi QC</option>
-                                                    <option value="Divisi Perakitan">Divisi Perakitan</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="tanggal">Tanggal Masuk</label>
+                            <input type="date" name="" id="datePicker" class="form-control" placeholder="">
+                        </div>
+                        <div class="form-group col">
+                            <label for="dari">Dari</label>
+                            <select class="form-control dari" name="dari">
+                                <option value="Divisi IT">Divisi IT</option>
+                                <option value="Divisi QC">Divisi QC</option>
+                                <option value="Divisi Perakitan">Divisi Perakitan</option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-8 col-md-12 col-sm-12">
-            <div class="card card-noborder b-radius">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 table-responsive mb-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title"><i class="fab fa-whmcs"></i> Sparepart Karantina</h3>
-                                    <div class="card-tools">
-                                        <button type="button" class="btn" id="" data-card-widget="collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="col-12 d-flex justify-content-end mb-2"><button class="btn btn-outline-info add_sparepart"><i class="fas fa-plus"></i> Tambah</button></div>
-                                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                                        <table class="table table-hover add_sparepart_table">
-                                            <thead class="thead-dark">
-                                                <tr>
-                                                    <th>Nama Produk</th>
-                                                    <th>Unit</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="tambah_data">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+        <div class="col-xl-12">
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fab fa-whmcs"></i> Sparepart Karantina</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn" id="" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
                             </div>
                         </div>
-
-                        <div class="col-12 table-responsive mb-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title"><i class="fas fa-tools"></i> Unit Karantina</h3>
-                                    <div class="card-tools">
-                                        <button type="button" class="btn" id="" data-card-widget="collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="col-12 d-flex justify-content-end mb-2"><button class="btn btn-outline-info add_unit"><i class="fas fa-plus"></i> Tambah</button></div>
-                                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                                        <table class="table table-hover add_unit_table">
-                                            <thead class="thead-dark">
-                                                <tr>
-                                                    <th>Nama Produk</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Tujuan</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="tambah_data">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex justify-content-end">
-                            <div class="btn-simpan">
-                                <button class="btn btn-success" type="button">Terima</button>&nbsp;
-                                <button class="btn btn-info" type="button">Rancang</button>&nbsp;
-                                <button class="btn btn-secondary " type="button">Batal</button>
+                        <div class="card-body">
+                            <div class="col-12 d-flex justify-content-end mb-2"><button
+                                    class="btn btn-outline-info add_sparepart"><i class="fas fa-plus"></i>
+                                    Tambah</button></div>
+                            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                <table class="table table-hover add_sparepart_table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th style="width: 180px">Nama Produk</th>
+                                            <th style="width: 180px">Unit</th>
+                                            <th style="width: 150px">Jumlah</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tambah_data">
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    </form>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-tools"></i> Unit Karantina</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn" id="" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-12 d-flex justify-content-end mb-2"><button
+                                    class="btn btn-outline-info add_unit"><i class="fas fa-plus"></i>
+                                    Tambah</button></div>
+                            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                <table class="table table-hover add_unit_table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th style="width: 180px">Nama Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tambah_data">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-xl-12 d-flex justify-content-end">
+        <div class="btn-simpan mb-3">
+            <button class="btn btn-success" onclick="terima()" type="button">Terima</button>&nbsp;
+            <button class="btn btn-info" onclick="rancang()" type="button">Rancang</button>&nbsp;
+            <button class="btn btn-secondary" onclick="batal()" type="button">Batal</button>
+        </div>
+    </div>
+     </div>
 </section>
 
 
@@ -367,16 +354,93 @@
         }
     });
     $(document).on('click','.add_sparepart', function () {
-        let table_sparepart = '<tr><td><select name="" id="" class="form-control"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_sparepart = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
+        $('.produk').select2();
+        $('.unit').select2();
     });
     $(document).on('click','.add_unit', function () {
-        let table_unit = '<tr><td><select name="" id="" class="form-control"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><input type="text" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
+        $('.produk').select2();
     });
     $(document).on('click', '.btn-delete', function (e) {
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
     });
+    $('.dari').select2({});
+
+    function terima() { 
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di terima tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Terima!',
+                    'Data berhasil diterima!',
+                    'success'
+                )
+            }else{
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil diterima!',
+                    'error'
+                )
+            }
+        });
+     }
+    function rancang() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di rancang tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Rancang!',
+                    'Data berhasil diterima!',
+                    'success'
+                );
+            }else{
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil diterima!',
+                    'error'
+                );
+            }
+        });
+    }
+    function batal() { 
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di batalkan tidak dapat dikembalikan!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Batal!',
+                    'Data berhasil dibatalkan!',
+                    'success'
+                    );
+            }else{
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil dibatalkan!',
+                    'error'
+                    );
+            }
+        });
+    }
 </script>
 @stop
