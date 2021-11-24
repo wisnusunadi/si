@@ -27,6 +27,24 @@
     .inline {
         display: inline-block;
     }
+
+    .borderless {
+        border: 0 none;
+    }
+
+    .filter {
+        margin: 10px;
+    }
+
+    .blue-bg {
+        background-color: #dae6f0;
+        color: #4682B4;
+    }
+
+    .yellow-bg {
+        background-color: #ffe680;
+        color: #997a00;
+    }
 </style>
 @stop
 
@@ -168,31 +186,26 @@
                 <div class="modal fade" id="modaldetail" role="dialog" aria-labelledby="modaldetail" aria-hidden="true">
                     <div class="modal-dialog modal-xl" role="document">
                         <div class="modal-content" style="margin: 10px">
-                            <div class="modal-header bg-success">
-                                <h4 class="modal-title">Detail</h4>
+                            <div class="modal-header borderless blue-bg">
+                                <h4 class="modal-title"><b>Detail</b></h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body filter">
                                 <div class="row">
                                     <div class="col-4">
+                                        <h5>Info</h5>
                                         <div class="card">
                                             <div class="card-body">
-                                                <ul class="list-group">
-                                                    <li class="list-group-item">
-                                                        <span style="font-size: 24px"><b>Info</b></span><span class="float-right green-text col-form-label"><b>Tersedia</b></span>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <a>Nama Produk</a><span></span><b class="float-right" id="nama_produk"></b>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <a>Harga</a><span></span><b class="float-right" id="harga_produk"></b>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <a>Stok</a><span id="stok"></span><b class="float-right">-</b>
-                                                    </li>
-                                                </ul>
+                                                <div class="filter">
+                                                    <div><small class="text-muted">Nama Produk</small></div>
+                                                    <div><b id="nama_produk"></b></div>
+                                                </div>
+                                                <div class="filter">
+                                                    <div><small class="text-muted">Harga Produk</small></div>
+                                                    <div><b id="harga_produk"></b></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -202,7 +215,7 @@
                                             <div class="card-body">
                                                 <div class="table-responsive">
                                                     <table class="table" id="showdetailtable" width="100%">
-                                                        <thead>
+                                                        <thead class="align-center">
                                                             <tr>
                                                                 <th>No</th>
                                                                 <th>Produk</th>
@@ -225,8 +238,8 @@
                 <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content" style="margin: 10px">
-                            <div class="modal-header bg-warning">
-                                <h4>Edit</h4>
+                            <div class="modal-header yellow-bg">
+                                <h4 class="modal-title"><b>Ubah</b></h4>
                             </div>
                             <div class="modal-body" id="edit">
 
@@ -337,18 +350,21 @@
                 },
                 ajax: '/api/penjualan_produk/detail/' + rows[0].id,
                 columns: [{
+                        className: 'nowrap-text align-center',
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
                     },
                     {
+                        className: 'nowrap-text',
                         data: 'nama'
-
                     },
                     {
+                        className: 'nowrap-text align-center',
                         data: 'kelompok'
 
                     }, {
+                        className: 'nowrap-text align-center',
                         data: 'jumlah'
                     }
 

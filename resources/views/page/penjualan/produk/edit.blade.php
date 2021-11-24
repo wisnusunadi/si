@@ -1,10 +1,10 @@
 @foreach($penjualanproduk as $p)
-<form data-attr="{{route('penjualan.produk.update', ['id' => $p->id])}}" method="post" id="form-penjualan-produk-update">
+<form data-attr="{{route('penjualan.produk.update', ['id' => $p->id])}}" data-id="{{$p->id}}" method="post" id="form-penjualan-produk-update">
     @method('PUT')
     <div class="row d-flex justify-content-center">
 
         <div class="col-11">
-            <h5>Info Umum Paket</h5>
+            <h6>Info Umum Paket</h6>
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -38,7 +38,7 @@
     </div>
     <div class="row d-flex justify-content-center">
         <div class="col-11">
-            <h5>Detail Produk Paket</h5>
+            <h6>Detail Produk Paket</h6>
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -102,7 +102,7 @@
                 <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
             </span>
             <span class="float-right">
-                <button type="submit" class="btn btn-warning float-right disabled" id="btnsimpan">Simpan</button>
+                <button type="submit" class="btn btn-warning float-right" id="btnsimpan">Simpan</button>
             </span>
         </div>
     </div>

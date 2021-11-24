@@ -9,6 +9,7 @@ class DetailPesananProduk extends Model
 {
     protected $table = 'detail_pesanan_produk';
     protected $fillable = ['detail_pesanan_id', 'gudang_barang_jadi_id'];
+    public $timestamps = false;
 
     public function GudangBarangJadi()
     {

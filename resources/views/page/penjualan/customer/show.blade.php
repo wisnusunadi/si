@@ -35,6 +35,11 @@
         color: #C0C0C0;
     }
 
+    .yellow-bg {
+        background-color: #ffe680;
+        color: #997a00;
+    }
+
     @media screen and (min-width: 1440px) {
         section {
             font-size: 14px;
@@ -164,8 +169,8 @@
                     <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content" style="margin: 10px">
-                                <div class="modal-header bg-warning">
-                                    <h4>Edit</h4>
+                                <div class="modal-header yellow-bg">
+                                    <h4 class="modal-title"><b>Ubah</b></h4>
                                 </div>
                                 <div class="modal-body" id="edit">
 

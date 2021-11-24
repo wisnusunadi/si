@@ -368,8 +368,12 @@
                                                             <th width="5%">Aksi</th>
                                                         </tr>
                                                     </thead>
+
                                                     <tbody>
+
                                                         <?php $produkpenjualan = 0; ?>
+                                                        @if(isset($e->pesanan))
+                                                        @if(isset($e->pesanan->detailpesanan))
                                                         @foreach($e->pesanan->detailpesanan as $f)
 
                                                         <tr>
@@ -411,7 +415,7 @@
                                                             <td>
                                                                 <div class="form-group d-flex justify-content-center">
                                                                     <div class="input-group">
-                                                                        <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah{{$loop->iteration-1}}" style="width:100%;" value="{{$f->jumlah}}">
+                                                                        <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[{{$produkpenjualan}}]" id="produk_jumlah{{$loop->iteration-1}}" style="width:100%;" value="{{$f->jumlah}}">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text" id="produk_satuan">pcs</span>
                                                                         </div>
@@ -424,7 +428,7 @@
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text" id="prdhrg">Rp</span>
                                                                     </div>
-                                                                    <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
+                                                                    <input type="text" class="form-control produk_harga" name="produk_harga[{{$produkpenjualan}}]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -432,7 +436,7 @@
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text" id="prdsub">Rp</span>
                                                                     </div>
-                                                                    <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
+                                                                    <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[{{$produkpenjualan}}]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -441,21 +445,27 @@
                                                         </tr>
                                                         <?php $produkpenjualan = $produkpenjualan + 1; ?>
                                                         @endforeach
-
+                                                        @endif
+                                                        @endif
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
                                                             <th colspan="4" style="text-align:right;">Total Harga</th>
                                                             <th id="totalhargaprd" class="align-right">Rp.
+                                                                @if(isset($e->pesanan))
+                                                                @if(isset($e->pesanan->detailpesanan))
                                                                 <?php $x = 0;
                                                                 foreach ($e->pesanan->detailpesanan as $f) {
                                                                     $x += $f->harga * $f->jumlah;
                                                                 }
                                                                 ?>
                                                                 {{number_format($x,0,',','.')}}
+                                                                @endif
+                                                                @endif
                                                             </th>
                                                         </tr>
                                                     </tfoot>
+
 
                                                 </table>
                                             </div>
@@ -509,9 +519,6 @@
             if ($(this).val() != "") {
                 $('#msgcustomer_id').text("");
                 $('#customer_id').removeClass('is-invalid');
-                //var value = getCustomer($(this).val());
-                // $('#alamat').val(value.alamat);
-                // $('#telepon').val(value.telepon);
             } else if ($(this).val() == "") {
                 $('#msgcustomer_id').text("Silahkan Pilih Customer");
                 $('#customer_id').addClass('is-invalid');
@@ -737,17 +744,17 @@
                 <td>
                     <div class="form-group">
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
-                            <option value=""></option>
                         </select>
-                        <div class="detailjual" id="tes0">
-                        </div>
                     </div>
-                    <div id="detail_produk" class="detail_produk"></div>
+                    <div class="detail_produk" id="detail_produk0">
+                    </div>
+                    <div class="detailjual" id="tes0">
+                    </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group">
-                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
+                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;" value="">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="produk_satuan">pcs</span>
                             </div>
@@ -758,21 +765,21 @@
                 <td>
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Rp</span>
+                            <span class="input-group-text" id="prdhrg">Rp</span>
                         </div>
-                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;"/>
+                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Rp</span>
+                            <span class="input-group-text" id="prdsub">Rp</span>
                         </div>
-                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
+                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
                     </div>
                 </td>
                 <td>
-                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
+                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
                 </td>
             </tr>`;
             return data;
@@ -961,51 +968,64 @@
 
         function load_variasi() {
             produk = [];
-            produk = <?php echo json_encode($e->Pesanan->DetailPesanan); ?>;
-            for (var w = 0; w < produk.length; w++) {
-                $.ajax({
-                    url: '/api/penjualan_produk/select/' + produk[w]['penjualan_produk_id'],
-                    type: 'GET',
-                    dataType: 'json',
-                    async: false,
-                    success: function(res) {
-                        for (var x = 0; x < res[0].produk.length; x++) {
-                            var data = [];
-                            if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                                data.push({
-                                    id: res[0].produk[x].gudang_barang_jadi[0].id,
-                                    text: res[0].produk[x].nama,
-                                    jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
-                                });
+            produk = <?php
+                        $prd = array();
+                        if (isset($e->Pesanan)) {
+                            $p = array();
+                            if (isset($e->Pesanan->DetailPesanan)) {
+                                echo json_encode($e->Pesanan->DetailPesanan);
                             } else {
-                                for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
-                                    data.push({
-                                        id: res[0].produk[x].gudang_barang_jadi[y].id,
-                                        text: res[0].produk[x].gudang_barang_jadi[y].nama,
-                                        jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
-                                    });
-                                }
+                                echo json_encode($prd);
                             }
-                            $('select[name="variasi[' + w + '][' + x + ']"]').select2({
-                                placeholder: 'Pilih Variasi',
-                                data: data,
-                                templateResult: function(data) {
-                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
-                                    return $span;
-                                },
-                                templateSelection: function(data) {
-                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
-                                    return $span;
+                        } else {
+                            echo json_encode($prd);
+                        } ?>;
+            if (produk.length > 0) {
+                for (var w = 0; w < produk.length; w++) {
+                    $.ajax({
+                        url: '/api/penjualan_produk/select/' + produk[w]['penjualan_produk_id'],
+                        type: 'GET',
+                        dataType: 'json',
+                        async: false,
+                        success: function(res) {
+                            for (var x = 0; x < res[0].produk.length; x++) {
+                                var data = [];
+                                if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                                    data.push({
+                                        id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                        text: res[0].produk[x].nama,
+                                        jumlah: res[0].produk[x].pivot.jumlah,
+                                        qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                    });
+                                } else {
+                                    for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                        data.push({
+                                            id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                            text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                            jumlah: res[0].produk[x].pivot.jumlah,
+                                            qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                        });
+                                    }
                                 }
-                            });
+                                $('select[name="variasi[' + w + '][' + x + ']"]').select2({
+                                    placeholder: 'Pilih Variasi',
+                                    data: data,
+                                    templateResult: function(data) {
+                                        var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                        return $span;
+                                    },
+                                    templateSelection: function(data) {
+                                        var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                        return $span;
+                                    }
+                                });
 
-                            $('select[name="variasi[' + w + '][' + x + ']"]').trigger("change");
-                            console.log('select[name="variasi[' + w + '][' + x + ']"]');
+                                $('select[name="variasi[' + w + '][' + x + ']"]').trigger("change");
+                                console.log('select[name="variasi[' + w + '][' + x + ']"]');
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
         }

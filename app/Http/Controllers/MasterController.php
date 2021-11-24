@@ -79,6 +79,9 @@ class MasterController extends Controller
         }
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('nama', function ($data) {
+                return $data->nama;
+            })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -94,7 +97,7 @@ class MasterController extends Controller
                     </a>
                 </div>';
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['nama', 'button'])
             ->make(true);
     }
 
@@ -140,12 +143,24 @@ class MasterController extends Controller
             // })
             // ->rawColumns(['produk_nama'])
             ->addColumn('kelompok', function ($data) {
-                return $data->KelompokProduk->nama;
+                $return = "";
+                if ($data->KelompokProduk->nama == 'Alat Kesehatan') {
+                    $return .= '<span class="badge blue-text">';
+                } else if ($data->KelompokProduk->nama == 'Water Treatment') {
+                    $return .= '<span class="badge orange-text">';
+                } else {
+                    $return .= '<span class="badge purple-text">';
+                }
+                $return .= $data->KelompokProduk->nama;
+                $return .= '</span>';
+
+                return $return;
             })
             ->addColumn('jumlah', function ($data) {
                 return $data->PenjualanProduk->first()->pivot->jumlah;
             })
             ->addIndexColumn()
+            ->rawColumns(['kelompok'])
             ->make(true);
     }
     public function get_data_pesanan($id)
