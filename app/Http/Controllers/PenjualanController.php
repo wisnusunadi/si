@@ -1087,7 +1087,7 @@ class PenjualanController extends Controller
     }
     public function update_ekatalog(Request $request, $id)
     {
-        echo json_encode($request->all());
+        echo json_encode($request->variasi);
         $ekatalog = Ekatalog::find($id);
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $request->customer_id;

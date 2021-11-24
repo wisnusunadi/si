@@ -445,7 +445,95 @@
                                                         </tr>
                                                         <?php $produkpenjualan = $produkpenjualan + 1; ?>
                                                         @endforeach
+                                                        @else
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                                                    </select>
+                                                                </div>
+                                                                <div class="detail_produk" id="detail_produk0">
+                                                                </div>
+                                                                <div class="detailjual" id="tes0">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group">
+                                                                        <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;" value="">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text" id="produk_satuan">pcs</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <small id="produk_ketersediaan"></small>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="prdhrg">Rp</span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="prdsub">Rp</span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                                                            </td>
+                                                        </tr>
                                                         @endif
+                                                        @else
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                                                    </select>
+                                                                </div>
+                                                                <div class="detail_produk" id="detail_produk0">
+                                                                </div>
+                                                                <div class="detailjual" id="tes0">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group">
+                                                                        <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;" value="">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text" id="produk_satuan">pcs</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <small id="produk_ketersediaan"></small>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="prdhrg">Rp</span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="prdsub">Rp</span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                                                            </td>
+                                                        </tr>
                                                         @endif
                                                     </tbody>
                                                     <tfoot>
@@ -513,6 +601,7 @@
                 select_data(i);
             }
         }
+
 
         $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
         $('#customer_id').on('keyup change', function() {
@@ -705,6 +794,7 @@
         });
 
         $('#produktable').on('keyup change', '.variasi', function() {
+            $(this).val();
             var name = $(this).attr('name');
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
@@ -1021,7 +1111,6 @@
                                 });
 
                                 $('select[name="variasi[' + w + '][' + x + ']"]').trigger("change");
-                                console.log('select[name="variasi[' + w + '][' + x + ']"]');
                             }
                         }
                     });
