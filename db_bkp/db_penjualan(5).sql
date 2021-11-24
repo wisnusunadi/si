@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 19, 2021 at 10:59 AM
+-- Generation Time: Nov 22, 2021 at 10:52 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.27
 
@@ -45,12 +45,12 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `id_provinsi`, `nama`, `telp`, `email`, `alamat`, `npwp`, `ket`, `created_at`, `updated_at`) VALUES
-(1, 11, 'CV. Cipta Jaya Medika', '890000000000', '0', 'JL. Biliton No. 15 Gubeng - Surabaya', '12.454.456.1-606.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 6, 'Gunung Bayan Pratama Coal', '890000000000', '0', 'Graha Irama Lt. 12, JL. HR. Rasuna said Blok X-1 Kav. 1-2, Kuningan Timur-Setia Budi-Jakarta Selatan', '01.467.051.7-091.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 6, 'Firman Ketaun Perkasa', '81792730137', '0', 'Graha Irama Lt 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta sela', '01.856.455.9-063.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(4, 11, 'CV. Golden Elite Technology', '0', '0', 'JL. Kalianyar 17 E, Surabaya', '01.922.786.7-611.000', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 6, 'PT. Indevco Karya Sakti', '0', '0', 'JL. P. Jayakarta 131 Blok A No. 31 Mangga Dua selatan, Sawah Besar Jakarta Pusat, DKI Jakarta raya 1', '01.109.118.8-026.001', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, 11, 'PT. Indevco Karya Sakti', '0', '0', 'JL. Rajawali No. 86, Surabaya', '01.109.118.8-605.000', 'asd', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(1, 11, 'CV. Cipta Jaya Medika', '0315035258', NULL, 'JL. Biliton No. 15 Gubeng - Surabaya', '12.454.456.1-606.000', NULL, '0000-00-00 00:00:00', '2021-11-22 02:06:48'),
+(2, 6, 'Gunung Bayan Pratama Coal', '0542874758', NULL, 'Graha Irama Lt. 12, JL. HR. Rasuna said Blok X-1 Kav. 1-2, Kuningan Timur-Setia Budi-Jakarta Selatan', '01.467.051.7-091.000', NULL, '0000-00-00 00:00:00', '2021-11-22 02:06:56'),
+(3, 6, 'Firman Ketaun Perkasa', '0213450660', NULL, 'Graha Irama Lt 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta sela', '01.856.455.9-063.000', NULL, '0000-00-00 00:00:00', '2021-11-22 02:05:36'),
+(4, 11, 'CV. Golden Elite Technology', '0317491860', NULL, 'JL. Kalianyar 17 E, Surabaya', '01.922.786.7-611.000', NULL, '0000-00-00 00:00:00', '2021-11-22 02:04:32'),
+(5, 6, 'PT. Indevco Karya Sakti', '0313524554', NULL, 'JL. P. Jayakarta 131 Blok A No. 31 Mangga Dua selatan, Sawah Besar Jakarta Pusat, DKI Jakarta raya 1', '01.109.118.8-026.001', NULL, '0000-00-00 00:00:00', '2021-11-22 06:19:50'),
+(6, 11, 'PT. Indevco Karya Sakti', '0313532982', NULL, 'JL. Rajawali No. 86, Surabaya', '01.109.118.8-605.000', 'Untuk FAX', '0000-00-00 00:00:00', '2021-11-22 06:20:35'),
 (7, 6, 'PT. Firman Ketaun Perkasa', '0', '0', 'Graha Irama Lt. 12, JL. HR. Rasuna Said Blok X-1 Kav. 1 No. 2, Kuningan Timur-Setia Budi-Jakarta sel', '01.856.455.9-603.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (8, 6, 'PT. Mas Eltrajaya', '0', '0', 'Komplek Grogol Permai, JL. Prof DR. Latumenten Blok C No. 21, Petambunan Jakarta Barat-DKI Jakarta R', '02.691.647.8-036.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (9, 18, 'PT. Sarana Sahabat Maju', '0', '0', 'JL. Kartini No. 43 C / D-Tanjung Karang Tanjun Karang Pusat-Bandar Lampung 35111', '02.523.217.4-322.000', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -1233,7 +1233,8 @@ INSERT INTO `detail_pesanan` (`id`, `pesanan_id`, `penjualan_produk_id`, `jumlah
 (324, 131, 142, 2, 1518730, 0, '2021-11-19 07:40:18', '2021-11-19 07:40:18'),
 (325, 131, 185, 2, 1605878, 0, '2021-11-19 07:40:18', '2021-11-19 07:40:18'),
 (326, 132, 63, 2, 1536831, 0, '2021-11-19 07:41:04', '2021-11-19 07:41:04'),
-(327, 132, 138, 2, 2037402, 0, '2021-11-19 07:41:04', '2021-11-19 07:41:04');
+(327, 132, 138, 2, 2037402, 0, '2021-11-19 07:41:04', '2021-11-19 07:41:04'),
+(328, 3, 11, 1, 526262, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -24476,10 +24477,18 @@ INSERT INTO `t_tfbj_his` (`id`, `tfbj_id`, `gdg_brg_jadi_id`, `qty`, `noseri`, `
 --
 
 CREATE TABLE `t_tfbj_noseri` (
-  `id` int(11) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `t_tfbj_detail_id` bigint(20) UNSIGNED NOT NULL,
-  `noseri_id` bigint(100) NOT NULL
+  `noseri_id` bigint(100) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `t_tfbj_noseri`
+--
+
+INSERT INTO `t_tfbj_noseri` (`id`, `t_tfbj_detail_id`, `noseri_id`) VALUES
+(1, 65, 4),
+(8, 65, 6);
 
 -- --------------------------------------------------------
 
@@ -24708,7 +24717,8 @@ ALTER TABLE `noseri_barang_jadi`
 --
 ALTER TABLE `noseri_detail_pesanan`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `detail_pesanan_produk_id` (`detail_pesanan_produk_id`,`t_tfbj_noseri_id`);
+  ADD KEY `detail_pesanan_produk_id` (`detail_pesanan_produk_id`,`t_tfbj_noseri_id`),
+  ADD KEY `t_tfbj_noseri_id` (`t_tfbj_noseri_id`);
 
 --
 -- Indexes for table `password_resets`
@@ -24870,7 +24880,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=328;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=329;
 
 --
 -- AUTO_INCREMENT for table `detail_pesanan_produk`
@@ -25080,7 +25090,7 @@ ALTER TABLE `t_tfbj_his`
 -- AUTO_INCREMENT for table `t_tfbj_noseri`
 --
 ALTER TABLE `t_tfbj_noseri`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -25188,7 +25198,8 @@ ALTER TABLE `m_state`
 -- Constraints for table `noseri_detail_pesanan`
 --
 ALTER TABLE `noseri_detail_pesanan`
-  ADD CONSTRAINT `noseri_detail_pesanan_ibfk_1` FOREIGN KEY (`detail_pesanan_produk_id`) REFERENCES `detail_pesanan_produk` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `noseri_detail_pesanan_ibfk_1` FOREIGN KEY (`detail_pesanan_produk_id`) REFERENCES `detail_pesanan_produk` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `noseri_detail_pesanan_ibfk_2` FOREIGN KEY (`t_tfbj_noseri_id`) REFERENCES `t_tfbj_noseri` (`id`);
 
 --
 -- Constraints for table `spa`
@@ -25201,6 +25212,26 @@ ALTER TABLE `spa`
 --
 ALTER TABLE `spb`
   ADD CONSTRAINT `spb_ibfk_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `t_tfbj`
+--
+ALTER TABLE `t_tfbj`
+  ADD CONSTRAINT `t_tfbj_ibfk_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`);
+
+--
+-- Constraints for table `t_tfbj_detail`
+--
+ALTER TABLE `t_tfbj_detail`
+  ADD CONSTRAINT `t_tfbj_detail_ibfk_1` FOREIGN KEY (`tfbj_id`) REFERENCES `t_tfbj` (`id`),
+  ADD CONSTRAINT `t_tfbj_detail_ibfk_2` FOREIGN KEY (`gdg_brg_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`);
+
+--
+-- Constraints for table `t_tfbj_noseri`
+--
+ALTER TABLE `t_tfbj_noseri`
+  ADD CONSTRAINT `t_tfbj_noseri_ibfk_1` FOREIGN KEY (`t_tfbj_detail_id`) REFERENCES `t_tfbj_detail` (`id`),
+  ADD CONSTRAINT `t_tfbj_noseri_ibfk_2` FOREIGN KEY (`noseri_id`) REFERENCES `noseri_barang_jadi` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

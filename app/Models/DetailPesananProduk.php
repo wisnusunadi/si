@@ -19,4 +19,8 @@ class DetailPesananProduk extends Model
     {
         return $this->belongsTo(DetailPesanan::class, 'detail_pesanan_id');
     }
+    public function NoseriDetailPesanan()
+    {
+        return $this->hasMany(NoseriDetailPesanan::class);
+    }
 }

@@ -16,14 +16,41 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+use Pesanan;
 
 class QcController extends Controller
 {
     //Get Data
-    public function get_data_seri_detail_ekatalog()
+    public function get_data_select_seri($value, $value2)
     {
-        $data = NoseriBarangJadi::where('id', 4)->get();
-        return view('page.qc.so.edit', ['data' => $data]);
+        $x = explode(',', $value);
+        if ($value == '0') {
+            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $value2);
+        } else {
+            $data = NoseriBarangJadi::whereIN('id', $x)->get();
+        }
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('seri', function ($data) {
+                return $data->noseri;
+            })
+            ->make(true);
+    }
+    public function get_data_seri_detail_ekatalog($value)
+    {
+        $value2 = array();
+        if ($value == '0') {
+            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', 108)->get();
+            foreach ($data as $d) {
+                $value2[] = $d->id;
+            }
+            $id =  json_encode($value2);
+        } else {
+            $x = explode(',', $value);
+            $id =  json_encode($x);
+        }
+
+        return view('page.qc.so.edit', ['id' => $id]);
     }
     public function get_data_seri_ekatalog($id)
     {
@@ -32,7 +59,7 @@ class QcController extends Controller
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
                 return '  <div class="form-check">
-                <input class=" form-check-input yet nosericheck" type="checkbox" value="" data-id="' . $data->id . '" />
+                <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->gudang->id . '" data-id="' . $data->id . '" />
             </div>';
             })
             ->addColumn('seri', function ($data) {
@@ -49,11 +76,10 @@ class QcController extends Controller
     }
     public function get_data_detail_so($id)
     {
+        $x = explode(',', $id);
         //$data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
-        $data = DetailPesananProduk::where('detail_pesanan_id', 1)->get();
+        $data = DetailPesananProduk::with('noseridetailpesanan')->whereIN('detail_pesanan_id', $x)->get();
 
-
-        // $q->whereNotNull('no_po');
         // echo json_encode($data);
         // $l = [];
         // $v = 0;
@@ -65,9 +91,6 @@ class QcController extends Controller
         //         $v++;
         //     }
         // }
-
-
-
         //echo json_encode($data);
         // $l = [];
         // $v = 0;
@@ -88,20 +111,33 @@ class QcController extends Controller
                     return $data->gudangbarangjadi->nama;
                 }
             })
-            // ->addColumn('jumlah', function ($l) {
-            //     return $l['jumlah'];
-            // })
-            // ->addColumn('button', function ($l) {
-            //     return '<a type="button" class="noserishow" data-id="' . $l['id'] . '"><i class="fas fa-search"></i></a>';
-            // })
-            // ->rawColumns(['button'])
+            ->addColumn('jumlah', function ($data) {
+                return $data->detailpesanan->jumlah;
+            })
+            ->addColumn('jumlah_ok', function ($data) {
+                if ($data->noseridetailpesanan == '') {
+                    return '1';
+                } else {
+                    return '0';
+                }
+            })
+            ->addColumn('jumlah_nok', function ($data) {
+                if ($data->noseridetailpesanan == '') {
+                    return '1';
+                } else {
+                    return $data->detailpesanan->jumlah;
+                }
+            })
+            ->addColumn('button', function ($data) {
+                return '<a type="button" class="noserishow" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
+            })
+            ->rawColumns(['button'])
             ->make(true);
         //echo json_encode($data);
     }
-
     public function get_data_so_qc()
     {
-        $data = Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
+        $data = Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
             $q->whereNotNull('no_po');
         })->get();
         return datatables()->of($data)
@@ -111,54 +147,54 @@ class QcController extends Controller
     {
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spa = collect(Spa::whereHas('Pesanan.Tgbj', function ($q) {
+            $Spa = collect(Spa::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spb = collect(Spb::whereHas('Pesanan.Tgbj', function ($q) {
+            $Spb = collect(Spb::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spa = collect(Spa::whereHas('Pesanan.Tgbj', function ($q) {
+            $Spa = collect(Spa::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
             $data = $Ekatalog->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spb = collect(Spb::whereHas('Pesanan.Tgbj', function ($q) {
+            $Spb = collect(Spb::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
             $data = $Ekatalog->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Spa::whereHas('Pesanan.Tgbj', function ($q) {
+            $Spa = collect(Spa::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
-            $Spb = collect(Spb::whereHas('Pesanan.Tgbj', function ($q) {
+            $Spb = collect(Spb::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Ekatalog::whereHas('Pesanan.Tgbj', function ($q) {
+            $data = Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get();
         } else if ($value == 'spa') {
-            $data = Spa::whereHas('Pesanan.Tgbj', function ($q) {
+            $data = Spa::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get();
         } else if ($value == 'spb') {
-            $data = Spb::whereHas('Pesanan.Tgbj', function ($q) {
+            $data = Spb::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get();
         } else {
-            $data = Spa::whereHas('Pesanan.Tgbj', function ($q) {
+            $data = Spa::whereHas('Pesanan.TFProduksi', function ($q) {
                 $q->whereNotNull('no_po');
             })->get();
         }
@@ -193,7 +229,6 @@ class QcController extends Controller
             ->make(true);
     }
 
-
     //Detail
     public function update_modal_so()
     {
@@ -204,6 +239,14 @@ class QcController extends Controller
     {
         if ($value == 'ekatalog') {
             $data = Ekatalog::where('id', $id)->get();
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+                $q->where('ekatalog.id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
+
             foreach ($data as $d) {
                 $tgl_sekarang = Carbon::now()->format('Y-m-d');
                 $tgl_parameter = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status)->format('Y-m-d');
@@ -214,22 +257,22 @@ class QcController extends Controller
                     $hari = $to->diffInDays($from);
 
                     if ($hari > 7) {
-                        $x = ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                        $param = ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
                     } else if ($hari > 0 && $hari <= 7) {
-                        $x = ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                        $param = ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                     } else {
-                        $x = '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                        $param = '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                     }
                 } elseif ($tgl_sekarang == $tgl_parameter) {
-                    $x =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                    $param =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                 } else {
                     $to = Carbon::now();
                     $from = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status);
                     $hari = $to->diffInDays($from);
-                    $x =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                    $param =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                 }
             }
-            return view('page.qc.so.detail_ekatalog', ['data' => $data, 'x' => $x]);
+            return view('page.qc.so.detail_ekatalog', ['data' => $data, 'detail_id' => $detail_id, 'param' => $param]);
         } elseif ($value == 'spa') {
             $data = Spa::where('id', $id)->get();
             return view('page.qc.so.detail_spa', ['data' => $data]);

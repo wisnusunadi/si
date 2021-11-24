@@ -43,7 +43,7 @@
                                     <th>No</th>
                                     <th>Nomor SO</th>
                                     <th>Customer</th>
-                                    <th>Batas Pengeluaran</th>
+                                    <th>Batas Transfer</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -141,11 +141,11 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form action="" id="myForm">
+                                <form action="" id="myForm" method="post">
                                 <table class="table table-striped add-produk" id="addProduk">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            {{-- <th></th> --}}
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             <th>Tipe</th>
@@ -155,7 +155,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td></td>
+                                            {{-- <td></td> --}}
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                             <td>100 Unit</td>
                                             <td>ABPM50</td>
@@ -164,7 +164,7 @@
                                                         class="fas fa-qrcode"></i> Scan Produk</button></td>
                                         </tr>
                                         <tr>
-                                            <td></td>
+                                            {{-- <td></td> --}}
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                             <td>100 Unit</td>
                                             <td>RGB</td>
@@ -215,6 +215,7 @@
                         <tr>
                             <td>78656562646545646</td>
                             <td></td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -290,9 +291,9 @@
                 "orderable": false,
                 "targets": 0
             }],
-            "order": [
-                [3, 'desc']
-            ],
+            // "order": [
+            //     [3, 'desc']
+            // ],
             "oLanguage": {
             "sSearch": "Cari:"
             }
@@ -332,19 +333,19 @@
                 // dataType: "json",
             },
             columns: [
-                { data: 'ids', name: 'ids'},
+                // { data: 'ids', name: 'ids'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
                 { data: 'tipe', name: 'tipe'},
                 { data: 'merk', name: 'merk'},
                 { data: 'action', name: 'action'},
             ],
-            'columnDefs': [{
-                'targets': 0,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
+            // 'columnDefs': [{
+            //     'targets': 0,
+            //     'checkboxes': {
+            //         'selectRow': true
+            //     }
+            // }],
             'select': {
                 'style': 'multi'
             },
@@ -358,10 +359,36 @@
         $('#addProdukModal').modal('show');
 
         $(document).on('click', '#btnDraft', function(e) {
-            var rowsel = mytable.column(0).checkboxes.selected();
-            $.each(rowsel, function(index, rowId) {
-                console.log(rowId);
+            e.preventDefault();
+
+            const ids = [];
+            const qtyy = [];
+
+            $('input[name^="gdg_brg_jadi_id"]').each(function() {
+                ids.push($(this).val());
             });
+
+            $('input[name^="qty"]').each(function() {
+                qtyy.push($(this).val());
+            });
+            // $.each(jml, function(index, rowIdd) {
+            //     console.log(index);
+            //     // qtyy.push(rowId);
+            // });
+
+            $.ajax({
+                url: "/api/tfp/byso",
+                type: "post",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    pesanan_id: id,
+                    gdg_brg_jadi_id: ids,
+                    qty: qtyy,
+                },
+                success: function(res) {
+                    console.log(res);
+                }
+            })
         })
     });
 

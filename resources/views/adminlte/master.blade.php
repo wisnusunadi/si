@@ -72,10 +72,11 @@
     <script src="{{ asset('native/js/plugin.js') }}"></script>
     <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('vendor/select2/checkbox/check.js') }}"></script>
+<script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 <script src="{{ asset('vendor/datepicker/moment.js') }}"></script>
 <script src="{{ asset('vendor/datepicker/datepicker.js') }}"></script>
-  
+
     {{-- Custom Scripts --}}
     @yield('master_js')
 

@@ -447,7 +447,7 @@ class MasterController extends Controller
         }
     }
 
-    //Show Modal 
+    //Show Modal
 
     public function update_customer_modal($id)
     {

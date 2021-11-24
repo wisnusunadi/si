@@ -71,6 +71,7 @@
         <div class="card">
             <div class="card-body">
                 <h4>Info Penjualan </h4>
+                <?php $item = array(); ?>
                 @foreach($data as $d)
                 <h4>Info Ekatalog</h4>
                 <div class="row">
@@ -104,7 +105,7 @@
                         </div>
                         <div class="margin">
                             <div><small class="text-muted">Batas Uji</small></div>
-                            {!!$x!!}
+                            {!!$param!!}
                         </div>
                     </div>
                     <div class="col-2">
@@ -253,8 +254,13 @@
                         <div class="table-responsive">
                             <table class="table" style="text-align:center; width:100%" id="noseritable">
                                 <thead>
-                                    <th>#</th>
-                                    <th>No</th>
+                                    <th>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
+                                            <label class="form-check-label" for="check_all">
+                                            </label>
+                                        </div>
+                                    </th>
                                     <th>No Seri</th>
                                     <th>Hasil</th>
                                     <th>Aksi</th>
@@ -321,11 +327,13 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        y = [];
+        y = <?php echo json_encode($detail_id); ?>;
         var showtable = $('#showtable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/qc/so/detail/' + '{{$d->pesanan->id}}',
+                'url': '/api/qc/so/detail/' + y,
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -344,22 +352,22 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'DT_RowIndex',
+                data: 'jumlah',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
             }, {
-                data: 'DT_RowIndex',
+                data: 'jumlah_ok',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
             }, {
-                data: 'DT_RowIndex',
+                data: 'jumlah_nok',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
             }, {
-                data: 'DT_RowIndex',
+                data: 'button',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
@@ -367,19 +375,17 @@
 
         });
 
-
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
-            console.log(data);
+            $('.nosericheck').prop('checked', false);
+            $('input[name ="check_all"]').prop('checked', false);
             $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data).load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
-            console.log(data);
-        })
 
-
-        $('#noseritable').DataTable({
+        });
+        var noseritable = $('#noseritable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
@@ -392,65 +398,100 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             columns: [{
+                data: 'checkbox',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'seri',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'status',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'button',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }]
+        });
+
+        function listnoseri(value, value2) {
+            $('#listnoseri').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/qc/so/seri/select/' + value + '/' + value2,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
                     data: 'DT_RowIndex',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
                 }, {
-                    data: 'checkbox',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
                     data: 'seri',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
-                }, {
-                    data: 'status',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'button',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                }
-            ]
+                }, ]
+            });
+        }
+        var checkedAry = [];
+        $('#noseritable').on('click', 'input[name="check_all"]', function() {
+            if ($('input[name="check_all"]:checked').length > 0) {
+                $('#cekbrg').removeAttr('disabled');
+                $('.nosericheck').prop('checked', true);
+                checkedAry = []
+                checkedAry.push('0');
+                $('#btnedit').removeClass('disabled');
+            } else if ($('input[name="check_all"]:checked').length <= 0) {
+                $('.nosericheck').prop('checked', false);
+                $('#btnedit').addClass('disabled', true);
+            }
         });
 
-
-        $('#noseritable ').on('change', '.nosericheck', function() {
+        $('#noseritable ').on('click', '.nosericheck', function() {
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').removeAttr('disabled');
-
+                checkedAry = [];
+                $.each($(".nosericheck:checked"), function() {
+                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
             } else if ($('.nosericheck:checked').length <= 0) {
                 $('#cekbrg').attr('disabled', true);
             }
+        });
 
-        })
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
-            var href = $(this).attr('data-attr');
-            var id = $(this).data('id');
-            var data = $(this).attr('data-id');
-            console.log(data);
+            data = $(".nosericheck").data().value;
             $.ajax({
-                url: "/qc/so/edit",
+                url: "/qc/so/edit/" + checkedAry,
                 beforeSend: function() {
                     $('#loader').show();
                 },
                 // return the result
                 success: function(result) {
+                    console.log(data);
+                    console.log(checkedAry);
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    console.log(id);
+                    listnoseri(checkedAry, data);
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {
                     $('#loader').hide();
+
                 },
                 error: function(jqXHR, testStatus, error) {
                     console.log(error);
