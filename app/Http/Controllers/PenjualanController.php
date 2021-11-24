@@ -592,7 +592,7 @@ class PenjualanController extends Controller
                     </button>
                 </a>';
                 if ($divisi_id == "26") {
-                    if ($data->log == "penjualan") {
+                    if ($data->log == "penjualan" || $data->log == "po") {
                         $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
                         <button class="dropdown-item" type="button" >
                         <i class="fas fa-pencil-alt"></i>
@@ -1060,17 +1060,40 @@ class PenjualanController extends Controller
 
         $ekatalog = Ekatalog::find($id);
         $p = Pesanan::find($ekatalog->pesanan_id);
-        $p->so = $this->createSO('EKAT');
-        $p->no_po = $request->no_po;
-        $p->tgl_po = $request->tanggal_po;
-        $p->no_do = $request->no_do;
-        $p->tgl_do = $request->tanggal_do;
-        $p->ket = $request->keterangan;
-        $pes = $p->save();
-        if (!$pes) {
-            $bool = false;
+
+
+        if (isset($p)) {
+            $p->so = $this->createSO('EKAT');
+            $p->no_po = $request->no_po;
+            $p->tgl_po = $request->tanggal_po;
+            $p->no_do = $request->no_do;
+            $p->tgl_do = $request->tanggal_do;
+            $p->ket = $request->keterangan;
+            $pes = $p->save();
+            if (!$pes) {
+                $bool = false;
+            }
+        } else {
+            $po = Pesanan::create([
+                'so' => $this->createSO('EKAT'),
+                'no_po' => $request->no_po,
+                'tgl_po' => $request->tanggal_po,
+                'no_do' => $request->no_do,
+                'tgl_do' => $request->tanggal_do,
+                'ket' => $request->keterangan
+            ]);
+
+            if ($po) {
+                $ekatalog->pesanan_id = $po->id;
+                $eksave = $ekatalog->save();
+                if (!$eksave) {
+                    $bool = false;
+                }
+            }
         }
 
+        $ekatalog->log = "po";
+        $ekatalog->save();
         if ($bool == true) {
             return redirect()->back()->with('success', 'Berhasil menambahkan PO');
         } else if ($bool == false) {
@@ -1094,11 +1117,9 @@ class PenjualanController extends Controller
     }
     public function update_ekatalog(Request $request, $id)
     {
-        echo json_encode($request->variasi);
         $ekatalog = Ekatalog::find($id);
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $request->customer_id;
-        $ekatalog->pesanan_id = $request->pesanan_id;
         $ekatalog->provinsi_id = $request->provinsi;
         $ekatalog->deskripsi = $request->deskripsi;
         $ekatalog->instansi = $request->instansi;
@@ -1114,19 +1135,25 @@ class PenjualanController extends Controller
             })->get();
 
             if (count($dekatp) > 0) {
-                DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                $deldekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                     $q->where('pesanan_id', $poid);
                 })->delete();
+                if (!$deldekatp) {
+                    $bool = false;
+                }
             }
 
             $dekat = DetailPesanan::where('pesanan_id', $poid)->get();
             if (count($dekat) > 0) {
-                DetailPesanan::where('pesanan_id', $poid)->delete();
+                $deldekat = DetailPesanan::where('pesanan_id', $poid)->delete();
+                if (!$deldekat) {
+                    $bool = false;
+                }
             }
-
             if ($bool == true) {
+
                 if ($request->status != "draft") {
-                    for ($i = 0; $i < 2; $i++) {
+                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $c = DetailPesanan::create([
                             'pesanan_id' => $poid,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
@@ -1134,10 +1161,8 @@ class PenjualanController extends Controller
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-                        if (!$c) {
-                            $bool = false;
-                        } else {
-                            for ($j = 0; $j < count(array($request->variasi[$i])); $j++) {
+                        if ($c) {
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
                                 $v = DetailPesananProduk::create([
                                     'detail_pesanan_id' => $c->id,
                                     'gudang_barang_jadi_id' => $request->variasi[$i][$j]
@@ -1146,6 +1171,8 @@ class PenjualanController extends Controller
                                     $bool = false;
                                 }
                             }
+                        } else {
+                            $bool = false;
                         }
                     }
                 }
@@ -1179,11 +1206,25 @@ class PenjualanController extends Controller
 
                 $dspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                     $q->where('pesanan_id', $poid);
-                })->delete();
+                })->get();
+                if (count($dspap) > 0) {
+                    $deldspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                        $q->where('pesanan_id', $poid);
+                    })->delete();
+                    if (!$deldspap) {
+                        $bool = false;
+                    }
+                }
 
-                $dspa = DetailPesanan::where('pesanan_id', $poid)->delete();
+                $dspa = DetailPesanan::where('pesanan_id', $poid)->get();
+                if (count($dspa) > 0) {
+                    $deldspa = DetailPesanan::where('pesanan_id', $poid)->delete();
+                    if (!$deldspa) {
+                        $bool = false;
+                    }
+                }
 
-                if ($dspa) {
+                if ($bool == true) {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $c = DetailPesanan::create([
                             'pesanan_id' => $spa->pesanan_id,
@@ -1240,9 +1281,23 @@ class PenjualanController extends Controller
 
                 $dspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                     $q->where('pesanan_id', $poid);
-                })->delete();
+                })->get();
+                if (count($dspbp) > 0) {
+                    $deldspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                        $q->where('pesanan_id', $poid);
+                    })->delete();
+                    if (!$deldspbp) {
+                        $bool = false;
+                    }
+                }
 
-                $dspb = DetailPesanan::where('pesanan_id', $poid)->delete();
+                $dspb = DetailPesanan::where('pesanan_id', $poid)->get();
+                if (count($dspb) > 0) {
+                    $deldspb = DetailPesanan::where('pesanan_id', $poid)->delete();
+                    if (!$deldspb) {
+                        $bool = false;
+                    }
+                }
 
                 if ($dspb) {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {

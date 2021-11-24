@@ -185,46 +185,14 @@
 <script>
     $('.table-seri').DataTable({
         "oLanguage": {
-<<<<<<< HEAD
             "sSearch": "Cari:"
         }
     });
     $('.dalam-perakitan').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '/api/tfp/rakit',
-        },
-        columns: [{
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex'
-            },
-            {
-                data: 'tgl_masuk'
-            },
-            {
-                data: 'product'
-            },
-            {
-                data: 'jumlah'
-            },
-            {
-                data: 'action'
-            }
-        ],
         "oLanguage": {
             "sSearch": "Cari:"
         },
         "columnDefs": [{
-=======
-        "sSearch": "Cari:"}
-    });
-    $('.dalam-perakitan').DataTable({
-        "oLanguage": {
-        "sSearch": "Cari:"},
-        "columnDefs": [
-        {
->>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
             "targets": [4],
             "visible": document.getElementById('auth').value == '2' ? false : true
         }]
