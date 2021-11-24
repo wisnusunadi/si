@@ -131,7 +131,7 @@
     </div>
     <div class="col-xl-12 d-flex justify-content-end">
         <div class="btn-simpan mb-3">
-            <button class="btn btn-success" type="button" onclick="modalTerima()">Terima</button>&nbsp;
+            <button class="btn btn-success" type="button" onclick="modalTerima()">Transfer</button>&nbsp;
             <button class="btn btn-info" type="button" onclick="modalRancang()">Rancang</button>&nbsp;
             <button class="btn btn-secondary " type="button" onclick="batal()">Batal</button>
         </div>
@@ -334,23 +334,11 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xl-6">
+                    <div class="col-xl-12">
                         <div class="form-group">
                             <label for="">Tujuan</label>
-                            <input type="text" class="form-control catatan">
+                            <textarea name="" id="" cols="10" rows="5" class="form-control"></textarea>
                         </div>
-                        <button class="btn btn-primary tambah_catatan" id="">Tambah Catatan</button>
-                    </div>
-                    <div class="col-xl-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="card-title">List Catatan Tujuan</div>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-group">
-                                    </ul>
-                                </div>
-                            </div>
                     </div>
                 </div>
             </div>
