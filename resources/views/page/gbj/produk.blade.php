@@ -3,7 +3,7 @@
 @section('title', 'ERP')
 
 @section('content')
-<input type="hidden" name="" id="auth" value="13">
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -17,38 +17,46 @@
                             <div class="col-4 d-flex justify-content-end">
                                 <div class="row">
                                     <div class="col-lg-12">
+                                        @if (Auth::user()->divisi_id == 13)
                                         <span class="float-right">
                                             <button type="button" class="btn btn-info" data-toggle="modal"
                                                 data-target="#modal-create">
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
-                                        <span class="dropdown float-right" id="semuaprodukfilter"
-                                            style="margin-right: 5px">
-                                            <button class="btn btn-outline-info dropdown-toggle" type="button"
-                                                id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
-                                                Filter
+                                        @endif
+                                        <span class="float-right filter">
+                                            <button class="btn btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-filter"></i> Filter Kelompok
                                             </button>
-                                            <div class="dropdown-menu p-3 text-nowrap"
-                                                aria-labelledby="semuaprodukfilter">
-                                                <div class="dropdown-header">Kelompok Produk</div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="sp_kelompok"
-                                                            value="alat_kesehatan" />
-                                                        <label class="form-check-label" for="sp_kelompok">
-                                                            Alat Kesehatan
-                                                        </label>
+                                            <div class="dropdown-menu">
+                                                <div class="px-3 py-3">
+                                                    <div class="form-group">
+                                                        <label for="jenis_penjualan">Kelompok</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="sp_kelompok"
-                                                            value="sarana_kesehatan" />
-                                                        <label class="form-check-label" for="sp_kelompok">
-                                                            Sarana Kesehatan
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                            <label class="form-check-label" for="jenis1">
+                                                                All
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                            <label class="form-check-label" for="jenis1">
+                                                                Alat Kesehatan
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
+                                                            <label class="form-check-label" for="jenis2">
+                                                                Sarana Kesehatan
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -493,11 +501,10 @@
     });
     $('#gudang-barang').DataTable({
         "columnDefs": [
-            {
-                "targets": [5],
-                "visible": document.getElementById('auth').value == '2' ? true : false
-            }
-        ]
+        {
+            "targets": [6],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }]
     })
     $('#inputGroupFile02').on('change', function () {
         //get the file name
