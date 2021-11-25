@@ -18,14 +18,11 @@ class DetailEkatalog extends Model
     {
         return $this->belongsTo(PenjualanProduk::class, 'penjualan_produk_id');
     }
-<<<<<<< HEAD:app/Models/DetailEkatalog_old.php
     // public function DetailEkatalogProduk()
     // {
     //     return $this->hasMany(DetailEkatalogProduk::class);
     // }
-=======
 
->>>>>>> 688feb96d856dcda5093fcf24faa4015090c9bae:app/Models/DetailEkatalog.php
     public function GudangBarangJadi()
     {
         return $this->belongsToMany(GudangBarangJadi::class, 'detail_ekatalog_produk')

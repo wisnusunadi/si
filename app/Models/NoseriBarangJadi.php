@@ -11,15 +11,22 @@ class NoseriBarangJadi extends Model
 
     protected $table = "noseri_barang_jadi";
 
-    function from() {
+    function from()
+    {
         return $this->belongsTo(Divisi::class, 'dari');
     }
 
-    function to() {
+    function to()
+    {
         return $this->belongsTo(Divisi::class, 'ke');
     }
 
-    function gudang() {
+    function gudang()
+    {
         return $this->belongsTo(GudangBarangJadi::class, 'gdg_barang_jadi_id');
+    }
+    function NoseriTGbj()
+    {
+        return $this->hasMany(NoseriTGbj::class);
     }
 }

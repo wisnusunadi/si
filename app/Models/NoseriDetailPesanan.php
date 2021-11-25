@@ -14,4 +14,8 @@ class NoseriDetailPesanan extends Model
     {
         return $this->belongsTo(DetailPesananProduk::class, 'detail_pesanan_produk_id');
     }
+    public function NoseriTGbj()
+    {
+        return $this->belongsTo(NoseriTGbj::class, 't_tfbj_noseri_id');
+    }
 }

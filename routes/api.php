@@ -209,9 +209,10 @@ Route::prefix('/spb')->group(function () {
 });
 Route::prefix('/qc')->group(function () {
     Route::prefix('/so')->group(function () {
+        // Route::post('create/{seri_id}/{tfgbj_id}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::get('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
-        Route::get('seri/{value}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
-        Route::get('seri/select/{value}/{value2}', [App\Http\Controllers\QcController::class, 'get_data_select_seri']);
+        Route::get('seri/{value}/{tfgbj_id}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
+        Route::get('seri/select/{seri_id}/{produk_id}/{tfgbj_id}', [App\Http\Controllers\QcController::class, 'get_data_select_seri']);
         Route::get('data_test', [App\Http\Controllers\QcController::class, 'get_data_so_qc']);
         Route::get('detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_so']);
         Route::get('update_modal', [App\Http\Controllers\QcController::class, 'update_modal_so']);

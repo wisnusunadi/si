@@ -11,11 +11,20 @@ class NoseriTGbj extends Model
 
     protected $table = "t_gbj_noseri";
 
-    function detail() {
+    function detail()
+    {
         return $this->belongsTo(TFProduksiDetail::class, 't_gbj_detail_id');
     }
-
-    function layout() {
+    function layout()
+    {
         return $this->belongsTo(Layout::class, 'layout_id');
+    }
+    function NoseriBarangJadi()
+    {
+        return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
+    }
+    function NoseriDetailPesanan()
+    {
+        return $this->hasOne(NoseriBarangJadi::class);
     }
 }
