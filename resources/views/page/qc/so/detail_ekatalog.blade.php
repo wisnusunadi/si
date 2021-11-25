@@ -105,7 +105,7 @@
                         </div>
                         <div class="margin">
                             <div><small class="text-muted">Batas Uji</small></div>
-                            {!!$param!!}
+                            <div class="urgent"><b>{!!$param!!}</b></div>
                         </div>
                     </div>
                     <div class="col-2">
@@ -262,8 +262,9 @@
                                         </div>
                                     </th>
                                     <th>No Seri</th>
+                                    <th>Tanggal Uji</th>
                                     <th>Hasil</th>
-                                    <th>Aksi</th>
+
                                 </thead>
                                 <tbody>
                                     <!-- <tr>
@@ -379,16 +380,13 @@
         $('#showtable').on('click', '.noserishow', function() {
             idtrf = '{{$d->pesanan->TFProduksi->id}}';
             idpesanan = '{{$d->pesanan->id}}';
-
             var data = $(this).attr('data-id');
-
             $('.nosericheck').prop('checked', false);
             $('input[name ="check_all"]').prop('checked', false);
             $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
-
         });
 
 
@@ -415,12 +413,12 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'status',
+                data: 'tgl_uji',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
             }, {
-                data: 'button',
+                data: 'status',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false

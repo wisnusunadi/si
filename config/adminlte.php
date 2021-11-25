@@ -1301,6 +1301,12 @@ return [
                     'icon' => 'far fa-circle',
                     'auth' => [2]
                 ],
+                [
+                    'text' => 'Lacak',
+                    'icon' => 'far fa-circle',
+                    'url' => '/penjualan/lacak/show',
+                    'auth' => [2],
+                ],
             ],
         ],
         [
@@ -1339,6 +1345,12 @@ return [
                     'url' => '/logistik/pengiriman/riwayat/show',
                     'auth' => [2],
                 ],
+                [
+                    'text' => 'Jasa Ekspedisi',
+                    'icon' => 'far fa-circle',
+                    'url' => '/logistik/ekspedisi/show',
+                    'auth' => [2],
+                ],
             ],
         ],
         [
@@ -1355,19 +1367,6 @@ return [
             ],
         ],
 
-        [
-            'text'    => 'After Sales',
-            'icon'    => 'fas fa-headset',
-            'auth' => [2],
-            'submenu' => [
-                [
-                    'text' => 'Lacak',
-                    'icon' => 'far fa-circle',
-                    'url' => '/penjualan/lacak/show',
-                    'auth' => [2],
-                ],
-            ],
-        ],
 
 
 

@@ -28,7 +28,7 @@
     }
 
     .align-right {
-        float: right;
+        text-align: right;
     }
 
     .align-center {
@@ -63,12 +63,47 @@
     .nowrap-text {
         white-space: nowrap;
     }
+
+    @media screen and (min-width: 1440px) {
+
+        section {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+
+        label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+<section class="content">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -127,18 +162,13 @@
                                     <table class="table" style="text-align:center;" id="showtable">
                                         <thead>
                                             <tr>
-                                                <th rowspan="2" class="nowrap">No</th>
-                                                <th rowspan="2" class="nowrap">No SO</th>
-                                                <th rowspan="2">Nama Produk</th>
-                                                <th rowspan="2" class="nowrap">Tanggal Pengujian</th>
-                                                <th rowspan="2" class="nowrap">Tanggal Selesai</th>
-                                                <th rowspan="2" class="nowrap">Jumlah</th>
-                                                <th colspan="2" class="nowrap">Hasil</th>
-                                                <th rowspan="2" class="nowrap">Aksi</th>
-                                            </tr>
-                                            <tr>
-                                                <th><i class="fas fa-check ok"></i></th>
-                                                <th><i class="fas fa-times nok"></i></th>
+                                                <th class="nowrap">No</th>
+                                                <th class="nowrap">No SO</th>
+                                                <th>Nama Produk</th>
+                                                <th class="nowrap">Tanggal Pengujian</th>
+                                                <th class="nowrap">Tanggal Selesai</th>
+                                                <th class="nowrap">Jumlah</th>
+                                                <th class="nowrap">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -149,8 +179,6 @@
                                                 <td>26-10-2021</td>
                                                 <td>29-10-2021</td>
                                                 <td>2</td>
-                                                <td>2</td>
-                                                <td>0</td>
                                                 <td>
                                                     <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
                                                         <div><i class="fas fa-search"></i></div>
@@ -164,8 +192,6 @@
                                                 <td>28-10-2021</td>
                                                 <td>30-10-2021</td>
                                                 <td>1</td>
-                                                <td>1</td>
-                                                <td>0</td>
                                                 <td>
                                                     <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
                                                         <div><i class="fas fa-search"></i></div>
@@ -179,8 +205,6 @@
                                                 <td>29-10-2021</td>
                                                 <td>29-10-2021</td>
                                                 <td>1</td>
-                                                <td>1</td>
-                                                <td>0</td>
                                                 <td>
                                                     <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
                                                         <div><i class="fas fa-search"></i></div>
@@ -196,34 +220,136 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-info">
-                    <h4 class="modal-title">Detail</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="detail">
+        <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-info">
+                        <h4 class="modal-title">Detail</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="detail">
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+</section>
 @stop
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({})
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/qc/so/riwayat/data',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so'
+                },
+                {
+                    data: 'nama_produk'
+                },
+                {
+                    data: 'tgl_mulai'
+                },
+                {
+                    data: 'tgl_selesai'
+                },
+                {
+                    data: 'jumlah'
+                },
+                {
+                    data: 'button'
+                }
+            ]
+        })
+
+        function noseritable(id) {
+            $('#noseritable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/qc/so/riwayat/detail/' + id,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'no_seri'
+                    },
+                    {
+                        data: 'hasil'
+                    }
+                ]
+            })
+        }
+
+        function select_produk(id) {
+            $('.detail_produk').select2({
+                placeholder: 'Pilih Produk',
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    dataType: 'json',
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/qc/so/riwayat/select/' + id,
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.gudang_barang_jadi.produk.nama + ' ' +
+                                        obj.gudang_barang_jadi.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            }).change(function() {
+                var ids = $(this).val();
+                noseritable(ids);
+            });
+        }
+
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
-            var href = $(this).attr('data-attr');
-            var id = $(this).data('id');
+            var penjualan_produk_id = $(this).attr('data-attr');
+            var id = $(this).attr('data-id');
             $.ajax({
-                url: "/api/qc/so/riwayat/detail_modal",
+                url: "/api/qc/so/riwayat/detail_modal/" + id,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -231,8 +357,10 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    console.log(id);
+                    console.log("data " + id);
                     // $("#editform").attr("action", href);
+
+                    select_produk(id);
                 },
                 complete: function() {
                     $('#loader').hide();

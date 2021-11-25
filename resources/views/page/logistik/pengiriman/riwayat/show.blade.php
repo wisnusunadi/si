@@ -289,6 +289,7 @@
 <script>
     $(function() {
         $('#showtable').DataTable({});
+
     })
 </script>
 @endsection

@@ -22,4 +22,32 @@ class DetailPesanan extends Model
     {
         return $this->hasMany(DetailPesananProduk::class);
     }
+    public function countNoSeri()
+    {
+        $id = $this->id;
+        $c = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('detail_pesanan_id', $id);
+        })->count();
+        return $c;
+    }
+    public function getTanggalUji()
+    {
+        $id = $this->id;
+        $date = NoseriDetailPesanan::selectRaw('MAX(noseri_detail_pesanan.tgl_uji) as tgl_selesai, MIN(noseri_detail_pesanan.tgl_uji) as tgl_mulai')->whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('detail_pesanan_id', $id);
+        })->first();
+        return $date;
+    }
+    public function getJumlahPesanan()
+    {
+        $id = $this->id;
+        $s = DetailPesanan::where('id', $id)->Has('DetailPesananProduk.NoSeriDetailPesanan')->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+            }
+        }
+        return $jumlah;
+    }
 }

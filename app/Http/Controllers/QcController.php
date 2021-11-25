@@ -80,6 +80,10 @@ class QcController extends Controller
             ->addColumn('seri', function ($data) {
                 return $data->NoseriBarangJadi->noseri;
             })
+            ->addColumn('tgl_uji', function ($data) {
+                $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->first();
+                return Carbon::createFromFormat('Y-m-d', $check->tgl_uji)->format('d-m-Y');
+            })
             ->addColumn('status', function ($data) {
                 $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->get();
                 if (count($check) > 0) {
@@ -254,6 +258,69 @@ class QcController extends Controller
             ->make(true);
     }
 
+    public function get_data_riwayat_pengujian()
+    {
+        $s = DetailPesanan::Has('DetailPesananProduk.NoSeriDetailPesanan')->get();
+        $data = array();
+        $c = 0;
+        foreach ($s as $i) {
+            if ($i->getJumlahPesanan() == $i->countNoSeri()) {
+                $data[$c]['id'] = $i->id;
+                $data[$c]['so'] = $i->Pesanan->so;
+                $data[$c]['nama_produk'] = $i->PenjualanProduk->nama;
+                $data[$c]['tgl_mulai'] = $i->getTanggalUji()->tgl_mulai;
+                $data[$c]['tgl_selesai'] = $i->getTanggalUji()->tgl_selesai;
+                $data[$c]['jumlah'] = $i->jumlah;
+                $data[$c]['penjualan_produk_id'] = $i->penjualan_produk_id;
+                $c++;
+            }
+        }
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data['so'];
+            })
+            ->addColumn('nama_produk', function ($data) {
+                return $data['nama_produk'];
+            })
+            ->addColumn('tgl_mulai', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data['tgl_mulai'])->format('d-m-Y');
+            })
+            ->addColumn('tgl_selesai', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data['tgl_selesai'])->format('d-m-Y');
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data['jumlah'];
+            })
+            ->addColumn('button', function ($data) {
+                return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" id="detmodal">
+                    <div><i class="fas fa-search"></i></div>
+                </a>';
+            })
+            ->rawColumns(['button'])
+            ->make(true);
+    }
+
+    public function get_data_detail_riwayat_pengujian($id)
+    {
+        $s = NoseriDetailPesanan::where('detail_pesanan_produk_id', $id)->get();
+
+        return datatables()->of($s)
+            ->addIndexColumn()
+            ->addColumn('no_seri', function ($data) {
+                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            })
+            ->addColumn('hasil', function ($data) {
+                if ($data->status == "ok") {
+                    return '<div><i class="fas fa-check-circle" style="color:green;"></div>';
+                } else if ($data->status == "nok") {
+                    return '<div><i class="fas fa-times-circle" style="color:red;"></div>';
+                };
+            })
+            ->rawColumns(['hasil'])
+            ->make(true);
+    }
+
     //Detail
     public function update_modal_so()
     {
@@ -307,9 +374,10 @@ class QcController extends Controller
         }
     }
 
-    public function detail_modal_riwayat_so()
+    public function detail_modal_riwayat_so($id)
     {
-        return view('page.qc.so.riwayat.detail');
+        $result = DetailPesanan::find($id);
+        return view('page.qc.so.riwayat.detail', ['id' => $id, 'res' => $result]);
     }
 
     //Tambah
@@ -354,5 +422,12 @@ class QcController extends Controller
             $days = '28';
         }
         return Carbon::parse($value)->subDays($days);
+    }
+
+    //Select
+    public function getProdukPesananSelect($id)
+    {
+        $result = DetailPesananProduk::where('detail_pesanan_id', $id)->with('GudangBarangJadi.Produk')->get();
+        return $result;
     }
 }

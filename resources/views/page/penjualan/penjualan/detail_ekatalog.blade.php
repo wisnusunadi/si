@@ -95,13 +95,12 @@
                                                 @isset($e->DetailPesananProduk)
                                                 @foreach($e->DetailPesananProduk as $l)
                                                 <li class="list-group-item">
-                                                    <b>
-                                                        @if($l->nama != "")
-                                                        {{$l->GudangBarangJadi->Produk->nama}} {{$l->GudangBarangJadi->nama}}
-                                                        @else
-                                                        {{$l->GudangBarangJadi->Produk->nama}}
-                                                        @endif
-                                                    </b>
+
+                                                    @if(!empty($l->GudangBarangJadi->nama))
+                                                    {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
+                                                    @else
+                                                    {{$l->GudangBarangJadi->Produk->nama}}
+                                                    @endif
                                                 </li>
                                                 @endforeach
                                                 @endif

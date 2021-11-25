@@ -501,7 +501,7 @@ class PenjualanController extends Controller
 
     public function get_data_ekatalog($value)
     {
-
+        $divisi_id = Auth::user()->divisi->id;
         $x = explode(',', $value);
 
         if ($value == 0 || $value == 'kosong') {
@@ -580,8 +580,8 @@ class PenjualanController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 return $data->Customer->nama;
             })
-            ->addColumn('button', function ($data) {
-                $divisi_id = Auth::user()->divisi->id;
+            ->addColumn('button', function ($data) use ($divisi_id) {
+
                 $return = "";
                 $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

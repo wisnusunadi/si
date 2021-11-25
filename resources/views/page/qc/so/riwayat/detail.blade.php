@@ -1,30 +1,40 @@
 <div class="content">
-    <div class="row">
-        <div class="col-6">
+    <div class="row d-flex justify-content">
+        <div class="col-5">
             <div class="card">
                 <div class="card-body">
                     <h4>Info Produk</h4>
                     <div class="margin">
                         <div><small class="text-muted">Nama Produk</small></div>
-                        <div><b>CMS-600 PLUS + PRINTER + LINEAR PROBE + TROLLEY + UPS</b></div>
+                        <div><b>{{$res->PenjualanProduk->nama}}</b></div>
                     </div>
 
                     <div class="margin">
                         <div><small class="text-muted">No SO</small></div>
-                        <div><b>SO/EKAT/X/02/98</b></div>
+                        <div><b>{{$res->Pesanan->so}}</b></div>
                     </div>
                     <div class="margin">
                         <div><small class="text-muted">Jumlah</small></div>
-                        <div><b>2 pcs</b></div>
+                        <div><b>{{$res->jumlah}}</b></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-7">
             <div class="card">
                 <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="form-group row">
+                            <label for="" class="col-5 align-right col-form-label">Detail Produk</label>
+                            <div class="col-5">
+                                <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped align-center">
+                        <table class="table table-hover table-striped align-center" id="noseritable">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -32,18 +42,7 @@
                                     <th>Hasil</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>TD01022099</td>
-                                    <td><i class="fas fa-check-circle ok"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>TD01022101</td>
-                                    <td><i class="fas fa-check-circle ok"></i></td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
