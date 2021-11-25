@@ -1006,9 +1006,10 @@
 
     function modalPenerimaan() {
             $('.detail-layout').modal('show');
-        }
-        function modalSO() {
-            $('#viewProdukModal').modal('show');
-        }
+    }
+    function modalSO() {
+        $('#viewProdukModal').modal('show');
+    }
+
 </script>
 @stop

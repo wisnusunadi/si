@@ -183,6 +183,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="tambah_data">
+                                                        <tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" onclick="tambahanPerakitan($(this).parent().prev().children().val())"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -306,30 +307,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -359,30 +336,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -461,7 +414,7 @@
     });
 
     function addData() {
-        let tambah_data = '<tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+        let tambah_data = '<tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
     }
     $(document).on('click', '.btn-delete', function (e) {
@@ -496,6 +449,7 @@
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('#ubah-layout').modal('hide');
+
     }
 
     $('#datetimepicker1').daterangepicker({});
@@ -506,17 +460,22 @@
 
     function tambahanRancangan() {
         $('.tambahan-rancangan').modal('show');
+
     }
 
-    function tambahanPerakitan() {
+    function tambahanPerakitan(tambah) {
         $('.tambahan-perakitan').modal('show');
+        for (let index = 0; index < tambah; index++) {
+           $('.scan-produk tbody').append('<tr><td><input type="checkbox" class="cb-child" value="1"></td><td><input type="text" name="" id="" class="form-control"></td><td><select name="" id="" class="form-control"><option value="1">Layout 1</option><option value="2">Layout 2</option></select></td></tr>');
+        }
+        $('.scan-produk').DataTable({}).destroy();
+        $('.scan-produk').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+        });
     }
-    $('.scan-produk').DataTable({
-        "ordering": false,
-        "autoWidth": false,
-        searching: false,
-        "lengthChange": false,
-    });
 
 </script>
 @stop
