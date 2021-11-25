@@ -113,6 +113,8 @@
                             @endforeach
 
                             <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
+                            @else
+                            <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
                             @endif
                             <!-- <table class="table" id="detailtabel"> -->
                             <!-- <thead>

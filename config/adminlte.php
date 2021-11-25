@@ -1279,6 +1279,12 @@ return [
 
         //DIREKSI
         [
+            'text' => 'Dashboard',
+            'icon' => 'fas fa-home',
+            'url' => '/direksi/dashboard',
+            'auth' => [2],
+        ],
+        [
             'text'    => 'Penjualan',
             'icon'    => 'fas fa-mail-bulk',
             'auth' => [2],

@@ -935,7 +935,6 @@
             });
         });
 
-
         $('.provinsi').select2({
             ajax: {
                 minimumResultsForSearch: 20,

@@ -47,6 +47,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>
+                            @if(isset($data->pesanan->detailpesanan))
                             @foreach($data->pesanan->detailpesanan as $e)
                             <div class="card removeshadow">
                                 <div class="card-body">
@@ -86,9 +87,13 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             @endforeach
                             <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
-
+                            @else
+                            <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
+                            @endif
 
                             <!-- <table class="table" id="detailtabel_spa">
                                 <thead>

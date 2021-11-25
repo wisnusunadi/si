@@ -48,12 +48,16 @@ class LoginController extends Controller
             return redirect('/qc/dashboard');
         } else if (auth()->user()->divisi->id == 26) {
             return redirect('/penjualan/dashboard');
-        } elseif (auth()->user()->divisi->id == 13) {
+        } else if (auth()->user()->divisi->id == 13) {
             return redirect('/gbj/dashboard');
-        } elseif (auth()->user()->divisi->id == 17) {
+        } else if (auth()->user()->divisi->id == 17) {
             return redirect('/produksi/dashboard');
-        }elseif (auth()->user()->divisi->id == 12) {
+        } else if (auth()->user()->divisi->id == 12) {
             return redirect('/gk/dashboard');
+        } else if (auth()->user()->divisi->id == 9) {
+            return redirect('/gk/dashboard');
+        } else if (auth()->user()->divisi->id == 2) {
+            return redirect('/direksi/dashboard');
         }
         return redirect('/home');
     }
