@@ -46,7 +46,6 @@ class QcController extends Controller
     {
         $value2 = array();
         $x = explode(',', $seri_id);
-
         if ($seri_id == '0') {
             $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
                 $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
@@ -71,7 +70,6 @@ class QcController extends Controller
         $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $idtrf) {
             $q->where(['gdg_brg_jadi_id' => $id, 't_gbj_id' => $idtrf]);
         });
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
@@ -325,14 +323,21 @@ class QcController extends Controller
         $array_seri = explode(',', $replace_array_seri);
 
         //  return response()->json(['data' =>  count($array_seri)]);
-
         for ($i = 0; $i < count($array_seri); $i++) {
-            NoseriDetailPesanan::create([
-                'detail_pesanan_produk_id' => $data->id,
-                't_tfbj_noseri_id' => $array_seri[$i],
-                'status' => $request->cek,
-                'tgl_uji' => $request->tanggal_uji,
-            ]);
+            $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
+            if ($check == null) {
+                NoseriDetailPesanan::create([
+                    'detail_pesanan_produk_id' => $data->id,
+                    't_tfbj_noseri_id' => $array_seri[$i],
+                    'status' => $request->cek,
+                    'tgl_uji' => $request->tanggal_uji,
+                ]);
+            } else {
+                $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
+                $NoseriDetailPesanan->status = $request->cek;
+                $NoseriDetailPesanan->tgl_uji = $request->tanggal_uji;
+                $NoseriDetailPesanan->save();
+            }
         }
     }
     //Laporan
