@@ -112,6 +112,8 @@
                                                 <th>Dari/Ke</th>
                                                 <th>Tujuan</th>
                                                 <th>Nomor SO</th>
+                                                <th>Produk</th>
+                                                <th>Jumlah</th>
                                                 <td>Aksi</td>
                                             </tr>
                                         </thead>
@@ -122,6 +124,8 @@
                                                 <td><span class="badge badge-success">Divisi IT</span></td>
                                                 <td>Uji Coba Produk</td>
                                                 <td>641311666541</td>
+                                                <td>Uji Coba Produk</td>
+                                                <td>641311666541</td>
                                                 <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
                                                             class="far fa-eye"></i> Detail</button></td>
                                             </tr>
@@ -129,6 +133,8 @@
                                                 <td>10-09-2022</td>
                                                 <td>10-09-2022</td>
                                                 <td><span class="badge badge-info">Divisi IT</span></td>
+                                                <td>Uji Coba Produk</td>
+                                                <td>641311666541</td>
                                                 <td>Uji Coba Produk</td>
                                                 <td>641311666541</td>
                                                 <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i

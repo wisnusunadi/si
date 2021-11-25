@@ -823,7 +823,7 @@
                                         <div class="col-sm"><h5><b>Layout 1</b></h5></div>
                                         <div class="col-sm text-right">Layout :</div>
                                         <div class="col-sm">
-                                            <select class="select2 form-control layout" multiple="multiple">
+                                            <select class="select2 form-control layout" id="layout" multiple="multiple">
                                             <option selected>All Layout</option>
                                             <option>Layout 1</option>
                                             <option>Layout 2</option>
@@ -1473,7 +1473,7 @@
 
 @section('adminlte_js')
 <script>
-    $('.table-jml-stok').DataTable({});
+
     $('.jml-produk').DataTable({});
     // $('.waktu-produk').DataTable({});
 
@@ -1581,6 +1581,24 @@
         })
 
         $.ajax({
+            url: "/api/dashboard-gbj/list1/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#he1').text(res);
+            }
+        })
+
+        $.ajax({
+            url: "/api/dashboard-gbj/list2/h",
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                $('h4#he2').text(res);
+            }
+        })
+
+        $.ajax({
             url: '/api/gbj/sel-layout',
             type: 'GET',
             dataType: 'json',
@@ -1602,10 +1620,39 @@
 
         // data
         // penjualan
-        $('.table-produk-batas-transfer-one-day').DataTable({
 
+        $('.table-produk-batas-transfer-one-day').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '/api/dashboard-gbj/list1',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'so'},
+                {data: 'nama_customer'},
+                {data: 'tgl_batas'},
+                {data: 'action'},
+            ]
         });
-        $('.table-produk-batas-transfer-two-day').DataTable({});
+        $('.table-produk-batas-transfer-two-day').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '/api/dashboard-gbj/list2',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'so'},
+                {data: 'nama_customer'},
+                {data: 'tgl_batas'},
+                {data: 'action'},
+            ]
+        });
         $('.table-produk-batas-transfer-three-day').DataTable({
             processing: true,
             serverSide: true,
@@ -1620,6 +1667,22 @@
                 {data: 'nama_customer'},
                 {data: 'tgl_batas'},
                 {data: 'action'},
+            ]
+        });
+
+        $('.table-jml-stok').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '/api/dashboard-gbj/list-all',
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'produk'},
+                {data: 'permintaan'},
+                {data: 'current_stok'},
             ]
         });
         // produk
@@ -1681,6 +1744,7 @@
             ]
 
         });
+
         $('.layout').change(function () {
             // console.log('ok');
             $('.tableStokLayout').DataTable().column(3).search($(this).val()).draw();

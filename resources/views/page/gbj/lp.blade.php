@@ -297,7 +297,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped scan-produk">
+                <table class="table table-striped scan-produk1">
                     <thead>
                         <tr>
                             <th><input type="checkbox" id="head-cb"></th>
@@ -306,30 +306,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
+
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -359,30 +336,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
+
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -479,7 +433,7 @@
             }
         });
         i++;
-        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty['+i+']" name="qty['+i+']"></td><td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-produk" data-id="'+$('.productt').val()+'" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty['+i+']" name="qty'+i+'"></td><td><button class="btn btn-primary" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
     }
 
@@ -542,6 +496,9 @@
     $(document).on('click', '.detail', function(e) {
         var id = $(this).data('id');
         console.log(id);
+
+        var int = $('.number-input').val();
+        console.log(int);
 
         tambahanRancangan();
     })
@@ -659,23 +616,27 @@
         $('.tambahan-rancangan').modal('show');
     }
 
-    function tambahanPerakitan() {
+    function tambahanPerakitan(tambah) {
         $('.tambahan-perakitan').modal('show');
+        for (let index = 0; index < tambah; index++) {
+           $('.scan-produk1 tbody').append('<tr><td><input type="checkbox" class="cb-child" value="1"></td><td><input type="text" name="" id="" class="form-control"></td><td><select name="" id="" class="form-control"><option value="1">Layout 1</option><option value="2">Layout 2</option></select></td></tr>');
+        }
+        $('.scan-produk1').DataTable({}).destroy();
+        $('.scan-produk1').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+        });
     }
-    $('.scan-produk').DataTable({
-        "ordering": false,
-        "autoWidth": false,
-        searching: false,
-        "lengthChange": false,
-    });
 
-    $(document).on('click', '#btnPlus', function() {
+    $(document).on('click', '.btnPlus', function() {
         const prd = [];
 
         var prdid = $('.productt').val();
         var jml = $('.number-input').val();
-        // for()
-        tambahanPerakitan();
+
+        tambahanPerakitan(jml);
     })
 
     $(document).on('click', '#btnSave', function() {
@@ -690,7 +651,6 @@
             },
             success: function(res) {
                 console.log(res);
-                // location.reload();
             }
         })
     })

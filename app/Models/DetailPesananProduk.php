@@ -22,4 +22,8 @@ class DetailPesananProduk extends Model
     {
         return $this->hasMany(NoseriDetailPesanan::class);
     }
+
+    function status() {
+        return $this->belongsTo(Status::class, 'status_cek');
+    }
 }

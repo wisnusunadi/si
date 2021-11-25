@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailEkatalog;
+use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
@@ -176,7 +177,11 @@ class ProduksiController extends Controller
                 return '<span class="badge badge-danger">Produk belum disiapkan</span>';
             })
             ->addColumn('status1', function ($data) {
-                return '<span class="badge badge-danger">Belum Dicek</span>';
+                if (isset($data->Pesanan->status_cek)) {
+                    return '<span class="badge badge-primary">Sudah Dicek</span>';
+                } else {
+                    return '<span class="badge badge-danger">Belum Dicek</span>';
+                }
             })
             ->addColumn('button', function ($data) {
                 return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -210,7 +215,8 @@ class ProduksiController extends Controller
 
     function getDetailSO(Request $request, $id)
     {
-        $data = DetailPesananProduk::with('noseridetailpesanan')->where('detail_pesanan_id', $id)->get();
+        $x = explode(',', $id);
+        $data = DetailPesananProduk::with('noseridetailpesanan', 'status')->whereIN('detail_pesanan_id', $x)->get();
         return datatables()->of($data)
         ->addIndexColumn()
         ->addColumn('produk', function ($data) {
@@ -239,9 +245,16 @@ class ProduksiController extends Controller
                         </a>';
         })
         ->addColumn('status', function ($data) {
-            return '<span class="badge badge-danger">Belum Diinput</span>';
+            if (isset($data->status_cek)) {
+                return '<span class="badge badge-success">Sudah Diinput</span>';
+            } else {
+                return '<span class="badge badge-danger">Belum Diinput</span>';
+            }
         })
-        ->rawColumns(['action', 'status', 'produk', 'qty'])
+        ->addColumn('checkbox', function ($d) {
+            return '<input type="checkbox" class="cb-child" value="' . $d->gudang_barang_jadi_id . '">';
+        })
+        ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox'])
         ->make(true);
     }
 

@@ -125,6 +125,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                     <form action="" method="post">
+                        <input type="hidden" name="pesanan_id" id="ids">
                         <div class="card">
                             <div class="card-header">
                                 <div class="row row-cols-2">
@@ -166,7 +167,7 @@
                                 <table class="table table-striped add-produk">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            <th><input type="checkbox" id="head-cb"></th>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             <th>Tipe</th>
@@ -175,14 +176,14 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td></td>
+                                            <td><input type="checkbox" class="cb-child" value="2"></td>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                             <td>100 Unit</td>
                                             <td>ABPM50</td>
                                             <td>ELITECH</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
+                                            <td><input type="checkbox" class="cb-child" value="2"></td>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                             <td>100 Unit</td>
                                             <td>RGB</td>
@@ -342,9 +343,10 @@
         //         [3, 'desc']
         //     ],
     });
-
+    var id = '';
     $(document).on('click', '.editmodal', function(e) {
-        var id = $(this).data('id');
+        id = $(this).data('id');
+        console.log(id);
         $.ajax({
             url: "/api/tfp/header-so/" +id,
             success: function(res) {
@@ -375,10 +377,13 @@
 
             ],
             'columnDefs': [{
-            'targets': 0,
+                'targets': 0,
                 'checkboxes': {
                     'selectRow': true
-                }
+                },
+                // 'render': function(data, type, row, meta) {
+                //     return '<input type="checkbox" class="cb-child">';
+                // }
             }],
             'select': {
                 'style': 'multi'
@@ -393,7 +398,7 @@
 
         $(document).on('click', '#btnSave', function(e) {
             e.preventDefault();
-
+            // var idd = $('#ids').val(id);
             const ids = [];
 
             var rowsel = tab.column(0).checkboxes.selected();
@@ -401,16 +406,17 @@
 
             $.each(rowsel, function(i, val) {
                 ids.push(val);
-            })
+            });
 
             $.ajax({
                 url: "/api/so/cek",
                 type: "post",
                 data: {
+                    pesanan_id : id,
                     gbj_id: ids,
-                }
+                },
                 success: function(res) {
-                    console.log(res);
+                   console.log('res ' + res);
                 }
             })
 

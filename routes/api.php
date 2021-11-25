@@ -92,7 +92,7 @@ Route::prefix('/penjualan')->group(function () {
 });
 Route::prefix('/so')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_so']);
-    Route::post('create', [App\Http\Controllers\GudangController::class, 'storeCekSO']);
+    Route::post('/cek', [App\Http\Controllers\GudangController::class, 'storeCekSO']);
 });
 Route::prefix('/laporan')->group(function () {
     Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
@@ -105,7 +105,7 @@ Route::prefix('/gbj')->group(function () {
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
 
-    Route::get('/test/{id}', [App\Http\Controllers\GudangController::class, 'test']);
+    Route::get('/test', [App\Http\Controllers\GudangController::class, 'test']);
 
     // select
     Route::get('sel-product', [\App\Http\Controllers\GudangController::class, 'select_product']);
@@ -140,7 +140,7 @@ Route::prefix('/transaksi')->group(function () {
     Route::get('/all-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailAll']);
 });
 
-Route::prefix('/dashboard-gbj')->group(function() {
+Route::prefix('/dashboard-gbj')->group(function () {
     Route::get('/noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getNoseriTerima']);
     // produk
     Route::get('/stok/1020/h', [\App\Http\Controllers\GudangController::class, 'h1']);
@@ -171,8 +171,13 @@ Route::prefix('/dashboard-gbj')->group(function() {
     Route::post('/terimaall', [\App\Http\Controllers\GudangController::class, 'getPenerimaanAll']);
 
     // penjualan
+    Route::post('/list1/h', [\App\Http\Controllers\GudangController::class, 'he1']);
+    Route::post('/list2/h', [\App\Http\Controllers\GudangController::class, 'he2']);
     Route::post('/list/h', [\App\Http\Controllers\GudangController::class, 'he3']);
+    Route::post('/list1', [\App\Http\Controllers\GudangController::class, 'list_tf1']);
+    Route::post('/list2', [\App\Http\Controllers\GudangController::class, 'list_tf2']);
     Route::post('/list', [\App\Http\Controllers\GudangController::class, 'list_tf3']);
+    Route::post('/list-all', [\App\Http\Controllers\GudangController::class, 'outSO']);
     Route::get('/list-detail/{id}', [\App\Http\Controllers\GudangController::class, 'detailsale']);
 });
 

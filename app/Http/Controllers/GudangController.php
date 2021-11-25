@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailEkatalog;
 use App\Models\DetailEkatalogProduk;
+use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
 use App\Models\Divisi;
 use App\Models\DraftGBJ;
@@ -572,10 +573,19 @@ class GudangController extends Controller
     }
 
     function storeCekSO(Request $request) {
-        dd($request->all());
-        // foreach($request->gudang_barang_jadi_id as $key => $value) {
-        //     $cek = DetailPesananProduk::
-        // }
+        // $id = $request->pesanan_id;
+        $h = Pesanan::find($request->pesanan_id);
+        $h->status_cek = 4;
+        $h->save();
+        $dt = DetailPesanan::where('pesanan_id', $h->id)->get();
+        foreach($dt as $d) {
+            // $x = explode(", ", $d->id);
+            // echo $x;
+            $dp = DetailPesananProduk::
+                where('detail_pesanan_id', $d->id)->update(['status_cek' => 4]);
+        }
+
+        return 'Successfully';
     }
 
     // select
@@ -827,7 +837,7 @@ class GudangController extends Controller
             ->make(true);
     }
 
-    function getProdukByLayout()
+    function getProdukByLayout(Request $request)
     {
         $data = GudangBarangJadi::with('produk', 'layout')->get();
         return datatables()->of($data)
@@ -954,11 +964,6 @@ class GudangController extends Controller
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
                     $c = Carbon::now()->diffInDays($d->header->tgl_masuk);
-                    // $diff = abs(strtotime(Carbon::now()->format('d-m-Y')) - strtotime($d->header->tgl_masuk));
-                    // $years = floor($diff / (365 * 60 * 60 * 24));
-                    // $months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
-                    // $c = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
-                    // return $diff;
                     return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $c . ' Hari</span>';
                 } else {
                     return '-';
@@ -1025,17 +1030,10 @@ class GudangController extends Controller
     // penjualan
     function he1()
     {
-    }
-
-    function he2()
-    {
-    }
-
-    function he3()
-    {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
-        })->where('tgl_kontrak', '<=', Carbon::now()->startOfDay()->subDays(3) )->get());
+        })->where('tgl_kontrak', '>=', Carbon::now()->subDays(1)->format('Y-m-d') )
+        ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })->get());
@@ -1047,11 +1045,45 @@ class GudangController extends Controller
         return count($data);
     }
 
-    function list_tf3()
+    function he2()
     {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
-        })->where('tgl_kontrak', '<=', Carbon::now()->startOfDay()->subDays(3) )->get());
+        })->where('tgl_kontrak', '>=', Carbon::now()->subDays(2)->format('Y-m-d') )
+        ->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return count($data);
+    }
+
+    function he3()
+    {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po')
+            ->where('tgl_kontrak', '<=', Carbon::now()->subDays(3)->format('Y-m-d') );
+        })->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return count($data);
+    }
+
+    function list_tf1() {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->where('tgl_kontrak', '>=', Carbon::now()->subDays(1)->format('Y-m-d') )
+        ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })->get());
@@ -1072,8 +1104,103 @@ class GudangController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('tgl_batas', function($d) {
-                $a = Carbon::now()->diffInDays($d->tgl_kontrak);
-                return $d->tgl_kontrak.'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                if(isset($d->tgl_kontrak)) {
+                    $a = Carbon::now()->diffInDays($d->tgl_kontrak);
+                    return $d->tgl_kontrak.'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status', function () {
+                return '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            })
+            ->addColumn('action', function ($d) {
+                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr=""  data-id="' . $d->pesanan_id . '">
+                             <button class="btn btn-outline-primary" type="button" >
+                                <i class="fas fa-paper-plane"></i>
+                             </button>
+                         </a>';
+            })
+            ->rawColumns(['action', 'status', 'tgl_batas'])
+            ->make(true);
+    }
+
+    function list_tf2() {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->where('tgl_kontrak', '>=', Carbon::now()->subDays(2)->format('Y-m-d') )->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->Pesanan->so;
+            })
+            ->addColumn('no_po', function ($data) {
+                return $data->Pesanan->no_po;
+            })
+            ->addColumn('nama_customer', function ($data) {
+                return $data->Customer->nama;
+            })
+            ->addColumn('tgl_batas', function($d) {
+                if(isset($d->tgl_kontrak)) {
+                    $a = Carbon::now()->diffInDays($d->tgl_kontrak);
+                    return $d->tgl_kontrak.'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status', function () {
+                return '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            })
+            ->addColumn('action', function ($d) {
+                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr=""  data-id="' . $d->pesanan_id . '">
+                             <button class="btn btn-outline-primary" type="button" >
+                                <i class="fas fa-paper-plane"></i>
+                             </button>
+                         </a>';
+            })
+            ->rawColumns(['action', 'status', 'tgl_batas'])
+            ->make(true);
+    }
+
+    function list_tf3()
+    {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->where('tgl_kontrak', '<=', Carbon::now()->subDays(3)->format('Y-m-d') )->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->Pesanan->so;
+            })
+            ->addColumn('no_po', function ($data) {
+                return $data->Pesanan->no_po;
+            })
+            ->addColumn('nama_customer', function ($data) {
+                return $data->Customer->nama;
+            })
+            ->addColumn('tgl_batas', function($d) {
+                if(isset($d->tgl_kontrak)) {
+                    $a = Carbon::now()->diffInDays($d->tgl_kontrak);
+                    return $d->tgl_kontrak.'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('status', function () {
                 return '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -1118,10 +1245,46 @@ class GudangController extends Controller
 
     function outSO()
     {
+        $data = DetailPesananProduk::with('GudangBarangJadi', 'DetailPesanan')
+                ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('produk', function($d) {
+                return $d->GudangBarangJadi->produk->nama;
+            })
+            ->addColumn('permintaan', function($d) {
+                return $d->DetailPesanan->jumlah.' '.$d->GudangBarangJadi->Satuan->nama;
+            })
+            ->addColumn('current_stok', function($d) {
+                return $d->GudangBarangJadi->stok.' '.$d->GudangBarangJadi->Satuan->nama;
+            })
+            ->make(true);
     }
 
-    function test()
+    function test(Request $request)
     {
-        return Carbon::now()->subDays(1);
+        // $stok = GudangBarangJadi::all()->pluck('stok');
+        // $data = DetailPesananProduk::whereHas('GudangBarangJadi', function($q) use($request) {
+        //     // $q->where('stok', '>', 'jumlah');
+        // })
+        // ->get();
+        // // $data = DetailPesananProduk::with('GudangBarangJadi', 'DetailPesanan')
+        // //         ->get();
+        // return datatables()->of($data)
+        //     ->addIndexColumn()
+        //     ->addColumn('produk', function($d) {
+        //         return $d->GudangBarangJadi->produk->nama;
+        //     })
+        //     ->addColumn('permintaan', function($d) {
+        //         return $d->DetailPesanan->jumlah.' '.$d->GudangBarangJadi->Satuan->nama;
+        //     })
+        //     ->addColumn('current_stok', function($d) {
+        //         return $d->GudangBarangJadi->stok.' '.$d->GudangBarangJadi->Satuan->nama;
+        //     })
+        //     ->make(true);
+
+        // return $stok;
+        $data = Ekatalog::where('tgl_kontrak', '>=', Carbon::now())->get();
+        return $data;
     }
 }
