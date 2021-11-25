@@ -339,7 +339,7 @@
                                                                         <td>{{$loop->iteration}}</td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                                                                <select name="penjualan_produk_id[{{$produkpenjualan}}]" id="{{$produkpenjualan}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                     <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
                                                                                 </select>
                                                                             </div>

@@ -45,47 +45,53 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>
+                            @if(isset($data->Pesanan))
                             @foreach($data->pesanan->detailpesanan as $e)
                             <div class="card removeshadow">
                                 <div class="card-body">
                                     <h6>{{$e->PenjualanProduk->nama}}</h6>
                                     <div class="row align-center">
                                         <div class="col-4">
-                                            <div><small class="text-muted">Harga</small></div>
+                                            <div class="text-muted">Harga</div>
                                             <div><b>@currency($e->harga)</b></div>
                                         </div>
                                         <div class="col-4">
-                                            <div><small class="text-muted">Jumlah</small></div>
+                                            <div class="text-muted">Jumlah</div>
                                             <div><b>{{$e->jumlah}}</b></div>
                                         </div>
                                         <div class="col-4">
-                                            <div><small class="text-muted">Subtotal</small></div>
+                                            <div class="text-muted">Subtotal</div>
                                             <div><b>@currency($e->harga * $e->jumlah)</b></div>
                                             <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <div><small class="text-muted">Variasi</small></div>
+                                            <div class="text-muted">Variasi</div>
                                             <ul class="list-group">
+                                                @isset($e->DetailPesananProduk)
                                                 @foreach($e->DetailPesananProduk as $l)
                                                 <li class="list-group-item">
-                                                    <b>
-                                                        @if($l->nama != "")
-                                                        {{$l->GudangBarangJadi->Produk->nama}} {{$l->GudangBarangJadi->nama}}
-                                                        @else
-                                                        {{$l->GudangBarangJadi->Produk->nama}}
-                                                        @endif
-                                                    </b>
+
+                                                    @if(!empty($l->GudangBarangJadi->nama))
+                                                    {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
+                                                    @else
+                                                    {{$l->GudangBarangJadi->Produk->nama}}
+                                                    @endif
                                                 </li>
                                                 @endforeach
+                                                @endif
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             @endforeach
+
                             <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
+                            @else
+                            <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
+                            @endif
 
                             <!-- <table class="table" id="detailtabel_spb">
                                 <thead>

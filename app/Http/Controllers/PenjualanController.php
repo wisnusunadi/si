@@ -1191,6 +1191,7 @@ class PenjualanController extends Controller
     }
     public function update_spa(Request $request, $id)
     {
+        echo json_encode($request->all());
         $spa = Spa::find($id);
         $spa->customer_id = $request->customer_id;
         $uspa = $spa->save();
@@ -1224,10 +1225,10 @@ class PenjualanController extends Controller
                     }
                 }
 
-                if ($bool == true) {
+                if ($dspa) {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $c = DetailPesanan::create([
-                            'pesanan_id' => $spa->pesanan_id,
+                            'pesanan_id' => $poid,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
@@ -1237,11 +1238,11 @@ class PenjualanController extends Controller
                             $bool = false;
                         } else {
                             for ($j = 0; $j < count($request->variasi[$i]); $j++) {
-                                $dspbp = DetailPesananProduk::create([
+                                $cd = DetailPesananProduk::create([
                                     'detail_pesanan_id' => $c->id,
                                     'gudang_barang_jadi_id' => $request->variasi[$i][$j]
                                 ]);
-                                if (!$dspbp) {
+                                if (!$cd) {
                                     $bool = false;
                                 }
                             }
