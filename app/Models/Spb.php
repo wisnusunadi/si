@@ -8,15 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Spb extends Model
 {
     protected $table = 'spb';
-    protected $fillable = ['customer_id', 'pesanan_id', 'status', 'ket'];
+    protected $fillable = ['customer_id', 'pesanan_id', 'status', 'ket', 'log'];
 
     public function Customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
-    }
-    public function DetailSpb()
-    {
-        return $this->hasMany(DetailSpb::class);
     }
     public function Pesanan()
     {

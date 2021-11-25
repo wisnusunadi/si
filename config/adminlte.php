@@ -1167,23 +1167,22 @@ return [
         ],
           //DIREKSI
         [
-            'text'    => 'Produksi',
-            'icon'    => 'fas fa-cogs',
+            'text' => 'Dashboard',
+            'url' => 'direksi/dashboard',
+            'icon' => 'fas fa-layer-group',
             'auth' => [2],
-            'submenu' => [
-                [
-                        'text' => 'Riwayat Perakitan',
-                        'url'  => 'produksi/riwayat_perakitan',
-                        'icon' => 'far fa-circle',
-                        'auth' => [2]
-                ],
-            ],
         ],
         [
             'text'    => 'GBJ',
             'icon'    => 'fas fa-boxes',
             'auth' => [2],
             'submenu' => [
+                [
+                    'text' => 'Produk',
+                    'icon' => 'far fa-circle',
+                    'url'  => '/gbj/produk',
+                    'auth' => [2],
+                ],
                 [
                     'text' => 'Riwayat Transaksi',
                     'url'  => '/gbj/tp',
@@ -1197,6 +1196,12 @@ return [
             'icon'    => 'fas fa-tools',
             'auth' => [2],
             'submenu' => [
+                [
+                    'text' => 'Gudang',
+                    'url' => '/gk/gudang',
+                    'icon' => 'far fa-circle',
+                    'auth' => [2]
+                ],
                 [
                     'text' => 'Riwayat Transaksi',
                     'url'  => 'gk/transaksi',
@@ -1221,6 +1226,32 @@ return [
                     'url'  => '/penjualan/customer/show',
                     'icon' => 'far fa-circle',
                     'auth' => [2]
+                ],
+            ],
+        ],
+        [
+            'text' => 'PPIC',
+            'icon' => 'fas fa-truck-loading',
+            'auth' => [2],
+            'submenu' => [
+                [
+                    'text' => 'Perencanaan',
+                    'url'  => '/ppic/jadwal/penyusunan',
+                    'icon' => 'far fa-circle',
+                    'auth' => [2]
+                ],
+            ],
+        ],
+        [
+            'text'    => 'Produksi',
+            'icon'    => 'fas fa-cogs',
+            'auth' => [2],
+            'submenu' => [
+                [
+                        'text' => 'Riwayat Perakitan',
+                        'url'  => 'produksi/riwayat_perakitan',
+                        'icon' => 'far fa-circle',
+                        'auth' => [2]
                 ],
             ],
         ],

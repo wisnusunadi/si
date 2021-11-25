@@ -63,6 +63,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
+                @foreach($data as $d)
                 <div class="card mb-3">
                     <div class="row no-gutters">
                       <div class="col-md-4">
@@ -71,23 +72,21 @@
                       <div class="col-md-8">
                         <div class="card-body ml-5">
                           <div class="card-title">
-                            <h2 class="text-bold">Nama Produk</h2>
-                            <h6 class="text-muted">Kode Produk</h6>
+                              <input type="hidden" name="id" id="ids" value="{{ $d->id }}">
+                            <h2 class="text-bold" id="nama_produk">{{ $d->produk->nama }} {{ $d->nama }}</h2>
+                            <h6 class="text-muted" id="kode_produk">{{ $d->produk->product->kode . '' . $d->produk->kode ? $d->produk->product->kode . '' . $d->produk->kode : '-' }}</h6>
                           </div>
                           <h5 class="card-text text-bold pt-2">Deskripsi</h5>
-                          <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit
-                            amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor
-                            purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper
-                            eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque
-                            fermentum dui faucibus in ornare quam viverra</p>
+                          <p class="card-text" id="deskripsi">{{ $d->deskripsi }}</p>
                           <h5 class="card-text text-bold pt-1">Dimensi</h5>
                           <p class="text-bold" style="margin-bottom: 0">Panjang x Lebar x Tinggi</p>
-                          <p><span class="panjang">50</span> x <span class="lebar">10</span> x <span
-                                  class="tinggi">10</span></p>
+                          <p><span class="panjang">{{ $d->dim_p }}</span> x <span class="lebar">{{ $d->dim_l }}</span> x <span
+                                  class="tinggi">{{ $d->dim_}}</span></p>
                         </div>
                       </div>
                     </div>
                 </div>
+                @endforeach
             </div>
             <div class="col-xl-7">
                 <div class="card">
@@ -151,7 +150,7 @@
                                         <td>652146416541654</td>
                                         <td scope="row">10-04-2021</td>
                                         <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span><br><span class="badge badge-info">Divisi QC</span></td>
+                                        <td><span class="badge badge-success">Divisi IT</span></td>
                                         <td>Untuk Uji Coba</td>
                                         <td>100 Unit</td>
                                         <td><button type="button" class="btn btn-outline-info"
@@ -295,11 +294,11 @@
 @stop
 @section('adminlte_js')
 <script>
-    $('.table-seri').DataTable({});
-    $('.tableProdukView').DataTable({
-        searching: false,
-        "lengthChange": false
-    });
+
+    // $('.tableProdukView').DataTable({
+    //     searching: false,
+    //     "lengthChange": false
+    // });
     $('#nav-deskripsi-tab').click(function (e) {
         e.preventDefault();
         $('.is-active').addClass('font-weight-bold');
@@ -319,6 +318,59 @@
     function detailProduk() {
         $('.modalDetail').modal('show');
     }
+
+    $(document).on('click', '.editmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+        $('.table-seri').DataTable({
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {
+                url: "/api/transaksi/history-detail-seri/" + id,
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'noser'},
+                {data: 'posisi'},
+            ]
+        });
+        detailProduk();
+    })
+
+    $(document).ready(function () {
+        var id = $('#ids').val();
+        console.log(id);
+        $('.tableProdukView').DataTable().destroy();
+        $('.tableProdukView').dataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            searching: false,
+            "lengthChange": false,
+            autoWidth: false,
+            ajax: {
+                url: "/api/transaksi/history-detail/" + id,
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                { data: 'date_in', name: 'date_in'},
+                { data: 'date_out', name: 'date_out'},
+                { data: 'divisi', name: 'divisi'},
+                { data: 'tujuan', name: 'tujuan'},
+                { data: 'jumlah', name: 'jumlah'},
+                { data: 'action', name: 'action'},
+            ],
+            "oLanguage": {
+                "sSearch": "Cari:"
+            }
+        });
+
+    })
 
 </script>
 @stop

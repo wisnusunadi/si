@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GudangController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,10 +58,11 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/dp', 'page.gbj.dp');
     Route::view('/lp', 'page.gbj.lp');
     Route::view('/dashboard', 'page.gbj.dashboard'); 
-    route::group(['prefix' => '/tp'], function () {
+    Route::group(['prefix' => '/tp'], function () {
         Route::view('/', 'page.gbj.tp.tp');
-        Route::view('/1', 'page.gbj.tp.show');
+        Route::get('/{id}', [GudangController::class, 'getDetailHistory1']);
     });
+    Route::get('/data', [GudangController::class, 'get_data_barang_jadi']);
 });
 
 Route::middleware('auth')->prefix('/produksi')->group(function () {
