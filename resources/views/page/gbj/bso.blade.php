@@ -49,12 +49,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {{-- <tr>
                                     <td>1</td>
                                     <td>8457938475938475</td>
                                     <td>Rumah Sakit Dr. Soetomo</td>
                                     <td>10 Oktober 2021</td>
-                                    {{-- Menggunakan Perkondisian Jika Data Sudah Dirancang Maka Tampil Seperti ini --}}
+
                                     <td><span class="badge badge-info">Tersimpan ke rancangan</span></td>
                                     <td>
                                         <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
@@ -73,7 +73,7 @@
                                     <td>8457938475938475</td>
                                     <td>Rumah Sakit Dr. Soetomo</td>
                                     <td>10 Oktober 2021</td>
-                                    {{-- Menggunakan Perkondisian Jika Produk Belum Keluar Maka Tampil Seperti ini --}}
+
                                     <td><span class="badge badge-danger">Produk belum disiapkan</span></td>
                                     <td>
                                         <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
@@ -86,7 +86,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -148,30 +148,13 @@
                                             {{-- <th></th> --}}
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
-                                            <th>Tipe</th>
+                                            {{-- <th>Tipe</th> --}}
                                             <th>Merk</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            {{-- <td></td> --}}
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100 Unit</td>
-                                            <td>ABPM50</td>
-                                            <td>ELITECH</td>
-                                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
-                                                        class="fas fa-qrcode"></i> Scan Produk</button></td>
-                                        </tr>
-                                        <tr>
-                                            {{-- <td></td> --}}
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100 Unit</td>
-                                            <td>RGB</td>
-                                            <td>ELITECH</td>
-                                            <td><button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
-                                                        class="fas fa-qrcode"></i> Scan Produk</button></td>
-                                        </tr>
+                                       
                                     </tbody>
                                 </table>
                             </div>
@@ -312,10 +295,12 @@
 
     var id = '';
         $(document).on('click', '.editmodal', function(e) {
+        var x = $(this).data('value');
+        console.log(x);
         id = $(this).data('id');
             console.log(id);
             $.ajax({
-                url: "/api/tfp/header-so/" +id,
+                url: "/api/tfp/header-so/" +id+"/"+x,
                 success: function(res) {
                     console.log(res);
                     $('span#so').text(res.so);
@@ -329,7 +314,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "/api/tfp/detail-so/" +id,
+                url: "/api/tfp/detail-so/" +id+"/"+x,
                 // data: {id: id},
                 // type: "post",
                 // dataType: "json",
@@ -338,7 +323,7 @@
                 // { data: 'ids', name: 'ids'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
-                { data: 'tipe', name: 'tipe'},
+                // { data: 'tipe', name: 'tipe'},
                 { data: 'merk', name: 'merk'},
                 { data: 'action', name: 'action'},
             ],
@@ -364,6 +349,7 @@
     let a = $('#gudang-barang').DataTable({
             processing: true,
             serverSide: true,
+            destroy: true,
             ajax: {
                 url: '/api/tfp/data-so',
             },
@@ -371,7 +357,7 @@
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 { data: 'so', name: 'so'},
                 { data: 'nama_customer', name: 'nama_customer'},
-                { data: 'tgl_kontrak', name: 'tgl_kontrak'},
+                { data: 'batas_out', name: 'batas_out'},
                 { data: 'status', name: 'status'},
                 { data: 'button', name: 'button'},
             ],

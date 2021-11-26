@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProduksiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -191,8 +192,8 @@ Route::prefix('/tfp')->group(function () {
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
     Route::get('noseri/{id}', [\App\Http\Controllers\ProduksiController::class, 'getNoseri']);
     Route::get('data-so', [\App\Http\Controllers\ProduksiController::class, 'getOutSO']);
-    Route::get('detail-so/{id}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
-    Route::get('header-so/{id}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);
+    Route::get('detail-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
+    Route::get('header-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);
     Route::get('rakit', [\App\Http\Controllers\GudangController::class, 'getRakit']);
     Route::get('rakit-noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getRakitNoseri']);
     Route::get('rakit-terima/{id}', [\App\Http\Controllers\GudangController::class, 'getTerimaRakit']);
@@ -200,6 +201,12 @@ Route::prefix('/tfp')->group(function () {
 
     // check
     Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
+});
+
+Route::prefix('/prd')->group(function() {
+    Route::post('/minus10/h', [ProduksiController::class, 'h_minus10']);
+    Route::post('/minus5/h', [ProduksiController::class, 'h_minus5']);
+    Route::post('/exp/h', [ProduksiController::class, 'h_exp']);
 });
 
 Route::prefix('/spr')->group(function () {

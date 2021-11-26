@@ -55,12 +55,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {{-- <tr>
                                     <td>2</td>
                                     <td>8457938475938475</td>
                                     <td>Rumah Sakit Dr. Soetomo</td>
                                     <td>10 Oktober 2021</td>
-                                    {{-- Menggunakan Perkondisian Jika Data Sudah Dicek Maka Tampil Seperti ini --}}
                                     <td><span class="badge badge-primary">Pengecekan di QC</span></td>
                                     <td>
                                         <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
@@ -71,12 +70,11 @@
                                     <td>8457938475938475</td>
                                     <td>Rumah Sakit Dr. Soetomo</td>
                                     <td>10 Oktober 2021</td>
-                                    {{-- Menggunakan Perkondisian Jika Data Belum Dicek Maka Tampil Seperti ini --}}
                                     <td><span class="badge badge-warning">Pengecekan di Gudang</span></td>
                                     <td>
                                         <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -108,7 +106,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="so">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -116,7 +114,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -124,7 +122,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -132,7 +130,7 @@
                                     <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansi">RS. Dr. Soetomo</span>
                                             </div>
                                         </div>
                                     </div>
@@ -144,13 +142,13 @@
                                         <tr>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
-                                            <th>Tipe</th>
+                                            {{-- <th>Tipe</th> --}}
                                             <th>Merk</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                             <td>100</td>
                                             <td>ABPM50</td>
@@ -163,7 +161,7 @@
                                             <td>RGB</td>
                                             <td>ELITECH</td>
                                             <td><span class="badge badge-danger">Belum di cek</span></td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -179,13 +177,72 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function () {
-        $('.addProduk').click(function (e) {
-            $('#addProdukModal').modal('show');
-        });
-        $('.viewProduk').click(function (e) {
-            $('#viewProdukModal').modal('show');
+        // $('.addProduk').click(function (e) {
+        //     $('#addProdukModal').modal('show');
+        // });
+        // $('.viewProduk').click(function (e) {
+        //     $('#viewProdukModal').modal('show');
+        // });
+        $('#gudang-barang').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/tfp/data-so',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                { data: 'batas_out', name: 'batas_out'},
+                { data: 'status_prd', name: 'status_prd'},
+                { data: 'button_prd', name: 'button_prd'},
+            ],
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
         });
     });
+
+    $(document).on('click', '.detailproduk', function() {
+        var x = $(this).data('value');
+        console.log(x);
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+                url: "/api/tfp/header-so/" +id+"/"+x,
+                success: function(res) {
+                    console.log(res);
+                    $('span#so').text(res.so);
+                    $('span#po').text(res.po);
+                    $('span#akn').text(res.akn);
+                    $('span#instansi').text(res.customer);
+                }
+        });
+
+        $('#view-produk').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id+"/"+x,
+            },
+            columns: [
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                // { data: 'tipe', name: 'tipe'},
+                { data: 'merk', name: 'merk'},
+                { data: 'status_prd', name: 'status_prd'},
+            ],
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+        });
+
+        $('#viewProdukModal').modal('show');
+    })
+
 
     $('.add-produk').DataTable({
         'columnDefs': [{
@@ -204,15 +261,7 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
-    $('#view-produk').DataTable({
-        "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
-    $('#gudang-barang').DataTable({
-        "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
+
+
 </script>
 @stop

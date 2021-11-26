@@ -86,52 +86,52 @@ class ProduksiController extends Controller
 
     function TfbySO(Request $request)
     {
-        dd($request->all());
-        // $data = TFProduksi::where('pesanan_id', $request->pesanan_id)->get();
-        // if (count($data) > 0) {
-        //     // foreach($data as $v) {
-        //     //     $v->pesanan_id = $request->pesanan_id;
-        //     //     $v->tgl_keluar = Carbon::now();
-        //     //     $v->ke = 23;
-        //     //     $v->jenis = 'keluar';
-        //     //     $v->status_id = 1;
-        //     //     $v->created_at = Carbon::now();
-        //     //     $v->save();
-        //     // }
+        // dd($request->all());
+        $data = TFProduksi::where('pesanan_id', $request->pesanan_id)->get();
+        if (count($data) > 0) {
+            // foreach($data as $v) {
+            //     $v->pesanan_id = $request->pesanan_id;
+            //     $v->tgl_keluar = Carbon::now();
+            //     $v->ke = 23;
+            //     $v->jenis = 'keluar';
+            //     $v->status_id = 1;
+            //     $v->created_at = Carbon::now();
+            //     $v->save();
+            // }
 
-        //     return response()->json(['msg' => 'Data Sudah Ada']);
-        // } else {
-        //     $d = new TFProduksi();
-        //     $d->pesanan_id = $request->pesanan_id;
-        //     $d->tgl_keluar = Carbon::now();
-        //     $d->ke = 23;
-        //     $d->jenis = 'keluar';
-        //     $d->status_id = 1;
-        //     $d->state_id = 2;
-        //     $d->created_at = Carbon::now();
-        //     $d->save();
+            return response()->json(['msg' => 'Data Sudah Ada']);
+        } else {
+            $d = new TFProduksi();
+            $d->pesanan_id = $request->pesanan_id;
+            $d->tgl_keluar = Carbon::now();
+            $d->ke = 23;
+            $d->jenis = 'keluar';
+            $d->status_id = 1;
+            $d->state_id = 2;
+            $d->created_at = Carbon::now();
+            $d->save();
 
-        //     foreach ($request->gdg_brg_jadi_id as $key => $value) {
-        //         $dd = new TFProduksiDetail();
-        //         $dd->t_gbj_id = $d->id;
-        //         $dd->gdg_brg_jadi_id = $value;
-        //         $dd->qty = $request->qty[$key];
-        //         $dd->jenis = 'keluar';
-        //         $dd->status_id = 1;
-        //         $dd->state_id = 2;
-        //         $dd->created_at = Carbon::now();
-        //         $dd->save();
-        //     }
+            foreach ($request->gdg_brg_jadi_id as $key => $value) {
+                $dd = new TFProduksiDetail();
+                $dd->t_gbj_id = $d->id;
+                $dd->gdg_brg_jadi_id = $value;
+                $dd->qty = $request->qty[$key];
+                $dd->jenis = 'keluar';
+                $dd->status_id = 1;
+                $dd->state_id = 2;
+                $dd->created_at = Carbon::now();
+                $dd->save();
+            }
 
-        //     // foreach($request->noseri_id as $key => $value) {
-        //     //     $nn = new NoseriBarangJadi();
-        //     //     $nn->gdg_barang_jadi_id = $request->gdg_brg_jadi_id[$key];
-        //     //     $nn->ke = 23;
-        //     //     $nn->noseri = $key
-        //     // }
+            // foreach($request->noseri_id as $key => $value) {
+            //     $nn = new NoseriBarangJadi();
+            //     $nn->gdg_barang_jadi_id = $request->gdg_brg_jadi_id[$key];
+            //     $nn->ke = 23;
+            //     $nn->noseri = $key
+            // }
 
-        //     return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
-        // }
+            return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
+        }
     }
 
     // get
@@ -160,6 +160,7 @@ class ProduksiController extends Controller
         $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })->get());
+
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         return datatables()->of($data)
@@ -173,8 +174,18 @@ class ProduksiController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 return $data->Customer->nama;
             })
+            ->addColumn('batas_out', function($d) {
+                if (isset($d->tgl_kontrak)) {
+                    return $d->tgl_kontrak;
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('status', function ($data) {
                 return '<span class="badge badge-danger">Produk belum disiapkan</span>';
+            })
+            ->addColumn('status_prd', function ($data) {
+                return '<span class="badge badge-warning">Pengecekan di Gudang</span>';
             })
             ->addColumn('status1', function ($data) {
                 if (isset($data->Pesanan->status_cek)) {
@@ -184,9 +195,11 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('button', function ($data) {
+                $x = $data->getTable();
+
                 return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
+                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
                             <button class="btn btn-primary dropdown-item" type="button">
                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                             </button>
@@ -196,77 +209,145 @@ class ProduksiController extends Controller
             ->addColumn('action', function ($data) {
                 return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
+                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->pesanan_id . '">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                             </button>
                         </a>
 
-                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->pesanan_id . '">
                             <button class="dropdown-item" type="button">
                                 <i class="far fa-eye"></i>&nbsp;View
                             </button>
                         </a>
                         </div>';
             })
-            ->rawColumns(['button', 'status', 'action', 'status1'])
+            ->addColumn('button_prd', function ($d) {
+                $x = $d->getTable();
+                return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="' . $x . '"  data-id="' . $d->pesanan_id . '">
+                            <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                        </a>';
+            })
+            ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
             ->make(true);
     }
 
-    function getDetailSO(Request $request, $id)
+    function getDetailSO(Request $request, $id, $value)
     {
-        $x = explode(',', $id);
-        $data = DetailPesananProduk::with('noseridetailpesanan', 'status')->whereIN('detail_pesanan_id', $x)->get();
-        return datatables()->of($data)
-        ->addIndexColumn()
-        ->addColumn('produk', function ($data) {
-            if (empty($data->gudangbarangjadi->nama)) {
-                return $data->gudangbarangjadi->produk->nama.'<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id[]" value="'.$data->gudang_barang_jadi_id.'">';
-            } else {
-                return $data->gudangbarangjadi->nama.'<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id[]" value="'.$data->gudang_barang_jadi_id.'">';
+        if ($value == "ekatalog") {
+            // $data = Ekatalog::where('id', $id)->get();
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
             }
-        })
-        ->addColumn('qty', function ($data) {
-            return $data->detailpesanan->jumlah.'<input type="hidden" class="jumlah" name="qty[]" id="qty" value="'.$data->detailpesanan->jumlah.'">';
-        })
-        ->addColumn('tipe', function ($data) {
-            return $data->gudangbarangjadi->produk->nama;
-        })
-        ->addColumn('merk', function ($data) {
-            return $data->gudangbarangjadi->produk->merk;
-        })
-        ->addColumn('ids', function ($d) {
-                    return $d->gudang_barang_jadi_id;
-                })
-        ->addColumn('action', function ($data) {
-            return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data['id'] . '">
-                        <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
-                        class="fas fa-qrcode"></i> Scan Produk</button>
-                        </a>';
-        })
-        ->addColumn('status', function ($data) {
-            if (isset($data->status_cek)) {
-                return '<span class="badge badge-success">Sudah Diinput</span>';
-            } else {
-                return '<span class="badge badge-danger">Belum Diinput</span>';
+
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+        } else if ($value == "spa") {
+            // $data = Spa::where('pesanan_id', $id)->get();
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
             }
-        })
-        ->addColumn('checkbox', function ($d) {
-            return '<input type="checkbox" class="cb-child" value="' . $d->gudang_barang_jadi_id . '">';
-        })
-        ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox'])
-        ->make(true);
+
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+        } else if ($value == "spb") {
+            // $data = Spb::where('id', $id)->get();
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
+
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+        }
+
+        //return $g;
+
+        return datatables()->of($g)
+            ->addIndexColumn()
+            ->addColumn('produk', function ($data) {
+                if (empty($data->gudangbarangjadi->nama)) {
+                    return $data->gudangbarangjadi->produk->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id[]" value="' . $data->gudang_barang_jadi_id . '">';
+                } else {
+                    return $data->gudangbarangjadi->produk->nama.'-'.$data->gudangbarangjadi->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id[]" value="' . $data->gudang_barang_jadi_id . '">';
+                }
+            })
+            ->addColumn('qty', function ($data) {
+                return $data->detailpesanan->jumlah . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $data->detailpesanan->jumlah . '">';
+            })
+            ->addColumn('tipe', function ($data) {
+                if (empty($data->gudangbarangjadi->nama)) {
+                    return $data->gudangbarangjadi->produk->nama;
+                } else {
+                    return $data->gudangbarangjadi->produk->nama.' '.$data->gudangbarangjadi->nama;
+                }
+            })
+            ->addColumn('merk', function ($data) {
+                return $data->gudangbarangjadi->produk->merk;
+            })
+            ->addColumn('ids', function ($d) {
+                return $d->gudang_barang_jadi_id;
+            })
+            ->addColumn('action', function ($data) {
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data['id'] . '">
+                                <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
+                                class="fas fa-qrcode"></i> Scan Produk</button>
+                                </a>';
+            })
+            ->addColumn('status', function ($data) {
+                if (isset($data->status_cek)) {
+                    return '<span class="badge badge-success">Sudah Diinput</span>';
+                } else {
+                    return '<span class="badge badge-danger">Belum Diinput</span>';
+                }
+            })
+            ->addColumn('status_prd', function($d) {
+                if (isset($d->status_cek)) {
+                    return '<span class="badge badge-success">Sudah dicek</span>';
+                } else {
+                    return '<span class="badge badge-danger">Belum dicek</span>';
+                }
+            })
+            ->addColumn('checkbox', function ($d) {
+                return '<input type="checkbox" class="cb-child" value="' . $d->gudang_barang_jadi_id . '">';
+            })
+            ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd'])
+            ->make(true);
     }
 
-    function headerSo($id)
+    function headerSo($id, $value)
     {
-        $data = Pesanan::with('Ekatalog')->find($id);
-        return response()->json([
-            'so' => $data->so,
-            'po' => $data->no_po,
-            'akn' => $data->Ekatalog->no_paket,
-            'customer' => $data->Ekatalog->Customer->nama,
-        ]);
+        if ($value == "ekatalog") {
+            $data = Pesanan::with('Ekatalog')->find($id);
+            return response()->json([
+                'so' => $data->so,
+                'po' => $data->no_po,
+                'akn' => $data->Ekatalog->no_paket,
+                'customer' => $data->Ekatalog->Customer->nama,
+            ]);
+        } else if ($value == "spa") {
+            $data = Pesanan::with('spa')->find($id);
+            return response()->json([
+                'so' => $data->so,
+                'po' => $data->no_po,
+                'customer' => $data->spa->Customer->nama,
+            ]);
+        } else if ($value == "spb") {
+            $data = Pesanan::with('spb')->find($id);
+            return response()->json([
+                'so' => $data->so,
+                'po' => $data->no_po,
+                'customer' => $data->spb->Customer->nama,
+            ]);
+        }
     }
 
     function getHistorybyProduk()
@@ -296,13 +377,14 @@ class ProduksiController extends Controller
             ->make(true);
     }
 
-    function getNoseriSO(Request $request) {
+    function getNoseriSO(Request $request)
+    {
         $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->get();
         return datatables()->of($data)
-            ->addColumn('seri', function($d) {
-                return $d->noseri.'<input type="hidden" name="noseri[]" id="noseri" value="'.$d->noseri.'">';
+            ->addColumn('seri', function ($d) {
+                return $d->noseri . '<input type="hidden" name="noseri[]" id="noseri" value="' . $d->noseri . '">';
             })
-            ->addColumn('checkbox', function($d) {
+            ->addColumn('checkbox', function ($d) {
                 return $d->id;
             })
             ->RawColumns(['seri'])
@@ -327,6 +409,162 @@ class ProduksiController extends Controller
         // // return $data;
 
         $a = [];
+    }
+
+
+    // dashboard produksi
+    // sale
+    function h_minus10()
+    {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })
+        ->where('tgl_kontrak', '>=', Carbon::now()->subDays(10)->format('Y-m-d'))
+        ->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return count($data);
+    }
+
+    function h_minus5()
+    {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })
+        ->where('tgl_kontrak', '>=', Carbon::now()->subDays(5)->format('Y-m-d'))
+        ->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return count($data);
+    }
+
+    function h_exp()
+    {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })
+        ->where('tgl_kontrak', '<', Carbon::now()->format('Y-m-d'))
+        ->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return count($data);
+    }
+
+    function minus5()
+    {
 
     }
+
+    function minus10()
+    {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })
+        ->where('tgl_kontrak', '>=', Carbon::now()->subDays(10)->format('Y-m-d'))
+        ->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->Pesanan->so;
+            })
+            ->addColumn('no_po', function ($data) {
+                return $data->Pesanan->no_po;
+            })
+            ->addColumn('nama_customer', function ($data) {
+                return $data->Customer->nama;
+            })
+            ->addColumn('batas_out', function($d) {
+                if (isset($d->tgl_kontrak)) {
+                    return $d->tgl_kontrak;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                return '<span class="badge badge-danger">Produk belum disiapkan</span>';
+            })
+            ->addColumn('status_prd', function ($data) {
+                return '<span class="badge badge-warning">Pengecekan di Gudang</span>';
+            })
+            ->addColumn('status1', function ($data) {
+                if (isset($data->Pesanan->status_cek)) {
+                    return '<span class="badge badge-primary">Sudah Dicek</span>';
+                } else {
+                    return '<span class="badge badge-danger">Belum Dicek</span>';
+                }
+            })
+            ->addColumn('button', function ($data) {
+                $x = $data->getTable();
+
+                return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
+                            <button class="btn btn-primary dropdown-item" type="button">
+                                <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                            </button>
+                        </a>
+                        </div>';
+            })
+            ->addColumn('action', function ($data) {
+                return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->pesanan_id . '">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                            </button>
+                        </a>
+
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->pesanan_id . '">
+                            <button class="dropdown-item" type="button">
+                                <i class="far fa-eye"></i>&nbsp;View
+                            </button>
+                        </a>
+                        </div>';
+            })
+            ->addColumn('button_prd', function ($d) {
+                $x = $d->getTable();
+                return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="' . $x . '"  data-id="' . $d->pesanan_id . '">
+                            <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                        </a>';
+            })
+            ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
+            ->make(true);
+    }
+
+    function expired()
+    {
+
+    }
+    // rakit
+
 }
