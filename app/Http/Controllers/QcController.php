@@ -111,30 +111,7 @@ class QcController extends Controller
     public function get_data_detail_so($id)
     {
         $x = explode(',', $id);
-        //$data = DetailEkatalog::where('ekatalog_id', $id)->with('GudangBarangJadi', 'GudangBarangJadi.Produk')->get();
         $data = DetailPesananProduk::with('noseridetailpesanan')->whereIN('detail_pesanan_id', $x)->get();
-        // echo json_encode($data);
-        // $l = [];
-        // $v = 0;
-        // foreach ($data as $s) {
-        //     foreach ($s->GudangBarangJadi as $k) {
-        //         $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
-        //         $l[$v]['nama_produk'] = $k->produk->nama;
-        //         $l[$v]['jumlah'] = $k->pivot->jumlah;
-        //         $v++;
-        //     }
-        // }
-        //echo json_encode($data);
-        // $l = [];
-        // $v = 0;
-        // foreach ($data as $s) {
-        //     foreach ($s->GudangBarangJadi as $k) {
-        //         $l[$v]['id'] = $k->pivot->gudang_barang_jadi_id;
-        //         $l[$v]['nama_produk'] = $k->produk->nama;
-        //         $l[$v]['jumlah'] = $k->pivot->jumlah;
-        //         $v++;
-        //     }
-        // }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
@@ -211,8 +188,68 @@ class QcController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 return $data->Customer->nama;
             })
-            ->addColumn('status', function () {
-                return '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            ->addColumn('batas_uji', function ($data) {
+                $name =  $data->getTable();
+                if ($name == 'ekatalog') {
+                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                    $tgl_parameter = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status)->format('Y-m-d');
+
+                    if ($tgl_sekarang < $tgl_parameter) {
+                        $to = Carbon::now();
+                        $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
+                        $hari = $to->diffInDays($from);
+
+                        if ($hari > 7) {
+                            return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                        } else if ($hari > 0 && $hari <= 7) {
+                            return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                        } else {
+                            return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                        }
+                    } elseif ($tgl_sekarang == $tgl_parameter) {
+                        return   '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                    } else {
+                        $to = Carbon::now();
+                        $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
+                        $hari = $to->diffInDays($from);
+                        return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                    }
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                $z = array();
+                $x = array();
+
+                $jumlah = 0;
+                foreach ($data->pesanan->detailpesanan as $d) {
+                    $x[] = $d->id;
+                    $z[] = $d->jumlah;
+                    foreach ($d->penjualanproduk->produk as $l) {
+                        $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                    }
+                }
+                $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+
+                $y = array();
+
+                foreach ($detail_pesanan_produk as $d) {
+                    $y[] = $d->id;
+                }
+
+                $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
+
+
+                if ($jumlah == $jumlah_seri) {
+                    return  '<span class="badge green-text">Selesai</span>';
+                } else {
+                    if ($jumlah_seri == 0) {
+                        return '<span class="badge red-text">Belum diuji</span>';
+                    } else {
+                        return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
+                }
             })
             ->addColumn('button', function ($data) {
                 $name =  $data->getTable();
@@ -226,7 +263,7 @@ class QcController extends Controller
             </a>
         </div>';
             })
-            ->rawColumns(['button', 'status'])
+            ->rawColumns(['button', 'status', 'batas_uji'])
             ->make(true);
     }
 
@@ -306,9 +343,33 @@ class QcController extends Controller
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
                 $q->where('ekatalog.id', $id);
             })->get();
+
+            $jumlah = 0;
+            $z = array();
             $detail_id = array();
             foreach ($detail_pesanan as $d) {
                 $detail_id[] = $d->id;
+                $z[] = $d->jumlah;
+                foreach ($d->penjualanproduk->produk as $l) {
+                    $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                }
+            }
+
+            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_id)->get();
+            $y = array();
+            foreach ($detail_pesanan_produk as $d) {
+                $y[] = $d->id;
+            }
+            $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
+
+            if ($jumlah == $jumlah_seri) {
+                $status =  '<span class="badge green-text">Selesai</span>';
+            } else {
+                if ($jumlah_seri == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                }
             }
 
             foreach ($data as $d) {
@@ -336,7 +397,7 @@ class QcController extends Controller
                     $param =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                 }
             }
-            return view('page.qc.so.detail_ekatalog', ['data' => $data, 'detail_id' => $detail_id, 'param' => $param]);
+            return view('page.qc.so.detail_ekatalog', ['data' => $data, 'detail_id' => $detail_id, 'param' => $param, 'status' => $status]);
         } elseif ($value == 'spa') {
             $data = Spa::where('id', $id)->get();
             return view('page.qc.so.detail_spa', ['data' => $data]);
@@ -385,7 +446,17 @@ class QcController extends Controller
     {
         $terbaru = TFProduksi::Has('Pesanan')->where('tgl_keluar', '>=', Carbon::now()->subdays(7))->get()->count();
         $hasil = TFProduksi::Has('Pesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get()->count();
-        $lewat_batas = TFProduksi::Has('Pesanan.Ekatalog')->get()->count();
+        $lewat_batas_data = TFProduksi::Has('Pesanan.Ekatalog')->get();
+
+        $tgl_sekarang = Carbon::now()->format('Y-m-d');
+        $lewat_batas = 0;
+        foreach ($lewat_batas_data as $l) {
+            $tgl_parameter = $this->getHariBatasKontrak($l->pesanan->ekatalog->tgl_kontrak, $l->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+            if ($tgl_sekarang > $tgl_parameter) {
+                $lewat_batas++;
+            }
+        }
+
 
         return view('page.qc.dashboard', ['terbaru' => $terbaru, 'hasil' => $hasil, 'lewat_batas' => $lewat_batas]);
     }
@@ -398,12 +469,70 @@ class QcController extends Controller
                 ->addColumn('so', function ($data) {
                     return $data->Pesanan->so;
                 })
-                ->addColumn('batas', function () {
-                    return ' <div class="urgent">11-10-2021</div>
-                <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>';
+                ->addColumn('batas', function ($data) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        $x =  'ekatalog';
+                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                        $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+
+
+                        if ($tgl_sekarang < $tgl_parameter) {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+
+                            if ($hari > 7) {
+                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                            } else {
+                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                            }
+                        } elseif ($tgl_sekarang == $tgl_parameter) {
+                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                        } else {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        }
+                    } else {
+                        return '';
+                    }
                 })
-                ->addColumn('status', function () {
-                    return 'Belum diuji';
+                ->addColumn('status', function ($data) {
+                    $z = array();
+                    $x = array();
+
+                    $jumlah = 0;
+                    foreach ($data->pesanan->detailpesanan as $d) {
+                        $x[] = $d->id;
+                        $z[] = $d->jumlah;
+                        foreach ($d->penjualanproduk->produk as $l) {
+                            $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                        }
+                    }
+
+                    $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+                    $y = array();
+
+                    foreach ($detail_pesanan_produk as $d) {
+                        $y[] = $d->id;
+                    }
+
+                    $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
+
+
+                    if ($jumlah == $jumlah_seri) {
+                        return  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        if ($jumlah_seri == 0) {
+                            return '<span class="badge red-text">Belum diuji</span>';
+                        } else {
+                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                        }
+                    }
                 })
                 ->addColumn('button', function ($data) {
                     $name = explode('/', $data->pesanan->so);
@@ -417,7 +546,7 @@ class QcController extends Controller
                     return '<a href="' . route('qc.so.detail', [$data->pesanan->id, $x]) . '"><i class="fas fa-search"></i></a>
                 ';
                 })
-                ->rawColumns(['button', 'batas'])
+                ->rawColumns(['button', 'batas', 'status'])
                 ->make(true);
         } else if ($value == 'belum_uji') {
             $data = TFProduksi::Has('Pesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get();
@@ -426,13 +555,39 @@ class QcController extends Controller
                 ->addColumn('so', function ($data) {
                     return $data->Pesanan->so;
                 })
-                ->addColumn('batas', function () {
-                    return ' <div class="urgent">11-10-2021</div>
-            <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>';
+                ->addColumn('batas', function ($data) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        $x =  'ekatalog';
+                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                        $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+
+
+                        if ($tgl_sekarang < $tgl_parameter) {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+
+                            if ($hari > 7) {
+                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                            } else {
+                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                            }
+                        } elseif ($tgl_sekarang == $tgl_parameter) {
+                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                        } else {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        }
+                    } else {
+                        return '';
+                    }
                 })
-                ->addColumn('status', function () {
-                    return 'Belum diuji';
-                })
+
                 ->addColumn('button', function ($data) {
                     $name = explode('/', $data->pesanan->so);
                     if ($name[1] == 'EKAT') {
@@ -447,23 +602,103 @@ class QcController extends Controller
                 ->rawColumns(['button', 'batas'])
                 ->make(true);
         } else if ($value == 'lewat_uji') {
-            $data = TFProduksi::Has('Pesanan.Ekatalog')->get();
+
+            $lewat_batas_data = TFProduksi::Has('Pesanan.Ekatalog')->get();
+
+            $tgl_sekarang = Carbon::now()->format('Y-m-d');
+            $lewat_batas = 0;
+            $id = array();
+            foreach ($lewat_batas_data as $l) {
+                $tgl_parameter = $this->getHariBatasKontrak($l->pesanan->ekatalog->tgl_kontrak, $l->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+                if ($tgl_sekarang > $tgl_parameter) {
+                    $lewat_batas++;
+                    $id[] = $l->pesanan->id;
+                }
+            }
+            $data = TFProduksi::whereIN('pesanan_id', $id)->get();
+
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
                     return $data->Pesanan->so;
                 })
-                ->addColumn('batas', function () {
-                    return ' <div class="urgent">11-10-2021</div>
-            <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>';
+                ->addColumn('batas', function ($data) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        $x =  'ekatalog';
+                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                        $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+
+
+                        if ($tgl_sekarang < $tgl_parameter) {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+
+                            if ($hari > 7) {
+                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                            } else {
+                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                            }
+                        } elseif ($tgl_sekarang == $tgl_parameter) {
+                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                        } else {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        }
+                    } else {
+                        return '';
+                    }
                 })
-                ->addColumn('status', function () {
-                    return 'Belum diuji';
+                ->addColumn('status', function ($data) {
+                    $z = array();
+                    $x = array();
+
+                    $jumlah = 0;
+                    foreach ($data->pesanan->detailpesanan as $d) {
+                        $x[] = $d->id;
+                        $z[] = $d->jumlah;
+                        foreach ($d->penjualanproduk->produk as $l) {
+                            $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                        }
+                    }
+
+                    $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+                    $y = array();
+
+                    foreach ($detail_pesanan_produk as $d) {
+                        $y[] = $d->id;
+                    }
+
+                    $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
+
+
+                    if ($jumlah == $jumlah_seri) {
+                        return  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        if ($jumlah_seri == 0) {
+                            return '<span class="badge red-text">Belum diuji</span>';
+                        } else {
+                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                        }
+                    }
                 })
-                ->addColumn('button', function () {
-                    return '<a href="' . route('qc.so.detail_ekatalog', ['id' => '1']) . '"><i class="fas fa-search"></i></a>';
+                ->addColumn('button', function ($data) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        $x =  'ekatalog';
+                    } elseif ($name[1] == 'SPA') {
+                        $x =  'spa';
+                    } else {
+                        $x =  'spb';
+                    }
+                    return '<a href="' . route('qc.so.detail', [$data->pesanan->id, $x]) . '"><i class="fas fa-search"></i></a>';
                 })
-                ->rawColumns(['button', 'batas'])
+                ->rawColumns(['button', 'batas', 'status'])
                 ->make(true);
         }
     }
