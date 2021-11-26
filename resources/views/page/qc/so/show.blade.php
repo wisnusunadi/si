@@ -188,7 +188,7 @@
             columns: [{
                 data: 'DT_RowIndex',
                 className: 'nowrap-text align-center',
-                orderable: false,
+                orderable: true,
                 searchable: false
             }, {
                 data: 'so',

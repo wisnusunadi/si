@@ -53,7 +53,74 @@
         color: #C0C0C0;
     }
 
+    .removeshadow {
+        box-shadow: none;
+    }
+
+    .orange {
+        background-color: #ff6600;
+        color: #FFFFFF;
+    }
+
+    .yellow {
+        background-color: #ffb31a;
+        color: #FFFFFF;
+    }
+
+    .blue {
+        background-color: #00bfff;
+        color: #FFFFFF;
+    }
+
+    .red {
+        background-color: #b30000;
+        color: #FFFFFF;
+    }
+
+    .purple {
+        background-color: #7D6378;
+        color: #FFFFFF;
+    }
+
+    .green {
+        background-color: #456600;
+        color: #FFFFFF;
+    }
+
+    .midnightblue {
+        background-color: #191970;
+        color: #FFFFFF;
+    }
+
+    .link {
+        color: #FFFFFF;
+        text-decoration: none;
+        background-color: none;
+    }
+
+    .blue-bg {
+        background-color: #5F7A90;
+    }
+
     @media screen and (max-width: 1440px) {
+        #pengirimantable {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .so-title {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (min-width: 1440px) {
         #pengirimantable {
             font-size: 12px;
         }
@@ -70,107 +137,100 @@
 @stop
 
 @section('content')
-<div class="content">
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h4></h4>
-                                    <div class="chart">
-                                        <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card removeshadow">
+                    <div class="card-body blue-bg">
+                        <h3 class="link">Penjualan</h3>
+                        <div class="row">
+                            <div class="col-lg-6 col-12">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4></h4>
+                                                <div class="chart h-100">
+                                                    <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 100%; max-width: 100%;"></canvas>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="col-lg-6 col-12 align-center">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4><b>Sales Order</b></h4>
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-6 py-2">
+                                                        <div class="card h-100 purple">
+                                                            <div class="card-body">
+                                                                <h3 id="so_gudang">3</h3>
+                                                                <p class="so-title">SO Belum Diproses Gudang</p>
+                                                            </div>
+                                                            <div class="card-footer align-center"><a href="#" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-6 py-2">
+                                                        <div class="card h-100 yellow">
+                                                            <div class="card-body ">
+                                                                <h3 id="so_qc">3</h3>
+                                                                <p class="so-title">SO Belum Diproses QC</p>
+                                                            </div>
+                                                            <div class="card-footer align-center"><a href="/qc/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-6 py-2">
+                                                        <div class="card h-100 green">
+                                                            <div class="card-body">
+                                                                <h3 id="so_logistik">3</h3>
+                                                                <p class="so-title">SO Belum Diproses Logistik</p>
+                                                            </div>
+                                                            <div class="card-footer align-center"><a href="/logistik/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-6 py-2">
+                                                        <div class="card h-100 midnightblue">
+                                                            <div class="card-body">
+                                                                <h3 id="so_dc">3</h3>
+                                                                <p class="so-title">SO Belum Diproses DC</p>
+                                                            </div>
+                                                            <div class="card-footer align-center"><a href="/dc/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-12 py-2">
+                                                        <div class="card h-100 red">
+                                                            <div class="card-body p-5">
+                                                                <h3 id="so_dc">3</h3>
+                                                                <p class="so-title">AKN Belum Memiliki SO</p>
+                                                            </div>
+                                                            <div class="card-footer align-center"><a href="/penjualan/penjualan/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-2 col-6">
-                                    <div class="small-box purple-text">
-                                        <div class="inner">
-                                            <h3>3</h3>
-                                            <p>Belum Memiliki SO</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fas fa-tasks"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-6">
-                                    <div class="small-box orange-text">
-                                        <div class="inner">
-                                            <h3>4</h3>
-                                            <p>SO Belum Diproses Gudang</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fas fa-boxes"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-6">
-                                    <div class="small-box yellow-text">
-                                        <div class="inner">
-                                            <h3>2</h3>
-                                            <p>SO Belum Diproses QC</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-6">
-                                    <div class="small-box green-text">
-                                        <div class="inner">
-                                            <h3>2</h3>
-                                            <p>SO Belum Diproses Logistik</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-6">
-                                    <div class="small-box green-text">
-                                        <div class="inner">
-                                            <h3>2</h3>
-                                            <p>SO Belum Diproses DC</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
-    <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-warning">
-                    <h4>Detail</h4>
-                </div>
-                <div class="modal-body" id="detail">
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 @stop
 @section('adminlte_js')
 <script>
