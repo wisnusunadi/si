@@ -22,10 +22,43 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Alert;
+use App\Models\Ekspedisi;
 
 class MasterController extends Controller
 {
     //Get Data Table
+    public function get_data_ekspedisi()
+    {
+        $data = Ekspedisi::select();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jurusan', function ($data) {
+                return implode(',', $data->provinsi->pluck('nama')->toArray());
+            })
+            ->addColumn('via', function ($data) {
+                return implode(',', $data->jalurekspedisi->pluck('nama')->toArray());
+            })
+            ->addColumn('button', function ($data) {
+                return '
+            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a href="' . route('logistik.ekspedisi.detail', ['id' => '1']) . '">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-search"></i>
+                        Detail
+                    </button>
+                </a>
+                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
+                    </button>
+                </a>
+            </div>';
+            })
+            ->rawColumns(['button', 'jurusan', 'via'])
+            ->make(true);
+    }
     public function get_data_produk()
     {
         return datatables()->of(Produk::with('KelompokProduk'))->toJson();

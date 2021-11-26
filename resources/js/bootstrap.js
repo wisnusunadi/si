@@ -30,13 +30,10 @@ import "bootstrap/dist/js/bootstrap.bundle";
 import "datatables.net-bs4/js/dataTables.bootstrap4.min";
 import "chart.js/dist/chart";
 import "select2/dist/js/select2.full";
-<<<<<<< HEAD
 // import Swal from 'sweetalert2';
 // import swal from 'sweetalert2';
 
-=======
->>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
-import "fullcalendar";
+//import "fullcalendar";
 
 window.OverlayScrollbars = require("overlayscrollbars");
 

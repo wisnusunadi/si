@@ -228,3 +228,7 @@ Route::prefix('/qc')->group(function () {
         });
     });
 });
+
+Route::group(['prefix' => '/ekspedisi'], function () {
+    Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
+});

@@ -13,7 +13,3 @@
     </div>
 </div>
 @stop
-
-@section('adminlte_js')
-<script src="{{ asset('native/js/gbj/penjualan.js') }}"></script>
-@stop
