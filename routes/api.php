@@ -207,6 +207,27 @@ Route::prefix('/prd')->group(function() {
     Route::post('/minus10/h', [ProduksiController::class, 'h_minus10']);
     Route::post('/minus5/h', [ProduksiController::class, 'h_minus5']);
     Route::post('/exp/h', [ProduksiController::class, 'h_exp']);
+
+    Route::post('/minus5', [ProduksiController::class, 'minus5']);
+    Route::post('/minus10', [ProduksiController::class, 'minus10']);
+    Route::post('/exp', [ProduksiController::class, 'expired']);
+
+    Route::post('/exp_rakit/h', [ProduksiController::class, 'exp_rakit_h']);
+    Route::post('/exp_rakit', [ProduksiController::class, 'exp_rakit']);
+
+    // jadwal
+    // plan
+    Route::post('/plan', [ProduksiController::class, 'plan_rakit']);
+    Route::post('/plan-cal', [ProduksiController::class, 'calender_plan']);
+
+    // on
+    Route::post('/ongoing', [ProduksiController::class, 'on_rakit']);
+    Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
+    Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
+    Route::get('/test1', [ProduksiController::class, 'test1']);
+
+    // kirim
+    Route::post('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
 });
 
 Route::prefix('/spr')->group(function () {

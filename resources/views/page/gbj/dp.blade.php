@@ -3,6 +3,7 @@
 @section('title', 'ERP')
 
 @section('content')
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="card">
     <div class="card-header">
       <h3 class="card-title">Produk dari Perakitan </h3>
@@ -65,7 +66,7 @@
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk <span id="title">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
+                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -149,7 +150,7 @@
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
+                  <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -205,23 +206,20 @@
     });
 
     $('.dalam-perakitan').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '/api/tfp/rakit',
-        },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            { data: 'tgl_masuk'},
-            { data: 'product'},
-            { data: 'jumlah'},
-            { data: 'action'}
-        ],
         "oLanguage": {
         "sSearch": "Cari:"},
+        "columnDefs": [
+        {
+            "targets": [4],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }
+    ]
     });
-
-
+    $('.scan-produk').DataTable({
+            "oLanguage": {
+        "sSearch": "Cari:"
+        }
+    });
     $(document).ready(function () {
         $('.terimaProduk').click(function (e) {
             $('.terima-produk').modal('show');
@@ -241,6 +239,7 @@
         });
         $('#ubah-layout').modal('hide');
     }
+<<<<<<< HEAD
     var id = '';
     $(document).on('click', '.editmodal', function() {
         id = $(this).data('id');
@@ -320,6 +319,8 @@
 
         openModalView();
     });
+=======
+>>>>>>> 24b2266da4db4106d53d405bebadfc91e3549658
 
     function openModalTerima() {
         $('.terima-produk').modal('show');

@@ -23,6 +23,7 @@
         font-size: 18px
     }
 </style>
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -118,7 +119,7 @@
                                         <label for="">Nomor SO</label>
                                             <div class="card nomor-so">
                                                 <div class="card-body">
-                                                    <span id="so">89798797856456</span>
+                                                    89798797856456
                                                 </div>
                                               </div>
                                     </div>
@@ -126,7 +127,7 @@
                                         <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="akn">89798797856456</span>
+                                                89798797856456
                                             </div>
                                           </div>
                                     </div>
@@ -134,18 +135,17 @@
                                         <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">89798797856456</span>
+                                                89798797856456
                                             </div>
                                           </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form action="" id="myForm" method="post">
-                                <table class="table table-striped add-produk" id="addProduk">
+                                <table class="table table-striped add-produk">
                                     <thead>
                                         <tr>
-                                            {{-- <th></th> --}}
+                                            <th></th>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             {{-- <th>Tipe</th> --}}
@@ -154,7 +154,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       
+            
                                     </tbody>
                                 </table>
                             </div>
@@ -163,8 +163,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="btnTf">Transfer</button>
-                <button type="button" class="btn btn-info" id="btnDraft">Rancang</button>
+                <button type="button" class="btn btn-success">Transfer</button>
+                <button type="button" class="btn btn-info">Rancang</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
         </div>
@@ -198,13 +198,11 @@
                         <tr>
                             <td>78656562646545646</td>
                             <td></td>
-
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </form>
     </div>
 </div>
 @stop
@@ -213,29 +211,29 @@
 <script>
     var mytable = '';
     $(document).ready(function () {
-        // $('.addProduk').click(function (e) {
-        //     $('#addProdukModal').modal('show');
-        // });
-        // $('.viewProduk').click(function (e) {
-        //     $('#viewProdukModal').modal('show');
-        // });
-        // let t = $('.add-produk').DataTable({
-        //     'columnDefs': [{
-        //         'targets': 0,
-        //         'checkboxes': {
-        //             'selectRow': true
-        //         }
-        //     }],
-        //     'select': {
-        //         'style': 'multi'
-        //     },
-        //     'order': [
-        //         [1, 'asc']
-        //     ],
-        //     "oLanguage": {
-        //     "sSearch": "Cari:"
-        //     }
-        // });
+        $('.addProduk').click(function (e) {
+            $('#addProdukModal').modal('show');
+        });
+        $('.viewProduk').click(function (e) {
+            $('#viewProdukModal').modal('show');
+        });
+        let t = $('.add-produk').DataTable({
+            'columnDefs': [{
+                'targets': 0,
+                'checkboxes': {
+                    'selectRow': true
+                }
+            }],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
+                [1, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"
+            }
+        });
 
         // $('.scan-produk').DataTable({
         //     'columnDefs': [{
@@ -327,16 +325,7 @@
                 { data: 'merk', name: 'merk'},
                 { data: 'action', name: 'action'},
             ],
-            // 'columnDefs': [{
-            //     'targets': 0,
-            //     'checkboxes': {
-            //         'selectRow': true
-            //     }
-            // }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
+            "order": [
                 [1, 'asc']
             ],
             "oLanguage": {

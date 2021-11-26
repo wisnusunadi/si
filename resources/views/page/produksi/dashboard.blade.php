@@ -10,7 +10,7 @@
     .hidden {
         display: none !important;
     }
-    
+
     .otg:hover {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
@@ -37,6 +37,9 @@
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
+    }
+    body{
+        font-size: 14px;
     }
 </style>
 <div class="content-header">
@@ -65,7 +68,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="transferoneday" class="card active otg" style="background-color: #E6EFFA">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="m1">10</h4>
                                         <p class="card-text">Produk Mendekati Batas Pengiriman Kurang Dari 10 Hari</p>
                                     </div>
                                 </div>
@@ -73,7 +76,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="transfertwoday" class="card otg" style="background-color: #FEF7EA">
                                     <div class="card-body text-center">
-                                        <h4>50</h4>
+                                        <h4 id="m2">50</h4>
                                         <p class="card-text">Produk Mendekati Batas Pengiriman Kurang Dari 5 Hari</p>
                                     </div>
                                 </div>
@@ -81,7 +84,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="transferthreeday" class="card otg" style="background-color: #FCEDE9">
                                     <div class="card-body text-center">
-                                        <h4>60</h4>
+                                        <h4 id="m3">60</h4>
                                         <p class="card-text">Produk Melewati Batas Pengiriman</p>
                                     </div>
                                 </div>
@@ -100,14 +103,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {{-- <tr>
                                     <td scope="row">1</td>
                                     <td>654654654654</td>
                                     <td>Rumkital Dr. Ramelan</td>
                                     <td>18-06-2021 </td>
                                     <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
                                         class="fas fa-paper-plane"></i></button></td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -175,7 +178,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="bataswaktupenyerahan" class="card active otg" style="background-color: #E6EFFA">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="m4">10</h4>
                                         <p class="card-text">Produk Mendekati Batas Waktu Penyerahan ke GBJ</p>
                                     </div>
                                 </div>
@@ -183,7 +186,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="bataswaktuperakitan" class="card otg" style="background-color: #FEF7EA">
                                     <div class="card-body text-center">
-                                        <h4>50</h4>
+                                        <h4 id="m5">50</h4>
                                         <p class="card-text">Produk Mendekati Batas Waktu Perakitan</p>
                                     </div>
                                 </div>
@@ -191,7 +194,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="perubahanperakitan" class="card otg" style="background-color: #FCEDE9">
                                     <div class="card-body text-center">
-                                        <h4>60</h4>
+                                        <h4 id="m6">60</h4>
                                         <p class="card-text">Produk Mengalami Perubahan Jadwal Perakitan</p>
                                     </div>
                                 </div>
@@ -412,7 +415,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="so">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -420,7 +423,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -428,7 +431,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -436,7 +439,7 @@
                                     <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansi">RS. Dr. Soetomo</span>
                                             </div>
                                         </div>
                                     </div>
@@ -448,26 +451,13 @@
                                         <tr>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
-                                            <th>Tipe</th>
+                                            {{-- <th>Tipe</th> --}}
                                             <th>Merk</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>ABPM50</td>
-                                            <td>ELITECH</td>
-                                            <td><span class="badge badge-success">Sudah di cek</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>RGB</td>
-                                            <td>ELITECH</td>
-                                            <td><span class="badge badge-danger">Belum di cek</span></td>
-                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -482,41 +472,257 @@
 
 @section('adminlte_js')
 <script>
-        $('.table-produk-batas-transfer-one-day').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+    // sale
+    $.ajax({
+        url: "/api/prd/minus5/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m1').text(res);
+        }
+    })
+
+    $('.table-produk-batas-transfer-two-day').DataTable({
+        destroy: true,
+        "paging": true,
+        "lengthChange": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/prd/minus5',
+            type: "post",
+        },
+        columns: [
+            {data: 'DT_RowIndex'},
+            {data: 'so'},
+            {data: 'nama_customer'},
+            {data: 'batas_out'},
+            {data: 'button'},
+        ],
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
+    });
+
+    $(document).on('click', '.minus5', function() {
+        var x = $(this).data('value');
+        console.log(x);
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/tfp/header-so/" +id+"/"+x,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.po);
+                $('span#akn').text(res.akn);
+                $('span#instansi').text(res.customer);
             }
         });
-    $('.table-produk-batas-transfer-two-day').DataTable({
-        "paging": true,
-            "lengthChange": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+
+        $('#view-produk').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id+"/"+x,
+            },
+            columns: [
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'merk', name: 'merk'},
+                { data: 'status_prd', name: 'status_prd'},
+            ],
             "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
-    $('.table-produk-batas-transfer-three-day').DataTable({
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+        });
+
+        modalSO();
+    })
+
+
+    $.ajax({
+        url: "/api/prd/minus10/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m2').text(res);
+        }
+    })
+
+    $('.table-produk-batas-transfer-one-day').DataTable({
+        destroy: true,
         "paging": true,
-            "lengthChange": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
-    $('#view-produk').DataTable({
+        "lengthChange": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/prd/minus10',
+            type: "post",
+        },
+        columns: [
+            {data: 'DT_RowIndex'},
+            {data: 'so'},
+            {data: 'nama_customer'},
+            {data: 'batas_out'},
+            {data: 'button'},
+        ],
         "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
+    });
+
+    $(document).on('click', '.minus10', function() {
+        var x = $(this).data('value');
+        console.log(x);
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/tfp/header-so/" +id+"/"+x,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.po);
+                $('span#akn').text(res.akn);
+                $('span#instansi').text(res.customer);
+            }
+        });
+
+        $('#view-produk').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id+"/"+x,
+            },
+            columns: [
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'merk', name: 'merk'},
+                { data: 'status_prd', name: 'status_prd'},
+            ],
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+        });
+
+        modalSO();
+    })
+
+    $.ajax({
+        url: "/api/prd/exp/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m3').text(res);
+        }
+    })
+
+    $('.table-produk-batas-transfer-three-day').DataTable({
+        destroy: true,
+        "paging": true,
+        "lengthChange": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/prd/exp',
+            type: "post",
+        },
+        columns: [
+            {data: 'DT_RowIndex'},
+            {data: 'so'},
+            {data: 'nama_customer'},
+            {data: 'batas_out'},
+            {data: 'button'},
+        ],
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
+    });
+
+    $(document).on('click', '.expired', function() {
+        var x = $(this).data('value');
+        console.log(x);
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/tfp/header-so/" +id+"/"+x,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.po);
+                $('span#akn').text(res.akn);
+                $('span#instansi').text(res.customer);
+            }
+        });
+
+        $('#view-produk').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id+"/"+x,
+            },
+            columns: [
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'merk', name: 'merk'},
+                { data: 'status_prd', name: 'status_prd'},
+            ],
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+        });
+
+        modalSO();
+    })
+
+    // rakit
+    $.ajax({
+        url: "/api/prd/exp_rakit/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m5').text(res);
+        }
+    })
+
+    $('.table-waktu-perakitan').DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/api/prd/exp_rakit",
+            type: "post",
+        },
+        columns: [
+            {data: 'start'},
+            {data: 'end'},
+            {data: 'no_bppb'},
+            {data: 'produk'},
+            {data: 'jml'},
+            {data: 'button'}
+        ],
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
     });
@@ -592,14 +798,7 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
     });
-    $('.table-waktu-perakitan').DataTable({
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
+
     $('.table-perubahan-perakitan').DataTable({
             "ordering":false,
             "autoWidth": false,
@@ -608,7 +807,7 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
     });
-    function modalSO() { 
+    function modalSO() {
         $('.viewProdukModal').modal('show');
     }
 </script>

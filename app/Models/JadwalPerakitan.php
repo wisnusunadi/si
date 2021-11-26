@@ -14,6 +14,6 @@ class JadwalPerakitan extends Model
 
     public function Produk()
     {
-        return $this->belongsTo(Produk::class, 'produk_id');
+        return $this->belongsTo(GudangBarangJadi::class, 'produk_id');
     }
 }

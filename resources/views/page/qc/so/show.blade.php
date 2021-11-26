@@ -8,18 +8,14 @@
 
 @section('adminlte_css')
 <style>
-    .urgent {
-        color: #dc3545;
+    #urgent {
+        color: red;
         font-weight: 600;
     }
 
-    .warning {
+    #warning {
         color: #FFC700;
         font-weight: 600;
-    }
-
-    .filter {
-        margin: 5px;
     }
 </style>
 @stop
@@ -37,49 +33,48 @@
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <form id="filter">
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Jenis Penjualan</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
-                                                        <label class="form-check-label" for="defaultCheck1">
-                                                            E-Catalogue
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                        <label class="form-check-label" for="defaultCheck2">
-                                                            SPA
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="spb" id="defaultCheck2" />
-                                                        <label class="form-check-label" for="defaultCheck2">
-                                                            SPB
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary" type="submit">
-                                                            Cari
-                                                        </button>
-                                                    </span>
+                                    <div class="dropdown-menu">
+                                        <div class="px-3 py-3">
+                                            <div class="form-group">
+                                                <label for="jenis_penjualan">Jenis Penjualan</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                        E-Catalogue
+                                                    </label>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
+                                                    <label class="form-check-label" for="defaultCheck2">
+                                                        SPA
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
+                                                    <label class="form-check-label" for="defaultCheck2">
+                                                        SPB
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="float-right">
+                                                    <button class="btn btn-primary">
+                                                        Cari
+                                                    </button>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </span>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
@@ -88,74 +83,55 @@
                                             <th>No</th>
                                             <th>No SO</th>
                                             <th>No PO</th>
-                                            <th>Batas Pengujian</th>
+                                            <th>Tanggal Buat</th>
+                                            <th>Batas Kontrak</th>
                                             <th>Customer</th>
+                                            <th>DO</th>
+                                            <th>Tanggal DO</th>
                                             <th>Keterangan</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
+                                            <tr>
                                                 <td>1</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>PO/ON/09/21/001</td>
+                                                <td>SO-EKAT000001</td>
+                                                <td>PO/ON/10/2021/0001</td>
+                                                <td>21-09-2021</td>
+                                                <td><span id="warning">08-11-2021</span></td>
+                                                <td>PT. A</td>
+                                                <td>DO/31/10/2021</td>
                                                 <td>31-10-2021</td>
-                                                <td>CV. Cipta Jaya Mandiri</td>
                                                 <td>-</td>
-                                                <td><span class="badge green-text">Selesai</span></td>
+                                                <td><span class="badge orange-text">Gudang</span></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
                                                 <td>2</td>
-                                                <td>SO/EKAT/X/02/100</td>
-                                                <td>PO/ON/09/21/002</td>
-                                                <td>
-                                                    <div class="urgent">31-10-2021</div>
-                                                    <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>
-                                                </td>
-                                                <td>CV. Cipta Jaya Mandiri</td>
+                                                <td>SO-SPA000002</td>
+                                                <td>PO/ON/10/2021/0001</td>
+                                                <td>21-08-2021</td>
+                                                <td><span id="urgent">31-10-2021</span></td>
+                                                <td>Pak K</td>
+                                                <td>DO/31/10/2021</td>
+                                                <td>31-10-2021</td>
                                                 <td>-</td>
-                                                <td><span class="badge yellow-text">Sedang Berlangsung</span></td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                 
-                                                    </div>
-                                                    <a href="">
-                                                        <div><i class="fas fa-eye"></i></div><small>Detail</small>
-                                                    </a>
-                                                </td>
+                                                <td><span class="badge yellow-text">QC</span></td>
+                                                <td><a href="/qc/so/detail/1"><i class="fas fa-search"></i></a></td>
                                             </tr>
                                             <tr>
                                                 <td>3</td>
-                                                <td>SO/SPA/XI/02/01</td>
-                                                <td>PO/ON/09/21/003</td>
-                                                <td>
-                                                    <div class="warning">04-11-2021</div>
-                                                    <small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa 2 Hari</small>
-                                                </td>
-                                                <td>CV. Cipta Jaya Mandiri</td>
+                                                <td>SO-SPB000003</td>
+                                                <td>PO/ON/10/2021/0001</td>
+                                                <td>31-07-2021</td>
+                                                <td>01-10-2021</td>
+                                                <td>Bu B</td>
+                                                <td>DO/31/10/2021</td>
+                                                <td>31-10-2021</td>
                                                 <td>-</td>
-                                                <td><span class="badge yellow-text">Sedang Berlangsung</span></td>
-                                                <td><a href="">
-                                                        <div><i class="fas fa-eye"></i></div><small>Detail</small>
-                                                    </a></td>
+                                                <td><span class="badge green-text">Pengiriman</span></td>
+                                                <td><a href="/qc/so/detail/1"><i class="fas fa-search"></i></a></td>
                                             </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>SO/SPB/XI/02/01</td>
-                                                <td>PO/ON/09/21/004</td>
-                                                <td>
-                                                    <div>21-09-2021</div>
-                                                    <small>Batas sisa 6 Hari</small>
-                                                </td>
-                                                <td>PT. Emiindo Jaya Bersama</td>
-                                                <td>-</td>
-                                                <td><span class="badge red-text">Belum diuji</span></td>
-                                                <td><a href="">
-                                                        <div><i class="fas fa-eye"></i></div><small>Detail</small>
-                                                    </a></td>
-                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -171,73 +147,8 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/qc/so/data/semua',
+        var showtable = $('#showtable').DataTable({})
 
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                data: 'DT_RowIndex',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'so',
-
-            }, {
-                data: 'no_po',
-
-            }, {
-                data: 'DT_RowIndex',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false,
-            }, {
-                data: 'nama_customer',
-
-            }, {
-                data: 'ket',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'status',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'button',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }]
-        })
-
-
-        $('#filter').submit(function() {
-            var values = [];
-            $("input:checked").each(function() {
-                values.push($(this).val());
-            });
-            if (values != 0) {
-                var x = values;
-
-            } else {
-                var x = ['semua']
-            }
-            console.log(x);
-            $('#showtable').DataTable().ajax.url(' /api/qc/so/data/' + x).load();
-            return false;
-        });
     })
 </script>
 @stop

@@ -29,6 +29,7 @@
         font-size: 18px
     }
 </style>
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -124,8 +125,11 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
+<<<<<<< HEAD
                     <form action="" method="post">
                         <input type="hidden" name="pesanan_id" id="ids">
+=======
+>>>>>>> 24b2266da4db4106d53d405bebadfc91e3549658
                         <div class="card">
                             <div class="card-header">
                                 <div class="row row-cols-2">
@@ -133,7 +137,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                <span id="soo">89798797856456</span>
+                                                89798797856456
                                             </div>
                                         </div>
                                     </div>
@@ -141,7 +145,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="aknn">89798797856456</span>
+                                                89798797856456
                                             </div>
                                         </div>
                                     </div>
@@ -149,7 +153,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="poo">89798797856456</span>
+                                                89798797856456
                                             </div>
                                         </div>
                                     </div>
@@ -157,7 +161,7 @@
                                     <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                <span id="instansii">89798797856456</span>
+                                                RS. Dr. Soetomo
                                             </div>
                                         </div>
                                     </div>
@@ -193,7 +197,6 @@
                                 </table>
                             </div>
                         </div>
-                    </form>
                     </div>
                 </div>
                 {{-- Tambahkan DataTable --}}
@@ -201,7 +204,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
+                <button type="button" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
@@ -228,7 +231,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                <span id="so">89798797856456</span>
+                                                89798797856456
                                             </div>
                                         </div>
                                     </div>
@@ -236,7 +239,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="akn">89798797856456</span>
+                                                89798797856456
                                             </div>
                                         </div>
                                     </div>
@@ -244,7 +247,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">89798797856456</span>
+                                                89798797856456
                                             </div>
                                         </div>
                                     </div>
@@ -252,7 +255,7 @@
                                     <div class="col"> <label for="">Instansi</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                <span id="instansi">RS. Dr. Soetomo</span>
+                                                RS. Dr. Soetomo
                                             </div>
                                         </div>
                                     </div>
@@ -298,14 +301,14 @@
 
 @section('adminlte_js')
 <script>
-    // $(document).ready(function () {
-    //     $('.addProduk').click(function (e) {
-    //         $('#addProdukModal').modal('show');
-    //     });
-    //     $('.viewProduk').click(function (e) {
-    //         $('#viewProdukModal').modal('show');
-    //     });
-    // });
+    $(document).ready(function () {
+        $('.addProduk').click(function (e) {
+            $('#addProdukModal').modal('show');
+        });
+        $('.viewProduk').click(function (e) {
+            $('#viewProdukModal').modal('show');
+        });
+    });
 
     $('.add-produk').DataTable({
         'columnDefs': [{
@@ -324,24 +327,21 @@
             "sSearch": "Cari:"
         }
     });
-
+    $('#view-produk').DataTable({
+        "oLanguage": {
+            "sSearch": "Cari:"
+        }
+    });
     $('#gudang-barang').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '/api/tfp/data-so',
+        "oLanguage": {
+            "sSearch": "Cari:"
         },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            { data: 'so', name: 'so'},
-            { data: 'nama_customer', name: 'nama_customer'},
-            { data: 'tgl_kontrak', name: 'tgl_kontrak'},
-            { data: 'status1', name: 'status1'},
-            { data: 'action', name: 'action'},
-        ],
-        // "order": [
-        //         [3, 'desc']
-        //     ],
+                "columnDefs": [
+        {
+            "targets": [5],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }
+    ]
     });
     var id = '';
     $(document).on('click', '.editmodal', function(e) {

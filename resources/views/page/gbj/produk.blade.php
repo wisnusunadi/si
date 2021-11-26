@@ -16,12 +16,14 @@
                             <div class="col-4 d-flex justify-content-end">
                                 <div class="row">
                                     <div class="col-lg-12">
+                                        @if (Auth::user()->divisi->id != 2)
                                         <span class="float-right">
                                             <button type="button" class="btn btn-info" data-toggle="modal"
                                                 data-target="#modal-create" id="create">
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
+                                        @endif
                                         <span class="dropdown float-right" id="semuaprodukfilter"
                                             style="margin-right: 5px">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
@@ -71,58 +73,6 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            {{-- <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>ZTP80AS-UPGRADE</td>
-                                    <td>STERILISATOR KERING</td>
-                                    <td>100 Unit</td>
-                                    <td>80 Unit</td>
-                                    <td>Alat Kesehatan</td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item editProduk">
-                                                    <i class="far fa-edit"></i>&nbsp;Edit
-                                                </button>
-                                                <button type="button" class="dropdown-item viewProduk">
-                                                    <i class="far fa-eye"></i>&nbsp;Detail
-                                                </button>
-                                                <button type="button" class="dropdown-item stokProduct">
-                                                    <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>ZTP80AS-UPGRADE</td>
-                                    <td>STERILISATOR KERING</td>
-                                    <td>100 Unit</td>
-                                    <td>80 Unit</td>
-                                    <td>Alat Kesehatan</td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item editProduk">
-                                                    <i class="far fa-edit"></i>&nbsp;Edit
-                                                </button>
-                                                <button type="button" class="dropdown-item viewProduk">
-                                                    <i class="far fa-eye"></i>&nbsp;Detail
-                                                </button>
-                                                <button type="button" class="dropdown-item stokProduct">
-                                                    <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody> --}}
                         </table>
                     </div>
                 </div>
@@ -558,7 +508,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/api/gbj/data',
+            url: '/gbj/data',
         },
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex'},

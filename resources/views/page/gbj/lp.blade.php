@@ -183,6 +183,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="tambah_data">
+                                                        <tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" onclick="tambahanPerakitan($(this).parent().prev().children().val())"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -233,7 +234,7 @@
                                 <label for="">Dari</label>
                                 <div class="card nomor-akn">
                                     <div class="card-body">
-                                        <span id="from">Divisi IT</span>
+                                        Divisi IT
                                     </div>
                                 </div>
                             </div>
@@ -241,7 +242,7 @@
                                 <label for="">Tujuan</label>
                                 <div class="card nomor-po">
                                     <div class="card-body">
-                                       <span id="tujuan">Uji Coba Produk</span>
+                                        Uji Coba Produk
                                     </div>
                                 </div>
                             </div>
@@ -306,7 +307,6 @@
                         </tr>
                     </thead>
                     <tbody>
-
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -336,7 +336,6 @@
                         </tr>
                     </thead>
                     <tbody>
-
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -396,7 +395,7 @@
     }(jQuery));
     $(document).ready(function () {
         $('.division').select2();
-        $('.productt').select2();
+        $('.product').select2();
 
         $(".number-input").inputFilter(function (value) {
             return /^\d*$/.test(value);
@@ -505,10 +504,8 @@
 
 
     $(document).ready(function () {
-
-        var table = $('.pertanggal').DataTable({
-            processing: true,
-            serverSide: true,
+        $('.table-rancangan').DataTable({});
+        $('.pertanggal').DataTable({
             "lengthChange": false,
             "searching": false,
             ajax: {
@@ -536,65 +533,6 @@
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
-
-        // divisi
-        $.ajax({
-            url: '/api/gbj/sel-divisi',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $(".division").empty();
-                    $(".division").append('<option value="">Pilih Item</option>');
-                    $.each(res, function(key, value) {
-                        $(".division").append('<option value="'+value.id+'">'+value.nama+'</option');
-                    });
-                } else {
-                    $(".division").empty();
-                }
-            }
-        });
-
-    });
-
-    $(document).on('click', '#btnDraft', function(e) {
-        e.preventDefault();
-
-        const prd = [];
-        const jml = [];
-
-        $('select[name^="gdg_brg_jadi_id"]').each(function() {
-            prd.push($(this).val());
-        });
-
-        $('input[name^="qty"]').each(function() {
-            jml.push($(this).val());
-        });
-
-        $.ajax({
-            url: "/api/draft/rancang",
-            type: "post",
-            data: {
-                "_token" : "{{ csrf_token() }}",
-                tgl_masuk : $('.tanggal').val(),
-                dari: $('#dari').val(),
-                deskripsi: $('#deskripsi').val(),
-                gdg_brg_jadi_id: prd,
-                qty: jml,
-            },
-            success: function(res) {
-                console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
-            }
-        })
     });
 
     function ubahData() {
@@ -604,6 +542,7 @@
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('#ubah-layout').modal('hide');
+
     }
 
     $('#datetimepicker1').daterangepicker({});
@@ -614,6 +553,7 @@
 
     function tambahanRancangan() {
         $('.tambahan-rancangan').modal('show');
+
     }
 
     function tambahanPerakitan(tambah) {

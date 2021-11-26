@@ -29,6 +29,7 @@
 </style>
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -49,7 +50,7 @@
 <div class="row ml-2">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-body">              
+            <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
                         <table class="table table-bordered table_produk_perakitan ">
@@ -68,7 +69,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {{-- <tr>
                                     <td scope="row" class="text-center">16-06-2021 <br><span class="badge badge-primary">Baru</span></td>
                                     <td class="text-center">18-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
                                     <td>6543524635465464</td>
@@ -100,7 +101,7 @@
                                     <td>
                                         <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -127,7 +128,7 @@
                                 <label for="">Nomor BPPB</label>
                                     <div class="card" style="background-color: #C8E1A7">
                                         <div class="card-body">
-                                            89798797856456
+                                            <span id="no_bppb">89798797856456</span>
                                         </div>
                                       </div>
                             </div>
@@ -135,7 +136,7 @@
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
                                     <div class="card-body">
-                                        Produk 1
+                                        <span id="produk">Produk 1</span>
                                     </div>
                                   </div>
                             </div>
@@ -143,7 +144,7 @@
                                 <label for="">Kategori</label>
                                 <div class="card" style="background-color: #FCF9C4">
                                     <div class="card-body">
-                                        Kategori 1
+                                        <span id="kategori">Kategori 1</span>
                                     </div>
                                   </div>
                             </div>
@@ -153,7 +154,7 @@
                                 <label for="">Jumlah Rakit</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body">
-                                        100 Unit
+                                        <span id="jml">100 Unit</span>
                                     </div>
                                   </div>
                             </div>
@@ -161,7 +162,7 @@
                                 <label for="">Tanggal Mulai</label>
                                 <div class="card" style="background-color: #FFE0B4">
                                     <div class="card-body">
-                                        10-06-2021
+                                        <span id="start">10-06-2021</span>
                                     </div>
                                   </div>
                             </div>
@@ -169,7 +170,7 @@
                                 <label for="">Tanggal Selesai</label>
                                 <div class="card" style="background-color: #FFECB2">
                                     <div class="card-body">
-                                        13-06-2021
+                                       <span id="end"> 13-06-2021</span>
                                     </div>
                                   </div>
                             </div>
@@ -273,12 +274,33 @@
 @section('adminlte_js')
 <script>
     $('.table_produk_perakitan').DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/api/prd/kirim",
+            type: "post",
+        },
+        columns: [
+            {data: "start"},
+            {data: "end"},
+            {data: "no_bppb"},
+            {data: "produk"},
+            {data: "jml"},
+            {data: "status"},
+            {data: "action"},
+        ],
         "ordering": false,
         "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
         "lengthChange": false,
         searching: false,
+        "columnDefs": [
+        {
+            "targets": [6],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }]
         });
 
         $('.scan-produk').DataTable({
@@ -289,7 +311,7 @@
             },
             "lengthChange": false,
         });
-    function modalRakit() { 
+    function modalRakit() {
         $('.modalRakit').modal('show');
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')

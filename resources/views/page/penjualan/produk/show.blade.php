@@ -31,189 +31,169 @@
 @stop
 
 @section('content')
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                @if(Session::has('error') || count($errors) > 0 )
-                <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
-                    <strong>Gagal menambahkan!</strong> Periksa
-                    kembali data yang diinput
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @elseif(Session::has('success'))
-                <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
-                    <strong>Berhasil menambahkan data</strong>,
-                    Terima kasih
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @endif
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row" style="margin-bottom: 5px">
-                                    <div class="col-12">
-                                        <span class="float-right">
-                                            <a href="{{route('penjualan.produk.create')}}">
-                                                <button class="btn btn-info">
-                                                    <i class="fas fa-plus"></i> Tambah
-                                                </button>
-                                            </a>
-                                        </span>
-                                        <span class="float-right" style="margin-right: 5px">
-                                            <button class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-filter"></i> Filter
+<div class="row">
+    <div class="col-12">
+        <div class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row" style="margin-bottom: 5px">
+                                <div class="col-12">
+                                    <span class="float-right">
+                                        <a href="{{route('penjualan.produk.create')}}">
+                                            <button class="btn btn-info">
+                                                <i class="fas fa-plus"></i> Tambah
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <form id="filter" class="px-4 py-3">
-                                                    <div class="dropdown-header">
-                                                        Kelompok Produk
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="1" />
-                                                            <label class="form-check-label" for="dropdownkelompokproduk">
-                                                                Alat Kesehatan
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="2" />
-                                                            <label class="form-check-label" for="dropdownkelompokproduk">
-                                                                Sarana Kesehatan
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="3" />
-                                                            <label class="form-check-label" for="dropdownkelompokproduk">
-                                                                Aksesoris
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="4" />
-                                                            <label class="form-check-label" for="dropdownkelompokproduk">
-                                                                Lain - lain
-                                                            </label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="dropdown-header">
-                                                        Stok
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" />
-                                                            <label class="form-check-label" for="dropdownstok">
-                                                                Tersedia
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" />
-                                                            <label class="form-check-label" for="dropdownstok">
-                                                                Hampir Habis
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" />
-                                                            <label class="form-check-label" for="dropdownstok">
-                                                                Habis
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <button class="btn btn-primary float-right">
-                                                        Cari
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover" id="showtable">
-                                                <thead style="text-align: center;">
-                                                    <tr>
-                                                        <th width="5%">No</th>
-                                                        <th width="78%">Nama Produk</th>
-                                                        <th width="12%">Harga</th>
-                                                        <th width="5%">Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade" id="modaldetail" role="dialog" aria-labelledby="modaldetail" aria-hidden="true">
-                    <div class="modal-dialog modal-xl" role="document">
-                        <div class="modal-content" style="margin: 10px">
-                            <div class="modal-header bg-success">
-                                <h4 class="modal-title">Detail</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <ul class="list-group">
-                                                    <li class="list-group-item">
-                                                        <span style="font-size: 24px"><b>Info</b></span><span class="float-right green-text col-form-label"><b>Tersedia</b></span>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <a>Nama Produk</a><span></span><b class="float-right" id="nama_produk"></b>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <a>Harga</a><span></span><b class="float-right" id="harga_produk"></b>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <a>Stok</a><span id="stok"></span><b class="float-right">-</b>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-8">
-                                        <h5>Detail Produk</h5>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table" id="showdetailtable" width="100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>Produk</th>
-                                                                <th>Kelompok</th>
-                                                                <th>Jumlah</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                    </table>
+                                        </a>
+                                    </span>
+                                    <span class="float-right" style="margin-right: 5px">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-filter"></i> Filter
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <form id="filter" class="px-4 py-3">
+                                                <div class="dropdown-header">
+                                                    Kelompok Produk
                                                 </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="1" />
+                                                        <label class="form-check-label" for="dropdownkelompokproduk">
+                                                            Alat Kesehatan
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="2" />
+                                                        <label class="form-check-label" for="dropdownkelompokproduk">
+                                                            Sarana Kesehatan
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="3" />
+                                                        <label class="form-check-label" for="dropdownkelompokproduk">
+                                                            Aksesoris
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="4" />
+                                                        <label class="form-check-label" for="dropdownkelompokproduk">
+                                                            Lain - lain
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="dropdown-header">
+                                                    Stok
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="dropdownstok" />
+                                                        <label class="form-check-label" for="dropdownstok">
+                                                            Tersedia
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="dropdownstok" />
+                                                        <label class="form-check-label" for="dropdownstok">
+                                                            Hampir Habis
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="dropdownstok" />
+                                                        <label class="form-check-label" for="dropdownstok">
+                                                            Habis
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-primary float-right">
+                                                    Cari
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="showtable">
+                                            <thead style="text-align: center;">
+                                                <tr>
+                                                    <th width="5%">No</th>
+                                                    <th width="78%">Nama Produk</th>
+                                                    <th width="12%">Harga</th>
+                                                    <th width="5%">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modaldetail" tabindex="-1" role="dialog" aria-labelledby="modaldetail" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header bg-success">
+                            <h4 class="modal-title">Detail</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <span style="font-size: 24px"><b>Info</b></span><span class="float-right green-text col-form-label"><b>Tersedia</b></span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a>Nama Produk</a><span></span><b class="float-right" id="nama_produk"></b>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a>Harga</a><span></span><b class="float-right" id="harga_produk"></b>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a>Stok</a><span id="stok"></span><b class="float-right">-</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <h5>Detail Produk</h5>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table" id="showdetailtable" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Produk</th>
+                                                            <th>Kelompok</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -222,68 +202,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content" style="margin: 10px">
-                            <div class="modal-header bg-warning">
-                                <h4>Edit</h4>
-                            </div>
-                            <div class="modal-body" id="edit">
+            </div>
+            <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header bg-warning">
+                            <h4>Edit</h4>
+                        </div>
+                        <div class="modal-body" id="edit">
 
-                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-</section>
+</div>
 @endsection
 
 @section('adminlte_js')
 <script>
     $(function() {
-        $(document).on('submit', '#form-penjualan-produk-update', function(e) {
-            console.log("tes");
-            e.preventDefault();
-            var action = $(this).attr('data-attr');
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: action,
-                data: $('#form-penjualan-produk-update').serialize(),
-                success: function(response) {
-                    if (response['data'] == "success") {
-                        swal.fire(
-                            'Berhasil',
-                            'Berhasil melakukan ubah data Penjualan Produk',
-                            'success'
-                        );
-                        $("#editmodal").modal('hide');
-                        $('#showtable').DataTable().ajax.reload();
-                    } else if (response['data'] == "error") {
-                        swal.fire(
-                            'Gagal',
-                            'Gagal melakukan ubah data Penjualan Produk',
-                            'error'
-                        );
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert($('#form-customer-update').serialize());
-                }
-            });
-            return false;
-        });
-
         var showtable = $('#showtable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/penjualan_produk/data/' + 0,
+
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -348,14 +293,14 @@
                     {
                         data: 'kelompok'
 
-                    }, {
-                        data: 'jumlah'
-                    }
+                    },
 
                 ],
             });
             $('#modaldetail').modal('show');
         });
+
+
 
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
@@ -373,10 +318,6 @@
                     $('#edit').html(result).show();
                     console.log(result);
                     $("#editform").attr("action", href);
-                    var x = 3;
-                    for (i = 0; i < 10; i++) {
-                        select_data(i);
-                    }
 
                 },
                 complete: function() {
@@ -399,20 +340,19 @@
                 $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
                 $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                 $(el).find('.produk_id').attr('id', j);
-                $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
-                select_data(j);
             });
         }
+
         $(document).on('click', '#addrow', function() {
             $('#createtable tr:last').after(`<tr>
             <td></td>
             <td>
                 <div class="form-group">
-                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0" style="width:100%" >
+                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0">
                     </select>
                 </div>
             </td>
-            <td><span class="badge kelompok_produk" id="kelompok_produk0"></span></td>
+            <td><span class="badge" id="kelompok_produk"></span></td>
             <td>
                 <div class="form-group d-flex justify-content-center">
                     <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
@@ -450,8 +390,9 @@
             }
         });
 
-        function select_data(x) {
-            $('#' + x).select2({
+        function select_data() {
+            $('.produk_id').select2({
+                dropdownParent: $("#editmodal"),
                 ajax: {
                     minimumResultsForSearch: 20,
                     placeholder: "Pilih Produk",
@@ -466,7 +407,7 @@
                         }
                     },
                     processResults: function(data) {
-
+                        console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -477,21 +418,7 @@
                         };
                     },
                 }
-            }).change(function() {
-                var value = $(this).val();
-                var index = $(this).attr('id');
-                console.log(index);
-                // var id = $(#produk_id).val();
-                $.ajax({
-                    url: '/api/produk/select/' + value,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        console.log(data);
-                        $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
-                    }
-                });
-            });
+            })
         }
         $(document).on('keyup change', '#nama_paket', function() {
             if ($(this).val() != "") {
@@ -509,6 +436,7 @@
                 $('#btnsimpan').addClass('disabled');
             }
         });
+
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {
@@ -523,6 +451,7 @@
             console.log(x);
             $('#showtable').DataTable().ajax.url(' /api/penjualan_produk/data/' + x).load();
             return false;
+
         });
     });
 </script>

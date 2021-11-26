@@ -36,7 +36,7 @@ class GudangController extends Controller
     public function get_data_barang_jadi()
     {
         $data = GudangBarangJadi::with('produk', 'satuan')->get();
-        // return response()->json($data);
+        // return response()->json($auth);
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -53,27 +53,41 @@ class GudangController extends Controller
                 return $data->produk->KelompokProduk->nama;
             })
             ->addColumn('action', function ($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+            $auth = auth()->user()->divisi->id;
+                if ($auth == '2') {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-edit"></i>&nbsp;Edit
-                            </button>
-                        </a>
-
                         <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
                             <button class="dropdown-item" type="button" >
                             <i class="far fa-eye"></i>&nbsp;Detail
                             </button>
                         </a>
 
-                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
-                            </button>
-                        </a>
-
                         </div>';
+                }else {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="far fa-edit"></i>&nbsp;Edit
+                        </button>
+                    </a>
+
+                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="far fa-eye"></i>&nbsp;Detail
+                        </button>
+                    </a>
+
+                    <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
+                        </button>
+                    </a>
+
+                    </div>';
+                }
+
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -711,6 +725,7 @@ class GudangController extends Controller
             ->addColumn('jml', function ($d) {
                 return $d->stok . ' ' . $d->satuan->nama;
             })
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -725,6 +740,14 @@ class GudangController extends Controller
             ->addColumn('jml', function ($d) {
                 return $d->stok . ' ' . $d->satuan->nama;
             })
+            ->addColumn('action', function ($d) {
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal2" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                            <button class="btn btn-outline-primary" type="button" >
+                            <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </a>';
+            })
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -739,6 +762,7 @@ class GudangController extends Controller
             ->addColumn('jml', function ($d) {
                 return $d->stok . ' ' . $d->satuan->nama;
             })
+            ->rawColumns(['action', 'tgl_masuk'])
             ->make(true);
     }
 
@@ -752,7 +776,19 @@ class GudangController extends Controller
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+
+                    $a = Carbon::now()->diffInDays($d->header->tgl_masuk);
+
+                    if ($a == 1) {
+                        // return 'a';
+                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-info">Lewat ' . $a . ' Hari</span>';
+                    } else if ($a == 2) {
+                        // return 'b';
+                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-warning">Lewat ' . $a . ' Hari</span>';
+                    } else if ($a >= 3) {
+                        // return 'c';
+                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    }
                 } else {
                     return '-';
                 }

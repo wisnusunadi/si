@@ -5,6 +5,7 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
+<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="row">
     <div class="col-md-6">
         <div class="card">
@@ -90,7 +91,7 @@
                                 <label for="">Nomor BPPB</label>
                                     <div class="card" style="background-color: #C8E1A7">
                                         <div class="card-body">
-                                            89798797856456
+                                            <span id="bppb">89798797856456</span>
                                         </div>
                                       </div>
                             </div>
@@ -98,7 +99,7 @@
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
                                     <div class="card-body">
-                                        Produk 1
+                                        <span id="produk">Produk 1</span>
                                     </div>
                                   </div>
                             </div>
@@ -106,7 +107,7 @@
                                 <label for="">Kategori</label>
                                 <div class="card" style="background-color: #FCF9C4">
                                     <div class="card-body">
-                                        Kategori 1
+                                        <span id="kategori">Kategori 1</span>
                                     </div>
                                   </div>
                             </div>
@@ -116,7 +117,7 @@
                                 <label for="">Jumlah Rakit</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body">
-                                        100 Unit
+                                        <span id="jml">100 Unit</span>
                                     </div>
                                   </div>
                             </div>
@@ -124,7 +125,7 @@
                                 <label for="">Tanggal Mulai</label>
                                 <div class="card" style="background-color: #FFE0B4">
                                     <div class="card-body">
-                                        10-06-2021
+                                        <span id="start">10-06-2021</span>
                                     </div>
                                   </div>
                             </div>
@@ -132,7 +133,7 @@
                                 <label for="">Tanggal Selesai</label>
                                 <div class="card" style="background-color: #FFECB2">
                                     <div class="card-body">
-                                        13-06-2021
+                                        <span id="end">13-06-2021</span>
                                     </div>
                                   </div>
                             </div>
@@ -229,49 +230,115 @@
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
             //Random default events
-            events: [
-                {
-                    title: 'Perakitan Produk 1',
-                    start: new Date(y, m, 1),
-                    end: new Date(y, m, 3),
-                    backgroundColor: '#FF0000', //red
-                    borderColor: '#FF0000' //red
-                },
-                {
-                    title: 'Perakitan Produk 2',
-                    start: new Date(y, m, d - 5, 15, 25),
-                    end: new Date(y, m, d - 2), 
-                    backgroundColor: '#AF0404', //yellow
-                    borderColor: '#AF0404   ' //yellow
-                },
-                {
-                    title: 'Perakitan Produk 3',
-                    start: new Date(y, m, d, 10, 30),
-                    end: new Date(y, m, d + 3, 14, 0),
-                    allDay: false,
-                    backgroundColor: '#414141', //Blue
-                    borderColor: '#414141' //Blue
-                },
-                {
-                    title: 'Perakitan Produk 4',
-                    start: new Date(y, m, d, 10, 30),
-                    end: new Date(y, m, d + 5, 14, 0),
-                    allDay: false,
-                    backgroundColor: '#252525', //Blue
-                    borderColor: '#252525' //Blue
-                },
-            ],
+            // events: [
+            //     {
+            //         title: 'Perakitan Produk 1',
+            //         start: new Date(y, m, 1),
+            //         end: new Date(y, m, 3),
+            //         backgroundColor: '#FF0000', //red
+            //         borderColor: '#FF0000' //red
+            //     },
+            //     {
+            //         title: 'Perakitan Produk 2',
+            //         start: new Date(y, m, d - 5, 15, 25),
+            //         end: new Date(y, m, d - 2),
+            //         backgroundColor: '#AF0404', //yellow
+            //         borderColor: '#AF0404   ' //yellow
+            //     },
+            //     {
+            //         title: 'Perakitan Produk 3',
+            //         start: new Date(y, m, d, 10, 30),
+            //         end: new Date(y, m, d + 3, 14, 0),
+            //         allDay: false,
+            //         backgroundColor: '#414141', //Blue
+            //         borderColor: '#414141' //Blue
+            //     },
+            //     {
+            //         title: 'Perakitan Produk 4',
+            //         start: new Date(y, m, d, 10, 30),
+            //         end: new Date(y, m, d + 5, 14, 0),
+            //         allDay: false,
+            //         backgroundColor: '#252525', //Blue
+            //         borderColor: '#252525' //Blue
+            //     },
+            // ],
+            events: function( fetchInfo, successCallback, failureCallback ) {
+                $.ajax({
+                    url: "/api/prd/ongoing-cal",
+                    type: "post",
+                    dataType: "json",
+                    success: function(res) {
+                        var events = [];
+                        if (res != null) {
+                            console.log(res);
+                            $.each(res, function(i, item) {
+                                events.push({
+                                    start: item.tanggal_mulai,
+                                    end: item.tanggal_selesai + 'T23:59:59',
+                                    title: item.produk.produk.nama + '-' + item.produk.nama,
+                                    backgroundColor: item.warna,
+                                    borderColor: item.warna,
+                                })
+                            })
+                        }
+                        console.log('events', events);
+                        successCallback(events);
+                    }
+                })
+            }
         });
 
         calendar.render();
 
         $('.table_produk_perakitan').DataTable({
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        },
-        "lengthChange": false,
-        "ordering": false,
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/prd/ongoing",
+                type: "post",
+            },
+            columns: [
+                {data: "start"},
+                {data: "end"},
+                {data: "produk"},
+                {data: "jml"},
+                {data: "action"},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+            "lengthChange": false,
+            "ordering": false,
+            "columnDefs": [
+            {
+                "targets": [4],
+                "visible": document.getElementById('auth').value == '2' ? false : true
+            }]
         });
+
+        $(document).on('click', '.detailmodal', function() {
+            var id = $(this).data('id');
+            console.log(id);
+            var jml = $(this).data('jml');
+            console.log(jml);
+
+            $.ajax({
+                url: "/api/prd/ongoing/h/" + id,
+                dataType: "json",
+                type: "get",
+                success: function(res) {
+                    $('span#bppb').text(res.no_bppb);
+                    $('span#produk').text(res.produk);
+                    $('span#kategori').text(res.kategori);
+                    $('span#jml').text(res.jml);
+                    $('span#start').text(res.start);
+                    $('span#end').text(res.end);
+                }
+            })
+
+            $('.modalRakit').modal('show');
+        })
 
         $('.scan-produk').DataTable({
             "ordering":false,
@@ -283,7 +350,8 @@
             }
         });
     })
-    function modalRakit() { 
+    function modalRakit() {
+
         $('.modalRakit').modal('show');
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
@@ -299,6 +367,6 @@
             dangerMode: true,
         });
     };
-    
+
 </script>
 @stop

@@ -224,7 +224,6 @@ return [
         // 'Redis' => Illuminate\Support\Facades\Redis::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Request' => Illuminate\Support\Facades\Request::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
         'Response' => Illuminate\Support\Facades\Response::class,
         'Route' => Illuminate\Support\Facades\Route::class,
         'Schema' => Illuminate\Support\Facades\Schema::class,

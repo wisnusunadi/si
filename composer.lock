@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "420ecbb099d3e357f17b16d0eba4227b",
+=======
+    "content-hash": "507437d28d7cbe3104639b27165e83ba",
+>>>>>>> 24b2266da4db4106d53d405bebadfc91e3549658
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -107,72 +111,6 @@
                 "issues": "https://gitlab.com/api/v4/projects/6731265/issues"
             },
             "time": "2020-06-06T16:24:31+00:00"
-        },
-        {
-            "name": "barryvdh/laravel-dompdf",
-            "version": "v0.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/barryvdh/laravel-dompdf.git",
-                "reference": "5b99e1f94157d74e450f4c97e8444fcaffa2144b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/5b99e1f94157d74e450f4c97e8444fcaffa2144b",
-                "reference": "5b99e1f94157d74e450f4c97e8444fcaffa2144b",
-                "shasum": ""
-            },
-            "require": {
-                "dompdf/dompdf": "^1",
-                "illuminate/support": "^5.5|^6|^7|^8",
-                "php": "^7.1 || ^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.9-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "Barryvdh\\DomPDF\\ServiceProvider"
-                    ],
-                    "aliases": {
-                        "PDF": "Barryvdh\\DomPDF\\Facade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Barryvdh\\DomPDF\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Barry vd. Heuvel",
-                    "email": "barryvdh@gmail.com"
-                }
-            ],
-            "description": "A DOMPDF Wrapper for Laravel",
-            "keywords": [
-                "dompdf",
-                "laravel",
-                "pdf"
-            ],
-            "support": {
-                "issues": "https://github.com/barryvdh/laravel-dompdf/issues",
-                "source": "https://github.com/barryvdh/laravel-dompdf/tree/v0.9.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/barryvdh",
-                    "type": "github"
-                }
-            ],
-            "time": "2020-12-27T12:05:53+00:00"
         },
         {
             "name": "beyondcode/laravel-websockets",
@@ -608,73 +546,6 @@
                 }
             ],
             "time": "2020-05-25T17:44:05+00:00"
-        },
-        {
-            "name": "dompdf/dompdf",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dompdf/dompdf.git",
-                "reference": "aa594c1cdbcdab04977fdd0fff669a017fb50ef4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/aa594c1cdbcdab04977fdd0fff669a017fb50ef4",
-                "reference": "aa594c1cdbcdab04977fdd0fff669a017fb50ef4",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-mbstring": "*",
-                "phenx/php-font-lib": "^0.5.2",
-                "phenx/php-svg-lib": "^0.3.3",
-                "php": "^7.1 || ^8.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.3",
-                "phpunit/phpunit": "^7.5 || ^8 || ^9",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "suggest": {
-                "ext-gd": "Needed to process images",
-                "ext-gmagick": "Improves image processing performance",
-                "ext-imagick": "Improves image processing performance",
-                "ext-zlib": "Needed for pdf stream compression"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Dompdf\\": "src/"
-                },
-                "classmap": [
-                    "lib/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Ménager",
-                    "email": "fabien.menager@gmail.com"
-                },
-                {
-                    "name": "Brian Sweeney",
-                    "email": "eclecticgeek@gmail.com"
-                },
-                {
-                    "name": "Gabriel Bull",
-                    "email": "me@gabrielbull.com"
-                }
-            ],
-            "description": "DOMPDF is a CSS 2.1 compliant HTML to PDF converter",
-            "homepage": "https://github.com/dompdf/dompdf",
-            "support": {
-                "issues": "https://github.com/dompdf/dompdf/issues",
-                "source": "https://github.com/dompdf/dompdf/tree/v1.1.0"
-            },
-            "time": "2021-11-16T18:39:01+00:00"
         },
         {
             "name": "dragonmantank/cron-expression",
@@ -1417,16 +1288,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.72.0",
+            "version": "v8.69.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "5168f8589195a5f48b9c41ad2eec77a6c15f14f3"
+                "reference": "545181da688db64fed6d8427e55f630a90ca0d32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/5168f8589195a5f48b9c41ad2eec77a6c15f14f3",
-                "reference": "5168f8589195a5f48b9c41ad2eec77a6c15f14f3",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/545181da688db64fed6d8427e55f630a90ca0d32",
+                "reference": "545181da688db64fed6d8427e55f630a90ca0d32",
                 "shasum": ""
             },
             "require": {
@@ -1503,12 +1374,12 @@
             },
             "require-dev": {
                 "aws/aws-sdk-php": "^3.198.1",
-                "doctrine/dbal": "^2.13.3|^3.1.4",
+                "doctrine/dbal": "^2.13.3|^3.1.2",
                 "filp/whoops": "^2.14.3",
                 "guzzlehttp/guzzle": "^6.5.5|^7.0.1",
                 "league/flysystem-cached-adapter": "^1.0",
                 "mockery/mockery": "^1.4.4",
-                "orchestra/testbench-core": "^6.27",
+                "orchestra/testbench-core": "^6.23",
                 "pda/pheanstalk": "^4.0",
                 "phpunit/phpunit": "^8.5.19|^9.5.8",
                 "predis/predis": "^1.1.9",
@@ -1517,7 +1388,7 @@
             "suggest": {
                 "aws/aws-sdk-php": "Required to use the SQS queue driver, DynamoDb failed job storage and SES mail driver (^3.198.1).",
                 "brianium/paratest": "Required to run tests in parallel (^6.0).",
-                "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.13.3|^3.1.4).",
+                "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.13.3|^3.1.2).",
                 "ext-bcmath": "Required to use the multiple_of validation rule.",
                 "ext-ftp": "Required to use the Flysystem FTP driver.",
                 "ext-gd": "Required to use Illuminate\\Http\\Testing\\FileFactory::image().",
@@ -1538,7 +1409,7 @@
                 "phpunit/phpunit": "Required to use assertions and run tests (^8.5.19|^9.5.8).",
                 "predis/predis": "Required to use the predis connector (^1.1.9).",
                 "psr/http-message": "Required to allow Storage::put to accept a StreamInterface (^1.0).",
-                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (^4.0|^5.0|^6.0|^7.0).",
+                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (^4.0|^5.0|^6.0).",
                 "symfony/cache": "Required to PSR-6 cache bridge (^5.1.4).",
                 "symfony/filesystem": "Required to enable support for relative symbolic links (^5.1.4).",
                 "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^2.0).",
@@ -1585,20 +1456,20 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-11-17T15:15:08+00:00"
+            "time": "2021-11-02T13:53:22+00:00"
         },
         {
             "name": "laravel/sanctum",
-            "version": "v2.12.2",
+            "version": "v2.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sanctum.git",
-                "reference": "76b2d552c00477d520338889160f80a0cfb5fc55"
+                "reference": "e610647b04583ace6b30c8eb74cee0a866040420"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sanctum/zipball/76b2d552c00477d520338889160f80a0cfb5fc55",
-                "reference": "76b2d552c00477d520338889160f80a0cfb5fc55",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/e610647b04583ace6b30c8eb74cee0a866040420",
+                "reference": "e610647b04583ace6b30c8eb74cee0a866040420",
                 "shasum": ""
             },
             "require": {
@@ -1649,20 +1520,20 @@
                 "issues": "https://github.com/laravel/sanctum/issues",
                 "source": "https://github.com/laravel/sanctum"
             },
-            "time": "2021-11-16T16:57:07+00:00"
+            "time": "2021-10-26T18:23:26+00:00"
         },
         {
             "name": "laravel/serializable-closure",
-            "version": "v1.0.4",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/serializable-closure.git",
-                "reference": "8148e72e6c2c3af7f05640ada1b26c3bca970f8d"
+                "reference": "6cfc678735f22ccedad761b8cae2bab14c3d8e5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/8148e72e6c2c3af7f05640ada1b26c3bca970f8d",
-                "reference": "8148e72e6c2c3af7f05640ada1b26c3bca970f8d",
+                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/6cfc678735f22ccedad761b8cae2bab14c3d8e5b",
+                "reference": "6cfc678735f22ccedad761b8cae2bab14c3d8e5b",
                 "shasum": ""
             },
             "require": {
@@ -1708,7 +1579,7 @@
                 "issues": "https://github.com/laravel/serializable-closure/issues",
                 "source": "https://github.com/laravel/serializable-closure"
             },
-            "time": "2021-11-16T17:01:57+00:00"
+            "time": "2021-10-07T14:00:57+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -1780,16 +1651,16 @@
         },
         {
             "name": "laravel/ui",
-            "version": "v3.3.2",
+            "version": "v3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/ui.git",
-                "reference": "28f3d190fe270b6dcd6fdab4a77a392e693ceca5"
+                "reference": "a449e3364d9780a80a49894a3af9795c85af806f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/ui/zipball/28f3d190fe270b6dcd6fdab4a77a392e693ceca5",
-                "reference": "28f3d190fe270b6dcd6fdab4a77a392e693ceca5",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/a449e3364d9780a80a49894a3af9795c85af806f",
+                "reference": "a449e3364d9780a80a49894a3af9795c85af806f",
                 "shasum": ""
             },
             "require": {
@@ -1832,9 +1703,9 @@
                 "ui"
             ],
             "support": {
-                "source": "https://github.com/laravel/ui/tree/v3.3.2"
+                "source": "https://github.com/laravel/ui/tree/v3.3.1"
             },
-            "time": "2021-11-05T08:25:44+00:00"
+            "time": "2021-11-02T17:04:20+00:00"
         },
         {
             "name": "laravelcollective/html",
@@ -2644,16 +2515,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.54.0",
+            "version": "2.53.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "eed83939f1aed3eee517d03a33f5ec587ac529b5"
+                "reference": "f4655858a784988f880c1b8c7feabbf02dfdf045"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/eed83939f1aed3eee517d03a33f5ec587ac529b5",
-                "reference": "eed83939f1aed3eee517d03a33f5ec587ac529b5",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/f4655858a784988f880c1b8c7feabbf02dfdf045",
+                "reference": "f4655858a784988f880c1b8c7feabbf02dfdf045",
                 "shasum": ""
             },
             "require": {
@@ -2664,7 +2535,6 @@
                 "symfony/translation": "^3.4 || ^4.0 || ^5.0"
             },
             "require-dev": {
-                "doctrine/dbal": "^2.0 || ^3.0",
                 "doctrine/orm": "^2.7",
                 "friendsofphp/php-cs-fixer": "^3.0",
                 "kylekatarnls/multi-tester": "^2.0",
@@ -2735,20 +2605,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-01T21:22:20+00:00"
+            "time": "2021-09-06T09:29:23+00:00"
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.13.1",
+            "version": "v4.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "63a79e8daa781cac14e5195e63ed8ae231dd10fd"
+                "reference": "50953a2691a922aa1769461637869a0a2faa3f53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/63a79e8daa781cac14e5195e63ed8ae231dd10fd",
-                "reference": "63a79e8daa781cac14e5195e63ed8ae231dd10fd",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/50953a2691a922aa1769461637869a0a2faa3f53",
+                "reference": "50953a2691a922aa1769461637869a0a2faa3f53",
                 "shasum": ""
             },
             "require": {
@@ -2789,9 +2659,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.0"
             },
-            "time": "2021-11-03T20:52:16+00:00"
+            "time": "2021-09-20T12:20:58+00:00"
         },
         {
             "name": "opis/closure",
@@ -2995,6 +2865,8 @@
             "time": "2021-08-10T02:43:50+00:00"
         },
         {
+<<<<<<< HEAD
+=======
             "name": "phenx/php-font-lib",
             "version": "0.5.2",
             "source": {
@@ -3080,6 +2952,7 @@
             "time": "2019-09-11T20:02:13+00:00"
         },
         {
+>>>>>>> b5e8be235b65ad7c34437199536d17b0095d0d4b
             "name": "phpoffice/phpspreadsheet",
             "version": "1.19.0",
             "source": {
@@ -4736,96 +4609,6 @@
             "time": "2021-07-11T12:37:55+00:00"
         },
         {
-            "name": "realrashid/sweet-alert",
-            "version": "v4.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/realrashid/sweet-alert.git",
-                "reference": "7615c5799fbc8743a6b5a7bd7f645f55a1d62723"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/realrashid/sweet-alert/zipball/7615c5799fbc8743a6b5a7bd7f645f55a1d62723",
-                "reference": "7615c5799fbc8743a6b5a7bd7f645f55a1d62723",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "^5.6|^6.0|^7.0|^8.0",
-                "php": "^7.2|^8.0"
-            },
-            "require-dev": {
-                "symfony/thanks": "^1.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "RealRashid\\SweetAlert\\SweetAlertServiceProvider"
-                    ],
-                    "aliases": {
-                        "Alert": "RealRashid\\SweetAlert\\Facades\\Alert"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "RealRashid\\SweetAlert\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rashid Ali",
-                    "email": "realrashid05@gmail.com",
-                    "homepage": "https://realrashid.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A BEAUTIFUL, RESPONSIVE, CUSTOMIZABLE, ACCESSIBLE (WAI-ARIA) REPLACEMENT FOR JAVASCRIPT'S POPUP BOXES FOR LARAVEL BY RASHID ALI",
-            "homepage": "https://github.com/realrashid/sweet-alert",
-            "keywords": [
-                "alert",
-                "laravel",
-                "laravel-package",
-                "notifier",
-                "noty",
-                "sweet-alert",
-                "sweet-alert2",
-                "toast"
-            ],
-            "support": {
-                "docs": "https://realrashid.github.io/sweet-alert/",
-                "email": "realrashid05@gmail.com",
-                "issues": "https://github.com/realrashid/sweet-alert/issues",
-                "source": "https://github.com/realrashid/sweet-alert"
-            },
-            "funding": [
-                {
-                    "url": "https://ko-fi.com/realrashid",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.buymeacoffee.com/realrashid",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://issuehunt.io/r/realrashid",
-                    "type": "issuehunt"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/realrashid/sweet-alert",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2021-11-06T09:34:33+00:00"
-        },
-        {
             "name": "ringcentral/psr7",
             "version": "1.3.0",
             "source": {
@@ -4885,55 +4668,6 @@
                 "source": "https://github.com/ringcentral/psr7/tree/master"
             },
             "time": "2018-05-29T20:21:04+00:00"
-        },
-        {
-            "name": "sabberworm/php-css-parser",
-            "version": "8.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sabberworm/PHP-CSS-Parser.git",
-                "reference": "d217848e1396ef962fb1997cf3e2421acba7f796"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sabberworm/PHP-CSS-Parser/zipball/d217848e1396ef962fb1997cf3e2421acba7f796",
-                "reference": "d217848e1396ef962fb1997cf3e2421acba7f796",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "codacy/coverage": "^1.4",
-                "phpunit/phpunit": "~4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Sabberworm\\CSS": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Raphael Schweikert"
-                }
-            ],
-            "description": "Parser for CSS Files written in PHP",
-            "homepage": "http://www.sabberworm.com/blog/2010/6/10/php-css-parser",
-            "keywords": [
-                "css",
-                "parser",
-                "stylesheet"
-            ],
-            "support": {
-                "issues": "https://github.com/sabberworm/PHP-CSS-Parser/issues",
-                "source": "https://github.com/sabberworm/PHP-CSS-Parser/tree/8.3.1"
-            },
-            "time": "2020-06-01T09:10:00+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -6754,32 +6488,32 @@
         },
         {
             "name": "symfony/psr-http-message-bridge",
-            "version": "v2.1.2",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/psr-http-message-bridge.git",
-                "reference": "22b37c8a3f6b5d94e9cdbd88e1270d96e2f97b34"
+                "reference": "c9012994c4b4fb23e7c57dd86b763a417a04feba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/22b37c8a3f6b5d94e9cdbd88e1270d96e2f97b34",
-                "reference": "22b37c8a3f6b5d94e9cdbd88e1270d96e2f97b34",
+                "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/c9012994c4b4fb23e7c57dd86b763a417a04feba",
+                "reference": "c9012994c4b4fb23e7c57dd86b763a417a04feba",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1",
                 "psr/http-message": "^1.0",
-                "symfony/http-foundation": "^4.4 || ^5.0 || ^6.0"
+                "symfony/http-foundation": "^4.4 || ^5.0"
             },
             "require-dev": {
                 "nyholm/psr7": "^1.1",
                 "psr/log": "^1.1 || ^2 || ^3",
-                "symfony/browser-kit": "^4.4 || ^5.0 || ^6.0",
-                "symfony/config": "^4.4 || ^5.0 || ^6.0",
-                "symfony/event-dispatcher": "^4.4 || ^5.0 || ^6.0",
-                "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
-                "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0",
-                "symfony/phpunit-bridge": "^5.4@dev || ^6.0"
+                "symfony/browser-kit": "^4.4 || ^5.0",
+                "symfony/config": "^4.4 || ^5.0",
+                "symfony/event-dispatcher": "^4.4 || ^5.0",
+                "symfony/framework-bundle": "^4.4 || ^5.0",
+                "symfony/http-kernel": "^4.4 || ^5.0",
+                "symfony/phpunit-bridge": "^4.4.19 || ^5.2"
             },
             "suggest": {
                 "nyholm/psr7": "For a super lightweight PSR-7/17 implementation"
@@ -6822,7 +6556,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/psr-http-message-bridge/issues",
-                "source": "https://github.com/symfony/psr-http-message-bridge/tree/v2.1.2"
+                "source": "https://github.com/symfony/psr-http-message-bridge/tree/v2.1.1"
             },
             "funding": [
                 {
@@ -6838,7 +6572,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-05T13:13:39+00:00"
+            "time": "2021-07-27T17:25:39+00:00"
         },
         {
             "name": "symfony/routing",
@@ -7408,16 +7142,16 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v5.4.0",
+            "version": "v5.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "d4394d044ed69a8f244f3445bcedf8a0d7fe2403"
+                "reference": "accaddf133651d4b5cf81a119f25296736ffc850"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/d4394d044ed69a8f244f3445bcedf8a0d7fe2403",
-                "reference": "d4394d044ed69a8f244f3445bcedf8a0d7fe2403",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/accaddf133651d4b5cf81a119f25296736ffc850",
+                "reference": "accaddf133651d4b5cf81a119f25296736ffc850",
                 "shasum": ""
             },
             "require": {
@@ -7440,7 +7174,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.3-dev"
                 }
             },
             "autoload": {
@@ -7470,7 +7204,7 @@
             ],
             "support": {
                 "issues": "https://github.com/vlucas/phpdotenv/issues",
-                "source": "https://github.com/vlucas/phpdotenv/tree/v5.4.0"
+                "source": "https://github.com/vlucas/phpdotenv/tree/v5.3.1"
             },
             "funding": [
                 {
@@ -7482,7 +7216,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-10T01:08:39+00:00"
+            "time": "2021-10-02T19:24:42+00:00"
         },
         {
             "name": "voku/portable-ascii",
@@ -7746,16 +7480,16 @@
         },
         {
             "name": "yajra/laravel-datatables-editor",
-            "version": "v1.25.0",
+            "version": "v1.24.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables-editor.git",
-                "reference": "096282402265a7a3aad06ce88df33d13968a3a5f"
+                "reference": "8418f7f2fb4fb73e095687c464a50d92e9f1f357"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables-editor/zipball/096282402265a7a3aad06ce88df33d13968a3a5f",
-                "reference": "096282402265a7a3aad06ce88df33d13968a3a5f",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables-editor/zipball/8418f7f2fb4fb73e095687c464a50d92e9f1f357",
+                "reference": "8418f7f2fb4fb73e095687c464a50d92e9f1f357",
                 "shasum": ""
             },
             "require": {
@@ -7805,7 +7539,7 @@
             ],
             "support": {
                 "issues": "https://github.com/yajra/laravel-datatables-editor/issues",
-                "source": "https://github.com/yajra/laravel-datatables-editor/tree/v1.25.0"
+                "source": "https://github.com/yajra/laravel-datatables-editor/tree/v1.24.2"
             },
             "funding": [
                 {
@@ -7817,7 +7551,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-11-08T02:57:13+00:00"
+            "time": "2021-08-13T01:43:33+00:00"
         },
         {
             "name": "yajra/laravel-datatables-fractal",
@@ -8178,16 +7912,16 @@
         },
         {
             "name": "facade/ignition",
-            "version": "2.16.1",
+            "version": "2.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facade/ignition.git",
-                "reference": "29b533f63a3b269aa599d08dd4d22a0d720e295f"
+                "reference": "23400e6cc565c9dcae2c53704b4de1c4870c0697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facade/ignition/zipball/29b533f63a3b269aa599d08dd4d22a0d720e295f",
-                "reference": "29b533f63a3b269aa599d08dd4d22a0d720e295f",
+                "url": "https://api.github.com/repos/facade/ignition/zipball/23400e6cc565c9dcae2c53704b4de1c4870c0697",
+                "reference": "23400e6cc565c9dcae2c53704b4de1c4870c0697",
                 "shasum": ""
             },
             "require": {
@@ -8251,7 +7985,7 @@
                 "issues": "https://github.com/facade/ignition/issues",
                 "source": "https://github.com/facade/ignition"
             },
-            "time": "2021-11-16T13:09:30+00:00"
+            "time": "2021-10-28T11:47:23+00:00"
         },
         {
             "name": "fakerphp/faker",
@@ -8442,16 +8176,16 @@
         },
         {
             "name": "laravel/sail",
-            "version": "v1.12.5",
+            "version": "v1.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "d1c31b2c3d226e70e0071e074da69e4801f0f47b"
+                "reference": "1acae00ddb5c6ec4a2957fe42c0004f13cd17a7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/d1c31b2c3d226e70e0071e074da69e4801f0f47b",
-                "reference": "d1c31b2c3d226e70e0071e074da69e4801f0f47b",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/1acae00ddb5c6ec4a2957fe42c0004f13cd17a7a",
+                "reference": "1acae00ddb5c6ec4a2957fe42c0004f13cd17a7a",
                 "shasum": ""
             },
             "require": {
@@ -8498,7 +8232,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2021-11-16T16:55:18+00:00"
+            "time": "2021-10-26T21:37:54+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -9905,16 +9639,16 @@
         },
         {
             "name": "sebastian/exporter",
-            "version": "4.0.4",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "65e8b7db476c5dd267e65eea9cab77584d3cfff9"
+                "reference": "d89cc98761b8cb5a1a235a6b703ae50d34080e65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/65e8b7db476c5dd267e65eea9cab77584d3cfff9",
-                "reference": "65e8b7db476c5dd267e65eea9cab77584d3cfff9",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/d89cc98761b8cb5a1a235a6b703ae50d34080e65",
+                "reference": "d89cc98761b8cb5a1a235a6b703ae50d34080e65",
                 "shasum": ""
             },
             "require": {
@@ -9963,14 +9697,14 @@
                 }
             ],
             "description": "Provides the functionality to export PHP variables for visualization",
-            "homepage": "https://www.github.com/sebastianbergmann/exporter",
+            "homepage": "http://www.github.com/sebastianbergmann/exporter",
             "keywords": [
                 "export",
                 "exporter"
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/exporter/issues",
-                "source": "https://github.com/sebastianbergmann/exporter/tree/4.0.4"
+                "source": "https://github.com/sebastianbergmann/exporter/tree/4.0.3"
             },
             "funding": [
                 {
@@ -9978,7 +9712,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-11T14:18:36+00:00"
+            "time": "2020-09-28T05:24:23+00:00"
         },
         {
             "name": "sebastian/global-state",

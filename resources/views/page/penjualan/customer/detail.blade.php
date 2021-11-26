@@ -12,26 +12,6 @@
     #historitabel {
         text-align: center;
     }
-
-    @media screen and (min-width: 1440px) {
-        section {
-            font-size: 14px;
-        }
-
-        .dropdown-item {
-            font-size: 14px;
-        }
-    }
-
-    @media screen and (max-width: 1439px) {
-        section {
-            font-size: 12px;
-        }
-
-        .dropdown-item {
-            font-size: 12px;
-        }
-    }
 </style>
 @stop
 
@@ -40,8 +20,8 @@
 @stop
 
 @section('content')
-<section class="section">
-    <div class="container-fluid">
+<div class="row">
+    <div class="col-12">
         <div class="row">
             <div class="col-4">
                 <div class="card">
@@ -123,7 +103,7 @@
             </div>
         </div>
     </div>
-</section>
+</div>
 @stop
 
 @section('adminlte_js')
@@ -149,19 +129,18 @@
                     searchable: false
                 },
                 {
-                    data: 'so'
+                    data: 'DT_RowIndex'
                 },
                 {
-                    data: 'nopo',
+                    data: 'DT_RowIndex',
+
                 },
                 {
-                    data: 'tglpo',
+                    data: 'DT_RowIndex',
+
                 },
                 {
-                    data: 'jenis',
-                },
-                {
-                    data: 'status',
+                    data: 'DT_RowIndex',
 
                 }
             ]
