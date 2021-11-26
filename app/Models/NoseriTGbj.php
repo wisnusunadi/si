@@ -25,6 +25,6 @@ class NoseriTGbj extends Model
     }
     function NoseriDetailPesanan()
     {
-        return $this->hasOne(NoseriBarangJadi::class);
+        return $this->hasOne(NoseriDetailPesanan::class);
     }
 }

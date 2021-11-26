@@ -207,6 +207,7 @@ Route::prefix('/spb')->group(function () {
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spb']);
 });
 Route::prefix('/qc')->group(function () {
+    Route::get('dashboard/data/{value}', [App\Http\Controllers\QcController::class, 'dashboard_data']);
     Route::prefix('/so')->group(function () {
         // Route::post('create/{seri_id}/{tfgbj_id}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::get('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
