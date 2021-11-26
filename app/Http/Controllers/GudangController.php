@@ -34,7 +34,7 @@ class GudangController extends Controller
     public function get_data_barang_jadi()
     {
         $data = GudangBarangJadi::with('produk', 'satuan')->get();
-        // return response()->json($data);
+        // return response()->json($auth);
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -51,27 +51,41 @@ class GudangController extends Controller
                 return $data->produk->KelompokProduk->nama;
             })
             ->addColumn('action', function ($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+            $auth = auth()->user()->divisi->id;
+                if ($auth == '2') {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-edit"></i>&nbsp;Edit
-                            </button>
-                        </a>
-
                         <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
                             <button class="dropdown-item" type="button" >
                             <i class="far fa-eye"></i>&nbsp;Detail
                             </button>
                         </a>
 
-                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
-                            </button>
-                        </a>
-
                         </div>';
+                }else {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="far fa-edit"></i>&nbsp;Edit
+                        </button>
+                    </a>
+
+                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="far fa-eye"></i>&nbsp;Detail
+                        </button>
+                    </a>
+
+                    <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
+                        </button>
+                    </a>
+
+                    </div>';
+                }
+               
             })
             ->rawColumns(['action'])
             ->make(true);
