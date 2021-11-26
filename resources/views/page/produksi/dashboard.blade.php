@@ -38,6 +38,9 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
+    body{
+        font-size: 14px;
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">

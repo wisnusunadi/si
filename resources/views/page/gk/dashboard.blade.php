@@ -14,6 +14,9 @@
     .otg:hover {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+    body{
+        font-size: 14px;
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
@@ -254,7 +257,7 @@
                     <div class="card-body">
                         <div class="row row-cols-4">
                             <div class="col">
-                                <div id="produk-masuk-3-bulan" class="card otg active" style="background-color: #FEF7EA">
+                                <div id="produk-masuk-3-bulan" class="card otg active" style="background-color: #FEF7EA;font-size: 12px;">
                                     <div class="card-body text-center">
                                         <h4>10</h4>
                                         <p class="card-text font-weight">Produk masuk 3 bulan sampai 6 bulan</p>
@@ -262,7 +265,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div id="produk-masuk-6-bulan" class="card otg" style="background-color: #FFBD67">
+                                <div id="produk-masuk-6-bulan" class="card otg" style="background-color: #FFBD67; font-size: 12px;">
                                     <div class="card-body text-center">
                                         <h4>10</h4>
                                         <p class="card-text font-weight">Produk masuk 6 bulan sampai 1 tahun</p>
@@ -270,7 +273,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div id="produk-masuk-1-tahun" class="card otg" style="background-color: #FA8282">
+                                <div id="produk-masuk-1-tahun" class="card otg" style="background-color: #FA8282; font-size: 12px;">
                                     <div class="card-body text-center">
                                         <h4>10</h4>
                                         <p class="card-text font-weight">Produk masuk 1 tahun sampai 3 tahun</p>
@@ -278,7 +281,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div id="produk-masuk-3-tahun" class="card otg" style="background-color: #FF6464">
+                                <div id="produk-masuk-3-tahun" class="card otg" style="background-color: #FF6464; font-size: 12px;">
                                     <div class="card-body text-center">
                                         <h4>10</h4>
                                         <p class="card-text font-weight">Produk masuk lebih dari 3 tahun</p>
