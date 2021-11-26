@@ -82,7 +82,11 @@ class QcController extends Controller
             })
             ->addColumn('tgl_uji', function ($data) {
                 $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->first();
-                return Carbon::createFromFormat('Y-m-d', $check->tgl_uji)->format('d-m-Y');
+                if (isset($check)) {
+                    return Carbon::createFromFormat('Y-m-d', $check->tgl_uji)->format('d-m-Y');
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('status', function ($data) {
                 $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->get();

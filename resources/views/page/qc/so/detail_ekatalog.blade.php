@@ -241,7 +241,7 @@
                             </button> -->
 
                             <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
-                                <button class="btn btn-warning" id="cekbrg" disabled>
+                                <button class="btn btn-warning" id="cekbrg" disabled="true">
                                     <i class="fas fa-pencil-alt"></i> Cek Barang
                                 </button>
                             </a>
@@ -382,6 +382,7 @@
             idpesanan = '{{$d->pesanan->id}}';
             var data = $(this).attr('data-id');
             $('.nosericheck').prop('checked', false);
+            $('#cekbrg').prop('disabled', true);
             $('input[name ="check_all"]').prop('checked', false);
             $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
             $('#showtable').find('tr').removeClass('bgcolor');
@@ -455,26 +456,26 @@
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
             if ($('input[name="check_all"]:checked').length > 0) {
-                $('#cekbrg').removeAttr('disabled');
+                $('#cekbrg').prop('disabled', false);
                 $('.nosericheck').prop('checked', true);
                 checkedAry = []
                 checkedAry.push('0');
-                $('#btnedit').removeClass('disabled');
+                $('#btnedit').removeAttr('disabled');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
                 $('.nosericheck').prop('checked', false);
-                $('#btnedit').addClass('disabled', true);
+                $('#cekbrg').prop('disabled', true);
             }
         });
 
         $('#noseritable ').on('click', '.nosericheck', function() {
             if ($('.nosericheck:checked').length > 0) {
-                $('#cekbrg').removeAttr('disabled');
+                $('#cekbrg').prop('disabled', false);
                 checkedAry = [];
                 $.each($(".nosericheck:checked"), function() {
                     checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
             } else if ($('.nosericheck:checked').length <= 0) {
-                $('#cekbrg').attr('disabled', true);
+                $('#cekbrg').prop('disabled', true);
             }
         });
 
