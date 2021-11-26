@@ -109,44 +109,44 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-success">
                                             <div class="inner">
-                                                <h3>3</h3>
+                                                <h3>{{$terbaru}}</h3>
                                                 <p>Pengujian Terbaru</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-tasks"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer active" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer active" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box warning-bg">
                                             <div class="inner">
-                                                <h3>4</h3>
+                                                <h3>{{$hasil}}</h3>
                                                 <p>Belum diuji</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-boxes"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-danger">
                                             <div class="inner">
-                                                <h3>2</h3>
+                                                <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Uji</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <table class="table table-hover" id="pengujianterbarutable" style="width:100%;">
+                                        <table class="table table-hover " id="pengujianterbarutable" style="width:100%;">
                                             <thead>
                                                 <tr>
                                                     <th colspan=5>
@@ -164,7 +164,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA102100001</td>
                                                     <td>
@@ -194,7 +194,7 @@
                                                     <td><span class="badge red-text">Belum diuji</span></td>
                                                     <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
-                                            </tbody>
+                                            </tbody> -->
                                         </table>
 
 
@@ -215,7 +215,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA092100093</td>
                                                     <td>
@@ -250,7 +250,7 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                     </td>
                                                     <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
 
@@ -270,7 +270,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA092100093</td>
                                                     <td>
@@ -289,7 +289,7 @@
                                                     </td>
                                                     <td><span class="badge yellow-text">Sebagian diuji</span></td>
                                                     <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -319,7 +319,11 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        pengujianterbarutable();
         $('#pengujianterbaru').on('click', function() {
+            belumdiujitable_destroy();
+            lewatbatasujitable_destroy();
+            pengujianterbarutable();
             $('#pengujianterbaru').addClass('active');
             $('#pengujianterbarutable').removeClass('hide');
 
@@ -331,6 +335,9 @@
         })
 
         $('#belumdiuji').on('click', function() {
+            pengujianterbarutable_destroy();
+            lewatbatasujitable_destroy();
+            belumdiujitable();
             $('#belumdiuji').addClass('active');
             $('#belumdiujitable').removeClass('hide');
 
@@ -342,6 +349,9 @@
         })
 
         $('#lewatbatasuji').on('click', function() {
+            lewatbatasujitable();
+            pengujianterbarutable_destroy();
+            belumdiujitable_destroy();
             $('#lewatbatasuji').addClass('active');
             $('#lewatbatasujitable').removeClass('hide');
 
@@ -352,57 +362,158 @@
             $('#pengujianterbarutable').addClass('hide');
         })
 
-        var pengirimantable = $('#table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/ekatalog/pengiriman/data/',
-                'type': 'POST',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
+        function belumdiujitable() {
+            $('#belumdiujitable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/qc/dashboard/data/belum_uji',
 
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'batas_kontrak',
-                    className: 'nowrap-text align-center',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
 
                 },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
-            ]
-        })
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    }, {
+                        data: 'so',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'batas',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            })
+        }
+
+        function belumdiujitable_destroy() {
+            $('#belumdiujitable').DataTable().clear().destroy();
+        }
+
+        function pengujianterbarutable() {
+            var pengujianterbarutable = $('#pengujianterbarutable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/qc/dashboard/data/terbaru',
+
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    }, {
+                        data: 'so',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'batas',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            })
+        }
+
+        function pengujianterbarutable_destroy() {
+            $('#pengujianterbarutable').DataTable().clear().destroy();
+        }
+
+        function lewatbatasujitable() {
+            $('#lewatbatasujitable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/qc/dashboard/data/lewat_uji',
+
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    }, {
+                        data: 'so',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'batas',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            })
+        }
+
+        function lewatbatasujitable_destroy() {
+            $('#lewatbatasujitable').DataTable().clear().destroy();
+        }
     })
 </script>
 <script>

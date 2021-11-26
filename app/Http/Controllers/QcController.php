@@ -141,21 +141,15 @@ class QcController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->detailpesanan->jumlah;
+                return $data->detailpesanan->jumlah * $data->detailpesanan->Penjualanproduk->produk->first()->pivot->jumlah;
             })
             ->addColumn('jumlah_ok', function ($data) {
-                if ($data->noseridetailpesanan == '') {
-                    return '1';
-                } else {
-                    return '0';
-                }
+                $c = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $data->id, 'status' => 'ok'])->get()->count();
+                return $c;
             })
             ->addColumn('jumlah_nok', function ($data) {
-                if ($data->noseridetailpesanan == '') {
-                    return '1';
-                } else {
-                    return '0';
-                }
+                $c = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $data->id, 'status' => 'nok'])->get()->count();
+                return $c;
             })
             ->addColumn('button', function ($data) {
                 return '<a type="button" class="noserishow" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
@@ -176,56 +170,30 @@ class QcController extends Controller
     {
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
-            $Spa = collect(Spa::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
-            $Spb = collect(Spb::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
+            $Ekatalog = collect(Ekatalog::Has('Pesanan.TFProduksi.detail.seri')->get());
+            $Spa = collect(Spa::Has('Pesanan.TFProduksi.detail.seri')->get());
+            $Spb = collect(Spb::Has('Pesanan.TFProduksi.detail.seri')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
-            $Spa = collect(Spa::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
+            $Ekatalog = collect(Ekatalog::Has('Pesanan.TFProduksi.detail.seri')->get());
+            $Spa = collect(Spa::Has('Pesanan.TFProduksi.detail.seri')->get());
             $data = $Ekatalog->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
-            $Spb = collect(Spb::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
+            $Ekatalog = collect(Ekatalog::Has('Pesanan.TFProduksi.detail.seri')->get());
+            $Spb = collect(Spb::Has('Pesanan.TFProduksi.detail.seri')->get());
             $data = $Ekatalog->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Spa::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
-            $Spb = collect(Spb::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get());
+            $Spa = collect(Spa::Has('Pesanan.TFProduksi.detail.seri')->get());
+            $Spb = collect(Spb::Has('Pesanan.TFProduksi.detail.seri')->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Ekatalog::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get();
+            $data = Ekatalog::Has('Pesanan.TFProduksi.detail.seri')->get();
         } else if ($value == 'spa') {
-            $data = Spa::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get();
+            $data = Spa::Has('Pesanan.TFProduksi.detail.seri')->get();
         } else if ($value == 'spb') {
-            $data = Spb::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get();
+            $data = Spb::Has('Pesanan.TFProduksi.detail.seri')->get();
         } else {
-            $data = Spa::whereHas('Pesanan.TFProduksi', function ($q) {
-                $q->whereNotNull('no_po');
-            })->get();
+            $data = Spa::Has('Pesanan.TFProduksi.detail.seri')->get();
         }
 
         return datatables()->of($data)
@@ -408,6 +376,94 @@ class QcController extends Controller
             }
         }
     }
+    //Dashboard 
+    public function dashboard()
+    {
+        $terbaru = TFProduksi::Has('Pesanan')->where('tgl_keluar', '>=', Carbon::now()->subdays(7))->get()->count();
+        $hasil = TFProduksi::Has('Pesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get()->count();
+        $lewat_batas = TFProduksi::Has('Pesanan.Ekatalog')->get()->count();
+
+        return view('page.qc.dashboard', ['terbaru' => $terbaru, 'hasil' => $hasil, 'lewat_batas' => $lewat_batas]);
+    }
+    public function dashboard_data($value)
+    {
+        if ($value == 'terbaru') {
+            $data = TFProduksi::Has('Pesanan')->where('tgl_keluar', '>=', Carbon::now()->subdays(7))->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return $data->Pesanan->so;
+                })
+                ->addColumn('batas', function () {
+                    return ' <div class="urgent">11-10-2021</div>
+                <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>';
+                })
+                ->addColumn('status', function () {
+                    return 'Belum diuji';
+                })
+                ->addColumn('button', function ($data) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        $x =  'ekatalog';
+                    } elseif ($name[1] == 'SPA') {
+                        $x =  'spa';
+                    } else {
+                        $x =  'spb';
+                    }
+                    return '<a href="' . route('qc.so.detail', [$data->pesanan->id, $x]) . '"><i class="fas fa-search"></i></a>
+                ';
+                })
+                ->rawColumns(['button', 'batas'])
+                ->make(true);
+        } else if ($value == 'belum_uji') {
+            $data = TFProduksi::Has('Pesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return $data->Pesanan->so;
+                })
+                ->addColumn('batas', function () {
+                    return ' <div class="urgent">11-10-2021</div>
+            <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>';
+                })
+                ->addColumn('status', function () {
+                    return 'Belum diuji';
+                })
+                ->addColumn('button', function ($data) {
+                    $name = explode('/', $data->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        $x =  'ekatalog';
+                    } elseif ($name[1] == 'SPA') {
+                        $x =  'spa';
+                    } else {
+                        $x =  'spb';
+                    }
+                    return '<a href="' . route('qc.so.detail', [$data->pesanan->id, $x]) . '"><i class="fas fa-search"></i></a>';
+                })
+                ->rawColumns(['button', 'batas'])
+                ->make(true);
+        } else if ($value == 'lewat_uji') {
+            $data = TFProduksi::Has('Pesanan.Ekatalog')->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return $data->Pesanan->so;
+                })
+                ->addColumn('batas', function () {
+                    return ' <div class="urgent">11-10-2021</div>
+            <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>';
+                })
+                ->addColumn('status', function () {
+                    return 'Belum diuji';
+                })
+                ->addColumn('button', function () {
+                    return '<a href="' . route('qc.so.detail_ekatalog', ['id' => '1']) . '"><i class="fas fa-search"></i></a>';
+                })
+                ->rawColumns(['button', 'batas'])
+                ->make(true);
+        }
+    }
+
     //Laporan
     public function laporan_outgoing(Request $request)
     {

@@ -134,7 +134,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
-    Route::view('/dashboard', 'page.qc.dashboard')->name('qc.dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\QcController::class, 'dashboard'])->name('qc.dashboard');
     Route::group(['prefix' => '/so'], function () {
         Route::post('create/{seri_id}/{tfgbj_id}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
@@ -144,7 +144,6 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         Route::view('/detail_spb/{id}', 'page.qc.so.detail_spb')->name('qc.so.detail_spb');
         Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
         Route::get('/edit/{seri_id}/{produk_id}/{tfgbj_id}/{pesanan_id}', [App\Http\Controllers\QcController::class, 'get_data_seri_detail_ekatalog'])->name('qc.so.edit');
-
         Route::group(['prefix' => '/riwayat'], function () {
             Route::view('/show', 'page.qc.so.riwayat.show')->name('qc.so.riwayat.show');
         });
@@ -157,6 +156,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'page.logistik.dashboard')->name('logistik.dashboard');
+
 
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');

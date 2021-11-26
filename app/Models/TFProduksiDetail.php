@@ -15,9 +15,12 @@ class TFProduksiDetail extends Model
     {
         return $this->belongsTo(TFProduksi::class, 't_gbj_id');
     }
-
     function produk()
     {
         return $this->belongsTo(GudangBarangJadi::class, 'gdg_brg_jadi_id');
+    }
+    function seri()
+    {
+        return $this->hasMany(NoseriTGbj::class, 't_gbj_detail_id');
     }
 }
