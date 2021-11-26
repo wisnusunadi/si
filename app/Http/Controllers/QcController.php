@@ -363,20 +363,34 @@ class QcController extends Controller
         $array_seri = explode(',', $replace_array_seri);
 
         //  return response()->json(['data' =>  count($array_seri)]);
+
+        $bool = true;
         for ($i = 0; $i < count($array_seri); $i++) {
             $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
             if ($check == null) {
-                NoseriDetailPesanan::create([
+                $c = NoseriDetailPesanan::create([
                     'detail_pesanan_produk_id' => $data->id,
                     't_tfbj_noseri_id' => $array_seri[$i],
                     'status' => $request->cek,
                     'tgl_uji' => $request->tanggal_uji,
                 ]);
+                if (!$c) {
+                    $bool = false;
+                }
             } else {
                 $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
                 $NoseriDetailPesanan->status = $request->cek;
                 $NoseriDetailPesanan->tgl_uji = $request->tanggal_uji;
-                $NoseriDetailPesanan->save();
+                $u = $NoseriDetailPesanan->save();
+                if (!$u) {
+                    $bool = false;
+                }
+            }
+
+            if ($bool == true) {
+                return response()->json(['data' =>  'success']);
+            } else {
+                return response()->json(['data' =>  'error']);
             }
         }
     }
@@ -472,6 +486,82 @@ class QcController extends Controller
     public function laporan_outgoing(Request $request)
     {
         return Excel::download(new LaporanQcOutgoing($request->produk_id ?? '', $request->no_so ?? '', $request->hasil_uji  ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_qc_outgoing.xlsx');
+    }
+
+    public function get_data_laporan_qc($produk, $so, $hasil, $tgl_awal, $tgl_akhir)
+    {
+        $res = "";
+        if ($produk != "0" && $so == '0') {
+            if ($hasil != "semua") {
+                $res = NoseriDetailPesanan::where('status', $hasil)
+                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                        $q->where('penjualan_produk_id', $produk);
+                    })->get();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                        $q->where('penjualan_produk_id', $produk);
+                    })->get();
+            }
+        } else if ($produk == "0" && $so != '0') {
+            if ($hasil != "semua") {
+                $res = NoseriDetailPesanan::where('status', $hasil)
+                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($so) {
+                        $q->where('pesanan_id', $so);
+                    })->get();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($so) {
+                        $q->where('pesanan_id', $so);
+                    })->get();
+            }
+        } else if ($produk != "0" && $so != '0') {
+            if ($hasil != "semua") {
+                $res = NoseriDetailPesanan::where('status', $hasil)
+                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk, $so) {
+                        $q->where(['pesanan_id' => $so, 'penjualan_produk_id' => $produk]);
+                    })->get();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk, $so) {
+                        $q->where(['pesanan_id' => $so, 'penjualan_produk_id' => $produk]);
+                    })->get();
+            }
+        } else if ($produk == "0" && $so == '0') {
+            if ($hasil != "semua") {
+                $res = NoseriDetailPesanan::where('status', $hasil)
+                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->get();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->get();
+            }
+        }
+
+        return datatables()->of($res)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
+            })
+            ->addColumn('produk', function ($data) {
+                return $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama;
+            })
+            ->addColumn('noseri', function ($data) {
+                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            })
+            ->addColumn('tgl_uji', function ($data) {
+                return $data->tgl_uji;
+            })
+            ->addColumn('status', function ($data) {
+                if ($data->status == "ok") {
+                    return '<div><i class="fas fa-check-circle" style="color:green;"></i></div>';
+                } else if ($data->status == "nok") {
+                    return '<div><i class="fas fa-times-circle" style="color:red;"></i></div>';
+                }
+            })
+            ->rawColumns(['status'])
+            ->make(true);
     }
 
     public function getHariBatasKontrak($value, $limit)

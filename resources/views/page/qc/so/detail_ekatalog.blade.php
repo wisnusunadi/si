@@ -390,6 +390,39 @@
             $('#noseridetail').removeClass('hide');
         });
 
+        $(document).on('submit', '#form-pengujian-update', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-pengujian-update').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan edit data',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#noseritable').DataTable().ajax.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan edit data',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-customer-update').serialize());
+                }
+            });
+            return false;
+        });
 
         var noseritable = $('#noseritable').DataTable({
             processing: true,
