@@ -52,16 +52,14 @@
                                 <div class="form-group row">
                                     <label for="" class="col-form-label col-5" style="text-align: right">No SO</label>
                                     <div class="col-4">
-                                        <select class="select2 select-info form-control no_so" name="no_so" id="no_so">
-                                            <option value=""></option>
-                                        </select>
+                                        <input type="text" class="form-control no_so" id="no_so" name="no_so" placeholder="Masukkan Nomor SO">
                                         <div class="feedback" id="msgno_so">
                                             <small class="text-muted">No SO boleh dikosongi</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Penjualan</label>
+                                    <label for="" class="col-form-label col-5" style="text-align: right">Hasil Pengujian</label>
                                     <div class="col-5 col-form-label">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="hasil_uji" id="hasil_uji1" value="semua" />
@@ -138,6 +136,16 @@
 @endsection
 
 @section('adminlte_js')
+<script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.1.3/css/rowGroup.bootstrap4.min.css">
+
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js "></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css "></script>
 <script>
     $(function() {
         var today = new Date();
@@ -146,7 +154,7 @@
         var yyyy = today.getFullYear();
 
         today = yyyy + '-' + mm + '-' + dd;
-        console.log(today);
+        //console.log(today);
         $("#tanggal_mulai").attr("max", today);
         $("#tanggal_akhir").attr("max", today);
 
@@ -216,7 +224,7 @@
                 type: 'GET',
                 url: '/api/penjualan_produk/select/',
                 processResults: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     return {
                         results: $.map(data, function(obj) {
                             return {
@@ -229,15 +237,10 @@
             }
         });
 
-        $('.no_so').select2({
-            allowClear: true,
-            placeholder: 'Pilih Data No SO'
-        });
-
         $("#btnbatal").on('click', function() {
             $("#btncetak").attr('disabled', true);
             $(".produk_id").val(null).trigger("change");
-            $(".no_so").val(null).trigger("change");
+            $(".no_so").val("");
             $('input[type="radio"][name="hasil_uji"]').prop('checked', false);
             $('#tanggal_mulai').val('');
             $('#tanggal_mulai').attr('readonly', true);
@@ -258,7 +261,8 @@
 
             var so = "";
             if ($(".no_so").val() != "") {
-                so = $(".no_so").val();
+                var sos = $(".no_so").val();
+                so = sos.replaceAll("/", "_")
             } else {
                 so = "0";
             }
@@ -270,7 +274,7 @@
 
 
         function table(produk, so, hasil, tgl_awal, tgl_akhir) {
-            console.log('/api/laporan/qc/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir);
+            //console.log('/api/laporan/qc/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir);
             $('#qctable').DataTable({
                 destroy: true,
                 processing: true,
@@ -287,37 +291,39 @@
                 },
                 buttons: [{
                         extend: 'excel',
-                        title: 'Laporan Penjualan',
+                        title: 'Laporan QC Outgoing',
                         text: '<i class="far fa-file-excel"></i> Export',
                         className: "btn btn-info"
                     },
                     {
                         extend: 'print',
-                        title: 'Laporan Penjualan',
+                        title: 'Laporan QC Outgoing',
                         text: '<i class="fas fa-print"></i> Cetak',
                         className: "btn btn-primary"
                     },
                 ],
                 columns: [{
                         data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
+                        className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'so'
+                        data: 'so',
+                        className: 'nowrap-text align-center'
                     },
                     {
                         data: 'produk'
                     },
                     {
-                        data: 'noseri'
+                        data: 'noseri',
+                        className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'tgl_uji'
+                        data: 'tgl_uji',
+                        className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'status'
+                        data: 'status',
+                        className: 'nowrap-text align-center'
                     },
                 ],
             });
