@@ -197,7 +197,7 @@
                 data: 'no_po',
 
             }, {
-                data: 'DT_RowIndex',
+                data: 'batas_uji',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false,

@@ -111,7 +111,7 @@
                     <div class="col-2">
                         <div class="margin">
                             <div><small class="text-muted">Status</small></div>
-                            <div><span class="badge yellow-text">Sebagian Diperiksa</span></div>
+                            <div>{!!$status!!}</div>
                         </div>
                     </div>
                 </div>
