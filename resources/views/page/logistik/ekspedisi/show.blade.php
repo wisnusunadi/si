@@ -293,7 +293,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/ekspedisi/data/',
+                'url': '/api/logistik/ekspedisi/data/',
 
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -348,8 +348,9 @@
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
+            console.log(id);
             $.ajax({
-                url: "/logistik/ekspedisi/edit/1",
+                url: "/logistik/ekspedisi/edit/" + id,
                 beforeSend: function() {
                     $('#loader').show();
                 },

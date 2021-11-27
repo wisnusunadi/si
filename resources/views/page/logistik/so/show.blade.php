@@ -119,7 +119,7 @@
                                             <th>Aksi</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>SO/EKAT/X/02/98</td>
                                                 <td>
@@ -134,7 +134,7 @@
                                                 <td>
                                                     <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.so.detail', ['id' => '1'])}}">
+                                                        <a href="{{route('logistik.so.detail', ['id' => '1','value' => 'ekatalog'])}}">
                                                             <button class="dropdown-item" type="button">
                                                                 <i class="fas fa-search"></i>
                                                                 Detail
@@ -170,7 +170,7 @@
                                                 <td>-</td>
                                                 <td><span class="badge yellow-text">Sebagian dikirim</span></td>
                                                 <td><a href=""></td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -186,7 +186,64 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({})
+        var showtable = $('#showtable').DataTable({
+
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/so/data/',
+
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so'
+                },
+                {
+                    data: 'batas',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nama_customer'
+                },
+                {
+                    data: 'alamat'
+                }, {
+                    data: 'telp',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'ket',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'status',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'button',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+
+        })
 
     })
 </script>

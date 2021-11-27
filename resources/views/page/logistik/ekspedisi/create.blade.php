@@ -18,7 +18,7 @@
 <div class="row">
     <div class="col-12">
         <div class="content">
-            <form action="" method="post">
+            <form action="/api/logistik/ekspedisi/create" method="post">
                 {{csrf_field()}}
                 <div class="row d-flex justify-content-center">
                     <div class="col-8">
@@ -94,19 +94,19 @@
                                             <label for="" class="col-form-label col-4" style="text-align: right">Jalur</label>
                                             <div class="col-5 col-form-label">
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jalur" type="checkbox" id="jalur1" value="darat" name="jalur">
+                                                    <input class="form-check-input jalur" type="checkbox" id="jalur1" value="1" name="jalur[]">
                                                     <label class="form-check-label" for="jalur1">Darat</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jalur" type="checkbox" id="jalur2" value="laut" name="jalur">
+                                                    <input class="form-check-input jalur" type="checkbox" id="jalur2" value="2" name="jalur[]">
                                                     <label class="form-check-label" for="jalur2">Laut</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jalur" type="checkbox" id="jalur3" value="udara" name="jalur">
+                                                    <input class="form-check-input jalur" type="checkbox" id="jalur3" value="3" name="jalur[]">
                                                     <label class="form-check-label" for="jalur3">Udara</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jalur" type="checkbox" id="jalur4" value="lain" name="jalur">
+                                                    <input class="form-check-input jalur" type="checkbox" id="jalur4" value="4" name="jalur[]">
                                                     <label class="form-check-label" for="jalur4">Lain</label>
                                                 </div>
                                                 <div class="invalid-feedback" id="msgjalur">
@@ -217,7 +217,7 @@
                 // }
                 $("#msgnama_customer").val("");
                 $('#nama_ekspedisi').removeClass('is-invalid');
-                if ($('#telepon').val() != "" && $('#alamat').val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
+                if ($('#telepon').val() != "" && $('#alamat').val() != "" && $('input[type="checkbox"][name="jalur[]"]:checked').length > 0 && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr("disabled");
                 } else {
                     $("#btntambah").attr("disabled", true);
@@ -261,7 +261,7 @@
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur[]"]:checked').length > 0 && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 } else {
                     $("#btntambah").attr('disabled', true);
@@ -283,14 +283,14 @@
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
+                    if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur[]"]:checked').length > 0 && $('#jurusan').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#jurusan').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('input[type="checkbox"][name="jalur[][]"]:checked').length > 0 && $('#jurusan').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 }
             }
@@ -312,7 +312,7 @@
                 }
                 $('#msgjurusan').text("");
                 $('#jurusan').removeClass("is-invalid");
-                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur"]:checked').length > 0 && $('#alamat').val() != "") {
+                if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('input[type="checkbox"][name="jalur[]"]:checked').length > 0 && $('#alamat').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 } else {
                     $("#btntambah").attr('disabled', true);
@@ -324,19 +324,19 @@
             }
         });
 
-        $('input[type="checkbox"][name="jalur"]').on('keyup change', function() {
-            console.log($('input[type="checkbox"][name="jalur"]:checked').val());
-            if ($('input[type="checkbox"][name="jalur"]:checked').length > 0) {
+        $('input[type="checkbox"][name="jalur[]"]').on('keyup change', function() {
+            console.log($('input[type="checkbox"][name="jalur[]"]:checked').val());
+            if ($('input[type="checkbox"][name="jalur[]"]:checked').length > 0) {
                 $('#msgjalur').text("");
-                $('input[type="checkbox"][name="jalur"]').removeClass("is-invalid");
+                $('input[type="checkbox"][name="jalur[]"]').removeClass("is-invalid");
                 if ($("#nama_ekspedisi").val() != "" && $("#telepon").val() != "" && $('#jurusan').val() != "" && $('#alamat').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 } else {
                     $("#btntambah").attr('disabled', true);
                 }
-            } else if ($('input[type="checkbox"][name="jalur"]:checked').length <= 0) {
+            } else if ($('input[type="checkbox"][name="jalur[]"]:checked').length <= 0) {
                 $('#msgjalur').text("Jalur tidak boleh kosong");
-                $('input[type="checkbox"][name="jalur"]').addClass("is-invalid");
+                $('input[type="checkbox"][name="jalur[]"]').addClass("is-invalid");
                 $("#btntambah").attr('disabled', true);
             }
         });

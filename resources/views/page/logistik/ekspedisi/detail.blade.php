@@ -52,30 +52,50 @@
                 <div class="card">
                     <div class="card-body">
                         <h5>Info Ekspedisi</h5>
+                        @foreach($ekspedisi as $e)
                         <div class="row">
                             <div class="col-6 filter">
                                 <div><small class="text-muted">Deskripsi Ekspedisi</small></div>
-                                <div><b>JNE Regular</b></div>
-                                <div><b>08172093108</b></div>
-                                <div><b>Pergudangan Osowilangun Permai Blok E7 - E9 Benowo, Surabaya</b></div>
-                                <div><b>Jawa Timur</b></div>
+                                <div><b>{{$e->nama}}</b></div>
+                                <div><b>{{$e->telp}}</b></div>
+                                <div><b>{{$e->alamat}}</b></div>
                             </div>
 
                             <div class="col-3">
                                 <div class="filter">
                                     <div><small class="text-muted">Jalur</small></div>
-                                    <div><span class="badge green-text">Darat</span> <span class="badge purple-text">Lain</span> <span class="badge orange-text">Udara</span> <span class="badge blue-text">Laut</span></div>
+                                    <div>
+                                        @foreach($e->jalurekspedisi as $j)
+                                        @if($j->nama == 'darat')
+                                        <span class="badge green-text">Darat</span>
+                                        @elseif($j->nama == 'laut')
+                                        <span class="badge blue-text">Laut</span>
+                                        @elseif($j->nama == 'udara')
+                                        <span class="badge orange-text">Udara</span>
+                                        @else
+                                        <span class="badge purple-text">Lain</span>
+                                        @endif
+                                        @endforeach
+                                    </div>
                                 </div>
                                 <div class="filter">
                                     <div><small class="text-muted">Jurusan</small></div>
-                                    <div>Seluruh Indonesia</div>
+                                    <div>
+                                        @foreach($e->Provinsi as $p)
+                                        {{$p->nama}}
+                                        @if( !$loop->last)
+                                        ,
+                                        @endif
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-3 filter">
                                 <div><small class="text-muted">Keterangan</small></div>
-                                <div>-</div>
+                                <div>{{$e->ket}}</div>
                             </div>
                         </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

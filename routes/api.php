@@ -229,6 +229,16 @@ Route::prefix('/qc')->group(function () {
     });
 });
 
-Route::group(['prefix' => '/ekspedisi'], function () {
-    Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
+Route::prefix('/logistik')->group(function () {
+    Route::group(['prefix' => '/so'], function () {
+        Route::post('create', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
+        Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
+        Route::get('data/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_so']);
+        Route::get('detail/select/{id}/{pesanan_id}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
+    });
+    Route::group(['prefix' => '/ekspedisi'], function () {
+        Route::get('select', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
+        Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
+        Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
+    });
 });

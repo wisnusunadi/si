@@ -75,7 +75,8 @@ class QcController extends Controller
             ->addColumn('checkbox', function ($data) {
                 return '  <div class="form-check">
                 <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
-            </div>';
+           
+                </div>';
             })
             ->addColumn('seri', function ($data) {
                 return $data->NoseriBarangJadi->noseri;
@@ -416,7 +417,7 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc($seri_id, $tfgbj_id, $pesanan_id, $produk_id, Request $request)
     {
-        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($seri_id, $tfgbj_id, $pesanan_id) {
+        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
             $q->where('Pesanan_id', $pesanan_id);
         })->where('gudang_barang_jadi_id', $produk_id)->first();
 

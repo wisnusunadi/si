@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ekspedisi extends Model
 {
     protected $table = 'ekspedisi';
-    protected $fillable = ['nama', 'alamat', 'email', 'telp', 'jalur', 'ket'];
+    protected $fillable = ['nama', 'alamat', 'email', 'telp', 'ket'];
 
     public function Provinsi()
     {
@@ -17,5 +17,9 @@ class Ekspedisi extends Model
     public function JalurEkspedisi()
     {
         return $this->belongsToMany(JalurEkspedisi::class, 'ekspedisi_jalur_ekspedisi');
+    }
+    public function Logistik()
+    {
+        return $this->hasMany(Logistik::class);
     }
 }
