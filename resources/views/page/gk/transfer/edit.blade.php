@@ -33,7 +33,7 @@
     top: 0;
     z-index: 30;
     }
-    
+
 </style>
 <section class="content-header">
     <div class="container-fluid">
@@ -46,20 +46,21 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
+                    @foreach ($data as $d)
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="tanggal">Tanggal Masuk</label>
-                            <input type="date" name="" id="datePicker" class="form-control" placeholder="" readonly>
+                            <input type="text" name="date_out" value="{{ $d->date_out }}" id="datePicker" class="form-control" placeholder="" readonly>
                         </div>
                         <div class="form-group col">
                             <label for="dari">Dari</label>
+                            <input type="hidden" name="dari" value="{{ $d->to }}">
                             <select class="form-control dari" name="dari" disabled>
-                                <option value="Divisi IT">Divisi IT</option>
-                                <option value="Divisi QC">Divisi QC</option>
-                                <option value="Divisi Perakitan">Divisi Perakitan</option>
+                                <option value="Divisi IT">{{ $d->to->nama }}</option>
                             </select>
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -352,7 +353,7 @@
 @stop
 @section('adminlte_js')
 <script>
-    document.getElementById('datePicker').valueAsDate = new Date();
+    // document.getElementById('datePicker').valueAsDate = new Date();
 
     function addSparepart() {
         $('.modalAddSparepart').modal('show');
@@ -481,7 +482,7 @@
                 }
             });
         });
-    }   
+    }
     function batal() {
         Swal.fire({
             title: "Apakah anda yakin?",

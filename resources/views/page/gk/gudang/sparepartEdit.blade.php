@@ -63,13 +63,15 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
+                    @foreach ($header as $h)
+                    <input type="hidden" name="" id="id" value="{{ $h->id }}">
                     <div class="col-sm">
                         <div class="row row-cols-2">
                             {{-- col --}}
                             <div class="col"> <label for="">Kode Sparepart</label>
                                 <div class="card nomor-so">
                                     <div class="card-body">
-                                        89798797856456
+                                        {{ $h->spare->kode }}
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +79,7 @@
                             <div class="col"> <label for="">Nama Sparepart</label>
                                 <div class="card nomor-akn">
                                     <div class="card-body">
-                                        Sparepart 1
+                                        {{ $h->nama}}
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +87,7 @@
                             <div class="col"> <label for="">Unit</label>
                                 <div class="card nomor-po">
                                     <div class="card-body">
-                                        Nama Unit
+                                        -
                                     </div>
                                 </div>
                             </div>
@@ -93,12 +95,13 @@
                             <div class="col"> <label for="">Jumlah</label>
                                 <div class="card instansi">
                                     <div class="card-body">
-                                        100 pcs
+                                       {{ $h->stok }} pcs
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
             <div class="card-body">
@@ -123,7 +126,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        {{-- <tr>
                             <td>10-04-2021</td>
                             <td>23-04-2021</td>
                             <td><span class="badge badge-success">Divisi IT</span></td>
@@ -148,7 +151,7 @@
                             <td><span class="belum_diterima">Belum Diperbaiki</span></td>
                             <td><button class="btn btn-outline-info" onclick="changeStatus()"><i
                                         class="far fa-edit"></i></button></td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -172,7 +175,7 @@
                         <div class="row">
                             <div class="col"> <label for="">No Seri</label>
                                 <div class="card nomor-so">
-                                    <div class="card-body">
+                                    <div class="card-body" id="nose">
                                         89798797856456
                                     </div>
                                 </div>
@@ -182,12 +185,12 @@
                                 <div class="card-group">
                                     <div class="card nomor-akn">
                                         <div class="card-body">
-                                            <p class="card-text">10-04-2022</p>
+                                            <p class="card-text" id="in">10-04-2022</p>
                                         </div>
                                     </div>
                                     <div class="card nomor-akn">
                                         <div class="card-body">
-                                            <p class="card-text">23-09-2022</p>
+                                            <p class="card-text" id="out">23-09-2022</p>
                                         </div>
                                     </div>
                                 </div>
@@ -239,23 +242,61 @@
     $('.kerusakan_edit').select2({
         dropdownParent: $('.changeStatus')
     });
+    var id = $('#id').val();
+    console.log(id);
     $('.table_edit_sparepart').dataTable({
-    "paging": true,
-    "lengthChange": true,
-    "searching": true,
-    "ordering": true,
-    "info": true,
-    "autoWidth": false,
-    "responsive": true,
-    "language": {
-      "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-    },
-    "columnDefs": [
-        {
-            "targets": [9],
-            "visible": document.getElementById('auth').value == '2' ? false : true
-        }
-    ]
-  });
+        destroy: true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/api/gk/his-spr/" + id,
+        },
+        columns: [
+            {data: 'inn'},
+            {data: 'out'},
+            {data: 'from'},
+            {data: 'to'},
+            {data: 'noser'},
+            {data: 'layout'},
+            {data: 'remarks'},
+            {data: 'tingkat'},
+            {data: 'status'},
+            {data: 'action'},
+        ],
+        "language": {
+        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        },
+        "columnDefs": [
+            {
+                "targets": [9],
+                "visible": document.getElementById('auth').value == '2' ? false : true
+            }
+        ]
+    });
+
+    $(document).on('click', '.detailModal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/gk/noseri/" + id,
+            type: "get",
+            dataType: "json",
+            success: function(res) {
+                $('div#nose').text(res.noser);
+                $('p#in').text(res.in);
+                $('p#out').text(res.out);
+            }
+        })
+
+        changeStatus();
+    })
 </script>
 @stop

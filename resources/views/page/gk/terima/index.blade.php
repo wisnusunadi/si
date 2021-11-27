@@ -105,9 +105,9 @@
                                 <div class="form-group col">
                                     <label for="dari">Dari</label>
                                     <select class="form-control dari" name="dari">
-                                        <option value="Divisi IT">Divisi IT</option>
+                                        {{-- <option value="Divisi IT">Divisi IT</option>
                                         <option value="Divisi QC">Divisi QC</option>
-                                        <option value="Divisi Perakitan">Divisi Perakitan</option>
+                                        <option value="Divisi Perakitan">Divisi Perakitan</option> --}}
                                     </select>
                                 </div>
                             </div>
@@ -251,7 +251,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <table class="table table-striped scan-produk">
+                                    <table class="table table-striped scan-produk1">
                                         <thead>
                                             <tr>
                                                 <th>No Seri</th>
@@ -260,7 +260,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td><input type="text" class="form-control"></td>
                                                 <td><input type="text" class="form-control"></td>
                                                 <td>
@@ -270,7 +270,7 @@
                                                         <option value="">Level 1</option>
                                                     </select>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -347,7 +347,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td><input type="text" class="form-control"></td>
                                                 <td><input type="text" class="form-control"></td>
                                                 <td>
@@ -357,7 +357,7 @@
                                                         <option value="">Level 1</option>
                                                     </select>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -376,14 +376,77 @@
     @section('adminlte_js')
     <script>
         document.getElementById('datePicker').valueAsDate = new Date();
-
-        function addSparepart() {
+        var i = 0;
+        function addSparepart(x) {
             $('.modalAddSparepart').modal('show');
+            $('.scan-produk1').DataTable().destroy();
+            $('.scan-produk1 tbody').empty();
+            for (let index = 0; index < x; index++) {
+            $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri[]" id="noseri" maxlength="13" class="form-control"></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+            }
+            $('.scan-produk1').DataTable({
+                "ordering": false,
+                "autoWidth": false,
+                searching: false,
+                "lengthChange": false,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+            });
+
+            $(".form-control").keyup(function () {
+                if (this.value.length == this.maxLength) {
+                $(this).next('.form-control').focus();
+                }
+            });
         }
 
-        function addUnit() {
+        function addUnit(x) {
             $('.modalAddUnit').modal('show');
+            $('.scan-produk').DataTable().destroy();
+            $('.scan-produk tbody').empty();
+            for (let index = 0; index < x; index++) {
+            $('.scan-produk tbody').append('<tr><td><input type="text" class="form-control"></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+            }
+            $('.scan-produk').DataTable({
+                "ordering": false,
+                "autoWidth": false,
+                searching: false,
+                "lengthChange": false,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+            });
         }
+
+        $(document).on('click', '#btn_plus', function() {
+            var tr = $(this).closest('tr');
+            var x = tr.find('#jml').val();
+            console.log(x);
+            addSparepart(x);
+        })
+        $(document).on('click', '#btnPlus', function() {
+            var tr = $(this).closest('tr');
+            var x = tr.find('#jum').val();
+            console.log(x);
+            addUnit(x);
+        })
+
+        // function select_divisi() {
+            $.ajax({
+                url: '/api/gbj/sel-divisi',
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    // ii++;
+                    console.log(res);
+                    $.each(res, function(key, value) {
+                        // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                        $(".dari").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    });
+                }
+            });
+        // }
 
         function transfer() {
             Swal.fire({
@@ -404,16 +467,16 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $(document).on('click', '.add_sparepart', function () {
-            let table_sparepart =
-                '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        $(document).on('click','.add_sparepart', function () {
+            i++;
+            let table_sparepart = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="jml['+i+']" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
             $('.add_sparepart_table tbody').append(table_sparepart);
             $('.produk').select2();
             $('.unit').select2();
         });
-        $(document).on('click', '.add_unit', function () {
-            let table_unit =
-                '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        $(document).on('click','.add_unit', function () {
+            i++;
+            let table_unit = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
             $('.add_unit_table tbody').append(table_unit);
             $('.produk').select2();
         });
@@ -434,7 +497,7 @@
             });
             $('.dari').select2({});
         });
-        function terima() { 
+        function terima() {
         Swal.fire({
             title: "Apakah anda yakin?",
             text: "Data yang sudah di terima tidak dapat diubah!",
@@ -482,7 +545,7 @@
             }
         });
     }
-    function batal() { 
+    function batal() {
         Swal.fire({
             title: "Apakah anda yakin?",
             text: "Data yang sudah di batalkan tidak dapat dikembalikan!",

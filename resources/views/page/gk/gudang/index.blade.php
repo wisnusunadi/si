@@ -295,6 +295,7 @@
 @section('adminlte_js')
 <script>
     $('.tableSparepart').dataTable({
+        destroy: true,
         "paging": true,
         "lengthChange": true,
         "searching": true,
@@ -302,11 +303,24 @@
         "info": true,
         "autoWidth": false,
         "responsive": true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/api/spr/data",
+        },
+        columns: [
+            {data: 'kode'},
+            {data: 'produk'},
+            {data: 'unit'},
+            {data: 'jml'},
+            {data: 'button'},
+        ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
     $('.tableUnit').dataTable({
+        destroy: true,
         "paging": true,
         "lengthChange": true,
         "searching": true,
@@ -314,6 +328,17 @@
         "info": true,
         "autoWidth": false,
         "responsive": true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/api/gk/unit",
+        },
+        columns: [
+            {data: 'kode_produk'},
+            {data: 'nama_produk'},
+            {data: 'jumlah'},
+            {data: 'button'},
+        ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }

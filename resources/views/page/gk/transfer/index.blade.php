@@ -33,7 +33,7 @@
     top: 0;
     z-index: 30;
     }
-    
+
 </style>
 <section class="content-header">
     <div class="container-fluid">
@@ -77,11 +77,7 @@
                                 <td>Divisi IT</td>
                                 <td><a href="{{ url('gk/transfer/1') }}" class="btn btn-outline-info"><i class="far fa-edit"></i>Edit Produk</a></td>
                             </tr>
-                            <tr>
-                                <td scope="row"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -97,14 +93,14 @@
                             <div class="form-row">
                                 <div class="form-group col">
                                     <label for="tanggal">Tanggal Masuk</label>
-                                    <input type="date" name="" id="datePicker" class="form-control" placeholder="">
+                                    <input type="date" name="date_in" id="datePicker" class="form-control" placeholder="">
                                 </div>
                                 <div class="form-group col">
                                     <label for="dari">Dari</label>
                                     <select class="form-control dari" name="dari">
-                                        <option value="Divisi IT">Divisi IT</option>
+                                        {{-- <option value="Divisi IT">Divisi IT</option>
                                         <option value="Divisi QC">Divisi QC</option>
-                                        <option value="Divisi Perakitan">Divisi Perakitan</option>
+                                        <option value="Divisi Perakitan">Divisi Perakitan</option> --}}
                                     </select>
                                 </div>
                             </div>
@@ -250,7 +246,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <table class="table table-striped scan-produk">
+                                <table class="table table-striped scan-produk1">
                                     <thead>
                                         <tr>
                                             <th>No Seri</th>
@@ -388,7 +384,7 @@
                     <div class="col-xl-12">
                         <div class="form-group">
                             <label for="">Tujuan</label>
-                            <textarea name="" id="" cols="10" rows="5" class="form-control"></textarea>
+                            <textarea name="tujuan" id="tujuan_draft" cols="10" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
                 </div>
@@ -400,46 +396,46 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade modal_transfer1" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title judul_modal">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="form-group">
+                            <label for="">Tujuan</label>
+                            <textarea name="tujuan" id="tujuan_tf" cols="10" rows="5" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary simpan1">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 @section('adminlte_js')
 <script>
     document.getElementById('datePicker').valueAsDate = new Date();
-
-    function addSparepart() {
+    var i = 0;
+    function addSparepart(x) {
         $('.modalAddSparepart').modal('show');
-    }
-
-    function addUnit() {
-        $('.modalAddUnit').modal('show');
-    }
-
-    $('.scan-produk').DataTable({
-        "ordering": false,
-        "autoWidth": false,
-        searching: false,
-        "lengthChange": false,
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        $('.scan-produk1').DataTable().destroy();
+        $('.scan-produk1 tbody').empty();
+        for (let index = 0; index < x; index++) {
+           $('.scan-produk1 tbody').append('<tr><td><input type="text" class="form-control"></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
         }
-    });
-    $(document).on('click','.add_sparepart', function () {
-        let table_sparepart = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
-        $('.add_sparepart_table tbody').append(table_sparepart);
-        $('.produk').select2();
-        $('.unit').select2();
-    });
-    $(document).on('click','.add_unit', function () {
-        let table_unit = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
-        $('.add_unit_table tbody').append(table_unit);
-        $('.produk').select2();
-    });
-    $(document).on('click', '.btn-delete', function (e) {
-        $(this).parent().parent().remove();
-        var check = $('tbody.tambah_data tr').length;
-    });
-
-    $(document).ready(function () {
-        $('.table-rancangan').DataTable({
+        $('.scan-produk1').DataTable({
             "ordering": false,
             "autoWidth": false,
             searching: false,
@@ -448,11 +444,96 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+    }
+
+    function addUnit(x) {
+        $('.modalAddUnit').modal('show');
+        $('.scan-produk').DataTable().destroy();
+        $('.scan-produk tbody').empty();
+        for (let index = 0; index < x; index++) {
+           $('.scan-produk tbody').append('<tr><td><input type="text" class="form-control"></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+        }
+        $('.scan-produk').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+    }
+
+    $(document).on('click', '#btn_plus', function() {
+        var tr = $(this).closest('tr');
+        var x = tr.find('#jml').val();
+        console.log(x);
+        addSparepart(x);
+    })
+    $(document).on('click', '#btnPlus', function() {
+        var tr = $(this).closest('tr');
+        var x = tr.find('#jum').val();
+        console.log(x);
+        addUnit(x);
+    })
+
+    $(document).on('click','.add_sparepart', function () {
+        i++;
+        let table_sparepart = '<tr><td><select name="sparepart_id['+i+']" id="sparepart_id" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty['+i+']" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        $('.add_sparepart_table tbody').append(table_sparepart);
+        $('.produk').select2();
+        $('.unit').select2();
+    });
+    $(document).on('click','.add_unit', function () {
+        i++;
+        let table_unit = '<tr><td><select name="gdg_barang_jadi_id['+i+']" id="gdg_barang_jadi_id" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="qty" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        $('.add_unit_table tbody').append(table_unit);
+        $('.produk').select2();
+    });
+    $(document).on('click', '.btn-delete', function (e) {
+        $(this).parent().parent().remove();
+        var check = $('tbody.tambah_data tr').length;
+    });
+
+    $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            // ii++;
+            console.log(res);
+            $.each(res, function(key, value) {
+                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                $(".dari").append('<option value="'+value.id+'">'+value.nama+'</option');
+            });
+        }
+    });
+
+    $(document).ready(function () {
+        $('.table-rancangan').DataTable({
+            destroy: true,
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            ajax: {
+                url: "/api/gk/draft-tf",
+                type: "post",
+            },
+            columns: [
+                {data: "out"},
+                {data: "too"},
+                {data: "aksi"},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
         $('.dari').select2({});
     });
 
     function modalTerima() {
-        $('.modal_transfer').modal('show');
+        $('.modal_transfer1').modal('show');
         $('.catatan').val('');
         $('.list-group').children().remove();
         $('.judul_modal').text('Silahkan isi tujuan transfer produk');
@@ -460,35 +541,46 @@
             $(this).parent().parent().remove();
         });
 
-        $(document).on('click','.simpan', function () {
-            Swal.fire({
-                title: "Apakah anda yakin?",
-                text: "Data yang sudah di transfer tidak dapat diubah!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-                showCancelButton: true,
-            }).then((success) => {
-                if (success) {
-                    Swal.fire(
-                        'Data berhasil di transfer!',
-                        '',
-                        'success'
-                    );
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                }else{
-                    Swal.fire(
-                        'Data gagal di transfer!',
-                        '',
-                        'error'
-                    );
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                }
-            });
+        $(document).on('click','.simpan1', function () {
+            let out = $('#datePicker').val();
+            let to = $('.dari').val();
+            let tujuan = $('#tujuan_tf').val();
+
+            let spr = [];
+            let unit = [];
+            let qty = [];
+
+            console.log(out);
+            console.log(to);
+            console.log(tujuan);
+            // Swal.fire({
+            //     title: "Apakah anda yakin?",
+            //     text: "Data yang sudah di transfer tidak dapat diubah!",
+            //     icon: "warning",
+            //     buttons: true,
+            //     dangerMode: true,
+            //     showCancelButton: true,
+            // }).then((success) => {
+            //     if (success) {
+            //         Swal.fire(
+            //             'Data berhasil di transfer!',
+            //             '',
+            //             'success'
+            //         );
+            //         setTimeout(() => {
+            //             location.reload();
+            //         }, 1000);
+            //     }else{
+            //         Swal.fire(
+            //             'Data gagal di transfer!',
+            //             '',
+            //             'error'
+            //         );
+            //         setTimeout(() => {
+            //             location.reload();
+            //         }, 1000);
+            //     }
+            // });
         });
     }
     function modalRancang() {
@@ -499,36 +591,43 @@
             $(this).parent().parent().remove();
         });
         $(document).on('click', '.simpan', function () {
-            Swal.fire({
-                title: "Apakah anda yakin?",
-                text: "Data yang sudah di rancangan tidak dapat diubah!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-                showCancelButton: true,
-            }).then((success) => {
-                if (success) {
-                    Swal.fire(
-                        'Data berhasil di rancangan!',
-                        '',
-                        'success'
-                    );
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                }else{
-                    Swal.fire(
-                        'Data gagal di rancangan!',
-                        '',
-                        'error'
-                    );
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                }
-            });
+            let out = $('#datePicker').val();
+            let to = $('.dari').val();
+            let tujuan = $('#tujuan_draft').val();
+
+            console.log(out);
+            console.log(to);
+            console.log(tujuan);
+            // Swal.fire({
+            //     title: "Apakah anda yakin?",
+            //     text: "Data yang sudah di rancangan tidak dapat diubah!",
+            //     icon: "warning",
+            //     buttons: true,
+            //     dangerMode: true,
+            //     showCancelButton: true,
+            // }).then((success) => {
+            //     if (success) {
+            //         Swal.fire(
+            //             'Data berhasil di rancangan!',
+            //             '',
+            //             'success'
+            //         );
+            //         setTimeout(() => {
+            //             location.reload();
+            //         }, 1000);
+            //     }else{
+            //         Swal.fire(
+            //             'Data gagal di rancangan!',
+            //             '',
+            //             'error'
+            //         );
+            //         setTimeout(() => {
+            //             location.reload();
+            //         }, 1000);
+            //     }
+            // });
         });
-    }   
+    }
     function batal() {
         Swal.fire({
             title: "Apakah anda yakin?",

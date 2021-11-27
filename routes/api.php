@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProduksiController;
+use App\Http\Controllers\SparepartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -237,6 +238,22 @@ Route::prefix('/spr')->group(function () {
     Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
     Route::get('/data/{id}', [App\Http\Controllers\SparepartController::class, 'getId']);
     Route::delete('/test', [App\Http\Controllers\SparepartController::class, 'deleteImage']);
+});
+
+Route::prefix('/gk')->group(function() {
+    Route::get('/his-spr/{id}', [SparepartController::class, 'history_spr']);
+    Route::get('/unit', [SparepartController::class, 'get_unit']);
+    Route::get('/his-unit/{id}', [SparepartController::class, 'history_unit']);
+
+    Route::post('/draft-tf', [SparepartController::class, 'get_draft_tf']);
+    Route::get('/noseri/{id}', [SparepartController::class, 'headerSeri']);
+
+    // history trx
+    Route::prefix('/transaksi')->group(function () {
+        Route::post('/by-product', [SparepartController::class, 'history_by_produk']);
+        Route::post('/all', [SparepartController::class, 'historyAll']);
+        Route::get('/noseri/{id}', [SparepartController::class, 'get_noseri_history']);
+    });
 });
 
 Route::prefix('/noseri')->group(function () {

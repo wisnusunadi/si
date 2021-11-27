@@ -33,7 +33,7 @@
     top: 0;
     z-index: 30;
     }
-    
+
 </style>
 <section class="content-header">
     <div class="container-fluid">
@@ -53,6 +53,7 @@
                         </div>
                         <div class="form-group col">
                             <label for="dari">Dari</label>
+                            <input type="hidden" name="dari" value="">
                             <select class="form-control dari" name="dari" disabled>
                                 <option value="Divisi IT">Divisi IT</option>
                                 <option value="Divisi QC">Divisi QC</option>
@@ -370,7 +371,7 @@
     });
     $('.dari').select2({});
 
-    function terima() { 
+    function terima() {
         Swal.fire({
             title: "Apakah anda yakin?",
             text: "Data yang sudah di terima tidak dapat diubah!",
@@ -418,7 +419,7 @@
             }
         });
     }
-    function batal() { 
+    function batal() {
         Swal.fire({
             title: "Apakah anda yakin?",
             text: "Data yang sudah di batalkan tidak dapat dikembalikan!",

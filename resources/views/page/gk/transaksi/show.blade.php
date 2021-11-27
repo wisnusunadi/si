@@ -65,6 +65,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
+
                 <div class="card mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
@@ -92,6 +93,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">

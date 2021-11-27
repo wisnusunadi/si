@@ -99,10 +99,10 @@
                                             <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Jenis Produk</label>
-                                                    <select name="" id="" class="form-control">
-                                                        <option value="">All</option>
-                                                        <option value="">Sparepart</option>
-                                                        <option value="">Unit</option>
+                                                    <select name="" id="jenis" class="form-control">
+                                                        <option value="0">All</option>
+                                                        <option value="1">Sparepart</option>
+                                                        <option value="2">Unit</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -184,7 +184,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                <input class="form-check-input" type="checkbox" value="0" id="jenis1" />
                                                 <label class="form-check-label" for="jenis1">
                                                     All
                                                 </label>
@@ -192,7 +192,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                <input class="form-check-input" type="checkbox" value="1" id="jenis1" />
                                                 <label class="form-check-label" for="jenis1">
                                                     Sparepart
                                                 </label>
@@ -200,7 +200,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
+                                                <input class="form-check-input" type="checkbox" value="2" id="jenis1" />
                                                 <label class="form-check-label" for="jenis2">
                                                     Unit
                                                 </label>
@@ -305,28 +305,67 @@
     }
 
     $(document).ready(function () {
-        $('.pertanggal').dataTable({
+        $('.pertanggal').DataTable({
+            destroy: true,
             "lengthChange": false,
             "searching": false,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/gk/transaksi/all",
+                type: "post",
+                // data: function(d) {
+                //     d.jenis = $('#jenis').val()
+                // }
+            },
+            columns: [
+                {data: 'tanggal'},
+                {data: 'divisi'},
+                {data: 'jenis'},
+                {data: 'produk'},
+                {data: 'unitt'},
+                {data: 'jumlah'},
+                {data: 'tujuan'},
+                {data: 'aksi'},
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $('#gudang-barang').dataTable({
+        $('#gudang-barang').DataTable({
+            destroy: true,
             "lengthChange": false,
             "searching": false,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/gk/transaksi/by-product",
+                type: "post",
+
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'kode'},
+                {data: 'produk'},
+                {data: 'jenis'},
+                {data: 'aksi'},
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+
+        // $('#jenis').change(function() {
+        //     $('.pertanggal').dataTable().draw();
+        // })
         $('.add-produk').dataTable({
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
@@ -338,12 +377,33 @@
         $(document).on("click", "#produk-tab", function () {
             $('.produk-show').addClass('hidden-product');
         });
+
+    });
+
+    $(document).on('click', '.detailModal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+
         $('.table-seri').dataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/gk/transaksi/noseri/" + id,
+            },
+            columns: [
+                {data: 'noser'},
+                {data: 'rusak'},
+                {data: 'tingkat'},
+                {data: 'layout'},
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-    });
+
+        detailtanggal();
+    })
 
     function detailProdukModal() {
         $('.produk-show').removeClass('hidden-product');

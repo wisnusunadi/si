@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\SparepartController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -141,14 +142,14 @@ Route::get('/test/{name?}', function ($name = null) {
 Route::middleware('auth')->prefix('/gk')->group(function () {
     Route::view('/dashboard', 'page.gk.dashboard');
     Route::view('/gudang', 'page.gk.gudang.index');
-    Route::view('/gudang/sparepart/1', 'page.gk.gudang.sparepartEdit');
-    Route::view('/gudang/unit/1', 'page.gk.gudang.unitEdit');
+    Route::get('/gudang/sparepart/{id}', [SparepartController::class, 'detail_spr']);
+    Route::get('/gudang/unit/{id}', [SparepartController::class, 'detail_unit']);
     Route::view('/terimaProduk', 'page.gk.terima.index');
     Route::view('/terimaProduk/1', 'page.gk.terima.edit');
     Route::view('/transfer', 'page.gk.transfer.index');
-    Route::view('/transfer/1', 'page.gk.transfer.edit');
+    Route::get('/transfer/{id}', [SparepartController::class, 'edit_tf']);
     Route::view('/transaksi', 'page.gk.transaksi.index');
-    Route::view('/transaksi/1', 'page.gk.transaksi.show');
+    Route::get('/transaksi/{id}', [SparepartController::class, 'detail_trx']);
 });
 
 Route::middleware(['auth'])->prefix('/direksi')->group(function () {
