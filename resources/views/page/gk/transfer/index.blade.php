@@ -275,7 +275,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary seri_spr" id="btnSpr">Simpan</button>
             </div>
         </div>
     </div>
@@ -428,12 +428,17 @@
 <script>
     document.getElementById('datePicker').valueAsDate = new Date();
     var i = 0;
+    var k = 0;
+    var ii = 0;
+    var kk = 0;
     function addSparepart(x) {
+
         $('.modalAddSparepart').modal('show');
         $('.scan-produk1').DataTable().destroy();
         $('.scan-produk1 tbody').empty();
         for (let index = 0; index < x; index++) {
-           $('.scan-produk1 tbody').append('<tr><td><input type="text" class="form-control"></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+            ii++;
+           $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri['+i+']['+ii+']" class="form-control seri_spr"></td><td><input type="text" name="remark['+i+']['+ii+']" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
         }
         $('.scan-produk1').DataTable({
             "ordering": false,
@@ -478,15 +483,41 @@
     })
 
     $(document).on('click','.add_sparepart', function () {
+        $.ajax({
+            url: '/api/gk/sel-spare',
+            type: 'POST',
+            dataType: 'json',
+            success: function(res) {
+                // ii++;
+                console.log(res);
+                $.each(res, function(key, value) {
+                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    $(".produk").append('<option value="'+value.id+'">'+value.nama+'</option');
+                });
+            }
+        });
         i++;
-        let table_sparepart = '<tr><td><select name="sparepart_id['+i+']" id="sparepart_id" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty['+i+']" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_sparepart = '<tr id="'+i+'"><td><select name="sparepart_id['+i+']" id="sparepart_id'+i+'" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr['+i+']" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
         $('.produk').select2();
         $('.unit').select2();
     });
     $(document).on('click','.add_unit', function () {
-        i++;
-        let table_unit = '<tr><td><select name="gdg_barang_jadi_id['+i+']" id="gdg_barang_jadi_id" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="qty" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        $.ajax({
+            url: '/api/gbj/sel-gbj',
+            type: 'get',
+            dataType: 'json',
+            success: function(res) {
+                // ii++;
+                console.log(res);
+                $.each(res, function(key, value) {
+                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    $(".produkk").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
+                });
+            }
+        });
+        k++;
+        let table_unit = '<tr id="'+k+'"><td><select name="gbj_id['+k+']" id="gbj_id'+k+'" class="form-control produkk"></td><td><input type="number" name="qty_unit['+k+']" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('.produk').select2();
     });
@@ -553,6 +584,8 @@
             console.log(out);
             console.log(to);
             console.log(tujuan);
+
+
             // Swal.fire({
             //     title: "Apakah anda yakin?",
             //     text: "Data yang sudah di transfer tidak dapat diubah!",
@@ -583,6 +616,25 @@
             // });
         });
     }
+
+    $(document).on('click', '#btnSpr', function(e) {
+        console.log('ok');
+
+        const seri = [];
+        const rusak = [];
+
+        $('input[name^="noseri"]').each(function() {
+            seri.push($(this).val());
+        });
+
+        $('input[name^="remark"]').each(function() {
+            seri.push($(this).val());
+        });
+
+        console.log(seri);
+    });
+
+
     function modalRancang() {
         $('.modal_transfer').modal('show');
         $('.list-group').children().remove();
@@ -590,14 +642,61 @@
         $(document).on('click', '.remove', function () {
             $(this).parent().parent().remove();
         });
+
         $(document).on('click', '.simpan', function () {
             let out = $('#datePicker').val();
             let to = $('.dari').val();
             let tujuan = $('#tujuan_draft').val();
+            let seri1 = $('.seri_spr').val();
 
             console.log(out);
             console.log(to);
             console.log(tujuan);
+
+            const spr = [];
+            const jml = [];
+            const seri_spr = [];
+            const unit = [];
+            const jum = [];
+
+            $('select[name^="sparepart_id"]').each(function() {
+                spr.push($(this).val());
+            });
+
+            $('input[name^="qty_spr"]').each(function() {
+                jml.push($(this).val());
+            });
+
+            // $('input[name^="noseri"]').each(function() {
+            //     spr.push(seri_spr.push(seri1));
+            // });
+
+            $('select[name^="gbj_id"]').each(function() {
+                unit.push($(this).val());
+            });
+
+            $('input[name^="qty_unit"]').each(function() {
+                jum.push($(this).val());
+            });
+
+            $.ajax({
+                url: "/api/gk/out-draft",
+                type: "post",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    date_out : out,
+                    ke: to,
+                    deskripsi : tujuan,
+                    sparepart_id : spr,
+                    qty_spr: jml,
+                    gbj_id : unit,
+                    qty_unit: jum,
+                    // x: ser1,
+                },
+                success: function(res) {
+                    console.log(res);
+                },
+            })
             // Swal.fire({
             //     title: "Apakah anda yakin?",
             //     text: "Data yang sudah di rancangan tidak dapat diubah!",

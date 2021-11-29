@@ -21,6 +21,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Alert;
+use App\Models\SparepartGudang;
 
 class MasterController extends Controller
 {
@@ -54,7 +55,7 @@ class MasterController extends Controller
                       Detail
                     </button>
                 </a>';
-                $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">                         
+                $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
                         <button class="dropdown-item" type="button" >
                         <i class="fas fa-pencil-alt"></i>
                         Edit
@@ -472,5 +473,11 @@ class MasterController extends Controller
             ->get();
 
         echo json_encode($data);
+    }
+
+    function select_sparepart()
+    {
+        $data = SparepartGudang::all();
+        return response()->json($data);
     }
 }

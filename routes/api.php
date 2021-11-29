@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MasterController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
 use Illuminate\Http\Request;
@@ -250,6 +251,12 @@ Route::prefix('/gk')->group(function() {
 
     Route::post('/draft-tf', [SparepartController::class, 'get_draft_tf']);
     Route::get('/noseri/{id}', [SparepartController::class, 'headerSeri']);
+
+    // select
+    Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
+
+    // store
+    Route::post('/out-draft', [SparepartController::class, 'transfer_by_draft']);
 
     // history trx
     Route::prefix('/transaksi')->group(function () {
