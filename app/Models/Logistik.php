@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Logistik extends Model
 {
     protected $table = 'logistik';
-    protected $fillable = ['ekspedisi_id', 'nosurat', 'tglkirim', 'nama_pengirim', 'no_kendaraan'];
+    protected $fillable = ['ekspedisi_id', 'nosurat', 'tgl_kirim', 'nama_pengirim'];
 
     public function Ekspedisi()
     {
