@@ -201,19 +201,19 @@ class QcController extends Controller
                         $hari = $to->diffInDays($from);
 
                         if ($hari > 7) {
-                            return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                            return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
                         } else if ($hari > 0 && $hari <= 7) {
-                            return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                            return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                         } else {
-                            return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                            return '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                         }
                     } elseif ($tgl_sekarang == $tgl_parameter) {
-                        return   '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                        return   '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                     } else {
                         $to = Carbon::now();
                         $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
                         $hari = $to->diffInDays($from);
-                        return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                     }
                 } else {
                     return '';
@@ -383,28 +383,92 @@ class QcController extends Controller
                     $hari = $to->diffInDays($from);
 
                     if ($hari > 7) {
-                        $param = ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                        $param = ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
                     } else if ($hari > 0 && $hari <= 7) {
-                        $param = ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                        $param = ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                     } else {
-                        $param = '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                        $param = '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                     }
                 } elseif ($tgl_sekarang == $tgl_parameter) {
-                    $param =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                    $param =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                 } else {
                     $to = Carbon::now();
                     $from = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status);
                     $hari = $to->diffInDays($from);
-                    $param =  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                    $param =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                 }
             }
             return view('page.qc.so.detail_ekatalog', ['data' => $data, 'detail_id' => $detail_id, 'param' => $param, 'status' => $status]);
         } elseif ($value == 'spa') {
             $data = Spa::where('id', $id)->get();
-            return view('page.qc.so.detail_spa', ['data' => $data]);
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('spa.id', $id);
+            })->get();
+
+            $jumlah = 0;
+            $z = array();
+            $detail_id = array();
+
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+                $z[] = $d->jumlah;
+                foreach ($d->penjualanproduk->produk as $l) {
+                    $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                }
+            }
+
+            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_id)->get();
+            $y = array();
+            foreach ($detail_pesanan_produk as $d) {
+                $y[] = $d->id;
+            }
+            $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
+
+            if ($jumlah == $jumlah_seri) {
+                $status =  '<span class="badge green-text">Selesai</span>';
+            } else {
+                if ($jumlah_seri == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                }
+            }
+            return view('page.qc.so.detail_spa', ['data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
         } else {
             $data = Spb::where('id', $id)->get();
-            return view('page.qc.so.detail_spb', ['data' => $data]);
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
+                $q->where('spb.id', $id);
+            })->get();
+
+            $jumlah = 0;
+            $z = array();
+            $detail_id = array();
+
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+                $z[] = $d->jumlah;
+                foreach ($d->penjualanproduk->produk as $l) {
+                    $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                }
+            }
+
+            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_id)->get();
+            $y = array();
+            foreach ($detail_pesanan_produk as $d) {
+                $y[] = $d->id;
+            }
+            $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
+
+            if ($jumlah == $jumlah_seri) {
+                $status =  '<span class="badge green-text">Selesai</span>';
+            } else {
+                if ($jumlah_seri == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                }
+            }
+            return view('page.qc.so.detail_spb', ['data' => $data, 'detail_id' => $detail_id, 'status' => $status]);
         }
     }
 
@@ -425,20 +489,34 @@ class QcController extends Controller
         $array_seri = explode(',', $replace_array_seri);
 
         //  return response()->json(['data' =>  count($array_seri)]);
+
+        $bool = true;
         for ($i = 0; $i < count($array_seri); $i++) {
             $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
             if ($check == null) {
-                NoseriDetailPesanan::create([
+                $c = NoseriDetailPesanan::create([
                     'detail_pesanan_produk_id' => $data->id,
                     't_tfbj_noseri_id' => $array_seri[$i],
                     'status' => $request->cek,
                     'tgl_uji' => $request->tanggal_uji,
                 ]);
+                if (!$c) {
+                    $bool = false;
+                }
             } else {
                 $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
                 $NoseriDetailPesanan->status = $request->cek;
                 $NoseriDetailPesanan->tgl_uji = $request->tanggal_uji;
-                $NoseriDetailPesanan->save();
+                $u = $NoseriDetailPesanan->save();
+                if (!$u) {
+                    $bool = false;
+                }
+            }
+
+            if ($bool == true) {
+                return response()->json(['data' =>  'success']);
+            } else {
+                return response()->json(['data' =>  'error']);
             }
         }
     }
@@ -484,19 +562,19 @@ class QcController extends Controller
                             $hari = $to->diffInDays($from);
 
                             if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                                return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
                             } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                             } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                                return '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                             }
                         } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                         } else {
                             $to = Carbon::now();
                             $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
                             $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                            return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
                         return '';
@@ -570,19 +648,19 @@ class QcController extends Controller
                             $hari = $to->diffInDays($from);
 
                             if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                                return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
                             } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                             } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                                return '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                             }
                         } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                         } else {
                             $to = Carbon::now();
                             $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
                             $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                            return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
                         return '';
@@ -637,19 +715,19 @@ class QcController extends Controller
                             $hari = $to->diffInDays($from);
 
                             if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                                return ' <div class="info">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
                             } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                             } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                                return '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                             }
                         } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                         } else {
                             $to = Carbon::now();
                             $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
                             $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                            return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
                         return '';
@@ -708,6 +786,97 @@ class QcController extends Controller
     public function laporan_outgoing(Request $request)
     {
         return Excel::download(new LaporanQcOutgoing($request->produk_id ?? '', $request->no_so ?? '', $request->hasil_uji  ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_qc_outgoing.xlsx');
+    }
+
+    public function get_data_laporan_qc($produk, $no_so, $hasil, $tgl_awal, $tgl_akhir)
+    {
+        $res = "";
+        $so = "";
+        if ($no_so != "0") {
+            $so = str_replace("_", "/", $no_so);
+        } else {
+            $so = $no_so;
+        }
+
+        if ($produk != "0" && $so == '0') {
+            if ($hasil != "semua") {
+                $res = NoseriDetailPesanan::where('status', $hasil)
+                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                        $q->where('penjualan_produk_id', $produk);
+                    })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                        $q->where('penjualan_produk_id', $produk);
+                    })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+            }
+        } else if ($produk == "0" && $so != '0') {
+            if ($hasil != "semua") {
+                $res = NoseriDetailPesanan::where('status', $hasil)
+                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
+                        $q->where('so', $so);
+                    })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
+                        $q->where('so', $so);
+                    })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+            }
+        } else if ($produk != "0" && $so != '0') {
+            if ($hasil != "semua") {
+                $res = NoseriDetailPesanan::where('status', $hasil)
+                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                        $q->where('penjualan_produk_id', $produk);
+                    })
+                    ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
+                        $q->where('so', $so);
+                    })
+                    ->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                        $q->where('penjualan_produk_id', $produk);
+                    })
+                    ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
+                        $q->where('so', $so);
+                    })
+                    ->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+            }
+        } else if ($produk == "0" && $so == '0') {
+            if ($hasil != "semua") {
+                $res = NoseriDetailPesanan::where('status', $hasil)
+                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+            }
+        }
+
+        return datatables()->of($res)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
+            })
+            ->addColumn('produk', function ($data) {
+                return $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama;
+            })
+            ->addColumn('noseri', function ($data) {
+                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            })
+            ->addColumn('tgl_uji', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_uji)->format('d-m-Y');
+            })
+            ->addColumn('status', function ($data) {
+                if ($data->status == "ok") {
+                    return '<div><i class="fas fa-check-circle" style="color:green;"></i></div>';
+                } else if ($data->status == "nok") {
+                    return '<div><i class="fas fa-times-circle" style="color:red;"></i></div>';
+                }
+            })
+            ->rawColumns(['status'])
+            ->make(true);
     }
 
     public function getHariBatasKontrak($value, $limit)

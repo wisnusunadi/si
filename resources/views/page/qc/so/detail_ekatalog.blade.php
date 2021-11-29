@@ -66,132 +66,133 @@
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4>Info Penjualan </h4>
-                <?php $item = array(); ?>
-                @foreach($data as $d)
-                <h4>Info Ekatalog</h4>
-                <div class="row">
-                    <div class="col-5">
-                        <div class="margin">
-                            <div><small class="text-muted">Distributor & Instansi</small></div>
-                        </div>
-                        <div class="margin">
-                            <b id="distributor">{{$d->customer->nama}}</b><small> (Distributor)</small>
-                        </div>
-                        <div class="margin">
-                            <div><b id="no_akn">{{$d->satuan}}</b></div>
-                            <small>({{$d->instansi}})</small>
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="margin">
-                            <div><small class="text-muted">No AKN</small></div>
-                            <div><b id="no_akn">{{$d->no_paket}}</b></div>
-                        </div>
-                        <div class="margin">
-                            <div><small class="text-muted">No SO</small></div>
-                            <div><b id="no_so">
-                                    {{$d->pesanan->so}}</b></div>
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="margin">
-                            <div><small class="text-muted">No PO</small></div>
-                            <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
-                        </div>
-                        <div class="margin">
-                            <div><small class="text-muted">Batas Uji</small></div>
-                            <div class="urgent"><b>{!!$param!!}</b></div>
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="margin">
-                            <div><small class="text-muted">Status</small></div>
-                            <div>{!!$status!!}</div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<div class="row">
-    <div class="col-7">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        <span class="float-right filter">
-                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-filter"></i> Filter
-                            </button>
-                            <div class="dropdown-menu">
-                                <div class="px-3 py-3">
-                                    <div class="form-group">
-                                        <label for="jenis_penjualan">Status</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                            <label class="form-check-label" for="status1">
-                                                Selesai Diperiksa
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                            <label class="form-check-label" for="status2">
-                                                Sebagian Diperiksa
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                            <label class="form-check-label" for="status3">
-                                                Belum Diperiksa
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <span class="float-right">
-                                            <button class="btn btn-primary">
-                                                Cari
-                                            </button>
-                                        </span>
-                                    </div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Info Penjualan </h4>
+                        <?php $item = array(); ?>
+                        @foreach($data as $d)
+                        <h4>Info Ekatalog</h4>
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="margin">
+                                    <div><small class="text-muted">Distributor & Instansi</small></div>
+                                </div>
+                                <div class="margin">
+                                    <b id="distributor">{{$d->customer->nama}}</b><small> (Distributor)</small>
+                                </div>
+                                <div class="margin">
+                                    <div><b id="no_akn">{{$d->satuan}}</b></div>
+                                    <small>({{$d->instansi}})</small>
                                 </div>
                             </div>
-                        </span>
+                            <div class="col-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">No AKN</small></div>
+                                    <div><b id="no_akn">{{$d->no_paket}}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">No SO</small></div>
+                                    <div><b id="no_so">
+                                            {{$d->pesanan->so}}</b></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">No PO</small></div>
+                                    <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Batas Uji</small></div>
+                                    <div class="urgent"><b>{!!$param!!}</b></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">Status</small></div>
+                                    <div>{!!$status!!}</div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-7">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="float-right filter">
+                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <div class="px-3 py-3">
+                                            <div class="form-group">
+                                                <label for="jenis_penjualan">Status</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
+                                                    <label class="form-check-label" for="status1">
+                                                        Selesai Diperiksa
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
+                                                    <label class="form-check-label" for="status2">
+                                                        Sebagian Diperiksa
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
+                                                    <label class="form-check-label" for="status3">
+                                                        Belum Diperiksa
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="float-right">
+                                                    <button class="btn btn-primary">
+                                                        Cari
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <table class="table" style="text-align:center;" id="showtable">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2">No</th>
-                                        <th rowspan="2">Nama Produk</th>
-                                        <th rowspan="2">Jumlah</th>
-                                        <th colspan="2">Hasil</th>
-                                        <th rowspan="2">Aksi</th>
-                                    </tr>
-                                    <tr>
-                                        <th><i class="fas fa-check ok"></i></th>
-                                        <th><i class="fas fa-times nok"></i></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- <tr>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table" style="text-align:center;" id="showtable">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">No</th>
+                                                <th rowspan="2">Nama Produk</th>
+                                                <th rowspan="2">Jumlah</th>
+                                                <th colspan="2">Hasil</th>
+                                                <th rowspan="2">Aksi</th>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="fas fa-check ok"></i></th>
+                                                <th><i class="fas fa-times nok"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- <tr>
                                         <td>1</td>
                                         <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
                                         <td>2</td>
@@ -215,59 +216,59 @@
                                         <td>2</td>
                                         <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
                                     </tr> -->
-                                </tbody>
-                            </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="col-5 hide" id="noseridetail">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        <span class="float-right filter">
-                            <!-- <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="cekbrg" disabled>
+            <div class="col-5 hide" id="noseridetail">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="float-right filter">
+                                    <!-- <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="cekbrg" disabled>
                                 <i class="fas fa-clipboard-check"></i> Cek Barang
                             </button>
                             <div class="dropdown-menu">
                                 <button class="dropdown-item" type="button"><i class="fas fa-check-circle ok"></i> Hasil OK</button>
                                 <button class="dropdown-item" type="button"><i class="fas fa-times-circle nok"></i> Hasil Tidak OK</button>
                             </div> -->
-                            <!-- <button class="btn btn-outline-info" id="cekbrg" disabled>
+                                    <!-- <button class="btn btn-outline-info" id="cekbrg" disabled>
                                 <i class="fas fa-clipboard-check"></i> Cek Barang
                             </button> -->
 
-                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
-                                <button class="btn btn-warning" id="cekbrg" disabled="true">
-                                    <i class="fas fa-pencil-alt"></i> Cek Barang
-                                </button>
-                            </a>
-                        </span>
-                    </div>
-                </div>
+                                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                                        <button class="btn btn-warning" id="cekbrg" disabled="true">
+                                            <i class="fas fa-pencil-alt"></i> Cek Barang
+                                        </button>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <table class="table" style="text-align:center; width:100%" id="noseritable">
-                                <thead>
-                                    <th>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
-                                            <label class="form-check-label" for="check_all">
-                                            </label>
-                                        </div>
-                                    </th>
-                                    <th>No Seri</th>
-                                    <th>Tanggal Uji</th>
-                                    <th>Hasil</th>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table" style="text-align:center; width:100%" id="noseritable">
+                                        <thead>
+                                            <th>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
+                                                    <label class="form-check-label" for="check_all">
+                                                    </label>
+                                                </div>
+                                            </th>
+                                            <th>No Seri</th>
+                                            <th>Tanggal Uji</th>
+                                            <th>Hasil</th>
 
-                                </thead>
-                                <tbody>
-                                    <!-- <tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- <tr>
                                         <td>
                                             <div class="form-check">
                                                 <input class="form-check-input ok" type="checkbox" value="" id="" disabled />
@@ -300,30 +301,32 @@
                                         <td><i class="fas fa-times-circle nok"></i></td>
                                         <td></td>
                                     </tr> -->
-                                </tbody>
-                            </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header bg-warning">
+                            <h4 class="modal-title">Edit</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="edit">
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-warning">
-                    <h4 class="modal-title">Edit</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="edit">
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 @stop
 @section('adminlte_js')
 <script>
@@ -390,6 +393,39 @@
             $('#noseridetail').removeClass('hide');
         });
 
+        $(document).on('submit', '#form-pengujian-update', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-pengujian-update').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan edit data',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#noseritable').DataTable().ajax.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan edit data',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-customer-update').serialize());
+                }
+            });
+            return false;
+        });
 
         var noseritable = $('#noseritable').DataTable({
             processing: true,
