@@ -151,7 +151,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>JNE</td>
                                                 <td>Jl Jaksa Agung Suprapto No. 15 Banyuurip, Surabaya</td>
@@ -258,7 +258,7 @@
                                                         </a>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -288,76 +288,59 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#showtable').DataTable();
 
-        function eks() {
-            var showtable = $('#showtable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/customer/data/' + 0,
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/ekspedisi/data/',
 
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    }
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'align-center nowrap-text',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'nama',
-                        className: 'nowrap-text',
-                    },
-                    {
-                        data: 'alamat',
-                        className: 'minimizechar',
-                        orderable: false,
-                    },
-                    {
-                        data: "prov",
-                        className: 'align-center nowrap-text',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'email',
-                        className: 'align-center nowrap-text',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'telp',
-                        className: 'align-center nowrap-text',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'npwp',
-                        className: 'align-center nowrap-text',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'npwp',
-                        className: 'minimizechar',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'button',
-                        className: 'align-center nowrap-text',
-                        orderable: false,
-                        searchable: false
-                    }
-                ]
-            });
-        }
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'align-center nowrap-text',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'nama',
+
+            }, {
+                data: 'alamat',
+
+            }, {
+                data: 'email',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'telp',
+                orderable: false,
+                searchable: false
+
+            }, {
+                data: 'via',
+            }, {
+                data: 'jurusan',
+                orderable: false,
+                searchable: false
+
+            }, {
+                data: 'ket',
+                orderable: false,
+                searchable: false
+
+            }, {
+                data: 'button',
+                orderable: false,
+                searchable: false
+
+            }]
+        });
 
 
 
@@ -365,8 +348,9 @@
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
+            console.log(id);
             $.ajax({
-                url: "/logistik/ekspedisi/edit/1",
+                url: "/logistik/ekspedisi/edit/" + id,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -583,18 +567,28 @@
         }
 
         $('#filter').submit(function() {
-            var values = [];
-            $("input:checked").each(function() {
-                values.push($(this).val());
+            var jalur = [];
+            var jurusan = [];
+            $("input[name=jalur]:checked").each(function() {
+                jalur.push($(this).val());
             });
-            if (values != 0) {
-                var x = values;
+            $("input[name=jurusan]:checked").each(function() {
+                jurusan.push($(this).val());
+            });
+            if (jurusan != 0) {
+                var y = jurusan;
+
+            } else {
+                var y = ['kosong']
+            }
+            if (jalur != 0) {
+                var x = jalur;
 
             } else {
                 var x = ['kosong']
             }
-            console.log(x);
-            $('#showtable').DataTable().ajax.url(' /api/customer/data/' + x).load();
+            console.log(y);
+
             return false;
         });
     })

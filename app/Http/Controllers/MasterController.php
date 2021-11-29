@@ -22,10 +22,43 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Alert;
+use App\Models\Ekspedisi;
 
 class MasterController extends Controller
 {
     //Get Data Table
+    public function get_data_ekspedisi()
+    {
+        $data = Ekspedisi::select();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jurusan', function ($data) {
+                return implode(',', $data->provinsi->pluck('nama')->toArray());
+            })
+            ->addColumn('via', function ($data) {
+                return implode(',', $data->jalurekspedisi->pluck('nama')->toArray());
+            })
+            ->addColumn('button', function ($data) {
+                return '
+            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a href="' . route('logistik.ekspedisi.detail', ['id' => $data->id]) . '">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-search"></i>
+                        Detail
+                    </button>
+                </a>
+                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
+                    </button>
+                </a>
+            </div>';
+            })
+            ->rawColumns(['button', 'jurusan', 'via'])
+            ->make(true);
+    }
     public function get_data_produk()
     {
         return datatables()->of(Produk::with('KelompokProduk'))->toJson();
@@ -237,6 +270,37 @@ class MasterController extends Controller
                 ->make(true);
     }
     //Create
+    public function create_ekspedisi(Request $request)
+    {
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'nama' => 'required',
+        //         'jalur' => 'required',
+        //         'tipe' => 'required|unique:produk',
+
+        //     ],
+        //     [
+        //         'nama.required' => 'Kelompok Produk harus di isi',
+        //         'jalur.required' => 'Merk Produk harus di isi',
+        //         'tipe.required' => 'Tipe Produk harus di isi',
+        //     ]
+        // );
+        $ekspedisi =  Ekspedisi::create([
+            'nama' => $request->nama_ekspedisi,
+            'alamat' => $request->alamat,
+            'email' => $request->email,
+            'telp' => $request->telepon,
+            'ket' => $request->keterangan,
+        ]);
+        $ekspedisi->JalurEkspedisi()->attach($request->jalur);
+
+        if ($request->jurusan == 'provinsi') {
+            $ekspedisi->Provinsi()->attach($request->provinsi);
+        } else {
+            $ekspedisi->Provinsi()->attach(35);
+        }
+    }
     public function create_produk(Request $request)
     {
         $this->validate(
@@ -245,7 +309,6 @@ class MasterController extends Controller
                 'kelompok_produk_id' => 'required',
                 'merk' => 'required',
                 'tipe' => 'required|unique:produk',
-
             ],
             [
                 'kelompok_produk_id.required' => 'Kelompok Produk harus di isi',
@@ -451,11 +514,15 @@ class MasterController extends Controller
     }
 
     //Show Modal
-
     public function update_customer_modal($id)
     {
         $customer = Customer::find($id);
         return view("page.penjualan.customer.edit", ['customer' => $customer]);
+    }
+    public function update_ekspedisi_modal($id)
+    {
+        $ekspedisi = Ekspedisi::where('id', $id)->get();
+        return view("page.logistik.ekspedisi.edit", ['ekspedisi' => $ekspedisi]);
     }
 
 
@@ -466,7 +533,11 @@ class MasterController extends Controller
         $customer = Customer::find($id);
         return view('page.penjualan.customer.detail', ['customer' => $customer]);
     }
-
+    public function detail_ekspedisi($id)
+    {
+        $ekspedisi = Ekspedisi::where('id', $id)->get();
+        return view('page.logistik.ekspedisi.detail', ['ekspedisi' => $ekspedisi]);
+    }
 
     //Select
     public function select_produk(Request $request)
@@ -510,6 +581,12 @@ class MasterController extends Controller
         $data = PenjualanProduk::with('Produk.GudangBarangJadi')->where('id', $id)
             ->get();
 
+        echo json_encode($data);
+    }
+    public function select_ekspedisi(Request $request)
+    {
+        $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
 }

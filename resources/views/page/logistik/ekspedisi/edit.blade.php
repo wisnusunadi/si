@@ -22,12 +22,13 @@
                         </button>
                     </div>
                     @endif
+                    @foreach($ekspedisi as $e)
                     <div class="row">
                         <div class="col-11">
                             <div class="form-group row">
                                 <label for="nama_ekspedisi" class="col-4 col-form-label" style="text-align:right;">Nama Ekspedisi</label>
                                 <div class="col-6">
-                                    <input type="text" class="form-control @error('nama_ekspedisi') is-invalid @enderror" placeholder="Masukkan Nama Ekspedisi" id="nama_ekspedisi" name="nama_ekspedisi" />
+                                    <input type="text" class="form-control @error('nama_ekspedisi') is-invalid @enderror" placeholder="Masukkan Nama Ekspedisi" id="nama_ekspedisi" name="nama_ekspedisi" value="{{$e->nama}}" />
                                     <div class="invalid-feedback" id="msgnama_ekspedisi">
                                     </div>
                                 </div>
@@ -35,7 +36,7 @@
                             <div class="form-group row">
                                 <label for="alamat" class="col-4 col-form-label" style="text-align:right;">Alamat</label>
                                 <div class="col-8">
-                                    <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" />
+                                    <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" value="{{$e->alamat}}" />
                                     <div class="invalid-feedback" id="msgalamat">
                                     </div>
                                 </div>
@@ -43,7 +44,7 @@
                             <div class="form-group row">
                                 <label for="email" class="col-4 col-form-label" style="text-align:right;">Email</label>
                                 <div class="col-8">
-                                    <input type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
+                                    <input type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" value="{{$e->email}}" />
                                     <div class="invalid-feedback" id="msgemail">
                                     </div>
                                 </div>
@@ -51,7 +52,7 @@
                             <div class="form-group row">
                                 <label for="telepon" class="col-4 col-form-label" style="text-align:right;">No Telp</label>
                                 <div class="col-5">
-                                    <input type="text" class="form-control @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
+                                    <input type="text" class="form-control @error('telepon') is-invalid @enderror" placeholder="Masukkan Telepon" id="telepon" name="telepon" value="{{$e->telp}}" />
                                     <div class="invalid-feedback" id="msgtelepon">
                                     </div>
                                 </div>
@@ -136,6 +137,7 @@
                             </div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
                 <div class="card-footer"><span class="float-right filter"><button type="submit" class="btn btn-warning" id="btnsimpan">
                             Simpan
