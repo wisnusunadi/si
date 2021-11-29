@@ -20,22 +20,23 @@ class SparepartController extends Controller
     // get
     // produk spr
     function get() {
-        $spr = SparepartGudang::with('Spare', 'his')->limit(10)->get();
+        // $spr = SparepartGudang::with('Spare', 'his')->limit(10)->get();
+        $spr = GudangKarantinaDetail::with('sparepart.spare')->whereNotNull('sparepart_id')->get();
         return datatables()->of($spr)
             ->addColumn('kode', function($d) {
-                return $d->spare->kode;
+                return $d->sparepart->spare->kode;
             })
             ->addColumn('produk', function($d) {
-                return $d->spare->nama;
+                return $d->sparepart->nama;
             })
             ->addColumn('unit', function($d) {
                 return '-';
             })
             ->addColumn('jml', function($d) {
-                return $d->stok.' pcs';
+                return $d->sparepart->stok.' pcs';
             })
             ->addColumn('button', function($d) {
-                return '<a class="btn btn-outline-info" href="'.url('gk/gudang/sparepart/'.$d->id.'').'"><i
+                return '<a class="btn btn-outline-info" href="'.url('gk/gudang/sparepart/'.$d->sparepart_id.'').'"><i
                 class="far fa-eye"></i> Detail</a>';
             })
             ->rawColumns(['button'])
@@ -43,23 +44,24 @@ class SparepartController extends Controller
     }
     // produk unit
     function get_unit() {
-        $data = GudangBarangJadi::with('produk', 'satuan')->get();
+        // $data = GudangBarangJadi::with('produk', 'satuan')->get();
+        $data = GudangKarantinaDetail::with('units.produk')->whereNotNull('gbj_id')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
-                return $data->produk->nama . ' ' . $data->nama;
+                return $data->units->produk->nama . ' ' . $data->units->nama;
             })
             ->addColumn('kode_produk', function ($data) {
-                return $data->produk->product->kode . '' . $data->produk->kode;
+                return $data->units->produk->product->kode . '' . $data->units->produk->kode;
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->stok . ' ' . $data->satuan->nama;
+                return $data->qty_unit . ' ' . $data->units->satuan->nama;
             })
             ->addColumn('kelompok', function ($data) {
-                return $data->produk->KelompokProduk->nama;
+                return $data->units->produk->KelompokProduk->nama;
             })
             ->addColumn('button', function($d) {
-                return '<a class="btn btn-outline-info" href="'.url('gk/gudang/unit/'.$d->id.'').'"><i
+                return '<a class="btn btn-outline-info" href="'.url('gk/gudang/unit/'.$d->gbj_id.'').'"><i
                 class="far fa-eye"></i> Detail</a>';
             })
             ->rawColumns(['button'])
@@ -68,7 +70,7 @@ class SparepartController extends Controller
     // detail
     function detail_spr($id)
     {
-        $header = SparepartGudang::with('Spare', 'his')->where('sparepart_id', $id)->get();
+        $header = SparepartGudang::with('Spare', 'his')->where('id', $id)->get();
         return view('page.gk.gudang.sparepartEdit', compact('header'));
     }
 
@@ -115,7 +117,7 @@ class SparepartController extends Controller
                 return $d->noseri;
             })
             ->addColumn('layout', function($d) {
-                return '-';
+                return $d->detail->sparepart->Layout->ruang;
             })
             ->addColumn('remarks', function($d) {
                 if (empty($d->remark)) {
@@ -373,7 +375,7 @@ class SparepartController extends Controller
                 }
             })
             ->addColumn('aksi', function($d) {
-                return '<a class="btn btn-info" href="'.url('gk/transaksi/'.$d->id.'').'"><i
+                return '<a class="btn btn-info" href="'.url('gk/transaksi/'.$d->id.'').'" data-id="'.$d->id.'"><i
                     class="far fa-eye"></i> Detail</a>';
             })
             ->rawColumns(['aksi'])
@@ -381,7 +383,40 @@ class SparepartController extends Controller
     }
 
     function detail_trx($id) {
-        return view('page.gk.transaksi.show');
+        $d = GudangKarantinaDetail::find($id);
+        $did = $d->id;
+        return view('page.gk.transaksi.show', compact('did'));
+    }
+
+    function get_detail_id($id) {
+        $d = GudangKarantinaDetail::find($id);
+        if (empty($d->gbj_id)) {
+            $p = SparepartGudang::find($d->sparepart_id);
+            $res_p = [
+                'kode' => $p->spare->kode ? $p->spare->kode : '-',
+                'nama' => $p->spare->nama,
+                'desk' => $p->deskripsi,
+                'panjang' => $p->dim_p,
+                'lebar' => $p->dim_l,
+                'tinggi' => $p->dim_t,
+            ];
+        } else {
+            $p = GudangBarangJadi::find($d->gbj_id);
+            $res_p = [
+                'kode' => $p->produk->kode ? $p->produk->kode : '-',
+                'nama' => $p->produk->nama.' '.$p->nama,
+                'desk' => $p->deskripsi,
+                'panjang' => $p->dim_p,
+                'lebar' => $p->dim_l,
+                'tinggi' => $p->dim_t,
+            ];
+        }
+
+        return $res_p;
+    }
+
+    function get_trx($id) {
+        // $data = GudangKarantinaDetail::find($id);
     }
 
     // store
@@ -598,6 +633,381 @@ class SparepartController extends Controller
         }else{
             dd('File does not exists.');
         }
+    }
+
+    // dashboard
+    function stok34()
+    {
+        $data = GudangKarantinaDetail::with('units', 'sparepart')
+                ->whereBetween('qty_unit', [3,4])
+                ->orWhereBetween('qty_spr', [3,4])
+                ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('produk', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->nama;
+                } else {
+                    return $d->units->produk->nama.' '.$d->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->qty_unit)) {
+                    return $d->qty_spr.' Unit';
+                } else {
+                    return $d->qty_unit.' '.$d->units->satuan->nama;
+                }
+            })
+            ->make(true);
+    }
+
+    function stok510()
+    {
+        $data = GudangKarantinaDetail::with('units', 'sparepart')
+                ->whereBetween('qty_unit', [5,10])
+                ->orWhereBetween('qty_spr', [5,10])
+                ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('produk', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->nama;
+                } else {
+                    return $d->units->produk->nama.' '.$d->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->qty_unit)) {
+                    return $d->qty_spr.' Unit';
+                } else {
+                    return $d->qty_unit.' '.$d->units->satuan->nama;
+                }
+            })
+            ->make(true);
+    }
+
+    function stok10plus()
+    {
+        $data = GudangKarantinaDetail::with('units', 'sparepart')
+                ->where('qty_unit', '>', 10)
+                ->orWhere('qty_spr', '>', 10)
+                ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('produk', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->nama;
+                } else {
+                    return $d->units->produk->nama.' '.$d->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->qty_unit)) {
+                    return $d->qty_spr.' Unit';
+                } else {
+                    return $d->qty_unit.' '.$d->units->satuan->nama;
+                }
+            })
+            ->make(true);
+    }
+
+    function h_stok34()
+    {
+        $data = GudangKarantinaDetail::with('units', 'sparepart')
+                ->whereBetween('qty_unit', [3,4])
+                ->orWhereBetween('qty_spr', [3,4])
+                ->get();
+        return count($data);
+    }
+
+    function h_stok510()
+    {
+        $data = GudangKarantinaDetail::with('units', 'sparepart')
+        ->whereBetween('qty_unit', [5,10])
+        ->orWhereBetween('qty_spr', [5,10])
+        ->get();
+
+        return count($data);
+    }
+
+    function h_stok10plus()
+    {
+        $data = GudangKarantinaDetail::with('units', 'sparepart')
+        ->where('qty_unit', '>', 10)
+        ->orWhere('qty_spr', '>', 10)
+        ->get();
+
+        return count($data);
+    }
+
+    // in
+    function in36()
+    {
+        $data = GudangKarantinaDetail::whereHas('header', function ($q) {
+            $q->whereBetween('date_in', [Carbon::now()->subMonths(6), Carbon::now()->subMonths(3)]);
+        })->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('in', function($d) {
+                if (empty($d->header->date_in)) {
+                    return '-';
+                } else {
+                    return date('d-m-Y', strtotime($d->header->date_in));
+                }
+            })
+            ->addColumn('produk', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->nama;
+                } else {
+                    return $d->units->produk->nama.' '.$d->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->qty_unit)) {
+                    return $d->qty_spr.' Unit';
+                } else {
+                    return $d->qty_unit.' '.$d->units->satuan->nama;
+                }
+            })
+            ->make(true);
+    }
+
+    function in612()
+    {
+        $data = GudangKarantinaDetail::whereHas('header', function ($q) {
+            $q->whereBetween('date_in', [Carbon::now()->subMonths(12), Carbon::now()->subMonths(6)]);
+        })->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('in', function($d) {
+                if (empty($d->header->date_in)) {
+                    return '-';
+                } else {
+                    return date('d-m-Y', strtotime($d->header->date_in));
+                }
+            })
+            ->addColumn('produk', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->nama;
+                } else {
+                    return $d->units->produk->nama.' '.$d->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->qty_unit)) {
+                    return $d->qty_spr.' Unit';
+                } else {
+                    return $d->qty_unit.' '.$d->units->satuan->nama;
+                }
+            })
+            ->make(true);
+    }
+
+    function in1236()
+    {
+        $data = GudangKarantinaDetail::whereHas('header', function ($q) {
+            $q->whereBetween('date_in', [Carbon::now()->subYears(3), Carbon::now()->subYears(1)]);
+        })->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('in', function($d) {
+                if (empty($d->header->date_in)) {
+                    return '-';
+                } else {
+                    return date('d-m-Y', strtotime($d->header->date_in));
+                }
+            })
+            ->addColumn('produk', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->nama;
+                } else {
+                    return $d->units->produk->nama.' '.$d->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->qty_unit)) {
+                    return $d->qty_spr.' Unit';
+                } else {
+                    return $d->qty_unit.' '.$d->units->satuan->nama;
+                }
+            })
+            ->make(true);
+    }
+
+    function in36plus()
+    {
+        $data = GudangKarantinaDetail::whereHas('header', function ($q) {
+            $q->where('date_in', '<=', Carbon::now()->subYears(3));
+        })->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('in', function($d) {
+                if (empty($d->header->date_in)) {
+                    return '-';
+                } else {
+                    return date('d-m-Y', strtotime($d->header->date_in));
+                }
+            })
+            ->addColumn('produk', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->nama;
+                } else {
+                    return $d->units->produk->nama.' '.$d->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->qty_unit)) {
+                    return $d->qty_spr.' Unit';
+                } else {
+                    return $d->qty_unit.' '.$d->units->satuan->nama;
+                }
+            })
+            ->make(true);
+    }
+
+    function h_in36()
+    {
+        $data = GudangKarantinaDetail::whereHas('header', function ($q) {
+            $q->whereBetween('date_in', [Carbon::now()->subMonths(6), Carbon::now()->subMonths(3)]);
+        })->get();
+        return count($data);
+    }
+
+    function h_in612()
+    {
+        $data = GudangKarantinaDetail::whereHas('header', function ($q) {
+            $q->whereBetween('date_in', [Carbon::now()->subMonths(12), Carbon::now()->subMonths(6)]);
+        })->get();
+        return count($data);
+    }
+
+    function h_in1236()
+    {
+        $data = GudangKarantinaDetail::whereHas('header', function ($q) {
+            $q->whereBetween('date_in', [Carbon::now()->subYears(3), Carbon::now()->subYears(1)]);
+        })->get();
+        return count($data);
+    }
+
+    function h_in36plus()
+    {
+        $data = GudangKarantinaDetail::whereHas('header', function ($q) {
+            $q->where('date_in', '<=', Carbon::now()->subYears(3));
+        })->get();
+        return count($data);
+    }
+
+    function byLayout()
+    {
+        $data = GudangKarantinaDetail::with('units', 'sparepart')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('produk', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->nama;
+                } else {
+                    return $d->units->produk->nama.' '.$d->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->qty_unit)) {
+                    return $d->qty_spr.' Unit';
+                } else {
+                    return $d->qty_unit.' '.$d->units->satuan->nama;
+                }
+            })
+            ->addColumn('layout', function($d) {
+                if (empty($d->gbj_id)) {
+                    return $d->sparepart->Layout->ruang;
+                } else {
+                    return $d->units->layout->ruang;
+                }
+            })
+            ->make(true);
+    }
+
+    function byTingkat()
+    {
+    //     $data = GudangKarantinaDetail::with('noseri')->get();
+    //     return datatables()->of($data)
+    //         ->addIndexColumn()
+    //         ->addColumn('kode', function($d) {
+    //             if (empty($d->gbj_id)) {
+    //                 return $d->sparepart->spare->kode;
+    //             } else {
+    //                 return $d->units->produk->product->kode . '' . $d->units->produk->kode;
+    //             }
+    //         })
+    //         ->addColumn('produk', function($d) {
+    //             if (empty($d->gbj_id)) {
+    //                 return $d->sparepart->nama;
+    //             } else {
+    //                 return $d->units->produk->nama.' '.$d->units->nama;
+    //             }
+    //         })
+    //         ->addColumn('jumlah', function($d) {
+    //             if (empty($d->qty_unit)) {
+    //                 return $d->qty_spr.' Unit';
+    //             } else {
+    //                 return $d->qty_unit.' '.$d->units->satuan->nama;
+    //             }
+    //         })
+    //         ->addColumn('tingkat', function($d) {
+    //             // return $d->noseri->tk_kerusakan;
+    //         })
+    //         ->addColumn('jenis', function($d) {
+    //             if (empty($d->qty_unit)) {
+    //                 return 'Sparepart';
+    //             } else {
+    //                 return 'Unit';
+    //             }
+    //         })
+    //         ->make(true);
+        $did = GudangKarantinaDetail::all()->pluck('id');
+        $data = GudangKarantinaNoseri::with('detail', 'detail.sparepart')->whereIn('gk_detail_id', $did)->get();
+        // return $data;
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('kode', function($d) {
+                if (empty($d->detail->gbj_id)) {
+                    return $d->detail->sparepart->spare->kode;
+                } else {
+                    return $d->detail->units->produk->product->kode . '' . $d->detail->units->produk->kode;
+                }
+            })
+            ->addColumn('produk', function($d) {
+                if (empty($d->detail->gbj_id)) {
+                    return $d->detail->sparepart->nama;
+                } else {
+                    return $d->detail->units->produk->nama.' '.$d->detail->units->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                if (empty($d->detail->qty_unit)) {
+                    return $d->detail->qty_spr.' Unit';
+                } else {
+                    return $d->detail->qty_unit.' '.$d->detail->units->satuan->nama;
+                }
+            })
+            ->addColumn('tingkat', function($d) {
+                return 'Level '.$d->tk_kerusakan;
+            })
+            ->addColumn('jenis', function($d) {
+                if (empty($d->detail->qty_unit)) {
+                    return 'Sparepart';
+                } else {
+                    return 'Unit';
+                }
+            })
+            ->addColumn('button', function($d) {
+            if (empty($d->detail->gbj_id)) {
+                return '<a href="'.url('gk/gudang/sparepart/'.$d->detail->sparepart_id.'').'" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i>';
+            } else {
+                return '<a href="'.url('gk/gudang/unit/'.$d->detail->gbj_id.'').'" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i>';
+            }
+            })
+            ->rawColumns(['button'])
+            ->make(true);
     }
 
 }

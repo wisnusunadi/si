@@ -38,7 +38,7 @@
                             <div class="col">
                                 <div id="jml-produk-20" class="card active otg" style="background-color: #FEF7EA">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="h1">10</h4>
                                         <p class="card-text">Produk dengan jumlah stok 3 sampai 4</p>
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                             <div class="col">
                                 <div id="jml-produk-5" class="card otg" style="background-color: #FFBD67">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="h2">10</h4>
                                         <p class="card-text">Produk dengan jumlah stok 5 sampai 10</p>
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@
                             <div class="col">
                                 <div id="jml-produk-4" class="card otg" style="background-color: #FF6464">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="h3">10</h4>
                                         <p class="card-text">Produk dengan jumlah lebih dari 10</p>
                                     </div>
                                 </div>
@@ -259,7 +259,7 @@
                             <div class="col">
                                 <div id="produk-masuk-3-bulan" class="card otg active" style="background-color: #FEF7EA;font-size: 12px;">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="h4">10</h4>
                                         <p class="card-text font-weight">Produk masuk 3 bulan sampai 6 bulan</p>
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@
                             <div class="col">
                                 <div id="produk-masuk-6-bulan" class="card otg" style="background-color: #FFBD67; font-size: 12px;">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="h5">10</h4>
                                         <p class="card-text font-weight">Produk masuk 6 bulan sampai 1 tahun</p>
                                     </div>
                                 </div>
@@ -275,7 +275,7 @@
                             <div class="col">
                                 <div id="produk-masuk-1-tahun" class="card otg" style="background-color: #FA8282; font-size: 12px;">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="h6">10</h4>
                                         <p class="card-text font-weight">Produk masuk 1 tahun sampai 3 tahun</p>
                                     </div>
                                 </div>
@@ -283,7 +283,7 @@
                             <div class="col">
                                 <div id="produk-masuk-3-tahun" class="card otg" style="background-color: #FF6464; font-size: 12px;">
                                     <div class="card-body text-center">
-                                        <h4>10</h4>
+                                        <h4 id="h7">10</h4>
                                         <p class="card-text font-weight">Produk masuk lebih dari 3 tahun</p>
                                     </div>
                                 </div>
@@ -291,7 +291,7 @@
                         </div>
                         {{-- Produk Masuk 3 Bulan --}}
                         <div class="produk-masuk-3-bulan-table">
-                            <table class="table waktu-produk">
+                            <table class="table waktu-produk1">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>No</th>
@@ -366,7 +366,7 @@
                         </div>
                         {{-- Produk Masuk 6 Bulan --}}
                         <div class="produk-masuk-6-bulan-table hidden">
-                        <table class="table waktu-produk ">
+                        <table class="table waktu-produk2">
                             <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
@@ -441,7 +441,7 @@
                         </div>
                         {{-- Produk Masuk 1 Tahun --}}
                         <div class="produk-masuk-1-tahun-table hidden">
-                        <table class="table waktu-produk ">
+                        <table class="table waktu-produk3">
                             <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
@@ -516,7 +516,7 @@
                         </div>
                         {{-- Produk Masuk 3 Tahun --}}
                         <div class="produk-masuk-3-tahun-table hidden">
-                        <table class="table waktu-produk">
+                        <table class="table waktu-produk4">
                             <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
@@ -796,7 +796,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {{-- <tr>
                                     <td scope="row">1</td>
                                     <td>65465456464</td>
                                     <td>Produk 1</td>
@@ -885,7 +885,7 @@
                                     <td>Level 2</td>
                                     <td>Unit</td>
                                     <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -963,38 +963,213 @@
             $('.produk-masuk-3-bulan-table').addClass('hidden');
         })
         $('.select2').select2({});
+        $.ajax({
+            url: "/api/gk/dashboard/stok/34/h",
+            type: "post",
+            success: function(res) {
+                $('h4#h1').text(res);
+            }
+        })
         $('.jml-produk-20-tab').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
             "lengthChange": false,
+            ajax: {
+                url: "/api/gk/dashboard/stok/34",
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'produk'},
+                {data: 'jumlah'}
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+        $.ajax({
+            url: "/api/gk/dashboard/stok/510/h",
+            type: "post",
+            success: function(res) {
+                $('h4#h2').text(res);
+            }
+        })
         $('.jml-produk-5-tab').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
             "lengthChange": false,
+            ajax: {
+                url: "/api/gk/dashboard/stok/510",
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'produk'},
+                {data: 'jumlah'}
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+        $.ajax({
+            url: "/api/gk/dashboard/stok/10/h",
+            type: "post",
+            success: function(res) {
+                $('h4#h3').text(res);
+            }
+        })
         $('.jml-produk-4-tab').DataTable({
+            destroy: true,
+            processing: true,
+            autoWidth: false,
+            serverSide: true,
             "lengthChange": false,
+            ajax: {
+                url: "/api/gk/dashboard/stok/10",
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'produk'},
+                {data: 'jumlah'}
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $('.waktu-produk').DataTable({
+        $.ajax({
+            url: "/api/gk/dashboard/in/36/h",
+            type: "post",
+            success: function(res) {
+                $('h4#h4').text(res);
+            }
+        })
+        $('.waktu-produk1').DataTable({
+            destroy: true,
+            processing: true,
+            autoWidth: false,
+            serverSide: true,
             "lengthChange": false,
+            ajax: {
+                url: "/api/gk/dashboard/in/36",
+                type: "post"
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'in'},
+                {data: 'produk'},
+                {data: 'jumlah'},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $.ajax({
+            url: "/api/gk/dashboard/in/612/h",
+            type: "post",
+            success: function(res) {
+                $('h4#h5').text(res);
+            }
+        })
+        $('.waktu-produk2').DataTable({
+            destroy: true,
+            processing: true,
+            autoWidth: false,
+            serverSide: true,
+            "lengthChange": false,
+            ajax: {
+                url: "/api/gk/dashboard/in/612",
+                type: "post"
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'in'},
+                {data: 'produk'},
+                {data: 'jumlah'},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $.ajax({
+            url: "/api/gk/dashboard/in/1236/h",
+            type: "post",
+            success: function(res) {
+                $('h4#h6').text(res);
+            }
+        })
+        $('.waktu-produk3').DataTable({
+            destroy: true,
+            processing: true,
+            autoWidth: false,
+            serverSide: true,
+            "lengthChange": false,
+            ajax: {
+                url: "/api/gk/dashboard/in/1236",
+                type: "post"
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'in'},
+                {data: 'produk'},
+                {data: 'jumlah'},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $.ajax({
+            url: "/api/gk/dashboard/in/36plus/h",
+            type: "post",
+            success: function(res) {
+                $('h4#h7').text(res);
+            }
+        })
+        $('.waktu-produk4').DataTable({
+            destroy: true,
+            processing: true,
+            autoWidth: false,
+            serverSide: true,
+            "lengthChange": false,
+            ajax: {
+                url: "/api/gk/dashboard/in/36plus",
+                type: "post"
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'in'},
+                {data: 'produk'},
+                {data: 'jumlah'},
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
         $('.tableStokLayout').DataTable({
+            destroy: true,
             "ordering": true,
             "autoWidth": false,
             searching: false,
             "lengthChange": false,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/gk/dashboard/layout",
+                type: "post"
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'produk'},
+                {data: 'jumlah'},
+                {data: 'layout'}
+            ],
             "columnDefs":[{
                 "targets": '_all',
-                "createdCell": function (td, cellData, rowData, row, ) { 
+                "createdCell": function (td, cellData, rowData, row, ) {
                     $(td).css('padding', '18.3px');
                 }
             }],
@@ -1003,10 +1178,26 @@
             }
         });
         $('.tableKerusakan').DataTable({
+            destroy: true,
             "ordering": true,
             "autoWidth": false,
             searching: false,
             "lengthChange": false,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/gk/dashboard/tingkat",
+                type: "post",
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'kode'},
+                {data: 'produk'},
+                {data: 'jumlah'},
+                {data: 'tingkat'},
+                {data: 'jenis'},
+                {data: 'button'},
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }

@@ -27,4 +27,5 @@ class GudangKarantinaDetail extends Model
     function noseri() {
         return $this->hasMany(GudangKarantinaNoseri::class, 'gk_detail_id');
     }
+    
 }

@@ -69,7 +69,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- <tr>
+                                <tr>
                                     <td scope="row" class="text-center">16-06-2021 <br><span class="badge badge-primary">Baru</span></td>
                                     <td class="text-center">18-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
                                     <td>6543524635465464</td>
@@ -101,7 +101,7 @@
                                     <td>
                                         <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
                                     </td>
-                                </tr> --}}
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -303,14 +303,6 @@
         }]
         });
 
-        $('.scan-produk').DataTable({
-            ordering: false,
-            "autoWidth": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            },
-            "lengthChange": false,
-        });
     function modalRakit() {
         $('.modalRakit').modal('show');
         $("#head-cb").on('click', function () {
@@ -361,6 +353,49 @@
             }
         });
     }
+
+    $(document).on('click', '.detailmodal', function() {
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/prd/headerSeri/" + id,
+            type: "get",
+            dataType: "json",
+            success: function(res) {
+                console.log(res);
+                $('span#no_bppb').text(res.bppb);
+                $('span#produk').text(res.produk);
+                $('span#kategori').text(res.kategori);
+                $('span#jml').text(res.jumlah);
+                $('span#start').text(res.start);
+                $('span#end').text(res.end);
+            }
+        })
+
+        $('.scan-produk').DataTable({
+            // destroy: true,
+            ordering: false,
+            "autoWidth": false,
+            // processing: true,
+            // serverSide: true,
+            // ajax: {
+            //     url: "/api/prd/detailSeri/" + id,
+            // },
+            // columns: [
+            //     {data: 'noseri'},
+            //     {data: 'noseri'},
+            //     {data: 'noseri'},
+            //     {data: 'noseri'},
+            //     {data: 'noseri'},
+            // ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+            "lengthChange": false,
+        });
+        modalRakit();
+    })
     $('.daterange').daterangepicker({
         locale: {
             format: 'DD/MM/YYYY'

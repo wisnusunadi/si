@@ -65,7 +65,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
-
+                {{-- @foreach ($did as $p) --}}
+                <input type="hidden" name="" id="id" value="{{ $did }}">
+                {{-- @endforeach --}}
                 <div class="card mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
@@ -75,11 +77,11 @@
                         <div class="col-md-8">
                             <div class="card-body ml-5">
                                 <div class="card-title">
-                                    <h2 class="text-bold">Nama Produk</h2>
-                                    <h6 class="text-muted">Kode Produk</h6>
+                                    <h2 class="text-bold" id="nama">Nama Produk</h2>
+                                    <h6 class="text-muted" id="kode">Kode Produk</h6>
                                 </div>
                                 <h5 class="card-text text-bold pt-2">Deskripsi</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam,
+                                <p class="card-text" id="desk">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam,
                                     purus sit
                                     amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor
                                     purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper
@@ -93,7 +95,7 @@
                         </div>
                     </div>
                 </div>
-                
+                {{-- @endforeach --}}
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -309,6 +311,22 @@
 @stop
 @section('adminlte_js')
 <script>
+    var id = $('#id').val();
+    console.log(id);
+
+    $.ajax({
+        url: "/api/gk/transaksi/header/" + id,
+        type: "get",
+        success: function(res) {
+            console.log(res);
+            $('h2#nama').text(res.nama);
+            $('h6#kode').text(res.kode);
+            $('p#desk').text(res.desk);
+            $('span#panjang').text(res.panjang);
+            $('span#lebar').text(res.lebar);
+            $('span#tinggi').text(res.tinggi);
+        }
+    })
     $('.table-seri').DataTable({
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"

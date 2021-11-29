@@ -239,7 +239,6 @@
         });
         $('#ubah-layout').modal('hide');
     }
-<<<<<<< HEAD
     var id = '';
     $(document).on('click', '.editmodal', function() {
         id = $(this).data('id');
@@ -319,8 +318,6 @@
 
         openModalView();
     });
-=======
->>>>>>> 24b2266da4db4106d53d405bebadfc91e3549658
 
     function openModalTerima() {
         $('.terima-produk').modal('show');

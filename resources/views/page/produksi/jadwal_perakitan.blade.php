@@ -197,7 +197,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
             </div>
         </div>
     </div>
@@ -316,9 +316,9 @@
                 "visible": document.getElementById('auth').value == '2' ? false : true
             }]
         });
-
+        var id = '';
         $(document).on('click', '.detailmodal', function() {
-            var id = $(this).data('id');
+            id = $(this).data('id');
             console.log(id);
             var jml = $(this).data('jml');
             console.log(jml);
@@ -338,17 +338,56 @@
             })
 
             $('.modalRakit').modal('show');
+            var i = 0;
+            i++;
+            $('.scan-produk').DataTable().destroy();
+            $('.scan-produk tbody').empty();
+            $('.scan-produk tbody').append('<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>')
+                            .children("tr").append("<td></td><td></td><td></td><td></td><td></td>")
+                            .children("td").slice(0, jml).each(function() {
+                                $(this).html('<input type="text" name="noseri[]" id="noseri" class="form-control">');
+                            })
+            $('.scan-produk').DataTable({
+                "ordering":false,
+                "autoWidth": false,
+                searching: false,
+                "lengthChange": false,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+            });
         })
 
-        $('.scan-produk').DataTable({
-            "ordering":false,
-            "autoWidth": false,
-            searching: false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
+       $(document).on('click', '#btnSave', function(e) {
+           e.preventDefault();
+
+           const seri = [];
+
+           $('input[name^="noseri"]').each(function() {
+                seri.push($(this).val());
+            });
+
+            $.ajax({
+                url: "/api/prd/rakit-seri",
+                type: "post",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    noseri: seri,
+                    jadwal_id : id,
+                },
+                success: function(res) {
+                    console.log(res);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: res.msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    location.reload();
+                }
+            })
+       })
     })
     function modalRakit() {
 

@@ -9,6 +9,7 @@ use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
+use App\Models\JadwalRakitNoseri;
 use App\Models\NoseriBarangJadi;
 use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
@@ -726,7 +727,7 @@ class ProduksiController extends Controller
 
     function getSelesaiRakit()
     {
-        $data = JadwalPerakitan::where('status', 'selesai')->get();
+        $data = JadwalPerakitan::where('status_tf', 11)->where('status', 'pelaksanaan')->get();
         $res = datatables()->of($data)
                 ->addColumn('start', function($d) {
                     if (isset($d->tanggal_mulai)) {
@@ -756,10 +757,11 @@ class ProduksiController extends Controller
                             </a>';
                 })
                 ->addColumn('status', function($d) {
-                    if ('x') {
-                        return '<span class="sudah_diterima">Sudah Diterima</span>';
-                    } else {
+                    if ($d->status_tf == 'Belum Terkirim') {
                         return '<span class="belum_diterima">Belum Diterima</span>';
+                    } else {
+                        return '<span class="sudah_diterima">Sudah Diterima</span>';
+                        // return 'xx';
                     }
                 })
                 ->addColumn('no_bppb', function() {
@@ -781,6 +783,45 @@ class ProduksiController extends Controller
             'start' => date('d-m-Y', strtotime($d->tanggal_mulai)),
             'end' => date('d-m-Y', strtotime($d->tanggal_selesai)),
         ]);
+    }
+
+    function storeRakitNoseri(Request $request) {
+        // dd($request->all());
+             foreach($request->noseri as $key => $value) {
+                $seri = new JadwalRakitNoseri();
+                $seri->jadwal_id = $request->jadwal_id;
+                $seri->noseri = $value;
+                $seri->status = 11;
+                $seri->save();
+                // echo $seri;
+            }
+
+            $d = JadwalPerakitan::find($request->jadwal_id);
+            $d->status_tf = 12;
+            $d->save();
+
+        return response()->json(['msg' => 'Successfully']);
+    }
+
+    function getHeaderSeri($id) {
+        $jadwal = JadwalPerakitan::find($id);
+        $gdg = GudangBarangJadi::find($jadwal->produk_id);
+
+        return response()->json([
+            'bppb' => '-',
+            'produk' => $gdg->produk->nama.' '.$gdg->nama,
+            'kategori' => $gdg->produk->KelompokProduk->nama,
+            'jumlah' => $jadwal->jumlah.' '.$gdg->satuan->nama,
+            'start' => date('d-m-Y', strtotime($jadwal->tanggal_mulai)),
+            'end' => date('d-m-Y', strtotime($jadwal->tanggal_selesai)),
+        ]);
+    }
+
+    function detailSeri($id) {
+        $data = JadwalRakitNoseri::where('jadwal_id', $id)->get();
+        return datatables()->of($data)
+
+            ->make(true);
     }
 
     function test1()

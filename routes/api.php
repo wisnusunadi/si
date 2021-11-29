@@ -226,9 +226,12 @@ Route::prefix('/prd')->group(function() {
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/test1', [ProduksiController::class, 'test1']);
+    Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
 
     // kirim
     Route::post('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
+    Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
+    Route::get('/detailSeri/{id}', [ProduksiController::class, 'detailSeri']);
 });
 
 Route::prefix('/spr')->group(function () {
@@ -237,7 +240,7 @@ Route::prefix('/spr')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\SparepartController::class, 'update']);
     Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
     Route::get('/data/{id}', [App\Http\Controllers\SparepartController::class, 'getId']);
-    Route::delete('/test', [App\Http\Controllers\SparepartController::class, 'deleteImage']);
+
 });
 
 Route::prefix('/gk')->group(function() {
@@ -253,6 +256,32 @@ Route::prefix('/gk')->group(function() {
         Route::post('/by-product', [SparepartController::class, 'history_by_produk']);
         Route::post('/all', [SparepartController::class, 'historyAll']);
         Route::get('/noseri/{id}', [SparepartController::class, 'get_noseri_history']);
+        Route::get('/header/{id}', [App\Http\Controllers\SparepartController::class, 'get_detail_id']);
+    });
+
+    Route::prefix('/dashboard')->group(function () {
+        Route::post('/tingkat', [SparepartController::class, 'byTingkat']);
+        Route::post('/layout', [SparepartController::class, 'byLayout']);
+
+        // stok
+        Route::post('/stok/34', [SparepartController::class, 'stok34']);
+        Route::post('/stok/510', [SparepartController::class, 'stok510']);
+        Route::post('/stok/10', [SparepartController::class, 'stok10plus']);
+
+        Route::post('/stok/34/h', [SparepartController::class, 'h_stok34']);
+        Route::post('/stok/510/h', [SparepartController::class, 'h_stok510']);
+        Route::post('/stok/10/h', [SparepartController::class, 'h_stok10plus']);
+
+        // in
+        Route::post('/in/36', [SparepartController::class, 'in36']);
+        Route::post('/in/612', [SparepartController::class, 'in612']);
+        Route::post('/in/1236', [SparepartController::class, 'in1236']);
+        Route::post('/in/36plus', [SparepartController::class, 'in36plus']);
+
+        Route::post('/in/36/h', [SparepartController::class, 'h_in36']);
+        Route::post('/in/612/h', [SparepartController::class, 'h_in612']);
+        Route::post('/in/1236/h', [SparepartController::class, 'h_in1236']);
+        Route::post('/in/36plus/h', [SparepartController::class, 'h_in36plus']);
     });
 });
 
