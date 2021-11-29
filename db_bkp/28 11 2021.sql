@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Nov 2021 pada 09.41
+-- Waktu pembuatan: 29 Nov 2021 pada 10.59
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 7.4.25
 
@@ -515,8 +515,19 @@ INSERT INTO `customer` (`id`, `id_provinsi`, `nama`, `telp`, `email`, `alamat`, 
 CREATE TABLE `detail_logistik` (
   `id` bigint(20) NOT NULL,
   `logistik_id` bigint(20) UNSIGNED NOT NULL,
-  `detail_pesanan_id` bigint(20) UNSIGNED NOT NULL
+  `detail_pesanan_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `detail_logistik`
+--
+
+INSERT INTO `detail_logistik` (`id`, `logistik_id`, `detail_pesanan_id`, `created_at`, `updated_at`) VALUES
+(6, 56, 1, '2021-11-29 05:20:23', '2021-11-29 05:20:23'),
+(7, 57, 2, '2021-11-29 05:22:28', '2021-11-29 05:22:28'),
+(8, 58, 3, '2021-11-29 06:27:19', '2021-11-29 06:27:19');
 
 -- --------------------------------------------------------
 
@@ -941,7 +952,6 @@ CREATE TABLE `detail_pesanan` (
 --
 
 INSERT INTO `detail_pesanan` (`id`, `pesanan_id`, `penjualan_produk_id`, `jumlah`, `harga`, `ongkir`, `created_at`, `updated_at`) VALUES
-(0, 52, 19, 2, 0, NULL, NULL, NULL),
 (1, 1, 76, 2, 6127698, 0, NULL, NULL),
 (2, 1, 13, 1, 5216740, 0, NULL, NULL),
 (3, 2, 74, 3, 7364108, 0, NULL, NULL),
@@ -1470,7 +1480,8 @@ INSERT INTO `ekatalog` (`id`, `customer_id`, `provinsi_id`, `pesanan_id`, `no_pa
 (48, 384, 25, 48, 'AK1-P2103-3703110', 'Belanja Alkes Pakai Habis e-catalog Puskesmas Kecamatan Menteng 2021', 'Kepolisian Negara Republik Indonesia', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-20', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
 (49, 321, 4, 49, 'AK1-P2103-3703286', 'Belanja Barang Medis Habis Pakai Penunjang Medis Ekatalog', 'Pemerintah Daerah Kabupaten Asahan', 'DINAS KESEHATAN', '2021-06-21', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
 (50, 25, 15, 50, 'AK1-P2103-3704150', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Tangerang', 'DINAS KESEHATAN', '2021-06-22', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(51, 278, 2, 51, 'AK1-P2103-3704763', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Provinsi Banten', 'DINAS KESEHATAN', '2021-06-23', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan');
+(51, 278, 2, 51, 'AK1-P2103-3704763', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Provinsi Banten', 'DINAS KESEHATAN', '2021-06-23', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(53, 213, 18, 217, 'AK1-1903183130831', '-', 'Dinas Kesehatan Lampung', 'Pemerintah Lampung', '2022-03-01', '2021-11-29', NULL, '2021-11-29 02:14:25', '2021-11-29 02:14:25', 'sepakat', 'penjualan');
 
 -- --------------------------------------------------------
 
@@ -2112,6 +2123,7 @@ CREATE TABLE `jadwal_perakitan` (
   `state` enum('perencanaan','persetujuan','perubahan') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `konfirmasi` int(11) DEFAULT NULL,
   `warna` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_tf` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2120,16 +2132,58 @@ CREATE TABLE `jadwal_perakitan` (
 -- Dumping data untuk tabel `jadwal_perakitan`
 --
 
-INSERT INTO `jadwal_perakitan` (`id`, `produk_id`, `jumlah`, `tanggal_mulai`, `tanggal_selesai`, `status`, `state`, `konfirmasi`, `warna`, `created_at`, `updated_at`) VALUES
-(91, 68, 20, '2021-11-22', '2021-11-29', 'pelaksanaan', 'perencanaan', 0, 'rgb(23, 162, 184)', '2021-11-18 00:40:54', '2021-11-23 02:42:58'),
-(94, 6, 12, '2021-11-08', '2021-11-16', 'pelaksanaan', 'perencanaan', 0, 'rgb(220, 53, 69)', '2021-11-18 03:13:48', '2021-11-23 02:42:58'),
-(97, 12, 121, '2021-12-08', '2021-12-16', 'penyusunan', 'perencanaan', 0, 'rgb(220, 53, 69)', '2021-11-19 00:24:34', '2021-11-23 02:42:11'),
-(98, 15, 12, '2021-12-15', '2021-12-23', 'penyusunan', 'perencanaan', 0, 'rgb(255, 193, 7)', '2021-11-19 00:24:43', '2021-11-23 02:42:11'),
-(100, 25, 131, '2021-12-09', '2021-12-15', 'penyusunan', 'perencanaan', 0, 'rgb(40, 167, 69)', '2021-11-21 20:01:42', '2021-11-23 02:42:11'),
-(101, 15, 12, '2021-12-23', '2021-12-28', 'penyusunan', 'perencanaan', 0, 'rgb(255, 193, 7)', '2021-11-21 20:04:08', '2021-11-23 02:42:11'),
-(103, 30, 121, '2021-12-06', '2021-12-08', 'penyusunan', 'perencanaan', 0, 'rgb(23, 162, 184)', '2021-11-22 18:12:48', '2021-11-23 02:42:11'),
-(104, 8, 12, '2021-12-01', '2021-12-04', 'penyusunan', 'perencanaan', 0, 'rgb(0, 123, 255)', '2021-11-22 18:16:23', '2021-11-23 02:42:11'),
-(105, 10, 12, '2021-12-02', '2021-12-11', 'penyusunan', 'perencanaan', 0, 'rgb(40, 167, 69)', '2021-11-23 02:39:38', '2021-11-23 02:42:11');
+INSERT INTO `jadwal_perakitan` (`id`, `produk_id`, `jumlah`, `tanggal_mulai`, `tanggal_selesai`, `status`, `state`, `konfirmasi`, `warna`, `status_tf`, `created_at`, `updated_at`) VALUES
+(91, 68, 20, '2021-11-22', '2021-11-29', 'pelaksanaan', 'perencanaan', 0, 'rgb(23, 162, 184)', 11, '2021-11-18 00:40:54', '2021-11-23 02:42:58'),
+(94, 6, 12, '2021-11-08', '2021-11-16', 'pelaksanaan', 'perencanaan', 0, 'rgb(220, 53, 69)', 11, '2021-11-18 03:13:48', '2021-11-23 02:42:58'),
+(97, 12, 121, '2021-12-08', '2021-12-16', 'penyusunan', 'perencanaan', 0, 'rgb(220, 53, 69)', 11, '2021-11-19 00:24:34', '2021-11-23 02:42:11'),
+(98, 15, 12, '2021-12-15', '2021-12-23', 'penyusunan', 'perencanaan', 0, 'rgb(255, 193, 7)', 11, '2021-11-19 00:24:43', '2021-11-23 02:42:11'),
+(100, 25, 131, '2021-12-09', '2021-12-15', 'penyusunan', 'perencanaan', 0, 'rgb(40, 167, 69)', 11, '2021-11-21 20:01:42', '2021-11-23 02:42:11'),
+(101, 15, 12, '2021-12-23', '2021-12-28', 'penyusunan', 'perencanaan', 0, 'rgb(255, 193, 7)', 11, '2021-11-21 20:04:08', '2021-11-23 02:42:11'),
+(103, 30, 121, '2021-12-06', '2021-12-08', 'penyusunan', 'perencanaan', 0, 'rgb(23, 162, 184)', 11, '2021-11-22 18:12:48', '2021-11-23 02:42:11'),
+(104, 8, 12, '2021-12-01', '2021-12-04', 'penyusunan', 'perencanaan', 0, 'rgb(0, 123, 255)', 11, '2021-11-22 18:16:23', '2021-11-23 02:42:11'),
+(105, 10, 12, '2021-12-02', '2021-12-11', 'penyusunan', 'perencanaan', 0, 'rgb(40, 167, 69)', 11, '2021-11-23 02:39:38', '2021-11-23 02:42:11');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `jadwal_rakit_noseri`
+--
+
+CREATE TABLE `jadwal_rakit_noseri` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `jadwal_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `noseri` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `waktu_tf` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `jadwal_rakit_noseri`
+--
+
+INSERT INTO `jadwal_rakit_noseri` (`id`, `jadwal_id`, `noseri`, `status`, `waktu_tf`, `created_at`, `updated_at`) VALUES
+(61, 91, 'ser1', 'Belum Diterima', NULL, '2021-11-29 03:04:00', '2021-11-29 03:04:00'),
+(62, 91, 'ser2', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(63, 91, 'ser3', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(64, 91, 'ser4', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(65, 91, 'ser5', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(66, 91, 'ser6', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(67, 91, 'ser7', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(68, 91, 'ser8', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(69, 91, 'ser9', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(70, 91, 'ser10', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(71, 91, 'ser11', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(72, 91, 'ser12', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(73, 91, 'ser13', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(74, 91, 'ser14', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(75, 91, 'ser15', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(76, 91, 'ser16', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(77, 91, 'ser17', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(78, 91, 'ser18', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(79, 91, 'ser19', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
+(80, 91, 'ser20', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02');
 
 -- --------------------------------------------------------
 
@@ -2204,10 +2258,18 @@ CREATE TABLE `logistik` (
   `nosurat` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tgl_kirim` date NOT NULL,
   `nama_pengirim` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `no_kendaraan` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `logistik`
+--
+
+INSERT INTO `logistik` (`id`, `ekspedisi_id`, `nosurat`, `tgl_kirim`, `nama_pengirim`, `created_at`, `updated_at`) VALUES
+(56, 1, 'SPA-001', '2021-11-29', NULL, '2021-11-29 05:20:23', '2021-11-29 05:20:23'),
+(57, NULL, 'SPA-001', '2021-11-16', 'Diambil Pak Nuri', '2021-11-29 05:22:28', '2021-11-29 05:22:28'),
+(58, NULL, 'SPA-777', '2021-11-23', 'Umar', '2021-11-29 06:27:18', '2021-11-29 06:27:18');
 
 -- --------------------------------------------------------
 
@@ -9300,7 +9362,8 @@ CREATE TABLE `m_jenis_gks` (
 INSERT INTO `m_jenis_gks` (`id`, `nama`, `created_at`, `updated_at`) VALUES
 (1, 'Gudang Barang Jadi', NULL, NULL),
 (2, 'Sparepart', NULL, NULL),
-(3, 'Gudang Karantina', NULL, NULL);
+(3, 'Gudang Karantina', NULL, NULL),
+(4, 'Produksi', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -16537,11 +16600,15 @@ INSERT INTO `m_state` (`id`, `nama`, `jenis_id`, `is_aktif`, `created_at`, `upda
 (3, 'Transfer ke Gudang', 1, 1, NULL, NULL),
 (4, 'Belum Dicek', 1, 1, NULL, NULL),
 (5, 'Sudah Dicek', 1, 1, NULL, NULL),
-(6, 'Gudang', NULL, NULL, NULL, NULL),
-(7, 'Penjualan', NULL, NULL, NULL, NULL),
-(8, 'QC', NULL, NULL, NULL, NULL),
-(9, 'PO', NULL, NULL, NULL, NULL),
-(10, 'Kirim', NULL, NULL, NULL, NULL);
+(6, 'Gudang', 4, 1, NULL, NULL),
+(7, 'Penjualan', 4, 1, NULL, NULL),
+(8, 'QC', 4, 1, NULL, NULL),
+(9, 'PO', 4, 1, NULL, NULL),
+(10, 'Kirim', 4, 1, NULL, NULL),
+(11, 'Belum Terkirim', 4, 1, NULL, NULL),
+(12, 'Terisi Noseri', 4, 1, NULL, NULL),
+(13, 'Terkirim Sebagian', 4, 1, NULL, NULL),
+(14, 'Sudah Terkirim', 4, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -16814,14 +16881,18 @@ CREATE TABLE `noseri_detail_pesanan` (
 --
 
 INSERT INTO `noseri_detail_pesanan` (`id`, `detail_pesanan_produk_id`, `t_tfbj_noseri_id`, `status`, `tgl_uji`, `updated_at`, `created_at`) VALUES
-(38, 1, 2, 'ok', '2021-11-30', '2021-11-26 04:17:40', '2021-11-26 04:17:40'),
-(39, 1, 3, 'ok', '2021-11-30', '2021-11-26 04:17:40', '2021-11-26 04:17:40'),
-(40, 2, 4, 'ok', '2021-11-25', '2021-11-26 04:23:29', '2021-11-26 04:23:29'),
-(43, 3, 1, 'ok', '2021-11-17', '2021-11-26 04:47:57', '2021-11-26 04:47:57'),
-(44, 4, 6, 'ok', '2021-11-08', '2021-11-26 04:48:13', '2021-11-26 04:48:13'),
+(38, 1, 2, 'ok', '2021-11-28', '2021-11-26 04:17:40', '2021-11-26 04:17:40'),
+(39, 1, 3, 'ok', '2021-11-08', '2021-11-26 04:17:40', '2021-11-26 04:17:40'),
+(40, 2, 4, 'ok', '2021-11-29', '2021-11-26 04:23:29', '2021-11-26 04:23:29'),
+(43, 3, 1, 'ok', '2021-11-28', '2021-11-26 04:47:57', '2021-11-26 04:47:57'),
+(44, 4, 6, 'ok', '2021-11-28', '2021-11-26 04:48:13', '2021-11-26 04:48:13'),
 (45, 2, 5, 'ok', '2021-11-08', '2021-11-26 05:32:30', '2021-11-26 05:32:30'),
 (46, 5, 9, 'ok', '2021-11-26', '2021-11-26 09:54:56', '2021-11-26 09:54:56'),
-(47, 8, 18, 'ok', '2021-11-09', '2021-11-26 10:00:40', '2021-11-26 10:00:40');
+(47, 8, 18, 'ok', '2021-11-09', '2021-11-26 10:00:40', '2021-11-26 10:00:40'),
+(48, 4, 7, 'ok', '2021-11-29', '2021-11-29 02:27:49', '2021-11-29 02:27:49'),
+(49, 5, 10, 'ok', '2021-11-28', '2021-11-29 02:28:45', '2021-11-29 02:28:45'),
+(50, 6, 12, 'ok', '2021-11-08', '2021-11-29 02:30:32', '2021-11-29 02:30:32'),
+(51, 5, 11, 'ok', '2021-11-28', '2021-11-29 02:33:39', '2021-11-29 02:33:39');
 
 -- --------------------------------------------------------
 
@@ -17314,7 +17385,9 @@ INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, 
 (212, 'SO/SPB/XI/2021/83', 'POSPB161', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (213, 'SO/SPB/XI/2021/84', 'POSPB162', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (214, 'SO/SPB/XI/2021/85', 'POSPB163', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(215, 'SO/SPB/XI/2021/86', 'POSPB164', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(215, 'SO/SPB/XI/2021/86', 'POSPB164', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(216, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-29 02:12:34', '2021-11-29 02:12:34', NULL),
+(217, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-29 02:14:25', '2021-11-29 02:14:25', NULL);
 
 -- --------------------------------------------------------
 
@@ -25287,7 +25360,15 @@ ALTER TABLE `gdg_barang_jadi_his`
 --
 ALTER TABLE `jadwal_perakitan`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `jadwal_perakitan_produk_id_foreign` (`produk_id`);
+  ADD KEY `jadwal_perakitan_produk_id_foreign` (`produk_id`),
+  ADD KEY `jadwal_perakitan_FK` (`status_tf`);
+
+--
+-- Indeks untuk tabel `jadwal_rakit_noseri`
+--
+ALTER TABLE `jadwal_rakit_noseri`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jadwal_rakit_noseri_FK` (`jadwal_id`);
 
 --
 -- Indeks untuk tabel `jalur_ekspedisi`
@@ -25570,7 +25651,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT untuk tabel `detail_logistik`
 --
 ALTER TABLE `detail_logistik`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `divisi`
@@ -25582,7 +25663,7 @@ ALTER TABLE `divisi`
 -- AUTO_INCREMENT untuk tabel `ekatalog`
 --
 ALTER TABLE `ekatalog`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT untuk tabel `ekspedisi`
@@ -25615,6 +25696,12 @@ ALTER TABLE `jadwal_perakitan`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
+-- AUTO_INCREMENT untuk tabel `jadwal_rakit_noseri`
+--
+ALTER TABLE `jadwal_rakit_noseri`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+
+--
 -- AUTO_INCREMENT untuk tabel `jalur_ekspedisi`
 --
 ALTER TABLE `jalur_ekspedisi`
@@ -25636,7 +25723,7 @@ ALTER TABLE `komentar_jadwal_perakitan`
 -- AUTO_INCREMENT untuk tabel `logistik`
 --
 ALTER TABLE `logistik`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT untuk tabel `migrations`
@@ -25654,7 +25741,7 @@ ALTER TABLE `m_gs`
 -- AUTO_INCREMENT untuk tabel `m_jenis_gks`
 --
 ALTER TABLE `m_jenis_gks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `m_layout`
@@ -25684,7 +25771,7 @@ ALTER TABLE `m_sparepart`
 -- AUTO_INCREMENT untuk tabel `m_state`
 --
 ALTER TABLE `m_state`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT untuk tabel `m_status`
@@ -25702,7 +25789,7 @@ ALTER TABLE `noseri_barang_jadi`
 -- AUTO_INCREMENT untuk tabel `noseri_detail_pesanan`
 --
 ALTER TABLE `noseri_detail_pesanan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT untuk tabel `penjualan_produk`
@@ -25720,7 +25807,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=216;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=218;
 
 --
 -- AUTO_INCREMENT untuk tabel `produk`
@@ -25889,7 +25976,14 @@ ALTER TABLE `gdg_barang_jadi_his`
 -- Ketidakleluasaan untuk tabel `jadwal_perakitan`
 --
 ALTER TABLE `jadwal_perakitan`
+  ADD CONSTRAINT `jadwal_perakitan_FK` FOREIGN KEY (`status_tf`) REFERENCES `m_state` (`id`),
   ADD CONSTRAINT `jadwal_perakitan_produk_id_foreign` FOREIGN KEY (`produk_id`) REFERENCES `gdg_barang_jadi` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `jadwal_rakit_noseri`
+--
+ALTER TABLE `jadwal_rakit_noseri`
+  ADD CONSTRAINT `jadwal_rakit_noseri_FK` FOREIGN KEY (`jadwal_id`) REFERENCES `jadwal_perakitan` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `kelompok_produk`

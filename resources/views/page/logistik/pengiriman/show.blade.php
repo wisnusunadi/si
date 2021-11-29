@@ -335,7 +335,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#showtable').DataTable();
+
         $(document).on('click', '.editmodal', function() {
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
@@ -460,43 +460,43 @@
             });
         }
 
-        function gg() {
-            var showtable = $('#showtable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/customer/detail/' + '1',
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    }
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'DT_RowIndex',
 
-                    },
-                    {
-                        data: 'DT_RowIndex',
+        var showtable = $('#showtable').DataTable({
+            // processing: true,
+            // serverSide: true,
+            // ajax: {
+            //     'url': '/api/customer/detail/' + '1',
+            //     'type': 'POST',
+            //     'headers': {
+            //         'X-CSRF-TOKEN': '{{csrf_token()}}'
+            //     }
+            // },
+            // language: {
+            //     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            // },
+            // columns: [{
+            //         data: 'DT_RowIndex',
+            //         orderable: false,
+            //         searchable: false
+            //     },
+            //     {
+            //         data: 'DT_RowIndex'
+            //     },
+            //     {
+            //         data: 'DT_RowIndex',
 
-                    },
-                    {
-                        data: 'DT_RowIndex',
+            //     },
+            //     {
+            //         data: 'DT_RowIndex',
 
-                    }
-                ]
-            });
-        }
+            //     },
+            //     {
+            //         data: 'DT_RowIndex',
+
+            //     }
+            // ]
+        });
+
     });
 </script>
 @stop

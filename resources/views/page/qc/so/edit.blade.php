@@ -1,4 +1,4 @@
-<form method="POST" action="/qc/so/create/{{$id}}/{{$tfgbj_id}}/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
+<form method="POST" action="/api/qc/so/create/{{$id}}/{{$tfgbj_id}}/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
     @csrf
     <div class="row d-flex justify-content-center">
         <div class="col-11">
