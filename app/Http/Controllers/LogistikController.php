@@ -212,7 +212,7 @@ class LogistikController extends Controller
         }
     }
 
-    public function create_logistik($detail_pesanan_id, $pesanan_id)
+    public function create_logistik_view($detail_pesanan_id, $pesanan_id)
     {
         $value = [];
         $x = explode(',', $detail_pesanan_id);
@@ -231,6 +231,19 @@ class LogistikController extends Controller
         }
 
         return view('page.logistik.so.create', ['id' => $id]);
+    }
+    public function create_logistik(Request $request, $detail_pesanan_id)
+    {
+
+
+        if ($request->pengiriman == 'ekspedisi') {
+            $Logistik = Logistik::create([
+                'ekspedisi_id' => $request->ekspedisi_id,
+                'nosurat' => $request->no_invoice,
+                'tgl_kirim' => $request->tgl_kirim,
+                'nama_pengirim' => 's',
+            ]);
+        }
     }
     //Other
     public function getHariBatasKontrak($value, $limit)

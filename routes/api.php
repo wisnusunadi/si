@@ -231,7 +231,7 @@ Route::prefix('/qc')->group(function () {
 
 Route::prefix('/logistik')->group(function () {
     Route::group(['prefix' => '/so'], function () {
-        Route::post('create', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
+        Route::post('create/{detail_pesanan_id}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
         Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('data/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_so']);
         Route::get('detail/select/{id}/{pesanan_id}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
