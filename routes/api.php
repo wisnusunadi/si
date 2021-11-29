@@ -243,3 +243,7 @@ Route::prefix('/logistik')->group(function () {
         Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });
 });
+
+Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
+    Route::get('dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard']);
+});

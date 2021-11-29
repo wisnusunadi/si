@@ -86,6 +86,26 @@
     .dropdown-toggle:active {
         color: #C0C0C0;
     }
+
+    @media screen and (min-width: 1440px) {
+        section {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        section {
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
@@ -94,242 +114,246 @@
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        <span class="float-right filter">
-                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-filter"></i> Filter
-                            </button>
-                            <div class="dropdown-menu">
-                                <div class="px-3 py-3">
-                                    <div class="form-group">
-                                        <label for="jenis_penjualan">No Resi</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" value="semua" id="no_resi1" name="no_resi" />
-                                            <label class="form-check-label" for="no_resi1">
-                                                Semua
-                                            </label>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="float-right filter">
+                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <div class="px-3 py-3">
+                                            <div class="form-group">
+                                                <label for="jenis_penjualan">No Resi</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" value="semua" id="no_resi1" name="no_resi" />
+                                                    <label class="form-check-label" for="no_resi1">
+                                                        Semua
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" value="belum_tersedia" id="no_resi2" name="no_resi" />
+                                                    <label class="form-check-label" for="no_resi2">
+                                                        Belum Tersedia
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" value="tersedia" id="no_resi3" name="no_resi" />
+                                                    <label class="form-check-label" for="no_resi3">
+                                                        Tersedia
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="jenis_penjualan">Status Pengiriman</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" value="semua" id="status_pengiriman1" name="status_pengiriman" />
+                                                    <label class="form-check-label" for="status_pengiriman1">
+                                                        Semua
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" value="draft_pengiriman" id="status_pengiriman2" name="status_pengiriman" />
+                                                    <label class="form-check-label" for="status_pengiriman2">
+                                                        Draft Pengiriman
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" value="dalam_pengiriman" id="status_pengiriman3" name="status_pengiriman" />
+                                                    <label class="form-check-label" for="status_pengiriman3">
+                                                        Dalam Pengiriman
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="float-right">
+                                                    <button class="btn btn-primary">
+                                                        Cari
+                                                    </button>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" value="belum_tersedia" id="no_resi2" name="no_resi" />
-                                            <label class="form-check-label" for="no_resi2">
-                                                Belum Tersedia
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" value="tersedia" id="no_resi3" name="no_resi" />
-                                            <label class="form-check-label" for="no_resi3">
-                                                Tersedia
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="jenis_penjualan">Status Pengiriman</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" value="semua" id="status_pengiriman1" name="status_pengiriman" />
-                                            <label class="form-check-label" for="status_pengiriman1">
-                                                Semua
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" value="draft_pengiriman" id="status_pengiriman2" name="status_pengiriman" />
-                                            <label class="form-check-label" for="status_pengiriman2">
-                                                Draft Pengiriman
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" value="dalam_pengiriman" id="status_pengiriman3" name="status_pengiriman" />
-                                            <label class="form-check-label" for="status_pengiriman3">
-                                                Dalam Pengiriman
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <span class="float-right">
-                                            <button class="btn btn-primary">
-                                                Cari
-                                            </button>
-                                        </span>
-                                    </div>
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table" id="showtable" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>No SO</th>
+                                                <th>No SJ</th>
+                                                <th>Ekspedisi</th>
+                                                <th>No Resi</th>
+                                                <th>Tanggal Kirim</th>
+                                                <th>Nama Customer</th>
+                                                <th>Provinsi</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>SO-SPA10210001</td>
+                                                <td>SJ/10/20/2001</td>
+                                                <td class="minimizechar">J&T</td>
+                                                <td><small><i class="text-muted">Belum Tersedia</i></small></td>
+                                                <td>09-10-2021</td>
+                                                <td class="minimizechar">RS Nurul Ikhsan</td>
+                                                <td class="minimizechar">Jawa Barat</td>
+                                                <td><span class="badge blue-text">Dalam Pengiriman</span></td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                        @if(Auth::user()->divisi->id == "15")
+                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'dalam_pengiriman'])}}" data-id="">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        <a href="{{route('logistik.pengiriman.print')}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-file"></i>
+                                                                Laporan PDF
+                                                            </button>
+                                                        </a>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>SO-EKAT08210005</td>
+                                                <td>SJ/08/21/0986</td>
+                                                <td class="minimizechar">Safari Dharma Raya</td>
+                                                <td><small><i class="text-muted">Belum Tersedia</i></small></td>
+                                                <td>
+                                                    <div>02-08-2021</div>
+                                                    <div><small><i class="fas fa-exclamation-circle warning"></i> Batas 2 Hari Lagi</small></div>
+                                                </td>
+                                                <td class="minimizechar">Bapak Hutapea</td>
+                                                <td class="minimizechar">Sumatera Utara</td>
+                                                <td>@if(Auth::user()->divisi->id == "15")
+                                                    <a href="" id="pengirimanhref">
+                                                        <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
+                                                        <div><small class="text-muted">Pengiriman</small></div>
+                                                    </a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                        @if(Auth::user()->divisi->id == "15")
+                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        @endif
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>SO-SPB08210005</td>
+                                                <td>SJ/01/20/1927</td>
+                                                <td class="minimizechar">Si Cepat</td>
+                                                <td><small><i class="text-muted">Belum Tersedia</i></small></td>
+                                                <td>
+                                                    <div>02-08-2021</div>
+                                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</div>
+                                                </td>
+                                                <td class="minimizechar">Pemerintah Kab Badung</td>
+                                                <td class="minimizechar">Bali</td>
+                                                <td>
+                                                    @if(Auth::user()->divisi->id == "15")<a href="" id="pengirimanhref">
+                                                        <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
+                                                        <div><small class="text-muted">Pengiriman</small></div>
+                                                    </a>@endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-search"></i>
+                                                                Detail
+                                                            </button>
+                                                        </a>
+                                                        @if(Auth::user()->divisi->id == "15")
+                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
+                                                            <button class="dropdown-item" type="button">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                                Edit
+                                                            </button>
+                                                        </a>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        </span>
-
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <table class="table" id="showtable" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>No SO</th>
-                                        <th>No SJ</th>
-                                        <th>Ekspedisi</th>
-                                        <th>No Resi</th>
-                                        <th>Tanggal Kirim</th>
-                                        <th>Nama Customer</th>
-                                        <th>Provinsi</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>SO-SPA10210001</td>
-                                        <td>SJ/10/20/2001</td>
-                                        <td class="minimizechar">J&T</td>
-                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
-                                        <td>09-10-2021</td>
-                                        <td class="minimizechar">RS Nurul Ikhsan</td>
-                                        <td class="minimizechar">Jawa Barat</td>
-                                        <td><span class="badge blue-text">Dalam Pengiriman</span></td>
-                                        <td>
-                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-search"></i>
-                                                        Detail
-                                                    </button>
-                                                </a>
-                                                @if(Auth::user()->divisi->id == "15")
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'dalam_pengiriman'])}}" data-id="">
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                        Edit
-                                                    </button>
-                                                </a>
-                                                <a href="{{route('logistik.pengiriman.print')}}">
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-file"></i>
-                                                        Laporan PDF
-                                                    </button>
-                                                </a>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>SO-EKAT08210005</td>
-                                        <td>SJ/08/21/0986</td>
-                                        <td class="minimizechar">Safari Dharma Raya</td>
-                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
-                                        <td>
-                                            <div>02-08-2021</div>
-                                            <div><small><i class="fas fa-exclamation-circle warning"></i> Batas 2 Hari Lagi</small></div>
-                                        </td>
-                                        <td class="minimizechar">Bapak Hutapea</td>
-                                        <td class="minimizechar">Sumatera Utara</td>
-                                        <td>@if(Auth::user()->divisi->id == "15")
-                                            <a href="" id="pengirimanhref">
-                                                <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
-                                                <div><small class="text-muted">Pengiriman</small></div>
-                                            </a>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-search"></i>
-                                                        Detail
-                                                    </button>
-                                                </a>
-                                                @if(Auth::user()->divisi->id == "15")
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                        Edit
-                                                    </button>
-                                                </a>
-                                                @endif
-                                            </div>
+            </div>
+            <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header bg-warning">
+                            <h4 class="modal-title">Edit</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="edit">
 
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>SO-SPB08210005</td>
-                                        <td>SJ/01/20/1927</td>
-                                        <td class="minimizechar">Si Cepat</td>
-                                        <td><small><i class="text-muted">Belum Tersedia</i></small></td>
-                                        <td>
-                                            <div>02-08-2021</div>
-                                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</div>
-                                        </td>
-                                        <td class="minimizechar">Pemerintah Kab Badung</td>
-                                        <td class="minimizechar">Bali</td>
-                                        <td>
-                                            @if(Auth::user()->divisi->id == "15")<a href="" id="pengirimanhref">
-                                                <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
-                                                <div><small class="text-muted">Pengiriman</small></div>
-                                            </a>@endif
-                                        </td>
-                                        <td>
-                                            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-search"></i>
-                                                        Detail
-                                                    </button>
-                                                </a>
-                                                @if(Auth::user()->divisi->id == "15")
-                                                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
-                                                    <button class="dropdown-item" type="button">
-                                                        <i class="fas fa-pencil-alt"></i>
-                                                        Edit
-                                                    </button>
-                                                </a>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-warning">
-                    <h4 class="modal-title">Edit</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="edit">
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 @stop
 
 @section('adminlte_js')

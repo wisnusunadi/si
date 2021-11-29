@@ -26,7 +26,6 @@ class Pesanan extends Model
     {
         return $this->hasMany(DetailPesanan::class);
     }
-
     function TFProduksi()
     {
         return $this->hasOne(TFProduksi::class);

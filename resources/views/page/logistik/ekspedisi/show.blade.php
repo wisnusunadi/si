@@ -38,12 +38,60 @@
     .hide {
         display: none !important;
     }
+
+    .laut-text {
+        background-color: #E1EBF2;
+        color: #5F7A90;
+        padding: 6px;
+        border-radius: 0.3rem;
+    }
+
+    .udara-text {
+        background-color: #FFE6C9;
+        color: #EA8B1B;
+        padding: 6px;
+        border-radius: 0.3rem;
+    }
+
+    .darat-text {
+        background-color: rgba(69, 102, 0, 0.2);
+        color: #456600;
+        padding: 6px;
+        border-radius: 0.3rem;
+    }
+
+    .lain-text {
+        background-color: #E9DDE5;
+        color: #7D6378;
+        padding: 6px;
+        border-radius: 0.3rem;
+    }
+
+    @media screen and (min-width: 1440px) {
+        section {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        section {
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+<section class="content">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -282,7 +330,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 
 @section('adminlte_js')
@@ -309,10 +357,13 @@
                 searchable: false
             }, {
                 data: 'nama',
+                className: 'nowrap-text minimizechar',
+                orderable: true,
+                searchable: true
 
             }, {
                 data: 'alamat',
-
+                className: 'nowrap-text minimizechar',
             }, {
                 data: 'email',
                 orderable: false,
@@ -331,6 +382,7 @@
 
             }, {
                 data: 'ket',
+                className: 'nowrap-text minimizechar',
                 orderable: false,
                 searchable: false
 

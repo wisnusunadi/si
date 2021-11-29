@@ -864,7 +864,6 @@ class PenjualanController extends Controller
                 'pesanan_id' => $x,
                 'provinsi_id' => $request->provinsi,
                 'instansi' => $request->instansi,
-                'alamat' => $request->alamatinstansi,
                 'satuan' => $request->satuan_kerja,
                 'status' => $request->status,
                 'tgl_kontrak' => $request->batas_kontrak,
@@ -1054,7 +1053,6 @@ class PenjualanController extends Controller
         //         'jumlah.required' => 'Jumlah Produk harus di isi',
         //         'penjualan_produk_id.required' => 'Produk harus di pilih',
         //     ]
-
         // );
         $bool = true;
 

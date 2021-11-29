@@ -196,7 +196,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
-    Route::view('/dashboard', 'page.direksi.dashboard')->name('direksi.dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard'])->name('direksi.dashboard');
 });
 
 Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
