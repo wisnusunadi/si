@@ -28,8 +28,18 @@
                             </li>
                             <li class="list-group-item bordertopnone">
                                 <a>Status</a>
-                                <b class="float-right" id="status">@if ($data->log)
-                                    {{ $data->log}}
+                                <b class="float-right" id="status">@if ($data->log == "penjualan")
+                                    <span class="red-text badge">{{ucfirst($data->log)}}</span>
+                                    @elseif($data->log == "po")
+                                    <span class="purple-text badge">{{ucfirst($data->log)}}</span>
+                                    @elseif($data->log == "gudang")
+                                    <span class="orange-text badge">{{ucfirst($data->log)}}</span>
+                                    @elseif($data->log == "qc")
+                                    <span class="yellow-text badge">{{ucfirst($data->log)}}</span>
+                                    @elseif($data->log == "logistik")
+                                    <span class="blue-text badge">{{ucfirst($data->log)}}</span>
+                                    @elseif($data->log == "selesai")
+                                    <span class="green-text badge">{{ucfirst($data->log)}}</span>
                                     @endif</b>
                             </li>
                             <li class="list-group-item bordertopnone">
