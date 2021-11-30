@@ -100,6 +100,9 @@ class MasterController extends Controller
                     }
                 }
             })
+            ->addColumn('button', function ($data) {
+                $return = "";
+            })
             ->rawColumns(['status'])
             ->make(true);
     }

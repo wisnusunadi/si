@@ -98,16 +98,18 @@
                     <div class="card-body">
                         <div class="row" style="margin-bottom:10px;">
                             <div class="col-12">
+                                @if(Auth::user()->divisi_id == "15")
                                 <span class="float-right filter">
                                     <a href="{{route('logistik.ekspedisi.create')}}"><button class="btn btn-outline-info">
                                             <i class="fas fa-plus"></i> Tambah
                                         </button></a>
                                 </span>
+                                @endif
                                 <span class="dropdown float-right filter">
-                                    <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" data-flip="false" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="filterpenjualan">
+                                    <div class="dropdown-menu" aria-labelledby="filterpenjualan" style="position:relative;">
                                         <form class="px-4 py-3" style="white-space:nowrap;" id="filter">
                                             <div class="dropdown-header">
                                                 <label for="jenis_penjualan" class="text-muted">Jalur</label>
@@ -199,114 +201,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                                <td>1</td>
-                                                <td>JNE</td>
-                                                <td>Jl Jaksa Agung Suprapto No. 15 Banyuurip, Surabaya</td>
-                                                <td>jne-banyuurip@gmail.com</td>
-                                                <td>03179026798</td>
-                                                <td><span class="badge green-text">Darat</span></td>
-                                                <td>Jawa Timur</td>
-                                                <td>-</td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.ekspedisi.detail', ['id' => '1'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                                Edit
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Safari Dharma Raya</td>
-                                                <td>Jl Arjuno No. 68 Surabaya</td>
-                                                <td>safarilkargosub@gmail.com</td>
-                                                <td>03189821583</td>
-                                                <td><span class="badge blue-text">Laut</span></td>
-                                                <td>NTT, NTB</td>
-                                                <td>-</td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.ekspedisi.detail', ['id' => '1'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                                Edit
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>KAI8</td>
-                                                <td>Jl Pasar Turi No. 9 Pasar Turi, Surabaya</td>
-                                                <td>kai8pasarturi@gmail.com</td>
-                                                <td>03189829089</td>
-                                                <td><span class="badge purple-text">Lain</span></td>
-                                                <td>Jawa Barat</td>
-                                                <td>-</td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.ekspedisi.detail', ['id' => '1'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                                Edit
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Garuda Kargo</td>
-                                                <td>Jl Pasar Turi No. 9 Pasar Turi, Surabaya</td>
-                                                <td>kai8pasarturi@gmail.com</td>
-                                                <td>03189829089</td>
-                                                <td><span class="badge orange-text">Udara</span></td>
-                                                <td>Padang</td>
-                                                <td>-</td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.ekspedisi.detail', ['id' => '1'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                                Edit
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr> -->
+
                                         </tbody>
                                     </table>
                                 </div>
