@@ -104,6 +104,97 @@ class LogistikController extends Controller
             ->rawColumns(['checkbox', 'button', 'status'])
             ->make(true);
     }
+
+    public function get_data_detail_belum_kirim_so($id)
+    {
+        $data = DetailPesanan::where('pesanan_id', $id)->doesntHave('DetailLogistik')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('checkbox', function ($data) {
+                return '  <div class="form-check">
+                    <input class=" form-check-input yet detail_produk_id"  data-id="' . $data->id . '" type="checkbox" data-value="' . $data->pesanan->id . '" />
+                    </div>';
+            })
+            ->addColumn('nama_produk', function ($data) {
+                return $data->penjualanproduk->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('button', function ($data) {
+                return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+            })
+            ->rawColumns(['checkbox', 'button', 'status'])
+            ->make(true);
+    }
+
+    public function get_data_detail_selesai_kirim_so($id)
+    {
+        $data = DetailPesanan::where('pesanan_id', $id)->Has('DetailLogistik')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('no', function ($data) {
+                if (isset($data->DetailLogistik->Logistik)) {
+                    return $data->DetailLogistik->Logistik->nosurat;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('tgl_kirim', function ($data) {
+                if (isset($data->DetailLogistik->Logistik)) {
+                    return $data->DetailLogistik->Logistik->tgl_kirim;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('pengirim', function ($data) {
+                if (isset($data->DetailLogistik->Logistik)) {
+                    if ($data->DetailLogistik->Logistik->nama_pengirim == "") {
+                        return $data->DetailLogistik->Logistik->ekspedisi->nama;
+                    } else {
+                        return $data->DetailLogistik->Logistik->nama_pengirim;
+                    }
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('nama_produk', function ($data) {
+                return $data->penjualanproduk->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('button', function ($data) {
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
+                <div><i class="fas fa-search"></i></div>
+            </a>';
+            })
+            ->rawColumns(['checkbox', 'button', 'status'])
+            ->make(true);
+    }
+
+    public function get_data_no_seri($id)
+    {
+        $data = NoseriDetailPesanan::where('detail_pesanan_produk', $id)->doesntHave('DetailLogistik')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('checkbox', function ($data) {
+                return '  <div class="form-check">
+                    <input class=" form-check-input yet detail_produk_id"  data-id="' . $data->id . '" type="checkbox" data-value="' . $data->pesanan->id . '" />
+                    </div>';
+            })
+            ->addColumn('nama_produk', function ($data) {
+                return $data->penjualanproduk->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('button', function ($data) {
+                return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+            })
+            ->rawColumns(['checkbox', 'button', 'status'])
+            ->make(true);
+    }
     //Get Data 
     public function get_data_so()
     {
@@ -616,7 +707,7 @@ class LogistikController extends Controller
     }
 
     //Laporan
-    public function laporan_logistik($pengiriman, $ekspedisi, $tgl_awal, $tgl_akhir)
+    public function get_data_laporan_logistik($pengiriman, $ekspedisi, $tgl_awal, $tgl_akhir)
     {
         $s = "";
         if ($pengiriman == "ekspedisi") {
@@ -639,7 +730,7 @@ class LogistikController extends Controller
                 return $data->Pesanan->so;
             })
             ->addColumn('sj', function ($data) {
-                return $data->DetailLogistik->Logistik->no_sj;
+                return $data->DetailLogistik->Logistik->nosurat;
             })
             ->addColumn('invoice', function ($data) {
                 return '-';
@@ -710,7 +801,7 @@ class LogistikController extends Controller
             ->addColumn('jumlah', function ($data) {
                 return $data->jumlah;
             })
-            ->addColumn('ongkir', function () {
+            ->addColumn('ongkir', function ($data) {
                 return '0';
             })
             ->addColumn('status', function ($data) {

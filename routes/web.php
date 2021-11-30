@@ -172,6 +172,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/ekspedisi'], function () {
         Route::view('/show', 'page.logistik.ekspedisi.show')->name('logistik.ekspedisi.show');
+        Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_ekspedisi'])->name('logistik.ekspedisi.detail');
         Route::view('/create', 'page.logistik.ekspedisi.create')->name('logistik.ekspedisi.create');
         Route::get('/edit/{id}', [App\Http\Controllers\MasterController::class, 'update_ekspedisi_modal'])->name('logistik.ekspedisi.edit');

@@ -18,4 +18,8 @@ class NoseriDetailPesanan extends Model
     {
         return $this->belongsTo(NoseriTGbj::class, 't_tfbj_noseri_id');
     }
+    public function NoseriDetailLogistik()
+    {
+        return $this->hasOne(NoseriDetailLogistik::class);
+    }
 }

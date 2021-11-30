@@ -162,9 +162,9 @@
 
         ekspedisi_select();
 
-        function table(pengiriman, eksepedisi, tgl_awal, tgl_akhir) {
-            //console.log('/api/laporan/qc/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir);
-            $('#qctable').DataTable({
+        function table(pengiriman, ekspedisi, tgl_awal, tgl_akhir) {
+            // console.log('/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir);
+            $('#showtable').DataTable({
                 destroy: true,
                 processing: true,
                 dom: 'Bfrtip',
@@ -283,7 +283,6 @@
                 }
             }).change(function() {
                 var value = $(this).val();
-                $('.ekspedisi').text('d');
                 console.log(value);
             });
         }
@@ -339,28 +338,28 @@
             }
         });
 
-        $('.customer_id').select2({
-            allowClear: true,
-            placeholder: 'Pilih Data',
-            ajax: {
-                tags: [],
-                dataType: 'json',
-                delay: 250,
-                type: 'GET',
-                url: '/api/customer/select/',
-                processResults: function(data) {
-                    console.log(data);
-                    return {
-                        results: $.map(data, function(obj) {
-                            return {
-                                id: obj.id,
-                                text: obj.nama
-                            };
-                        })
-                    };
-                },
-            }
-        });
+        // $('.customer_id').select2({
+        //     allowClear: true,
+        //     placeholder: 'Pilih Data',
+        //     ajax: {
+        //         tags: [],
+        //         dataType: 'json',
+        //         delay: 250,
+        //         type: 'GET',
+        //         url: '/api/customer/select/',
+        //         processResults: function(data) {
+        //             console.log(data);
+        //             return {
+        //                 results: $.map(data, function(obj) {
+        //                     return {
+        //                         id: obj.id,
+        //                         text: obj.nama
+        //                     };
+        //                 })
+        //             };
+        //         },
+        //     }
+        // });
 
         $("#btnbatal").on('click', function() {
             $("#btncetak").attr('disabled', true);
@@ -375,17 +374,26 @@
 
         $('#btncetak').on('click', function() {
             $('#showform').removeClass('hide');
-            var ekspedisi = "";
-            if ($(".ekspedisi_id").val() != "") {
-                ekspedisi = $(".ekspedisi_id").val();
+
+            var ekspedisi = "0";
+            console.log($(".ekspedisi_id").val());
+            var pengiriman = "0";
+            if ($('input[type="radio"][name="pengiriman"]:checked').length > 0) {
+                pengiriman = $('input[type="radio"][name="pengiriman"]:checked').val();
+                if (pengiriman == "ekspedisi") {
+                    if ($(".ekspedisi_id").val() != "") {
+                        ekspedisi = $(".ekspedisi_id").val();
+                    } else {
+                        ekspedisi = "0";
+                    }
+                }
             } else {
-                ekspedisi = "0";
+                pengiriman = "0";
             }
-            var pengiriman = $('input[type="radio"][name="pengiriman"]:checked').val();
-            if ($('input[type="radio"][name="pengiriman"]:checked').val())
-                var tgl_awal = $('#tanggal_mulai').val();
+
+            var tgl_awal = $('#tanggal_mulai').val();
             var tgl_akhir = $('#tanggal_akhir').val();
-            table(produk, so, hasil, tgl_awal, tgl_akhir);
+            table(pengiriman, ekspedisi, tgl_awal, tgl_akhir);
         })
     });
 </script>

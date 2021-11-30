@@ -13,7 +13,12 @@
                                     <div class="form-group row">
                                         <label class="col-form-label col-5 align-right" for="no_invoice">No Surat Jalan</label>
                                         <div class="col-6">
-                                            <input type="text" class="form-control col-form-label" name="no_invoice" id="no_invoice">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">SPA</span>
+                                                </div>
+                                                <input type="text" class="form-control col-form-label" name="no_invoice" id="no_invoice">
+                                            </div>
                                             <div class="invalid-feedback" id="msgno_invoice"></div>
                                         </div>
                                     </div>
