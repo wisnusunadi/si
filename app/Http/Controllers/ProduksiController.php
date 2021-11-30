@@ -11,6 +11,7 @@ use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
 use App\Models\JadwalRakitNoseri;
 use App\Models\NoseriBarangJadi;
+use App\Models\NoseriTGbj;
 use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
 use App\Models\Spa;
@@ -841,7 +842,36 @@ class ProduksiController extends Controller
         $detail->jenis = 'masuk';
         $detail->created_at = Carbon::now();
         $detail->save();
-        // dd($request->all());
+
+        $check_array = $request->noseri;
+        foreach($request->noseri as $key => $value) {
+            if (in_array($request->noseri[$key], $check_array)) {
+                $seri = new NoseriBarangJadi();
+
+                $seri->dari = 17;
+                $seri->noseri = $request->noseri[$key];
+                $seri->jenis = 'MASUK';
+                $seri->is_aktif = 0;
+                $seri->created_at = Carbon::now();
+                $seri->save();
+
+                $serit = new NoseriTGbj();
+                $serit->t_gbj_detail_id = $detail->id;
+                $serit->noseri_id = $seri->id;
+                $serit->layout_id = 1;
+                $serit->jenis = 'MASUK';
+                $serit->created_at = Carbon::now();
+                $serit->save();
+            }
+        }
+
+        $rakitseri = JadwalPerakitan::find($request->jadwal_id);
+        $rakitseri->status_tf = 14;
+        $rakitseri->save();
+
+        JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->update(['waktu_tf' => Carbon::now()]);
+
+        dd($request->all());
     }
 
     function test1()

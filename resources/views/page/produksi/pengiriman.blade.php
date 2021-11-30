@@ -397,7 +397,7 @@
                         if (i < 5) {
                             // $row = $('.scan-produk').append('<tr></tr>');
                             // $('.scan-produk').append('<td>x</td><td>val</td>')
-                            $('.scan-produk').append('<td><input type="checkbox" name="noseri[]" id="noseri" value="'+val.id+'" class="cb-child-'+i+'"></td><td>'+val.noseri+'</td>')
+                            $('.scan-produk').append('<td><input type="checkbox" name="noseri[]" id="noseri" value="'+val.noseri+'" class="cb-child-'+i+'"></td><td>'+val.noseri+'</td>')
                         }
                         // $row.append('<td><input type="checkbox" name="noseri[]" id="noseri" value="'+val.id+'" class="cb-child-'+i+'"></td><td>'+val.noseri+'</td>')
                     })
@@ -417,6 +417,34 @@
         // var id = $(this).data('id');
         console.log(id);
         console.log(prd);
+
+        const seri = [];
+
+        $('.cb-child-0').each(function() {
+            if ($(this).is(":checked")) {
+                seri.push($(this).val());
+            }
+        })
+        $('.cb-child-1').each(function() {
+            if ($(this).is(":checked")) {
+                seri.push($(this).val());
+            }
+        })
+        $('.cb-child-2').each(function() {
+            if ($(this).is(":checked")) {
+                seri.push($(this).val());
+            }
+        })
+        $('.cb-child-3').each(function() {
+            if ($(this).is(":checked")) {
+                seri.push($(this).val());
+            }
+        })
+        $('.cb-child-4').each(function() {
+            if ($(this).is(":checked")) {
+                seri.push($(this).val());
+            }
+        })
         $.ajax({
             url: "/api/prd/send",
             type: "post",
@@ -424,6 +452,8 @@
                 "_token" : "{{csrf_token() }}",
                 qty: jumlah,
                 gbj_id : prd,
+                jadwal_id : id,
+                noseri: seri,
             },
             success: function(res) {
                 console.log(res);
