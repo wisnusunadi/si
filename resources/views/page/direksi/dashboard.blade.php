@@ -170,7 +170,7 @@
                                                     <div class="col-lg-6 col-6 py-2">
                                                         <div class="card h-100 purple">
                                                             <div class="card-body">
-                                                                <h3 id="so_gudang">3</h3>
+                                                                <h3 id="so_gudang">{{$gudang}}</h3>
                                                                 <p class="so-title">SO Belum Diproses Gudang</p>
                                                             </div>
                                                             <div class="card-footer align-center"><a href="#" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
@@ -179,7 +179,7 @@
                                                     <div class="col-lg-6 col-6 py-2">
                                                         <div class="card h-100 yellow">
                                                             <div class="card-body ">
-                                                                <h3 id="so_qc">3</h3>
+                                                                <h3 id="so_qc">{{$qc}}</h3>
                                                                 <p class="so-title">SO Belum Diproses QC</p>
                                                             </div>
                                                             <div class="card-footer align-center"><a href="/qc/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
@@ -190,7 +190,7 @@
                                                     <div class="col-lg-6 col-6 py-2">
                                                         <div class="card h-100 green">
                                                             <div class="card-body">
-                                                                <h3 id="so_logistik">3</h3>
+                                                                <h3 id="so_logistik">{{$log}}</h3>
                                                                 <p class="so-title">SO Belum Diproses Logistik</p>
                                                             </div>
                                                             <div class="card-footer align-center"><a href="/logistik/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
@@ -212,7 +212,7 @@
                                                     <div class="col-lg-12 col-12 py-2">
                                                         <div class="card h-100 red">
                                                             <div class="card-body p-5">
-                                                                <h3 id="so_dc">3</h3>
+                                                                <h3 id="so_dc">{{$penj}}</h3>
                                                                 <p class="so-title">AKN Belum Memiliki SO</p>
                                                             </div>
                                                             <div class="card-footer align-center"><a href="/penjualan/penjualan/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>

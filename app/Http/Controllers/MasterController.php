@@ -106,10 +106,14 @@ class MasterController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('jurusan', function ($data) {
-                return implode(',', $data->provinsi->pluck('nama')->toArray());
+                return implode(', ', $data->provinsi->pluck('nama')->toArray());
             })
             ->addColumn('via', function ($data) {
-                return implode(',', $data->jalurekspedisi->pluck('nama')->toArray());
+                $list = array();
+                foreach ($data->jalurekspedisi as $s) {
+                    $list[] = '<div class="badge ' . $s->nama . '-text">' . ucfirst($s->nama) . '</div>';
+                }
+                return implode('<br>', $list);
             })
             ->addColumn('button', function ($data) {
                 return '

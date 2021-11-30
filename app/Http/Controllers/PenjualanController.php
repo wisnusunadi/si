@@ -14,6 +14,7 @@ use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
+use App\Models\TFProduksi;
 use Carbon\Doctrine\CarbonType;
 use Hamcrest\Core\IsNot;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
+                return $data->Customer['nama'];
             })
             ->addColumn('no_paket', function ($data) {
                 if (isset($data->no_paket)) {
@@ -120,20 +121,22 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if ($data->log == "penjualan") {
-                    $datas .= '<span class="red-text badge">';
-                } else if ($data->log == "po") {
-                    $datas .= '<span class="purple-text badge">';
-                } else if ($data->log == "gudang") {
-                    $datas .= '<span class="orange-text badge">';
-                } else if ($data->log == "qc") {
-                    $datas .= '<span class="yellow-text badge">';
-                } else if ($data->log == "logistik") {
-                    $datas .= '<span class="blue-text badge">';
-                } else if ($data->log == "selesai") {
-                    $datas .= '<span class="green-text badge">';
+                if (!empty($data->log)) {
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
                 }
-                $datas .= ucfirst($data->log) . '</span>';
                 return $datas;
             })
             ->addColumn('button', function ($data) {
@@ -236,6 +239,7 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function ($data) {
+                    $status = "";
                     if ($data->status == "draft") {
                         $status = '<span class="badge blue-text">Draft</span>';
                     } else if ($data->status == "sepakat") {
@@ -503,12 +507,14 @@ class PenjualanController extends Controller
     {
         $divisi_id = Auth::user()->divisi->id;
         $x = explode(',', $value);
+        $data = "";
 
         if ($value == 0 || $value == 'kosong') {
-            $data  = Ekatalog::with('pesanan')->get();
+            $data  = Ekatalog::with('pesanan', 'customer')->get();
         } else {
-            $data  = Ekatalog::with('pesanan')->whereIN('status', $x);
+            $data  = Ekatalog::with('pesanan', 'customer')->whereIN('status', $x);
         }
+
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -520,6 +526,7 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
+                $status = "";
                 if ($data->status == "draft") {
                     $status = '<span class="blue-text badge">Draft</span>';
                 } else if ($data->status == "sepakat") {
@@ -529,7 +536,6 @@ class PenjualanController extends Controller
                 } else if ($data->status == "batal") {
                     $status =  '<span class="red-text badge">Batal</span>';
                 }
-
                 return $status;
             })
             ->addColumn('nopo', function ($data) {
@@ -540,7 +546,9 @@ class PenjualanController extends Controller
                 }
             })
             ->editColumn('tgl_buat', function ($data) {
-                return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
+                if (!empty($data->tgl_buat)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
+                }
             })->editColumn('tgl_kontrak', function ($data) {
                 if ($data->status == "batal" || $data->status == "draft") {
                     return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
@@ -578,7 +586,9 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
+                if (isset($data->Customer)) {
+                    return $data->Customer['nama'];
+                }
             })
             ->addColumn('button', function ($data) use ($divisi_id) {
 
@@ -864,7 +874,6 @@ class PenjualanController extends Controller
                 'pesanan_id' => $x,
                 'provinsi_id' => $request->provinsi,
                 'instansi' => $request->instansi,
-                'alamat' => $request->alamatinstansi,
                 'satuan' => $request->satuan_kerja,
                 'status' => $request->status,
                 'tgl_kontrak' => $request->batas_kontrak,
@@ -1054,7 +1063,6 @@ class PenjualanController extends Controller
         //         'jumlah.required' => 'Jumlah Produk harus di isi',
         //         'penjualan_produk_id.required' => 'Produk harus di pilih',
         //     ]
-
         // );
         $bool = true;
 
@@ -1757,6 +1765,17 @@ class PenjualanController extends Controller
 
         return response()->json(compact('ekatalog_graph', 'spa_graph', 'spb_graph'));
     }
+
+    //Dashboard
+    public function dashboard()
+    {
+        $belum_so = Ekatalog::whereNull('pesanan_id')->get()->count();
+        $so_belum_gudang = Pesanan::DoesntHave('TFProduksi')->get()->count();
+        $so_belum_qc = TFProduksi::Has('Pesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get()->count();
+        $so_belum_logistik = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailLogistik')->get()->count();
+        return view('page.penjualan.dashboard', ['belum_so' => $belum_so, 'so_belum_gudang' => $so_belum_gudang, 'so_belum_qc' => $so_belum_qc, 'so_belum_logistik' => $so_belum_logistik]);
+    }
+
     //Another 
     function toRomawi($number)
     {

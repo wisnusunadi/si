@@ -62,6 +62,41 @@
     .nowrap-text {
         white-space: nowrap;
     }
+
+    @media screen and (min-width: 1440px) {
+
+        section {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+
+        label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
@@ -407,7 +442,7 @@
                     if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',
-                            'Berhasil melakukan edit data',
+                            'Berhasil melakukan Penambahan Data Pengujian',
                             'success'
                         );
                         $("#editmodal").modal('hide');
@@ -415,7 +450,7 @@
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
-                            'Gagal melakukan edit data',
+                            'Gagal melakukan Penambahan Data Pengujian',
                             'error'
                         );
                     }

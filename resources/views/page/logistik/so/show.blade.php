@@ -26,6 +26,17 @@
         margin: 5px;
     }
 
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 25ch;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
     @media screen and (min-width: 1440px) {
         section {
             font-size: 14px;
@@ -49,8 +60,8 @@
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+<section class="content">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -181,7 +192,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 @section('adminlte_js')
 <script>
@@ -207,7 +218,8 @@
                     searchable: false
                 },
                 {
-                    data: 'so'
+                    data: 'so',
+                    className: 'nowrap-text'
                 },
                 {
                     data: 'batas',
@@ -216,10 +228,12 @@
                     searchable: false
                 },
                 {
-                    data: 'nama_customer'
+                    data: 'nama_customer',
+                    className: 'align-center nowrap-text minimizechar'
                 },
                 {
-                    data: 'alamat'
+                    data: 'alamat',
+                    className: 'align-center nowrap-text minimizechar'
                 }, {
                     data: 'telp',
                     className: 'align-center nowrap-text',

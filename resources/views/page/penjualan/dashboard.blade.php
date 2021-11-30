@@ -98,7 +98,7 @@
                                 <div class="col-lg-3 col-6">
                                     <div class="small-box purple-text">
                                         <div class="inner">
-                                            <h3>3</h3>
+                                            <h3>{{$belum_so}}</h3>
                                             <p>Belum Memiliki SO</p>
                                         </div>
                                         <div class="icon">
@@ -109,7 +109,7 @@
                                 <div class="col-lg-3 col-6">
                                     <div class="small-box orange-text">
                                         <div class="inner">
-                                            <h3>4</h3>
+                                            <h3>{{$so_belum_gudang}}</h3>
                                             <p>SO Belum Diproses Gudang</p>
                                         </div>
                                         <div class="icon">
@@ -120,7 +120,7 @@
                                 <div class="col-lg-3 col-6">
                                     <div class="small-box yellow-text">
                                         <div class="inner">
-                                            <h3>2</h3>
+                                            <h3>{{$so_belum_qc}}</h3>
                                             <p>SO Belum Diproses QC</p>
                                         </div>
                                         <div class="icon">
@@ -131,7 +131,7 @@
                                 <div class="col-lg-3 col-6">
                                     <div class="small-box green-text">
                                         <div class="inner">
-                                            <h3>2</h3>
+                                            <h3>{{$so_belum_logistik}}</h3>
                                             <p>SO Belum Diproses Logistik</p>
                                         </div>
                                         <div class="icon">

@@ -18,17 +18,20 @@
         text-align: center;
     }
 
-    #urgent {
-        color: red;
+    .urgent {
+        color: #dc3545;
+        font-weight: 600;
     }
 
-    #warning {
+    .warning {
         color: #FFC700;
+        font-weight: 600;
     }
 
-    #info {
-        color: #3a7bb0;
+    .info {
+        color: #4682B4
     }
+
 
     .fa-search:hover {
         color: #4682B4;
@@ -307,12 +310,12 @@
                         <h4>Detail</h4>
                     </div>
                     <div class="modal-body" id="detail">
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </section>
 @stop
 
