@@ -162,9 +162,9 @@
 
         ekspedisi_select();
 
-        function table(pengiriman, eksepedisi, tgl_awal, tgl_akhir) {
-            console.log('/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir);
-            $('#qctable').DataTable({
+        function table(pengiriman, ekspedisi, tgl_awal, tgl_akhir) {
+            // console.log('/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir);
+            $('#showtable').DataTable({
                 destroy: true,
                 processing: true,
                 dom: 'Bfrtip',
@@ -283,7 +283,6 @@
                 }
             }).change(function() {
                 var value = $(this).val();
-                $('.ekspedisi').text('d');
                 console.log(value);
             });
         }
@@ -377,9 +376,8 @@
             $('#showform').removeClass('hide');
 
             var ekspedisi = "0";
-
-
-            var pengiriman = "";
+            console.log($(".ekspedisi_id").val());
+            var pengiriman = "0";
             if ($('input[type="radio"][name="pengiriman"]:checked').length > 0) {
                 pengiriman = $('input[type="radio"][name="pengiriman"]:checked').val();
                 if (pengiriman == "ekspedisi") {

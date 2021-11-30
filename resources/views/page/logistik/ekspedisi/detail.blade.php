@@ -121,7 +121,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>1</td>
                                         <td>SO-SPA10210001</td>
                                         <td>SJ/10/20/2001</td>
@@ -153,7 +153,7 @@
                                         <td>082139754850</td>
                                         <td><span class="badge green-text">Selesai</span></td>
                                         <td><i class="fas fa-search"></i></td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -168,46 +168,54 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#showtable').DataTable();
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/ekspedisi/detail/{{$e->id}}',
+                'type': 'GET',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
 
-        function gg() {
-            var showtable = $('#showtable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/customer/detail/' + '1',
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so'
+                },
+                {
+                    data: 'sj',
 
                 },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                {
+                    data: 'tgl',
+
                 },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'DT_RowIndex',
+                {
+                    data: 'nama_customer',
 
-                    },
-                    {
-                        data: 'DT_RowIndex',
+                },
+                {
+                    data: 'alamat',
 
-                    },
-                    {
-                        data: 'DT_RowIndex',
+                },
+                {
+                    data: 'telp',
 
-                    }
-                ]
-            });
-        }
+                },
+                {
+                    data: 'status',
+
+                }
+            ]
+        });
     });
 </script>
 @stop

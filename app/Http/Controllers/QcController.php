@@ -535,8 +535,6 @@ class QcController extends Controller
                 $lewat_batas++;
             }
         }
-
-
         return view('page.qc.dashboard', ['terbaru' => $terbaru, 'hasil' => $hasil, 'lewat_batas' => $lewat_batas]);
     }
     public function dashboard_data($value)

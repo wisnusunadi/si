@@ -136,7 +136,6 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\QcController::class, 'dashboard'])->name('qc.dashboard');
     Route::group(['prefix' => '/so'], function () {
-        Route::post('create/{seri_id}/{tfgbj_id}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
         Route::get('/detail/{id}/{value}', [App\Http\Controllers\QCController::class, 'detail_so'])->name('qc.so.detail');
         Route::view('/detail_ekatalog/{id}', 'page.qc.so.detail_ekatalog')->name('qc.so.detail_ekatalog');
@@ -155,7 +154,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
 
 
 Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
-    Route::view('/dashboard', 'page.logistik.dashboard')->name('logistik.dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
 
 
     Route::group(['prefix' => '/so'], function () {

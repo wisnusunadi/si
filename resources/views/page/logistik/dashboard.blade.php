@@ -105,43 +105,41 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4>Outgoing 2021</h4>
-
-
                                 <div class="row">
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-success">
                                             <div class="inner">
-                                                <h3>3</h3>
+                                                <h3>{{$terbaru}}</h3>
                                                 <p>Pengiriman Terbaru</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-dolly-flatbed"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="pengirimanterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer" id="pengirimanterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box warning-bg">
                                             <div class="inner">
-                                                <h3>4</h3>
+                                                <h3>{{$belum_dikirim}}</h3>
                                                 <p>Belum dikirim</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-boxes"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="belumdikirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer" id="belumdikirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-danger">
                                             <div class="inner">
-                                                <h3>2</h3>
+                                                <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Kirim</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="lewatbataskirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer" id="lewatbataskirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +161,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA102100001</td>
                                                     <td>
@@ -171,7 +169,11 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                     </td>
                                                     <td><span class="badge red-text">Belum dikirim</span></td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -181,7 +183,11 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
                                                     <td><span class="badge red-text">Belum dikirim</span></td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
@@ -191,8 +197,13 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
                                                     <td><span class="badge red-text">Belum dikirim</span></td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
                                                 </tr>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr> -->
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                             </tbody>
                                         </table>
 
@@ -212,14 +223,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA092100093</td>
                                                     <td>
                                                         <div class="urgent">31-10-2021</div>
                                                         <small><i class="fas fa-exclamation-circle" id="warning"></i> 2 Hari Lagi</small>
                                                     </td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -228,7 +243,11 @@
                                                         <div class="urgent">01-11-2021</div>
                                                         <small><i class="fas fa-exclamation-circle" id="warning"></i> 3 Hari Lagi</small>
                                                     </td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
@@ -237,7 +256,11 @@
                                                         <div class="urgent">12-10-2021</div>
                                                         <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
                                                     </td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                                 </tr>
                                                 <tr>
                                                     <td>4</td>
@@ -246,8 +269,13 @@
                                                         <div class="urgent">11-10-2021</div>
                                                         <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                     </td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
                                                 </tr>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr> -->
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                             </tbody>
                                         </table>
 
@@ -267,7 +295,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA092100093</td>
                                                     <td>
@@ -275,7 +303,11 @@
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
                                                     </td>
                                                     <td><span class="badge yellow-text">Sebagian dikirim</span></td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -285,8 +317,13 @@
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
                                                     </td>
                                                     <td><span class="badge yellow-text">Sebagian dikirim</span></td>
+<<<<<<< HEAD
                                                     <td><a href="/api/logistik/so/data/detail/1"><i class="fas fa-search"></i></a></td>
                                                 </tr>
+=======
+                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
+                                                </tr> -->
+>>>>>>> 37c4b217c73e1443b28339600c7be23ca332d9db
                                             </tbody>
                                         </table>
                                     </div>
@@ -316,7 +353,11 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        pengirimanbarutable();
         $('#pengirimanterbaru').on('click', function() {
+            pengirimanbarutable();
+            belumdikirimtable_destroy();
+            lewatbataskirimtable_destroy();
             $('#pengirimanterbaru').addClass('active');
             $('#pengirimanbarutable').removeClass('hide');
 
@@ -328,6 +369,9 @@
         })
 
         $('#belumdikirim').on('click', function() {
+            belumdikirimtable();
+            pengirimanbarutable_destroy();
+            lewatbataskirimtable_destroy();
             $('#belumdikirim').addClass('active');
             $('#belumdikirimtable').removeClass('hide');
 
@@ -339,6 +383,9 @@
         })
 
         $('#lewatbataskirim').on('click', function() {
+            lewatbataskirimtable();
+            pengirimanbarutable_destroy();
+            belumdikirimtable_destroy();
             $('#lewatbataskirim').addClass('active');
             $('#lewatbataskirimtable').removeClass('hide');
 
@@ -349,57 +396,125 @@
             $('#pengirimanbarutable').addClass('hide');
         })
 
-        var pengirimantable = $('#table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/ekatalog/pengiriman/data/',
-                'type': 'POST',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
+        function pengirimanbarutable() {
+            var pengirimanbarutable = $('#pengirimanbarutable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/dashboard/data/terbaru',
 
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'batas_kontrak',
-                    className: 'nowrap-text align-center',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
 
                 },
-                {
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
                     data: 'DT_RowIndex',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
+                }, {
+                    data: 'so',
+
+                }, {
+                    data: 'batas',
+
+                }, {
+                    data: 'status',
+
+                }, {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                }]
+            })
+        }
+
+        function pengirimanbarutable_destroy() {
+            $('#pengirimanbarutable').DataTable().clear().destroy();
+        }
+
+        function belumdikirimtable() {
+            var belumdikirimtable = $('#belumdikirimtable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/dashboard/data/belum_dikirim',
+
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+
                 },
-            ]
-        })
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'so',
+
+                }, {
+                    data: 'batas',
+                }, {
+                    data: 'button',
+                }]
+            })
+        }
+
+        function belumdikirimtable_destroy() {
+            $('#belumdikirimtable').DataTable().clear().destroy();
+        }
+
+        function lewatbataskirimtable() {
+            var lewatbataskirimtable = $('#lewatbataskirimtable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/dashboard/data/lewat_batas',
+
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'so',
+
+                }, {
+                    data: 'batas',
+
+                }, {
+                    data: 'status',
+
+                }, {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                }]
+            })
+        }
+
+        function lewatbataskirimtable_destroy() {
+            $('#lewatbataskirimtable').DataTable().clear().destroy();
+        }
     })
 </script>
 <script>
