@@ -99,6 +99,7 @@ Route::prefix('/laporan')->group(function () {
     Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
     Route::get('/penjualan/{penjualan}/{distributor}/{tanggal_awal}/{tanggal_akhir}', [App\Http\Controllers\PenjualanController::class, 'get_data_laporan_penjualan']);
     Route::get('/qc/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_data_laporan_qc']);
+    Route::get('/logistik/{pengiriman}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'get_data_laporan_logistik']);
 });
 Route::prefix('/gbj')->group(function () {
     Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
@@ -241,10 +242,6 @@ Route::prefix('/logistik')->group(function () {
         Route::get('select', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
         Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
-    });
-
-    Route::prefix('/laporan')->group(function () {
-        Route::post('/create', [App\Http\Controllers\LogistikController::class, 'laporan_']);
     });
 });
 

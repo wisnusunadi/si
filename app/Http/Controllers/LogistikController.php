@@ -258,7 +258,7 @@ class LogistikController extends Controller
     }
 
     //Laporan
-    public function laporan_logistik($pengiriman, $ekspedisi, $tgl_awal, $tgl_akhir)
+    public function get_data_laporan_logistik($pengiriman, $ekspedisi, $tgl_awal, $tgl_akhir)
     {
         $s = "";
         if ($pengiriman == "ekspedisi") {
@@ -352,7 +352,7 @@ class LogistikController extends Controller
             ->addColumn('jumlah', function ($data) {
                 return $data->jumlah;
             })
-            ->addColumn('ongkir', function () {
+            ->addColumn('ongkir', function ($data) {
                 return '0';
             })
             ->addColumn('status', function ($data) {
