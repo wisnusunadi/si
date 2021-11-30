@@ -11,6 +11,8 @@ class GudangKarantinaDetail extends Model
 
     protected $table = 't_gk_detail';
 
+    protected $fillable = ['gk_id', 'gbj_id', 'sparepart_id', 'qty_unit', 'qty_spr', 'is_draft', 'is_keluar'];
+
     function units() {
         return $this->belongsTo(GudangBarangJadi::class, 'gbj_id');
     }
@@ -27,5 +29,5 @@ class GudangKarantinaDetail extends Model
     function noseri() {
         return $this->hasMany(GudangKarantinaNoseri::class, 'gk_detail_id');
     }
-    
+
 }

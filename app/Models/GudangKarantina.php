@@ -12,7 +12,7 @@ class GudangKarantina extends Model
     protected $table = 't_gk';
 
     function detail() {
-        return $this->hasMany(GudangKarantinaDetail::class, 'gk_id');
+        return $this->belongsToMany(GudangKarantinaDetail::class, 'gk_id');
     }
     function from() {
         return $this->belongsTo(Divisi::class, 'dari');
@@ -22,5 +22,5 @@ class GudangKarantina extends Model
         return $this->belongsTo(Divisi::class, 'ke');
     }
 
-    
+
 }

@@ -233,6 +233,7 @@ Route::prefix('/prd')->group(function() {
     Route::post('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
     Route::get('/detailSeri/{id}', [ProduksiController::class, 'detailSeri']);
+    Route::post('/send', [ProduksiController::class, 'kirimseri']);
 });
 
 Route::prefix('/spr')->group(function () {

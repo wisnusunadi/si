@@ -752,7 +752,7 @@ class ProduksiController extends Controller
                     return $d->jumlah.' '.$d->produk->satuan->nama;
                 })
                 ->addColumn('action', function($d) {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="'.$d->jumlah.'">
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="'.$d->jumlah.'" data-prd="'.$d->produk_id.'">
                                 <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
                             </a>';
                 })
@@ -818,10 +818,30 @@ class ProduksiController extends Controller
     }
 
     function detailSeri($id) {
-        $data = JadwalRakitNoseri::where('jadwal_id', $id)->get();
-        return datatables()->of($data)
+        $data = JadwalRakitNoseri::where('jadwal_id', $id)->limit(10)->get();
+        // return datatables()->of($data)
 
-            ->make(true);
+        //     ->make(true);
+
+        return response()->json($data);
+    }
+
+    function kirimseri(Request $request) {
+        $header = new TFProduksi();
+        $header->tgl_masuk = Carbon::now();
+        $header->dari = 17;
+        $header->jenis = 'masuk';
+        $header->created_at = Carbon::now();
+        $header->save();
+
+        $detail = new TFProduksiDetail();
+        $detail->t_gbj_id = $header->id;
+        $detail->gdg_brg_jadi_id = $request->gbj_id;
+        $detail->qty = $request->qty;
+        $detail->jenis = 'masuk';
+        $detail->created_at = Carbon::now();
+        $detail->save();
+        // dd($request->all());
     }
 
     function test1()

@@ -179,7 +179,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <table class="table table-striped scan-produk">
+                                <table class="table table-striped scan-produk" id>
                                     <thead>
                                         <tr>
                                             <th><input type="checkbox" name="" id="head-cb"></th>
@@ -195,7 +195,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td><input type="checkbox" name="" id="" class="cb-child"></td>
                                             <td>65462136516515</td>
                                             <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
@@ -254,7 +254,7 @@
                                             <td>65666654545465</td>
                                             <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
                                             <td>59689498484548</td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -264,7 +264,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" onclick="transfer()">Simpan</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
             </div>
         </div>
     </div>
@@ -301,13 +301,13 @@
             "targets": [6],
             "visible": document.getElementById('auth').value == '2' ? false : true
         }]
-        });
+    });
 
     function modalRakit() {
         $('.modalRakit').modal('show');
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            $('.cb-child-0').prop('checked', isChecked)
         });
 
         $("#head-cb-1").on('click', function () {
@@ -353,9 +353,13 @@
             }
         });
     }
-
+    var id = '';
+    var prd = '';
+    var jml = '';
     $(document).on('click', '.detailmodal', function() {
-        var id = $(this).data('id');
+        id = $(this).data('id');
+        prd = $(this).data('prd');
+        jumlah = $(this).data('jml');
         console.log(id);
 
         $.ajax({
@@ -373,28 +377,58 @@
             }
         })
 
+        $.ajax()
+
         $('.scan-produk').DataTable({
-            // destroy: true,
+            destroy: true,
             ordering: false,
             "autoWidth": false,
-            // processing: true,
-            // serverSide: true,
-            // ajax: {
-            //     url: "/api/prd/detailSeri/" + id,
-            // },
-            // columns: [
-            //     {data: 'noseri'},
-            //     {data: 'noseri'},
-            //     {data: 'noseri'},
-            //     {data: 'noseri'},
-            //     {data: 'noseri'},
-            // ],
+            processing: false,
+            serverSide: true,
+            ajax: {
+                url: "/api/prd/detailSeri/" + id,
+                success: function(res) {
+                    var i = 0;
+                    // console.log(res);
+                    // $('.scan-produk').append('<tr></tr>');
+                    $.each(res, function(i, val) {
+                        console.log(val);
+                        console.log(val);
+                        if (i < 5) {
+                            // $row = $('.scan-produk').append('<tr></tr>');
+                            // $('.scan-produk').append('<td>x</td><td>val</td>')
+                            $('.scan-produk').append('<td><input type="checkbox" name="noseri[]" id="noseri" value="'+val.id+'" class="cb-child-'+i+'"></td><td>'+val.noseri+'</td>')
+                        }
+                        // $row.append('<td><input type="checkbox" name="noseri[]" id="noseri" value="'+val.id+'" class="cb-child-'+i+'"></td><td>'+val.noseri+'</td>')
+                    })
+
+
+                }
+            },
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
             "lengthChange": false,
         });
         modalRakit();
+    })
+
+    $(document).on('click', '#btnSave', function(e) {
+        // var id = $(this).data('id');
+        console.log(id);
+        console.log(prd);
+        $.ajax({
+            url: "/api/prd/send",
+            type: "post",
+            data: {
+                "_token" : "{{csrf_token() }}",
+                qty: jumlah,
+                gbj_id : prd,
+            },
+            success: function(res) {
+                console.log(res);
+            }
+        })
     })
     $('.daterange').daterangepicker({
         locale: {

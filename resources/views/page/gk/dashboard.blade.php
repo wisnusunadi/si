@@ -38,8 +38,8 @@
                             <div class="col">
                                 <div id="jml-produk-20" class="card active otg" style="background-color: #FEF7EA">
                                     <div class="card-body text-center">
-                                        <h4 id="h1">10</h4>
-                                        <p class="card-text">Produk dengan jumlah stok 3 sampai 4</p>
+                                            <h4 id="h1">10</h4>
+                                            <p class="card-text">Produk dengan jumlah stok 3 sampai 4</p>
                                     </div>
                                 </div>
                             </div>

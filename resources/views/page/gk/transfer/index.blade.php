@@ -260,9 +260,9 @@
                                             <td><input type="text" class="form-control"></td>
                                             <td>
                                                 <select name="" id="" class="form-control">
-                                                    <option value="">Level 1</option>
-                                                    <option value="">Level 1</option>
-                                                    <option value="">Level 1</option>
+                                                    <option value="1">Level 1</option>
+                                                    <option value="2">Level 2</option>
+                                                    <option value="3">Level 3</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -438,7 +438,7 @@
         $('.scan-produk1 tbody').empty();
         for (let index = 0; index < x; index++) {
             ii++;
-           $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri['+i+']['+ii+']" class="form-control seri_spr"></td><td><input type="text" name="remark['+i+']['+ii+']" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+           $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri[]" class="form-control seri_spr"></td><td><input type="text" name="remark[]" id="remark[]" class="form-control"></td><td><select name="tk_kerusakan[]" id="tk_kerusakan" class="form-control"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select></td></tr>');
         }
         $('.scan-produk1').DataTable({
             "ordering": false,
@@ -468,10 +468,13 @@
             }
         });
     }
-
+    var x = '';
+    var id = '';
     $(document).on('click', '#btn_plus', function() {
         var tr = $(this).closest('tr');
-        var x = tr.find('#jml').val();
+        x = tr.find('#jml').val();
+        id = tr.find('#sparepart_id').val();
+        console.log(id);
         console.log(x);
         addSparepart(x);
     })
@@ -497,7 +500,7 @@
             }
         });
         i++;
-        let table_sparepart = '<tr id="'+i+'"><td><select name="sparepart_id['+i+']" id="sparepart_id'+i+'" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr['+i+']" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_sparepart = '<tr id="'+i+'"><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
         $('.produk').select2();
         $('.unit').select2();
@@ -517,7 +520,7 @@
             }
         });
         k++;
-        let table_unit = '<tr id="'+k+'"><td><select name="gbj_id['+k+']" id="gbj_id'+k+'" class="form-control produkk"></td><td><input type="number" name="qty_unit['+k+']" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr id="'+k+'"><td><select name="gbj_id[]" id="gbj_id[]" class="form-control produkk"></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('.produk').select2();
     });
@@ -616,6 +619,10 @@
             // });
         });
     }
+    const spr = {};
+    const sprr = {};
+    // const jml = [];
+    var t = 0;
 
     $(document).on('click', '#btnSpr', function(e) {
         console.log('ok');
@@ -626,14 +633,101 @@
         $('input[name^="noseri"]').each(function() {
             seri.push($(this).val());
         });
+        spr[t] = seri;
 
         $('input[name^="remark"]').each(function() {
-            seri.push($(this).val());
+            rusak.push($(this).val());
         });
+        sprr[t] = rusak;
 
         console.log(seri);
+        t++;
     });
 
+    $(document).on('click', '.simpan', function () {
+        let out = $('#datePicker').val();
+        let to = $('.dari').val();
+        let tujuan = $('#tujuan_draft').val();
+        let seri1 = $('.seri_spr').val();
+
+        console.log(out);
+        console.log(to);
+        console.log(tujuan);
+
+        const spr1 = [];
+        const jml = [];
+        const unit = [];
+        const jum = [];
+
+        $('select[name^="sparepart_id"]').each(function() {
+            spr1.push($(this).val());
+        });
+
+        $('input[name^="qty_spr"]').each(function() {
+            jml.push($(this).val());
+        });
+
+        // $('input[name^="noseri"]').each(function() {
+        //     spr.push(seri_spr.push(seri1));
+        // });
+
+        $('select[name^="gbj_id"]').each(function() {
+            unit.push($(this).val());
+        });
+
+        $('input[name^="qty_unit"]').each(function() {
+            jum.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/api/gk/out-draft",
+            type: "post",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                date_out : out,
+                ke: to,
+                deskripsi : tujuan,
+                sparepart_id : spr1,
+                qty_spr: jml,
+                noseri : spr,
+                remark : sprr,
+                // gbj_id : unit,
+                // qty_unit: jum,
+                // x: ser1,
+            },
+            success: function(res) {
+                console.log(res);
+            },
+        })
+        // Swal.fire({
+        //     title: "Apakah anda yakin?",
+        //     text: "Data yang sudah di rancangan tidak dapat diubah!",
+        //     icon: "warning",
+        //     buttons: true,
+        //     dangerMode: true,
+        //     showCancelButton: true,
+        // }).then((success) => {
+        //     if (success) {
+        //         Swal.fire(
+        //             'Data berhasil di rancangan!',
+        //             '',
+        //             'success'
+        //         );
+        //         setTimeout(() => {
+        //             location.reload();
+        //         }, 1000);
+        //     }else{
+        //         Swal.fire(
+        //             'Data gagal di rancangan!',
+        //             '',
+        //             'error'
+        //         );
+        //         setTimeout(() => {
+        //             location.reload();
+        //         }, 1000);
+        //     }
+        // });
+    });
 
     function modalRancang() {
         $('.modal_transfer').modal('show');
@@ -643,89 +737,7 @@
             $(this).parent().parent().remove();
         });
 
-        $(document).on('click', '.simpan', function () {
-            let out = $('#datePicker').val();
-            let to = $('.dari').val();
-            let tujuan = $('#tujuan_draft').val();
-            let seri1 = $('.seri_spr').val();
 
-            console.log(out);
-            console.log(to);
-            console.log(tujuan);
-
-            const spr = [];
-            const jml = [];
-            const seri_spr = [];
-            const unit = [];
-            const jum = [];
-
-            $('select[name^="sparepart_id"]').each(function() {
-                spr.push($(this).val());
-            });
-
-            $('input[name^="qty_spr"]').each(function() {
-                jml.push($(this).val());
-            });
-
-            // $('input[name^="noseri"]').each(function() {
-            //     spr.push(seri_spr.push(seri1));
-            // });
-
-            $('select[name^="gbj_id"]').each(function() {
-                unit.push($(this).val());
-            });
-
-            $('input[name^="qty_unit"]').each(function() {
-                jum.push($(this).val());
-            });
-
-            $.ajax({
-                url: "/api/gk/out-draft",
-                type: "post",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    date_out : out,
-                    ke: to,
-                    deskripsi : tujuan,
-                    sparepart_id : spr,
-                    qty_spr: jml,
-                    gbj_id : unit,
-                    qty_unit: jum,
-                    // x: ser1,
-                },
-                success: function(res) {
-                    console.log(res);
-                },
-            })
-            // Swal.fire({
-            //     title: "Apakah anda yakin?",
-            //     text: "Data yang sudah di rancangan tidak dapat diubah!",
-            //     icon: "warning",
-            //     buttons: true,
-            //     dangerMode: true,
-            //     showCancelButton: true,
-            // }).then((success) => {
-            //     if (success) {
-            //         Swal.fire(
-            //             'Data berhasil di rancangan!',
-            //             '',
-            //             'success'
-            //         );
-            //         setTimeout(() => {
-            //             location.reload();
-            //         }, 1000);
-            //     }else{
-            //         Swal.fire(
-            //             'Data gagal di rancangan!',
-            //             '',
-            //             'error'
-            //         );
-            //         setTimeout(() => {
-            //             location.reload();
-            //         }, 1000);
-            //     }
-            // });
-        });
     }
     function batal() {
         Swal.fire({
