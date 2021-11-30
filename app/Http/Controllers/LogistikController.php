@@ -237,8 +237,6 @@ class LogistikController extends Controller
     }
     public function create_logistik(Request $request, $detail_pesanan_id)
     {
-
-
         if ($request->pengiriman == 'ekspedisi') {
             $Logistik = Logistik::create([
                 'ekspedisi_id' => $request->ekspedisi_id,
@@ -257,5 +255,110 @@ class LogistikController extends Controller
             $days = '35';
         }
         return Carbon::parse($value)->subDays($days);
+    }
+
+    //Laporan
+    public function laporan_logistik($pengiriman, $ekspedisi, $tgl_awal, $tgl_akhir)
+    {
+        $s = "";
+        if ($pengiriman == "ekspedisi") {
+            $s = DetailPesanan::whereHas('DetailLogistik.Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
+                $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+            })->get();
+        } else if ($pengiriman == "nonekspedisi") {
+            $s = DetailPesanan::whereHas('DetailLogistik.Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+            })->get();
+        } else {
+            $s = DetailPesanan::whereHas('DetailLogistik.Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+            })->get();
+        }
+
+        return datatables()->of($s)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->Pesanan->so;
+            })
+            ->addColumn('sj', function ($data) {
+                return $data->DetailLogistik->Logistik->no_sj;
+            })
+            ->addColumn('invoice', function ($data) {
+                return '-';
+            })
+            ->addColumn('no_resi', function ($data) {
+                if ($data->DetailLogistik->Logistik->no_resi == "") {
+                    return '-';
+                } else {
+                    return $data->DetailLogistik->Logistik->no_resi;
+                }
+            })
+            ->addColumn('customer', function ($data) {
+                $name = explode('/', $data->pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return $data->Pesanan->Ekatalog->instansi;
+                } elseif ($name[1] == 'SPA') {
+                    return $data->Pesanan->Spa->Customer->nama;
+                } else {
+                    return $data->Pesanan->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('alamat', function ($data) {
+                $name = explode('/', $data->pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return $data->Pesanan->Ekatalog->Customer->alamat;
+                } elseif ($name[1] == 'SPA') {
+                    return $data->Pesanan->Spa->Customer->alamat;
+                } else {
+                    return $data->Pesanan->Spb->Customer->alamat;
+                }
+            })
+            ->addColumn('provinsi', function ($data) {
+                $name = explode('/', $data->pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return $data->Pesanan->Ekatalog->Provinsi->nama;
+                } elseif ($name[1] == 'SPA') {
+                    return $data->Pesanan->Spa->Customer->Provinsi->nama;
+                } else {
+                    return $data->Pesanan->Spb->Customer->Provinsi->nama;
+                }
+            })
+            ->addColumn('telp', function ($data) {
+                $name = explode('/', $data->pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return $data->Pesanan->Ekatalog->Customer->telp;
+                } elseif ($name[1] == 'SPA') {
+                    return $data->Pesanan->Spa->Customer->telp;
+                } else {
+                    return $data->Pesanan->Spb->Customer->telp;
+                }
+            })
+            ->addColumn('ekspedisi', function ($data) {
+                if (!empty($data->DetailLogistik->Logistik->ekspedisi_id)) {
+                    return $data->DetailLogistik->Logistik->Ekspedisi->nama;
+                } else {
+                    return $data->DetailLogistik->Logistik->nama_pengirim;
+                }
+            })
+            ->addColumn('tgl_kirim', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->DetailLogistik->Logistik->tgl_kirim)->format('d-m-Y');
+            })
+            ->addColumn('tgl_selesai', function ($data) {
+                return '-';
+            })
+            ->addColumn('produk', function ($data) {
+                return $data->PenjualanProduk->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('ongkir', function () {
+                return '0';
+            })
+            ->addColumn('status', function ($data) {
+                return '-';
+            })
+            ->rawColumns(['status'])
+            ->make(true);
     }
 }

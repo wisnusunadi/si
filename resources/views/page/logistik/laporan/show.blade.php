@@ -53,7 +53,7 @@
                                 <!-- <form method="POST" action="/api/laporan/create"> -->
                                 <div class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="pengiriman" class="col-form-label col-5" style="text-align: right">Ekspedisi</label>
+                                        <label for="pengiriman" class="col-form-label col-5" style="text-align: right">Pengiriman</label>
                                         <div class="col-5 col-form-label">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="pengiriman" id="jasa_pengiriman1" value="ekspedisi" />
@@ -160,32 +160,133 @@
         $("#tanggal_mulai").attr("max", today);
         $("#tanggal_akhir").attr("max", today);
 
-        $('#showtable').DataTable({
-            processing: true,
-            dom: 'Bfrtip',
-            serverSide: false,
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            buttons: [{
-                    extend: 'excel',
-                    title: 'Laporan Penjualan',
-                    text: '<i class="far fa-file-excel"></i> Export',
-                    className: "btn btn-info"
-                },
-                {
-                    extend: 'print',
-                    title: 'Laporan Penjualan',
-                    text: '<i class="fas fa-print"></i> Cetak',
-                    className: "btn btn-primary"
-                },
-            ],
-        });
+        ekspedisi_select();
 
-        $('.ekspedisi_id').select2({
-            placeholder: 'Pilih Ekspedisi',
-            allowClear: true
-        });
+        function table(pengiriman, eksepedisi, tgl_awal, tgl_akhir) {
+            //console.log('/api/laporan/qc/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir);
+            $('#qctable').DataTable({
+                destroy: true,
+                processing: true,
+                dom: 'Bfrtip',
+                serverSide: false,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: {
+                    'url': '/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                buttons: [{
+                        extend: 'excel',
+                        title: 'Laporan Pengiriman',
+                        text: '<i class="far fa-file-excel"></i> Export',
+                        className: "btn btn-info"
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Laporan Pengiriman',
+                        text: '<i class="fas fa-print"></i> Cetak',
+                        className: "btn btn-primary"
+                    },
+                ],
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'so',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'sj'
+                    },
+                    {
+                        data: 'invoice'
+                    },
+                    {
+                        data: 'no_resi'
+                    },
+                    {
+                        data: 'customer'
+                    },
+                    {
+                        data: 'alamat',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'provinsi',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'telp',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'ekspedisi',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'tgl_kirim',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'tgl_selesai',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'produk',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'jumlah',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'ongkir',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'status',
+                        className: 'nowrap-text align-center'
+                    },
+                ],
+            });
+        }
+
+        function ekspedisi_select() {
+            $('.ekspedisi_id').select2({
+                placeholder: "Pilih Ekspedisi",
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    dataType: 'json',
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/logistik/ekspedisi/select',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            }).change(function() {
+                var value = $(this).val();
+                $('.ekspedisi').text('d');
+                console.log(value);
+            });
+        }
 
         $('.ekspedisi_id').on('keyup change', function() {
             if ($(this).val() != "") {
@@ -274,6 +375,17 @@
 
         $('#btncetak').on('click', function() {
             $('#showform').removeClass('hide');
+            var ekspedisi = "";
+            if ($(".ekspedisi_id").val() != "") {
+                ekspedisi = $(".ekspedisi_id").val();
+            } else {
+                ekspedisi = "0";
+            }
+            var pengiriman = $('input[type="radio"][name="pengiriman"]:checked').val();
+            if ($('input[type="radio"][name="pengiriman"]:checked').val())
+                var tgl_awal = $('#tanggal_mulai').val();
+            var tgl_akhir = $('#tanggal_akhir').val();
+            table(produk, so, hasil, tgl_awal, tgl_akhir);
         })
     });
 </script>

@@ -242,6 +242,10 @@ Route::prefix('/logistik')->group(function () {
         Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });
+
+    Route::prefix('/laporan')->group(function () {
+        Route::post('/create', [App\Http\Controllers\LogistikController::class, 'laporan_']);
+    });
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
