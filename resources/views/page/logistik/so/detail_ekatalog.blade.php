@@ -359,7 +359,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-info">
-                            <h4 class="modal-title">Edit</h4>
+                            <h5 class="modal-title">Tambah Pengiriman</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -370,6 +370,22 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Pengiriman</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="detail">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -468,6 +484,34 @@
             $('#noseridetail').removeClass('hide');
             $('input[name ="check_all"]').prop('checked', false);
             select_produk(data);
+        })
+
+        $('#selesaikirimtable').on('click', '.detailmodal', function() {
+            var data = $(this).attr('data-id');
+            alert(data);
+            $('#selesaikirimtable').find('tr').removeClass('bgcolor');
+            $(this).closest('tr').addClass('bgcolor');
+
+            $.ajax({
+                url: "/logistik/pengiriman/noseri/" + data,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#detailmodal').modal("show");
+                    $('#detail').html(result).show();
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
         })
 
         $(document).on('submit', '#form-logistik-create', function(e) {
@@ -672,6 +716,7 @@
                 console.log(value);
             });
         }
+
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             console.log(checkedAry);

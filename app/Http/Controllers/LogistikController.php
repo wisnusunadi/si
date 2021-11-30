@@ -164,8 +164,10 @@ class LogistikController extends Controller
             ->addColumn('jumlah', function ($data) {
                 return $data->jumlah;
             })
-            ->addColumn('button', function () {
-                return '<a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a>';
+            ->addColumn('button', function ($data) {
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
+                <div><i class="fas fa-search"></i></div>
+            </a>';
             })
             ->rawColumns(['checkbox', 'button', 'status'])
             ->make(true);
@@ -728,7 +730,7 @@ class LogistikController extends Controller
                 return $data->Pesanan->so;
             })
             ->addColumn('sj', function ($data) {
-                return $data->DetailLogistik->Logistik->no_sj;
+                return $data->DetailLogistik->Logistik->nosurat;
             })
             ->addColumn('invoice', function ($data) {
                 return '-';

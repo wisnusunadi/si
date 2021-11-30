@@ -26,6 +26,9 @@ use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+
+use function PHPUnit\Framework\returnValueMap;
 
 class MasterController extends Controller
 {
@@ -102,6 +105,7 @@ class MasterController extends Controller
     }
     public function get_data_ekspedisi()
     {
+        $divisi_id = auth()->user()->divisi->id;
         $data = Ekspedisi::select();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -115,8 +119,9 @@ class MasterController extends Controller
                 }
                 return implode('<br>', $list);
             })
-            ->addColumn('button', function ($data) {
-                return '
+            ->addColumn('button', function ($data) use ($divisi_id) {
+                $return = "";
+                $return .= '
             <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="' . route('logistik.ekspedisi.detail', ['id' => $data->id]) . '">
@@ -124,14 +129,18 @@ class MasterController extends Controller
                         <i class="fas fa-search"></i>
                         Detail
                     </button>
-                </a>
-                <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="' . $data->id . '">
+                </a>';
+                if ($divisi_id == "15") {
+                    $return .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="' . $data->id . '">
                     <button class="dropdown-item" type="button">
                         <i class="fas fa-pencil-alt"></i>
                         Edit
                     </button>
-                </a>
-            </div>';
+                </a>';
+                }
+                $return .= '</div>';
+
+                return $return;
             })
             ->rawColumns(['button', 'jurusan', 'via'])
             ->make(true);
