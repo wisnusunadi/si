@@ -331,7 +331,6 @@
     </div>
 </div>
 @stop
-
 @section('adminlte_js')
 <script>
     $(function() {
@@ -459,8 +458,6 @@
                 allowClear: true,
             });
         }
-
-
         var showtable = $('#showtable').DataTable({
             // processing: true,
             // serverSide: true,
