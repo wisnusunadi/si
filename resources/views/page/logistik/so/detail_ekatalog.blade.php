@@ -261,21 +261,10 @@
                                                                 <div class="card-title">No Seri</div>
                                                             </div>
                                                             <div class="card-body">
-                                                                <div class="form-horizontal">
-                                                                    <div class="form-group row">
-                                                                        <label for="" class="col-5 align-right col-form-label">Detail Produk</label>
-                                                                        <div class="col-5">
-                                                                            <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
-
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                                 <div class="table-responsive">
                                                                     <table class="table table-hover table-striped align-center" id="noseritable">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th>No</th>
                                                                                 <th>No Seri</th>
                                                                             </tr>
                                                                         </thead>
@@ -482,11 +471,12 @@
 
         $('#belumkirimtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
+            idtrf = '{{$d->pesanan->TFProduksi->id}}';
             $('#belumkirimtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
             $('input[name ="check_all"]').prop('checked', false);
-            select_produk(data);
+            noseritable(data);
         })
 
         $('#selesaikirimtable').on('click', '.detailmodal', function() {
@@ -520,6 +510,7 @@
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
+            console.log(action);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -528,24 +519,25 @@
                 url: action,
                 data: $('#form-logistik-create').serialize(),
                 success: function(response) {
+                    console.log(response);
 
-                    if (response['data'] == "success") {
-                        swal.fire(
-                            'Berhasil',
-                            'Berhasil menambahkan Pengiriman',
-                            'success'
-                        );
-                        $("#editmodal").modal('hide');
-                        $('#belumkirimtable').DataTable().ajax.reload();
-                        $('#selesaikirimtable').DataTable().ajax.reload();
-                        $('#noseridetail').addClass('hide');
-                    } else if (response['data'] == "error") {
-                        swal.fire(
-                            'Gagal',
-                            'Gagal menambahkan Pengiriman',
-                            'error'
-                        );
-                    }
+                    // if (response['data'] == "success") {
+                    //     swal.fire(
+                    //         'Berhasil',
+                    //         'Berhasil menambahkan Pengiriman',
+                    //         'success'
+                    //     );
+                    //     $("#editmodal").modal('hide');
+                    //     $('#belumkirimtable').DataTable().ajax.reload();
+                    //     $('#selesaikirimtable').DataTable().ajax.reload();
+                    //     $('#noseridetail').addClass('hide');
+                    // } else if (response['data'] == "error") {
+                    //     swal.fire(
+                    //         'Gagal',
+                    //         'Gagal menambahkan Pengiriman',
+                    //         'error'
+                    //     );
+                    // }
                 },
                 error: function(xhr, status, error) {
                     alert($('#form-logistik-create').serialize());
@@ -556,11 +548,11 @@
 
         function detailpesanan(id, pesanan_id) {
             $('#detailpesanan').DataTable({
-
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id,
+                    'url': '/api/logistik/so/detail/select/' + id + '/' + 1,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -593,7 +585,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/qc/so/riwayat/detail/' + id,
+                    'url': '/api/logistik/so/noseri/detail/' + id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -602,50 +594,43 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'no_seri'
-                    },
-                ]
+                    data: 'no_seri'
+                }, ]
             })
         }
 
-        function select_produk(id) {
-            $('.detail_produk').select2({
-                placeholder: 'Pilih Produk',
-                ajax: {
-                    minimumResultsForSearch: 20,
-                    dataType: 'json',
-                    delay: 250,
-                    type: 'GET',
-                    url: '/api/qc/so/riwayat/select/' + id,
-                    data: function(params) {
-                        return {
-                            term: params.term
-                        }
-                    },
-                    processResults: function(data) {
-                        console.log(data);
-                        return {
-                            results: $.map(data, function(obj) {
-                                return {
-                                    id: obj.id,
-                                    text: obj.gudang_barang_jadi.produk.nama + ' ' +
-                                        obj.gudang_barang_jadi.nama
-                                };
-                            })
-                        };
-                    },
-                }
-            }).change(function() {
-                var ids = $(this).val();
-                noseritable(ids);
-            });
-        }
+        // function select_produk(id) {
+        //     $('.detail_produk').select2({
+        //         placeholder: 'Pilih Produk',
+        //         ajax: {
+        //             minimumResultsForSearch: 20,
+        //             dataType: 'json',
+        //             delay: 250,
+        //             type: 'GET',
+        //             url: '/api/qc/so/riwayat/select/' + id,
+        //             data: function(params) {
+        //                 return {
+        //                     term: params.term
+        //                 }
+        //             },
+        //             processResults: function(data) {
+        //                 console.log(data);
+        //                 return {
+        //                     results: $.map(data, function(obj) {
+        //                         return {
+        //                             id: obj.id,
+        //                             text: obj.gudang_barang_jadi.produk.nama + ' ' +
+        //                                 obj.gudang_barang_jadi.nama
+        //                         };
+        //                     })
+        //                 };
+        //             },
+        //         }
+        //     }).change(function() {
+        //         var ids = $(this).val();
+        //         noseritable(ids);
+        //     });
+        // }
 
         var checkedAry = [];
         $('#belumkirimtable').on('click', 'input[name="check_all"]', function() {

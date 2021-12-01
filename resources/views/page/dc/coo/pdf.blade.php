@@ -73,7 +73,7 @@
 
         div.footer {
             position: fixed;
-            bottom: 280px;
+            bottom: 100px;
             left: 0px;
             right: 0px;
         }
@@ -91,11 +91,11 @@
 
 <body>
     <div class="header">
-        <table border="0" style="border-collapse: collapse; text-align:right;" class="table" width="100%">
+        <table border="0" style="border-collapse: collapse; text-align:right;width:625px" class="table">
             <tbody>
                 <tr>
-                    <td width="52.3%"></td>
-                    <td class="veramd align-center" width="47.7%">
+                    <td style="width:52.3%;"></td>
+                    <td class="veramd align-center" style="width:47.7%;">
                         <h3>10293010 / SKA / IX / SPA / 2021</h3>
                     </td>
                 </tr>

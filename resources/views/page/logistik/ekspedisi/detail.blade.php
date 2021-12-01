@@ -37,6 +37,26 @@
     .hide {
         display: none !important;
     }
+
+    @media screen and (min-width: 1440px) {
+        section {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        section {
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
@@ -45,8 +65,8 @@
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+<section class="content">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-12">
                 <div class="card">
@@ -101,7 +121,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12  ">
+            <div class="col-12">
                 <h5>Histori Pengiriman</h5>
                 <div class="card">
                     <div class="card-body">
@@ -162,7 +182,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 
 @section('adminlte_js')

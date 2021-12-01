@@ -8,6 +8,7 @@ use App\Models\DetailPesananProduk;
 use App\Models\Ekatalog;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
+use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
 use Illuminate\Http\Request;
 use PDF;
@@ -32,17 +33,24 @@ class LogistikController extends Controller
     {
         $x = explode(',', $detail_produk);
         if ($detail_produk == '0') {
-            $data = DetailPesanan::DoesntHave('detaillogistik')->where('pesanan_id', $pesanan_id)->get();
+            $data = DetailPesananProduk::whereHas('DetailPEsanan', function ($q) use ($pesanan_id) {
+                $q->where('pesanan_id', $pesanan_id);
+            })->get();
         } else {
-            $data = DetailPesanan::whereIN('id', $x)->get();
+            $data = DetailPesananProduk::whereIN('id', $x)->get();
         }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
-                return $data->penjualanproduk->nama;
+                if ($data->GudangBarangJadi->nama == '') {
+                    return $data->GudangBarangJadi->produk->nama;
+                } else {
+                    return $data->GudangBarangJadi->nama;
+                }
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->jumlah;
+                $c = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $data->id, 'status' => 'ok'])->get()->count();
+                return $c;
             })
             ->make(true);
     }
@@ -136,6 +144,23 @@ class LogistikController extends Controller
             ->rawColumns(['checkbox', 'button', 'status'])
             ->make(true);
     }
+
+    public function get_noseri_so($id)
+    {
+        $data = NoseriDetailPesanan::whereHas('DetailPesananProduk')->where('detail_pesanan_produk_id', $id)->get();
+
+        // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $idtrf) {
+        //     $q->where(['gdg_brg_jadi_id' => $id, 't_gbj_id' => $idtrf]);
+        // });
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('no_seri', function ($data) {
+                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            })
+            ->make(true);
+    }
+
     public function get_data_detail_selesai_kirim_so($id)
     {
         // $data = DetailPesanan::where('pesanan_id', $id)->Has('DetailLogistik')->get();
@@ -373,55 +398,78 @@ class LogistikController extends Controller
     public function create_logistik_view($detail_pesanan_id, $pesanan_id)
     {
         $value = [];
+        $value2 = [];
+
         $x = explode(',', $detail_pesanan_id);
         if ($detail_pesanan_id == '0') {
-            $data = DetailPesanan::DoesntHave('detaillogistik')->where('pesanan_id', $pesanan_id)->get();
+            $data = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
+                $q->where('pesanan_id', $pesanan_id);
+            })->get();
             foreach ($data as $d) {
                 $value[] = $d->id;
             }
+
             $id =  json_encode($value);
         } else {
-            $data = DetailPesanan::whereIN('id', $x)->get();
+            $data = DetailPesananPRoduk::whereIN('id', $x)->get();
             foreach ($data as $d) {
-                $value[] = $d->id;
+                $value2[] = $d->id;
+                $count = 0;
+                foreach ($d->noseridetailpesanan as $e) {
+                    $value[$d->id][$count] = $e->id;
+                    $count++;
+                }
             }
             $id =  json_encode($value);
+            $id_produk =  json_encode($value2);
         }
-        return view('page.logistik.so.create', ['id' => $id]);
+        return view('page.logistik.so.create', ['id' => $id, 'id_produk' => $id_produk]);
     }
-    public function create_logistik(Request $request, $detail_pesanan_id)
+    public function create_logistik(Request $request, $detail_pesanan_id, $id_produk)
     {
-        $replace_array_detail = strtr($detail_pesanan_id, array('[' => '', ']' => ''));
-        $array_seri = explode(',', $replace_array_detail);
-        $bool = true;
-        $Logistik = 0;
-        if ($request->pengiriman == 'ekspedisi') {
-            $Logistik = Logistik::create([
-                'ekspedisi_id' => $request->ekspedisi_id,
-                'nosurat' => $request->no_invoice,
-                'tgl_kirim' => $request->tgl_kirim,
-            ]);
-        } else {
-            $Logistik = Logistik::create([
-                'nosurat' => $request->no_invoice,
-                'tgl_kirim' => $request->tgl_kirim,
-                'nama_pengirim' => $request->nama_pengirim,
-            ]);
-        }
-        for ($i = 0; $i < count($array_seri); $i++) {
-            $c = DetailLogistik::create([
-                'logistik_id' => $Logistik->id,
-                'detail_pesanan_id' => $array_seri[$i],
-            ]);
-            if (!$c) {
-                $bool = false;
-            }
-        }
-        if ($bool == true) {
-            return response()->json(['data' =>  'success']);
-        } else {
-            return response()->json(['data' =>  'error']);
-        }
+        //  $result = array_values(json_decode($detail_pesanan_id, true));
+
+        $task_array = json_decode($detail_pesanan_id);
+        $total = 0;
+        // $replace_array_seri = strtr($id_produk, array('[' => '', ']' => ''));
+        // $array_produk = explode(',', $replace_array_seri);
+
+
+        // $bool = true;
+        // $Logistik = 0;
+        // if ($request->pengiriman == 'ekspedisi') {
+        //     $Logistik = Logistik::create([
+        //         'ekspedisi_id' => $request->ekspedisi_id,
+        //         'nosurat' => 'SPA-' . $request->no_invoice,
+        //         'tgl_kirim' => $request->tgl_kirim,
+        //     ]);
+        // } else {
+        //     $Logistik = Logistik::create([
+        //         'nosurat' => 'SPA-' . $request->no_invoice,
+        //         'tgl_kirim' => $request->tgl_kirim,
+        //         'nama_pengirim' => $request->nama_pengirim,
+        //     ]);
+        // }
+        // for ($i = 0; $i < count($array_produk); $i++) {
+        //     $c = DetailLogistik::create([
+        //         'logistik_id' => $Logistik->id,
+        //         'detail_pesanan_produk_id' => $array_produk[$i],
+        //     ]);
+        //     for ($y = 0; $y < count($k[$i]); $y++) {
+        //         $b = NoseriDetailLogistik::create([
+        //             'detail_logistik_id' => $c->id,
+        //             'detail_pesanan_produk_id' => $k[$i][$y],
+        //         ]);
+        //     }
+        //     if (!$b) {
+        //         $bool = false;
+        //     }
+        // }
+        // if ($bool == true) {
+        //     return response()->json(['data' =>  'success']);
+        // } else {
+        //     return response()->json(['data' =>  'error']);
+        // }
     }
     //Dashboard
     public function dashboard()
