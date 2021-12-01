@@ -484,6 +484,7 @@
 
     $('.table-produk-batas-transfer-two-day').DataTable({
         destroy: true,
+        dom: "Bfrtip",
         "paging": true,
         "lengthChange": false,
         "ordering": true,
@@ -529,6 +530,7 @@
             destroy: true,
             processing: true,
             serverSide: true,
+            dom: "Bfrtip",
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
@@ -559,6 +561,7 @@
     $('.table-produk-batas-transfer-one-day').DataTable({
         destroy: true,
         "paging": true,
+        dom: "Bfrtip",
         "lengthChange": false,
         "ordering": true,
         "info": true,
@@ -603,6 +606,7 @@
             destroy: true,
             processing: true,
             serverSide: true,
+            dom: "Bfrtip",
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
@@ -632,6 +636,7 @@
     $('.table-produk-batas-transfer-three-day').DataTable({
         destroy: true,
         "paging": true,
+        dom: "Bfrtip",
         "lengthChange": false,
         "ordering": true,
         "info": true,
@@ -676,6 +681,7 @@
             destroy: true,
             processing: true,
             serverSide: true,
+            dom: "Bfrtip",
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
@@ -699,26 +705,95 @@
         type: "post",
         success: function(res) {
             console.log(res);
+            $('h4#m4').text(res);
+        }
+    })
+
+    $('.table-produk-gbj').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            dom: "Bfrtip",
+            ajax: {
+                url: "/api/prd/exp_rakit",
+                type: "post",
+            },
+            columns: [
+                {data: 'start'},
+                {data: 'end'},
+                {data: 'no_bppb'},
+                {data: 'produk'},
+                {data: 'jml'},
+                {data: 'button1'}
+            ],
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+    });
+
+    $.ajax({
+        url: "/api/prd/exp_rakit/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
             $('h4#m5').text(res);
         }
     })
 
     $('.table-waktu-perakitan').DataTable({
-        destroy: true,
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: "/api/prd/exp_rakit",
-            type: "post",
-        },
-        columns: [
-            {data: 'start'},
-            {data: 'end'},
-            {data: 'no_bppb'},
-            {data: 'produk'},
-            {data: 'jml'},
-            {data: 'button'}
-        ],
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            dom: "Bfrtip",
+            ajax: {
+                url: "/api/prd/exp_rakit",
+                type: "post",
+            },
+            columns: [
+                {data: 'start'},
+                {data: 'end'},
+                {data: 'no_bppb'},
+                {data: 'produk'},
+                {data: 'jml'},
+                {data: 'button'}
+            ],
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+    });
+
+    $.ajax({
+        url: "/api/prd/exp_jadwal/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m6').text(res);
+        }
+    })
+
+    $('.table-perubahan-perakitan').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            dom: "Bfrtip",
+            ajax: {
+                url: "/api/prd/exp_jadwal",
+                type: "post",
+            },
+            columns: [
+                {data: 'start'},
+                {data: 'end'},
+                {data: 'no_bppb'},
+                {data: 'produk'},
+                {data: 'jml'},
+                {data: 'button'}
+            ],
             "ordering":false,
             "autoWidth": false,
             "lengthChange": false,
@@ -790,23 +865,7 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
     });
-    $('.table-produk-gbj').DataTable({
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
 
-    $('.table-perubahan-perakitan').DataTable({
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
     function modalSO() {
         $('.viewProdukModal').modal('show');
     }

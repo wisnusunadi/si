@@ -609,7 +609,7 @@ class ProduksiController extends Controller
 
     function exp_rakit()
     {
-        $data = JadwalPerakitan::where('tanggal_selesai', '>=', Carbon::now()->subDays(10))->get();
+        $data = JadwalPerakitan::whereDate('tanggal_selesai', '>', Carbon::now()->subDays(10))->whereNotIn('status_tf', [14])->get();
         // $data = JadwalPerakitan::whereBetween('tanggal_selesai',[$end, Carbon::now()->format('Y-m-d')])->get();
         return datatables()->of($data)
             ->addColumn('start', function($d) {
@@ -618,13 +618,58 @@ class ProduksiController extends Controller
             ->addColumn('end', function($d) {
                 $x = Carbon::now()->diffInDays($d->tanggal_selesai);
                 // return $x;
+
                 if ($x <= 10 && $x >5) {
                     return date('Y-m-d', strtotime($d->tanggal_selesai)).'<br> <span class="badge badge-info">Kurang '.$x.' Hari</span>';
                 } elseif($x <= 5 && $x >= 2) {
                     return date('Y-m-d', strtotime($d->tanggal_selesai)).'<br> <span class="badge badge-warning">Kurang '.$x.' Hari</span>';
-                } elseif ($x <= 2 && $x >= 0) {
+                } elseif ($x < 2 && $x >= 0) {
                     return date('Y-m-d', strtotime($d->tanggal_selesai)).'<br> <span class="badge badge-danger">Kurang '.$x.' Hari</span>';
                 }
+            })
+            ->addColumn('no_bppb', function($d) {
+                return '-';
+            })
+            ->addColumn('produk', function($d) {
+                return $d->produk->produk->nama.'-'.$d->produk->nama;
+            })
+            ->addColumn('jml', function($d) {
+                return $d->jumlah.' '.$d->produk->satuan->nama;
+            })
+            ->addColumn('button', function($d) {
+                return '<a href="'.url('produksi/jadwal_perakitan').'" class="btn btn-outline-primary"><i
+                        class="fas fa-paper-plane">';
+            })
+            ->addColumn('button1', function($d) {
+                if ($d->status_tf == 12) {
+                    return '<a href="'.url('produksi/pengiriman').'" class="btn btn-outline-primary"><i
+                        class="fas fa-paper-plane">';
+                } elseif ($d->status_tf == 11) {
+                    return '<a href="'.url('produksi/jadwal_perakitan').'" class="btn btn-outline-primary"><i
+                        class="fas fa-paper-plane">';
+                } else {
+
+                }
+            })
+            ->rawColumns(['button', 'end', 'button1'])
+            ->make(true);
+    }
+
+    function exp_rakit_h()
+    {
+        $data = JadwalPerakitan::whereDate('tanggal_selesai', '>', Carbon::now()->subDays(10))->whereNotIn('status_tf', [14])->get();
+        return count($data);
+    }
+
+    function exp_jadwal()
+    {
+        $data = JadwalPerakitan::where('state', 'perubahan')->whereNotIn('status_tf', [14])->get();
+        return datatables()->of($data)
+            ->addColumn('start', function($d) {
+                return date('Y-m-d', strtotime($d->tanggal_mulai));
+            })
+            ->addColumn('end', function($d) {
+                return date('Y-m-d', strtotime($d->tanggal_selesai));
             })
             ->addColumn('no_bppb', function($d) {
                 return '-';
@@ -643,10 +688,9 @@ class ProduksiController extends Controller
             ->make(true);
     }
 
-    function exp_rakit_h()
+    function exp_jadwal_h()
     {
-        $end = JadwalPerakitan::all()->pluck('tanggal_selesai');
-        $data = JadwalPerakitan::whereBetween('tanggal_selesai',[$end, Carbon::now()->format('Y-m-d')])->get();
+        $data = JadwalPerakitan::where('state', 'perubahan')->whereNotIn('status_tf', [14])->get();
         return count($data);
     }
 
@@ -895,12 +939,7 @@ class ProduksiController extends Controller
         $unit = JadwalPerakitan::where('status_tf', 14)->get()->sum('jumlah');
         $data = JadwalPerakitan::where('status_tf', 14)->get();
         $detail = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->get();
-        // $a = [];
-        // foreach($data as $d) {
-        //     $a[] = [
-        //         'tgl' => Carbon::
-        //     ]
-        // }
+
         return view('page.produksi.riwayat_perakitan', compact('rakit', 'unit', 'data', 'detail'));
     }
 
