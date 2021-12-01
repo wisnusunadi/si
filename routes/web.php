@@ -34,7 +34,7 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::get('/jadwal/{status}', function ($status) {
         return view('spa.ppic.jadwal', ['status' => $status]);
     });
-
+    Route::view('/master_stok/show', 'spa.ppic.master_stok.show');
     //test
     Route::view('/bppb/{any}', 'spa.ppic.bppb');
     Route::view('/test', 'spa.ppic');

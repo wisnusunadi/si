@@ -39,6 +39,8 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/jadwal', [App\Http\Controllers\PpicController::class, 'getJadwalPerakitan']);
     Route::get('test-event', [App\Http\Controllers\PpicController::class, 'testBroadcast']);
     Route::get('update-confirmation', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
+
+    Route::get('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data']);
 });
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);

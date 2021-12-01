@@ -1310,6 +1310,19 @@ return [
             ],
         ],
         [
+            'text'    => 'PPIC',
+            'icon'    => 'fas fa-database',
+            'auth' => [2],
+            'submenu' => [
+                [
+                    'text' => 'Master Stok',
+                    'icon' => 'far fa-circle',
+                    'url' => '/ppic/master_stok/show',
+                    'auth' => [2],
+                ],
+            ],
+        ],
+        [
             'text'    => 'QC',
             'icon'    => 'fas fa-clipboard-check',
             'auth' => [2],
