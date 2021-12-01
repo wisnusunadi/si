@@ -263,6 +263,15 @@
             }
         });
 
+        $('.scan-produk').DataTable({
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+
         $('#modal_id').modal('show');
     })
     $('.produk').select2({});
@@ -326,13 +335,6 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
-    $('.scan-produk').DataTable({
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
+
 </script>
 @stop
