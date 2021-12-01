@@ -142,18 +142,19 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <table class="table table-striped scan-produk">
+                                <table class="table table-striped scan-produk" id="scan">
                                     <thead>
                                         <tr>
+                                            <th>CB</th>
+                                            <th>Nomor Seri</th>
+                                            {{-- <th>Nomor Seri</th>
                                             <th>Nomor Seri</th>
                                             <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
+                                            <th>Nomor Seri</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
@@ -187,7 +188,7 @@
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
                                             <td><input type="text" name="" id="" class="form-control"></td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -338,20 +339,40 @@
             })
 
             $('.modalRakit').modal('show');
-            var i = 0;
-            i++;
+
+            // var i = 0;
+            // i++;
             $('.scan-produk').DataTable().destroy();
             $('.scan-produk tbody').empty();
-            $('.scan-produk tbody').append('<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>')
-                            .children("tr").append("<td></td><td></td><td></td><td></td><td></td>")
-                            .children("td").slice(0, jml).each(function() {
-                                $(this).html('<input type="text" name="noseri[]" id="noseri" class="form-control">');
-                            })
+            // $('.scan-produk tbody').append('<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>')
+            //                 .children("tr").append("<td></td><td></td><td></td><td></td><td></td>")
+            //                 .children("td").slice(0, jml).each(function() {
+            //                     $(this).html('<input type="text" name="noseri[]" id="noseri" class="form-control">');
+            //                 })
+            // for(i=0; i<12; i++)
+            // {
+            //     if (i <= 5) {
+            //         $(".scan-produk tbody tr").append("<td>"+ i +"</td>");
+            //     }
+
+            //     if(i < 5)
+            //     {
+            //         $(".scan-produk tbody").append("</tr><tr>");
+            //     }
+            // }
+            var $table = $(".scan-produk");
+            for (var i=0;i<jml;i++) {
+                    var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq("+i+")");
+                    for (var k=0;k<1;k++) {
+                        $row.append('<td>x</td><td><input type="text" name="noseri[]" id="noseri" class="form-control"></td>');
+                    }
+            }
             $('.scan-produk').DataTable({
                 "ordering":false,
                 "autoWidth": false,
                 searching: false,
                 "lengthChange": false,
+                "pageLength": 10,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 }

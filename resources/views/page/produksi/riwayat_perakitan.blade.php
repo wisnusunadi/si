@@ -264,6 +264,7 @@
         });
 
         $('.scan-produk').DataTable({
+            destroy: true,
             "ordering":false,
             "autoWidth": false,
             "lengthChange": false,
