@@ -125,11 +125,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-<<<<<<< HEAD
                     <form action="" method="post">
                         <input type="hidden" name="pesanan_id" id="ids">
-=======
->>>>>>> 24b2266da4db4106d53d405bebadfc91e3549658
                         <div class="card">
                             <div class="card-header">
                                 <div class="row row-cols-2">
@@ -179,7 +176,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td><input type="checkbox" class="cb-child" value="2"></td>
                                             <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
                                             <td>100 Unit</td>
@@ -192,7 +189,7 @@
                                             <td>100 Unit</td>
                                             <td>RGB</td>
                                             <td>ELITECH</td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -204,7 +201,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
             </div>
         </div>
     </div>
@@ -308,6 +305,11 @@
         $('.viewProduk').click(function (e) {
             $('#viewProdukModal').modal('show');
         });
+
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
+        });
     });
 
     $('.add-produk').DataTable({
@@ -333,6 +335,20 @@
         }
     });
     $('#gudang-barang').DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/tfp/data-so',
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            { data: 'so', name: 'so'},
+            { data: 'nama_customer', name: 'nama_customer'},
+            { data: 'batas_out', name: 'batas_out'},
+            { data: 'status1', name: 'status1'},
+            { data: 'action', name: 'action'},
+        ],
         "oLanguage": {
             "sSearch": "Cari:"
         },
@@ -345,10 +361,12 @@
     });
     var id = '';
     $(document).on('click', '.editmodal', function(e) {
+        var x = $(this).data('value');
+        console.log(x);
         id = $(this).data('id');
         console.log(id);
         $.ajax({
-            url: "/api/tfp/header-so/" +id,
+            url: "/api/tfp/header-so/" +id+"/"+x,
             success: function(res) {
                 console.log(res);
                 $('span#soo').text(res.so);
@@ -357,34 +375,33 @@
                 $('span#instansii').text(res.customer);
             }
         });
-        $('.add-produk').DataTable().destroy();
+        // $('.add-produk').DataTable().destroy();
         var tab = $('.add-produk').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
-                url: "/api/tfp/detail-so/" +id,
+                url: "/api/tfp/detail-so/" +id+"/"+x,
                 // data: {id: id},
                 // type: "post",
                 // dataType: "json",
             },
             columns: [
                 { data: 'ids', name: 'ids'},
-                // { data: 'status', name: 'status'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
-                { data: 'tipe', name: 'tipe'},
                 { data: 'merk', name: 'merk'},
+                { data: 'status', name: 'status'},
 
             ],
-            'columnDefs': [{
-                'targets': 0,
-                'checkboxes': {
-                    'selectRow': true
-                },
-                // 'render': function(data, type, row, meta) {
-                //     return '<input type="checkbox" class="cb-child">';
-                // }
-            }],
+            // 'columnDefs': [{
+            //     'targets': 0,
+            //     'checkboxes': {
+            //         'selectRow': true
+            //     },
+
+            // }],
             'select': {
                 'style': 'multi'
             },
@@ -401,12 +418,17 @@
             // var idd = $('#ids').val(id);
             const ids = [];
 
-            var rowsel = tab.column(0).checkboxes.selected();
-            // console.log(rowsel);
+            // var rowsel = tab.column(0).checkboxes.selected();
+            // // console.log(rowsel);
 
-            $.each(rowsel, function(i, val) {
-                ids.push(val);
-            });
+            // $.each(rowsel, function(i, val) {
+            //     ids.push(val);
+            // });
+            $('.cb-child').each(function() {
+                if ($(this).is(":checked")) {
+                    ids.push($(this).val());
+                }
+            })
 
             $.ajax({
                 url: "/api/so/cek",
@@ -426,9 +448,12 @@
     })
 
     $(document).on('click', '.detailmodal', function(e) {
+        var x = $(this).data('value');
+        console.log(x);
         var id = $(this).data('id');
+
         $.ajax({
-            url: "/api/tfp/header-so/" +id,
+            url: "/api/tfp/header-so/" +id+"/"+x,
             success: function(res) {
                 console.log(res);
                 $('span#so').text(res.so);
@@ -437,12 +462,14 @@
                 $('span#instansi').text(res.customer);
             }
         });
-        $('#view-produk').DataTable().destroy();
+
         var table = $('#view-produk').DataTable({
             processing: true,
             serverSide: true,
+            destroy: true,
+            autoWidth: false,
             ajax: {
-                url: "/api/tfp/detail-so/" +id,
+                url: "/api/tfp/detail-so/" +id+"/"+x,
                 // data: {id: id},
                 // type: "post",
                 // dataType: "json",

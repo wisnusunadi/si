@@ -210,15 +210,15 @@ class ProduksiController extends Controller
                         </div>';
             })
             ->addColumn('action', function ($data) {
+                $x = $data->getTable();
                 return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->pesanan_id . '">
+                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '" data-id="' . $data->pesanan_id . '">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                             </button>
                         </a>
-
-                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->pesanan_id . '">
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
                             <button class="dropdown-item" type="button">
                                 <i class="far fa-eye"></i>&nbsp;View
                             </button>
@@ -297,7 +297,7 @@ class ProduksiController extends Controller
                 return $data->gudangbarangjadi->produk->merk;
             })
             ->addColumn('ids', function ($d) {
-                return $d->gudang_barang_jadi_id;
+                return '<input type="checkbox" class="cb-child" value="'.$d->gudang_barang_jadi_id.'">';
             })
             ->addColumn('action', function ($data) {
                 return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data['id'] . '">
@@ -322,7 +322,7 @@ class ProduksiController extends Controller
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" class="cb-child" value="' . $d->gudang_barang_jadi_id . '">';
             })
-            ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd'])
+            ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids'])
             ->make(true);
     }
 

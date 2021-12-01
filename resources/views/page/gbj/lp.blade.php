@@ -183,7 +183,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="tambah_data">
-                                                        <tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" onclick="tambahanPerakitan($(this).parent().prev().children().val())"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>
+                                                        {{-- <tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" onclick="tambahanPerakitan($(this).parent().prev().children().val())"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr> --}}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -412,6 +412,8 @@
             }
         });
     });
+
+
     var i = 0;
     function addData() {
         $.ajax({
@@ -450,6 +452,23 @@
             $('.btn-simpan').addClass('hapus');
         }
     });
+    $.ajax({
+            url: '/api/gbj/sel-divisi',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $(".division").empty();
+                    $(".division").append('<option value="">Pilih Item</option>');
+                    $.each(res, function(key, value) {
+                        $(".division").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    });
+                } else {
+                    $(".division").empty();
+                }
+            }
+        });
     var id = '';
     $(document).on('click', '.editmodal', function() {
         id = $(this).data('id');

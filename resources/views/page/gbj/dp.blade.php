@@ -3,7 +3,6 @@
 @section('title', 'ERP')
 
 @section('content')
-<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="card">
     <div class="card-header">
       <h3 class="card-title">Produk dari Perakitan </h3>
@@ -66,7 +65,7 @@
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                <h5 class="modal-title"><b>Detail Produk <span id="title">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -75,7 +74,6 @@
                 <table class="table table-striped scan-produk">
                     <thead>
                         <tr>
-                            <input type="hidden" name="t_gbj_detail_id[]" id="t_gbj_detail_id[]">
                             <th><input type="checkbox" id="head-cb"></th>
                             <th>Nomor Seri</th>
                             <th>Layout</th>
@@ -112,7 +110,7 @@
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                  <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
+                  <button type="button" class="btn btn-primary">Simpan</button>
               </div>
           </div>
       </div>
@@ -150,7 +148,7 @@
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                  <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
@@ -172,7 +170,6 @@
                             <td>654165654</td>
                             <td>Layout 1</td>
                           </tr>
-
                       </tbody>
                   </table>
               </div>
@@ -183,43 +180,24 @@
 
 @section('adminlte_js')
 <script>
-    // $('.table-seri').DataTable({
-    //     "oLanguage": {
-    //     "sSearch": "Cari:"}
-    // });
-    $.ajax({
-        url: '/api/gbj/sel-layout',
-        type: 'GET',
-        dataType: 'json',
-        success: function(res) {
-            if(res) {
-                console.log(res);
-                $("#change-layout").empty();
-                // $("#divisi").append('<option value="">All</option>');
-                $.each(res, function(key, value) {
-                    $("#change-layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                });
-            } else {
-                $("#change-layout").empty();
-            }
-        }
-    });
-
     $('.dalam-perakitan').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/tfp/rakit',
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            { data: 'tgl_masuk'},
+            { data: 'product'},
+            { data: 'jumlah'},
+            { data: 'action'}
+        ],
         "oLanguage": {
         "sSearch": "Cari:"},
-        "columnDefs": [
-        {
-            "targets": [4],
-            "visible": document.getElementById('auth').value == '2' ? false : true
-        }
-    ]
     });
-    $('.scan-produk').DataTable({
-            "oLanguage": {
-        "sSearch": "Cari:"
-        }
-    });
+
+
     $(document).ready(function () {
         $('.terimaProduk').click(function (e) {
             $('.terima-produk').modal('show');
@@ -239,9 +217,9 @@
         });
         $('#ubah-layout').modal('hide');
     }
-    var id = '';
+
     $(document).on('click', '.editmodal', function() {
-        id = $(this).data('id');
+        var id = $(this).data('id');
         console.log(id);
 
         $.ajax({
@@ -268,23 +246,23 @@
             }
         });
 
-        // $.ajax({
-        //     url: '/api/gbj/sel-layout',
-        //     type: 'GET',
-        //     dataType: 'json',
-        //     success: function(res) {
-        //         if(res) {
-        //             console.log(res);
-        //             $("#layout_id").empty();
-        //             // $("#divisi").append('<option value="">All</option>');
-        //             $.each(res, function(key, value) {
-        //                 $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
-        //             });
-        //         } else {
-        //             $("#layout_id").empty();
-        //         }
-        //     }
-        // });
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $("#layout_id").empty();
+                    // $("#divisi").append('<option value="">All</option>');
+                    $.each(res, function(key, value) {
+                        $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    });
+                } else {
+                    $("#layout_id").empty();
+                }
+            }
+        });
 
         openModalTerima();
     });
@@ -326,45 +304,6 @@
         $('.detail-layout').modal('show');
     }
 
-    $(document).on('click', '#btnSave', function(e) {
-        e.preventDefault();
 
-        const ids = [];
-        const noseri = [];
-        const layout = [];
-        const idd = id;
-
-        // var idd = $('#t_gbj_detail_id').val(id);
-
-        $('.cb-child').each(function() {
-            if ($(this).is(":checked")) {
-                ids.push($(this).val());
-            }
-        });
-
-        $('input[name^="noseri"]').each(function() {
-            noseri.push($(this).val());
-        });
-
-        $('select[name^="layout_id"]').each(function() {
-            layout.push($(this).val());
-        });
-
-        $.ajax({
-            url: "/api/tfp/create-noseri",
-            type: "post",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                t_gbj_detail_id: idd,
-                noseri : noseri,
-                layout_id : layout
-            },
-            success: function(res) {
-                console.log(res);
-            }
-        })
-
-        // console.log('ok');
-    })
 </script>
 @stop

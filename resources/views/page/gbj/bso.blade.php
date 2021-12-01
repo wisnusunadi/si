@@ -119,7 +119,7 @@
                                         <label for="">Nomor SO</label>
                                             <div class="card nomor-so">
                                                 <div class="card-body">
-                                                    89798797856456
+                                                    <span id="so"></span>
                                                 </div>
                                               </div>
                                     </div>
@@ -127,7 +127,7 @@
                                         <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn"></span>
                                             </div>
                                           </div>
                                     </div>
@@ -135,17 +135,17 @@
                                         <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po">89798797856456</span>
                                             </div>
                                           </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table class="table table-striped add-produk">
+                                <table class="table table-striped add-produk" id="addProduk">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            {{-- <th></th> --}}
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             {{-- <th>Tipe</th> --}}
@@ -154,7 +154,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-            
+
                                     </tbody>
                                 </table>
                             </div>
@@ -163,8 +163,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Transfer</button>
-                <button type="button" class="btn btn-info">Rancang</button>
+                <button type="button" class="btn btn-success" id="ok">Transfer</button>
+                <button type="button" class="btn btn-info" id="rancang">Rancang</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
         </div>
@@ -187,20 +187,24 @@
                     <thead>
                         <tr>
                             <th>Nomor Seri</th>
-                            <th></th>
+                            <th><input type="checkbox" id="head-cb"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>36541654654654564</td>
-                            <td></td>
+                            <td><input type="checkbox" class="cb-child" value="2"></td>
                         </tr>
                         <tr>
                             <td>78656562646545646</td>
-                            <td></td>
+                            <td><input type="checkbox" class="cb-child" value="2"></td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="simpan">Simpan</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
         </div>
     </div>
@@ -211,55 +215,22 @@
 <script>
     var mytable = '';
     $(document).ready(function () {
-        $('.addProduk').click(function (e) {
-            $('#addProdukModal').modal('show');
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
         });
-        $('.viewProduk').click(function (e) {
-            $('#viewProdukModal').modal('show');
-        });
-        let t = $('.add-produk').DataTable({
-            'columnDefs': [{
-                'targets': 0,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [1, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Cari:"
-            }
-        });
-
-        // $('.scan-produk').DataTable({
-        //     'columnDefs': [{
-        //         'targets': 1,
-        //         'checkboxes': {
-        //             'selectRow': true
-        //         }
-        //     }],
-        //     'select': {
-        //         'style': 'multi'
-        //     },
-        //     'order': [
-        //         [0, 'asc']
-        //     ],
-        //     "oLanguage": {
-        //     "sSearch": "Masukkan Nomor Seri:"
-        //     }
-        // });
 
         $(document).on('click', '.detailmodal', function(e) {
         var id = $(this).data('id');
+        var jml = $(this).data('jml');
+        console.log(jml);
         console.log(id);
-        $('.scan-produk').DataTable().destroy();
+        // $('.scan-produk').DataTable().destroy();
         mytable = $('.scan-produk').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
+            destroy: true,
             ajax: {
                 url: "/api/tfp/seri-so",
                 data: {gdg_barang_jadi_id: id},
@@ -270,12 +241,6 @@
                 { data: 'seri', name: 'seri'},
                 { data: 'checkbox', name: 'checkbox'},
             ],
-            'columnDefs': [{
-                'targets': 1,
-                'checkboxes': {
-                    'selectRow': true
-                }
-            }],
             'select': {
                 'style': 'multi'
             },
@@ -304,11 +269,14 @@
                     $('span#so').text(res.so);
                     $('span#po').text(res.po);
                     $('span#akn').text(res.akn);
+                    // $('span#instansi').text(res.customer);
                 }
         });
-        $('#addProduk').DataTable().destroy();
+        // $('#addProduk').DataTable().destroy();
         $('#addProduk').DataTable({
             // retrieve: true,
+            destroy: true,
+            autoWidth: false,
             processing: true,
             serverSide: true,
             ajax: {
@@ -371,52 +339,50 @@
             cell.innerHTML = i + 1;
         });
     }).draw();
+    const seri = {};
+    var t = 0;
+    $(document).on('click', '#simpan', function(e) {
+        // console.log('ok');
 
-    $(document).on('click', '#btnDraft', function(e) {
+        const ids = [];
+        $('.cb-child').each(function() {
+            if ($(this).is(":checked")) {
+                ids.push($(this).val());
+            }
+        })
+        seri[t] = ids;
+
+        console.log(seri);
+        t++;
+    })
+
+    $(document).on('click', '#rancang', function(e) {
             e.preventDefault();
 
-            const ids = [];
+            const prd = [];
             const qtyy = [];
-            const noseri = [];
+            // const noseri = [];
 
-            // var rowsel = mytable.column(1).checkboxes.selected();
-            // $.each(rowsel, function(index, rowId) {
-            //     // console.log(rowId);
-            //     // noseri.push(rowId);
-            //     noseri.push($('#noseri').val());
-            // });
             $('input[name^="gdg_brg_jadi_id"]').each(function() {
-                ids.push($(this).val());
+                prd.push($(this).val());
             });
 
             $('input[name^="qty"]').each(function() {
                 qtyy.push($(this).val());
             });
 
-            $('input[name^="noseri"]').each(function() {
-                noseri.push($(this).val());
-            });
 
-            // for(var o = 0; o < ids.length; o++) {
-            //     $('input[name^="noseri_id"]').each(function() {
-            //         ids[o] = noseri.push($(this).val());
-            //     });
-            // }
 
-            // $.each(jml, function(index, rowIdd) {
-            //     console.log(index);
-            //     // qtyy.push(rowId);
-            // });
-            console.log(ids.length);
+            // console.log(ids.length);
             $.ajax({
                 url: "/api/tfp/byso",
                 type: "post",
                 data: {
                     "_token": "{{ csrf_token() }}",
                     pesanan_id: id,
-                    gdg_brg_jadi_id: ids,
+                    gdg_brg_jadi_id: prd,
                     qty: qtyy,
-                    noseri: noseri,
+                    noseri_id: seri,
                 },
                 success: function(res) {
                     console.log(res);
