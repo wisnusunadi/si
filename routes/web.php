@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -72,7 +73,7 @@ Route::middleware('auth')->prefix('/produksi')->group(function () {
     Route::view('/so', 'page.produksi.so');
     Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
-    Route::view('/riwayat_perakitan', 'page.produksi.riwayat_perakitan');
+    Route::get('/riwayat_perakitan', [ProduksiController::class, 'his_rakit']);
     Route::view('/pengiriman', 'page.produksi.pengiriman');
 });
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {

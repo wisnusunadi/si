@@ -226,7 +226,7 @@ Route::prefix('/prd')->group(function() {
     Route::post('/ongoing', [ProduksiController::class, 'on_rakit']);
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
-    Route::get('/test1', [ProduksiController::class, 'test1']);
+    Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
 
     // kirim
@@ -234,6 +234,13 @@ Route::prefix('/prd')->group(function() {
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
     Route::get('/detailSeri/{id}', [ProduksiController::class, 'detailSeri']);
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
+
+    // riwayat
+    Route::prefix('/history')->group(function() {
+        Route::post('/rakit/h', [ProduksiController::class, 'h_rakit']);
+        Route::post('/unit/h', [ProduksiController::class, 'h_unit']);
+        Route::get('/header/{id}', [ProduksiController::class, 'header_his_rakit']);
+    });
 });
 
 Route::prefix('/spr')->group(function () {

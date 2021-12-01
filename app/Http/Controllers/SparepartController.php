@@ -983,41 +983,6 @@ class SparepartController extends Controller
 
     function byTingkat()
     {
-    //     $data = GudangKarantinaDetail::with('noseri')->get();
-    //     return datatables()->of($data)
-    //         ->addIndexColumn()
-    //         ->addColumn('kode', function($d) {
-    //             if (empty($d->gbj_id)) {
-    //                 return $d->sparepart->spare->kode;
-    //             } else {
-    //                 return $d->units->produk->product->kode . '' . $d->units->produk->kode;
-    //             }
-    //         })
-    //         ->addColumn('produk', function($d) {
-    //             if (empty($d->gbj_id)) {
-    //                 return $d->sparepart->nama;
-    //             } else {
-    //                 return $d->units->produk->nama.' '.$d->units->nama;
-    //             }
-    //         })
-    //         ->addColumn('jumlah', function($d) {
-    //             if (empty($d->qty_unit)) {
-    //                 return $d->qty_spr.' Unit';
-    //             } else {
-    //                 return $d->qty_unit.' '.$d->units->satuan->nama;
-    //             }
-    //         })
-    //         ->addColumn('tingkat', function($d) {
-    //             // return $d->noseri->tk_kerusakan;
-    //         })
-    //         ->addColumn('jenis', function($d) {
-    //             if (empty($d->qty_unit)) {
-    //                 return 'Sparepart';
-    //             } else {
-    //                 return 'Unit';
-    //             }
-    //         })
-    //         ->make(true);
         $did = GudangKarantinaDetail::all()->pluck('id');
         $data = GudangKarantinaNoseri::with('detail', 'detail.sparepart')->whereIn('gk_detail_id', $did)->get();
         // return $data;

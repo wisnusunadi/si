@@ -650,6 +650,7 @@ class ProduksiController extends Controller
         return count($data);
     }
 
+    // perakitan
     function plan_rakit()
     {
         $data = JadwalPerakitan::whereMonth('tanggal_mulai', '>', Carbon::now()->format('m'))->get();
@@ -874,19 +875,85 @@ class ProduksiController extends Controller
         dd($request->all());
     }
 
-    function test1()
+    // riwayat rakit
+    function h_rakit()
     {
-        $x = 12;
-        for ($i = 0; $i < 5; $i++) {
+        $data = JadwalPerakitan::where('status_tf', 14)->get()->count('produk_id');
+        return $data;
+    }
 
-            for ($j=0; $j < 5; $j++) {
-                # code...
-               for ($k=0; $k < $x; $k++) {
-                   # code...
-                   echo '* ';
-               }
-            }
-            echo '<br>';
+    function h_unit()
+    {
+        // $data = JadwalPerakitan::where('status_tf', 14)->get()->sum('jumlah');
+        // return $data;
+        $data = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->get();
+        return $data;
+    }
+
+    function his_rakit() {
+        $rakit = JadwalPerakitan::where('status_tf', 14)->get()->count('produk_id');
+        $unit = JadwalPerakitan::where('status_tf', 14)->get()->sum('jumlah');
+        $data = JadwalPerakitan::where('status_tf', 14)->get();
+        $detail = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->get();
+        // $a = [];
+        // foreach($data as $d) {
+        //     $a[] = [
+        //         'tgl' => Carbon::
+        //     ]
+        // }
+        return view('page.produksi.riwayat_perakitan', compact('rakit', 'unit', 'data', 'detail'));
+    }
+
+    function header_his_rakit($id) {
+        $detail = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->where('produk_id', $id)->get();
+        $a = [];
+        foreach($detail as $d) {
+            $a[] = [
+                'day_rakit' => Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->format('l, d-m-Y'),
+                'time_rakit' => Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->format('H:i'),
+                'day_kirim' => Carbon::createFromFormat('Y-m-d H:i:s', $d->updated_at)->format('l, d-m-Y'),
+                'time_kirim' => Carbon::createFromFormat('Y-m-d H:i:s', $d->updated_at)->format('H:i'),
+                'bppb' => '-',
+                'produk' => $d->produk->produk->nama.' '.$d->produk->nama,
+                'jml' => $d->jumlah.' Unit',
+            ];
         }
+        return $a;
+        // $data = JadwalPerakitan::find($id);
+    }
+    function ajax_history_rakit()
+    {
+        $data = JadwalPerakitan::where('status_tf', 14)->get();
+        return datatables()->of($data)
+            ->addColumn('day_rakit', function($d) {
+                return Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->format('l, d-m-Y');
+                // return $d->tanggal_mulai->locale('id')->format('l, d-m-Y');
+            })
+            ->addColumn('day_kirim', function($d) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $d->updated_at)->format('l, d-m-Y');
+            })
+            ->addColumn('time_rakit', function($d) {
+                return Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->format('H:i');
+            })
+            ->addColumn('time_kirim', function($d) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $d->updated_at)->format('H:i');
+            })
+            ->addColumn('bppb', function($d) {
+                return '-';
+            })
+            ->addColumn('produk', function($d) {
+                return $d->produk->produk->nama.' '.$d->produk->nama;
+            })
+            ->addColumn('jml', function($d) {
+                return $d->jumlah.' Unit';
+            })
+            ->addColumn('kosong', function () {
+                return '';
+            })
+            ->addColumn('action', function($d) {
+                return '<button class="btn btn-outline-secondary detail" data-id="'.$d->produk_id.'"><i class="far fa-eye"></i> Detail</button>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 }
