@@ -128,6 +128,20 @@ class LogistikController extends Controller
             ->make(true);
     }
 
+    public function get_noseri_so($id)
+    {
+        $s = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('detail_pesanan_id', $id);
+        })->get();
+
+        return datatables()->of($s)
+            ->addIndexColumn()
+            ->addColumn('no_seri', function ($data) {
+                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            })
+            ->make(true);
+    }
+
     public function get_data_detail_selesai_kirim_so($id)
     {
         $data = DetailPesanan::where('pesanan_id', $id)->Has('DetailLogistik')->get();

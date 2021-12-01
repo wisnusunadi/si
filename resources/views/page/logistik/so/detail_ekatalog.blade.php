@@ -261,16 +261,6 @@
                                                                 <div class="card-title">No Seri</div>
                                                             </div>
                                                             <div class="card-body">
-                                                                <div class="form-horizontal">
-                                                                    <div class="form-group row">
-                                                                        <label for="" class="col-5 align-right col-form-label">Detail Produk</label>
-                                                                        <div class="col-5">
-                                                                            <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
-
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                                 <div class="table-responsive">
                                                                     <table class="table table-hover table-striped align-center" id="noseritable">
                                                                         <thead>
@@ -483,7 +473,7 @@
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
             $('input[name ="check_all"]').prop('checked', false);
-            select_produk(data);
+            noseritable(data);
         })
 
         $('#selesaikirimtable').on('click', '.detailmodal', function() {
@@ -590,7 +580,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/qc/so/riwayat/detail/' + id,
+                    'url': '/api/logistik/so/noseri/detail/' + id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -611,38 +601,38 @@
             })
         }
 
-        function select_produk(id) {
-            $('.detail_produk').select2({
-                placeholder: 'Pilih Produk',
-                ajax: {
-                    minimumResultsForSearch: 20,
-                    dataType: 'json',
-                    delay: 250,
-                    type: 'GET',
-                    url: '/api/qc/so/riwayat/select/' + id,
-                    data: function(params) {
-                        return {
-                            term: params.term
-                        }
-                    },
-                    processResults: function(data) {
-                        console.log(data);
-                        return {
-                            results: $.map(data, function(obj) {
-                                return {
-                                    id: obj.id,
-                                    text: obj.gudang_barang_jadi.produk.nama + ' ' +
-                                        obj.gudang_barang_jadi.nama
-                                };
-                            })
-                        };
-                    },
-                }
-            }).change(function() {
-                var ids = $(this).val();
-                noseritable(ids);
-            });
-        }
+        // function select_produk(id) {
+        //     $('.detail_produk').select2({
+        //         placeholder: 'Pilih Produk',
+        //         ajax: {
+        //             minimumResultsForSearch: 20,
+        //             dataType: 'json',
+        //             delay: 250,
+        //             type: 'GET',
+        //             url: '/api/qc/so/riwayat/select/' + id,
+        //             data: function(params) {
+        //                 return {
+        //                     term: params.term
+        //                 }
+        //             },
+        //             processResults: function(data) {
+        //                 console.log(data);
+        //                 return {
+        //                     results: $.map(data, function(obj) {
+        //                         return {
+        //                             id: obj.id,
+        //                             text: obj.gudang_barang_jadi.produk.nama + ' ' +
+        //                                 obj.gudang_barang_jadi.nama
+        //                         };
+        //                     })
+        //                 };
+        //             },
+        //         }
+        //     }).change(function() {
+        //         var ids = $(this).val();
+        //         noseritable(ids);
+        //     });
+        // }
 
         var checkedAry = [];
         $('#belumkirimtable').on('click', 'input[name="check_all"]', function() {
