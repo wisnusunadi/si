@@ -14,6 +14,7 @@ use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
+use App\Models\TFProduksi;
 use Carbon\Doctrine\CarbonType;
 use Hamcrest\Core\IsNot;
 use Illuminate\Http\Request;
@@ -1764,6 +1765,17 @@ class PenjualanController extends Controller
 
         return response()->json(compact('ekatalog_graph', 'spa_graph', 'spb_graph'));
     }
+
+    //Dashboard
+    public function dashboard()
+    {
+        $belum_so = Ekatalog::whereNull('pesanan_id')->get()->count();
+        $so_belum_gudang = Pesanan::DoesntHave('TFProduksi')->get()->count();
+        $so_belum_qc = TFProduksi::Has('Pesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get()->count();
+        $so_belum_logistik = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailLogistik')->get()->count();
+        return view('page.penjualan.dashboard', ['belum_so' => $belum_so, 'so_belum_gudang' => $so_belum_gudang, 'so_belum_qc' => $so_belum_qc, 'so_belum_logistik' => $so_belum_logistik]);
+    }
+
     //Another 
     function toRomawi($number)
     {

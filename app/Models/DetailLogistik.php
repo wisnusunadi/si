@@ -18,4 +18,8 @@ class DetailLogistik extends Model
     {
         return $this->belongsTo(DetailPesanan::class, 'detail_pesanan_id');
     }
+    public function NoseriDetailLogistik()
+    {
+        return $this->hasMany(NoseriDetailLogistik::class);
+    }
 }

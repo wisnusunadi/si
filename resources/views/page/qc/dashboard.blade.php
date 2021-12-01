@@ -310,12 +310,12 @@
                         <h4>Detail</h4>
                     </div>
                     <div class="modal-body" id="detail">
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </section>
 @stop
 

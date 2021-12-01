@@ -228,7 +228,7 @@
                                                                 <div class="row">
                                                                     <div class="col-12">
                                                                         <div class="table-responsive">
-                                                                            <table class="table table-bordered table-striped" style="text-align:center; width:100%;" id="belumkirimtable">
+                                                                            <table class="table " style="text-align:center; width:100%;" id="belumkirimtable">
 
                                                                                 <thead>
                                                                                     <tr>
