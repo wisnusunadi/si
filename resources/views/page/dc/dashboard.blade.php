@@ -275,7 +275,7 @@
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
                                                     </td>
                                                     <td><span class="badge yellow-text">Sebagian diproses</span></td>
-                                                    <td><a href="{{route('dc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('dc.so.detail', ['id' => '1','value' => 's'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
@@ -285,7 +285,7 @@
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
                                                     </td>
                                                     <td><span class="badge yellow-text">Sebagian diproses</span></td>
-                                                    <td><a href="{{route('dc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('dc.so.detail', ['id' => '1','value' => 's'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
@@ -295,7 +295,7 @@
                                                         <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
                                                     </td>
                                                     <td><span class="badge red-text">Belum diproses</span></td>
-                                                    <td><a href="{{route('dc.so.detail', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
+                                                    <td><a href="{{route('dc.so.detail', ['id' => '1','value' => 's'])}}"><i class="fas fa-search"></i></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>

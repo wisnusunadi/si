@@ -167,7 +167,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <td class="nowrap-text">1</td>
                                     <td class="nowrap-text">19-10-2021</td>
                                     <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
@@ -208,7 +208,7 @@
                                             </a>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -242,7 +242,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <td>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="1" id="1" name="no_seri_id[]" />
@@ -269,7 +269,7 @@
                                     <td>Kusmardiana Rahayu <div><small>Q.A. Manager</small></div>
                                     </td>
                                     <td>-</td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -286,7 +286,6 @@
                         </button>
                     </div>
                     <div class="modal-body" id="create">
-
                     </div>
                 </div>
             </div>
@@ -314,10 +313,25 @@
 <script>
     $(function() {
         $('#showtable').DataTable({
-            scrollX: true
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/dc/so/detail/1',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, ]
         });
-
-
         $('#noseritable').on('change', 'input[name="check_all"]', function() {
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('input[name="no_seri_id[]"]').prop('checked', true);

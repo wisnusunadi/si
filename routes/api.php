@@ -252,6 +252,7 @@ Route::prefix('/logistik')->group(function () {
 Route::prefix('/dc')->group(function () {
     Route::prefix('/so')->group(function () {
         Route::get('data', [App\Http\Controllers\DCController::class, 'get_data_so']);
+        Route::get('detail/{id}', [App\Http\Controllers\DCController::class, 'get_data_detail_so']);
     });
 });
 

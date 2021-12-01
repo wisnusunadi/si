@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPesanan;
 use Illuminate\Http\Request;
 use PDF;
 use App\Models\Pesanan;
@@ -70,6 +71,15 @@ class DcController extends Controller
     }
 
 
+    public function get_data_detail_so($id)
+    {
+        $data = DetailPesanan::WhereHas('Pesanan', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->Has('Ekatalog')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->make(true);
+    }
     //Show
     public function detail_coo($id, $value)
     {
