@@ -129,14 +129,14 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Batas Pengiriman</small></div>
-                                    <div class="urgent"><b>{!!$param!!}</b></div>
+                                    <div class="urgent"><b></b></div>
                                 </div>
                             </div>
 
                             <div class="col-2">
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div>{!!$status!!}</div>
+                                    <div></div>
                                 </div>
                             </div>
                         </div>
@@ -265,7 +265,6 @@
                                                                     <table class="table table-hover table-striped align-center" id="noseritable">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th>No</th>
                                                                                 <th>No Seri</th>
                                                                             </tr>
                                                                         </thead>
@@ -383,11 +382,14 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        y = [];
+        y = <?php echo json_encode($detail_id); ?>;
+
         var belumkirimtable = $('#belumkirimtable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$d->pesanan_id}}',
+                'url': '/api/logistik/so/data/detail/belum_kirim/' + y,
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -469,6 +471,7 @@
 
         $('#belumkirimtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
+            idtrf = '{{$d->pesanan->TFProduksi->id}}';
             $('#belumkirimtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
@@ -507,6 +510,7 @@
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
+            console.log(action);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -515,24 +519,25 @@
                 url: action,
                 data: $('#form-logistik-create').serialize(),
                 success: function(response) {
+                    console.log(response);
 
-                    if (response['data'] == "success") {
-                        swal.fire(
-                            'Berhasil',
-                            'Berhasil menambahkan Pengiriman',
-                            'success'
-                        );
-                        $("#editmodal").modal('hide');
-                        $('#belumkirimtable').DataTable().ajax.reload();
-                        $('#selesaikirimtable').DataTable().ajax.reload();
-                        $('#noseridetail').addClass('hide');
-                    } else if (response['data'] == "error") {
-                        swal.fire(
-                            'Gagal',
-                            'Gagal menambahkan Pengiriman',
-                            'error'
-                        );
-                    }
+                    // if (response['data'] == "success") {
+                    //     swal.fire(
+                    //         'Berhasil',
+                    //         'Berhasil menambahkan Pengiriman',
+                    //         'success'
+                    //     );
+                    //     $("#editmodal").modal('hide');
+                    //     $('#belumkirimtable').DataTable().ajax.reload();
+                    //     $('#selesaikirimtable').DataTable().ajax.reload();
+                    //     $('#noseridetail').addClass('hide');
+                    // } else if (response['data'] == "error") {
+                    //     swal.fire(
+                    //         'Gagal',
+                    //         'Gagal menambahkan Pengiriman',
+                    //         'error'
+                    //     );
+                    // }
                 },
                 error: function(xhr, status, error) {
                     alert($('#form-logistik-create').serialize());
@@ -543,11 +548,11 @@
 
         function detailpesanan(id, pesanan_id) {
             $('#detailpesanan').DataTable({
-
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id,
+                    'url': '/api/logistik/so/detail/select/' + id + '/' + 1,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -589,15 +594,8 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'no_seri'
-                    },
-                ]
+                    data: 'no_seri'
+                }, ]
             })
         }
 

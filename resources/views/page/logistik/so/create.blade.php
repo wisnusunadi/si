@@ -1,4 +1,4 @@
-<form action="/api/logistik/so/create/{{$id}}" method="POST" id="form-logistik-create">
+<form action="/api/logistik/so/create/{{$id}}/{{$id_produk}}" method="POST" id="form-logistik-create">
     @csrf
     <div class="content">
         <div class=" d-flex justify-content-center">
@@ -15,7 +15,7 @@
                                         <div class="col-6">
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text">SPA</span>
+                                                    <span class="input-group-text">SPA-</span>
                                                 </div>
                                                 <input type="text" class="form-control col-form-label" name="no_invoice" id="no_invoice">
                                             </div>
@@ -123,4 +123,5 @@
             </div>
         </div>
     </div>
+    {{$id_produk}}
 </form>

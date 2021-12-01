@@ -50,8 +50,4 @@ class DetailPesanan extends Model
         }
         return $jumlah;
     }
-    public function DetailLogistik()
-    {
-        return $this->hasOne(DetailLogistik::class);
-    }
 }

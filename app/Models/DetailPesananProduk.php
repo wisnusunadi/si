@@ -23,4 +23,8 @@ class DetailPesananProduk extends Model
     {
         return $this->hasMany(NoseriDetailPesanan::class);
     }
+    public function DetailLogistik()
+    {
+        return $this->hasMany(DetailLogistik::class);
+    }
 }
