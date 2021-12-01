@@ -129,14 +129,14 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Batas Pengiriman</small></div>
-                                    <div class="urgent"><b>{!!$param!!}</b></div>
+                                    <div class="urgent"><b></b></div>
                                 </div>
                             </div>
 
                             <div class="col-2">
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div>{!!$status!!}</div>
+                                    <div></div>
                                 </div>
                             </div>
                         </div>
@@ -393,11 +393,14 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        y = [];
+        y = <?php echo json_encode($detail_id); ?>;
+
         var belumkirimtable = $('#belumkirimtable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$d->pesanan_id}}',
+                'url': '/api/logistik/so/data/detail/belum_kirim/' + y,
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

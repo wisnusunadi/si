@@ -204,7 +204,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.dc.so.show')->name('dc.so.show');
-        Route::view('/detail/{id}', 'page.dc.so.detail')->name('dc.so.detail');
+        Route::get('/detail/{id}/{value}',  [App\Http\Controllers\DcController::class, 'detail_coo'])->name('dc.so.detail');
         Route::view('/create/{id}', 'page.dc.so.create')->name('dc.so.create');
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.dc.laporan.show')->name('dc.so.laporan.show');

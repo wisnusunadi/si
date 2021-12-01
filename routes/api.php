@@ -248,6 +248,11 @@ Route::prefix('/logistik')->group(function () {
         Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });
 });
+Route::prefix('/dc')->group(function () {
+    Route::prefix('/so')->group(function () {
+        Route::get('data', [App\Http\Controllers\DCController::class, 'get_data_so']);
+    });
+});
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard']);

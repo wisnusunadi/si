@@ -123,7 +123,7 @@
                                             <th>Aksi</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>SO/EKAT/X/02/98</td>
                                                 <td>AK1-909090-1892180</td>
@@ -192,7 +192,7 @@
                                                         <i class="fas fa-search"></i>
                                                     </a>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -251,53 +251,43 @@
         //         timeout: 8000
         //     })
         // });
-        // var showtable = $('#showtable').DataTable({
-        //     processing: true,
-        //     serverSide: true,
-        //     ajax: {
-        //         'url': '/api/qc/so/data',
-        //         'type': 'POST',
-        //         'headers': {
-        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //         }
+        var showtable = $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/dc/so/data',
 
-        //     },
-        //     language: {
-        //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-        //     },
-        //     columns: [{
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false
-        //     }, {
-        //         data: 'no_po',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
 
-        //     }, {
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false,
-        //     }, {
-        //         data: 'nama_customer',
-
-        //     }, {
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false
-        //     }, {
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false
-        //     }, {
-        //         data: 'DT_RowIndex',
-        //         className: 'nowrap-text align-center',
-        //         orderable: false,
-        //         searchable: false
-        //     }]
-        // })
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'so',
+            }, {
+                data: 'no_paket',
+            }, {
+                data: 'batas_paket',
+            }, {
+                data: 'nama_customer',
+            }, {
+                data: 'instansi',
+            }, {
+                data: 'status',
+            }, {
+                data: 'ket',
+            }, {
+                data: 'button',
+            }]
+        })
 
     })
 </script>
