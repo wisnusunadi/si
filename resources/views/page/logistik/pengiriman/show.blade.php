@@ -204,7 +204,7 @@
                                                 <th>No</th>
                                                 <th>No SO</th>
                                                 <th>No SJ</th>
-                                                <th>Ekspedisi</th>
+                                                <th>Ekspedisi / Pengirim</th>
                                                 <th>No Resi</th>
                                                 <th>Tanggal Kirim</th>
                                                 <th>Nama Customer</th>
@@ -483,39 +483,54 @@
             });
         }
         var showtable = $('#showtable').DataTable({
-            // processing: true,
-            // serverSide: true,
-            // ajax: {
-            //     'url': '/api/customer/detail/' + '1',
-            //     'type': 'POST',
-            //     'headers': {
-            //         'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //     }
-            // },
-            // language: {
-            //     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            // },
-            // columns: [{
-            //         data: 'DT_RowIndex',
-            //         orderable: false,
-            //         searchable: false
-            //     },
-            //     {
-            //         data: 'DT_RowIndex'
-            //     },
-            //     {
-            //         data: 'DT_RowIndex',
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/pengiriman/data',
+                'type': 'GET',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so'
+                },
+                {
+                    data: 'sj',
 
-            //     },
-            //     {
-            //         data: 'DT_RowIndex',
+                },
+                {
+                    data: 'ekspedisi',
 
-            //     },
-            //     {
-            //         data: 'DT_RowIndex',
+                },
+                {
+                    data: 'no_resi',
 
-            //     }
-            // ]
+                }, {
+                    data: 'tgl_kirim',
+
+                }, {
+                    data: 'nama_customer',
+
+                }, {
+                    data: 'provinsi',
+
+                }, {
+                    data: 'status',
+
+                }, {
+                    data: 'button',
+
+                }
+            ]
         });
 
     });

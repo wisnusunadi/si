@@ -3,7 +3,6 @@
     <div class="content">
         <div class=" d-flex justify-content-center">
             <div class="col-11">
-
                 <div class="d-flex justify-content-center">
                     <div class="col-12">
                         <div class="card">
@@ -123,5 +122,4 @@
             </div>
         </div>
     </div>
-    {{$id_produk}}
 </form>

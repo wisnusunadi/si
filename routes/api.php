@@ -239,6 +239,9 @@ Route::prefix('/logistik')->group(function () {
         Route::post('create/{detail_pesanan_id}/{id_produk}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
         Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('noseri/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so']);
+        Route::get('noseri/detail/belum_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_belum_kirim']);
+        Route::get('noseri/detail/selesai_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim']);
+        Route::get('noseri/detail/selesai_kirim/data/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim_data']);
         // Route::get('data/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_so']);
         Route::get('data/detail/belum_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_belum_kirim_so']);
         Route::get('data/detail/selesai_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_selesai_kirim_so']);
@@ -249,6 +252,13 @@ Route::prefix('/logistik')->group(function () {
         Route::get('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_ekspedisi']);
         // Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
+    });
+
+    Route::group(['prefix' => '/pengiriman'], function () {
+        Route::get('/data', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
+        Route::get('/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_pengiriman']);
+        // Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
+        // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });
 });
 Route::prefix('/dc')->group(function () {
