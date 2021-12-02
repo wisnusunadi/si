@@ -965,14 +965,15 @@ class ProduksiController extends Controller
         $data = JadwalPerakitan::where('status_tf', 14)->get();
         return datatables()->of($data)
             ->addColumn('day_rakit', function($d) {
-                return Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->format('l, d-m-Y');
-                // return $d->tanggal_mulai->locale('id')->format('l, d-m-Y');
+                $dd = JadwalRakitNoseri::where('jadwal_id', $d->id)->first();
+                return Carbon::createFromFormat('Y-m-d H:i:s', $dd->created_at)->format('l, d-m-Y');
             })
             ->addColumn('day_kirim', function($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->updated_at)->format('l, d-m-Y');
             })
             ->addColumn('time_rakit', function($d) {
-                return Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->format('H:i');
+                $dd = JadwalRakitNoseri::where('jadwal_id', $d->id)->first();
+                return Carbon::createFromFormat('Y-m-d H:i:s', $dd->created_at)->format('H:i');
             })
             ->addColumn('time_kirim', function($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->updated_at)->format('H:i');
