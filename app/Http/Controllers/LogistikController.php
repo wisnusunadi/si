@@ -397,79 +397,108 @@ class LogistikController extends Controller
     }
     public function create_logistik_view($detail_pesanan_id, $pesanan_id)
     {
-        $value = [];
+        $value = array();
         $value2 = [];
-
+        $id = [];
+        $a = 0;
         $x = explode(',', $detail_pesanan_id);
         if ($detail_pesanan_id == '0') {
             $data = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
                 $q->where('pesanan_id', $pesanan_id);
             })->get();
             foreach ($data as $d) {
-                $value[] = $d->id;
-            }
-
-            $id =  json_encode($value);
-        } else {
-            $data = DetailPesananPRoduk::whereIN('id', $x)->get();
-            foreach ($data as $d) {
-                $value2[] = $d->id;
+                $value[$a]['id'] = $d->id;
                 $count = 0;
                 foreach ($d->noseridetailpesanan as $e) {
-                    $value[$d->id][$count] = $e->id;
+                    $value[$a]['noseri'][$count] = $e->id;
                     $count++;
                 }
+                $a++;
+            }
+            $id =  json_encode($value);
+        } else {
+            $data = DetailPesananProduk::whereIN('id', $x)->get();
+            foreach ($data as $d) {
+                $value[$a]['id'] = $d->id;
+                $count = 0;
+                foreach ($d->noseridetailpesanan as $e) {
+                    $value[$a]['noseri'][$count] = $e->id;
+                    $count++;
+                }
+                $a++;
             }
             $id =  json_encode($value);
             $id_produk =  json_encode($value2);
         }
+        echo json_encode($value);
         return view('page.logistik.so.create', ['id' => $id, 'id_produk' => $id_produk]);
     }
     public function create_logistik(Request $request, $detail_pesanan_id, $id_produk)
     {
         //  $result = array_values(json_decode($detail_pesanan_id, true));
 
-        $task_array = json_decode($detail_pesanan_id);
-        $total = 0;
+        $array = array_values(json_decode($detail_pesanan_id, true));
+        // return response()->json(['data' => $array]);
+        // $total = 0;
+
         // $replace_array_seri = strtr($id_produk, array('[' => '', ']' => ''));
         // $array_produk = explode(',', $replace_array_seri);
 
 
-        // $bool = true;
-        // $Logistik = 0;
-        // if ($request->pengiriman == 'ekspedisi') {
-        //     $Logistik = Logistik::create([
-        //         'ekspedisi_id' => $request->ekspedisi_id,
-        //         'nosurat' => 'SPA-' . $request->no_invoice,
-        //         'tgl_kirim' => $request->tgl_kirim,
-        //     ]);
-        // } else {
-        //     $Logistik = Logistik::create([
-        //         'nosurat' => 'SPA-' . $request->no_invoice,
-        //         'tgl_kirim' => $request->tgl_kirim,
-        //         'nama_pengirim' => $request->nama_pengirim,
-        //     ]);
-        // }
-        // for ($i = 0; $i < count($array_produk); $i++) {
-        //     $c = DetailLogistik::create([
-        //         'logistik_id' => $Logistik->id,
-        //         'detail_pesanan_produk_id' => $array_produk[$i],
-        //     ]);
-        //     for ($y = 0; $y < count($k[$i]); $y++) {
-        //         $b = NoseriDetailLogistik::create([
-        //             'detail_logistik_id' => $c->id,
-        //             'detail_pesanan_produk_id' => $k[$i][$y],
-        //         ]);
-        //     }
-        //     if (!$b) {
-        //         $bool = false;
+
+        $bool = true;
+        $Logistik = "";
+        if ($request->pengiriman == 'ekspedisi') {
+            $Logistik = Logistik::create([
+                'ekspedisi_id' => $request->ekspedisi_id,
+                'nosurat' => 'SPA-' . $request->no_invoice,
+                'tgl_kirim' => $request->tgl_kirim,
+            ]);
+        } else {
+            $Logistik = Logistik::create([
+                'nosurat' => 'SPA-' . $request->no_invoice,
+                'tgl_kirim' => $request->tgl_kirim,
+                'nama_pengirim' => $request->nama_pengirim,
+            ]);
+        }
+
+        // if ($Logistik) {
+        //     if ($bool == true) {
+        //         return response()->json(['data' =>  'success']);
+        //     } else {
+        //         return response()->json(['data' =>  'error']);
         //     }
         // }
-        // if ($bool == true) {
-        //     return response()->json(['data' =>  'success']);
-        // } else {
-        //     return response()->json(['data' =>  'error']);
-        // }
+        if ($Logistik) {
+            for ($i = 0; $i < count($array); $i++) {
+                $c = DetailLogistik::create([
+                    'logistik_id' => $Logistik->id,
+                    'detail_pesanan_produk_id' => $array[$i]['id'],
+                ]);
+                if ($c) {
+                    // $bool = true;
+
+                    for ($y = 0; $y < count($array[$i]['noseri']); $y++) {
+                        $b = NoseriDetailLogistik::create([
+                            'detail_logistik_id' => $c->id,
+                            'noseri_detail_pesanan_id' => $array[$i]['noseri'][$y],
+                        ]);
+                    }
+                    if (!$b) {
+                        $bool = false;
+                    }
+                } else {
+                    $bool = false;
+                }
+            }
+        } else {
+            return response()->json(['data' =>  $Logistik]);
+        }
+        if ($bool == true) {
+            return response()->json(['data' =>  'success']);
+        } else {
+            return response()->json(['data' =>  'error']);
+        }
     }
     //Dashboard
     public function dashboard()
