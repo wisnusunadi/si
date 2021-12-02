@@ -115,7 +115,7 @@
                     <thead>
                         <tr>
                             <th>Nomor Seri</th>
-                            <th></th>
+                            <th><input type="checkbox" id="head-cb"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,7 +132,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary btn-simpan" type="button" id="btnSave">Simpan</button>
+                <button class="btn btn-primary" type="button" id="btnSave">Simpan</button>
             </div>
         </div>
     </div>
@@ -166,6 +166,11 @@
         $(".number-input").inputFilter(function (value) {
             return /^\d*$/.test(value);
             var value = $(this).val();
+        });
+
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
         });
 
         // load produk
@@ -269,8 +274,9 @@
 
         i++;
         // console.log(deskripsi.length);
-        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" ><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
+
 
     }
     $(document).on('click', '.btn-delete', function(e){
@@ -283,6 +289,70 @@
             $('.btn-simpan').prop('hidden', true);
         }
     });
+
+
+    var prd = '';
+    var jml = '';
+    var id = '';
+    $(document).on('click', '.noseriModal', function(e) {
+        var tr = $(this).closest('tr');
+        jml = tr.find('#post_qty').val();
+        console.log(jml);
+        id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/tfp/noseri/" + id,
+            type: "get",
+            // data : {id : id},
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+
+                $('.scan-produk').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    ajax: {
+                        url: '/api/tfp/noseri/' + id,
+                    },
+                    columns: [
+                        { data: 'noseri', name: 'noseri'},
+                        { data: 'checkbox', name: 'checkbox', orderable: 'false'},
+                    ],
+                    // 'columnDefs': [{
+                    //     'targets': 1,
+                    //     'checkboxes': {
+                    //         'selectRow': true
+                    //     },
+                    // }],
+                    'select': {
+                        'style': 'multi'
+                    },
+                    // 'order': [
+                    //     [0, 'asc']
+                    // ],
+                    "oLanguage": {
+                    "sSearch": "Scan Nomor Seri:"
+                    }
+                });
+            }
+        })
+        $('.modal-produk').modal('show');
+    })
+    const seri = {};
+    $(document).on('click', '#btnSave', function() {
+        console.log('ok');
+        const ids = [];
+        $('.cb-child').each(function() {
+            if ($(this).is(":checked")) {
+                ids.push($(this).val());
+            }
+        })
+        seri[id] = ids;
+        console.log(seri);
+    })
 
     $(document).on('click', '.btn-simpan', function(e) {
         e.preventDefault();
@@ -301,7 +371,7 @@
         $('input[name^="ke"]').each(function() {
             ke.push($(this).val());
         });
-        console.log(ke);
+        // console.log(ke);
 
         $('input[name^="deskripsi"]').each(function() {
             desk.push($(this).val());
@@ -324,6 +394,7 @@
                 deskripsi: desk,
                 gdg_brg_jadi_id: gdg,
                 qty: stok,
+                noseri_id : seri,
             },
             success: function (res) {
                 console.log(res);
@@ -338,55 +409,6 @@
             }
         });
         // console.log('ok');
-    })
-
-    $(document).on('click', '.noseriModal', function(e) {
-        var id = $(this).data('id');
-        console.log(id);
-
-        $.ajax({
-            url: "/api/tfp/noseri/" + id,
-            type: "get",
-            // data : {id : id},
-            dataType: 'json',
-            success: function(res) {
-                console.log(res);
-
-                $('.scan-produk').DataTable({
-                    destroy: false,
-                    processing: true,
-                    serverSide: true,
-                    autoWidth: false,
-                    ajax: {
-                        url: '/api/tfp/noseri/' + id,
-                    },
-                    columns: [
-                        { data: 'noseri', name: 'noseri'},
-                        { data: 'checkbox', name: 'checkbox'},
-                    ],
-                    'columnDefs': [{
-                        'targets': 1,
-                        'checkboxes': {
-                            'selectRow': true
-                        },
-                    }],
-                    'select': {
-                        'style': 'multi'
-                    },
-                    'order': [
-                        [0, 'asc']
-                    ],
-                    "oLanguage": {
-                    "sSearch": "Scan Nomor Seri:"
-                    }
-                });
-            }
-        })
-        $('.modal-produk').modal('show');
-    })
-
-    $(document).on('click', '#btnSave', function() {
-        console.log('ok');
     })
 
 

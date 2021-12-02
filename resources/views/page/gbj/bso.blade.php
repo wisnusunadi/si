@@ -308,8 +308,8 @@
 
     var prd = '';
         $(document).on('click', '.detailmodal', function(e) {
-            var tr = $(this).closest('tr');
-        prd = tr.find('#gdg_brg_jadi_id').val();;
+        var tr = $(this).closest('tr');
+        prd = tr.find('#gdg_brg_jadi_id').val();
         var jml = $(this).data('jml');
         console.log(jml);
         console.log(prd);
@@ -388,14 +388,14 @@
                 },
                 success: function(res) {
                     console.log(res);
-                    // Swal.fire({
-                    //     position: 'center',
-                    //     icon: 'success',
-                    //     title: res.msg,
-                    //     showConfirmButton: false,
-                    //     timer: 1500
-                    // })
-                    // location.reload();
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: res.msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    location.reload();
                 }
             })
         })

@@ -166,11 +166,13 @@ class ProduksiController extends Controller
             }
         }
 
+        // kurang stok ??
 
 
 
 
-        // return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
+
+        return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
         // }
     }
 
@@ -180,7 +182,7 @@ class ProduksiController extends Controller
         $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $id)->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($data) {
-                return '<input type="checkbox" name="" id="" value="' . $data->id . '">';
+                return '<input type="checkbox" class="cb-child" name="noseri_id[]" id="" value="' . $data->id . '">';
             })
             ->addColumn('noseri', function ($data) {
                 return $data->noseri;
