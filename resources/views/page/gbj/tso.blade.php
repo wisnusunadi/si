@@ -131,6 +131,9 @@
                 </table>
 
             </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-simpan" type="button" id="btnSave">Simpan</button>
+            </div>
         </div>
     </div>
 </div>
@@ -290,12 +293,6 @@
         let d = parseInt($('#post_qty').val());
         let stok_gudang = parseInt($('.stok-gudang').val());
 
-        // let divisi = $('.ke').val();
-        // let deskripsi = $('.deskripsi').val();
-        // let produk = $('.product').val();
-        // let stok = parseInt($('.qty').val());
-        // let stok_gudang = parseInt($('.stok-gudang').val());
-
         let ke = [];
         let desk = [];
         let gdg = [];
@@ -356,8 +353,10 @@
                 console.log(res);
 
                 $('.scan-produk').DataTable({
+                    destroy: false,
                     processing: true,
                     serverSide: true,
+                    autoWidth: false,
                     ajax: {
                         url: '/api/tfp/noseri/' + id,
                     },
@@ -384,6 +383,10 @@
             }
         })
         $('.modal-produk').modal('show');
+    })
+
+    $(document).on('click', '#btnSave', function() {
+        console.log('ok');
     })
 
 

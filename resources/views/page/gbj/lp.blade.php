@@ -183,7 +183,6 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="tambah_data">
-                                                        {{-- <tr><td><select name="" id="" class="form-control product"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id=""></td><td><button class="btn btn-primary" onclick="tambahanPerakitan($(this).parent().prev().children().val())"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr> --}}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -234,7 +233,7 @@
                                 <label for="">Dari</label>
                                 <div class="card nomor-akn">
                                     <div class="card-body">
-                                        Divisi IT
+                                        <span id="from">Divisi IT</span>
                                     </div>
                                 </div>
                             </div>
@@ -242,7 +241,7 @@
                                 <label for="">Tujuan</label>
                                 <div class="card nomor-po">
                                     <div class="card-body">
-                                        Uji Coba Produk
+                                       <span id="tujuan">Uji Coba Produk</span>
                                     </div>
                                 </div>
                             </div>
@@ -307,6 +306,30 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="1"></td>
+                            <td><input type="text" name="" id="" class="form-control"></td>
+                            <td><select name="" id="" class="form-control">
+                                    <option value="1">Layout 1</option>
+                                    <option value="2">Layout 2</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="2"></td>
+                            <td><input type="text" name="" id="" class="form-control"></td>
+                            <td><select name="" id="" class="form-control">
+                                    <option value="1">Layout 1</option>
+                                    <option value="2">Layout 2</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="3"></td>
+                            <td><input type="text" name="" id="" class="form-control"></td>
+                            <td><select name="" id="" class="form-control">
+                                    <option value="1">Layout 1</option>
+                                    <option value="2">Layout 2</option>
+                                </select></td>
+                        </tr>
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -336,9 +359,34 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="1"></td>
+                            <td>36541654654654564</td>
+                            <td><select name="" id="" class="form-control">
+                                    <option value="1">Layout 1</option>
+                                    <option value="2">Layout 2</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="2"></td>
+                            <td>36541654654654564</td>
+                            <td><select name="" id="" class="form-control">
+                                    <option value="1">Layout 1</option>
+                                    <option value="2">Layout 2</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="cb-child" value="3"></td>
+                            <td>36541654654654564</td>
+                            <td><select name="" id="" class="form-control">
+                                    <option value="1">Layout 1</option>
+                                    <option value="2">Layout 2</option>
+                                </select></td>
+                        </tr>
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
+                <button type="button" class="btn btn-primary" id="seriBtn">Simpan</button>
             </div>
         </div>
     </div>
@@ -395,7 +443,7 @@
     }(jQuery));
     $(document).ready(function () {
         $('.division').select2();
-        $('.product').select2();
+        $('.productt').select2();
 
         $(".number-input").inputFilter(function (value) {
             return /^\d*$/.test(value);
@@ -412,8 +460,6 @@
             }
         });
     });
-
-
     var i = 0;
     function addData() {
         $.ajax({
@@ -434,7 +480,7 @@
             }
         });
         i++;
-        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty['+i+']" name="qty'+i+'"></td><td><button class="btn btn-primary" onclick="tambahanPerakitan()"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty" name="qty['+i+']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
     }
 
@@ -452,23 +498,6 @@
             $('.btn-simpan').addClass('hapus');
         }
     });
-    $.ajax({
-            url: '/api/gbj/sel-divisi',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $(".division").empty();
-                    $(".division").append('<option value="">Pilih Item</option>');
-                    $.each(res, function(key, value) {
-                        $(".division").append('<option value="'+value.id+'">'+value.nama+'</option');
-                    });
-                } else {
-                    $(".division").empty();
-                }
-            }
-        });
     var id = '';
     $(document).on('click', '.editmodal', function() {
         id = $(this).data('id');
@@ -493,6 +522,7 @@
             processing: true,
             serverSide: true,
             "lengthChange": false,
+            autoWidth: false,
             "searching": false,
             ajax: {
                 url: '/api/draft/data',
@@ -515,16 +545,15 @@
         var id = $(this).data('id');
         console.log(id);
 
-        var int = $('.number-input').val();
-        console.log(int);
-
         tambahanRancangan();
     })
 
 
     $(document).ready(function () {
-        $('.table-rancangan').DataTable({});
-        $('.pertanggal').DataTable({
+
+        var table = $('.pertanggal').DataTable({
+            processing: true,
+            serverSide: true,
             "lengthChange": false,
             "searching": false,
             ajax: {
@@ -552,7 +581,74 @@
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
+
+        // divisi
+        $.ajax({
+            url: '/api/gbj/sel-divisi',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $(".division").empty();
+                    $(".division").append('<option value="">Pilih Item</option>');
+                    $.each(res, function(key, value) {
+                        $(".division").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    });
+                } else {
+                    $(".division").empty();
+                }
+            }
+        });
+
     });
+
+    $(document).on('click', '#btnDraft', function(e) {
+        e.preventDefault();
+
+        const prd = [];
+        const jml = [];
+
+        $('select[name^="gdg_brg_jadi_id"]').each(function() {
+            prd.push($(this).val());
+        });
+
+        $('input[name^="qty"]').each(function() {
+            jml.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/api/draft/rancang",
+            type: "post",
+            data: {
+                "_token" : "{{ csrf_token() }}",
+                tgl_masuk : $('.tanggal').val(),
+                dari: $('#dari').val(),
+                deskripsi: $('#deskripsi').val(),
+                gdg_brg_jadi_id: prd,
+                qty: jml,
+            },
+            success: function(res) {
+                console.log(res);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
+            }
+        })
+    });
+
+    $(document).on('click', '#btnPlus', function() {
+        var tr = $(this).closest('tr');
+        x = tr.find('#qty').val();
+
+        console.log(x);
+        tambahanPerakitan(x);
+    })
 
     function ubahData() {
         let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
@@ -561,7 +657,6 @@
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('#ubah-layout').modal('hide');
-
     }
 
     $('#datetimepicker1').daterangepicker({});
@@ -570,17 +665,28 @@
         $('.modal-rancangan').modal('show');
     }
 
-    function tambahanRancangan() {
+    function tambahanRancangan(x) {
         $('.tambahan-rancangan').modal('show');
-
+        // $('.scan-produk').DataTable().destroy();
+        // $('.scan-produk1 tbody').empty();
+        // for (let index = 0; index < x; index++) {
+        //    $('.scan-produk tbody').append('<tr><td><input type="checkbox" class="cb-child" value="1"></td><td><input type="text" name="" id="" class="form-control"></td><td><select name="" id="" class="form-control"><option value="1">Layout 1</option><option value="2">Layout 2</option></select></td></tr>');
+        // }
+        // $('.scan-produk').DataTable({
+        //     "ordering": false,
+        //     "autoWidth": false,
+        //     searching: false,
+        //     "lengthChange": false,
+        // });
     }
 
-    function tambahanPerakitan(tambah) {
+    function tambahanPerakitan(x) {
         $('.tambahan-perakitan').modal('show');
-        for (let index = 0; index < tambah; index++) {
+        $('.scan-produk1').DataTable().destroy();
+        $('.scan-produk1 tbody').empty();
+        for (let index = 0; index < x; index++) {
            $('.scan-produk1 tbody').append('<tr><td><input type="checkbox" class="cb-child" value="1"></td><td><input type="text" name="" id="" class="form-control"></td><td><select name="" id="" class="form-control"><option value="1">Layout 1</option><option value="2">Layout 2</option></select></td></tr>');
         }
-        $('.scan-produk1').DataTable({}).destroy();
         $('.scan-produk1').DataTable({
             "ordering": false,
             "autoWidth": false,
@@ -589,14 +695,14 @@
         });
     }
 
-    $(document).on('click', '.btnPlus', function() {
-        const prd = [];
+    // $(document).on('click', '#btnPlus', function() {
+    //     const prd = [];
 
-        var prdid = $('.productt').val();
-        var jml = $('.number-input').val();
-
-        tambahanPerakitan(jml);
-    })
+    //     var prdid = $('.productt').val();
+    //     var jml = $('.number-input').val();
+    //     // for()
+    //     tambahanPerakitan();
+    // })
 
     $(document).on('click', '#btnSave', function() {
         // console.log(id);
@@ -610,6 +716,7 @@
             },
             success: function(res) {
                 console.log(res);
+                // location.reload();
             }
         })
     })

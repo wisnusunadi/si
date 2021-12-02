@@ -225,20 +225,21 @@
         $.ajax({
             url: '/api/tfp/rakit-terima/' + id,
             success: function(res) {
-                console.log(res.data[0].title);
-                $('span#title').text(res.data[0].title);
+                console.log(res);
+                // $('span#title').text(res.data[0].title);
             }
         })
 
         $('.scan-produk').DataTable().destroy();
         $('.scan-produk').DataTable({
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/tfp/rakit-terima/' + id,
             },
             columns: [
                 { data: 'checkbox'},
-                { data: 'seri'},
+                { data: 'noserii'},
                 { data: 'layout'},
             ],
                 "oLanguage": {
@@ -283,11 +284,12 @@
         $('.table-seri').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: '/api/tfp/rakit-noseri/' + id,
             },
             columns: [
-                { data: 'seri'},
+                { data: 'noserii'},
                 { data: 'layout'},
             ],
             "oLanguage": {

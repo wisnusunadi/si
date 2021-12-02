@@ -290,7 +290,7 @@ class GudangController extends Controller
 
     function getRakit()
     {
-        $data = TFProduksiDetail::with('produk', 'header')->get();
+        $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
@@ -329,13 +329,13 @@ class GudangController extends Controller
 
     function getRakitNoseri($id)
     {
-        $data = NoseriTGbj::with('layout', 'detail')->where('t_gbj_detail_id', $id)->get();
+        $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->get();
         return datatables()->of($data)
             ->addColumn('layout', function ($d) {
                 return $d->layout->ruang;
             })
-            ->addColumn('seri', function ($d) {
-                return $d->noseri;
+            ->addColumn('noserii', function ($d) {
+                return $d->seri->noseri;
             })
             ->addColumn('title', function ($d) {
                 return $d->detail->produk->produk->nama . ' ' . $d->detail->produk->nama;
@@ -345,7 +345,7 @@ class GudangController extends Controller
 
     function getTerimaRakit($id)
     {
-        $data = NoseriTGbj::with('layout', 'detail')->where('t_gbj_detail_id', $id)->get();
+        $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->get();
         $layout = Layout::where('jenis_id', 1)->get();
         return datatables()->of($data)
             ->addColumn('layout', function ($d) use($layout) {
@@ -357,8 +357,8 @@ class GudangController extends Controller
                         ' . $opt . '
                         </select>';
             })
-            ->addColumn('seri', function ($d) {
-                return $d->noseri.'<input type="hidden" name="noseri[]" id="noseri[]" value="'.$d->noseri.'">';
+            ->addColumn('noserii', function ($d) {
+                return $d->seri->noseri.'<input type="hidden" name="noseri[]" id="noseri[]" value="'.$d->seri->noseri.'">';
             })
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
@@ -366,7 +366,7 @@ class GudangController extends Controller
             ->addColumn('title', function ($d) {
                 return $d->detail->produk->produk->nama . ' ' . $d->detail->produk->nama;
             })
-            ->rawColumns(['checkbox', 'layout', 'seri'])
+            ->rawColumns(['checkbox', 'layout', 'noserii'])
             ->make(true);
     }
 

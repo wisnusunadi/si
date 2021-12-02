@@ -145,50 +145,11 @@
                                 <table class="table table-striped scan-produk" id="scan">
                                     <thead>
                                         <tr>
-                                            <th>CB</th>
+                                            <th><input type="checkbox" name="" id="head-cb"></th>
                                             <th>Nomor Seri</th>
-                                            {{-- <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                            <td><input type="text" name="" id="" class="form-control"></td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -208,8 +169,10 @@
 @section('adminlte_js')
 <script>
     $(function () {
-
-
+        $("#head-cb").on('click', function() {
+                    var isChecked = $("#head-cb").prop('checked')
+                    $('.cb-child').prop('checked', isChecked)
+                });
         /* initialize the calendar
          -----------------------------------------------------------------*/
         //Date for the calendar events (dummy data)
@@ -364,18 +327,24 @@
             for (var i=0;i<jml;i++) {
                     var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq("+i+")");
                     for (var k=0;k<1;k++) {
-                        $row.append('<td>x</td><td><input type="text" name="noseri[]" id="noseri" class="form-control"></td>');
+                        $row.append('<td><input type="checkbox" class="cb-child"></td><td><input type="text" name="noseri[]" id="noseri" class="form-control"></td>');
                     }
             }
             $('.scan-produk').DataTable({
-                "ordering":false,
+                ordering: false,
                 "autoWidth": false,
                 searching: false,
                 "lengthChange": false,
                 "pageLength": 10,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                }
+                },
+                columnDefs: [
+                    {
+                        targets: [0],
+                        width: "5%",
+                    }
+                ],
             });
         })
 

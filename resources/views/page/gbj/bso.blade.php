@@ -220,40 +220,6 @@
             $('.cb-child').prop('checked', isChecked)
         });
 
-        $(document).on('click', '.detailmodal', function(e) {
-        var id = $(this).data('id');
-        var jml = $(this).data('jml');
-        console.log(jml);
-        console.log(id);
-        // $('.scan-produk').DataTable().destroy();
-        mytable = $('.scan-produk').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            destroy: true,
-            ajax: {
-                url: "/api/tfp/seri-so",
-                data: {gdg_barang_jadi_id: id},
-                type: "post",
-                // dataType: "json",
-            },
-            columns: [
-                { data: 'seri', name: 'seri'},
-                { data: 'checkbox', name: 'checkbox'},
-            ],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [0, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Masukkan Nomor Seri:"
-            }
-        });
-
-        $('#viewProdukModal').modal('show');
-    });
     });
 
     var id = '';
@@ -339,7 +305,45 @@
             cell.innerHTML = i + 1;
         });
     }).draw();
-    const seri = {};
+
+    var prd = '';
+        $(document).on('click', '.detailmodal', function(e) {
+            var tr = $(this).closest('tr');
+        prd = tr.find('#gdg_brg_jadi_id').val();;
+        var jml = $(this).data('jml');
+        console.log(jml);
+        console.log(prd);
+        // $('.scan-produk').DataTable().destroy();
+        mytable = $('.scan-produk').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            destroy: true,
+            ajax: {
+                url: "/api/tfp/seri-so",
+                data: {gdg_barang_jadi_id: prd},
+                type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                { data: 'seri', name: 'seri'},
+                { data: 'checkbox', name: 'checkbox'},
+            ],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
+                [0, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Masukkan Nomor Seri:"
+            }
+        });
+
+        $('#viewProdukModal').modal('show');
+    });
+
+    const prd1 = {};
     var t = 0;
     $(document).on('click', '#simpan', function(e) {
         // console.log('ok');
@@ -350,28 +354,26 @@
                 ids.push($(this).val());
             }
         })
-        seri[t] = ids;
+        prd1[prd] = ids;
 
-        console.log(seri);
+        console.log(prd1);
         t++;
     })
 
     $(document).on('click', '#rancang', function(e) {
             e.preventDefault();
 
-            const prd = [];
+            const prdd = [];
             const qtyy = [];
             // const noseri = [];
 
             $('input[name^="gdg_brg_jadi_id"]').each(function() {
-                prd.push($(this).val());
+                prdd.push($(this).val());
             });
 
             $('input[name^="qty"]').each(function() {
                 qtyy.push($(this).val());
             });
-
-
 
             // console.log(ids.length);
             $.ajax({
@@ -380,9 +382,9 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     pesanan_id: id,
-                    gdg_brg_jadi_id: prd,
+                    gdg_brg_jadi_id: prdd,
                     qty: qtyy,
-                    noseri_id: seri,
+                    noseri_id: prd1,
                 },
                 success: function(res) {
                     console.log(res);

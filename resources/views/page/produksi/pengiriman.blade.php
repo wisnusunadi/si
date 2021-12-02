@@ -68,41 +68,7 @@
                                     <th class="text-center">Tgl Selesai</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row" class="text-center">16-06-2021 <br><span class="badge badge-primary">Baru</span></td>
-                                    <td class="text-center">18-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
-                                    <td>6543524635465464</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit <br> <span class="badge badge-dark">Kurang 50 Unit</span></td>
-                                    <td class="text-center"><span class="sudah_diterima">Sudah Diterima</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" class="text-center">18-06-2021 <br><span class="badge badge-info">Revisi</span></td>
-                                    <td class="text-center">21-06-2021 <br> <span class="badge badge-danger">Lebih 10 Hari</span></td>
-                                    <td>6543524635465464</td>
-                                    <td>Produk 2</td>
-                                    <td>200 Unit</td>
-                                    <td><span class="belum_diterima">Belum Diterima</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" class="text-center">20-06-2021</td>
-                                    <td class="text-center">25-06-2021</td>
-                                    <td>6543524635465464</td>
-                                    <td>Produk 3</td>
-                                    <td>300 Unit</td>
-                                    <td><span class="belum_diterima">Belum Diterima</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -184,78 +150,9 @@
                                         <tr>
                                             <th><input type="checkbox" name="" id="head-cb"></th>
                                             <th>Nomor Seri</th>
-                                            <th><input type="checkbox" name="" id="head-cb-1"></th>
-                                            <th>Nomor Seri</th>
-                                            <th><input type="checkbox" name="" id="head-cb-2"></th>
-                                            <th>Nomor Seri</th>
-                                            <th><input type="checkbox" name="" id="head-cb-3"></th>
-                                            <th>Nomor Seri</th>
-                                            <th><input type="checkbox" name="" id="head-cb-4"></th>
-                                            <th>Nomor Seri</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {{-- <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr> --}}
-                                    </tbody>
+                                    <tbody class="scan"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -307,25 +204,7 @@
         $('.modalRakit').modal('show');
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child-0').prop('checked', isChecked)
-        });
-
-        $("#head-cb-1").on('click', function () {
-            var isChecked = $("#head-cb-1").prop('checked')
-            $('.cb-child-1').prop('checked', isChecked)
-        });
-
-        $("#head-cb-2").on('click', function () {
-            var isChecked = $("#head-cb-2").prop('checked')
-            $('.cb-child-2').prop('checked', isChecked)
-        });
-        $("#head-cb-3").on('click', function () {
-            var isChecked = $("#head-cb-3").prop('checked')
-            $('.cb-child-3').prop('checked', isChecked)
-        });
-        $("#head-cb-4").on('click', function () {
-            var isChecked = $("#head-cb-4").prop('checked')
-            $('.cb-child-4').prop('checked', isChecked)
+            $('.cb-child').prop('checked', isChecked)
         });
     }
     function transfer() {
@@ -360,14 +239,13 @@
         id = $(this).data('id');
         prd = $(this).data('prd');
         jumlah = $(this).data('jml');
-        console.log(id);
 
         $.ajax({
             url: "/api/prd/headerSeri/" + id,
             type: "get",
             dataType: "json",
             success: function(res) {
-                console.log(res);
+                // console.log(res);
                 $('span#no_bppb').text(res.bppb);
                 $('span#produk').text(res.produk);
                 $('span#kategori').text(res.kategori);
@@ -377,74 +255,37 @@
             }
         })
 
-        $.ajax()
-
         $('.scan-produk').DataTable({
             destroy: true,
             ordering: false,
             "autoWidth": false,
-            processing: false,
-            serverSide: true,
-            ajax: {
-                url: "/api/prd/detailSeri/" + id,
-                success: function(res) {
-                    var i = 0;
-                    // console.log(res);
-                    // $('.scan-produk').append('<tr></tr>');
-                    $.each(res, function(i, val) {
-                        console.log(val);
-                        console.log(val);
-                        if (i < 5) {
-                            // $row = $('.scan-produk').append('<tr></tr>');
-                            // $('.scan-produk').append('<td>x</td><td>val</td>')
-                            $('.scan-produk').append('<td><input type="checkbox" name="noseri[]" id="noseri" value="'+val.noseri+'" class="cb-child-'+i+'"></td><td>'+val.noseri+'</td>')
-                        }
-                        // $row.append('<td><input type="checkbox" name="noseri[]" id="noseri" value="'+val.id+'" class="cb-child-'+i+'"></td><td>'+val.noseri+'</td>')
-                    })
-
-
-                }
-            },
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            },
+            processing: true,
             "lengthChange": false,
+            ajax: "/api/prd/detailSeri1/" + prd,
+            columns: [
+                {data: "checkbox"},
+                {data: "no_seri"},
+            ],
+            columnDefs: [
+                {
+                    targets: [0],
+                    checkboxes: {
+                        selectRow: true,
+                        selectAll: true
+                    },
+                    width: "5%"
+                },
+            ],
         });
         modalRakit();
     })
 
     $(document).on('click', '#btnSave', function(e) {
         // var id = $(this).data('id');
-        console.log(id);
-        console.log(prd);
+        // console.log(id);
+        // console.log(prd);
 
         const seri = [];
-
-        $('.cb-child-0').each(function() {
-            if ($(this).is(":checked")) {
-                seri.push($(this).val());
-            }
-        })
-        $('.cb-child-1').each(function() {
-            if ($(this).is(":checked")) {
-                seri.push($(this).val());
-            }
-        })
-        $('.cb-child-2').each(function() {
-            if ($(this).is(":checked")) {
-                seri.push($(this).val());
-            }
-        })
-        $('.cb-child-3').each(function() {
-            if ($(this).is(":checked")) {
-                seri.push($(this).val());
-            }
-        })
-        $('.cb-child-4').each(function() {
-            if ($(this).is(":checked")) {
-                seri.push($(this).val());
-            }
-        })
         $.ajax({
             url: "/api/prd/send",
             type: "post",
@@ -456,7 +297,7 @@
                 noseri: seri,
             },
             success: function(res) {
-                console.log(res);
+                // console.log(res);
             }
         })
     })

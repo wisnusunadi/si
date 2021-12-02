@@ -388,7 +388,7 @@
                 // dataType: "json",
             },
             columns: [
-                { data: 'ids', name: 'ids'},
+                { data: 'ids', name: 'ids', ordering: 'false'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
                 { data: 'merk', name: 'merk'},
@@ -438,7 +438,15 @@
                     gbj_id: ids,
                 },
                 success: function(res) {
-                   console.log('res ' + res);
+                //    console.log('res ' + res);
+                   Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: res.msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    location.reload();
                 }
             })
 

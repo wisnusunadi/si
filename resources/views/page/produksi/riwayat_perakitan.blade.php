@@ -186,14 +186,14 @@
                                     <thead>
                                         <tr>
                                             <th>Nomor Seri</th>
+                                            {{-- <th>Nomor Seri</th>
                                             <th>Nomor Seri</th>
                                             <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
+                                            <th>Nomor Seri</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td>846464654654</td>
                                             <td>654654654654</td>
                                             <td>957489688845</td>
@@ -227,7 +227,7 @@
                                             <td>957489688845</td>
                                             <td>656645644654</td>
                                             <td>656886451212</td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -263,17 +263,26 @@
             }
         });
 
+        $('#modal_id').modal('show');
+
         $('.scan-produk').DataTable({
             destroy: true,
             "ordering":false,
             "autoWidth": false,
             "lengthChange": false,
+            "pageLength": 10,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/prd/detailSeri/" + id,
+            },
+            columns: [
+                {data: 'seri'}
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-
-        $('#modal_id').modal('show');
     })
     $('.produk').select2({});
     $('.daterange').daterangepicker({
