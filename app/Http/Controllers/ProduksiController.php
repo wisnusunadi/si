@@ -954,51 +954,51 @@ class ProduksiController extends Controller
 
     function kirimseri(Request $request)
     {
-        // $header = new TFProduksi();
-        // $header->tgl_masuk = Carbon::now();
-        // $header->dari = 17;
-        // $header->jenis = 'masuk';
-        // $header->created_at = Carbon::now();
-        // $header->save();
+        $header = new TFProduksi();
+        $header->tgl_masuk = Carbon::now();
+        $header->dari = 17;
+        $header->jenis = 'masuk';
+        $header->created_at = Carbon::now();
+        $header->save();
 
-        // $detail = new TFProduksiDetail();
-        // $detail->t_gbj_id = $header->id;
-        // $detail->gdg_brg_jadi_id = $request->gbj_id;
-        // $detail->qty = $request->qty;
-        // $detail->jenis = 'masuk';
-        // $detail->created_at = Carbon::now();
-        // $detail->save();
+        $detail = new TFProduksiDetail();
+        $detail->t_gbj_id = $header->id;
+        $detail->gdg_brg_jadi_id = $request->gbj_id;
+        $detail->qty = $request->qty;
+        $detail->jenis = 'masuk';
+        $detail->created_at = Carbon::now();
+        $detail->save();
 
-        // $check_array = $request->noseri;
-        // foreach ($request->noseri as $key => $value) {
-        //     if (in_array($request->noseri[$key], $check_array)) {
-        //         $seri = new NoseriBarangJadi();
+        $check_array = $request->noseri;
+        foreach ($request->noseri as $key => $value) {
+            if (in_array($request->noseri[$key], $check_array)) {
+                $seri = new NoseriBarangJadi();
 
-        //         $seri->dari = 17;
-        //         $seri->gdg_barang_jadi_id = $request->gbj_id;
-        //         $seri->noseri = $request->noseri[$key];
-        //         $seri->jenis = 'MASUK';
-        //         $seri->is_aktif = 0;
-        //         $seri->created_at = Carbon::now();
-        //         $seri->save();
+                $seri->dari = 17;
+                $seri->gdg_barang_jadi_id = $request->gbj_id;
+                $seri->noseri = $request->noseri[$key];
+                $seri->jenis = 'MASUK';
+                $seri->is_aktif = 0;
+                $seri->created_at = Carbon::now();
+                $seri->save();
 
-        //         $serit = new NoseriTGbj();
-        //         $serit->t_gbj_detail_id = $detail->id;
-        //         $serit->noseri_id = $seri->id;
-        //         $serit->layout_id = 1;
-        //         $serit->jenis = 'MASUK';
-        //         $serit->created_at = Carbon::now();
-        //         $serit->save();
-        //     }
-        // }
+                $serit = new NoseriTGbj();
+                $serit->t_gbj_detail_id = $detail->id;
+                $serit->noseri_id = $seri->id;
+                $serit->layout_id = 1;
+                $serit->jenis = 'MASUK';
+                $serit->created_at = Carbon::now();
+                $serit->save();
+            }
+        }
 
-        // $rakitseri = JadwalPerakitan::find($request->jadwal_id);
-        // $rakitseri->status_tf = 14;
-        // $rakitseri->save();
+        $rakitseri = JadwalPerakitan::find($request->jadwal_id);
+        $rakitseri->status_tf = 14;
+        $rakitseri->save();
 
-        // JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->update(['waktu_tf' => Carbon::now()]);
+        JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->update(['waktu_tf' => Carbon::now()]);
 
-        dd($request->all());
+        // dd($request->all());
     }
 
     // gbj
@@ -1014,7 +1014,7 @@ class ProduksiController extends Controller
             NoseriTGbj::find($s['id'])->update(['status_id' => 3]);
             NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
             // GudangBarangJadi::find($s[])
-            
+
 
         }
         return response()->json(['msg' => 'Successfully']);
