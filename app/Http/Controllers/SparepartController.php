@@ -423,62 +423,62 @@ class SparepartController extends Controller
     // tf
     function transfer_by_draft(Request $request)
     {
-        // dd($request->all());
-        $header = new GudangKarantina();
-        $header->date_out = $request->date_out;
-        $header->ke = $request->ke;
-        $header->deskripsi = $request->deskripsi;
-        $header->is_draft = 0;
-        $header->is_keluar = 1;
-        $header->save();
+        dd($request->all());
+        // $header = new GudangKarantina();
+        // $header->date_out = $request->date_out;
+        // $header->ke = $request->ke;
+        // $header->deskripsi = $request->deskripsi;
+        // $header->is_draft = 0;
+        // $header->is_keluar = 1;
+        // $header->save();
 
-        $spr = $request->sparepart_id;
+        // $spr = $request->sparepart_id;
 
-        foreach($spr as $k => $v) {
-            $sprr = new GudangKarantinaDetail();
-            $sprr->gk_id = $header->id;
-            $sprr->sparepart_id = $request->sparepart_id[$k];
-            $sprr->qty_spr = $request->qty_spr[$k];
-            $sprr->is_draft = 0;
-            $sprr->is_keluar = 1;
-            $sprr->save();
+        // foreach($spr as $k => $v) {
+        //     $sprr = new GudangKarantinaDetail();
+        //     $sprr->gk_id = $header->id;
+        //     $sprr->sparepart_id = $request->sparepart_id[$k];
+        //     $sprr->qty_spr = $request->qty_spr[$k];
+        //     $sprr->is_draft = 0;
+        //     $sprr->is_keluar = 1;
+        //     $sprr->save();
 
-            $x = $request->noseri;
-            $id = $sprr->id;
+        //     $x = $request->noseri;
+        //     $id = $sprr->id;
 
-            foreach($x as $key => $val) {
-                $noseri = new GudangKarantinaNoseri();
-                $noseri->gk_detail_id = $id;
-                $noseri->noseri = implode(', ', $request->noseri[$key]);
-                $noseri->remark = implode(', ', $request->remark[$key]);
-                $noseri->save();
-            }
+        //     foreach($x as $key => $val) {
+        //         $noseri = new GudangKarantinaNoseri();
+        //         $noseri->gk_detail_id = $id;
+        //         $noseri->noseri = implode(', ', $request->noseri[$key]);
+        //         $noseri->remark = implode(', ', $request->remark[$key]);
+        //         $noseri->save();
+        //     }
 
-        }
+        // }
 
-        $unit = $request->gbj_id;
-        foreach($unit as $i => $v) {
-            $sprr = new GudangKarantinaDetail();
-            $sprr->gk_id = $header->id;
-            $sprr->gbj_id = $request->gbj_id[$i];
-            $sprr->qty_unit = $request->qty_unit[$i];
-            $sprr->is_draft = 0;
-            $sprr->is_keluar = 1;
-            $sprr->save();
+        // $unit = $request->gbj_id;
+        // foreach($unit as $i => $v) {
+        //     $sprr = new GudangKarantinaDetail();
+        //     $sprr->gk_id = $header->id;
+        //     $sprr->gbj_id = $request->gbj_id[$i];
+        //     $sprr->qty_unit = $request->qty_unit[$i];
+        //     $sprr->is_draft = 0;
+        //     $sprr->is_keluar = 1;
+        //     $sprr->save();
 
-            $xx = $request->noseri;
-            $idd = $sprr->id;
+        //     $xx = $request->noseri;
+        //     $idd = $sprr->id;
 
-            foreach($xx as $key => $val) {
-                $noseri = new GudangKarantinaNoseri();
-                $noseri->gk_detail_id = $idd;
-                $noseri->noseri = implode(', ', $request->noseri[$key]);
-                $noseri->remark = implode(', ', $request->remark[$key]);
-                $noseri->save();
-            }
-        }
+        //     foreach($xx as $key => $val) {
+        //         $noseri = new GudangKarantinaNoseri();
+        //         $noseri->gk_detail_id = $idd;
+        //         $noseri->noseri = implode(', ', $request->noseri[$key]);
+        //         $noseri->remark = implode(', ', $request->remark[$key]);
+        //         $noseri->save();
+        //     }
+        // }
 
-        return response()->json(['msg' => 'Success']);
+        // return response()->json(['msg' => 'Success']);
     }
 
     function transfer_by_final(Request $request)

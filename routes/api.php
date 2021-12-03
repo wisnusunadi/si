@@ -235,11 +235,12 @@ Route::prefix('/prd')->group(function() {
     Route::get('/testing', [ProduksiController::class, 'testing']);
 
     // kirim
-    Route::post('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
+    Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
     Route::get('/detailSeri/{id}', [ProduksiController::class, 'detailSeri']);
     Route::get('/detailSeri1/{id}', [ProduksiController::class, 'detailSeri1']);
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
+    Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
 
     // riwayat
     Route::prefix('/history')->group(function() {

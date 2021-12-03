@@ -28,63 +28,76 @@ class ProduksiController extends Controller
 {
     function CreateTFItem(Request $request)
     {
-        dd($request->all());
-        // $validator = Validator::make(
-        //     $request->all(),
-        //     [
-        //         // 'produk_id' => 'required',
-        //         // 'nama' => 'required',
-        //         // 'stok' => 'required|numeric',
-        //         // 'ke' => 'required',
-        //     ],
-        //     [
-        //         // 'produk_id.required' => 'Produk harus diisi',
-        //         // 'nama.required' => 'Nama harus diisi',
-        //         // 'stok.numeric' => 'Stok harus diisi angka',
-        //         // 'stok.required' => 'Stok harus diisi',
-        //         // 'ke.required' => 'Tujuan harus diisi',
-        //     ]
-        // );
+        // dd($request->all());
+        $validator = Validator::make(
+            $request->all(),
+            [
+                // 'produk_id' => 'required',
+                // 'nama' => 'required',
+                // 'stok' => 'required|numeric',
+                // 'ke' => 'required',
+            ],
+            [
+                // 'produk_id.required' => 'Produk harus diisi',
+                // 'nama.required' => 'Nama harus diisi',
+                // 'stok.numeric' => 'Stok harus diisi angka',
+                // 'stok.required' => 'Stok harus diisi',
+                // 'ke.required' => 'Tujuan harus diisi',
+            ]
+        );
 
-        // if ($validator->fails()) {
-        //     return $validator->errors();
-        // } else {
-        //     foreach ($request->ke as $key => $value) {
-        //         $tf_prod = new TFProduksi();
-        //         $tf_prod->tgl_keluar = Carbon::now();
-        //         $tf_prod->ke = $value;
-        //         $tf_prod->deskripsi = $request->deskripsi[$key];
-        //         $tf_prod->jenis = 'keluar';
-        //         $tf_prod->created_at = Carbon::now();
-        //         $tf_prod->save();
+        if ($validator->fails()) {
+            return $validator->errors();
+        } else {
+            foreach ($request->ke as $key => $value) {
+                $tf_prod = new TFProduksi();
+                $tf_prod->tgl_keluar = Carbon::now();
+                $tf_prod->ke = $value;
+                $tf_prod->deskripsi = $request->deskripsi[$key];
+                $tf_prod->jenis = 'keluar';
+                $tf_prod->created_at = Carbon::now();
+                $tf_prod->save();
 
-        //         $tf_prod_det = new TFProduksiDetail();
-        //         $tf_prod_det->t_gbj_id = $tf_prod->id;
-        //         $tf_prod_det->gdg_brg_jadi_id = $request->gdg_brg_jadi_id[$key];
-        //         $tf_prod_det->qty = $request->qty[$key];
-        //         $tf_prod_det->jenis = 'keluar';
-        //         $tf_prod_det->created_at = Carbon::now();
-        //         $tf_prod_det->save();
+                $tf_prod_det = new TFProduksiDetail();
+                $tf_prod_det->t_gbj_id = $tf_prod->id;
+                $tf_prod_det->gdg_brg_jadi_id = $request->gdg_brg_jadi_id[$key];
+                $tf_prod_det->qty = $request->qty[$key];
+                $tf_prod_det->jenis = 'keluar';
+                $tf_prod_det->created_at = Carbon::now();
+                $tf_prod_det->save();
 
-        //         // $tf_prod_his = new TFProduksiHis();
-        //         // $tf_prod_his->tfbj_id = $tf_prod->id;
-        //         // $tf_prod_his->gdg_brg_jadi_id = $request->gdg_brg_jadi_id[$key];
-        //         // $tf_prod_his->qty = $request->qty[$key];
-        //         // // $tf_prod_his->noseri = $request->noseri[$key];
-        //         // $tf_prod_his->created_at = Carbon::now();
-        //         // $tf_prod_his->save();
-        //     }
+                $did = $tf_prod_det->id;
+                $checked = $request->noseri_id;
 
-        //     $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
-        //     $i = 0;
-        //     foreach ($gdg as $vv) {
-        //         $i++;
-        //         $vv['stok'] = $vv['stok'] - $request->qty[$i];
-        //         GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-        //     }
+                foreach ($request->noseri_id as $k => $v) {
+                    if (in_array($request->noseri_id[$k], $checked)) {
+                        $nn = new NoseriTGbj();
+                        $nn->t_gbj_detail_id = $did;
+                        $ss = implode('|', $request->noseri_id[$k]);
+                        $rr = explode('|', $ss);
+                        for ($i = 0; $i < count($rr); $i++) {
+                            $nn->noseri = $rr[$i];
+                        }
+                        $nn->layout_id = 1;
+                        $nn->status_id = 1;
+                        $nn->state_id = 2;
+                        $nn->jenis = 'keluar';
+                        $nn->created_at = Carbon::now();
+                        $nn->save();
+                    }
+                }
+            }
 
-        //     return response()->json(['msg' => 'Successfully',]);
-        // }
+            $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
+            $i = 0;
+            foreach ($gdg as $vv) {
+                $i++;
+                $vv['stok'] = $vv['stok'] - $request->qty[$i];
+                GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+            }
+
+            return response()->json(['msg' => 'Successfully',]);
+        }
     }
 
     function TfbySO(Request $request)
@@ -127,7 +140,7 @@ class ProduksiController extends Controller
 
             $did = $dd->id;
             $checked = $request->noseri_id;
-        //     // $x = explode(", ", $request->noseri_id);
+            //     // $x = explode(", ", $request->noseri_id);
 
 
             // return response()->json([
@@ -151,7 +164,7 @@ class ProduksiController extends Controller
                     $nn->t_gbj_detail_id = $did;
                     $ss = implode('|', $request->noseri_id[$value]);
                     $rr = explode('|', $ss);
-                    for ($i=0; $i < count($rr); $i++) {
+                    for ($i = 0; $i < count($rr); $i++) {
                         $nn->noseri = $rr[$i];
                         // echo json_encode($rr[$i]);
                     }
@@ -814,7 +827,7 @@ class ProduksiController extends Controller
     function getSelesaiRakit()
     {
         $data = JadwalPerakitan::where('status_tf', 11)->where('status', 'pelaksanaan')->get();
-        $res = datatables()->of($data)
+        return datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
                     return date('d-m-Y', strtotime($d->tanggal_mulai));
@@ -855,7 +868,6 @@ class ProduksiController extends Controller
             })
             ->rawColumns(['action', 'status'])
             ->make(true);
-        return $res;
     }
 
     function detailRakitHeader($id)
@@ -938,56 +950,74 @@ class ProduksiController extends Controller
             })
             ->rawColumns(['checkbox'])
             ->make(true);
-
-        // return response()->json($data);
     }
 
     function kirimseri(Request $request)
     {
-        $header = new TFProduksi();
-        $header->tgl_masuk = Carbon::now();
-        $header->dari = 17;
-        $header->jenis = 'masuk';
-        $header->created_at = Carbon::now();
-        $header->save();
+        // $header = new TFProduksi();
+        // $header->tgl_masuk = Carbon::now();
+        // $header->dari = 17;
+        // $header->jenis = 'masuk';
+        // $header->created_at = Carbon::now();
+        // $header->save();
 
-        $detail = new TFProduksiDetail();
-        $detail->t_gbj_id = $header->id;
-        $detail->gdg_brg_jadi_id = $request->gbj_id;
-        $detail->qty = $request->qty;
-        $detail->jenis = 'masuk';
-        $detail->created_at = Carbon::now();
-        $detail->save();
+        // $detail = new TFProduksiDetail();
+        // $detail->t_gbj_id = $header->id;
+        // $detail->gdg_brg_jadi_id = $request->gbj_id;
+        // $detail->qty = $request->qty;
+        // $detail->jenis = 'masuk';
+        // $detail->created_at = Carbon::now();
+        // $detail->save();
 
-        $check_array = $request->noseri;
-        foreach ($request->noseri as $key => $value) {
-            if (in_array($request->noseri[$key], $check_array)) {
-                $seri = new NoseriBarangJadi();
+        // $check_array = $request->noseri;
+        // foreach ($request->noseri as $key => $value) {
+        //     if (in_array($request->noseri[$key], $check_array)) {
+        //         $seri = new NoseriBarangJadi();
 
-                $seri->dari = 17;
-                $seri->noseri = $request->noseri[$key];
-                $seri->jenis = 'MASUK';
-                $seri->is_aktif = 0;
-                $seri->created_at = Carbon::now();
-                $seri->save();
+        //         $seri->dari = 17;
+        //         $seri->gdg_barang_jadi_id = $request->gbj_id;
+        //         $seri->noseri = $request->noseri[$key];
+        //         $seri->jenis = 'MASUK';
+        //         $seri->is_aktif = 0;
+        //         $seri->created_at = Carbon::now();
+        //         $seri->save();
 
-                $serit = new NoseriTGbj();
-                $serit->t_gbj_detail_id = $detail->id;
-                $serit->noseri_id = $seri->id;
-                $serit->layout_id = 1;
-                $serit->jenis = 'MASUK';
-                $serit->created_at = Carbon::now();
-                $serit->save();
-            }
-        }
+        //         $serit = new NoseriTGbj();
+        //         $serit->t_gbj_detail_id = $detail->id;
+        //         $serit->noseri_id = $seri->id;
+        //         $serit->layout_id = 1;
+        //         $serit->jenis = 'MASUK';
+        //         $serit->created_at = Carbon::now();
+        //         $serit->save();
+        //     }
+        // }
 
-        $rakitseri = JadwalPerakitan::find($request->jadwal_id);
-        $rakitseri->status_tf = 14;
-        $rakitseri->save();
+        // $rakitseri = JadwalPerakitan::find($request->jadwal_id);
+        // $rakitseri->status_tf = 14;
+        // $rakitseri->save();
 
-        JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->update(['waktu_tf' => Carbon::now()]);
+        // JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->update(['waktu_tf' => Carbon::now()]);
 
+        dd($request->all());
+    }
+
+    // gbj
+    function terimaseri(Request $request)
+    {
         // dd($request->all());
+        // NoseriTGbj::where('id',$request->seri)->update(['status_id' => 3]);
+        $seri = NoseriTGbj::whereIn('id', $request->seri)->get()->toArray();
+        $i = 0;
+        foreach($seri as $s) {
+            // echo $s['noseri_id'];
+            $i++;
+            NoseriTGbj::find($s['id'])->update(['status_id' => 3]);
+            NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
+            // GudangBarangJadi::find($s[])
+            
+
+        }
+        return response()->json(['msg' => 'Successfully']);
     }
 
     // riwayat rakit

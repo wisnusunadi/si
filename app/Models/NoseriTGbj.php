@@ -11,7 +11,7 @@ class NoseriTGbj extends Model
 
     protected $table = "t_gbj_noseri";
 
-    protected $fillable = ['t_gbj_detail_id', 'noseri_id'];
+    protected $fillable = ['t_gbj_detail_id', 'noseri_id', 'status_id'];
 
     function detail() {
         return $this->belongsTo(TFProduksiDetail::class, 't_gbj_detail_id');

@@ -26,6 +26,9 @@
         font-size: 14px;
         border-radius: 6px;
     }
+    /* .dataTables_filter{
+        display: none;
+    } */
 </style>
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
@@ -40,10 +43,19 @@
     </div><!-- /.container-fluid -->
 </div>
 <div class="row ml-2">
-    <div class="col-sm-4">
+    <div class="col-sm-2">
         <div class="form-group">
-            <label for="">Tanggal Perakitan</label>
-            <input type="text" name="" id="" class="form-control daterange">
+            <label for="">Filter Tanggal</label>
+            <select name="" id="filter_tgl" class="form-control">
+                <option value="tgl_mulai">Tanggal Mulai</option>
+                <option value="tgl_selesai">Tanggal Selesai</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="form-group">
+            <label for="">Tanggal</label>
+            <input type="text" name="" id="datetimepicker1" class="form-control">
         </div>
     </div>
 </div>
@@ -55,7 +67,7 @@
                     <div class="col-lg-12">
                         <table class="table table-bordered table_produk_perakitan ">
                             <thead class="thead-dark">
-                                <tr>
+                                {{-- <tr>
                                     <th colspan="2" class="text-center">Tanggal</th>
                                     <th rowspan="2">Nomor BPPB</th>
                                     <th rowspan="2">Produk</th>
@@ -66,6 +78,15 @@
                                 <tr>
                                     <th class="text-center">Tgl Mulai</th>
                                     <th class="text-center">Tgl Selesai</th>
+                                </tr> --}}
+                                <tr>
+                                    <th class="text-center">Tanggal Masuk</th>
+                                    <th class="text-center">Tanggal Keluar</th>
+                                    <th>Nomor BPPB</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -145,6 +166,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12">
+                                <form action="post" id="form-scan">
                                 <table class="table table-striped scan-produk" id>
                                     <thead>
                                         <tr>
@@ -161,8 +183,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
+                <button type="submit" class="btn btn-primary" id="">Simpan</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -170,14 +193,33 @@
 
 @section('adminlte_js')
 <script>
-    $('.table_produk_perakitan').DataTable({
-        destroy: true,
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+
+        var evalDate = parseDateValue(aData[0]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+   $(document).ready(function () {
+    var $dTable = $('.table_produk_perakitan').DataTable({
         processing: true,
         serverSide: true,
-        ajax: {
-            url: "/api/prd/kirim",
-            type: "post",
-        },
+        ajax: "/api/prd/kirim",
         columns: [
             {data: "start"},
             {data: "end"},
@@ -185,20 +227,40 @@
             {data: "produk"},
             {data: "jml"},
             {data: "status"},
-            {data: "action"},
+            {data: "action"},   
         ],
-        "ordering": false,
         "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
         "lengthChange": false,
-        searching: false,
         "columnDefs": [
         {
             "targets": [6],
             "visible": document.getElementById('auth').value == '2' ? false : true
         }]
     });
+
+    $('#datetimepicker1').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#datetimepicker1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            $dTable.draw();
+        });
+
+        $('#datetimepicker1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            $dTable.draw();
+        });
+
 
     function modalRakit() {
         $('.modalRakit').modal('show');
@@ -255,7 +317,7 @@
             }
         })
 
-        $('.scan-produk').DataTable({
+        var table = $('.scan-produk').DataTable({
             destroy: true,
             ordering: false,
             "autoWidth": false,
@@ -263,30 +325,33 @@
             "lengthChange": false,
             ajax: "/api/prd/detailSeri1/" + prd,
             columns: [
-                {data: "checkbox"},
                 {data: "no_seri"},
+                {data: "no_seri"}
             ],
             columnDefs: [
                 {
                     targets: [0],
                     checkboxes: {
                         selectRow: true,
-                        selectAll: true
                     },
                     width: "5%"
                 },
             ],
+            select : {
+                style: 'multi'
+            },
         });
-        modalRakit();
-    })
+        $('#form-scan').on('submit', function (e) {
+        e.preventDefault();
+        var form = $(this);
 
-    $(document).on('click', '#btnSave', function(e) {
-        // var id = $(this).data('id');
-        // console.log(id);
-        // console.log(prd);
-
+        var rows_selected = table.column(0).checkboxes.selected();
         const seri = [];
-        $.ajax({
+
+        $.each(rows_selected, function (index, rowId) { 
+            seri.push(rowId);
+       });
+       $.ajax({
             url: "/api/prd/send",
             type: "post",
             data: {
@@ -300,11 +365,10 @@
                 // console.log(res);
             }
         })
-    })
-    $('.daterange').daterangepicker({
-        locale: {
-            format: 'DD/MM/YYYY'
-        }
     });
+        modalRakit();
+    });
+    
+   });
 </script>
 @stop

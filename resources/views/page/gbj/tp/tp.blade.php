@@ -66,9 +66,6 @@
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Dari</label>
                                                     <select name="" id="divisi" class="form-control ">
                                                         <option value="">All</option>
-                                                        <option value="">Divisi IT</option>
-                                                        <option value="">Divisi QC</option>
-                                                        <option value="">Divisi SO</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -81,9 +78,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+                                    {{-- <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
                                         <a href="#" class="btn btn-outline-primary">Search</a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -231,8 +228,6 @@
 
 @section('adminlte_js')
 <script>
-    $('#datetimepicker1').daterangepicker({});
-
     $.ajax({
         url: '/api/gbj/sel-divisi',
         type: 'GET',
@@ -243,7 +238,7 @@
                 $("#divisi").empty();
                 $("#divisi").append('<option value="">All</option>');
                 $.each(res, function(key, value) {
-                    $("#divisi").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    $("#divisi").append('<option value="'+value.nama+'">'+value.nama+'</option');
                 });
             } else {
                 $("#divisi").empty();
@@ -259,25 +254,44 @@
         $('.modalDetail').modal('show');
     }
 
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+
+        var evalDate = parseDateValue(aData[0]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
     $(document).ready(function () {
         $('.pertanggal').dataTable({
             bFilter: false,
             responsive: true
         });
 
-        $('#history').DataTable().destroy();
-        $('#history').dataTable({
+        var $dTable = $('#history').dataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             autoWidth: false,
             ajax: {
                 url: "/api/transaksi/all",
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
             },
             columns: [
-                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 { data: 'date_in', name: 'date_in'},
                 { data: 'date_out', name: 'date_out'},
                 { data: 'divisi', name: 'divisi'},
@@ -292,7 +306,32 @@
             }
         });
 
-        $('#gudang-barang').dataTable({
+        $('#datetimepicker1').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#datetimepicker1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            $dTable.draw();
+        });
+
+        $('#datetimepicker1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            $dTable.draw();
+        });
+
+        $("#divisi").on("change", function () {
+            $dTable.columns(2).search($(this).val()).draw();
+        });
+
+        var gudangbarang = $('#gudang-barang').dataTable({
             processing: true,
             serverSide: true,
             responsive: true,

@@ -332,6 +332,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <br>
+                <button type="button" class="btn btn-primary float-right" id="btnSeri">Simpan</button>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
             </div>
         </div>
@@ -405,9 +407,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="">Layout</label>
-                    <select name="" id="change-layout" class="form-control">
-                        <option value="1">Layout 1</option>
-                        <option value="2">Layout 2</option>
+                    <select name="" id="change_layout" class="form-control">
                     </select>
                 </div>
             </div>
@@ -479,6 +479,7 @@
                 }
             }
         });
+
         i++;
         let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty" name="qty['+i+']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
@@ -551,6 +552,20 @@
 
     $(document).ready(function () {
 
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                // ii++;
+                console.log(res);
+                $.each(res, function(key, value) {
+                    $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    // $(".layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                });
+            }
+        });
+
         var table = $('.pertanggal').DataTable({
             processing: true,
             serverSide: true,
@@ -569,9 +584,6 @@
             ],
 
         });
-
-        // var datee = new DateTime($('#datetimepicker1'), {
-        //     format: 'dd mm YYYY' });
 
         $('#datetimepicker1').on('change', function() {
             table.draw();
@@ -603,6 +615,37 @@
 
     });
 
+    const seri = {};
+    const layout = {};
+
+    $(document).on('click', '#btnPlus', function() {
+        var tr = $(this).closest('tr');
+        x = tr.find('#qty').val();
+        y = tr.find('.productt').val();
+
+        console.log(x);
+        console.log(y);
+        tambahanPerakitan(x);
+    })
+
+    $(document).on('click', '#btnSeri', function() {
+        console.log('test');
+
+        var tr = $(this).closest('tr');
+        s = tr.find('.seri').val();
+        l = tr.find('.layout').val();
+
+        const cb = [];
+        $('.cb-child').each(function() {
+            if ($(this).is(":checked")) {
+                cb.push(s);
+            }
+        })
+        seri[y] = cb;
+        console.log(seri);
+
+    })
+
     $(document).on('click', '#btnDraft', function(e) {
         e.preventDefault();
 
@@ -630,70 +673,19 @@
             },
             success: function(res) {
                 console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
+                // Swal.fire({
+                //     position: 'center',
+                //     icon: 'success',
+                //     title: res.msg,
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // })
+                // location.reload();
             }
         })
     });
 
-    $(document).on('click', '#btnPlus', function() {
-        var tr = $(this).closest('tr');
-        x = tr.find('#qty').val();
 
-        console.log(x);
-        tambahanPerakitan(x);
-    })
-
-    function ubahData() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
-        let layout = $('#change-layout').val();
-        $.each(checkbox_terpilih, function (index, elm) {
-            let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
-        });
-        $('#ubah-layout').modal('hide');
-    }
-
-    $('#datetimepicker1').daterangepicker({});
-
-    function modalRancangan() {
-        $('.modal-rancangan').modal('show');
-    }
-
-    function tambahanRancangan(x) {
-        $('.tambahan-rancangan').modal('show');
-        // $('.scan-produk').DataTable().destroy();
-        // $('.scan-produk1 tbody').empty();
-        // for (let index = 0; index < x; index++) {
-        //    $('.scan-produk tbody').append('<tr><td><input type="checkbox" class="cb-child" value="1"></td><td><input type="text" name="" id="" class="form-control"></td><td><select name="" id="" class="form-control"><option value="1">Layout 1</option><option value="2">Layout 2</option></select></td></tr>');
-        // }
-        // $('.scan-produk').DataTable({
-        //     "ordering": false,
-        //     "autoWidth": false,
-        //     searching: false,
-        //     "lengthChange": false,
-        // });
-    }
-
-    function tambahanPerakitan(x) {
-        $('.tambahan-perakitan').modal('show');
-        $('.scan-produk1').DataTable().destroy();
-        $('.scan-produk1 tbody').empty();
-        for (let index = 0; index < x; index++) {
-           $('.scan-produk1 tbody').append('<tr><td><input type="checkbox" class="cb-child" value="1"></td><td><input type="text" name="" id="" class="form-control"></td><td><select name="" id="" class="form-control"><option value="1">Layout 1</option><option value="2">Layout 2</option></select></td></tr>');
-        }
-        $('.scan-produk1').DataTable({
-            "ordering": false,
-            "autoWidth": false,
-            searching: false,
-            "lengthChange": false,
-        });
-    }
 
     // $(document).on('click', '#btnPlus', function() {
     //     const prd = [];
@@ -720,6 +712,55 @@
             }
         })
     })
+
+    // load modal
+    function ubahData() {
+        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let layout = $('#change_layout').val();
+        $.each(checkbox_terpilih, function (index, elm) {
+            let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
+        });
+        $('#ubah-layout').modal('hide');
+    }
+
+    $('#datetimepicker1').daterangepicker({});
+
+    function modalRancangan() {
+        $('.modal-rancangan').modal('show');
+    }
+
+    function tambahanRancangan(x) {
+        $('.tambahan-rancangan').modal('show');
+
+    }
+
+    function tambahanPerakitan(x) {
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                // ii++;
+                console.log(res);
+                $.each(res, function(key, value) {
+                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    $(".layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                });
+            }
+        });
+        $('.tambahan-perakitan').modal('show');
+        $('.scan-produk1').DataTable().destroy();
+        $('.scan-produk1 tbody').empty();
+        for (let index = 0; index < x; index++) {
+           $('.scan-produk1 tbody').append('<tr id="row'+index+'"><td><input type="checkbox" class="cb-child"  value=""></td><td><input type="text" name="noseri_id['+index+']" id="noseri_id" class="form-control seri"></td><td><select name="layout_id['+index+']" id="layout_id" class="form-control layout"></select></td></tr>');
+        }
+        $('.scan-produk1').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+        });
+    }
 
 </script>
 @stop

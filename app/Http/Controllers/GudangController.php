@@ -304,7 +304,9 @@ class GudangController extends Controller
                 return $d->produk->produk->nama . ' ' . $d->produk->nama;
             })
             ->addColumn('jumlah', function ($d) {
-                return $d->qty . ' ' . $d->produk->satuan->nama;
+                $seri = NoseriTGbj::where('t_gbj_detail_id', $d->id)->get();
+                $c = count($seri);
+                return $c . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -329,7 +331,7 @@ class GudangController extends Controller
 
     function getRakitNoseri($id)
     {
-        $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->get();
+        $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->where('status_id', 3)->get();
         return datatables()->of($data)
             ->addColumn('layout', function ($d) {
                 return $d->layout->ruang;
@@ -345,7 +347,7 @@ class GudangController extends Controller
 
     function getTerimaRakit($id)
     {
-        $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->get();
+        $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->where('status_id', null)->get();
         $layout = Layout::where('jenis_id', 1)->get();
         return datatables()->of($data)
             ->addColumn('layout', function ($d) use($layout) {
@@ -550,28 +552,28 @@ class GudangController extends Controller
 
     function storeDraftRancang(Request $request)
     {
-        // dd($request->all());
-        $h = new TFProduksi();
-        $h->tgl_masuk = Carbon::now();
-        $h->dari = $request->dari;
-        $h->deskripsi = $request->deskripsi;
-        $h->status_id = 1;
-        $h->jenis = 'masuk';
-        $h->created_at = Carbon::now();
-        $h->save();
+        dd($request->all());
+        // $h = new TFProduksi();
+        // $h->tgl_masuk = Carbon::now();
+        // $h->dari = $request->dari;
+        // $h->deskripsi = $request->deskripsi;
+        // $h->status_id = 1;
+        // $h->jenis = 'masuk';
+        // $h->created_at = Carbon::now();
+        // $h->save();
 
-        foreach ($request->gdg_brg_jadi_id as $key => $value) {
-            $d = new TFProduksiDetail();
-            $d->t_gbj_id = $h->id;
-            $d->gdg_brg_jadi_id = $value;
-            $d->qty = $request->qty[$key];
-            $d->status_id = 1;
-            $d->jenis = 'masuk';
-            $d->created_at = Carbon::now();
-            $d->save();
-        }
+        // foreach ($request->gdg_brg_jadi_id as $key => $value) {
+        //     $d = new TFProduksiDetail();
+        //     $d->t_gbj_id = $h->id;
+        //     $d->gdg_brg_jadi_id = $value;
+        //     $d->qty = $request->qty[$key];
+        //     $d->status_id = 1;
+        //     $d->jenis = 'masuk';
+        //     $d->created_at = Carbon::now();
+        //     $d->save();
+        // }
 
-        return response()->json(['msg' => 'Successfully']);
+        // return response()->json(['msg' => 'Successfully']);
     }
 
     function storeFinalRancang(Request $request)

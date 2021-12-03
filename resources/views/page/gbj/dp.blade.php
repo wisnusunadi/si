@@ -110,7 +110,7 @@
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                  <button type="button" class="btn btn-primary">Simpan</button>
+                  <button type="button" class="btn btn-primary" id="simpanseri">Simpan</button>
               </div>
           </div>
       </div>
@@ -207,6 +207,24 @@
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
+
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if(res) {
+                    console.log(res);
+                    $("#change-layout").empty();
+                    // $("#divisi").append('<option value="">All</option>');
+                    $.each(res, function(key, value) {
+                        $("#change-layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    });
+                } else {
+                    $("#change-layout").empty();
+                }
+            }
+        });
     });
 
     function ubahData() {
@@ -234,11 +252,12 @@
         $('.scan-produk').DataTable({
             serverSide: true,
             autoWidth: false,
+            processing: true,
             ajax: {
                 url: '/api/tfp/rakit-terima/' + id,
             },
             columns: [
-                { data: 'checkbox'},
+                { data: 'checkbox', orderable: 'false'},
                 { data: 'noserii'},
                 { data: 'layout'},
             ],
@@ -306,6 +325,37 @@
         $('.detail-layout').modal('show');
     }
 
+    // submit
+    $(document).on('click', '#simpanseri', function() {
+        console.log('test');
+        const ids = [];
+        $('.cb-child').each(function() {
+            if ($(this).is(":checked")) {
+                ids.push($(this).val());
+            }
+        })
 
+        $.ajax({
+            url: "/api/prd/terimaseri",
+            type: "post",
+            data: {
+                "_token" : "{{ csrf_token() }}",
+                seri: ids,
+            },
+            success: function(res) {
+                console.log(res);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
+            }
+        })
+
+        // console.log(ids);
+    })
 </script>
 @stop

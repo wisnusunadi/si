@@ -274,10 +274,10 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "/api/prd/detailSeri/" + id,
+                url: "/api/prd/detailSeri1/" + id,
             },
             columns: [
-                {data: 'seri'}
+                {data: 'no_seri'}
             ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"

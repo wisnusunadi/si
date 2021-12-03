@@ -36,8 +36,8 @@
                                                 <div class="dropdown-header">Kelompok Produk</div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="sp_kelompok"
-                                                            value="alat_kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="alkes"
+                                                            value="Alat Kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Alat Kesehatan
                                                         </label>
@@ -45,8 +45,8 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="sp_kelompok"
-                                                            value="sarana_kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="sarkes"
+                                                            value="Sarana Kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Sarana Kesehatan
                                                         </label>
@@ -502,6 +502,22 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $('#alkes').click(function () {
+        if ($(this).prop('checked') == true) {
+            datatable.column(5).search($(this).val()).draw();
+        }else{
+            datatable.column(5).search('').draw();
+        }
+    })
+
+    $('#sarkes').click(function () {
+        if ($(this).prop('checked') == true) {
+            datatable.column(5).search($(this).val()).draw();
+        }else{
+            datatable.column(5).search('').draw();
+        }
+    })
 
     // load data
     var datatable = $('#gudang-barang').DataTable({

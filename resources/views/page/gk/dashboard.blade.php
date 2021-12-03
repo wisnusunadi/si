@@ -711,17 +711,17 @@
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Jenis</label>
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
                                                 <label class="form-check-label" for="jenis1">
                                                     All
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                <input class="form-check-input" type="checkbox" value="Sparepart" id="sparepart" />
                                                 <label class="form-check-label" for="jenis1">
                                                     Sparepart
                                                 </label>
@@ -729,7 +729,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
+                                                <input class="form-check-input" type="checkbox" value="Unit" id="unit" />
                                                 <label class="form-check-label" for="jenis2">
                                                     Unit
                                                 </label>
@@ -747,17 +747,17 @@
                                         <div class="form-group">
                                             <label for="jenis_penjualan">Kerusakan</label>
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                <input class="form-check-input" type="checkbox" value="All" id="all" />
                                                 <label class="form-check-label" for="jenis1">
                                                     All
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                <input class="form-check-input" type="checkbox" value="Level 1" id="level1" />
                                                 <label class="form-check-label" for="jenis1">
                                                     Level 1
                                                 </label>
@@ -765,7 +765,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
+                                                <input class="form-check-input" type="checkbox" value="Level 2" id="level2" />
                                                 <label class="form-check-label" for="jenis2">
                                                     Level 2
                                                 </label>
@@ -773,7 +773,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
+                                                <input class="form-check-input" type="checkbox" value="Level 3" id="level3" />
                                                 <label class="form-check-label" for="jenis2">
                                                     Level 3
                                                 </label>
@@ -1177,14 +1177,50 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $('.tableKerusakan').DataTable({
-            destroy: true,
-            "ordering": true,
-            "autoWidth": false,
-            searching: false,
-            "lengthChange": false,
+
+        $('#sparepart').click(function () {
+            if ($(this).prop('checked') == true) {
+                table.column(5).search($(this).val()).draw();
+            }else{
+                table.column(5).search('').draw();
+            }
+        })
+
+        $('#unit').click(function () {
+            if ($(this).prop('checked') == true) {
+                table.column(5).search($(this).val()).draw();
+            }else{
+                table.column(5).search('').draw();
+            }
+        })
+
+        $('#level1').click(function () {
+            if ($(this).prop('checked') == true) {
+                table.column(4).search($(this).val()).draw();
+            }else{
+                table.column(4).search('').draw();
+            }
+        })
+        $('#level2').click(function () {
+            if ($(this).prop('checked') == true) {
+                table.column(4).search($(this).val()).draw();
+            }else{
+                table.column(4).search('').draw();
+            }
+        })
+        $('#level3').click(function () {
+            if ($(this).prop('checked') == true) {
+                table.column(4).search($(this).val()).draw();
+            }else{
+                table.column(4).search('').draw();
+            }
+        })
+
+        var table = $('.tableKerusakan').DataTable({
+            dom: 'frtip',
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: "/api/gk/dashboard/tingkat",
                 type: "post",

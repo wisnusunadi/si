@@ -363,7 +363,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="btnUnit">Simpan</button>
             </div>
         </div>
     </div>
@@ -438,7 +438,7 @@
         $('.scan-produk1 tbody').empty();
         for (let index = 0; index < x; index++) {
             ii++;
-           $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri[]" class="form-control seri_spr"></td><td><input type="text" name="remark[]" id="remark[]" class="form-control"></td><td><select name="tk_kerusakan[]" id="tk_kerusakan" class="form-control"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select></td></tr>');
+           $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri[]" class="form-control seri_spr"></td><td><input type="text" name="remark[]" id="remark[]" class="form-control"></td><td><select name="tk_kerusakan[]" id="tk_kerusakan[]" class="form-control"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select></td></tr>');
         }
         $('.scan-produk1').DataTable({
             "ordering": false,
@@ -456,7 +456,7 @@
         $('.scan-produk').DataTable().destroy();
         $('.scan-produk tbody').empty();
         for (let index = 0; index < x; index++) {
-           $('.scan-produk tbody').append('<tr><td><input type="text" class="form-control"></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+           $('.scan-produk tbody').append('<tr><td><input type="text" name="noseri[]" id="noseri[]" class="form-control"></td><td><input type="text" name="remark[]" id="remark[]" class="form-control"></td><td><select name="tk_kerusakan[]" id="tk_kerusakan[]" class="form-control"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select></td></tr>');
         }
         $('.scan-produk').DataTable({
             "ordering": false,
@@ -619,27 +619,61 @@
             // });
         });
     }
+
     const spr = {};
     const sprr = {};
+    const sprrr = {};
+
+    const unit = {};
+    const unitt = {};
+    const unittt = {};
     // const jml = [];
     var t = 0;
+
+    $(document).on('click', '#btnUnit', function(e) {
+        console.log('unit');
+
+        const seri_unit = [];
+        const rusak_unit = [];
+        const tk_unit = [];
+
+        $('input[name^="noseri"]').each(function() {
+            seri_unit.push($(this).val());
+        });
+        unit[id] = seri_unit;
+
+        $('input[name^="remark"]').each(function() {
+            rusak_unit.push($(this).val());
+        });
+        unit[id] = rusak_unit;
+
+        $('select[name^="tk_kerusakan"]').each(function() {
+            tk_unit.push($(this).val());
+        });
+        unit[id] = tk_unit;
+    })
 
     $(document).on('click', '#btnSpr', function(e) {
         console.log('ok');
 
         const seri = [];
         const rusak = [];
+        const tk = [];
 
         $('input[name^="noseri"]').each(function() {
             seri.push($(this).val());
         });
-        spr[t] = seri;
+        spr[id] = seri;
 
         $('input[name^="remark"]').each(function() {
             rusak.push($(this).val());
         });
-        sprr[t] = rusak;
+        spr[id] = rusak;
 
+        $('select[name^="tk_kerusakan"]').each(function() {
+            tk.push($(this).val());
+        });
+        spr[id] = tk;
         console.log(seri);
         t++;
     });
@@ -648,7 +682,7 @@
         let out = $('#datePicker').val();
         let to = $('.dari').val();
         let tujuan = $('#tujuan_draft').val();
-        let seri1 = $('.seri_spr').val();
+        // let seri1 = $('.seri_spr').val();
 
         console.log(out);
         console.log(to);
@@ -656,7 +690,7 @@
 
         const spr1 = [];
         const jml = [];
-        const unit = [];
+        const unit1 = [];
         const jum = [];
 
         $('select[name^="sparepart_id"]').each(function() {
@@ -672,7 +706,7 @@
         // });
 
         $('select[name^="gbj_id"]').each(function() {
-            unit.push($(this).val());
+            unit1.push($(this).val());
         });
 
         $('input[name^="qty_unit"]').each(function() {
@@ -690,10 +724,13 @@
                 sparepart_id : spr1,
                 qty_spr: jml,
                 noseri : spr,
-                remark : sprr,
-                // gbj_id : unit,
-                // qty_unit: jum,
-                // x: ser1,
+                // remark : sprr,
+                // tk_spr : sprrr,
+                gbj_id : unit1,
+                qty_unit: jum,
+                seri_u: unit,
+                // re_unit: unitt,
+                // tk_unit: unittt,
             },
             success: function(res) {
                 console.log(res);

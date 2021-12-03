@@ -139,88 +139,7 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>68545465465</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
 
@@ -235,88 +154,7 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>68545465465</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
 
@@ -331,105 +169,7 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>68545465465</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021 <br>
-                                                    <span class="badge badge-danger">Melewati 3 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021<br>
-                                                        <span class="badge badge-danger">Melewati 5 Hari</span></td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021<br>
-                                                        <span class="badge badge-danger">Melewati 3 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021<br>
-                                                        <span class="badge badge-danger">Melewati 4 Hari</span>
-
-                                                    </td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021<br>
-                                                        <span class="badge badge-danger">Melewati 9 Hari</span>
-
-                                                    </td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021<br>
-                                                        <span class="badge badge-danger">Melewati 10 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Melewati 7 Hari</span></td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021<br>
-                                                        <span class="badge badge-danger">Melewati 3 Hari</span></td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>5456456155156</td>
-                                                    <td>RS Dr.Soetomo</td>
-                                                    <td>10-04-2021<br>
-                                                        <span class="badge badge-danger">Melewati 19 Hari</span></td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>4654564654654</td>
-                                                    <td>RS. Dr. Ramelan</td>
-                                                    <td>23-09-2021<br>
-                                                        <span class="badge badge-danger">Melewati 3 Hari</span></td>
-                                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -453,98 +193,8 @@
                                                 <th>Stok Saat Ini</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>200 Unit <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>200 Unit <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>200 Unit 
-                                                    <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>200 Unit
-                                                    <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>200 Unit
-                                                    <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>200 Unit
-                                                    <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>200 Unit
-                                                    <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>200 Unit
-                                                    <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>200 Unit
-                                                    <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>200 Unit
-                                                    <br>
-                                                    <span class="badge badge-danger">Kurang 100 Unit</span>
-                                                </td>
-                                                <td>100 Unit</td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
-
                                 </div>
                             </div>
                         </div>
@@ -594,18 +244,7 @@
                                                     <th>Jumlah</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>10 Unit</td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>20 Unit</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                     <div class="jml-produk-5-table hidden">
@@ -705,20 +344,7 @@
                                                     <th>Jumlah</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>10-04-2021</td>
-                                                    <td>Produk 1</td>
-                                                    <td>10 Unit</td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>23-09-2021</td>
-                                                    <td>Produk 2</td>
-                                                    <td>20 Unit</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                     {{-- Produk Masuk 6 Bulan --}}
@@ -732,20 +358,7 @@
                                                 <th>Jumlah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>10-04-2021</td>
-                                                <td>Produk 3</td>
-                                                <td>10 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>23-09-2021</td>
-                                                <td>Produk 3</td>
-                                                <td>20 Unit</td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                     </div>
                                     {{-- Produk Masuk 1 Tahun --}}
@@ -759,20 +372,7 @@
                                                 <th>Jumlah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>10-04-2021</td>
-                                                <td>Produk 4</td>
-                                                <td>10 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>23-09-2021</td>
-                                                <td>Produk 4</td>
-                                                <td>20 Unit</td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                     </div>
                                     {{-- Produk Masuk 3 Tahun --}}
@@ -786,20 +386,7 @@
                                                 <th>Jumlah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>10-04-2021</td>
-                                                <td>Produk 5</td>
-                                                <td>10 Unit</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>23-09-2021</td>
-                                                <td>Produk 5</td>
-                                                <td>20 Unit</td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                                 </div>
@@ -820,7 +407,6 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row mb-3">
-                                        <div class="col-sm"><h5><b>Layout 1</b></h5></div>
                                         <div class="col-sm text-right">Layout :</div>
                                         <div class="col-sm">
                                             <select class="select2 form-control layout" id="layout" multiple="multiple">
@@ -844,20 +430,7 @@
                                                 <th>Layout</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>100 Unit</td>
-                                                <td>Layout 1</td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>100 Unit</td>
-                                                <td>Layout 2</td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -917,88 +490,7 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>100 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>59 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>100 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>59 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>100 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>59 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>100 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>59 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>100 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>59 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
 
@@ -1013,88 +505,7 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>100 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>100 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>100 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>100 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>50 Unit</td>
-                                                    <td>10-04-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>100 Unit</td>
-                                                    <td>23-09-2021</td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
 
@@ -1109,108 +520,7 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 15 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 14 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 12 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 10 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 4 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 8 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 8 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 7 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">1</td>
-                                                    <td>Produk 1</td>
-                                                    <td>31 Unit</td>
-                                                    <td>10-04-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 6 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row">2</td>
-                                                    <td>Produk 2</td>
-                                                    <td>12 Unit</td>
-                                                    <td>23-09-2021 <br>
-                                                        <span class="badge badge-danger">Lewat 5 Hari</span>
-                                                    </td>
-                                                    <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                                class="fas fa-paper-plane"></i></button></td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -1235,108 +545,7 @@
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>31 Unit</td>
-                                                <td>10-04-2021 <br>
-                                                    <span class="badge badge-info">Lewat 1 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>12 Unit</td>
-                                                <td>23-09-2021 <br>
-                                                    <span class="badge badge-warning">Lewat 2 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>31 Unit</td>
-                                                <td>10-04-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 12 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>12 Unit</td>
-                                                <td>23-09-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 10 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>31 Unit</td>
-                                                <td>10-04-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 4 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>12 Unit</td>
-                                                <td>23-09-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 8 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>31 Unit</td>
-                                                <td>10-04-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 8 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>12 Unit</td>
-                                                <td>23-09-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 7 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">1</td>
-                                                <td>Produk 1</td>
-                                                <td>31 Unit</td>
-                                                <td>10-04-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 6 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td scope="row">2</td>
-                                                <td>Produk 2</td>
-                                                <td>12 Unit</td>
-                                                <td>23-09-2021 <br>
-                                                    <span class="badge badge-danger">Lewat 5 Hari</span>
-                                                </td>
-                                                <td><button onclick="modalPenerimaan()" class="btn btn-outline-primary"><i
-                                                            class="fas fa-paper-plane"></i></button></td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -1367,14 +576,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>654165654</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                          <td>654165654</td>
-                          <td>Layout 1</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -1444,22 +645,7 @@
                                             {{-- <th>Status</th> --}}
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>ABPM50</td>
-                                            <td>ELITECH</td>
-                                            {{-- <td><span class="badge badge-success">Sudah Diinput</span></td> --}}
-                                        </tr>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>RGB</td>
-                                            <td>ELITECH</td>
-                                            {{-- <td><span class="badge badge-danger">Belum Diinput</span></td> --}}
-                                        </tr>
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
@@ -1725,7 +911,8 @@
                 {data: 'jml'},
             ]
         });
-        $('.tableStokLayout').DataTable({
+        var table = $('.tableStokLayout').DataTable({
+            dom: 'lrtip',
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -1741,14 +928,31 @@
                 {data: 'jml'},
                 {data: 'layout'},
                 // {data: 'action'},
-            ]
+            ],
+            initComplete: function () {
+          this.api().columns([3]).every( function () {
+            var column = this;
+            console.log(column);
+            var select = $("#layout"); 
+            column.data().unique().sort().each( function ( d, j ) {
+              select.append( '<option value="'+d+'">'+d+'</option>' )
+            } );
+          } );
+          $("#layout").select2();
+       }
 
         });
 
-        $('.layout').change(function () {
-            // console.log('ok');
-            $('.tableStokLayout').DataTable().column(3).search($(this).val()).draw();
-        })
+        $('#layout').on('change', function(){
+    	var search = [];
+      
+            $.each($('#layout option:selected'), function(){
+                    search.push($(this).val());
+            });
+            
+            search = search.join('|');
+            table.column(3).search(search, true, false).draw();  
+        });
         $('.table-produk-batas-receipt-one-day').DataTable().destroy();
         $('.table-produk-batas-receipt-two-day').DataTable().destroy();
         $('.table-produk-batas-receipt-three-day').DataTable().destroy();
