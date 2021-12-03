@@ -256,7 +256,8 @@ Route::prefix('/logistik')->group(function () {
 
     Route::group(['prefix' => '/pengiriman'], function () {
         Route::get('/data', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
-        Route::get('/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_pengiriman']);
+        Route::get('/data/{id}', [App\Http\Controllers\LogistikController::class, 'get_produk_detail_pengiriman']);
+        // Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_datas']);
         // Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });

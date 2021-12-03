@@ -105,6 +105,7 @@
 @section('content')
 <section class="content">
     <div class="container-fluid">
+        @if($jenis == "EKAT")
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -116,50 +117,55 @@
                                     <div><small class="text-muted">Subjek Pengiriman</small></div>
                                 </div>
                                 <div class="margin">
-                                    <b id="customer">CIPTAJAYA RETAIL INDONESIA PT </b>
+                                    <b id="customer">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b>
                                 </div>
                                 <div class="margin">
-                                    <b id="alamat">Komplek Pergudangan Citra Raya Graha Blok E no 19 - 20 Bandung</b>
+                                    <b id="alamat">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->alamat}}</b>
                                 </div>
                                 <div class="margin">
-                                    <b id="provinsi">Jawa Barat</b>
+                                    <b id="provinsi">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}</b>
                                 </div>
                                 <div class="margin">
-                                    <b id="telepon">0819090567256</b>
+                                    <b id="telepon">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->telp}}</b>
                                 </div>
                             </div>
                             <div class="col-3">
                                 <div class="margin">
-                                    <div><small class="text-muted">Ekspedisi</small></div>
-                                    <div><b id="ekspedisi">MULIA BAKTI EXPRESS (BAYAR TUJUAN)</b></div>
+                                    <div><small class="text-muted">Ekspedisi / Pengiriman</small></div>
+                                    <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
+                                            {{$l->Ekspedisi->nama}}
+                                            @else
+                                            {{$l->Ekspedisi->nama_pengirim}}
+                                            @endif
+                                        </b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">No Surat Jalan</small></div>
-                                    <div><b id="no_sj">SJ/09/09/21/5001</b></div>
+                                    <div><b id="no_sj">{{$l->nosurat}}</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Tanggal Kirim</small></div>
-                                    <div><b id="no_sj">20-10-2021</b></div>
+                                    <div><b id="no_sj">{{$l->tgl_kirim}}</b></div>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No Sales Order</small></div>
-                                    <div><b id="no_so">SO/09/21/00001</b></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
-                                    <div><b id="no_so">PO/ON/09/21/00001</b></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Tanggal PO</small></div>
-                                    <div><b id="no_so">29-09-2021</b></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}</b></div>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No Invoice</small></div>
-                                    <div><b id="no_resi">9831937492</b></div>
+                                    <div><b id="no_resi">-</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
@@ -167,7 +173,7 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Resi</small></div>
-                                    <div><b id="no_resi">JP3183810381</b></div>
+                                    <div><b id="no_resi">-</b></div>
                                 </div>
                             </div>
                         </div>
@@ -175,12 +181,165 @@
                 </div>
             </div>
         </div>
+        @elseif($jenis == "SPA")
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Info</h5>
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="margin">
+                                    <div><small class="text-muted">Subjek Pengiriman</small></div>
+                                </div>
+                                <div class="margin">
+                                    <b id="customer">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}</b>
+                                </div>
+                                <div class="margin">
+                                    <b id="alamat">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}</b>
+                                </div>
+                                <div class="margin">
+                                    <b id="provinsi">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama}}</b>
+                                </div>
+                                <div class="margin">
+                                    <b id="telepon">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp}}</b>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="margin">
+                                    <div><small class="text-muted">Ekspedisi / Pengiriman</small></div>
+                                    <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
+                                            {{$l->Ekspedisi->nama}}
+                                            @else
+                                            {{$l->Ekspedisi->nama_pengirim}}
+                                            @endif
+                                        </b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">No Surat Jalan</small></div>
+                                    <div><b id="no_sj">{{$l->nosurat}}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tanggal Kirim</small></div>
+                                    <div><b id="no_sj">{{$l->tgl_kirim}}</b></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">No Sales Order</small></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">No PO</small></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tanggal PO</small></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}</b></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">No Invoice</small></div>
+                                    <div><b id="no_resi">-</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Status</small></div>
+                                    <div><span class="badge blue-text">Dalam Pengiriman</span></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Resi</small></div>
+                                    <div><b id="no_resi">-</b></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @elseif($jenis == "SPB")
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Info</h5>
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="margin">
+                                    <div><small class="text-muted">Subjek Pengiriman</small></div>
+                                </div>
+                                <div class="margin">
+                                    <b id="customer">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}</b>
+                                </div>
+                                <div class="margin">
+                                    <b id="alamat">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}</b>
+                                </div>
+                                <div class="margin">
+                                    <b id="provinsi">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}</b>
+                                </div>
+                                <div class="margin">
+                                    <b id="telepon">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp}}</b>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="margin">
+                                    <div><small class="text-muted">Ekspedisi / Pengiriman</small></div>
+                                    <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
+                                            {{$l->Ekspedisi->nama}}
+                                            @else
+                                            {{$l->Ekspedisi->nama_pengirim}}
+                                            @endif
+                                        </b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">No Surat Jalan</small></div>
+                                    <div><b id="no_sj">{{$l->nosurat}}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tanggal Kirim</small></div>
+                                    <div><b id="no_sj">{{$l->tgl_kirim}}</b></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">No Sales Order</small></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">No PO</small></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tanggal PO</small></div>
+                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}</b></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">No Invoice</small></div>
+                                    <div><b id="no_resi">-</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Status</small></div>
+                                    <div><span class="badge blue-text">Dalam Pengiriman</span></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Resi</small></div>
+                                    <div><b id="no_resi">-</b></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover align-center" id="showtable">
+                            <table class="table table-hover align-center" id="detailtable">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -194,33 +353,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Elitech MTB 2 MTR</td>
-                                        <td>10</td>
-                                        <td class="minimizechar wb">MTB0129021803, MTB0129021801, MTB0129021802, MTB0129021804, MTB0129021805, MTB0129021807, MTB0129021811, MTB0129021816, MTB0129021823, MTB0129021817</td>
-                                        <td>-</td>
-                                        @if(Auth::user()->divisi->id == "15")
-                                        <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('logistik.pengiriman.noseri', ['id' => '1'])}}" data-id="1">
-                                                <div><i class="fas fa-eye"></i></div>
-                                                <div><small>No Seri</small></div>
-                                            </a></td>
-                                        @endif
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Elitech Pocket Fetal Doppler</td>
-                                        <td>1</td>
-                                        <td class="minimizechar wb">PFD0129021803</td>
-                                        <td>-</td>
-                                        @if(Auth::user()->divisi->id == "15")
-                                        <td><a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="{{route('logistik.pengiriman.noseri', ['id' => '1'])}}" data-id="1">
-                                                <div><i class="fas fa-eye"></i></div>
-                                                <div><small>No Seri</small></div>
-                                            </a>
-                                        </td>
-                                        @endif
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -252,14 +384,76 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({});
+        var role = "{{Auth::user()->divisi->id}}";
+        console.log(role);
+        var showtable = $('#detailtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/pengiriman/data/' + "{{$id}}",
+                'type': 'GET',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nama_produk'
+                },
+                {
+                    data: 'jumlah',
+                },
+                {
+                    data: 'no_seri',
+                },
+                {
+                    data: 'keterangan',
+                },
+                {
+                    data: 'aksi',
+                    visible: role == 15 ? true : false
+                }
+            ]
+        });
 
-        $(document).on('click', '.detailmodal', function(event) {
-            event.preventDefault();
-            var href = $(this).attr('data-attr');
-            var id = $(this).data('id');
+        function showtabless(id) {
+            $('#showtable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/so/noseri/detail/selesai_kirim/data/' + id,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'no_seri'
+                    }
+                ]
+            })
+        }
+
+        $('#detailtable').on('click', '.detailmodal', function(event) {
+            var data = $(this).attr('data-id');
             $.ajax({
-                url: href,
+                url: "/api/logistik/so/noseri/detail/selesai_kirim/" + data,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -267,20 +461,19 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    console.log(id);
-                    // $("#editform").attr("action", href);
+                    showtabless(data);
                 },
                 complete: function() {
                     $('#loader').hide();
                 },
                 error: function(jqXHR, testStatus, error) {
                     console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
+                    alert("Page cannot open. Error:" + error);
                     $('#loader').hide();
                 },
-                timeout: 8000
-            })
-        });
+                timeout: 80
+            });
+        })
     })
 </script>
 @stop
