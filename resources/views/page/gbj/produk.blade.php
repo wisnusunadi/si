@@ -68,7 +68,7 @@
                                     <th>Kode Produk</th>
                                     <th>Nama Produk</th>
                                     <th>Stok Gudang</th>
-                                    <th>Stok</th>
+                                    <th>Stok Penjualan</th>
                                     <th>Kelompok</th>
                                     <th>Action</th>
                                 </tr>
@@ -111,9 +111,9 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="">Nama Produk</label>
+                        <label for="">Nama Variasi</label>
                         <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror"
-                            placeholder="Nama Produk">
+                            placeholder="Nama Variasi Produk">
                         @error('title')
                         <span class="invalid-feedback">Silahkan isi Nama Produk</span>
                         @enderror
@@ -524,14 +524,14 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/gbj/data',
+            url: '/api/gbj/data',
         },
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex'},
             { data: 'kode_produk', name: 'kode_produk'},
             { data: 'nama_produk', name: 'nama_produk'},
             { data: 'jumlah'},
-            { data: 'jumlah'},
+            { data: 'jumlah1'},
             { data: 'kelompok'},
             { data: 'action'}
         ]
@@ -579,7 +579,7 @@
     $('#create').click(function(e) {
         $('#Submitmodalcreate').val('create-product');
         $('#produkForm').trigger("reset");
-        $('#exampleModalLabel').html('Tambah Produk');
+        $('#exampleModalLabel').html('Tambah Variasi Produk');
         $('#modal-create').modal('show');
     });
 
@@ -595,7 +595,7 @@
             dataType: 'json',
             success: function(res){
                 console.log(res);
-                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.data[0].nama + '</b>');
+                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('#Submitmodalcreate').val('edit-product');
                 $('#modal-create').modal('show');
                 $('#id').val(res.data[0].id);
@@ -631,7 +631,7 @@
             success: function(res){
                 console.log(res);
 
-                $('#header_data').html('Detail Produk ' + '<b>' + res.data[0].nama + '</b>');
+                $('#header_data').html('Detail Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('p#nama').text(res.data[0].nama);
                 $('p#deskripsi').text(res.data[0].deskripsi);
                 $('span#panjang').text(res.data[0].dim_p);

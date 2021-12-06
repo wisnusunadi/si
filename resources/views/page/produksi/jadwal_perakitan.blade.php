@@ -18,7 +18,7 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">
-                    <i class="fas fa-layer-group"></i> Perakitan Bulan November
+                    <i class="fas fa-layer-group"></i> Perakitan Bulan {{ Carbon\Carbon::now()->isoFormat('MMMM') }}
                 </h5>
             </div>
             <div class="card-body">
@@ -145,7 +145,6 @@
                                 <table class="table table-striped scan-produk" id="scan">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" name="" id="head-cb"></th>
                                             <th>Nomor Seri</th>
                                         </tr>
                                     </thead>
@@ -159,7 +158,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
+                <button type="button" id="btnSave" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
@@ -193,39 +192,6 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            //Random default events
-            // events: [
-            //     {
-            //         title: 'Perakitan Produk 1',
-            //         start: new Date(y, m, 1),
-            //         end: new Date(y, m, 3),
-            //         backgroundColor: '#FF0000', //red
-            //         borderColor: '#FF0000' //red
-            //     },
-            //     {
-            //         title: 'Perakitan Produk 2',
-            //         start: new Date(y, m, d - 5, 15, 25),
-            //         end: new Date(y, m, d - 2),
-            //         backgroundColor: '#AF0404', //yellow
-            //         borderColor: '#AF0404   ' //yellow
-            //     },
-            //     {
-            //         title: 'Perakitan Produk 3',
-            //         start: new Date(y, m, d, 10, 30),
-            //         end: new Date(y, m, d + 3, 14, 0),
-            //         allDay: false,
-            //         backgroundColor: '#414141', //Blue
-            //         borderColor: '#414141' //Blue
-            //     },
-            //     {
-            //         title: 'Perakitan Produk 4',
-            //         start: new Date(y, m, d, 10, 30),
-            //         end: new Date(y, m, d + 5, 14, 0),
-            //         allDay: false,
-            //         backgroundColor: '#252525', //Blue
-            //         borderColor: '#252525' //Blue
-            //     },
-            // ],
             events: function( fetchInfo, successCallback, failureCallback ) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",
@@ -307,30 +273,15 @@
             // i++;
             $('.scan-produk').DataTable().destroy();
             $('.scan-produk tbody').empty();
-            // $('.scan-produk tbody').append('<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>')
-            //                 .children("tr").append("<td></td><td></td><td></td><td></td><td></td>")
-            //                 .children("td").slice(0, jml).each(function() {
-            //                     $(this).html('<input type="text" name="noseri[]" id="noseri" class="form-control">');
-            //                 })
-            // for(i=0; i<12; i++)
-            // {
-            //     if (i <= 5) {
-            //         $(".scan-produk tbody tr").append("<td>"+ i +"</td>");
-            //     }
 
-            //     if(i < 5)
-            //     {
-            //         $(".scan-produk tbody").append("</tr><tr>");
-            //     }
-            // }
             var $table = $(".scan-produk");
             for (var i=0;i<jml;i++) {
                     var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq("+i+")");
                     for (var k=0;k<1;k++) {
-                        $row.append('<td><input type="checkbox" class="cb-child"></td><td><input type="text" name="noseri[]" id="noseri" class="form-control"></td>');
+                        $row.append('<td><input type="text" name="noseri[]" id="noseri" class="form-control"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>');
                     }
             }
-            $('.scan-produk').DataTable({
+            var scanProduk = $('.scan-produk').DataTable({
                 ordering: false,
                 "autoWidth": false,
                 searching: false,
@@ -346,39 +297,49 @@
                     }
                 ],
             });
+
+            $(document).on('click', '#btnSave', function(e) {
+                // // $.each($('input[name^="noseri"]'), function () { 
+                // //      console.log($(this));
+                // // });
+                // var data = scanProduk.$('input[name^="noseri"]').serializeArray();
+                // console.log(data);
+                // return false;
+                   e.preventDefault();
+
+                   const seri = [];
+
+                   $('input[name^="noseri"]').each(function() {
+                        seri.push($(this).val());
+                    });
+
+                    console.log(seri);
+
+                    $.ajax({
+                        url: "/api/prd/rakit-seri",
+                        type: "post",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            noseri: seri,
+                            jadwal_id : id,
+                        },
+                        success: function(res) {
+                            console.log(res);
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: res.msg,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            location.reload();
+                        }
+                    })
+            })
+            })
         })
 
-       $(document).on('click', '#btnSave', function(e) {
-           e.preventDefault();
-
-           const seri = [];
-
-           $('input[name^="noseri"]').each(function() {
-                seri.push($(this).val());
-            });
-
-            $.ajax({
-                url: "/api/prd/rakit-seri",
-                type: "post",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    noseri: seri,
-                    jadwal_id : id,
-                },
-                success: function(res) {
-                    console.log(res);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: res.msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    location.reload();
-                }
-            })
-       })
-    })
+      
     function modalRakit() {
 
         $('.modalRakit').modal('show');

@@ -31,4 +31,9 @@ class Pesanan extends Model
     {
         return $this->hasOne(TFProduksi::class);
     }
+
+    function log()
+    {
+        return $this->belongsTo(State::class, 'log_id');
+    }
 }

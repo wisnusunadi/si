@@ -382,20 +382,20 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     pesanan_id: id,
-                    gdg_brg_jadi_id: prdd,
+                    gdg_brg_jadi_id: prd1,
                     qty: qtyy,
-                    noseri_id: prd1,
+                    // noseri_id: prd1,
                 },
                 success: function(res) {
                     console.log(res);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: res.msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    location.reload();
+                    // Swal.fire({
+                    //     position: 'center',
+                    //     icon: 'success',
+                    //     title: res.msg,
+                    //     showConfirmButton: false,
+                    //     timer: 1500
+                    // })
+                    // location.reload();
                 }
             })
         })

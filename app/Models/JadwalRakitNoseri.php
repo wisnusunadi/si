@@ -11,6 +11,8 @@ class JadwalRakitNoseri extends Model
 
     protected $table = "jadwal_rakit_noseri";
 
+    protected $fillable = ['jadwal_id', 'noseri', 'status', 'date_in', 'waktu_tf', 'created_at', 'updated_at'];
+
     function header()
     {
         return $this->belongsTo(JadwalPerakitan::class, 'jadwal_id');

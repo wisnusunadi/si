@@ -54,7 +54,7 @@
     }
     img{
         /* Jika Gambar Disamping */
-        width: 280px;
+        width: 330px;
         /* Jika Gambar Diatas */
         /* width: 100px; */
     }
@@ -64,24 +64,22 @@
         <div class="row">
             <div class="col-xl-5">
                 @foreach($data as $d)
-                <div class="card mb-3">
+                <input type="hidden" name="id" id="ids" value="{{ $d->id }}">
+                <div class="card" style="width: 40rem">
                     <div class="row no-gutters">
-                      <div class="col-md-4">
-                        <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80" alt="...">
+                      <div class="col-md-5">
+                        <img src="https://elitech.id/img/products-img/cardiology/ecg300g/gambara.jpg" alt="...">
                       </div>
-                      <div class="col-md-8">
-                        <div class="card-body ml-5">
-                          <div class="card-title">
-                              <input type="hidden" name="id" id="ids" value="{{ $d->id }}">
-                            <h2 class="text-bold" id="nama_produk">{{ $d->produk->nama }} {{ $d->nama }}</h2>
-                            <h6 class="text-muted" id="kode_produk">{{ $d->produk->product->kode . '' . $d->produk->kode ? $d->produk->product->kode . '' . $d->produk->kode : '-' }}</h6>
-                          </div>
-                          <h5 class="card-text text-bold pt-2">Deskripsi</h5>
-                          <p class="card-text" id="deskripsi">{{ $d->deskripsi }}</p>
-                          <h5 class="card-text text-bold pt-1">Dimensi</h5>
-                          <p class="text-bold" style="margin-bottom: 0">Panjang x Lebar x Tinggi</p>
-                          <p><span class="panjang">{{ $d->dim_p }}</span> x <span class="lebar">{{ $d->dim_l }}</span> x <span
-                                  class="tinggi">{{ $d->dim_}}</span></p>
+                      <div class="col-md-1"></div>
+                      <div class="col-md-6">
+                        <div class="card-body">
+                                  <h5 class="card-title text-bold">{{ $d->produk->nama }} {{ $d->nama }}</h5>
+                                  <p class="card-text"><small class="text-muted">{{ $d->produk->product->kode . '' . $d->produk->kode ? $d->produk->product->kode . '' . $d->produk->kode : '-' }}</small></p>
+                                  <p class="card-text">Deskripsi</p>
+                                    <p class="card-text">{{ $d->deskripsi }}</p>
+                                    <p class="card-text">Dimensi</p>
+                                    <p class="card-text">Panjang x Lebar x Tinggi</p>
+                                    <p class="card-text">{{ $d->dim_p }} x {{ $d->dim_l }} x {{ $d->dim_t }}</p>
                         </div>
                       </div>
                     </div>

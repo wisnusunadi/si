@@ -343,7 +343,7 @@
                 seri: ids,
             },
             success: function(res) {
-                console.log(res);
+                // console.log(res);
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -354,8 +354,6 @@
                 location.reload();
             }
         })
-
-        // console.log(ids);
     })
 </script>
 @stop
