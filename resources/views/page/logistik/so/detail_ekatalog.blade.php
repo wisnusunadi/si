@@ -363,7 +363,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pengiriman</h5>
+                            <h5 class="modal-title">Detail Logistik</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -389,7 +389,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/so/data/detail/belum_kirim/' + y,
+                'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$d->pesanan_id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -481,12 +481,11 @@
 
         $('#selesaikirimtable').on('click', '.detailmodal', function() {
             var data = $(this).attr('data-id');
-            alert(data);
             $('#selesaikirimtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
 
             $.ajax({
-                url: "/logistik/pengiriman/noseri/" + data,
+                url: "/api/logistik/so/noseri/detail/selesai_kirim/" + data,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -494,13 +493,14 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
+                    showtable(data);
                 },
                 complete: function() {
                     $('#loader').hide();
                 },
                 error: function(jqXHR, testStatus, error) {
                     console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
+                    alert("Page cannot open. Error:" + error);
                     $('#loader').hide();
                 },
                 timeout: 8000
@@ -510,7 +510,6 @@
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
-            console.log(action);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -519,25 +518,24 @@
                 url: action,
                 data: $('#form-logistik-create').serialize(),
                 success: function(response) {
-                    console.log(response);
-
-                    // if (response['data'] == "success") {
-                    //     swal.fire(
-                    //         'Berhasil',
-                    //         'Berhasil menambahkan Pengiriman',
-                    //         'success'
-                    //     );
-                    //     $("#editmodal").modal('hide');
-                    //     $('#belumkirimtable').DataTable().ajax.reload();
-                    //     $('#selesaikirimtable').DataTable().ajax.reload();
-                    //     $('#noseridetail').addClass('hide');
-                    // } else if (response['data'] == "error") {
-                    //     swal.fire(
-                    //         'Gagal',
-                    //         'Gagal menambahkan Pengiriman',
-                    //         'error'
-                    //     );
-                    // }
+                    // console.log(response);
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil menambahkan Pengiriman',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#belumkirimtable').DataTable().ajax.reload();
+                        $('#selesaikirimtable').DataTable().ajax.reload();
+                        $('#noseridetail').addClass('hide');
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal menambahkan Pengiriman',
+                            'error'
+                        );
+                    }
                 },
                 error: function(xhr, status, error) {
                     alert($('#form-logistik-create').serialize());
@@ -552,7 +550,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/logistik/so/detail/select/' + id + '/' + 1,
+                    'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -585,7 +583,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/logistik/so/noseri/detail/' + id,
+                    'url': '/api/logistik/so/noseri/detail/belum_kirim/' + id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -596,6 +594,33 @@
                 columns: [{
                     data: 'no_seri'
                 }, ]
+            })
+        }
+
+        function showtable(id) {
+            $('#showtable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/so/noseri/detail/selesai_kirim/data/' + id,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'no_seri'
+                    }
+                ]
             })
         }
 
@@ -710,7 +735,7 @@
             console.log(checkedAry);
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
-            var pesanan_id = '{{$d->pesanan_id}}';
+            var pesanan_id = '{{$d->id}}';
 
             $.ajax({
                 url: "/logistik/so/create/" + checkedAry + '/' + pesanan_id,
@@ -723,6 +748,7 @@
                     $('#edit').html(result).show();
                     detailpesanan(checkedAry, pesanan_id);
                     ekspedisi_select();
+                    alert(pesanan_id);
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {

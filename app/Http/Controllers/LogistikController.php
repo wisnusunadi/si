@@ -33,12 +33,47 @@ class LogistikController extends Controller
     {
         $x = explode(',', $detail_produk);
         if ($detail_produk == '0') {
-            $data = DetailPesananProduk::whereHas('DetailPEsanan', function ($q) use ($pesanan_id) {
+            // $data = DetailPesananProduk::whereHas('DetailPEsanan', function ($q) use ($pesanan_id) {
+            //     $q->where('pesanan_id', $pesanan_id);
+            // })->get();
+            $datas = DetailPesananProduk::WhereHas('NoSeriDetailPesanan', function ($q) {
+                $q->whereIN('status', ['ok']);
+            })->whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
                 $q->where('pesanan_id', $pesanan_id);
             })->get();
+
+            $array_id = array();
+            foreach ($datas as $i) {
+                $id = $i->id;
+                $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
+                    $q->where('detail_pesanan_produk_id', $id);
+                })->count();
+                $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id])->count();
+                $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                    $q->where('id', $id);
+                })->get();
+                $jumlahpesanan = 0;
+
+                foreach ($detail_pesanan as $j) {
+                    foreach ($j->PenjualanProduk->Produk as $k) {
+                        // echo $k->id . " dengan " . $i->GudangBarangJadi->produk_id . ". ";
+                        if ($k->id == $i->GudangBarangJadi->produk_id) {
+                            $jumlahpesanan = $jumlahpesanan + ($j->jumlah * $k->pivot->jumlah);
+                        }
+                    }
+                }
+
+                $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
+                if ($jumlahsekarang > 0) {
+                    $array_id[] = $i->id;
+                }
+            }
+            $data = DetailPesananProduk::whereIN('id', $array_id)->get();
         } else {
             $data = DetailPesananProduk::whereIN('id', $x)->get();
         }
+
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
@@ -114,37 +149,6 @@ class LogistikController extends Controller
             ->make(true);
     }
 
-    public function get_data_detail_belum_kirim_so($id)
-    {
-        $x = explode(',', $id);
-        $data = DetailPesananProduk::WhereHas('noseridetailpesanan', function ($q) {
-            $q->where('status', 'ok');
-        })->whereIN('detail_pesanan_id', $x)->get();
-        return datatables()->of($data)
-            ->addIndexColumn()
-            ->addColumn('checkbox', function ($data) {
-                return '  <div class="form-check">
-                        <input class=" form-check-input yet detail_produk_id"  data-id="' . $data->id . '" type="checkbox" data-value="' . $data->id . '" />
-                        </div>';
-            })
-            ->addColumn('nama_produk', function ($data) {
-                if ($data->gudangbarangjadi->nama == '') {
-                    return $data->gudangbarangjadi->produk->nama;
-                } else {
-                    return $data->gudangbarangjadi->nama;
-                }
-            })
-            ->addColumn('jumlah', function ($data) {
-                $c = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $data->id, 'status' => 'ok'])->get()->count();
-                return $c;
-            })
-            ->addColumn('button', function ($data) {
-                return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
-            })
-            ->rawColumns(['checkbox', 'button', 'status'])
-            ->make(true);
-    }
-
     public function get_noseri_so($id)
     {
         $data = NoseriDetailPesanan::whereHas('DetailPesananProduk')->where('detail_pesanan_produk_id', $id)->get();
@@ -161,50 +165,160 @@ class LogistikController extends Controller
             ->make(true);
     }
 
+    public function get_data_detail_belum_kirim_so($id)
+    {
+
+        // $x = explode(',', $id);
+        // $data = DetailPesananProduk::WhereHas('noseridetailpesanan', function ($q) {
+        //     $q->where('status', 'ok');
+        // })->whereIN('detail_pesanan_id', $x)->get();
+
+        $datas = DetailPesananProduk::WhereHas('NoSeriDetailPesanan', function ($q) {
+            $q->whereIN('status', ['ok']);
+        })->whereHas('DetailPesanan', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->get();
+
+        $array_id = array();
+        foreach ($datas as $i) {
+            $id = $i->id;
+            $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
+                $q->where('detail_pesanan_produk_id', $id);
+            })->count();
+            $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id])->count();
+            $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->get();
+            $jumlahpesanan = 0;
+
+            foreach ($detail_pesanan as $j) {
+                foreach ($j->PenjualanProduk->Produk as $k) {
+                    // echo $k->id . " dengan " . $i->GudangBarangJadi->produk_id . ". ";
+                    if ($k->id == $i->GudangBarangJadi->produk_id) {
+                        $jumlahpesanan = $jumlahpesanan + ($j->jumlah * $k->pivot->jumlah);
+                    }
+                }
+            }
+
+            $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
+            if ($jumlahsekarang > 0) {
+                $array_id[] = $i->id;
+            }
+        }
+
+        $data = DetailPesananProduk::whereIN('id', $array_id)->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('checkbox', function ($data) {
+                return '  <div class="form-check">
+                        <input class=" form-check-input yet detail_produk_id"  data-id="' . $data->id . '" type="checkbox" data-value="' . $data->id . '" />
+                        </div>';
+            })
+            ->addColumn('nama_produk', function ($data) {
+                if ($data->gudangbarangjadi->nama == '') {
+                    return $data->gudangbarangjadi->produk->nama;
+                } else {
+                    return $data->gudangbarangjadi->nama;
+                }
+            })
+            ->addColumn('jumlah', function ($data) {
+                $id = $data->id;
+                $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
+                    $q->where('detail_pesanan_produk_id', $id);
+                })->count();
+                $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id])->count();
+                $s = $jumlahsudahuji - $jumlahterkirim;
+                return $s;
+            })
+            ->addColumn('button', function ($data) {
+                return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+            })
+            ->rawColumns(['checkbox', 'button', 'status'])
+            ->make(true);
+    }
+
+    public function get_noseri_so_belum_kirim($id)
+    {
+        $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('no_seri', function ($data) {
+                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            })
+            ->make(true);
+    }
+
     public function get_data_detail_selesai_kirim_so($id)
     {
+        $data = DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->get();
         // $data = DetailPesanan::where('pesanan_id', $id)->Has('DetailLogistik')->get();
-        // return datatables()->of($data)
-        //     ->addIndexColumn()
-        //     ->addColumn('no', function ($data) {
-        //         if (isset($data->DetailLogistik->Logistik)) {
-        //             return $data->DetailLogistik->Logistik->nosurat;
-        //         } else {
-        //             return '';
-        //         }
-        //     })
-        //     ->addColumn('tgl_kirim', function ($data) {
-        //         if (isset($data->DetailLogistik->Logistik)) {
-        //             return $data->DetailLogistik->Logistik->tgl_kirim;
-        //         } else {
-        //             return '';
-        //         }
-        //     })
-        //     ->addColumn('pengirim', function ($data) {
-        //         if (isset($data->DetailLogistik->Logistik)) {
-        //             if ($data->DetailLogistik->Logistik->nama_pengirim == "") {
-        //                 return $data->DetailLogistik->Logistik->ekspedisi->nama;
-        //             } else {
-        //                 return $data->DetailLogistik->Logistik->nama_pengirim;
-        //             }
-        //         } else {
-        //             return '';
-        //         }
-        //     })
-        //     ->addColumn('nama_produk', function ($data) {
-        //         return $data->penjualanproduk->nama;
-        //     })
-        //     ->addColumn('jumlah', function ($data) {
-        //         return $data->jumlah;
-        //     })
-        //     ->addColumn('button', function ($data) {
-        //         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-        //         <div><i class="fas fa-search"></i></div>
-        //     </a>';
-        //     })
-        //     ->rawColumns(['checkbox', 'button', 'status'])
-        //     ->make(true);
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('no', function ($data) {
+                if (isset($data->Logistik)) {
+                    return $data->Logistik->nosurat;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('tgl_kirim', function ($data) {
+                if (isset($data->Logistik)) {
+                    return $data->Logistik->tgl_kirim;
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('pengirim', function ($data) {
+                if (isset($data->Logistik)) {
+                    if ($data->Logistik->nama_pengirim == "") {
+                        return $data->Logistik->ekspedisi['nama'];
+                    } else {
+                        return $data->Logistik->nama_pengirim;
+                    }
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('nama_produk', function ($data) {
+                return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+                return $c;
+            })
+            ->addColumn('button', function ($data) {
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
+                <div><i class="fas fa-search"></i></div>
+            </a>';
+            })
+            ->rawColumns(['checkbox', 'button', 'status'])
+            ->make(true);
     }
+
+    public function get_noseri_so_selesai_kirim($id)
+    {
+        $data = DetailLogistik::find($id);
+        return view('page.logistik.so.noseri', ['id' => $id, 'res' => $data]);
+    }
+
+
+    public function get_noseri_so_selesai_kirim_data($id)
+    {
+        $data = NoseriDetailPesanan::whereHas('NoseriDetailLogistik', function ($q) use ($id) {
+            $q->where('detail_logistik_id', $id);
+        })->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('no_seri', function ($data) {
+                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            })
+            ->make(true);
+    }
+
+
 
     public function get_data_no_seri($id)
     {
@@ -231,60 +345,60 @@ class LogistikController extends Controller
     //Get Data 
     public function get_data_so()
     {
-        $data = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get();
+        $data = Pesanan::Has('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->Pesanan->so;
+                return $data->so;
             })
             ->addColumn('nama_customer', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Customer->nama;
+                    return $data->Ekatalog->Customer->nama;
                 } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->Customer->nama;
+                    return $data->Spa->Customer->nama;
                 } else {
-                    return $data->Pesanan->Spb->Customer->nama;
+                    return $data->Spb->Customer->nama;
                 }
             })
             ->addColumn('alamat', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Customer->alamat;
+                    return $data->Ekatalog->Customer->alamat;
                 } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->Customer->alamat;
+                    return $data->Spa->Customer->alamat;
                 } else {
-                    return $data->Pesanan->Spb->Customer->alamat;
+                    return $data->Spb->Customer->alamat;
                 }
             })
             ->addColumn('telp', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Customer->telp;
+                    return $data->Ekatalog->Customer->telp;
                 } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->Customer->telp;
+                    return $data->Spa->Customer->telp;
                 } else {
-                    return $data->Pesanan->Spb->Customer->telp;
+                    return $data->Spb->Customer->telp;
                 }
             })
             ->addColumn('ket', function ($data) {
-                return $data->pesanan->ket;
+                return $data->ket;
             })
             ->addColumn('status', function ($data) {
                 return '';
             })
             ->addColumn('batas', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
                     $x =  'ekatalog';
                     $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+                    $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
                     $param = "";
 
                     if ($tgl_sekarang < $tgl_parameter) {
                         $to = Carbon::now();
-                        $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
                         $hari = $to->diffInDays($from);
 
                         if ($hari > 7) {
@@ -298,7 +412,7 @@ class LogistikController extends Controller
                         $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                     } else {
                         $to = Carbon::now();
-                        $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
                         $hari = $to->diffInDays($from);
                         $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                     }
@@ -308,18 +422,18 @@ class LogistikController extends Controller
                 }
             })
             ->addColumn('button', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->so);
                 $x = $name[1];
                 if ($x == 'EKAT') {
-                    $y = $data->Pesanan->ekatalog->id;
+                    $y = $data->ekatalog->id;
                 } elseif ($x == 'SPA') {
-                    $y = $data->Pesanan->spa->id;
+                    $y = $data->spa->id;
                 } else {
-                    $y = $data->Pesanan->spb->id;
+                    $y = $data->spb->id;
                 }
                 return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a href="' . route('logistik.so.detail', [$y, $x]) . '">
+                <a href="' . route('logistik.so.detail', [$data->id, $x]) . '">
                     <button class="dropdown-item" type="button">
                         <i class="fas fa-search"></i>
                         Detail
@@ -330,6 +444,119 @@ class LogistikController extends Controller
             ->rawColumns(['status', 'button', 'batas'])
             ->make(true);
     }
+
+    public function get_data_pengiriman()
+    {
+        $data = Logistik::all();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+            })
+            ->addColumn('sj', function ($data) {
+                return $data->nosurat;
+            })
+            ->addColumn('ekspedisi', function ($data) {
+                if (!empty($data->ekspedisi_id)) {
+                    $data->ekspedisi->nama;
+                } else {
+                    $data->nama_pengirim;
+                }
+            })
+            ->addColumn('no_resi', function ($data) {
+                return "-";
+            })
+            ->addColumn('tgl_kirim', function ($data) {
+                return $data->tgl_kirim;
+            })
+            ->addColumn('nama_customer', function ($data) {
+                $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                } elseif ($name[1] == 'SPA') {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                } else {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('provinsi', function ($data) {
+                $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama;
+                } elseif ($name[1] == 'SPA') {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
+                } else {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
+                }
+            })
+            ->addColumn('status', function ($data) {
+                return '';
+            })
+            ->addColumn('button', function ($data) {
+                $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a href="' . route('logistik.pengiriman.detail', ['id' => $data->id, 'jenis' => $name[1]]) . '">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-search"></i>
+                            Detail
+                        </button>
+                    </a>
+                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="' . route('logistik.pengiriman.edit', [$data->id, 'dalam_pengiriman']) . '" data-id="">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-pencil-alt"></i>
+                            Edit
+                        </button>
+                    </a>
+                    <a href="' . route('logistik.pengiriman.print') . '">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Laporan PDF
+                        </button>
+                    </a>
+                </div>';
+            })
+            ->rawColumns(['status', 'button'])
+            ->make(true);
+    }
+
+    public function get_pengiriman_detail_data($id, $jenis)
+    {
+        $l = Logistik::find($id);
+        return view('page.logistik.pengiriman.detail', ['id' => $id, 'l' => $l, 'jenis' => $jenis]);
+    }
+
+    public function get_produk_detail_pengiriman($id)
+    {
+        $l = DetailLogistik::where('logistik_id', $id)->get();
+        return datatables()->of($l)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                // $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+                return $data->NoseriDetailLogistik->count();
+            })
+            ->addColumn('no_seri', function ($data) {
+                $array = array();
+                foreach ($data->NoseriDetailLogistik as $i) {
+                    $array[] = $i->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri;
+                }
+                return implode(", ", $array);
+            })
+            ->addColumn('keterangan', function ($data) {
+                return "-";
+            })
+            ->addColumn('aksi', function ($data) {
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
+                <div><i class="fas fa-eye"></i></div>
+            </a>';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
     //Edit 
     public function update_modal_surat_jalan($id, $status)
     {
@@ -397,340 +624,378 @@ class LogistikController extends Controller
     }
     public function create_logistik_view($detail_pesanan_id, $pesanan_id)
     {
-        $value = [];
+        $value = array();
         $value2 = [];
-
+        $id = [];
+        $a = 0;
         $x = explode(',', $detail_pesanan_id);
+
         if ($detail_pesanan_id == '0') {
-            $data = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
+            $datas = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
                 $q->where('pesanan_id', $pesanan_id);
             })->get();
-            foreach ($data as $d) {
-                $value[] = $d->id;
+            $array_id = array();
+            foreach ($datas as $i) {
+                $ids = $i->id;
+                $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($ids) {
+                    $q->where('detail_pesanan_produk_id', $ids);
+                })->count();
+                $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $ids])->count();
+
+                $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
+                    $q->where('id', $ids);
+                })->get();
+                $jumlahpesanan = 0;
+
+                $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
+                if ($jumlahsekarang > 0) {
+                    $array_id[] = $i->id;
+                }
+            }
+
+            foreach ($array_id as $d) {
+                $value[$a]['id'] = $d;
+                $count = 0;
+
+                $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+                foreach ($e as $f) {
+                    $value[$a]['noseri'][$count] = $f->id;
+                    $count++;
+                }
+                $a++;
             }
 
             $id =  json_encode($value);
+            $id_produk =  json_encode($value2);
         } else {
-            $data = DetailPesananPRoduk::whereIN('id', $x)->get();
-            foreach ($data as $d) {
-                $value2[] = $d->id;
+            foreach ($x as $d) {
+                $value[$a]['id'] = $d;
                 $count = 0;
-                foreach ($d->noseridetailpesanan as $e) {
-                    $value[$d->id][$count] = $e->id;
+                $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+                foreach ($e as $f) {
+                    $value[$a]['noseri'][$count] = $f->id;
                     $count++;
                 }
+                $a++;
             }
             $id =  json_encode($value);
             $id_produk =  json_encode($value2);
         }
+
         return view('page.logistik.so.create', ['id' => $id, 'id_produk' => $id_produk]);
     }
     public function create_logistik(Request $request, $detail_pesanan_id, $id_produk)
     {
-        //  $result = array_values(json_decode($detail_pesanan_id, true));
+        $array = array_values(json_decode($detail_pesanan_id, true));
+        $bool = true;
+        $Logistik = "";
+        if ($request->pengiriman == 'ekspedisi') {
+            $Logistik = Logistik::create([
+                'ekspedisi_id' => $request->ekspedisi_id,
+                'nosurat' => 'SPA-' . $request->no_invoice,
+                'tgl_kirim' => $request->tgl_kirim,
+            ]);
+        } else {
+            $Logistik = Logistik::create([
+                'nosurat' => 'SPA-' . $request->no_invoice,
+                'tgl_kirim' => $request->tgl_kirim,
+                'nama_pengirim' => $request->nama_pengirim,
+            ]);
+        }
 
-        $task_array = json_decode($detail_pesanan_id);
-        $total = 0;
-        // $replace_array_seri = strtr($id_produk, array('[' => '', ']' => ''));
-        // $array_produk = explode(',', $replace_array_seri);
 
+        if ($Logistik) {
+            for ($i = 0; $i < count($array); $i++) {
+                $c = DetailLogistik::create([
+                    'logistik_id' => $Logistik->id,
+                    'detail_pesanan_produk_id' => $array[$i]['id'],
+                ]);
+                if ($c) {
+                    for ($y = 0; $y < count($array[$i]['noseri']); $y++) {
+                        $b = NoseriDetailLogistik::create([
+                            'detail_logistik_id' => $c->id,
+                            'noseri_detail_pesanan_id' => $array[$i]['noseri'][$y],
+                        ]);
+                    }
+                    if (!$b) {
+                        $bool = false;
+                    }
+                } else {
+                    $bool = false;
+                }
+            }
+        } else {
+            return response()->json(['data' =>  $Logistik]);
+        }
 
-        // $bool = true;
-        // $Logistik = 0;
-        // if ($request->pengiriman == 'ekspedisi') {
-        //     $Logistik = Logistik::create([
-        //         'ekspedisi_id' => $request->ekspedisi_id,
-        //         'nosurat' => 'SPA-' . $request->no_invoice,
-        //         'tgl_kirim' => $request->tgl_kirim,
-        //     ]);
-        // } else {
-        //     $Logistik = Logistik::create([
-        //         'nosurat' => 'SPA-' . $request->no_invoice,
-        //         'tgl_kirim' => $request->tgl_kirim,
-        //         'nama_pengirim' => $request->nama_pengirim,
-        //     ]);
-        // }
-        // for ($i = 0; $i < count($array_produk); $i++) {
-        //     $c = DetailLogistik::create([
-        //         'logistik_id' => $Logistik->id,
-        //         'detail_pesanan_produk_id' => $array_produk[$i],
-        //     ]);
-        //     for ($y = 0; $y < count($k[$i]); $y++) {
-        //         $b = NoseriDetailLogistik::create([
-        //             'detail_logistik_id' => $c->id,
-        //             'detail_pesanan_produk_id' => $k[$i][$y],
-        //         ]);
-        //     }
-        //     if (!$b) {
-        //         $bool = false;
-        //     }
-        // }
-        // if ($bool == true) {
-        //     return response()->json(['data' =>  'success']);
-        // } else {
-        //     return response()->json(['data' =>  'error']);
-        // }
+        if ($bool == true) {
+            return response()->json(['data' =>  'success']);
+        } else {
+            return response()->json(['data' =>  'error']);
+        }
     }
+
     //Dashboard
     public function dashboard()
     {
-        $terbaru = Pesanan::HAs('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
-            $q->where('tgl_uji', '>=', Carbon::now()->subdays(7));
-        })->get()->count();
-        $belum_dikirim = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailLogistik')->get()->count();
-        $lewat_batas_data = Ekatalog::Has('Pesanan.DEtailPesanan.detaillogistik')->get();
+        //     $terbaru = Pesanan::HAs('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
+        //         $q->where('tgl_uji', '>=', Carbon::now()->subdays(7));
+        //     })->get()->count();
+        //     $belum_dikirim = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailLogistik')->get()->count();
+        //     $lewat_batas_data = Ekatalog::Has('Pesanan.DEtailPesanan.detailpesananproduk.detaillogistik')->get();
 
 
-        $tgl_sekarang = Carbon::now()->format('Y-m-d');
-        $lewat_batas = 0;
-        foreach ($lewat_batas_data as $l) {
-            $tgl_parameter = $this->getHariBatasKontrak($l->tgl_kontrak, $l->provinsi->status)->format('Y-m-d');
-            if ($tgl_sekarang > $tgl_parameter) {
-                $lewat_batas++;
-            }
-        }
+        //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
+        //     $lewat_batas = 0;
+        //     foreach ($lewat_batas_data as $l) {
+        //         $tgl_parameter = $this->getHariBatasKontrak($l->tgl_kontrak, $l->provinsi->status)->format('Y-m-d');
+        //         if ($tgl_sekarang > $tgl_parameter) {
+        //             $lewat_batas++;
+        //         }
+        //     }
 
-        return view('page.logistik.dashboard', ['terbaru' => $terbaru, 'belum_dikirim' => $belum_dikirim, 'lewat_batas' => $lewat_batas]);
+        return view('page.logistik.dashboard');
+        // }
     }
-
     public function dashboard_data($value)
     {
-        if ($value == 'terbaru') {
-            $data = Pesanan::HAs('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
-                $q->where('tgl_uji', '>=', Carbon::now()->subdays(7));
-            })->get();
+        // {
+        //     if ($value == 'terbaru') {
+        //         $data = Pesanan::Has('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
+        //             $q->where('tgl_uji', '>=', Carbon::now()->subdays(7));
+        //         })->get();
 
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('so', function ($data) {
-                    return $data->so;
-                })
-                ->addColumn('batas', function ($data) {
-                    $name = explode('/', $data->so);
-                    if ($name[1] == 'EKAT') {
-                        $x =  'ekatalog';
-                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                        $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
-
-
-                        if ($tgl_sekarang < $tgl_parameter) {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
-
-                            if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
-                            } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
-                            } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
-                            }
-                        } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
-                        } else {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
-                        }
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('status', function ($data) {
-                    $y = array();
-                    $count = 0;
-                    foreach ($data->detailpesanan as $d) {
-                        $y[] = $d->id;
-                        $count++;
-                    }
-                    $detail_logistik  = DetailLogistik::whereIN('detail_pesanan_id', $y)->get()->Count();
-
-                    if ($count == $detail_logistik) {
-                        return  '<span class="badge green-text">Sudah Dikirim</span>';
-                    } else {
-                        if ($detail_logistik == 0) {
-                            return ' <span class="badge red-text">Belum Dikirim</span>';
-                        } else {
-                            return  '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                        }
-                    }
-                })
-                ->addColumn('button', function ($data) {
-                    $name = explode('/', $data->so);
-                    $x = $name[1];
-                    if ($x == 'EKAT') {
-                        $y = $data->ekatalog->id;
-                    } elseif ($x == 'SPA') {
-                        $y = $data->spa->id;
-                    } else {
-                        $y = $data->spb->id;
-                    }
-                    return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a href="' . route('logistik.so.detail', [$y, $x]) . '">
-                        <button class="dropdown-item" type="button">
-                            <i class="fas fa-search"></i>
-                            Detail
-                        </button>
-                    </a>
-                </div>';
-                })
-                ->rawColumns(['batas', 'status', 'button'])
-                ->make(true);
-        } else if ($value == 'belum_dikirim') {
-            $data = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailLogistik')->get();
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('so', function ($data) {
-                    return $data->pesanan->so;
-                })
-                ->addColumn('batas', function ($data) {
-                    $name = explode('/', $data->pesanan->so);
-                    if ($name[1] == 'EKAT') {
-                        $x =  'ekatalog';
-                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                        $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+        //         return datatables()->of($data)
+        //             ->addIndexColumn()
+        //             ->addColumn('so', function ($data) {
+        //                 return $data->so;
+        //             })
+        //             ->addColumn('batas', function ($data) {
+        //                 $name = explode('/', $data->so);
+        //                 if ($name[1] == 'EKAT') {
+        //                     $x =  'ekatalog';
+        //                     $tgl_sekarang = Carbon::now()->format('Y-m-d');
+        //                     $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
 
 
-                        if ($tgl_sekarang < $tgl_parameter) {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
+        //                     if ($tgl_sekarang < $tgl_parameter) {
+        //                         $to = Carbon::now();
+        //                         $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+        //                         $hari = $to->diffInDays($from);
 
-                            if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
-                            } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
-                            } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
-                            }
-                        } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
-                        } else {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
-                        }
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('button', function ($data) {
-                    $name = explode('/', $data->pesanan->so);
-                    $x = $name[1];
-                    if ($x == 'EKAT') {
-                        $y = $data->pesanan->ekatalog->id;
-                    } elseif ($x == 'SPA') {
-                        $y = $data->pesanan->spa->id;
-                    } else {
-                        $y = $data->pesanan->spb->id;
-                    }
-                    return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a href="' . route('logistik.so.detail', [$y, $x]) . '">
-                        <button class="dropdown-item" type="button">
-                            <i class="fas fa-search"></i>
-                            Detail
-                        </button>
-                    </a>
-                </div>';
-                })
-                ->rawColumns(['batas', 'button'])
-                ->make(true);
-        } else {
+        //                         if ($hari > 7) {
+        //                             return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+        //                         } else if ($hari > 0 && $hari <= 7) {
+        //                             return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+        //                         } else {
+        //                             return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+        //                         }
+        //                     } elseif ($tgl_sekarang == $tgl_parameter) {
+        //                         return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+        //                     } else {
+        //                         $to = Carbon::now();
+        //                         $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+        //                         $hari = $to->diffInDays($from);
+        //                         return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+        //                     }
+        //                 } else {
+        //                     return '';
+        //                 }
+        //             })
+        //             ->addColumn('status', function ($data) {
+        //                 $y = array();
+        //                 $count = 0;
+        //                 foreach ($data->detailpesanan as $d) {
+        //                     $y[] = $d->id;
+        //                     $count++;
+        //                 }
+        //                 $detail_logistik  = DetailLogistik::whereIN('detail_pesanan_id', $y)->get()->Count();
 
-            $lewat_batas_data = Ekatalog::Has('Pesanan.DEtailPesanan.detaillogistik')->get();
+        //                 if ($count == $detail_logistik) {
+        //                     return  '<span class="badge green-text">Sudah Dikirim</span>';
+        //                 } else {
+        //                     if ($detail_logistik == 0) {
+        //                         return ' <span class="badge red-text">Belum Dikirim</span>';
+        //                     } else {
+        //                         return  '<span class="badge yellow-text">Sebagian Dikirim</span>';
+        //                     }
+        //                 }
+        //             })
+        //             ->addColumn('button', function ($data) {
+        //                 $name = explode('/', $data->so);
+        //                 $x = $name[1];
+        //                 if ($x == 'EKAT') {
+        //                     $y = $data->ekatalog->id;
+        //                 } elseif ($x == 'SPA') {
+        //                     $y = $data->spa->id;
+        //                 } else {
+        //                     $y = $data->spb->id;
+        //                 }
+        //                 return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+        //             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        //                 <a href="' . route('logistik.so.detail', [$y, $x]) . '">
+        //                     <button class="dropdown-item" type="button">
+        //                         <i class="fas fa-search"></i>
+        //                         Detail
+        //                     </button>
+        //                 </a>
+        //             </div>';
+        //             })
+        //             ->rawColumns(['batas', 'status', 'button'])
+        //             ->make(true);
+        //     } else if ($value == 'belum_dikirim') {
+        //         $data = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailLogistik')->get();
+        //         return datatables()->of($data)
+        //             ->addIndexColumn()
+        //             ->addColumn('so', function ($data) {
+        //                 return $data->pesanan->so;
+        //             })
+        //             ->addColumn('batas', function ($data) {
+        //                 $name = explode('/', $data->pesanan->so);
+        //                 if ($name[1] == 'EKAT') {
+        //                     $x =  'ekatalog';
+        //                     $tgl_sekarang = Carbon::now()->format('Y-m-d');
+        //                     $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
 
-            $tgl_sekarang = Carbon::now()->format('Y-m-d');
-            $id = array();
-            foreach ($lewat_batas_data as $l) {
-                $tgl_parameter = $this->getHariBatasKontrak($l->tgl_kontrak, $l->provinsi->status)->format('Y-m-d');
-                if ($tgl_sekarang > $tgl_parameter) {
-                    $id[] = $l->pesanan->id;
-                }
-            }
-            $data = Pesanan::whereIN('id', $id)->get();
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('so', function ($data) {
-                    return $data->so;
-                })
-                ->addColumn('batas', function ($data) {
-                    $name = explode('/', $data->so);
-                    if ($name[1] == 'EKAT') {
-                        $x =  'ekatalog';
-                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                        $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+
+        //                     if ($tgl_sekarang < $tgl_parameter) {
+        //                         $to = Carbon::now();
+        //                         $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+        //                         $hari = $to->diffInDays($from);
+
+        //                         if ($hari > 7) {
+        //                             return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+        //                         } else if ($hari > 0 && $hari <= 7) {
+        //                             return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+        //                         } else {
+        //                             return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+        //                         }
+        //                     } elseif ($tgl_sekarang == $tgl_parameter) {
+        //                         return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+        //                     } else {
+        //                         $to = Carbon::now();
+        //                         $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+        //                         $hari = $to->diffInDays($from);
+        //                         return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+        //                     }
+        //                 } else {
+        //                     return '';
+        //                 }
+        //             })
+        //             ->addColumn('button', function ($data) {
+        //                 $name = explode('/', $data->pesanan->so);
+        //                 $x = $name[1];
+        //                 if ($x == 'EKAT') {
+        //                     $y = $data->pesanan->ekatalog->id;
+        //                 } elseif ($x == 'SPA') {
+        //                     $y = $data->pesanan->spa->id;
+        //                 } else {
+        //                     $y = $data->pesanan->spb->id;
+        //                 }
+        //                 return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+        //             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        //                 <a href="' . route('logistik.so.detail', [$y, $x]) . '">
+        //                     <button class="dropdown-item" type="button">
+        //                         <i class="fas fa-search"></i>
+        //                         Detail
+        //                     </button>
+        //                 </a>
+        //             </div>';
+        //             })
+        //             ->rawColumns(['batas', 'button'])
+        //             ->make(true);
+        //     } else {
+
+        //     $lewat_batas_data = Ekatalog::Has('Pesanan.DEtailPesanan.detaillogistik')->get();
+
+        //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
+        //     $id = array();
+        //     foreach ($lewat_batas_data as $l) {
+        //         $tgl_parameter = $this->getHariBatasKontrak($l->tgl_kontrak, $l->provinsi->status)->format('Y-m-d');
+        //         if ($tgl_sekarang > $tgl_parameter) {
+        //             $id[] = $l->pesanan->id;
+        //         }
+        //     }
+        //     $data = Pesanan::whereIN('id', $id)->get();
+        //     return datatables()->of($data)
+        //         ->addIndexColumn()
+        //         ->addColumn('so', function ($data) {
+        //             return $data->so;
+        //         })
+        //         ->addColumn('batas', function ($data) {
+        //             $name = explode('/', $data->so);
+        //             if ($name[1] == 'EKAT') {
+        //                 $x =  'ekatalog';
+        //                 $tgl_sekarang = Carbon::now()->format('Y-m-d');
+        //                 $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
 
 
-                        if ($tgl_sekarang < $tgl_parameter) {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
+        //                 if ($tgl_sekarang < $tgl_parameter) {
+        //                     $to = Carbon::now();
+        //                     $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+        //                     $hari = $to->diffInDays($from);
 
-                            if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
-                            } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
-                            } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
-                            }
-                        } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
-                        } else {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
-                        }
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('status', function ($data) {
-                    $y = array();
-                    $count = 0;
-                    foreach ($data->detailpesanan as $d) {
-                        $y[] = $d->id;
-                        $count++;
-                    }
-                    $detail_logistik  = DetailLogistik::whereIN('detail_pesanan_id', $y)->get()->Count();
+        //                     if ($hari > 7) {
+        //                         return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+        //                     } else if ($hari > 0 && $hari <= 7) {
+        //                         return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+        //                     } else {
+        //                         return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+        //                     }
+        //                 } elseif ($tgl_sekarang == $tgl_parameter) {
+        //                     return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+        //                 } else {
+        //                     $to = Carbon::now();
+        //                     $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+        //                     $hari = $to->diffInDays($from);
+        //                     return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+        //                 }
+        //             } else {
+        //                 return '';
+        //             }
+        //         })
+        //         ->addColumn('status', function ($data) {
+        //             $y = array();
+        //             $count = 0;
+        //             foreach ($data->detailpesanan as $d) {
+        //                 $y[] = $d->id;
+        //                 $count++;
+        //             }
+        //             $detail_logistik  = DetailLogistik::whereIN('detail_pesanan_id', $y)->get()->Count();
 
-                    if ($count == $detail_logistik) {
-                        return  '<span class="badge green-text">Sudah Dikirim</span>';
-                    } else {
-                        if ($detail_logistik == 0) {
-                            return ' <span class="badge red-text">Belum Dikirim</span>';
-                        } else {
-                            return  '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                        }
-                    }
-                })
-                ->addColumn('button', function ($data) {
-                    $name = explode('/', $data->so);
-                    $x = $name[1];
-                    if ($x == 'EKAT') {
-                        $y = $data->ekatalog->id;
-                    } elseif ($x == 'SPA') {
-                        $y = $data->spa->id;
-                    } else {
-                        $y = $data->spb->id;
-                    }
-                    return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a href="' . route('logistik.so.detail', [$y, $x]) . '">
-                        <button class="dropdown-item" type="button">
-                            <i class="fas fa-search"></i>
-                            Detail
-                        </button>
-                    </a>
-                </div>';
-                })
-                ->rawColumns(['batas', 'status', 'button'])
-                ->make(true);
-        }
+        //             if ($count == $detail_logistik) {
+        //                 return  '<span class="badge green-text">Sudah Dikirim</span>';
+        //             } else {
+        //                 if ($detail_logistik == 0) {
+        //                     return ' <span class="badge red-text">Belum Dikirim</span>';
+        //                 } else {
+        //                     return  '<span class="badge yellow-text">Sebagian Dikirim</span>';
+        //                 }
+        //             }
+        //         })
+        //         ->addColumn('button', function ($data) {
+        //             $name = explode('/', $data->so);
+        //             $x = $name[1];
+        //             if ($x == 'EKAT') {
+        //                 $y = $data->ekatalog->id;
+        //             } elseif ($x == 'SPA') {
+        //                 $y = $data->spa->id;
+        //             } else {
+        //                 $y = $data->spb->id;
+        //             }
+        //             return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+        //         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        //             <a href="' . route('logistik.so.detail', [$y, $x]) . '">
+        //                 <button class="dropdown-item" type="button">
+        //                     <i class="fas fa-search"></i>
+        //                     Detail
+        //                 </button>
+        //             </a>
+        //         </div>';
+        //         })
+        //         ->rawColumns(['batas', 'status', 'button'])
+        //         ->make(true);
+        // }
     }
 
     //Other
@@ -749,15 +1014,15 @@ class LogistikController extends Controller
     {
         $s = "";
         if ($pengiriman == "ekspedisi") {
-            $s = DetailPesanan::whereHas('DetailLogistik.Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
+            $s = DetailLogistik::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
                 $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
         } else if ($pengiriman == "nonekspedisi") {
-            $s = DetailPesanan::whereHas('DetailLogistik.Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
+            $s = DetailLogistik::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
         } else {
-            $s = DetailPesanan::whereHas('DetailLogistik.Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
+            $s = DetailLogistik::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
         }
@@ -765,79 +1030,79 @@ class LogistikController extends Controller
         return datatables()->of($s)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->Pesanan->so;
+                return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
             })
             ->addColumn('sj', function ($data) {
-                return $data->DetailLogistik->Logistik->nosurat;
+                return $data->Logistik->nosurat;
             })
             ->addColumn('invoice', function ($data) {
                 return '-';
             })
             ->addColumn('no_resi', function ($data) {
-                if ($data->DetailLogistik->Logistik->no_resi == "") {
-                    return '-';
-                } else {
-                    return $data->DetailLogistik->Logistik->no_resi;
-                }
+                // if ($data->DetailLogistik->Logistik->no_resi == "") {
+                //     return '-';
+                // } else {
+                //     return $data->DetailLogistik->Logistik->no_resi;
+                // }
             })
             ->addColumn('customer', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->DetailPesananProduk->DetailPesanan->pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->instansi;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
                 } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->Customer->nama;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                 } else {
-                    return $data->Pesanan->Spb->Customer->nama;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                 }
             })
             ->addColumn('alamat', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->DetailPesananProduk->DetailPesanan->pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Customer->alamat;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->alamat;
                 } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->Customer->alamat;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
                 } else {
-                    return $data->Pesanan->Spb->Customer->alamat;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
                 }
             })
             ->addColumn('provinsi', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->DetailPesananProduk->DetailPesanan->pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Provinsi->nama;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama;
                 } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->Customer->Provinsi->nama;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
                 } else {
-                    return $data->Pesanan->Spb->Customer->Provinsi->nama;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
                 }
             })
             ->addColumn('telp', function ($data) {
-                $name = explode('/', $data->pesanan->so);
+                $name = explode('/', $data->DetailPesananProduk->DetailPesanan->pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Customer->telp;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->telp;
                 } elseif ($name[1] == 'SPA') {
-                    return $data->Pesanan->Spa->Customer->telp;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp;
                 } else {
-                    return $data->Pesanan->Spb->Customer->telp;
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp;
                 }
             })
             ->addColumn('ekspedisi', function ($data) {
-                if (!empty($data->DetailLogistik->Logistik->ekspedisi_id)) {
-                    return $data->DetailLogistik->Logistik->Ekspedisi->nama;
+                if (!empty($data->Logistik->ekspedisi_id)) {
+                    return $data->Logistik->Ekspedisi->nama;
                 } else {
-                    return $data->DetailLogistik->Logistik->nama_pengirim;
+                    return $data->Logistik->nama_pengirim;
                 }
             })
             ->addColumn('tgl_kirim', function ($data) {
-                return Carbon::createFromFormat('Y-m-d', $data->DetailLogistik->Logistik->tgl_kirim)->format('d-m-Y');
+                return Carbon::createFromFormat('Y-m-d', $data->Logistik->tgl_kirim)->format('d-m-Y');
             })
             ->addColumn('tgl_selesai', function ($data) {
                 return '-';
             })
             ->addColumn('produk', function ($data) {
-                return $data->PenjualanProduk->nama;
+                return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->jumlah;
+                return $data->NoseriDetailLogistik->count();
             })
             ->addColumn('ongkir', function ($data) {
                 return '0';

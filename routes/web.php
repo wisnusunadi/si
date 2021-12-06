@@ -34,7 +34,7 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::get('/jadwal/{status}', function ($status) {
         return view('spa.ppic.jadwal', ['status' => $status]);
     });
-
+    Route::view('/master_stok/show', 'spa.ppic.master_stok.show');
     //test
     Route::view('/bppb/{any}', 'spa.ppic.bppb');
     Route::view('/test', 'spa.ppic');
@@ -180,7 +180,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/pengiriman'], function () {
         Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
-        Route::view('/detail/{id}', 'page.logistik.pengiriman.detail')->name('logistik.pengiriman.detail');
+        Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_data'])->name('logistik.pengiriman.detail');
         Route::view('/noseri/{id}', 'page.logistik.pengiriman.noseri')->name('logistik.pengiriman.noseri');
         Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
         Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');

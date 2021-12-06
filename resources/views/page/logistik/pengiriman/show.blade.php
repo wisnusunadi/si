@@ -204,7 +204,7 @@
                                                 <th>No</th>
                                                 <th>No SO</th>
                                                 <th>No SJ</th>
-                                                <th>Ekspedisi</th>
+                                                <th>Ekspedisi / Pengirim</th>
                                                 <th>No Resi</th>
                                                 <th>Tanggal Kirim</th>
                                                 <th>Nama Customer</th>
@@ -214,120 +214,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>SO-SPA10210001</td>
-                                                <td>SJ/10/20/2001</td>
-                                                <td class="minimizechar">J&T</td>
-                                                <td><small><i class="text-muted">Belum Tersedia</i></small></td>
-                                                <td>09-10-2021</td>
-                                                <td class="minimizechar">RS Nurul Ikhsan</td>
-                                                <td class="minimizechar">Jawa Barat</td>
-                                                <td><span class="badge blue-text">Dalam Pengiriman</span></td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                        @if(Auth::user()->divisi->id == "15")
-                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'dalam_pengiriman'])}}" data-id="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                                Edit
-                                                            </button>
-                                                        </a>
-                                                        <a href="{{route('logistik.pengiriman.print')}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-file"></i>
-                                                                Laporan PDF
-                                                            </button>
-                                                        </a>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SO-EKAT08210005</td>
-                                                <td>SJ/08/21/0986</td>
-                                                <td class="minimizechar">Safari Dharma Raya</td>
-                                                <td><small><i class="text-muted">Belum Tersedia</i></small></td>
-                                                <td>
-                                                    <div>02-08-2021</div>
-                                                    <div><small><i class="fas fa-exclamation-circle warning"></i> Batas 2 Hari Lagi</small></div>
-                                                </td>
-                                                <td class="minimizechar">Bapak Hutapea</td>
-                                                <td class="minimizechar">Sumatera Utara</td>
-                                                <td>@if(Auth::user()->divisi->id == "15")
-                                                    <a href="" id="pengirimanhref">
-                                                        <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
-                                                        <div><small class="text-muted">Pengiriman</small></div>
-                                                    </a>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                        @if(Auth::user()->divisi->id == "15")
-                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                                Edit
-                                                            </button>
-                                                        </a>
-                                                        @endif
-                                                    </div>
 
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SO-SPB08210005</td>
-                                                <td>SJ/01/20/1927</td>
-                                                <td class="minimizechar">Si Cepat</td>
-                                                <td><small><i class="text-muted">Belum Tersedia</i></small></td>
-                                                <td>
-                                                    <div>02-08-2021</div>
-                                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</div>
-                                                </td>
-                                                <td class="minimizechar">Pemerintah Kab Badung</td>
-                                                <td class="minimizechar">Bali</td>
-                                                <td>
-                                                    @if(Auth::user()->divisi->id == "15")<a href="" id="pengirimanhref">
-                                                        <div class="btn btn-sm btn-outline-primary btn-circle"><i class="fas fa-paper-plane"></i></div>
-                                                        <div><small class="text-muted">Pengiriman</small></div>
-                                                    </a>@endif
-                                                </td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.pengiriman.detail', ['id' => '1'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                        @if(Auth::user()->divisi->id == "15")
-                                                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="{{route('logistik.pengiriman.edit', ['id' => '1', 'status' => 'draft_pengiriman'])}}" data-id="">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                                Edit
-                                                            </button>
-                                                        </a>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -483,39 +370,54 @@
             });
         }
         var showtable = $('#showtable').DataTable({
-            // processing: true,
-            // serverSide: true,
-            // ajax: {
-            //     'url': '/api/customer/detail/' + '1',
-            //     'type': 'POST',
-            //     'headers': {
-            //         'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //     }
-            // },
-            // language: {
-            //     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            // },
-            // columns: [{
-            //         data: 'DT_RowIndex',
-            //         orderable: false,
-            //         searchable: false
-            //     },
-            //     {
-            //         data: 'DT_RowIndex'
-            //     },
-            //     {
-            //         data: 'DT_RowIndex',
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/pengiriman/data',
+                'type': 'GET',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so'
+                },
+                {
+                    data: 'sj',
 
-            //     },
-            //     {
-            //         data: 'DT_RowIndex',
+                },
+                {
+                    data: 'ekspedisi',
 
-            //     },
-            //     {
-            //         data: 'DT_RowIndex',
+                },
+                {
+                    data: 'no_resi',
 
-            //     }
-            // ]
+                }, {
+                    data: 'tgl_kirim',
+
+                }, {
+                    data: 'nama_customer',
+
+                }, {
+                    data: 'provinsi',
+
+                }, {
+                    data: 'status',
+
+                }, {
+                    data: 'button',
+
+                }
+            ]
         });
 
     });
