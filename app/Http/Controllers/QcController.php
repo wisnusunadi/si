@@ -369,9 +369,12 @@ class QcController extends Controller
     public function detail_so($id, $value)
     {
         if ($value == 'ekatalog') {
-            $data = Ekatalog::where('id', $id)->get();
-            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
-                $q->where('ekatalog.id', $id);
+            $data = Ekatalog::wherehas('Pesanan', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->get();
+
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan', function ($q) use ($id) {
+                $q->where('id', $id);
             })->get();
 
             $jumlah = 0;
@@ -429,50 +432,17 @@ class QcController extends Controller
             }
             return view('page.qc.so.detail_ekatalog', ['data' => $data, 'detail_id' => $detail_id, 'param' => $param, 'status' => $status]);
         } elseif ($value == 'spa') {
-            $data = Spa::where('id', $id)->get();
-            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
-                $q->where('spa.id', $id);
+            $data = Spa::whereHas('Pesanan', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->get();
+
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan', function ($q) use ($id) {
+                $q->where('id', $id);
             })->get();
 
             $jumlah = 0;
             $z = array();
             $detail_id = array();
-
-            foreach ($detail_pesanan as $d) {
-                $detail_id[] = $d->id;
-                $z[] = $d->jumlah;
-                foreach ($d->penjualanproduk->produk as $l) {
-                    $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
-                }
-            }
-
-            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_id)->get();
-            $y = array();
-            foreach ($detail_pesanan_produk as $d) {
-                $y[] = $d->id;
-            }
-            $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
-
-            if ($jumlah == $jumlah_seri) {
-                $status =  '<span class="badge green-text">Selesai</span>';
-            } else {
-                if ($jumlah_seri == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    $status = '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                }
-            }
-            return view('page.qc.so.detail_spa', ['data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
-        } else {
-            $data = Spb::where('id', $id)->get();
-            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
-                $q->where('spb.id', $id);
-            })->get();
-
-            $jumlah = 0;
-            $z = array();
-            $detail_id = array();
-
             foreach ($detail_pesanan as $d) {
                 $detail_id[] = $d->id;
                 $z[] = $d->jumlah;
@@ -497,7 +467,44 @@ class QcController extends Controller
                     $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
                 }
             }
-            return view('page.qc.so.detail_spb', ['data' => $data, 'detail_id' => $detail_id, 'status' => $status]);
+            return view('page.qc.so.detail_spa', ['data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
+        } else {
+            $data = Spb::whereHas('Pesanan', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->get();
+
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->get();
+
+            $jumlah = 0;
+            $z = array();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+                $z[] = $d->jumlah;
+                foreach ($d->penjualanproduk->produk as $l) {
+                    $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                }
+            }
+
+            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_id)->get();
+            $y = array();
+            foreach ($detail_pesanan_produk as $d) {
+                $y[] = $d->id;
+            }
+            $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
+
+            if ($jumlah == $jumlah_seri) {
+                $status =  '<span class="badge green-text">Selesai</span>';
+            } else {
+                if ($jumlah_seri == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                }
+            }
+            return view('page.qc.so.detail_spb', ['data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
         }
     }
 
@@ -510,6 +517,7 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc($seri_id, $tfgbj_id, $pesanan_id, $produk_id, Request $request)
     {
+
         $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
             $q->where('Pesanan_id', $pesanan_id);
         })->where('gudang_barang_jadi_id', $produk_id)->first();
@@ -517,7 +525,7 @@ class QcController extends Controller
         $replace_array_seri = strtr($seri_id, array('[' => '', ']' => ''));
         $array_seri = explode(',', $replace_array_seri);
 
-        //  return response()->json(['data' =>  count($array_seri)]);
+        // //  return response()->json(['data' =>  count($array_seri)]);
 
         $bool = true;
         for ($i = 0; $i < count($array_seri); $i++) {
@@ -541,11 +549,11 @@ class QcController extends Controller
                     $bool = false;
                 }
             }
-            if ($bool == true) {
-                return response()->json(['data' =>  'success']);
-            } else {
-                return response()->json(['data' =>  'error']);
-            }
+        }
+        if ($bool == true) {
+            return response()->json(['data' =>  'success']);
+        } else {
+            return response()->json(['data' =>  'error']);
         }
     }
     //Dashboard 

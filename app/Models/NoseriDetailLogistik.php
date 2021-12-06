@@ -18,4 +18,8 @@ class NoseriDetailLogistik extends Model
     {
         return $this->belongsto(NoseriDetailPesanan::class, 'noseri_detail_pesanan_id');
     }
+    public function NoseriCoo()
+    {
+        return $this->hasOne(NoseriCoo::class);
+    }
 }

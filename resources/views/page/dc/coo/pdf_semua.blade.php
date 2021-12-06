@@ -1,5 +1,9 @@
 <head>
     <style>
+        .page-break {
+            page-break-after: always;
+        }
+
         /* body {
             margin-left: 90px;
             margin-right: 90px;
@@ -89,22 +93,28 @@
     </style>
 </head>
 
-<body>
 
+<body>
+    <?php
+    if ($count > 1) {
+        echo ' <div class="page-break">';
+    } else {
+        echo '<div>';
+    }
+    ?>
+    @foreach($data as $d)
     <div class="header">
         <table border="0" style="border-collapse: collapse; text-align:right;width:625px" class="table">
             <tbody>
                 <tr>
                     <td style="width:52.3%;"></td>
                     <td class="veramd align-center" style="width:47.7%;">
-                        <h3>{{$data->id}} / SKA / {{$romawi}} / SPA / {{$tahun}}</h3>
+                        <h3> {{$d->id}}/ SKA / {{App\Http\Controllers\DcController::bulan_romawi($d->Noserilogistik->DetailLogistik->logistik->tgl_kirim)}} / SPA / {{App\Http\Controllers\DcController::tahun($d->Noserilogistik->DetailLogistik->logistik->tgl_kirim)}} </h3>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-
     <div class="body">
         <table border="0" style="border-collapse: collapse; text-align:center;" class="table" width="100%">
             <tbody>
@@ -131,8 +141,8 @@
                         <td class="nospace vera"><b>Kementrian Kesehatan Nomor</b></td>
                         <td class="nospace vera"><b>:</b></td>
                         <td class="wb vera"><b>KEMENKES RI AKD
-                                @if ($data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '')
-                                {{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd}}
+                                @if ($d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '')
+                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd}}
                                 @endif
                             </b></td>
                     </tr>
@@ -158,8 +168,8 @@
                             <td class="nospace trheight">Nama Produk</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                @if ($data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '')
-                                {{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo}}
+                                @if ($d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '')
+                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo}}
                                 @endif
                             </td>
                         </tr>
@@ -167,19 +177,25 @@
                             <td style="width:2%"></td>
                             <td class="nospace trheight">Tipe</td>
                             <td class="nospace align-center"> : </td>
-                            <td class="wb">{{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama}}</td>
+                            <td class="wb">
+                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama}}
+                            </td>
                         </tr>
                         <tr class="vera bold">
                             <td style="width:2%"></td>
                             <td class="nospace trheight">Nomor Seri</td>
                             <td class="nospace align-center"> : </td>
-                            <td class="wb">{{$data->Noserilogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}</td>
+                            <td class="wb">
+                                {{$d->Noserilogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
+                            </td>
                         </tr>
                         <tr class="vera bold">
                             <td style="width:2%"></td>
                             <td class="nospace trheight">Merk Produk</td>
                             <td class="nospace align-center"> : </td>
-                            <td class="wb">{{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->merk}}</td>
+                            <td class="wb">
+                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->merk}}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -200,7 +216,9 @@
                     </tr>
                     <tr>
                         <td class="wb">
-                            <b>{{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b>
+                            <b>
+                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}
+                            </b>
                         </td>
                     </tr>
                 </tbody>
@@ -220,11 +238,15 @@
                         <td style="height:3px"></td>
                     </tr>
                     <tr>
-                        <td class="wb"><b>{{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket}}</b></td>
+                        <td class="wb"><b>
+                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket}}
+                            </b></td>
                     </tr>
                     <tr style="min-height: 20px; max-height: 65px;">
                         <td class="wb">
-                            <b class="font-size:auto;">{{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->deskripsi}}</b>
+                            <b class="font-size:auto;">
+                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->deskripsi}}
+                            </b>
                         </td>
                     </tr>
                 </tbody>
@@ -249,7 +271,8 @@
                 <tbody>
                     <tr>
                         <td width="50%"></td>
-                        <td class="align-center">Surabaya, {{$footer}}</td>
+                        <td class="align-center">Surabaya, {{App\Http\Controllers\DcController::tgl_footer($d->Noserilogistik->DetailLogistik->logistik->tgl_kirim)}}
+                        </td>
                     </tr>
                     <tr>
                         <td width="50%"></td>
@@ -262,20 +285,20 @@
                     <tr>
                         <td width="50%"></td>
                         <td class="align-center"><b><u>
-                                    @if(empty($data->nama))
+                                    @if(empty($d->nama))
                                     Kusmardiana Rahayu
                                     @else
-                                    {{$data->nama}}
+                                    {{$d->nama}}
                                     @endif
                                 </u></b></td>
                     </tr>
                     <tr>
                         <td width="50%"></td>
                         <td class="align-center">
-                            @if(empty($data->nama))
+                            @if(empty($d->nama))
                             Q.A. Manager
                             @else
-                            {{$data->jabatan}}
+                            {{$d->jabatan}}
                             @endif
                         </td>
                     </tr>
@@ -283,4 +306,6 @@
             </table>
         </div>
     </div>
+    </div>
+    @endforeach
 </body>

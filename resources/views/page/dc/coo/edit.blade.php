@@ -5,26 +5,34 @@
                 <h5 class="filter">Info</h5>
                 <div class="filter">
                     <div><small class="text-muted">Nama Produk</small></div>
-                    <div><b>-</b></div>
+                    <div><b>
+                            @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama == '')
+                            {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->nama}}
+                            @else
+                            {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama}}
+                            @endif</b></div>
                 </div>
                 <div class="filter">
                     <div><small class="text-muted">No AKD</small></div>
-                    <div><b>-</b></div>
+                    <div><b>
+                            @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd != '')
+                            {{ $data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd}}
+                            @endif
+                        </b></div>
                 </div>
                 <div class="filter">
                     <div><small class="text-muted">Jumlah</small></div>
-                    <div><b>-</b></div>
+                    <div><b>{{$jumlah}}</b></div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="col-8">
-        <form action="" id="form-create-coo">
+        <form action="/api/dc/so/create/{{$noseri_id}}" id="form-create-coo" method="POST">
             <div class="card">
                 <div class="card-body">
                     <div class="form-horizontal">
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Bulan</label>
                             <div class="col-3">
                                 <select class="form-control bulan_edit col-form-label" name="bulan" id="bulan">
@@ -43,7 +51,7 @@
                                     <option value="XII">Desember</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Diketahui Oleh</label>
                             <div class="col-5 col-form-label">
@@ -70,24 +78,26 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <table class="table table-bordered" style="width: 100%; text-align:center;">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>No Seri</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
+                            <div class="col-12">
+                                <table class="table" style="width: 100%; text-align:center;" id="listnoseri">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No Seri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr>
                                         <td>1</td>
                                         <td>FX358085238401</td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
                                         <td>FX358085238390</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

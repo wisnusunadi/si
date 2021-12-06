@@ -161,7 +161,6 @@
                                     <th>Nama</th>
                                     <th>No AKD</th>
                                     <th>Bulan</th>
-                                    <th>Jumlah</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -220,9 +219,13 @@
                 <div class="card-body">
                     <div>
                         <h5 style="display: inline;" class="filter">No Seri</h5>
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal float-right" data-attr="" data-id="1">
-                            <button type="button" class="btn btn-sm btn-warning disabled" id="btnedit"><i class="fas fa-pencil-alt"></i> COO</button>
-                        </a>
+                        <span class="float-right filter">
+                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                                <button class="btn btn-warning" id="cekbrg" disabled="true">
+                                    <i class="fas fa-pencil-alt"></i> COO
+                                </button>
+                            </a>
+                        </span>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped" style="text-align: center; width:100%;" id="noseritable">
@@ -326,44 +329,162 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             columns: [{
-                data: 'DT_RowIndex',
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'tgl_surat',
+                },
+                {
+                    data: 'nama_paket',
+                },
+                {
+                    data: 'no_akd',
+                }, {
+                    data: 'bulan',
+                }, {
+                    data: 'status',
+                }, {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+
+
+        $('#noseritable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/dc/so/detail/seri/' + 0,
+
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'checkbox',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
-            }, ]
+            }, {
+                data: 'nocoo',
+
+            }, {
+                data: 'noseri',
+
+            }, {
+                data: 'diket',
+
+            }, {
+                data: 'laporan',
+
+            }]
         });
-        $('#noseritable').on('change', 'input[name="check_all"]', function() {
+
+        function listnoseri(seri_id, data) {
+
+            $('#listnoseri').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/dc/so/detail/seri/select/' + seri_id + '/' + data,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'noseri'
+                }]
+            });
+        }
+
+        var checkedAry = [];
+        $('#noseritable').on('click', 'input[name="check_all"]', function() {
             if ($('input[name="check_all"]:checked').length > 0) {
-                $('input[name="no_seri_id[]"]').prop('checked', true);
-                $('#btnedit').removeClass('disabled');
+                $('#cekbrg').prop('disabled', false);
+                $('.nosericheck').prop('checked', true);
+                checkedAry = []
+                checkedAry.push('0');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('input[name="no_seri_id[]"]').prop('checked', false);
-                $('#btnedit').addClass('disabled', true);
+                $('.nosericheck').prop('checked', false);
+                $('#cekbrg').prop('disabled', true);
             }
         });
 
-        $('#noseritable').on('change', 'input[name="no_seri_id[]"]', function() {
-            if (!($(this).is(':checked'))) {
-                $('input[name="check_all"]').prop('checked', false);
-                if ($('input[name="no_seri_id[]"]:checked').length <= 0) {
-                    $('#btnedit').addClass('disabled', true);
-                }
-            } else {
-                $('#btnedit').removeClass('disabled');
-                if ($('input[name="no_seri_id[]"]').length == $('input[name="no_seri_id[]"]:checked').length) {
-                    $('input[name="check_all"]').prop('checked', true);
-                } else {
-                    $('input[name="check_all"]').prop('checked', false);
-                }
+        $('#noseritable ').on('click', '.nosericheck', function() {
+            if ($('.nosericheck:checked').length > 0) {
+                $('#cekbrg').prop('disabled', false);
+                checkedAry = [];
+                $.each($(".nosericheck:checked"), function() {
+                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
+            } else if ($('.nosericheck:checked').length <= 0) {
+                $('#cekbrg').prop('disabled', true);
             }
-        })
+        });
 
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseri').removeClass('hide');
-            console.log(data);
+            $('#noseritable').DataTable().ajax.url('/api/dc/so/detail/seri/' + data).load();
+            //  console.log(data);
+        });
+
+
+        $(document).on('submit', '#form-create-coo', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-create-coo').serialize(),
+                success: function(response) {
+                    //   alert(response);
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Penambahan Data Pengujian',
+                            'success'
+                        ).then(function() {
+                            location.reload();
+                        });
+                        $("#editmodal").modal('hide');
+                        //$('#noseritable').DataTable().ajax.reload();
+
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Penambahan Data Pengujian',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-create-coo').serialize());
+                }
+            });
+            return false;
         });
 
         $(document).on('click', '.createmodal', function(event) {
@@ -399,10 +520,11 @@
 
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
-            var href = $(this).attr('data-attr');
+            console.log(checkedAry);
+            data = $(".nosericheck").data().value;
             var id = $(this).data('id');
             $.ajax({
-                url: "/dc/coo/edit/" + id,
+                url: "/dc/coo/edit/" + checkedAry + "/" + data,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -414,6 +536,7 @@
                         placeholder: 'Pilih Bulan',
                         allowClear: true
                     });
+                    listnoseri(checkedAry, data);
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {
