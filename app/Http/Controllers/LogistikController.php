@@ -457,9 +457,9 @@ class LogistikController extends Controller
             })
             ->addColumn('ekspedisi', function ($data) {
                 if (!empty($data->ekspedisi_id)) {
-                    $data->ekspedisi->nama;
+                    return $data->ekspedisi->nama;
                 } else {
-                    $data->nama_pengirim;
+                    return $data->nama_pengirim;
                 }
             })
             ->addColumn('no_resi', function ($data) {
@@ -942,7 +942,7 @@ class LogistikController extends Controller
         //                         return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
         //                     }
         //                 } elseif ($tgl_sekarang == $tgl_parameter) {
-        //                     return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+        //                     return  '<div>' . $tgl_parameter . '</div><small cla\ss="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
         //                 } else {
         //                     $to = Carbon::now();
         //                     $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);

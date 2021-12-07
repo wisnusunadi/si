@@ -862,6 +862,7 @@ class PenjualanController extends Controller
             $pesanan = Pesanan::create([
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
+                'log_id' => '7'
             ]);
             $x = $pesanan->id;
 
@@ -872,7 +873,7 @@ class PenjualanController extends Controller
                 'no_paket' => 'AK1-' . $request->no_paket,
                 'deskripsi' => $request->deskripsi,
                 'instansi' => $request->instansi,
-                'alamat' => $request->alamat,
+                'alamat' => $request->alamatinstansi,
                 'satuan' => $request->satuan_kerja,
                 'status' => $request->status,
                 'tgl_kontrak' => $request->batas_kontrak,
@@ -918,23 +919,22 @@ class PenjualanController extends Controller
             } else if ($bool == false) {
                 return redirect()->back()->with('error', 'Gagal menambahkan Ekatalog');
             }
-        } elseif ($request->jenis_penjualan == 'spa') {
-            if (!empty($request->input('no_po'))) {
-                $pesanan = Pesanan::create([
-                    'so' => $this->createSO('SPA'),
-                    'no_po' => $request->no_po,
-                    'tgl_po' => $request->tanggal_po,
-                    'no_do' => $request->no_do,
-                    'tgl_do' => $request->tanggal_do,
-                    'ket' =>  $request->keterangan,
-                ]);
-                $x = $pesanan->id;
-            }
+        } else if ($request->jenis_penjualan == 'spa') {
+            $pesanan = Pesanan::create([
+                'so' => $this->createSO('SPA'),
+                'no_po' => $request->no_po,
+                'tgl_po' => $request->tanggal_po,
+                'no_do' => $request->no_do,
+                'tgl_do' => $request->tanggal_do,
+                'ket' =>  $request->keterangan,
+                'log_id' => '9'
+            ]);
+            $x = $pesanan->id;
             $Spa = Spa::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
                 'ket' => $request->keterangan,
-                'log' => 'penjualan'
+                'log' => 'po'
             ]);
             $bool = true;
             if ($Spa) {
@@ -949,7 +949,7 @@ class PenjualanController extends Controller
                     if (!$dspa) {
                         $bool = false;
                     } else {
-                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                        for ($j = 0; $j < count(array($request->variasi[$i])); $j++) {
                             $dspap = DetailPesananProduk::create([
                                 'detail_pesanan_id' => $dspa->id,
                                 'gudang_barang_jadi_id' => $request->variasi[$i][$j]
@@ -970,24 +970,22 @@ class PenjualanController extends Controller
                 return redirect()->back()->with('error', 'Gagal menambahkan SPA');
             }
         } else {
-
-            if (!empty($request->input('no_po'))) {
-                $pesanan = Pesanan::create([
-                    'so' => $this->createSO('SPB'),
-                    'no_po' => $request->no_po,
-                    'tgl_po' => $request->tanggal_po,
-                    'no_do' => $request->no_do,
-                    'tgl_do' => $request->tanggal_do,
-                    'ket' =>  $request->keterangan,
-                ]);
-                $x = $pesanan->id;
-            }
+            $pesanan = Pesanan::create([
+                'so' => $this->createSO('SPB'),
+                'no_po' => $request->no_po,
+                'tgl_po' => $request->tanggal_po,
+                'no_do' => $request->no_do,
+                'tgl_do' => $request->tanggal_do,
+                'ket' =>  $request->keterangan,
+                'log_id' => '9'
+            ]);
+            $x = $pesanan->id;
 
             $Spb = Spb::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
                 'ket' => $request->keterangan,
-                'log' => 'penjualan'
+                'log' => 'po'
             ]);
             $bool = true;
             if ($Spb) {
@@ -1076,6 +1074,7 @@ class PenjualanController extends Controller
             $p->no_do = $request->no_do;
             $p->tgl_do = $request->tanggal_do;
             $p->ket = $request->keterangan;
+            $p->log_id = "9";
             $pes = $p->save();
             if (!$pes) {
                 $bool = false;
@@ -1198,8 +1197,8 @@ class PenjualanController extends Controller
     }
     public function update_spa(Request $request, $id)
     {
-        echo json_encode($request->all());
         $spa = Spa::find($id);
+        $poid = $spa->pesanan_id;
         $spa->customer_id = $request->customer_id;
         $uspa = $spa->save();
         $bool = true;
@@ -1210,7 +1209,6 @@ class PenjualanController extends Controller
             $pesanan->ket = $request->keterangan;
             $po = $pesanan->save();
             if ($po) {
-                $poid = $spa->pesanan_id;
 
                 $dspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                     $q->where('pesanan_id', $poid);
@@ -1274,6 +1272,7 @@ class PenjualanController extends Controller
     public function update_spb(Request $request, $id)
     {
         $spb = Spb::find($id);
+        $poid = $spb->pesanan_id;
         $spb->customer_id = $request->customer_id;
         $uspb = $spb->save();
         $bool = true;
@@ -1285,8 +1284,6 @@ class PenjualanController extends Controller
             $po = $pesanan->save();
 
             if ($po) {
-                $poid = $spb->pesanan_id;
-
                 $dspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                     $q->where('pesanan_id', $poid);
                 })->get();
@@ -1818,5 +1815,16 @@ class PenjualanController extends Controller
         }
         $no = 'SO/' . $value . '/' . $this->getMonth() . '/' . $this->getYear() . '/' . ($max_number + 1) . '';
         return $no;
+    }
+
+    public function check_no_paket($id, $val)
+    {
+        if ($id != "0") {
+            $e = Ekatalog::where('no_paket', 'AK1-' . $val)->whereNotIn('id', [$id])->count();
+            return response()->json(['data' => $e]);
+        } else {
+            $e = Ekatalog::where('no_paket', 'AK1-' . $val)->count();
+            return response()->json(['data' => $e]);
+        }
     }
 }

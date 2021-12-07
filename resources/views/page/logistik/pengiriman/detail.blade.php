@@ -135,7 +135,7 @@
                                     <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
                                             {{$l->Ekspedisi->nama}}
                                             @else
-                                            {{$l->Ekspedisi->nama_pengirim}}
+                                            {{$l->nama_pengirim}}
                                             @endif
                                         </b></div>
                                 </div>
@@ -211,7 +211,7 @@
                                     <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
                                             {{$l->Ekspedisi->nama}}
                                             @else
-                                            {{$l->Ekspedisi->nama_pengirim}}
+                                            {{$l->nama_pengirim}}
                                             @endif
                                         </b></div>
                                 </div>
@@ -287,7 +287,7 @@
                                     <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
                                             {{$l->Ekspedisi->nama}}
                                             @else
-                                            {{$l->Ekspedisi->nama_pengirim}}
+                                            {{$l->nama_pengirim}}
                                             @endif
                                         </b></div>
                                 </div>

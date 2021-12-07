@@ -103,7 +103,7 @@
                                             <div id="no_po">
                                                 <b>
                                                     @if($e->Pesanan)
-                                                    @if(empty($e->Pesanan->tgl_po) || $e->Pesanan->tgl_po != "0000-00-00")
+                                                    @if(empty($e->Pesanan->tgl_po) || $e->Pesanan->tgl_po == "0000-00-00")
                                                     -
                                                     @else
                                                     {{$e->Pesanan->tgl_po}}
@@ -347,7 +347,7 @@
                                                                                     <div>
                                                                                         <div class="card-body blue-bg">
                                                                                             <h6>{{$g->GudangBarangJadi->Produk->nama}}</h6>
-                                                                                            <select class="form-control variasi" name="variasi[{{$produkpenjualan}}][{{$variasi}}]" style="width:100%;" data-attr="{{$produkpenjualan}}{{$variasi}}" data-id="{{$variasi}}">
+                                                                                            <select class="form-control variasi" name="variasi[{{$produkpenjualan}}][{{$variasi}}]" style="width:100%;" data-attr="variasi{{$variasi}}" data-id="{{$variasi}}">
                                                                                                 <option value="{{$g->GudangBarangJadi->id}}">
 
                                                                                                     @if(!empty($g->GudangBarangJadi->nama))
@@ -357,7 +357,7 @@
                                                                                                     @endif
                                                                                                 </option>
                                                                                             </select>
-                                                                                            <span class=" invalid-feedback d-block ketstok" name="ketstok[{{$produkpenjualan}}][{{$variasi}}]" id="ketstok{{$produkpenjualan}}{{$variasi}}" data-attr="{{$produkpenjualan}}{{$variasi}}" data-id="{{$variasi}}"></span>
+                                                                                            <span class=" invalid-feedback d-block ketstok" name="ketstok[{{$produkpenjualan}}][{{$variasi}}]" id="ketstok{{$produkpenjualan}}{{$variasi}}" data-attr="ketstok{{$variasi}}" data-id="{{$variasi}}"></span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <?php $variasi = $variasi + 1; ?>
@@ -619,11 +619,12 @@
                 $(el).find('.penjualan_produk_id').attr('id', j);
                 var variasi = $(el).find('.variasi');
                 for (var k = 0; k < variasi.length; k++) {
-                    $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
-                    $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
-                    $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
-                    $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
+                    $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
+                    $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
+                    $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
+                    $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
                 }
+
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
@@ -815,8 +816,8 @@
                             tes.append(`<div>`);
                             tes.append(`<div class="card-body blue-bg">
                                         <h6>` + res[0].produk[x].nama + `</h6>
-                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" data-attr="` + index + `` + x + `" data-id="` + x + `"></select>
-                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="` + index + `` + x + `" data-id="` + x + `"></span>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" data-attr="variasi` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
                                       </div>`);
                             if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
                                 data.push({

@@ -162,6 +162,11 @@
                                             <div class="col-7">
                                                 <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
                                                 </select>
+                                                <div class="invalid-feedback" id="msgprovinsi">
+                                                    @if($errors->has('provinsi'))
+                                                    {{ $errors->first('provinsi')}}
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -491,7 +496,7 @@
                                 </a>
                             </span>
                             <span class="float-right">
-                                <button type="submit" class="btn btn-info" id="btntambah">
+                                <button type="submit" class="btn btn-info" id="btntambah" disabled="true">
                                     Tambah
                                 </button>
                             </span>
@@ -508,6 +513,16 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        $("#tanggal_pemesanan").attr("max", today);
+        $("#batas_kontrak").attr("min", today);
+        $("#tanggal_po").attr("max", today);
+        $("#tanggal_do").attr("min", today);
         select_data();
         // $('#customer_id').on('keyup change', function() {
         //     if ($(this).val() != "") {
@@ -543,16 +558,39 @@
             $('#btntambah').attr("disabled", true);
         }
 
+        function checkvalidasi() {
+            if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+                $('#btntambah').removeAttr("disabled");
+            } else {
+                $('#btntambah').attr("disabled", true);
+            }
+        }
 
-        $('#tanggal_pemesanan').on('keyup', function() {
-            if ($(this).val() != "") {
-                $("#msgtanggal_pemesanan").text("");
-                $("#tanggal_pemesanan").removeClass('is-invalid');
-                if ($("#instansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+        function checkvalidasinonakn() {
+            if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
+                if ($("#no_po").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
+            } else if ($('input[type="radio"][name="do"]:checked').val() == "no") {
+                if ($("#no_po").val() != "" && $("#tanggal_po").val() != "") {
+                    $('#btntambah').removeAttr("disabled");
+                } else {
+                    $('#btntambah').attr("disabled", true);
+                }
+            } else {
+                $('#btntambah').attr("disabled", true);
+            }
+        }
+
+
+        $('#tanggal_pemesanan').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#batas_kontrak").attr("min", $(this).val());
+                $("#msgtanggal_pemesanan").text("");
+                $("#tanggal_pemesanan").removeClass('is-invalid');
+                checkvalidasi();
             } else if ($(this).val() == "") {
                 $("#msgtanggal_pemesanan").text("Isi Tanggal Pemesanan");
                 $("#tanggal_pemesanan").addClass('is-invalid');
@@ -587,44 +625,60 @@
             if ($(this).val() == "yes") {
                 $("#do_detail_no").removeClass("hide");
                 $("#do_detail_tgl").removeClass("hide");
+                checkvalidasinonakn();
             } else if ($(this).val() == "no") {
-                if ($("#no_po").val() != "" && $("#tanggal_po").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
-                } else {
-                    $('#btntambah').attr("disabled", true);
-                }
                 $("#do_detail_no").addClass("hide");
                 $("#do_detail_tgl").addClass("hide");
+                checkvalidasinonakn();
             }
         });
 
-        $('#batas_kontrak').on('keyup', function() {
+        $('#batas_kontrak').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgbatas_kontrak").text("");
                 $("#batas_kontrak").removeClass('is-invalid');
-                if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#deskripsi").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
-                } else {
-                    $('#btntambah').attr("disabled", true);
-                }
+                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#deskripsi").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
+                checkvalidasi();
             } else if ($(this).val() == "") {
                 $("#msgbatas_kontrak").text("Batas Kontrak Harus diisi");
                 $("#batas_kontrak").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
         });
-        $('#instansi').on('keyup', function() {
+        $('#instansi').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msginstansi").text("");
                 $("#instansi").removeClass('is-invalid');
-                if ($("#tanggal_pemesanan").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
-                } else {
-                    $('#btntambah').attr("disabled", true);
-                }
+                // if ($("#tanggal_pemesanan").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
+                checkvalidasi();
             } else if ($(this).val() == "") {
                 $("#msginstansi").text("Instansi Harus diisi");
                 $("#instansi").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
+            }
+        });
+
+        $('#alamatinstansi').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#msgalamatinstansi").text("");
+                $("#alamatinstansi").removeClass('is-invalid');
+                // if ($("#tanggal_pemesanan").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
+                checkvalidasi();
+            } else if ($(this).val() == "") {
+                $("#msgalamatinstansi").text("Alamat Instansi Harus diisi");
+                $("#alamatinstansi").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
         });
@@ -639,12 +693,13 @@
                 } else {
                     $("#dataproduk").removeClass("hide");
                 }
-                if ($("#tanggal_pemesanan").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#instansi").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
 
-                } else {
-                    $('#btntambah').attr("disabled", true);
-                }
+                checkvalidasi();
+                // if ($("#tanggal_pemesanan").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#instansi").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
             } else {
                 $("#msgstatus").text("Status Harus dipilih");
                 $("#status").addClass('is-invalid');
@@ -656,13 +711,15 @@
             if ($(this).val() != "") {
                 $("#msgsatuan_kerja").text("");
                 $("#satuan_kerja").removeClass('is-invalid');
-                if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
-                } else {
-                    $('#btntambah').attr("disabled", true);
-                }
+
+                checkvalidasi();
+                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
             } else if ($(this).val() == "") {
-                $("#msginstansi").text("Satuan Kerja Harus diisi");
+                $("#msgsatuan_kerja").text("Satuan Kerja Harus diisi");
                 $("#satuan_kerja").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
@@ -672,52 +729,102 @@
             if ($(this).val() != "") {
                 $("#msgdeskripsi").text("");
                 $("#deskripsi").removeClass('is-invalid');
-                if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
-                } else {
-                    $('#btntambah').attr("disabled", true);
-                }
+                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
+
+                checkvalidasi();
             } else if ($(this).val() == "") {
                 $("#msgdeskripsi").text("Deskripsi harus diisi");
                 $("#deskripsi").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
         });
-        $('#no_paket').on('keyup', function() {
-            if ($(this).val() != "") {
-                $("#msgno_paket").text("");
-                $("#no_paket").removeClass('is-invalid');
-                if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
-                } else {
-                    $('#btntambah').attr("disabled", true);
+
+        function check_no_paket(values) {
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '/api/penjualan/check_no_paket/' + '0/' + values,
+                success: function(data) {
+                    return data.data;
+                },
+                error: function(data) {
+                    return values;
                 }
+            });
+        }
+
+
+        $('#no_paket').on('keyup change', function() {
+            if ($(this).val() != "") {
+                var values = $(this).val();
+                // if (check_no_paket(values) > 0) {
+                //     $("#msgno_paket").text("No Paket tidak boleh sama");
+                //     $("#no_paket").addClass('is-invalid');
+                //     $('#btntambah').attr("disabled", true);
+                // } else {
+                //     $("#msgno_paket").text("");
+                //     $("#no_paket").removeClass('is-invalid');
+                //     checkvalidasi();
+                // }
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '/api/penjualan/check_no_paket/' + '0/' + values,
+                    success: function(data) {
+                        if (data.data > 0) {
+                            $("#msgno_paket").text("No Paket telah digunakan");
+                            $("#no_paket").addClass('is-invalid');
+                            $('#btntambah').attr("disabled", true);
+                        } else {
+                            $("#msgno_paket").text("");
+                            $("#no_paket").removeClass('is-invalid');
+                            checkvalidasi();
+                        }
+                    },
+                    error: function(data) {
+                        return values;
+                    }
+                });
+
+                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
+
+
             } else if ($(this).val() == "") {
                 $("#msgno_paket").text("No Paket harus diisi");
                 $("#no_paket").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
         });
-        $('#no_po').on('keyup', function() {
+        $('#no_po').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgno_po").text("");
                 $("#no_po").removeClass('is-invalid');
-                if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
-                        $('#btntambah').removeAttr("disabled");
-                    } else {
-                        $('#btntambah').attr("disabled", true);
-                    }
-                } else {
+                checkvalidasinonakn();
+                // if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
+                //     if ($("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                //         $('#btntambah').removeAttr("disabled");
+                //     } else {
+                //         $('#btntambah').attr("disabled", true);
+                //     }
+                // } else {
 
-                    if ($("#tanggal_po").val() != "") {
-                        $('#btntambah').removeAttr("disabled");
-                    } else {
+                //     if ($("#tanggal_po").val() != "") {
+                //         $('#btntambah').removeAttr("disabled");
+                //     } else {
 
-                        $('#btntambah').attr("disabled", true);
-                    }
-                }
+                //         $('#btntambah').attr("disabled", true);
+                //     }
+                // }
             } else if ($(this).val() == "") {
+                $('#btntambah').attr("disabled", true);
                 $("#msgno_po").text("Nomor PO Harus diisi");
                 $("#no_po").addClass('is-invalid');
             }
@@ -727,40 +834,45 @@
             if ($(this).val() != "") {
                 $("#msgtanggal_po").text("");
                 $("#tanggal_po").removeClass('is-invalid');
-                if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                    if ($("#no_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
-                        $('#btntambah').removeAttr("disabled");
-                    } else {
-                        $('#btntambah').attr("disabled", true);
-                    }
-                } else {
-                    if ($("#no_po").val() != "") {
+                $("#tanggal_do").attr("min", $(this).val());
+                checkvalidasinonakn();
+                // if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
+                //     if ($("#no_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                //         $('#btntambah').removeAttr("disabled");
+                //     } else {
+                //         $('#btntambah').attr("disabled", true);
+                //     }
+                // } else {
+                //     if ($("#no_po").val() != "") {
 
-                        $('#btntambah').removeAttr("disabled");
-                    } else {
+                //         $('#btntambah').removeAttr("disabled");
+                //     } else {
 
-                        $('#btntambah').attr("disabled", true);
-                    }
-                }
+                //         $('#btntambah').attr("disabled", true);
+                //     }
+                // }
             } else if ($(this).val() == "") {
+                $('#btntambah').attr("disabled", true);
                 $("#msgtanggal_po").text("Tanggal PO Harus diisi");
                 $("#tanggal_po").addClass('is-invalid');
             }
         });
 
-        $('#no_do').on('keyup', function() {
+        $('#no_do').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgno_do").text("");
                 $("#no_do").removeClass('is-invalid');
-                if ($("#tanggal_po").val() != "" && $("#tanggal_do").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
-                } else {
-                    $('#btntambah').attr("disabled", true);
-                }
+                checkvalidasinonakn();
+                // if ($("#tanggal_po").val() != "" && $("#tanggal_do").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
 
             } else if ($(this).val() == "") {
-                $("#msgno_po").text("Nomor Do Harus diisi");
-                $("#no_po").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
+                $("#msgno_do").text("Nomor Do Harus diisi");
+                $("#no_do").addClass('is-invalid');
             }
         });
 
@@ -768,12 +880,14 @@
             if ($(this).val() != "") {
                 $("#msgtanggal_do").text("");
                 $("#tanggal_do").removeClass('is-invalid');
-                if ($("#no_po").val() != "" && $("#no_do").val() != "") {
-                    $('#btntambah').removeAttr("disabled");
-                } else {
-                    $('#btntambah').attr("disabled", true);
-                }
+                checkvalidasinonakn();
+                // if ($("#no_po").val() != "" && $("#no_do").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
             } else if ($(this).val() == "") {
+                $('#btntambah').attr("disabled", true);
                 $("#msgtanggal_do").text("Tanggal DO Harus diisi");
                 $("#tanggal_do").addClass('is-invalid');
             }
@@ -794,7 +908,6 @@
                     }
                 },
                 processResults: function(data) {
-                    console.log(data);
                     return {
                         results: $.map(data, function(obj) {
                             return {
@@ -812,7 +925,6 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data);
                     $('#alamat').val(data[0].alamat);
                     $('#telepon').val(data[0].telp);
                 }
@@ -890,14 +1002,12 @@
             }).change(function(i) {
                 var index = $(this).attr('id');
                 var id = $(this).val();
-                console.log(index);
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
                     dataType: 'json',
                     success: function(res) {
                         $('#produk_harga' + index).val(formatmoney(res[0].harga));
-                        console.log(res);
                         var tes = $('#detail_produk' + index);
                         tes.empty();
                         var datas = "";
@@ -907,8 +1017,8 @@
                             tes.append(`<div>`);
                             tes.append(`<div class="card-body blue-bg">
                                         <h6>` + res[0].produk[x].nama + `</h6>
-                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" data-attr="` + index + `` + x + `" data-id="` + x + `"></select>
-                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="` + index + `` + x + `" data-id="` + x + `"></span>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
                                       </div>`);
                             if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
                                 data.push({
@@ -927,7 +1037,6 @@
                                     });
                                 }
                             }
-                            console.log(data);
                             $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
                                 placeholder: 'Pilih Variasi',
                                 data: data,
@@ -956,7 +1065,7 @@
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
                 var subtotal = replaceAll($(this).val(), '.', '');
-                console.log(subtotal);
+                // console.log(subtotal);
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
@@ -1040,10 +1149,15 @@
                 $(el).find('.penjualan_produk_id').attr('id', j);
                 var variasi = $(el).find('.variasi');
                 for (var k = 0; k < variasi.length; k++) {
-                    $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
-                    $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
-                    $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
-                    $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
+                    $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
+                    $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
+                    // var idk = $(el).find('.ketstok').attr('data-attr');
+                    $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
+                    $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
+                    // $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
+                    // $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
+                    // $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
+                    // $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
@@ -1217,7 +1331,6 @@
                     }
                 },
                 processResults: function(data) {
-                    console.log(data);
                     return {
                         results: $.map(data, function(obj) {
                             return {
@@ -1228,7 +1341,23 @@
                     };
                 },
             }
-        })
+        }).change(function() {
+            if ($(this).val() != "") {
+                $("#msgprovinsi").text("");
+                $("#provinsi").removeClass('is-invalid');
+                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "") {
+                //     $('#btntambah').removeAttr("disabled");
+                // } else {
+                //     $('#btntambah').attr("disabled", true);
+                // }
+
+                checkvalidasi();
+            } else if ($(this).val() == "") {
+                $("#msgprovinsi").text("Provinsi harus diisi");
+                $("#provinsi").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
+            }
+        });
     });
 </script>
 @stop

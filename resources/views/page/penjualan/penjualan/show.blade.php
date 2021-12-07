@@ -653,7 +653,6 @@
                                                     <th>Nomor SO</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal Order</th>
-                                                    <th>Batas Kontrak</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -786,7 +785,6 @@
                                                     <th>Nomor SO</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal Order</th>
-                                                    <th>Batas Kontrak</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -996,9 +994,6 @@
                     data: 'tglpo'
                 },
                 {
-                    data: 'tglpo'
-                },
-                {
                     data: 'nama_customer'
                 },
                 {
@@ -1034,9 +1029,6 @@
                 },
                 {
                     data: 'nopo'
-                },
-                {
-                    data: 'tglpo'
                 },
                 {
                     data: 'tglpo'
