@@ -236,7 +236,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/logistik/ekspedisi/data/',
+                'url': '/api/logistik/ekspedisi/data/',
 
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
