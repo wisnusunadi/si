@@ -127,8 +127,8 @@
                                         <table class="table table-hover add_sparepart_table">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th style="width: 200px">Nama Produk</th>
-                                                    <th style="width: 200px">Unit</th>
+                                                    <th style="width: 150px">Nama Produk</th>
+                                                    <th style="width: 150px">Unit</th>
                                                     <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -159,7 +159,7 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th style="width: 220px">Nama Produk</th>
-                                                    <th>Jumlah</th>
+                                                    <th style="width: 180px">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -433,10 +433,10 @@
         var yyyy = today.getFullYear();
         if(dd<10){
         dd='0'+dd
-        } 
+        }
         if(mm<10){
         mm='0'+mm
-        } 
+        }
 
         today = yyyy+'-'+mm+'-'+dd;
         document.getElementById("datePicker").setAttribute("max", today);
@@ -446,6 +446,11 @@
     var k = 0;
     var ii = 0;
     var kk = 0;
+
+    const seri = {};
+    const seri_unit = {};
+    let spr_arr = [];
+    let unit_arr = [];
     function addSparepart(x) {
 
         $('.modalAddSparepart').modal('show');
@@ -453,9 +458,9 @@
         $('.scan-produk1 tbody').empty();
         for (let index = 0; index < x; index++) {
             ii++;
-           $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri[]" class="form-control seri_spr"></td><td><input type="text" name="remark[]" id="remark[]" class="form-control"></td><td><select name="tk_kerusakan[]" id="tk_kerusakan[]" class="form-control"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select></td></tr>');
+           $('.scan-produk1 tbody').append('<tr id="row'+ii+'"><td><input type="text" name="noseri[]['+ii+']" id="noseri'+ii+'" class="form-control seri_spr"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[]['+ii+']" id="remark'+ii+'" class="form-control remark_spr"></td><td><select name="tk_kerusakan[]['+ii+']" id="tk_kerusakan'+ii+'" class="form-control tk_spr"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select></td></tr>');
         }
-        $('.scan-produk1').DataTable({
+        var tableScan = $('.scan-produk1').DataTable({
             "ordering": false,
             "autoWidth": false,
             searching: false,
@@ -464,6 +469,67 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+
+        $(document).on('click','#btnSpr', function (e) {
+            e.preventDefault();
+
+                let arr = [];
+                const data = tableScan.$('.seri_spr').map(function() {
+                    return $(this).val();
+                }).get();
+
+                data.forEach(function(item) {
+                    if (item != '') {
+                        arr.push(item);
+                    }
+                })
+
+                const count = arr =>
+                    arr.reduce((a, b) => ({ ...a,
+                        [b]: (a[b] || 0) + 1
+                    }), {})
+
+                    const duplicates = dict =>
+                    Object.keys(dict).filter((a) => dict[a] > 1)
+
+                    if (duplicates(count(arr)).length > 0) {
+                                $('.seri_spr').filter(function () {
+                                    return $(this).val() == duplicates(count(arr))[0];
+                                }).addClass('is-invalid');
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                                })
+                    }else{
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            // console.log("test tbody")
+                            // console.log($('.scan-produk1 tbody tr'))
+                            // const spr_arr = []
+                            $('.scan-produk1 tbody tr').each((index, value) => {
+                                const obj = {
+                                    noseri: value.childNodes[0].firstChild.value,
+                                    kerusakan: value.childNodes[1].firstChild.value,
+                                    tingkat: value.childNodes[2].firstChild.value,
+                                }
+
+                                spr_arr.push(obj);
+                            })
+                            seri[id] = spr_arr;
+                            spr_arr = [];
+                            console.log(seri)
+                            $('.modalAddSparepart').modal('hide');
+                        })
+
+                    }
+        });
     }
 
     function addUnit(x) {
@@ -471,9 +537,10 @@
         $('.scan-produk').DataTable().destroy();
         $('.scan-produk tbody').empty();
         for (let index = 0; index < x; index++) {
-           $('.scan-produk tbody').append('<tr><td><input type="text" name="noseri[]" id="noseri[]" class="form-control"></td><td><input type="text" name="remark[]" id="remark[]" class="form-control"></td><td><select name="tk_kerusakan[]" id="tk_kerusakan[]" class="form-control"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select></td></tr>');
+            k++;
+           $('.scan-produk tbody').append('<tr id="u'+kk+'"><td><input type="text" name="noseri[]['+kk+']" id="noseri'+kk+'" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[]['+kk+']" id="remark'+kk+'" class="form-control"></td><td><select name="tk_kerusakan[]['+kk+']" id="tk_kerusakan'+kk+'" class="form-control"><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select></td></tr>');
         }
-        $('.scan-produk').DataTable({
+        var tableScan = $('.scan-produk').DataTable({
             "ordering": false,
             "autoWidth": false,
             searching: false,
@@ -481,6 +548,64 @@
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
+        });
+
+        $(document).on('click','#btnUnit', function (e) {
+            e.preventDefault();
+
+                let arr = [];
+                const data = tableScan.$('.seri').map(function() {
+                    return $(this).val();
+                }).get();
+
+                data.forEach(function(item) {
+                    if (item != '') {
+                        arr.push(item);
+                    }
+                })
+
+                const count = arr =>
+                    arr.reduce((a, b) => ({ ...a,
+                        [b]: (a[b] || 0) + 1
+                    }), {})
+
+                    const duplicates = dict =>
+                    Object.keys(dict).filter((a) => dict[a] > 1)
+
+                    if (duplicates(count(arr)).length > 0) {
+                                $('.seri').filter(function () {
+                                    return $(this).val() == duplicates(count(arr))[0];
+                                }).addClass('is-invalid');
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                                })
+                    }else{
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            $('.scan-produk tbody tr').each((index, value) => {
+                                const obj1 = {
+                                    noseri: value.childNodes[0].firstChild.value,
+                                    kerusakan: value.childNodes[1].firstChild.value,
+                                    tingkat: value.childNodes[2].firstChild.value,
+                                }
+
+                                unit_arr.push(obj1);
+                            })
+                            seri_unit[idd] = unit_arr;
+                            unit_arr = [];
+                            console.log(seri_unit)
+                            $('.modalAddUnit').modal('hide');
+                        })
+
+                    }
         });
     }
     var x = '';
@@ -493,9 +618,12 @@
         console.log(x);
         addSparepart(x);
     })
+    var idd = '';
     $(document).on('click', '#btnPlus', function() {
         var tr = $(this).closest('tr');
         var x = tr.find('#jum').val();
+        idd = tr.find('#gbj_id').val();
+        console.log(idd);
         console.log(x);
         addUnit(x);
     })
@@ -535,7 +663,7 @@
             }
         });
         k++;
-        let table_unit = '<tr id="'+k+'"><td><select name="gbj_id[]" id="gbj_id[]" class="form-control produkk"></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr id="'+k+'"><td><select name="gbj_id[]" id="gbj_id" class="form-control produkk"></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('.produk').select2();
     });
@@ -595,103 +723,84 @@
             let to = $('.dari').val();
             let tujuan = $('#tujuan_tf').val();
 
-            let spr = [];
-            let unit = [];
-            let qty = [];
-
             console.log(out);
             console.log(to);
             console.log(tujuan);
 
+            const spr1 = [];
+            const jml = [];
+            const unit1 = [];
+            const jum = [];
 
-            // Swal.fire({
-            //     title: "Apakah anda yakin?",
-            //     text: "Data yang sudah di transfer tidak dapat diubah!",
-            //     icon: "warning",
-            //     buttons: true,
-            //     dangerMode: true,
-            //     showCancelButton: true,
-            // }).then((success) => {
-            //     if (success) {
-            //         Swal.fire(
-            //             'Data berhasil di transfer!',
-            //             '',
-            //             'success'
-            //         );
-            //         setTimeout(() => {
-            //             location.reload();
-            //         }, 1000);
-            //     }else{
-            //         Swal.fire(
-            //             'Data gagal di transfer!',
-            //             '',
-            //             'error'
-            //         );
-            //         setTimeout(() => {
-            //             location.reload();
-            //         }, 1000);
-            //     }
+            $('select[name^="sparepart_id"]').each(function() {
+                spr1.push($(this).val());
+            });
+
+            $('input[name^="qty_spr"]').each(function() {
+                jml.push($(this).val());
+            });
+
+            // $('input[name^="noseri"]').each(function() {
+            //     spr.push(seri_spr.push(seri1));
             // });
+
+            $('select[name^="gbj_id"]').each(function() {
+                unit1.push($(this).val());
+            });
+
+            $('input[name^="qty_unit"]').each(function() {
+                jum.push($(this).val());
+            });
+
+            Swal.fire({
+                title: "Apakah anda yakin?",
+                text: "Data yang sudah di transfer tidak dapat diubah!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+            }).then((success) => {
+                if (success) {
+                    Swal.fire(
+                        'Data berhasil di transfer!',
+                        '',
+                        'success'
+                    );
+                    $.ajax({
+                        url: "/api/gk/out-final",
+                        type: "post",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            date_out : out,
+                            ke: to,
+                            deskripsi : tujuan,
+                            sparepart_id : spr1,
+                            qty_spr: jml,
+                            noseri : seri,
+                            gbj_id : unit1,
+                            qty_unit: jum,
+                            seriunit : seri_unit,
+                        },
+                        success: function(res) {
+                            console.log(res);
+                        },
+                    })
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }else{
+                    Swal.fire(
+                        'Data gagal di transfer!',
+                        '',
+                        'error'
+                    );
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
+            });
         });
     }
-
-    const spr = {};
-    const sprr = {};
-    const sprrr = {};
-
-    const unit = {};
-    const unitt = {};
-    const unittt = {};
-    // const jml = [];
-    var t = 0;
-
-    $(document).on('click', '#btnUnit', function(e) {
-        console.log('unit');
-
-        const seri_unit = [];
-        const rusak_unit = [];
-        const tk_unit = [];
-
-        $('input[name^="noseri"]').each(function() {
-            seri_unit.push($(this).val());
-        });
-        unit[id] = seri_unit;
-
-        $('input[name^="remark"]').each(function() {
-            rusak_unit.push($(this).val());
-        });
-        unit[id] = rusak_unit;
-
-        $('select[name^="tk_kerusakan"]').each(function() {
-            tk_unit.push($(this).val());
-        });
-        unit[id] = tk_unit;
-    })
-
-    $(document).on('click', '#btnSpr', function(e) {
-        console.log('ok');
-
-        const seri = [];
-        const rusak = [];
-        const tk = [];
-
-        $('input[name^="noseri"]').each(function() {
-            seri.push($(this).val());
-        });
-        spr[id] = seri;
-
-        $('input[name^="remark"]').each(function() {
-            rusak.push($(this).val());
-        });
-        spr[id] = rusak;
-
-        $('select[name^="tk_kerusakan"]').each(function() {
-            tk.push($(this).val());
-        });
-        spr[id] = tk;
-        console.log(seri);
-        t++;
-    });
 
     $(document).on('click', '.simpan', function () {
         let out = $('#datePicker').val();
@@ -728,57 +837,54 @@
             jum.push($(this).val());
         });
 
-        $.ajax({
-            url: "/api/gk/out-draft",
-            type: "post",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                date_out : out,
-                ke: to,
-                deskripsi : tujuan,
-                sparepart_id : spr1,
-                qty_spr: jml,
-                noseri : spr,
-                // remark : sprr,
-                // tk_spr : sprrr,
-                gbj_id : unit1,
-                qty_unit: jum,
-                seri_u: unit,
-                // re_unit: unitt,
-                // tk_unit: unittt,
-            },
-            success: function(res) {
-                console.log(res);
-            },
-        })
-        // Swal.fire({
-        //     title: "Apakah anda yakin?",
-        //     text: "Data yang sudah di rancangan tidak dapat diubah!",
-        //     icon: "warning",
-        //     buttons: true,
-        //     dangerMode: true,
-        //     showCancelButton: true,
-        // }).then((success) => {
-        //     if (success) {
-        //         Swal.fire(
-        //             'Data berhasil di rancangan!',
-        //             '',
-        //             'success'
-        //         );
-        //         setTimeout(() => {
-        //             location.reload();
-        //         }, 1000);
-        //     }else{
-        //         Swal.fire(
-        //             'Data gagal di rancangan!',
-        //             '',
-        //             'error'
-        //         );
-        //         setTimeout(() => {
-        //             location.reload();
-        //         }, 1000);
-        //     }
-        // });
+
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di rancangan tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((success) => {
+            if (success) {
+                Swal.fire(
+                    'Data berhasil di rancangan!',
+                    '',
+                    'success'
+                );
+                $.ajax({
+                    url: "/api/gk/out-draft",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        date_out : out,
+                        ke: to,
+                        deskripsi : tujuan,
+                        sparepart_id : spr1,
+                        qty_spr: jml,
+                        noseri : seri,
+                        gbj_id : unit1,
+                        qty_unit: jum,
+                        seriunit : seri_unit,
+                    },
+                    success: function(res) {
+                        console.log(res);
+                    },
+                })
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }else{
+                Swal.fire(
+                    'Data gagal di rancangan!',
+                    '',
+                    'error'
+                );
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        });
     });
 
     function modalRancang() {
@@ -788,8 +894,6 @@
         $(document).on('click', '.remove', function () {
             $(this).parent().parent().remove();
         });
-
-
     }
     function batal() {
         Swal.fire({

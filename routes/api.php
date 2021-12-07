@@ -273,6 +273,7 @@ Route::prefix('/gk')->group(function() {
 
     // store
     Route::post('/out-draft', [SparepartController::class, 'transfer_by_draft']);
+    Route::post('/out-final', [SparepartController::class, 'transfer_by_final']);
 
     // history trx
     Route::prefix('/transaksi')->group(function () {

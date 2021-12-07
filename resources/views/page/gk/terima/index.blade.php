@@ -134,8 +134,8 @@
                                         <table class="table table-hover add_sparepart_table">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th style="width: 180px">Nama Produk</th>
-                                                    <th style="width: 180px">Unit</th>
+                                                    <th style="width: 150px">Nama Produk</th>
+                                                    <th style="width: 150px">Unit</th>
                                                     <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -165,8 +165,8 @@
                                         <table class="table table-hover add_unit_table">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th style="width: 180px">Nama Produk</th>
-                                                    <th>Jumlah</th>
+                                                    <th style="width: 220px">Nama Produk</th>
+                                                    <th style="width: 180px">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -280,7 +280,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="btnSeri" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>
@@ -367,7 +367,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="btnAddUnit" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>
@@ -397,9 +397,10 @@
             $('.scan-produk1').DataTable().destroy();
             $('.scan-produk1 tbody').empty();
             for (let index = 0; index < x; index++) {
-            $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri[]" id="noseri" maxlength="13" class="form-control"></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+            $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri[]" id="noseri" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
             }
-            $('.scan-produk1').DataTable({
+            var tableScan = $('.scan-produk1').DataTable({
+                "destroy": true,
                 "ordering": false,
                 "autoWidth": false,
                 searching: false,
@@ -414,6 +415,52 @@
                 $(this).next('.form-control').focus();
                 }
             });
+
+            $(document).on('click', '#btnSeri', function(e) {
+                e.preventDefault();
+
+                let arr = [];
+                const data = tableScan.$('.seri').map(function() {
+                    return $(this).val();
+                }).get();
+
+                data.forEach(function(item) {
+                    if (item != '') {
+                        arr.push(item);
+                    }
+                })
+
+                const count = arr =>
+                    arr.reduce((a, b) => ({ ...a,
+                        [b]: (a[b] || 0) + 1
+                    }), {})
+
+                    const duplicates = dict =>
+                    Object.keys(dict).filter((a) => dict[a] > 1)
+                
+                    if (duplicates(count(arr)).length > 0) {
+                                $('.seri').filter(function () {
+                                    return $(this).val() == duplicates(count(arr))[0];
+                                }).addClass('is-invalid');
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                                })
+                    }else{
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            $('.modalAddSparepart').modal('hide');
+                        })
+
+                    }
+            });
         }
 
         function addUnit(x) {
@@ -421,9 +468,9 @@
             $('.scan-produk').DataTable().destroy();
             $('.scan-produk tbody').empty();
             for (let index = 0; index < x; index++) {
-            $('.scan-produk tbody').append('<tr><td><input type="text" class="form-control"></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+            $('.scan-produk tbody').append('<tr><td><input type="text" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
             }
-            $('.scan-produk').DataTable({
+            var tableUnit = $('.scan-produk').DataTable({
                 "ordering": false,
                 "autoWidth": false,
                 searching: false,
@@ -431,6 +478,51 @@
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 }
+            });
+
+            $(document).on('click', '#btnAddUnit', function(e) {
+                e.preventDefault();
+
+                let arr = [];
+                const data = tableUnit.$('.seri').map(function() {
+                    return $(this).val();
+                }).get();
+
+                data.forEach(function(item) {
+                    if (item != '') {
+                        arr.push(item);
+                    }
+                })
+
+                const count = arr =>
+                    arr.reduce((a, b) => ({ ...a,
+                        [b]: (a[b] || 0) + 1
+                    }), {})
+
+                    const duplicates = dict =>
+                    Object.keys(dict).filter((a) => dict[a] > 1)
+                
+                    if (duplicates(count(arr)).length > 0) {
+                                $('.seri').filter(function () {
+                                    return $(this).val() == duplicates(count(arr))[0];
+                                }).addClass('is-invalid');
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                                })
+                    }else{
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            $('.modalAddUnit').modal('hide');
+                        })
+                    }
             });
         }
 

@@ -889,7 +889,7 @@
         $('.scan-produk1').DataTable().destroy();
         $('.scan-produk1 tbody').empty();
         let a = 0;
-        for (let index = 0; index < x; index++) {
+        for (let index = 0; index < x; index++) { 
             a++;
            $('.scan-produk1 tbody').append('<tr id="row'+a+'"><td><input type="checkbox" class="cb-child"  value="'+y+'"></td><td><input type="text" name="noseri_id[]['+a+']" id="noseri_id['+a+']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id['+a+']" id="layout_id['+a+']" class="form-control layout"></select></td></tr>');
         }
@@ -940,7 +940,9 @@
                     title: 'Nomor seri tersimpan',
                     showConfirmButton: false,
                     timer: 1500
-                });
+                }).then(function() {
+                    $('.tambahan-perakitan').modal('hide');
+                })
                 nose = [];
                 lay = [];
 
@@ -958,7 +960,6 @@
                 seri[y] = nose;
                 layout[y] = lay;
                 // console.log(cb);
-                $('.tambahan-perakitan').modal('hide');
             }
 
         
