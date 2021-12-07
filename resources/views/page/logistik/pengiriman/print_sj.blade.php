@@ -60,7 +60,7 @@
 
     div.footer {
         position: fixed;
-        bottom: 90px;
+        bottom: 20px;
         left: 0px;
         right: 0px;
         height: auto;
