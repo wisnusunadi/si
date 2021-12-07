@@ -134,7 +134,7 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div><span class="badge yellow-text">Sebagian Diperiksa</span></div>
+                                    <div id="status">{!!$status!!}</div>
                                 </div>
                             </div>
                             <div class="col-3">
@@ -443,7 +443,10 @@
                             'success'
                         );
                         $("#editmodal").modal('hide');
-                        $('#noseritable').DataTable().ajax.reload();
+                        // $('#noseritable').DataTable().ajax.reload();
+                        // $('#showtable').DataTable().ajax.reload();
+
+                        location.reload();
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
@@ -458,7 +461,6 @@
             });
             return false;
         });
-
         var noseritable = $('#noseritable').DataTable({
             processing: true,
             serverSide: true,
@@ -495,7 +497,6 @@
         });
 
         function listnoseri(seri_id, produk_id, tfgbj_id) {
-
             $('#listnoseri').DataTable({
                 processing: true,
                 serverSide: true,
@@ -546,7 +547,6 @@
                 $('#cekbrg').prop('disabled', true);
             }
         });
-
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             data = $(".nosericheck").data().value;

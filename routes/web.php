@@ -215,8 +215,9 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
         Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
         Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
-        Route::view('/edit/{id}', 'page.dc.coo.edit')->name('dc.coo.edit');
-        Route::get('/pdf', [App\Http\Controllers\DcController::class, 'pdf_coo'])->name('dc.coo.pdf');
+        Route::get('/edit/{id}/{Value}', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
+        Route::get('/pdf/semua/{id}', [App\Http\Controllers\DcController::class, 'pdf_semua_coo'])->name('dc.coo.semua.pdf');
+        Route::get('/pdf/{id}', [App\Http\Controllers\DcController::class, 'pdf_seri_coo'])->name('dc.seri.coo.pdf');
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.dc.laporan.show')->name('dc.coo.laporan.show');
         });

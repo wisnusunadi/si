@@ -446,7 +446,8 @@
                             'success'
                         );
                         $("#editmodal").modal('hide');
-                        $('#noseritable').DataTable().ajax.reload();
+                        //$('#noseritable').DataTable().ajax.reload();
+                        location.reload();
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
@@ -570,6 +571,7 @@
                     $('#edit').html(result).show();
                     listnoseri(checkedAry, data, idtrf);
                     // $("#editform").attr("action", href);
+
                 },
                 complete: function() {
                     $('#loader').hide();

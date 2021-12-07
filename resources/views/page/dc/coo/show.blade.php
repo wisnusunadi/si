@@ -77,7 +77,7 @@
                                             <th>Laporan</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>30031</td>
                                                 <td>MTB2390193</td>
@@ -151,7 +151,7 @@
                                                         <i class="fas fa-file"></i>
                                                     </a>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -167,7 +167,44 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#showtable').DataTable({});
+        $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/dc/data/',
+                'type': 'GET',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'kosong'
+            }, {
+                data: 'seri'
+            }, {
+                data: 'so'
+            }, {
+                data: 'no_paket'
+            }, {
+                data: 'nama_produk'
+            }, {
+                data: 'noakd'
+            }, {
+                data: 'bulan'
+            }, {
+                data: 'tgl_sj'
+            }, {
+                data: 'laporan'
+            }]
+        });
     });
 </script>
 @stop
