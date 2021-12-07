@@ -155,8 +155,6 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
-
-
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
         Route::get('/detail/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
@@ -185,7 +183,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');
         Route::view('/edit/{id}', 'page.logistik.pengiriman.edit')->name('logistik.pengiriman.edit');
         Route::get('/edit/{id}/{status}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');
-        Route::get('/print', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
+        Route::get('/print/{id}', [App\Http\Controllers\LogistikController::class, 'pdf_surat_jalan'])->name('logistik.pengiriman.print');
         Route::group(['prefix' => '/riwayat'], function () {
             Route::view('/show', 'page.logistik.pengiriman.riwayat.show')->name('logistik.riwayat.show');
         });
@@ -228,6 +226,7 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'page.as.dashboard')->name('as.dashboard');
 
     Route::group(['prefix' => '/so'], function () {
+        Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so'])->name('as.so.show');
         Route::view('/show', 'page.as.so.show')->name('as.so.show');
         Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
     });
