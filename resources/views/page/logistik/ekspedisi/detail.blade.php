@@ -188,6 +188,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        console.log("{{$e->id}}");
         var showtable = $('#showtable').DataTable({
             processing: true,
             serverSide: true,

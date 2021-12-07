@@ -60,7 +60,7 @@
 
     div.footer {
         position: fixed;
-        bottom: 90px;
+        bottom: 20px;
         left: 0px;
         right: 0px;
         height: auto;
@@ -165,7 +165,20 @@
                     </tr>
                     <tr>
                         <td colspan="4"></td>
-                        <td colspan="4" class="wb">031793321217</td>
+                        <td colspan="4" class="wb">
+                            <?php
+                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+
+                            if ($name[1] == 'EKAT') {
+                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->telp;
+                            } else if ($name[1] == 'SPA') {
+                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp;
+                            } else {
+                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp;
+                            }
+
+                            ?>
+                        </td>
                     </tr>
                 </tbody>
             </table>
