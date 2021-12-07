@@ -205,7 +205,6 @@ class DcController extends Controller
                     $value[] = $d->id;
                 }
                 $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
-
                 if ($coo == 0) {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

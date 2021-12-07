@@ -18,15 +18,16 @@ use App\Models\TFProduksiDetail;
 use App\Models\NoseriTGbj;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Carbon;
-
 use function PHPUnit\Framework\returnSelf;
 
 class LogistikController extends Controller
 {
-    public function pdf_surat_jalan()
+    public function pdf_surat_jalan($id)
     {
+        $data = Logistik::where('id', $id)->get();
+        $data_produk = DetailLogistik::where('logistik_id', $id)->get();
         $customPaper = array(0, 0, 684.8094, 792.9372);
-        $pdf = PDF::loadView('page.logistik.pengiriman.print_sj')->setPaper($customPaper);
+        $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
         return $pdf->stream('');
     }
     public function get_data_select_produk($detail_produk, $pesanan_id)
@@ -53,7 +54,6 @@ class LogistikController extends Controller
                     $q->where('id', $id);
                 })->get();
                 $jumlahpesanan = 0;
-
                 foreach ($detail_pesanan as $j) {
                     foreach ($j->PenjualanProduk->Produk as $k) {
                         // echo $k->id . " dengan " . $i->GudangBarangJadi->produk_id . ". ";
@@ -346,7 +346,6 @@ class LogistikController extends Controller
     public function get_data_so()
     {
         $data = Pesanan::Has('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->get();
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -508,7 +507,7 @@ class LogistikController extends Controller
                             Edit
                         </button>
                     </a>
-                    <a href="' . route('logistik.pengiriman.print') . '">
+                    <a href="' . route('logistik.pengiriman.print', ['id' => $data->id]) . '" target="_blank">
                         <button class="dropdown-item" type="button">
                             <i class="fas fa-file"></i>
                             Laporan PDF
@@ -1112,5 +1111,11 @@ class LogistikController extends Controller
             })
             ->rawColumns(['status'])
             ->make(true);
+    }
+
+    public function tgl_footer($value)
+    {
+        $footer = Carbon::createFromFormat('Y-m-d', $value)->isoFormat('D MMMM Y');
+        return $footer;
     }
 }

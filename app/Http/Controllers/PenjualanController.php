@@ -32,11 +32,9 @@ class PenjualanController extends Controller
     //Get Data Table
     public function penjualan_data()
     {
-        // $data  = Ekatalog::all();
-
-        $Ekatalog = collect(Ekatalog::with('Pesanan')->get());
-        $Spa = collect(Spa::with('Pesanan')->get());
-        $Spb = collect(Spb::with('Pesanan')->get());
+        $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+        $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+        $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         return datatables()->of($data)
@@ -510,9 +508,9 @@ class PenjualanController extends Controller
         $data = "";
 
         if ($value == 0 || $value == 'kosong') {
-            $data  = Ekatalog::with('pesanan', 'customer')->get();
+            $data  = Ekatalog::with('pesanan', 'customer')->orderBy('id', 'DESC')->get();
         } else {
-            $data  = Ekatalog::with('pesanan', 'customer')->whereIN('status', $x);
+            $data  = Ekatalog::with('pesanan', 'customer')->orderBy('id', 'DESC')->whereIN('status', $x);
         }
 
 
@@ -639,7 +637,7 @@ class PenjualanController extends Controller
     }
     public function get_data_spa()
     {
-        $data  = Spa::with('pesanan')->get();
+        $data  = Spa::with('pesanan')->orderBy('id', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -733,7 +731,7 @@ class PenjualanController extends Controller
     }
     public function get_data_spb()
     {
-        $data  = Spb::with('pesanan')->get();
+        $data  = Spb::with('pesanan')->orderBy('id', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -869,11 +867,12 @@ class PenjualanController extends Controller
 
             $Ekatalog = Ekatalog::create([
                 'customer_id' => $request->customer_id,
+                'provinsi_id' => $request->provinsi,
+                'pesanan_id' => $x,
                 'no_paket' => 'AK1-' . $request->no_paket,
                 'deskripsi' => $request->deskripsi,
-                'pesanan_id' => $x,
-                'provinsi_id' => $request->provinsi,
                 'instansi' => $request->instansi,
+                'alamat' => $request->alamat,
                 'satuan' => $request->satuan_kerja,
                 'status' => $request->status,
                 'tgl_kontrak' => $request->batas_kontrak,
@@ -1772,7 +1771,7 @@ class PenjualanController extends Controller
         $belum_so = Ekatalog::whereNull('pesanan_id')->get()->count();
         $so_belum_gudang = Pesanan::DoesntHave('TFProduksi')->get()->count();
         $so_belum_qc = TFProduksi::Has('Pesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get()->count();
-        $so_belum_logistik = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailLogistik')->get()->count();
+        $so_belum_logistik = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananProduk.DetailLogistik')->get()->count();
         return view('page.penjualan.dashboard', ['belum_so' => $belum_so, 'so_belum_gudang' => $so_belum_gudang, 'so_belum_qc' => $so_belum_qc, 'so_belum_logistik' => $so_belum_logistik]);
     }
 

@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
 use Alert;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
+use App\Models\DetailPesananProduk;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -39,7 +40,7 @@ class MasterController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->detaillogistik->detailpesanan->pesanan->so;
+                return $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so;
             })
             ->addColumn('sj', function ($data) {
                 return $data->nosurat;
@@ -48,57 +49,57 @@ class MasterController extends Controller
                 return $data->tgl_kirim;
             })
             ->addColumn('nama_customer', function ($data) {
-                $name = explode('/', $data->detaillogistik->detailpesanan->pesanan->so);
+                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return   $data->detaillogistik->detailpesanan->pesanan->ekatalog->customer->nama;
+                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
                 } elseif ($name[1] == 'SPA') {
-                    return  $data->detaillogistik->detailpesanan->pesanan->spa->customer->nama;
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
                 } else {
-                    return  $data->detaillogistik->detailpesanan->pesanan->spb->customer->nama;
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->nama;
                 }
                 return;
             })
             ->addColumn('alamat', function ($data) {
-                $name = explode('/', $data->detaillogistik->detailpesanan->pesanan->so);
+                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return   $data->detaillogistik->detailpesanan->pesanan->ekatalog->customer->alamat;
+                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->alamat;
                 } elseif ($name[1] == 'SPA') {
-                    return  $data->detaillogistik->detailpesanan->pesanan->spa->customer->alamat;
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->alamat;
                 } else {
-                    return  $data->detaillogistik->detailpesanan->pesanan->spb->customer->alamat;
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->alamat;
                 }
                 return;
             })
             ->addColumn('telp', function ($data) {
-                $name = explode('/', $data->detaillogistik->detailpesanan->pesanan->so);
+                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return   $data->detaillogistik->detailpesanan->pesanan->ekatalog->customer->telp;
+                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->telp;
                 } elseif ($name[1] == 'SPA') {
-                    return  $data->detaillogistik->detailpesanan->pesanan->spa->customer->telp;
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->telp;
                 } else {
-                    return  $data->detaillogistik->detailpesanan->pesanan->spb->customer->telp;
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->telp;
                 }
                 return;
             })
             ->addColumn('status', function ($data) {
-                $y = array();
-                $count = 0;
-                $x = DetailPesanan::where('pesanan_id', $data->detaillogistik->detailpesanan->pesanan->id)->get();
-                foreach ($x  as $d) {
-                    $y[] = $d->id;
-                    $count++;
-                }
-                $detail_logistik  = DetailLogistik::whereIN('detail_pesanan_id', $y)->get()->Count();
+                // $y = array();
+                // $count = 0;
+                // $x = DetailPesananProduk::where('pesanan_id', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->id)->get();
+                // foreach ($x  as $d) {
+                //     $y[] = $d->id;
+                //     $count++;
+                // }
+                // $detail_logistik  = DetailLogistik::whereIN('detail_pesanan_id', $y)->get()->Count();
 
-                if ($count == $detail_logistik) {
-                    return  '<span class="badge green-text">Sudah Dikirim</span>';
-                } else {
-                    if ($detail_logistik == 0) {
-                        return ' <span class="badge red-text">Belum Dikirim</span>';
-                    } else {
-                        return  '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                    }
-                }
+                // if ($count == $detail_logistik) {
+                //     return  '<span class="badge green-text">Sudah Dikirim</span>';
+                // } else {
+                //     if ($detail_logistik == 0) {
+                //         return ' <span class="badge red-text">Belum Dikirim</span>';
+                //     } else {
+                //         return  '<span class="badge yellow-text">Sebagian Dikirim</span>';
+                //     }
+                // }
             })
             ->addColumn('button', function ($data) {
                 $return = "";

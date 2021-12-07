@@ -120,7 +120,7 @@
                                             <th>Aksi</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1</td>
                                                 <td>SO/EKAT/X/02/98</td>
                                                 <td>
@@ -163,7 +163,7 @@
                                                 <td><span class="badge green-text">Selesai</span></td>
                                                 <td>-</td>
                                                 <td><a href=""></td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>

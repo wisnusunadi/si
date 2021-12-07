@@ -194,7 +194,6 @@
                                                     <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
                                                     <label class="form-check-label" for="satuan3">Batal</label>
                                                 </div>
-
                                                 <div class="invalid-feedback" id="msgstatus">
                                                     @if($errors->has('status'))
                                                     {{ $errors->first('status')}}
@@ -202,7 +201,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="form-group row">
                                             <label for="" class="col-form-label col-5" style="text-align: right">No Paket</label>
                                             <div class="col-5 input-group">
@@ -630,7 +628,6 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
-
         $('input[type="radio"][name="status"]').on('change', function() {
             if ($(this).val() != "") {
                 if ($(this).val() == "draft") {

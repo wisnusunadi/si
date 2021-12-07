@@ -86,6 +86,7 @@
         <div class="col-12">
             <table style="width:100%">
                 <tbody>
+                    @foreach($data as $d)
                     <tr>
                         <td colspan="4">Pengirim</td>
                         <td colspan="4"></td>
@@ -113,15 +114,54 @@
                     </tr>
                     <tr>
                         <td colspan="4"></td>
-                        <td colspan="4" class="wb">Distributor</td>
+                        <td colspan="4" class="wb">
+                            <?php
+                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+
+                            if ($name[1] == 'EKAT') {
+                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                            } else if ($name[1] == 'SPA') {
+                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                            } else {
+                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                            }
+
+                            ?>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="4"></td>
-                        <td colspan="4" class="wb">Alamat Distributor</td>
+                        <td colspan="4" class="wb">
+                            <?php
+                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+
+                            if ($name[1] == 'EKAT') {
+                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->alamat;
+                            } else if ($name[1] == 'SPA') {
+                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
+                            } else {
+                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
+                            }
+
+                            ?>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="4"></td>
-                        <td colspan="4" class="wb">Provinsi Distributor</td>
+                        <td colspan="4" class="wb">
+                            <?php
+                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+
+                            if ($name[1] == 'EKAT') {
+                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->Provinsi->nama;
+                            } else if ($name[1] == 'SPA') {
+                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
+                            } else {
+                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
+                            }
+
+                            ?>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="4"></td>
@@ -142,7 +182,7 @@
     </div>
     <div class="row">
         <div class="col-12 align-left" style="border-bottom: 1px solid;">
-            <h4>SJ1289313198903</h4>
+            <h4>{{$d->nosurat}}</h4>
         </div>
     </div><br>
     <div class="row mdtxt">
@@ -158,10 +198,12 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="nospace">SOEKAT51892108</td>
-                        <td class="nospace">PO/ON/09/10/2021</td>
-                        <td class="wb">9003183913079</td>
-                        <td class="nospace">21-01-2021</td>
+                        <td class="nospace">{{$d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</td>
+                        <td class="nospace">{{$d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</td>
+                        <td class="wb">-</td>
+                        <td class="nospace">
+                            {{App\Http\Controllers\LogistikController::tgl_footer($d->tgl_kirim)}}
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -184,24 +226,27 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($data_produk as $e)
                     <tr>
-                        <td class="wb align-left">Elitech MTB 2 MTR</td>
-                        <td class="nospace align-right">100.00 pcs</td>
-                        <td class="wb">-</td>
+                        <td class="wb align-left">
+                            @if($e->DetailPesananProduk->GudangBarangJadi->nama == '')
+                            {{$e->DetailPesananProduk->GudangBarangJadi->produk->nama}}
+                            @else
+                            {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
+                            @endif
+                        </td>
+                        <td class="nospace align-right">{{$e->NoseriDetailLogistik->count()}} pcs</td>
+                        <td class="wb">
+                            @foreach($e->NoseriDetailLogistik as $x)
+                            {{$x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
+                            @if( !$loop->last)
+                            ,
+                            @endif
+                            @endforeach
+                        </td>
                         <td class="wb">-</td>
                     </tr>
-                    <tr>
-                        <td class="wb align-left">Elitech Pocket Fetal Doppler</td>
-                        <td class="nospace align-right">2.00 pcs</td>
-                        <td class="wb">-</td>
-                        <td class="wb">-</td>
-                    </tr>
-                    <tr>
-                        <td class="wb  align-left">Elitech APRON</td>
-                        <td class="nospace align-right">10.00 pcs</td>
-                        <td class="wb">-</td>
-                        <td class="wb">-</td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -214,23 +259,30 @@
                     <tr>
                         <td class="nospace">Ekspedisi </td>
                         <td class="nospace"> : </td>
-                        <td class="wb align-left">J&T</td>
+                        <td class="wb align-left">
+                            @if ($d->nama_pengirim == '')
+                            {{$d->Ekspedisi->nama}}
+                            @else
+                            {{$d->nama_pengirim}}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="nospace">Total Ongkir </td>
                         <td class="nospace"> : </td>
-                        <td class="wb align-left">Rp. 121.000</td>
+                        <td class="wb align-left">-</td>
                     </tr>
                     <tr>
                         <td class="nospace">Catatan </td>
                         <td class="nospace"> : </td>
-                        <td class="wb align-left">NO AKN sekian sekian sekian</td>
+                        <td class="wb align-left">-</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+@endforeach
 <div class="footer">
     <table border=0 class="table align-center" width="100%">
         <thead>
