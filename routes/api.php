@@ -133,6 +133,7 @@ Route::prefix('/draft')->group(function () {
 
     // get
     Route::post('/data', [\App\Http\Controllers\GudangController::class, 'getDraftPerakitan']);
+    Route::post('/data-seri', [\App\Http\Controllers\GudangController::class, 'getNoseriDraftRakit']);
 });
 
 Route::prefix('/transaksi')->group(function () {
@@ -188,7 +189,7 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
     Route::post('/byso', [\App\Http\Controllers\ProduksiController::class, 'TfbySO']);
     Route::post('/create-noseri', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
-    Route::post('/create-final', [\App\Http\Controllers\GudangController::class, 'storeFinalRancang']);
+    Route::post('/create-final', [\App\Http\Controllers\GudangController::class, 'finalDraftRakit']);
 
     // get
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);

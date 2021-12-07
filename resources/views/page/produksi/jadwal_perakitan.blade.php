@@ -278,7 +278,7 @@
             for (var i=0;i<jml;i++) {
                     var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq("+i+")");
                     for (var k=0;k<1;k++) {
-                        $row.append('<td><input type="text" name="noseri[]" id="noseri" class="form-control"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>');
+                        $row.append('<td><input type="text" name="noseri[]" class="form-control noseri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>');
                     }
             }
             var scanProduk = $('.scan-produk').DataTable({
@@ -299,42 +299,70 @@
             });
 
             $(document).on('click', '#btnSave', function(e) {
-                // // $.each($('input[name^="noseri"]'), function () { 
-                // //      console.log($(this));
-                // // });
-                // var data = scanProduk.$('input[name^="noseri"]').serializeArray();
-                // console.log(data);
-                // return false;
-                   e.preventDefault();
+                e.preventDefault();
 
-                   const seri = [];
+                let arr = [];
+                const data = scanProduk.$('.noseri').map(function() {
+                    return $(this).val();
+                }).get();
 
-                   $('input[name^="noseri"]').each(function() {
-                        seri.push($(this).val());
-                    });
+                data.forEach(function(item) {
+                    if (item != '') {
+                        arr.push(item);
+                    }
+                })
 
-                    console.log(seri);
+                const count = arr =>
+                    arr.reduce((a, b) => ({ ...a,
+                        [b]: (a[b] || 0) + 1
+                    }), {})
 
+                    const duplicates = dict =>
+                    Object.keys(dict).filter((a) => dict[a] > 1)
+
+                    if (duplicates(count(arr)).length > 0) {
+                        $('.noseri').filter(function () {
+                            return $(this).val() == duplicates(count(arr))[0];
+                        }).addClass('is-invalid');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                        })
+                    }
+                    else{
                     $.ajax({
                         url: "/api/prd/rakit-seri",
                         type: "post",
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            noseri: seri,
+                            noseri: arr,
                             jadwal_id : id,
                         },
                         success: function(res) {
                             console.log(res);
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: res.msg,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
+                            if (res.msg == 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: 'Data berhasil disimpan.',
+                                })
+                                $('.modalRakit').modal('hide');
+                                $('.scan-produk').DataTable().destroy();
+                                $('.scan-produk tbody').empty();
+                                $('.table_produk_perakitan').DataTable().ajax.reload();
+                            }else{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Nomor seri ada yang sama.',
+                                });
+                            }
                             location.reload();
                         }
                     })
+                    }
             })
             })
         })

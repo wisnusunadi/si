@@ -129,7 +129,7 @@
                                                                                     class="col-12 font-weight-bold col-form-label">Tanggal
                                                                                     Masuk</label>
                                                                                 <div class="col-12">
-                                                                                    <input type="date" 
+                                                                                    <input type="date"
                                                                                         class="form-control tgl_masuk " id="tgl_masuk" name="tgl_masuk">
                                                                                         <div class="invalid-feedback">
                                                                                             Silahkan Masukkan Tanggal Masuk
@@ -550,6 +550,28 @@
         var id = $(this).data('id');
         console.log(id);
 
+        $('.scan-produk').DataTable({
+            destroy: true,
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/draft/data-seri",
+                type: "post",
+                data: {
+                    t_gbj_detail_id: id,
+                },
+            },
+            columns: [
+                {data: 'checkbox'},
+                {data: 'serii'},
+                {data: 'posisi'},
+            ]
+        });
+
         tambahanRancangan();
     })
 
@@ -621,6 +643,8 @@
 
     const seri = {};
     const layout = {};
+    var nose;
+    var lay;
 
     $(document).on('click', '#btnPlus', function() {
         var tr = $(this).closest('tr');
@@ -632,25 +656,9 @@
         tambahanPerakitan(x);
     })
 
-    $(document).on('click', '#btnSeri', function() {
-        console.log('test');
 
-        var tr = $(this).closest('tr');
-        s = tr.find('.seri').val();
-        l = tr.find('.layout').val();
+    $(document).on('click','#btnSubmit', function (e) {
 
-        const cb = [];
-        $('.cb-child').each(function() {
-            if ($(this).is(":checked")) {
-                cb.push(s);
-            }
-        })
-        seri[y] = cb;
-        console.log(seri);
-
-    });
-
-    $(document).on('click','#btnSubmit', function () {
         if($('#tgl_masuk').val() == '' && $('#divisi').val() == '' && $('#deskripsi').val() == ''){
             $('.tgl_masuk').addClass('is-invalid');
             $('#divisi').addClass('is-invalid');
@@ -697,7 +705,45 @@
                     confirmButtonText: 'Oke'
                     })
             }else{
-                // 
+                e.preventDefault();
+                console.log('test');
+
+                const prd1 = [];
+                const jml1 = [];
+
+                $('select[name^="gdg_brg_jadi_id"]').each(function() {
+                    prd1.push($(this).val());
+                });
+
+                $('input[name^="qty"]').each(function() {
+                    jml1.push($(this).val());
+                });
+
+                $.ajax({
+                    url: "/api/draft/final",
+                    type: "post",
+                    data: {
+                        "_token" : "{{ csrf_token() }}",
+                        tgl_masuk : $('.tanggal').val(),
+                        dari: $('#divisi').val(),
+                        deskripsi: $('#deskripsi').val(),
+                        gdg_brg_jadi_id: prd1,
+                        qty: jml1,
+                        noseri : seri,
+                        layout : layout,
+                    },
+                    success: function(res) {
+                        // console.log(res);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: res.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        location.reload();
+                    }
+                })
             }
         }
     });
@@ -738,7 +784,7 @@
             $('#divisi').removeClass('is-invalid');
             $('#deskripsi').removeClass('is-invalid');
 
-            const prd = [];
+        const prd = [];
         const jml = [];
 
         $('select[name^="gdg_brg_jadi_id"]').each(function() {
@@ -755,21 +801,23 @@
             data: {
                 "_token" : "{{ csrf_token() }}",
                 tgl_masuk : $('.tanggal').val(),
-                dari: $('#dari').val(),
+                dari: $('#divisi').val(),
                 deskripsi: $('#deskripsi').val(),
                 gdg_brg_jadi_id: prd,
                 qty: jml,
+                noseri : seri,
+                layout : layout,
             },
             success: function(res) {
-                console.log(res);
-                // Swal.fire({
-                //     position: 'center',
-                //     icon: 'success',
-                //     title: res.msg,
-                //     showConfirmButton: false,
-                //     timer: 1500
-                // })
-                // location.reload();
+                // console.log(res);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
             }
         })
         }
@@ -821,7 +869,6 @@
 
     function tambahanRancangan(x) {
         $('.tambahan-rancangan').modal('show');
-
     }
 
     function tambahanPerakitan(x) {
@@ -841,15 +888,81 @@
         $('.tambahan-perakitan').modal('show');
         $('.scan-produk1').DataTable().destroy();
         $('.scan-produk1 tbody').empty();
+        let a = 0;
         for (let index = 0; index < x; index++) {
-           $('.scan-produk1 tbody').append('<tr id="row'+index+'"><td><input type="checkbox" class="cb-child"  value=""></td><td><input type="text" name="noseri_id['+index+']" id="noseri_id" class="form-control seri"></td><td><select name="layout_id['+index+']" id="layout_id" class="form-control layout"></select></td></tr>');
+            a++;
+           $('.scan-produk1 tbody').append('<tr id="row'+a+'"><td><input type="checkbox" class="cb-child"  value="'+y+'"></td><td><input type="text" name="noseri_id[]['+a+']" id="noseri_id['+a+']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id['+a+']" id="layout_id['+a+']" class="form-control layout"></select></td></tr>');
         }
-        $('.scan-produk1').DataTable({
+        var tableScan = $('.scan-produk1').DataTable({
             "ordering": false,
             "autoWidth": false,
             searching: false,
             "lengthChange": false,
         });
+
+        
+    $(document).on('click', '#btnSeri', function(e) {
+        e.preventDefault();
+
+        let arr = [];
+        const data = tableScan.$('.seri').map(function() {
+            return $(this).val();
+        }).get();
+
+        data.forEach(function(item) {
+            if (item != '') {
+                arr.push(item);
+            }
+        })
+
+        const count = arr =>
+            arr.reduce((a, b) => ({ ...a,
+                [b]: (a[b] || 0) + 1
+            }), {})
+
+            const duplicates = dict =>
+            Object.keys(dict).filter((a) => dict[a] > 1)
+        
+            if (duplicates(count(arr)).length > 0) {
+                        $('.seri').filter(function () {
+                            return $(this).val() == duplicates(count(arr))[0];
+                        }).addClass('is-invalid');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                        })
+            }else{
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Nomor seri tersimpan',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                nose = [];
+                lay = [];
+
+                const cb = [];
+
+                $.each($("input[class='cb-child']:checked"), function() {
+                    var row = $(this).parent().parent();
+                    cb.push($(this).val());
+                    nose.push(row.find('.seri').val());
+                    lay.push(row.find('.layout').val());
+                    if (row.find(".cb-child:checked").length) {cb.push(row.find(".cb-child:checked").val());}
+                })
+                // seri[y] = cb;
+                console.log(nose, lay);
+                seri[y] = nose;
+                layout[y] = lay;
+                // console.log(cb);
+                $('.tambahan-perakitan').modal('hide');
+            }
+
+        
+    });
     }
 
 </script>

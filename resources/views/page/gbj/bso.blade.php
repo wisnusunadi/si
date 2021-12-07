@@ -382,9 +382,9 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     pesanan_id: id,
-                    gdg_brg_jadi_id: prd1,
+                    gdg_brg_jadi_id: prdd,
                     qty: qtyy,
-                    // noseri_id: prd1,
+                    noseri_id: prd1,
                 },
                 success: function(res) {
                     console.log(res);

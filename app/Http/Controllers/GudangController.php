@@ -428,6 +428,29 @@ class GudangController extends Controller
         }
     }
 
+    function getNoseriDraftRakit(Request $request) {
+        $data = NoseriTGbj::with('seri', 'layout')->where('t_gbj_detail_id',$request->t_gbj_detail_id)->get();
+        $layout = Layout::where('jenis_id', 1)->get();
+        return datatables()->of($data)
+            ->addColumn('serii', function($d) {
+                return $d->seri->noseri;
+            })
+            ->addColumn('posisi', function($d) use($layout) {
+                $opt = '';
+                foreach($layout as $l) {
+                    $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
+                }
+                return '<select name="layout_id[]" id="layout_id[]" class="form-control">
+                        ' . $opt . '
+                        </select>';
+            })
+            ->addColumn('checkbox', function($d) {
+                return '<input type="checkbox" class="cb-child" value="'.$d->id.'" data-id="'.$d->noseri_id.'">';
+            })
+            ->rawColumns(['checkbox', 'posisi'])
+            ->make(true);
+    }
+
     // store
     function storeNoseri(Request $request)
     {
@@ -556,40 +579,117 @@ class GudangController extends Controller
 
     function storeDraftRancang(Request $request)
     {
-        dd($request->all());
-        // $h = new TFProduksi();
-        // $h->tgl_masuk = Carbon::now();
-        // $h->dari = $request->dari;
-        // $h->deskripsi = $request->deskripsi;
-        // $h->status_id = 1;
-        // $h->jenis = 'masuk';
-        // $h->created_at = Carbon::now();
-        // $h->save();
+        $h = new TFProduksi();
+        $h->tgl_masuk = Carbon::now();
+        $h->dari = $request->dari;
+        $h->deskripsi = $request->deskripsi;
+        $h->status_id = 1;
+        $h->jenis = 'masuk';
+        $h->created_at = Carbon::now();
+        $h->save();
 
-        // foreach ($request->gdg_brg_jadi_id as $key => $value) {
-        //     $d = new TFProduksiDetail();
-        //     $d->t_gbj_id = $h->id;
-        //     $d->gdg_brg_jadi_id = $value;
-        //     $d->qty = $request->qty[$key];
-        //     $d->status_id = 1;
-        //     $d->jenis = 'masuk';
-        //     $d->created_at = Carbon::now();
-        //     $d->save();
-        // }
+        foreach ($request->gdg_brg_jadi_id as $key => $value) {
+            $d = new TFProduksiDetail();
+            $d->t_gbj_id = $h->id;
+            $d->gdg_brg_jadi_id = $value;
+            $d->qty = $request->qty[$key];
+            $d->status_id = 1;
+            $d->jenis = 'masuk';
+            $d->created_at = Carbon::now();
+            $d->save();
 
-        // return response()->json(['msg' => 'Successfully']);
+            foreach($request->noseri[$value] as $k => $v) {
+                $nn = new NoseriBarangJadi();
+                $nn->gdg_barang_jadi_id = $value;
+                $nn->dari = $request->dari;
+                $nn->noseri = $request->noseri[$value][$k];
+                $nn->jenis = 'MASUK';
+                $nn->is_aktif = 0;
+                $nn->save();
+
+                $n = new NoseriTGbj();
+                $n->t_gbj_detail_id = $d->id;
+                $n->noseri_id = $nn->id;
+                $n->layout_id = $request->layout[$value][$k];
+                $n->jenis = 'keluar';
+                $n->status_id = 1;
+                $n->state_id = 2;
+                $n->save();
+            }
+        }
+
+        return response()->json(['msg' => 'Successfully']);
     }
 
     function storeFinalRancang(Request $request)
     {
+        $h = new TFProduksi();
+        $h->tgl_masuk = Carbon::now();
+        $h->dari = $request->dari;
+        $h->deskripsi = $request->deskripsi;
+        $h->status_id = 2;
+        $h->jenis = 'masuk';
+        $h->created_at = Carbon::now();
+        $h->save();
+
+        foreach ($request->gdg_brg_jadi_id as $key => $value) {
+            $d = new TFProduksiDetail();
+            $d->t_gbj_id = $h->id;
+            $d->gdg_brg_jadi_id = $value;
+            $d->qty = $request->qty[$key];
+            $d->status_id = 2;
+            $d->jenis = 'masuk';
+            $d->created_at = Carbon::now();
+            $d->save();
+
+            foreach($request->noseri[$value] as $k => $v) {
+                $nn = new NoseriBarangJadi();
+                $nn->gdg_barang_jadi_id = $value;
+                $nn->dari = $request->dari;
+                $nn->noseri = $request->noseri[$value][$k];
+                $nn->jenis = 'MASUK';
+                $nn->is_aktif = 1;
+                $nn->save();
+
+                $n = new NoseriTGbj();
+                $n->t_gbj_detail_id = $d->id;
+                $n->noseri_id = $nn->id;
+                $n->layout_id = $request->layout[$value][$k];
+                $n->jenis = 'keluar';
+                $n->status_id = 2;
+                $n->state_id = 3;
+                $n->save();
+            }
+        }
+
+        // update stok
+
+        return response()->json(['msg' => 'Successfully']);
+    }
+
+    function finalDraftRakit(Request $request) {
         $header = TFProduksi::find($request->id);
         $header->status_id = 2;
         $header->updated_at = Carbon::now();
         $header->save();
         $dd = TFProduksiDetail::where('t_gbj_id', $header->id)->get()->toArray();
-        // // $dd['status_id'] = 2;
-        TFProduksiDetail::where('t_gbj_id', $header->id)->update(['status_id' => 2]);
-        return response()->json(['msg' => 'Successfully']);
+        $i = 0;
+        foreach($dd as $dd) {
+            $i++;
+            NoseriTGbj::whereIn('t_gbj_detail_id', [$dd['id']])->update(['status_id' => 2]);
+            $a = NoseriTGbj::where('t_gbj_detail_id', $dd['id'])->get()->toArray();
+            foreach($a as $a) {
+                NoseriBarangJadi::find($a['noseri_id'])->update(['is_aktif' => 1]);
+                $b = NoseriBarangJadi::whereIn('id',[$a['noseri_id']])->get()->toArray();
+                foreach($b as $b) {
+                    $ac = GudangBarangJadi::where('id', $b['gdg_barang_jadi_id'])->get()->toArray();
+                    foreach($ac as $vv) {
+                        $vv['stok'] = $vv['stok'] + count($ac);
+                        GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                    }
+                }
+            }
+        }
     }
 
     function storeCekSO(Request $request) {
