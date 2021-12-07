@@ -360,6 +360,11 @@ class DcController extends Controller
             return response()->json(['data' =>  'error']);
         }
     }
+    public function dashboard()
+    {
+        $daftar_so = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->get()->count();
+        return view('page.dc.dashboard', ['daftar_so' => $daftar_so]);
+    }
     //Another 
     public function bulan_romawi($value)
     {

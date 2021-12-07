@@ -44,6 +44,7 @@ Route::prefix('/ppic')->group(function () {
 });
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
+    Route::get('select_edit', [App\Http\Controllers\MasterController::class, 'select_provinsi_edit']);
 });
 Route::prefix('/kota_kabupaten')->group(function () {
     Route::get('select', [App\Http\Controllers\ProvincesController::class, 'kota_kabupaten']);
@@ -248,7 +249,7 @@ Route::prefix('/logistik')->group(function () {
         Route::get('detail/select/{id}/{pesanan_id}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
     });
     Route::group(['prefix' => '/ekspedisi'], function () {
-        Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
+        // Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('select', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
         Route::get('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_ekspedisi']);
         Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);

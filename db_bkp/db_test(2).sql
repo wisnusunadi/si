@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 29 Nov 2021 pada 10.59
+-- Waktu pembuatan: 07 Des 2021 pada 10.50
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 7.4.25
 
@@ -513,9 +513,9 @@ INSERT INTO `customer` (`id`, `id_provinsi`, `nama`, `telp`, `email`, `alamat`, 
 --
 
 CREATE TABLE `detail_logistik` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `logistik_id` bigint(20) UNSIGNED NOT NULL,
-  `detail_pesanan_id` bigint(20) UNSIGNED NOT NULL,
+  `detail_pesanan_produk_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -524,10 +524,11 @@ CREATE TABLE `detail_logistik` (
 -- Dumping data untuk tabel `detail_logistik`
 --
 
-INSERT INTO `detail_logistik` (`id`, `logistik_id`, `detail_pesanan_id`, `created_at`, `updated_at`) VALUES
-(6, 56, 1, '2021-11-29 05:20:23', '2021-11-29 05:20:23'),
-(7, 57, 2, '2021-11-29 05:22:28', '2021-11-29 05:22:28'),
-(8, 58, 3, '2021-11-29 06:27:19', '2021-11-29 06:27:19');
+INSERT INTO `detail_logistik` (`id`, `logistik_id`, `detail_pesanan_produk_id`, `created_at`, `updated_at`) VALUES
+(13, 15, 1, '2021-12-02 01:33:59', '2021-12-02 01:33:59'),
+(14, 15, 2, '2021-12-02 01:33:59', '2021-12-02 01:33:59'),
+(15, 16, 8, '2021-12-02 08:53:17', '2021-12-02 08:53:17'),
+(16, 17, 3, '2021-12-03 09:00:42', '2021-12-03 09:00:42');
 
 -- --------------------------------------------------------
 
@@ -928,7 +929,9 @@ INSERT INTO `detail_penjualan_produk` (`produk_id`, `penjualan_produk_id`, `juml
 (158, 201, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (143, 201, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (52, 216, 1, NULL, NULL),
-(8, 216, 1, NULL, NULL);
+(8, 216, 1, NULL, NULL),
+(4, 217, 2, NULL, NULL),
+(4, 217, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -940,12 +943,12 @@ CREATE TABLE `detail_pesanan` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `pesanan_id` bigint(20) UNSIGNED DEFAULT NULL,
   `penjualan_produk_id` bigint(20) UNSIGNED NOT NULL,
-  `jumlah` int(11) NOT NULL,
+  `jumlah` bigint(20) NOT NULL,
   `harga` bigint(20) NOT NULL,
   `ongkir` bigint(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data untuk tabel `detail_pesanan`
@@ -1230,7 +1233,6 @@ INSERT INTO `detail_pesanan` (`id`, `pesanan_id`, `penjualan_produk_id`, `jumlah
 (296, 212, 48, 2, 1958299, 0, NULL, NULL),
 (297, 213, 114, 3, 1981024, 0, NULL, NULL),
 (298, 214, 50, 1, 1514732, 0, NULL, NULL),
-(299, 215, 193, 2, 1836738, 0, NULL, NULL),
 (300, 210, 108, 2, 1979416, 0, NULL, NULL),
 (301, 211, 184, 3, 1808360, 0, NULL, NULL),
 (302, 212, 147, 3, 2061002, 0, NULL, NULL),
@@ -1255,7 +1257,25 @@ INSERT INTO `detail_pesanan` (`id`, `pesanan_id`, `penjualan_produk_id`, `jumlah
 (325, 131, 185, 2, 1605878, 0, NULL, NULL),
 (326, 132, 63, 2, 1536831, 0, NULL, NULL),
 (327, 132, 138, 2, 2037402, 0, NULL, NULL),
-(328, 3, 11, 1, 526262, 0, NULL, NULL);
+(328, 3, 11, 1, 526262, 0, NULL, NULL),
+(333, 224, 4, 2, 1551000, 0, '2021-12-06 07:52:18', '2021-12-06 07:52:18'),
+(338, 225, 5, 1, 1760000, 0, '2021-12-06 08:03:10', '2021-12-06 08:03:10'),
+(339, 225, 12, 2, 141130000, 0, '2021-12-06 08:03:10', '2021-12-06 08:03:10'),
+(342, 228, 56, 1, 44330000, 0, '2021-12-07 04:13:57', '2021-12-07 04:13:57'),
+(343, 229, 56, 1, 44330000, 0, '2021-12-07 04:19:57', '2021-12-07 04:19:57'),
+(344, 230, 56, 1, 44330000, 0, '2021-12-07 04:21:11', '2021-12-07 04:21:11'),
+(345, 231, 56, 1, 44330000, 0, '2021-12-07 04:21:59', '2021-12-07 04:21:59'),
+(347, 233, 2, 1, 3245000, 0, '2021-12-07 04:34:59', '2021-12-07 04:34:59'),
+(348, 233, 5, 1, 1760000, 0, '2021-12-07 04:34:59', '2021-12-07 04:34:59'),
+(352, 235, 5, 3, 1760000, 0, '2021-12-07 07:04:06', '2021-12-07 07:04:06'),
+(353, 236, 3, 1, 583000, 0, '2021-12-07 07:42:10', '2021-12-07 07:42:10'),
+(354, 236, 29, 5, 3619000, 0, '2021-12-07 07:42:10', '2021-12-07 07:42:10'),
+(355, 234, 4, 1, 1551000, 0, '2021-12-07 08:49:46', '2021-12-07 08:49:46'),
+(356, 227, 1, 1, 10780000, 0, '2021-12-07 08:51:46', '2021-12-07 08:51:46'),
+(357, 227, 5, 1, 1760000, 0, '2021-12-07 08:51:46', '2021-12-07 08:51:46'),
+(362, 232, 68, 1, 35200000, 0, '2021-12-07 09:12:43', '2021-12-07 09:12:43'),
+(363, 232, 5, 1, 1760000, 0, '2021-12-07 09:12:43', '2021-12-07 09:12:43'),
+(364, 215, 194, 2, 16753000, 0, '2021-12-07 09:13:25', '2021-12-07 09:13:25');
 
 -- --------------------------------------------------------
 
@@ -1270,27 +1290,27 @@ CREATE TABLE `detail_pesanan_produk` (
   `status_cek` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data untuk tabel `detail_pesanan_produk`
 --
 
 INSERT INTO `detail_pesanan_produk` (`id`, `detail_pesanan_id`, `gudang_barang_jadi_id`, `status_cek`, `created_at`, `updated_at`) VALUES
-(1, 1, 108, 4, NULL, '2021-11-25 07:56:01'),
-(2, 1, 204, 4, NULL, '2021-11-25 07:56:01'),
-(3, 2, 20, 4, NULL, '2021-11-25 07:56:01'),
-(4, 3, 204, NULL, NULL, NULL),
-(5, 3, 196, NULL, NULL, NULL),
-(6, 4, 142, NULL, NULL, NULL),
-(7, 4, 196, NULL, NULL, NULL),
-(8, 5, 130, NULL, NULL, NULL),
-(9, 6, 142, NULL, NULL, NULL),
-(10, 6, 196, NULL, NULL, NULL),
-(11, 6, 204, NULL, NULL, NULL),
-(12, 7, 74, NULL, NULL, NULL),
-(13, 7, 196, NULL, NULL, NULL),
-(14, 8, 24, NULL, NULL, NULL),
+(1, 1, 108, 4, NULL, '0000-00-00 00:00:00'),
+(2, 1, 204, 4, NULL, '0000-00-00 00:00:00'),
+(3, 2, 20, 4, NULL, '0000-00-00 00:00:00'),
+(4, 3, 204, 4, NULL, '0000-00-00 00:00:00'),
+(5, 3, 196, 4, NULL, '0000-00-00 00:00:00'),
+(6, 4, 142, 4, NULL, '0000-00-00 00:00:00'),
+(7, 4, 196, 4, NULL, '0000-00-00 00:00:00'),
+(8, 5, 130, 4, NULL, '0000-00-00 00:00:00'),
+(9, 6, 142, 4, NULL, '0000-00-00 00:00:00'),
+(10, 6, 196, 4, NULL, '0000-00-00 00:00:00'),
+(11, 6, 204, 4, NULL, '0000-00-00 00:00:00'),
+(12, 7, 74, 4, NULL, '0000-00-00 00:00:00'),
+(13, 7, 196, 4, NULL, '0000-00-00 00:00:00'),
+(14, 8, 24, 4, NULL, '0000-00-00 00:00:00'),
 (15, 9, 139, NULL, NULL, NULL),
 (16, 10, 127, NULL, NULL, NULL),
 (17, 10, 196, NULL, NULL, NULL),
@@ -1354,7 +1374,29 @@ INSERT INTO `detail_pesanan_produk` (`id`, `detail_pesanan_id`, `gudang_barang_j
 (75, 326, 204, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (76, 327, 150, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (77, 327, 199, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(78, 327, 151, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(78, 327, 151, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(84, 333, 12, NULL, NULL, NULL),
+(93, 338, 12, NULL, NULL, NULL),
+(94, 338, 190, NULL, NULL, NULL),
+(95, 339, 18, NULL, NULL, NULL),
+(96, 339, 205, NULL, NULL, NULL),
+(100, 347, 221, NULL, NULL, NULL),
+(101, 348, 12, NULL, NULL, NULL),
+(105, 353, 9, NULL, NULL, NULL),
+(106, 354, 49, NULL, NULL, NULL),
+(107, 354, 190, NULL, NULL, NULL),
+(108, 355, 12, NULL, NULL, NULL),
+(109, 356, 7, NULL, NULL, NULL),
+(110, 357, 12, NULL, NULL, NULL),
+(111, 357, 190, NULL, NULL, NULL),
+(117, 362, 82, NULL, NULL, NULL),
+(118, 362, 196, NULL, NULL, NULL),
+(119, 362, 14, NULL, NULL, NULL),
+(120, 363, 12, NULL, NULL, NULL),
+(121, 363, 190, NULL, NULL, NULL),
+(122, 364, 203, NULL, NULL, NULL),
+(123, 364, 196, NULL, NULL, NULL),
+(124, 364, 14, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1418,13 +1460,14 @@ CREATE TABLE `ekatalog` (
   `no_paket` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `instansi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alamat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `satuan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tgl_kontrak` date DEFAULT NULL,
   `tgl_buat` date DEFAULT NULL,
   `ket` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `status` enum('sepakat','negosiasi','batal') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('sepakat','negosiasi','batal','draft') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `log` enum('penjualan','po','qc','gudang','logistik','selesai') COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1432,56 +1475,59 @@ CREATE TABLE `ekatalog` (
 -- Dumping data untuk tabel `ekatalog`
 --
 
-INSERT INTO `ekatalog` (`id`, `customer_id`, `provinsi_id`, `pesanan_id`, `no_paket`, `deskripsi`, `instansi`, `satuan`, `tgl_kontrak`, `tgl_buat`, `ket`, `created_at`, `updated_at`, `status`, `log`) VALUES
-(1, 449, 3, 1, 'AK1-P2102-3671852', 'Pengadaan Belanja Modal BLUD', 'Pemerintah Daerah Kabupaten Solok Selatan', 'Rumah Sakit Umum Daerah', '2021-12-08', '2021-02-09', NULL, NULL, NULL, 'sepakat', 'penjualan'),
-(2, 276, 14, 2, 'AK1-P2102-3672676', 'Belanja Modal Alat Kedokteran Gigi (ALKES DAN GIGI DAN MULUT)', 'Pemerintah Daerah kabupaten Tabanan', 'DINAS KESEHATAN KABUPATEN TABANAN', '2022-02-02', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(3, 319, 9, 3, 'AK1-P2102-3672860', 'Penyediaan Alat Kesehatan Untuk Mendukung RS Darurat Prop. Sulut, Babel dan RSUD DR. Zaenal Abidin Aceh', 'Kementerian Kesehatan', 'DIREKTORAT FASILITAS PELAYANAN KESEHATAN', '2022-02-15', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(4, 400, 14, 4, 'AK1-P2102-3673572', 'Belanja Modal Alat Kedokteran Umum RSUD Daha Sejahtera', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', 'Dinas Kesehatan', '2021-11-21', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(5, 147, 21, 5, 'AK1-P2102-3673706', 'Belanja Modal Pengadaan Alat-Alat Rumah Sakit (APBD)', 'Pemerintah Daerah Kabupaten Sleman', 'DINAS KESEHATAN', '2022-01-04', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(6, 66, 4, 6, 'AK1-P2102-3677900', 'Pengadaan Polindes Kit', 'Pemerintah Daerah Kabupaten Bojonegoro', 'DINAS KESEHATAN', '2021-02-11', '2021-02-11', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(7, 149, 19, 7, 'AK1-P2102-3679002', 'Pengadaan Polindes Kit', 'Pemerintah Daerah Kota Tangerang', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(8, 317, 2, 8, 'AK1-P2102-3680185', 'Pengadaan Alat Laboratorium Poltekkes Kemenkes Surabya Tahun 2021', 'Pemerintah Daerah Provinsi Jawa Tengah', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(9, 226, 15, 9, 'AK1-P2102-3680796', 'BELANJA ALAT KESEHATAN BLUD PUSKESMAS KARANG TENGAH', 'Pemerintah Daerah Kabupaten Dharmasraya', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(10, 419, 16, 10, 'AK1-P2102-3681600', 'Pengadaan ABBM Laboratorium Poltekkes Kemenkes Palembang Tahun 2021', 'Pemerintah Daerah Provinsi DKI Jakarta', 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(11, 181, 8, 11, 'AK1-P2102-3681944', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kota Surakarta', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(12, 263, 2, 12, 'AK1-P2102-3684536', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Berau', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(13, 248, 7, 13, 'AK1-P2102-3685030', 'Belanja Modal Alat Kedokteran Anak - Timbangan Bayi Digital', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(15, 344, 5, 15, 'AK1-P2102-3685557', 'Belanja Modal Alat Kedokteran Lainnya', 'Pemerintah Daerah Kabupaten Asahan', 'POLITEKNIK KESEHATAN PALEMBANG', '2021-05-18', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(16, 385, 19, 16, 'AK1-P2102-3689641', 'Penatalaksanaan Perbekalan Kesehatan Pakai Habis Di Pelayanan Kesehatan Milik Pemerintah Provinsi DKI Jakarta', 'Pemerintah Daerah Kabupaten Tangerang', 'POLITEKNIK KESEHATAN JOGYAKARTA', '2021-05-19', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(17, 265, 2, 17, 'AK1-P2102-3689641', 'Penatalaksanaan Perbekalan Kesehatan Pakai Habis Di Pelayanan Kesehatan Milik Pemerintah Provinsi DKI Jakarta', 'Pemerintah Daerah Provinsi Banten', 'POLITEKNIK KESEHATAN JOGYAKARTA', '2021-05-20', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(18, 365, 2, 18, 'AK1-P2102-3690088', 'Belanja Modal BLUD', 'Pemerintah Daerah Kabupaten Solok Selatan', 'RSJD DR RM SOEDJARWADI', '2021-05-21', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(20, 193, 9, 20, 'AK1-P2102-3691356', 'Belanja Modal Alat Kesehatan Kebidanan dan Penyakit Kandungan - Penguatan Penurunan Angka Kematian Ibu dan Bayi (DAK 2021) - Set Persalinan (Doppler)', 'Kementerian Kesehatan', 'DINAS KESEHATAN', '2021-05-23', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(21, 169, 23, 21, 'AK1-P2102-3691378', 'Belanja Modal Peralatan dan Mesin - Bidan Kit (Doppler)', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', 'Kementerian Kesehatan', '2021-05-24', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(22, 427, 24, 22, 'AK1-P2102-3691380', 'Belanja Modal Alat Kesehatan Kebidanan dan Penyakit Kandungan - Penguatan Penurunan Angka Kematian Ibu dan Bayi (DAK 2021) - Set Persalinan (Doppler)', 'Pemerintah Daerah Kabupaten Sleman', 'DINAS KESEHATAN', '2021-05-25', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(23, 2, 12, 23, 'AK1-P2103-3692381', 'Alat kedokteran lainnya', 'Pemerintah Daerah Kabupaten Bojonegoro', 'PUSAT KESEHATAN MASYARAKAT KECAMATAN CLINCING JAKUT', '2021-05-26', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(24, 319, 17, 24, 'AK1-P2103-3693134', 'Pengadaan Alat Labaratorium_RM', 'Pemerintah Daerah Kota Tangerang', 'PUSAT KESEHATAN MASYARAKAT KECAMATAN CLINCING JAKUT', '2021-05-27', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(25, 111, 2, 25, 'AK1-P2103-3693543', 'Pengadaan Alat Bantu Belajar Mengajar (ABBM) untuk Laboratorium Pada Poltekkes Kemenkes Palangka Raya Tahun 2021', 'Pemerintah Daerah Provinsi Jawa Tengah', 'RUMAH SAKIT UMUM DAERAH TAMAN SARI', '2021-05-28', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(26, 62, 19, 26, 'AK1-P2103-3693562', 'Pengadaan Alat Kesehatan Pelayanan Rawat Inap (DAK)', 'Pemerintah Daerah Kabupaten Dharmasraya', 'UPT Puskesmas Sibela', '2021-05-29', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(27, 454, 1, 27, 'AK1-P2103-3694440', 'Pengadaan Alat Laboratorium_RM', 'Pemerintah Daerah Provinsi DKI Jakarta', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-05-30', '2021-02-19', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(28, 158, 13, 28, 'AK1-P2103-3694852', 'Pengadaan untuk Alat Kedokteran/Kesehatan', 'Pemerintah Daerah Kota Surakarta', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-05-31', '2021-02-19', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(29, 298, 9, 29, 'AK1-P2103-3695107', 'Pengadaan Alat Laboratorium (BLU)', 'Pemerintah Daerah Kabupaten Berau', 'DINAS KESEHATAN KABUPATEN BERAU', '2021-06-01', '2021-02-20', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(30, 201, 18, 30, 'AK1-P2103-3695736', 'Pengadaan Pulse Oxymeter (Ruang Bismo dan Bekisar) RSJ Dr.Radjiman Wediodiningrat Lawang Tahun 2021', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', 'DINAS KESEHATAN', '2021-06-02', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(31, 105, 22, 31, 'AK1-P2103-3695752', 'Pengadaan Alat Kesehatan Pelayanan Rawat Inap (DAK)', 'Kepolisian Negara Republik Indonesia', 'POLITEKNIK KESEHATAN MANADO', '2021-06-03', '2021-02-24', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(32, 157, 20, 32, 'AK1-P2103-3696445', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Asahan', 'POLITEKNIK KESEHATAN PALANGKARAYA', '2021-06-04', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(33, 13, 25, 33, 'AK1-P2103-3696534', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Tangerang', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-05', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(35, 82, 23, 35, 'AK1-P2103-3696838', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Solok Selatan', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-07', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(36, 424, 11, 36, 'AK1-P2103-3697328', 'Pengadaan ABBM Laboratorium', 'Pemerintah Daerah kabupaten Tabanan', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-08', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(37, 178, 8, 37, 'AK1-P2103-3697463', 'Pengadaan ABBM Laboratorium', 'Kementerian Kesehatan', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-09', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(38, 90, 19, 38, 'AK1-P2103-3697463', 'Pengadaan ABBM Laboratorium', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', 'RUMKIT BHAYANGKARA BONDOWOSO', '2021-06-10', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(39, 79, 14, 39, 'AK1-P2103-3698088', 'Belanja Modal Pengadaan Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Sleman', 'POLITEKNIK KESEHATAN MANADO', '2021-06-11', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(40, 189, 25, 40, 'AK1-P2103-3698708', 'Belanja Modal Aset Tetap Lainnya', 'Pemerintah Daerah Kabupaten Bojonegoro', 'RSUD H ABDUL MANAN SIMATUPANG', '2021-06-12', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(41, 108, 8, 41, 'AK1-P2103-3699131', 'Belanja Modal Alat Kesehatan Umum Lainnya (Ruang CSSD,Ruang Laboratorium, Ruang Radiologi, Ruang Operasi)', 'Pemerintah Daerah Kota Tangerang', 'POLITEKNIK KESEHATAN MANADO', '2021-06-13', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(42, 406, 9, 42, 'AK1-P2103-3699131', 'Belanja Modal Alat Kesehatan Umum Lainnya (Ruang CSSD,Ruang Laboratorium, Ruang Radiologi, Ruang Operasi)', 'Pemerintah Daerah Provinsi Jawa Tengah', 'RUMAH SAKIT JIWA DR RADJIMAN WEDIODININGRAT LAWANG', '2021-06-14', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(43, 50, 21, 43, 'AK1-P2103-3699476', 'Belanja Pakai Habis Kesehatan', 'Pemerintah Daerah Kabupaten Dharmasraya', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-15', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(44, 214, 23, 44, 'AK1-P2103-3701368', 'Belanja modal alat kedokteran umum', 'Pemerintah Daerah Provinsi DKI Jakarta', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-16', '2021-02-27', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(45, 209, 15, 45, 'AK1-P2103-3702108', 'Belanja Modal Alat Ukur/Tes Klinis Lain - Thermometer Digital Infrared - RSUD Talisayan', 'Pemerintah Daerah Kota Surakarta', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-17', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(46, 340, 15, 46, 'AK1-P2103-3702134', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Kabupaten Berau', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-18', '2021-02-28', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(47, 346, 14, 47, 'AK1-P2103-3702265', 'Belanja Bahan ', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-19', '2021-02-28', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(48, 384, 25, 48, 'AK1-P2103-3703110', 'Belanja Alkes Pakai Habis e-catalog Puskesmas Kecamatan Menteng 2021', 'Kepolisian Negara Republik Indonesia', 'DINAS KESEHATAN PROVINSI NTB', '2021-06-20', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
-(49, 321, 4, 49, 'AK1-P2103-3703286', 'Belanja Barang Medis Habis Pakai Penunjang Medis Ekatalog', 'Pemerintah Daerah Kabupaten Asahan', 'DINAS KESEHATAN', '2021-06-21', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(50, 25, 15, 50, 'AK1-P2103-3704150', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Tangerang', 'DINAS KESEHATAN', '2021-06-22', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(51, 278, 2, 51, 'AK1-P2103-3704763', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Provinsi Banten', 'DINAS KESEHATAN', '2021-06-23', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
-(53, 213, 18, 217, 'AK1-1903183130831', '-', 'Dinas Kesehatan Lampung', 'Pemerintah Lampung', '2022-03-01', '2021-11-29', NULL, '2021-11-29 02:14:25', '2021-11-29 02:14:25', 'sepakat', 'penjualan');
+INSERT INTO `ekatalog` (`id`, `customer_id`, `provinsi_id`, `pesanan_id`, `no_paket`, `deskripsi`, `instansi`, `alamat`, `satuan`, `tgl_kontrak`, `tgl_buat`, `ket`, `created_at`, `updated_at`, `status`, `log`) VALUES
+(1, 449, 3, 1, 'AK1-P2102-3671852', 'Pengadaan Belanja Modal BLUD', 'Pemerintah Daerah Kabupaten Solok Selatan', NULL, 'Rumah Sakit Umum Daerah', '2021-12-08', '2021-02-09', NULL, NULL, NULL, 'sepakat', 'penjualan'),
+(2, 276, 14, 2, 'AK1-P2102-3672676', 'Belanja Modal Alat Kedokteran Gigi (ALKES DAN GIGI DAN MULUT)', 'Pemerintah Daerah kabupaten Tabanan', NULL, 'DINAS KESEHATAN KABUPATEN TABANAN', '2022-02-02', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(3, 319, 9, 3, 'AK1-P2102-3672860', 'Penyediaan Alat Kesehatan Untuk Mendukung RS Darurat Prop. Sulut, Babel dan RSUD DR. Zaenal Abidin Aceh', 'Kementerian Kesehatan', NULL, 'DIREKTORAT FASILITAS PELAYANAN KESEHATAN', '2022-02-15', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(4, 400, 14, 4, 'AK1-P2102-3673572', 'Belanja Modal Alat Kedokteran Umum RSUD Daha Sejahtera', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', NULL, 'Dinas Kesehatan', '2021-11-21', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(5, 147, 21, 5, 'AK1-P2102-3673706', 'Belanja Modal Pengadaan Alat-Alat Rumah Sakit (APBD)', 'Pemerintah Daerah Kabupaten Sleman', NULL, 'DINAS KESEHATAN', '2022-01-04', '2021-02-10', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(6, 66, 4, 6, 'AK1-P2102-3677900', 'Pengadaan Polindes Kit', 'Pemerintah Daerah Kabupaten Bojonegoro', NULL, 'DINAS KESEHATAN', '2021-02-11', '2021-02-11', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(7, 149, 19, 7, 'AK1-P2102-3679002', 'Pengadaan Polindes Kit', 'Pemerintah Daerah Kota Tangerang', NULL, 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(8, 317, 2, 8, 'AK1-P2102-3680185', 'Pengadaan Alat Laboratorium Poltekkes Kemenkes Surabya Tahun 2021', 'Pemerintah Daerah Provinsi Jawa Tengah', NULL, 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(9, 226, 15, 9, 'AK1-P2102-3680796', 'BELANJA ALAT KESEHATAN BLUD PUSKESMAS KARANG TENGAH', 'Pemerintah Daerah Kabupaten Dharmasraya', NULL, 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(10, 419, 16, 10, 'AK1-P2102-3681600', 'Pengadaan ABBM Laboratorium Poltekkes Kemenkes Palembang Tahun 2021', 'Pemerintah Daerah Provinsi DKI Jakarta', NULL, 'DINAS KESEHATAN', '2021-02-13', '2021-02-13', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(11, 181, 8, 11, 'AK1-P2102-3681944', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kota Surakarta', NULL, 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(12, 263, 2, 12, 'AK1-P2102-3684536', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Berau', NULL, 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(13, 248, 7, 13, 'AK1-P2102-3685030', 'Belanja Modal Alat Kedokteran Anak - Timbangan Bayi Digital', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', NULL, 'POLITEKNIK KESEHATAN SURABAYA', '2021-02-17', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(15, 344, 5, 15, 'AK1-P2102-3685557', 'Belanja Modal Alat Kedokteran Lainnya', 'Pemerintah Daerah Kabupaten Asahan', NULL, 'POLITEKNIK KESEHATAN PALEMBANG', '2021-05-18', '2021-02-17', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(16, 385, 19, 16, 'AK1-P2102-3689641', 'Penatalaksanaan Perbekalan Kesehatan Pakai Habis Di Pelayanan Kesehatan Milik Pemerintah Provinsi DKI Jakarta', 'Pemerintah Daerah Kabupaten Tangerang', NULL, 'POLITEKNIK KESEHATAN JOGYAKARTA', '2021-05-19', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(17, 265, 2, 17, 'AK1-P2102-3689641', 'Penatalaksanaan Perbekalan Kesehatan Pakai Habis Di Pelayanan Kesehatan Milik Pemerintah Provinsi DKI Jakarta', 'Pemerintah Daerah Provinsi Banten', NULL, 'POLITEKNIK KESEHATAN JOGYAKARTA', '2021-05-20', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(18, 365, 2, 18, 'AK1-P2102-3690088', 'Belanja Modal BLUD', 'Pemerintah Daerah Kabupaten Solok Selatan', NULL, 'RSJD DR RM SOEDJARWADI', '2021-05-21', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(20, 193, 9, 20, 'AK1-P2102-3691356', 'Belanja Modal Alat Kesehatan Kebidanan dan Penyakit Kandungan - Penguatan Penurunan Angka Kematian Ibu dan Bayi (DAK 2021) - Set Persalinan (Doppler)', 'Kementerian Kesehatan', NULL, 'DINAS KESEHATAN', '2021-05-23', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(21, 169, 23, 21, 'AK1-P2102-3691378', 'Belanja Modal Peralatan dan Mesin - Bidan Kit (Doppler)', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', NULL, 'Kementerian Kesehatan', '2021-05-24', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(22, 427, 24, 22, 'AK1-P2102-3691380', 'Belanja Modal Alat Kesehatan Kebidanan dan Penyakit Kandungan - Penguatan Penurunan Angka Kematian Ibu dan Bayi (DAK 2021) - Set Persalinan (Doppler)', 'Pemerintah Daerah Kabupaten Sleman', NULL, 'DINAS KESEHATAN', '2021-05-25', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(23, 2, 12, 23, 'AK1-P2103-3692381', 'Alat kedokteran lainnya', 'Pemerintah Daerah Kabupaten Bojonegoro', NULL, 'PUSAT KESEHATAN MASYARAKAT KECAMATAN CLINCING JAKUT', '2021-05-26', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(24, 319, 17, 24, 'AK1-P2103-3693134', 'Pengadaan Alat Labaratorium_RM', 'Pemerintah Daerah Kota Tangerang', NULL, 'PUSAT KESEHATAN MASYARAKAT KECAMATAN CLINCING JAKUT', '2021-05-27', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(25, 111, 2, 25, 'AK1-P2103-3693543', 'Pengadaan Alat Bantu Belajar Mengajar (ABBM) untuk Laboratorium Pada Poltekkes Kemenkes Palangka Raya Tahun 2021', 'Pemerintah Daerah Provinsi Jawa Tengah', NULL, 'RUMAH SAKIT UMUM DAERAH TAMAN SARI', '2021-05-28', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(26, 62, 19, 26, 'AK1-P2103-3693562', 'Pengadaan Alat Kesehatan Pelayanan Rawat Inap (DAK)', 'Pemerintah Daerah Kabupaten Dharmasraya', NULL, 'UPT Puskesmas Sibela', '2021-05-29', '2021-02-18', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(27, 454, 1, 27, 'AK1-P2103-3694440', 'Pengadaan Alat Laboratorium_RM', 'Pemerintah Daerah Provinsi DKI Jakarta', NULL, 'DINAS KESEHATAN KABUPATEN BERAU', '2021-05-30', '2021-02-19', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(28, 158, 13, NULL, 'AK1-P2103-3694852', 'Pengadaan untuk Alat Kedokteran/Kesehatan', 'Pemerintah Daerah Kota Surakarta', NULL, 'DINAS KESEHATAN KABUPATEN BERAU', '2021-05-31', '2021-02-19', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(29, 298, 9, NULL, 'AK1-P2103-3695107', 'Pengadaan Alat Laboratorium (BLU)', 'Pemerintah Daerah Kabupaten Berau', NULL, 'DINAS KESEHATAN KABUPATEN BERAU', '2021-06-01', '2021-02-20', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(30, 201, 18, 30, 'AK1-P2103-3695736', 'Pengadaan Pulse Oxymeter (Ruang Bismo dan Bekisar) RSJ Dr.Radjiman Wediodiningrat Lawang Tahun 2021', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', NULL, 'DINAS KESEHATAN', '2021-06-02', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(31, 105, 22, 31, 'AK1-P2103-3695752', 'Pengadaan Alat Kesehatan Pelayanan Rawat Inap (DAK)', 'Kepolisian Negara Republik Indonesia', NULL, 'POLITEKNIK KESEHATAN MANADO', '2021-06-03', '2021-02-24', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(32, 157, 20, 32, 'AK1-P2103-3696445', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Asahan', NULL, 'POLITEKNIK KESEHATAN PALANGKARAYA', '2021-06-04', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(33, 13, 25, 33, 'AK1-P2103-3696534', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Tangerang', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-05', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(35, 82, 23, 35, 'AK1-P2103-3696838', 'Belanja Modal Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Solok Selatan', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-07', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(36, 424, 11, 36, 'AK1-P2103-3697328', 'Pengadaan ABBM Laboratorium', 'Pemerintah Daerah kabupaten Tabanan', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-08', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(37, 178, 8, 37, 'AK1-P2103-3697463', 'Pengadaan ABBM Laboratorium', 'Kementerian Kesehatan', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-09', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(38, 90, 19, 38, 'AK1-P2103-3697463', 'Pengadaan ABBM Laboratorium', 'Pemerintah Daerah Kabupaten Hulu Sungai Selatan', NULL, 'RUMKIT BHAYANGKARA BONDOWOSO', '2021-06-10', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(39, 79, 14, 39, 'AK1-P2103-3698088', 'Belanja Modal Pengadaan Alat Kedokteran Umum', 'Pemerintah Daerah Kabupaten Sleman', NULL, 'POLITEKNIK KESEHATAN MANADO', '2021-06-11', '2021-02-23', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(40, 189, 25, 40, 'AK1-P2103-3698708', 'Belanja Modal Aset Tetap Lainnya', 'Pemerintah Daerah Kabupaten Bojonegoro', NULL, 'RSUD H ABDUL MANAN SIMATUPANG', '2021-06-12', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(41, 108, 8, 41, 'AK1-P2103-3699131', 'Belanja Modal Alat Kesehatan Umum Lainnya (Ruang CSSD,Ruang Laboratorium, Ruang Radiologi, Ruang Operasi)', 'Pemerintah Daerah Kota Tangerang', NULL, 'POLITEKNIK KESEHATAN MANADO', '2021-06-13', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(42, 406, 9, 42, 'AK1-P2103-3699131', 'Belanja Modal Alat Kesehatan Umum Lainnya (Ruang CSSD,Ruang Laboratorium, Ruang Radiologi, Ruang Operasi)', 'Pemerintah Daerah Provinsi Jawa Tengah', NULL, 'RUMAH SAKIT JIWA DR RADJIMAN WEDIODININGRAT LAWANG', '2021-06-14', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(43, 50, 21, 43, 'AK1-P2103-3699476', 'Belanja Pakai Habis Kesehatan', 'Pemerintah Daerah Kabupaten Dharmasraya', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-15', '2021-02-26', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(44, 214, 23, 44, 'AK1-P2103-3701368', 'Belanja modal alat kedokteran umum', 'Pemerintah Daerah Provinsi DKI Jakarta', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-16', '2021-02-27', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(45, 209, 15, 45, 'AK1-P2103-3702108', 'Belanja Modal Alat Ukur/Tes Klinis Lain - Thermometer Digital Infrared - RSUD Talisayan', 'Pemerintah Daerah Kota Surakarta', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-17', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(46, 340, 15, 46, 'AK1-P2103-3702134', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Kabupaten Berau', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-18', '2021-02-28', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(47, 346, 14, 47, 'AK1-P2103-3702265', 'Belanja Bahan ', 'Pemerintah Daerah Provinsi Nusa Tenggara Barat', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-19', '2021-02-28', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(48, 384, 25, 48, 'AK1-P2103-3703110', 'Belanja Alkes Pakai Habis e-catalog Puskesmas Kecamatan Menteng 2021', 'Kepolisian Negara Republik Indonesia', NULL, 'DINAS KESEHATAN PROVINSI NTB', '2021-06-20', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'sepakat', 'penjualan'),
+(49, 321, 4, 49, 'AK1-P2103-3703286', 'Belanja Barang Medis Habis Pakai Penunjang Medis Ekatalog', 'Pemerintah Daerah Kabupaten Asahan', NULL, 'DINAS KESEHATAN', '2021-06-21', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(50, 25, 15, 50, 'AK1-P2103-3704150', 'Pengadaan Sarana Pendidikan di Poltekkes Kemenkes Yogyakarta berupa AABM Laboratorium', 'Pemerintah Daerah Kabupaten Tangerang', NULL, 'DINAS KESEHATAN', '2021-06-22', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(51, 278, 2, 51, 'AK1-P2103-3704763', 'pengadaan ABBM Laboratorium', 'Pemerintah Daerah Provinsi Banten', NULL, 'DINAS KESEHATAN', '2021-06-23', '2021-03-01', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'batal', 'penjualan'),
+(55, 87, 4, 224, 'AK1-8989', 'Deskripsi', 'Instansi', 'JL. Ahmad Yani 116, Sby', 'Satuan', '2021-12-06', '2021-12-06', NULL, '2021-12-06 07:10:32', '2021-12-06 07:10:32', 'draft', 'penjualan'),
+(56, 251, 2, 225, 'AK1-P1232312', 'Deskk', 'Instansi', 'Jl. Basuki Rahmad No.308 Rt.000 Rw.000 Kel.Temayang Kec.Temayang Bojonegoro, Jawa Timur', 'Satuab', '2022-03-10', '2021-12-06', NULL, '2021-12-06 07:58:22', '2021-12-06 08:03:36', 'sepakat', 'po'),
+(57, 395, 11, 226, 'AK1-903.164.009', '-', 'Puskesmas Kebomas', 'Jl. Mastrip Kr. Pilang 12 Surabaya', 'Pemerintah Kabupaten Gresik', '2021-12-07', '2021-12-07', NULL, '2021-12-07 02:24:07', '2021-12-07 02:24:07', 'draft', 'penjualan'),
+(58, 435, 11, 227, 'AK1-903.164.001', '-', 'Rumah Sakit Dr Ramelan Sby', 'Jl. Ahmad Yani 1-10, Wonokromo, Surabaya', 'Yayasan Hang Tuah', '2021-12-07', '2021-12-07', NULL, '2021-12-07 03:44:10', '2021-12-07 03:44:10', 'sepakat', 'penjualan');
 
 -- --------------------------------------------------------
 
@@ -1855,7 +1901,7 @@ CREATE TABLE `gdg_barang_jadi` (
 --
 
 INSERT INTO `gdg_barang_jadi` (`id`, `produk_id`, `nama`, `deskripsi`, `stok`, `satuan_id`, `layout_id`, `gambar`, `dim_p`, `dim_l`, `dim_t`, `status`, `created_at`, `updated_at`) VALUES
-(5, 8, 'merah', 'test', 1009, 1, 1, '20211115150327.jpg', '1', '2', '3', NULL, '2021-11-15 08:03:27', '2021-11-23 09:14:05'),
+(5, 8, 'merah', 'test', 991, 1, 1, '20211115150327.jpg', '1', '2', '3', NULL, '2021-11-15 08:03:27', '2021-12-07 05:04:23'),
 (6, 17, 'biru', 'tewr', 0, 2, NULL, '20211115150719.png', '2', '3', '4', NULL, '2021-11-15 08:07:19', '2021-11-15 08:07:19'),
 (7, 1, '', '', 15, 2, NULL, NULL, '0', '0', '0', NULL, NULL, '2021-11-22 07:57:55'),
 (8, 2, '', '', 3, 2, NULL, NULL, '0', '0', '0', NULL, NULL, '2021-11-17 07:04:27'),
@@ -1865,12 +1911,12 @@ INSERT INTO `gdg_barang_jadi` (`id`, `produk_id`, `nama`, `deskripsi`, `stok`, `
 (12, 5, '', '', 258, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (13, 6, '', '', 20, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (14, 7, '', '', 0, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
-(15, 9, '', '', 3, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
+(15, 9, '', '', 6, 2, NULL, NULL, '0', '0', '0', NULL, NULL, '2021-12-06 07:27:42'),
 (16, 10, '', '', 2, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (17, 11, '', '', 0, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (18, 12, '', '', 0, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (19, 13, '', '', 0, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
-(20, 14, '', '', 335, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
+(20, 14, '', '', 317, 2, NULL, NULL, '0', '0', '0', NULL, NULL, '2021-12-07 05:04:23'),
 (21, 15, '', '', 4, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (22, 16, '', '', 68, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (23, 16, '', '', 0, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
@@ -2070,7 +2116,8 @@ INSERT INTO `gdg_barang_jadi` (`id`, `produk_id`, `nama`, `deskripsi`, `stok`, `
 (217, 155, '', '', 0, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (218, 156, '', '', 5, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
 (219, 157, '', '', 3, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
-(220, 158, '', '', 616, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL);
+(220, 158, '', '', 616, 2, NULL, NULL, '0', '0', '0', NULL, NULL, NULL),
+(221, 2, 'biru', 'test deskripsi', 0, 3, NULL, '20211203132406.png', '1', '2', '3', NULL, '2021-12-03 06:24:06', '2021-12-03 06:24:06');
 
 -- --------------------------------------------------------
 
@@ -2105,7 +2152,8 @@ INSERT INTO `gdg_barang_jadi_his` (`id`, `gdg_brg_jadi_id`, `produk_id`, `nama`,
 (3, 5, 8, 'merah', 'test', 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-15 08:03:29', '2021-11-15 08:03:29'),
 (4, 6, 17, 'biru', 'tewr', 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-15 08:07:22', '2021-11-15 08:07:22'),
 (5, 5, 8, 'merah1', 'test', 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-23 01:05:44', '2021-11-23 01:05:44'),
-(6, 5, 8, 'merah', 'test', 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-23 01:06:05', '2021-11-23 01:06:05');
+(6, 5, 8, 'merah', 'test', 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-23 01:06:05', '2021-11-23 01:06:05'),
+(7, 221, 2, 'biru', 'test deskripsi', 0, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-12-03 06:24:08', '2021-12-03 06:24:08');
 
 -- --------------------------------------------------------
 
@@ -2133,14 +2181,14 @@ CREATE TABLE `jadwal_perakitan` (
 --
 
 INSERT INTO `jadwal_perakitan` (`id`, `produk_id`, `jumlah`, `tanggal_mulai`, `tanggal_selesai`, `status`, `state`, `konfirmasi`, `warna`, `status_tf`, `created_at`, `updated_at`) VALUES
-(91, 68, 20, '2021-11-22', '2021-11-29', 'pelaksanaan', 'perencanaan', 0, 'rgb(23, 162, 184)', 11, '2021-11-18 00:40:54', '2021-11-23 02:42:58'),
+(91, 68, 20, '2021-11-22', '2021-11-29', 'selesai', 'perencanaan', 0, 'rgb(23, 162, 184)', 14, '2021-11-18 00:40:54', '2021-12-03 07:23:05'),
 (94, 6, 12, '2021-11-08', '2021-11-16', 'pelaksanaan', 'perencanaan', 0, 'rgb(220, 53, 69)', 11, '2021-11-18 03:13:48', '2021-11-23 02:42:58'),
-(97, 12, 121, '2021-12-08', '2021-12-16', 'penyusunan', 'perencanaan', 0, 'rgb(220, 53, 69)', 11, '2021-11-19 00:24:34', '2021-11-23 02:42:11'),
-(98, 15, 12, '2021-12-15', '2021-12-23', 'penyusunan', 'perencanaan', 0, 'rgb(255, 193, 7)', 11, '2021-11-19 00:24:43', '2021-11-23 02:42:11'),
+(97, 12, 121, '2021-12-08', '2021-12-16', 'pelaksanaan', 'perencanaan', 0, 'rgb(220, 53, 69)', 11, '2021-11-19 00:24:34', '2021-11-23 02:42:11'),
+(98, 15, 12, '2021-12-15', '2021-12-23', 'pelaksanaan', 'perencanaan', 0, 'rgb(255, 193, 7)', 14, '2021-11-19 00:24:43', '2021-12-06 04:17:32'),
 (100, 25, 131, '2021-12-09', '2021-12-15', 'penyusunan', 'perencanaan', 0, 'rgb(40, 167, 69)', 11, '2021-11-21 20:01:42', '2021-11-23 02:42:11'),
-(101, 15, 12, '2021-12-23', '2021-12-28', 'penyusunan', 'perencanaan', 0, 'rgb(255, 193, 7)', 11, '2021-11-21 20:04:08', '2021-11-23 02:42:11'),
+(101, 15, 12, '2021-12-23', '2021-12-28', 'penyusunan', 'perencanaan', 0, 'rgb(255, 193, 7)', 12, '2021-11-21 20:04:08', '2021-12-06 09:33:55'),
 (103, 30, 121, '2021-12-06', '2021-12-08', 'penyusunan', 'perencanaan', 0, 'rgb(23, 162, 184)', 11, '2021-11-22 18:12:48', '2021-11-23 02:42:11'),
-(104, 8, 12, '2021-12-01', '2021-12-04', 'penyusunan', 'perencanaan', 0, 'rgb(0, 123, 255)', 11, '2021-11-22 18:16:23', '2021-11-23 02:42:11'),
+(104, 8, 12, '2021-12-01', '2021-12-04', 'pelaksanaan', 'perencanaan', 0, 'rgb(0, 123, 255)', 11, '2021-11-22 18:16:23', '2021-12-03 07:17:41'),
 (105, 10, 12, '2021-12-02', '2021-12-11', 'penyusunan', 'perencanaan', 0, 'rgb(40, 167, 69)', 11, '2021-11-23 02:39:38', '2021-11-23 02:42:11');
 
 -- --------------------------------------------------------
@@ -2153,7 +2201,8 @@ CREATE TABLE `jadwal_rakit_noseri` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `jadwal_id` bigint(20) UNSIGNED DEFAULT NULL,
   `noseri` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `date_in` timestamp NULL DEFAULT NULL,
   `waktu_tf` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
@@ -2163,27 +2212,47 @@ CREATE TABLE `jadwal_rakit_noseri` (
 -- Dumping data untuk tabel `jadwal_rakit_noseri`
 --
 
-INSERT INTO `jadwal_rakit_noseri` (`id`, `jadwal_id`, `noseri`, `status`, `waktu_tf`, `created_at`, `updated_at`) VALUES
-(61, 91, 'ser1', 'Belum Diterima', NULL, '2021-11-29 03:04:00', '2021-11-29 03:04:00'),
-(62, 91, 'ser2', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(63, 91, 'ser3', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(64, 91, 'ser4', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(65, 91, 'ser5', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(66, 91, 'ser6', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(67, 91, 'ser7', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(68, 91, 'ser8', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(69, 91, 'ser9', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(70, 91, 'ser10', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(71, 91, 'ser11', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(72, 91, 'ser12', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(73, 91, 'ser13', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(74, 91, 'ser14', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(75, 91, 'ser15', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(76, 91, 'ser16', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(77, 91, 'ser17', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(78, 91, 'ser18', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(79, 91, 'ser19', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02'),
-(80, 91, 'ser20', 'Belum Diterima', NULL, '2021-11-29 03:04:02', '2021-11-29 03:04:02');
+INSERT INTO `jadwal_rakit_noseri` (`id`, `jadwal_id`, `noseri`, `status`, `date_in`, `waktu_tf`, `created_at`, `updated_at`) VALUES
+(61, 91, 'ser1', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:00', '2021-12-06 04:52:45'),
+(62, 91, 'ser2', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(63, 91, 'ser3', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(64, 91, 'ser4', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(65, 91, 'ser5', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(66, 91, 'ser6', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(67, 91, 'ser7', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(68, 91, 'ser8', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(69, 91, 'ser9', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(70, 91, 'ser10', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(71, 91, 'ser11', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(72, 91, 'ser12', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(73, 91, 'ser13', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(74, 91, 'ser14', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(75, 91, 'ser15', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(76, 91, 'ser16', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(77, 91, 'ser17', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(78, 91, 'ser18', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(79, 91, 'ser19', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(80, 91, 'ser20', 14, '2021-11-29 03:04:00', '2021-12-03 07:23:25', '2021-11-29 03:04:02', '2021-12-06 04:52:45'),
+(107, 98, 'test', 14, '2021-12-06 02:16:35', '2021-12-06 03:57:09', '2021-12-06 02:16:35', '2021-12-06 03:57:09'),
+(108, 98, 'test1', 14, '2021-12-06 02:20:36', '2021-12-06 04:08:08', '2021-12-06 02:16:36', '2021-12-06 04:40:26'),
+(109, 98, 'test2', 14, '2021-12-06 02:20:36', '2021-12-06 04:08:08', '2021-12-06 03:18:49', '2021-12-06 04:40:26'),
+(110, 98, 'test3', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 05:10:43'),
+(111, 98, 'test4', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 05:10:43'),
+(112, 98, 'test5', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 05:10:43'),
+(113, 98, 'test6', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 05:10:43'),
+(114, 98, 'test7', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 04:17:32'),
+(115, 98, 'test8', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 04:17:32'),
+(116, 98, 'test9', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 04:17:32'),
+(117, 98, 'test10', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 04:17:32'),
+(118, 98, 'test11', 14, '2021-12-06 03:18:49', '2021-12-06 04:17:32', '2021-12-06 03:18:49', '2021-12-06 04:17:32'),
+(119, 101, 'tes1', 11, '2021-12-06 09:33:55', NULL, '2021-12-06 09:33:55', '2021-12-06 09:33:55'),
+(120, 97, '2', 11, '2021-12-07 03:33:16', NULL, '2021-12-07 03:33:16', '2021-12-07 03:33:16'),
+(121, 97, '3', 11, '2021-12-07 03:33:16', NULL, '2021-12-07 03:33:16', '2021-12-07 03:33:16'),
+(122, 97, 'test1', 11, '2021-12-07 03:33:16', NULL, '2021-12-07 03:33:16', '2021-12-07 03:33:16'),
+(123, 97, '1', 11, '2021-12-07 03:34:27', NULL, '2021-12-07 03:34:27', '2021-12-07 03:34:27'),
+(124, 97, '2', 11, '2021-12-07 03:34:27', NULL, '2021-12-07 03:34:27', '2021-12-07 03:34:27'),
+(125, 97, '3', 11, '2021-12-07 03:34:27', NULL, '2021-12-07 03:34:27', '2021-12-07 03:34:27'),
+(126, 97, 'test1', 11, '2021-12-07 03:34:27', NULL, '2021-12-07 03:34:27', '2021-12-07 03:34:27');
 
 -- --------------------------------------------------------
 
@@ -2267,9 +2336,9 @@ CREATE TABLE `logistik` (
 --
 
 INSERT INTO `logistik` (`id`, `ekspedisi_id`, `nosurat`, `tgl_kirim`, `nama_pengirim`, `created_at`, `updated_at`) VALUES
-(56, 1, 'SPA-001', '2021-11-29', NULL, '2021-11-29 05:20:23', '2021-11-29 05:20:23'),
-(57, NULL, 'SPA-001', '2021-11-16', 'Diambil Pak Nuri', '2021-11-29 05:22:28', '2021-11-29 05:22:28'),
-(58, NULL, 'SPA-777', '2021-11-23', 'Umar', '2021-11-29 06:27:18', '2021-11-29 06:27:18');
+(15, 2, 'SPA-5645', '2021-12-02', NULL, '2021-12-02 01:33:59', '2021-12-02 01:33:59'),
+(16, 60, 'SPA-1234', '2021-12-02', NULL, '2021-12-02 08:53:17', '2021-12-02 08:53:17'),
+(17, NULL, 'SPA-999', '2021-12-01', 'dikirim pk nuri', '2021-12-03 09:00:42', '2021-12-03 09:00:42');
 
 -- --------------------------------------------------------
 
@@ -16606,9 +16675,10 @@ INSERT INTO `m_state` (`id`, `nama`, `jenis_id`, `is_aktif`, `created_at`, `upda
 (9, 'PO', 4, 1, NULL, NULL),
 (10, 'Kirim', 4, 1, NULL, NULL),
 (11, 'Belum Terkirim', 4, 1, NULL, NULL),
-(12, 'Terisi Noseri', 4, 1, NULL, NULL),
+(12, 'Terisi Noseri Sebagian', 4, 1, NULL, NULL),
 (13, 'Terkirim Sebagian', 4, 1, NULL, NULL),
-(14, 'Sudah Terkirim', 4, 1, NULL, NULL);
+(14, 'Sudah Terkirim', 4, 1, NULL, NULL),
+(15, 'Terisi Noseri', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -16858,7 +16928,130 @@ INSERT INTO `noseri_barang_jadi` (`id`, `gdg_barang_jadi_id`, `dari`, `ke`, `nos
 (203, 5, NULL, 23, 'ser1', 'MASUK', NULL, '2021-11-23 09:13:54', '2021-11-23 09:13:54'),
 (204, 5, NULL, 23, 'wer1', 'MASUK', NULL, '2021-11-23 09:13:54', '2021-11-23 09:13:54'),
 (205, 5, NULL, 23, 'ser1', 'MASUK', NULL, '2021-11-23 09:14:05', '2021-11-23 09:14:05'),
-(206, 5, NULL, 23, 'wer1', 'MASUK', NULL, '2021-11-23 09:14:05', '2021-11-23 09:14:05');
+(206, 5, NULL, 23, 'wer1', 'MASUK', NULL, '2021-11-23 09:14:05', '2021-11-23 09:14:05'),
+(207, NULL, 17, NULL, 'ser1', 'MASUK', 0, '2021-11-30 09:19:21', '2021-11-30 09:19:21'),
+(208, NULL, 17, NULL, 'ser2', 'MASUK', 0, '2021-11-30 09:19:21', '2021-11-30 09:19:21'),
+(209, NULL, 17, NULL, 'ser3', 'MASUK', 0, '2021-11-30 09:19:21', '2021-11-30 09:19:21'),
+(210, NULL, 17, NULL, 'ser4', 'MASUK', 0, '2021-11-30 09:19:22', '2021-11-30 09:19:22'),
+(211, NULL, 17, NULL, 'ser5', 'MASUK', 0, '2021-11-30 09:19:22', '2021-11-30 09:19:22'),
+(212, NULL, 17, NULL, 'ser1', 'MASUK', 0, '2021-11-30 09:36:01', '2021-11-30 09:36:01'),
+(213, NULL, 17, NULL, 'ser2', 'MASUK', 0, '2021-11-30 09:36:02', '2021-11-30 09:36:02'),
+(214, NULL, 17, NULL, 'ser3', 'MASUK', 0, '2021-11-30 09:36:02', '2021-11-30 09:36:02'),
+(215, NULL, 17, NULL, 'ser4', 'MASUK', 0, '2021-11-30 09:36:02', '2021-11-30 09:36:02'),
+(216, NULL, 17, NULL, 'ser5', 'MASUK', 0, '2021-11-30 09:36:02', '2021-11-30 09:36:02'),
+(217, 166, 17, 23, 'SERIKU1', 'MASUK', 1, NULL, NULL),
+(218, 166, 17, 23, 'SERIKU2', 'MASUK', 1, NULL, NULL),
+(219, 166, 17, 23, 'SERIKU3', 'MASUK', 1, NULL, NULL),
+(220, 134, 17, 23, 'INIKU1', 'MASUK', 1, NULL, NULL),
+(221, 134, 17, 23, 'INIKU2', 'MASUK', 1, NULL, NULL),
+(222, 134, 17, 23, 'INIKU3', 'MASUK', 1, NULL, NULL),
+(223, 204, 17, 23, 'TES1', 'MASUK', 1, NULL, NULL),
+(224, 204, 17, 23, 'TES2', 'MASUK', 1, NULL, NULL),
+(225, 204, 17, 23, 'TES3', 'MASUK', 1, NULL, NULL),
+(226, 147, 17, 23, 'ABC1', 'MASUK', NULL, NULL, NULL),
+(227, 147, 17, 23, 'ABC2', 'MASUK', NULL, NULL, NULL),
+(228, 204, 17, 23, 'DEF1', 'MASUK', NULL, NULL, NULL),
+(229, 204, 17, 23, 'DEF2', 'MASUK', NULL, NULL, NULL),
+(230, 150, 17, 23, 'FGH1', 'MASUK', NULL, NULL, NULL),
+(231, 150, 17, 23, 'FGH2', 'MASUK', NULL, NULL, NULL),
+(232, 199, 17, 23, 'HIJ1', 'MASUK', NULL, NULL, NULL),
+(233, 199, 17, 23, 'HIJ2', 'MASUK', NULL, NULL, NULL),
+(234, 151, 17, 23, 'BBB1', 'MASUK', NULL, NULL, NULL),
+(235, 151, 17, 23, 'BBB2', 'MASUK', NULL, NULL, NULL),
+(262, NULL, 17, NULL, 'ser1', 'MASUK', 0, '2021-12-03 02:07:41', '2021-12-03 02:07:41'),
+(263, 68, 17, NULL, 'ser1', 'MASUK', 1, '2021-12-03 02:08:17', '2021-12-03 03:06:50'),
+(264, 68, 17, NULL, 'ser2', 'MASUK', 1, '2021-12-03 02:08:17', '2021-12-03 03:06:50'),
+(265, 68, 17, NULL, 'ser3', 'MASUK', 1, '2021-12-03 02:08:17', '2021-12-03 03:47:40'),
+(266, 68, 17, NULL, 'ser4', 'MASUK', 1, '2021-12-03 02:08:17', '2021-12-03 03:47:40'),
+(267, 68, 17, NULL, 'ser5', 'MASUK', 1, '2021-12-03 02:08:17', '2021-12-03 06:29:29'),
+(268, 68, 17, NULL, 'ser6', 'MASUK', 1, '2021-12-03 02:08:17', '2021-12-03 06:29:29'),
+(269, 68, 17, NULL, 'ser7', 'MASUK', 0, '2021-12-03 02:08:17', '2021-12-03 02:08:17'),
+(270, 68, 17, NULL, 'ser8', 'MASUK', 0, '2021-12-03 02:08:17', '2021-12-03 02:08:17'),
+(271, 68, 17, NULL, 'ser9', 'MASUK', 0, '2021-12-03 02:08:18', '2021-12-03 02:08:18'),
+(272, 68, 17, NULL, 'ser10', 'MASUK', 0, '2021-12-03 02:08:18', '2021-12-03 02:08:18'),
+(273, 68, 17, NULL, 'ser1', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(274, 68, 17, NULL, 'ser2', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(275, 68, 17, NULL, 'ser3', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(276, 68, 17, NULL, 'ser4', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(277, 68, 17, NULL, 'ser5', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(278, 68, 17, NULL, 'ser6', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(279, 68, 17, NULL, 'ser7', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(280, 68, 17, NULL, 'ser8', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(281, 68, 17, NULL, 'ser9', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(282, 68, 17, NULL, 'ser10', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(283, 68, 17, NULL, 'ser11', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(284, 68, 17, NULL, 'ser12', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(285, 68, 17, NULL, 'ser13', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(286, 68, 17, NULL, 'ser14', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(287, 68, 17, NULL, 'ser15', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(288, 68, 17, NULL, 'ser16', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(289, 68, 17, NULL, 'ser17', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(290, 68, 17, NULL, 'ser18', 'MASUK', 0, '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(291, 68, 17, NULL, 'ser19', 'MASUK', 0, '2021-12-03 03:10:57', '2021-12-03 03:10:57'),
+(292, 68, 17, NULL, 'ser20', 'MASUK', 0, '2021-12-03 03:10:57', '2021-12-03 03:10:57'),
+(293, 68, 17, NULL, 'ser1', 'MASUK', 0, '2021-12-03 07:23:04', '2021-12-03 07:23:04'),
+(294, 68, 17, NULL, 'ser2', 'MASUK', 0, '2021-12-03 07:23:05', '2021-12-03 07:23:05'),
+(295, 68, 17, NULL, 'ser3', 'MASUK', 0, '2021-12-03 07:23:05', '2021-12-03 07:23:05'),
+(296, 68, 17, NULL, 'ser1', 'MASUK', 0, '2021-12-03 07:23:07', '2021-12-03 07:23:07'),
+(297, 68, 17, NULL, 'ser2', 'MASUK', 0, '2021-12-03 07:23:07', '2021-12-03 07:23:07'),
+(298, 68, 17, NULL, 'ser3', 'MASUK', 0, '2021-12-03 07:23:07', '2021-12-03 07:23:07'),
+(299, 68, 17, NULL, 'ser1', 'MASUK', 0, '2021-12-03 07:23:17', '2021-12-03 07:23:17'),
+(300, 68, 17, NULL, 'ser2', 'MASUK', 0, '2021-12-03 07:23:17', '2021-12-03 07:23:17'),
+(301, 68, 17, NULL, 'ser3', 'MASUK', 0, '2021-12-03 07:23:17', '2021-12-03 07:23:17'),
+(302, 68, 17, NULL, 'ser1', 'MASUK', 0, '2021-12-03 07:23:25', '2021-12-03 07:23:25'),
+(303, 68, 17, NULL, 'ser2', 'MASUK', 0, '2021-12-03 07:23:25', '2021-12-03 07:23:25'),
+(304, 68, 17, NULL, 'ser3', 'MASUK', 0, '2021-12-03 07:23:25', '2021-12-03 07:23:25'),
+(305, 15, 17, NULL, 'test', 'MASUK', 1, '2021-12-06 03:57:09', '2021-12-06 07:27:04'),
+(307, 15, 17, NULL, 'test1', 'MASUK', 1, '2021-12-06 04:08:08', '2021-12-06 07:27:42'),
+(308, 15, 17, NULL, 'test2', 'MASUK', 1, '2021-12-06 04:08:08', '2021-12-06 07:27:42'),
+(309, 15, 17, NULL, 'test3', 'MASUK', 0, '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(310, 15, 17, NULL, 'test4', 'MASUK', 0, '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(311, 15, 17, NULL, 'test5', 'MASUK', 0, '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(312, 15, 17, NULL, 'test6', 'MASUK', 0, '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(313, 15, 17, NULL, 'test7', 'MASUK', 0, '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(314, 15, 17, NULL, 'test8', 'MASUK', 0, '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(315, 15, 17, NULL, 'test9', 'MASUK', 0, '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(316, 15, 17, NULL, 'test10', 'MASUK', 0, '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(317, 15, 17, NULL, 'test11', 'MASUK', 0, '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(332, 5, 2, NULL, 'test1', 'MASUK', 0, '2021-12-07 02:28:41', '2021-12-07 02:28:41'),
+(333, 5, 2, NULL, 'test2', 'MASUK', 0, '2021-12-07 02:28:41', '2021-12-07 02:28:41'),
+(334, 6, 2, NULL, 'test3', 'MASUK', 0, '2021-12-07 02:28:41', '2021-12-07 02:28:41'),
+(335, 6, 2, NULL, 'qwe', 'MASUK', 0, '2021-12-07 02:28:41', '2021-12-07 02:28:41'),
+(336, 6, 2, NULL, 'qas', 'MASUK', 0, '2021-12-07 02:28:41', '2021-12-07 02:28:41'),
+(337, 6, 2, NULL, 'qaz', 'MASUK', 0, '2021-12-07 02:28:41', '2021-12-07 02:28:41'),
+(338, 6, 1, NULL, 'a', 'MASUK', 0, '2021-12-07 02:36:35', '2021-12-07 02:36:35'),
+(339, 6, 1, NULL, 's', 'MASUK', 0, '2021-12-07 02:36:36', '2021-12-07 02:36:36'),
+(340, 5, 1, NULL, 'a', 'MASUK', 1, '2021-12-07 03:04:28', '2021-12-07 03:23:46'),
+(341, 5, 1, NULL, 's', 'MASUK', 1, '2021-12-07 03:04:28', '2021-12-07 03:25:02'),
+(342, 5, 1, NULL, 'q', 'MASUK', 1, '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(343, 5, 1, NULL, 'a', 'MASUK', 1, '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(344, 6, 1, NULL, '1', 'MASUK', 1, '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(345, 6, 1, NULL, '2', 'MASUK', 1, '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(346, 6, 1, NULL, '3', 'MASUK', 1, '2021-12-07 03:06:05', '2021-12-07 03:06:05');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `noseri_coo`
+--
+
+CREATE TABLE `noseri_coo` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nama` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `jabatan` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `noseri_logistik_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `noseri_coo`
+--
+
+INSERT INTO `noseri_coo` (`id`, `nama`, `jabatan`, `noseri_logistik_id`, `created_at`, `updated_at`) VALUES
+(16, NULL, NULL, 1, '2021-12-03 03:21:58', '2021-12-03 03:21:58'),
+(19, NULL, NULL, 6, '2021-12-03 09:06:29', '2021-12-03 09:06:29'),
+(20, 'Ryan', 'Karyawan', 2, '2021-12-06 01:59:32', '2021-12-06 01:59:32');
 
 -- --------------------------------------------------------
 
@@ -16892,7 +17085,56 @@ INSERT INTO `noseri_detail_pesanan` (`id`, `detail_pesanan_produk_id`, `t_tfbj_n
 (48, 4, 7, 'ok', '2021-11-29', '2021-11-29 02:27:49', '2021-11-29 02:27:49'),
 (49, 5, 10, 'ok', '2021-11-28', '2021-11-29 02:28:45', '2021-11-29 02:28:45'),
 (50, 6, 12, 'ok', '2021-11-08', '2021-11-29 02:30:32', '2021-11-29 02:30:32'),
-(51, 5, 11, 'ok', '2021-11-28', '2021-11-29 02:33:39', '2021-11-29 02:33:39');
+(51, 5, 11, 'ok', '2021-11-28', '2021-11-29 02:33:39', '2021-11-29 02:33:39'),
+(61, 59, 502, 'ok', '2021-12-22', '2021-12-02 02:46:28', '2021-12-02 02:46:28'),
+(62, 59, 501, 'ok', '2021-12-29', '2021-12-02 02:46:41', '2021-12-02 02:46:41'),
+(63, 60, 504, 'ok', '2021-12-14', '2021-12-02 02:47:31', '2021-12-02 02:47:31'),
+(64, 9, 19, 'ok', '2021-12-20', '2021-12-02 02:47:47', '2021-12-02 02:47:47'),
+(65, 9, 20, 'ok', '2021-12-21', '2021-12-02 02:48:02', '2021-12-02 02:48:02'),
+(66, 10, 24, 'ok', '2021-12-13', '2021-12-02 02:48:24', '2021-12-02 02:48:24'),
+(67, 10, 25, 'ok', '2021-12-07', '2021-12-02 02:48:33', '2021-12-02 02:48:33'),
+(77, 11, 33, 'ok', '2021-12-02', '2021-12-02 03:34:38', '2021-12-02 03:34:38'),
+(78, 11, 34, 'ok', '2021-12-02', '2021-12-02 03:34:38', '2021-12-02 03:34:38'),
+(79, 77, 516, 'ok', '2021-12-06', '2021-12-02 03:35:27', '2021-12-02 03:35:27'),
+(80, 77, 517, 'ok', '2021-12-06', '2021-12-02 03:35:27', '2021-12-02 03:35:27'),
+(81, 74, 510, 'ok', '2021-12-22', '2021-12-02 03:44:57', '2021-12-02 03:44:57'),
+(82, 74, 511, 'ok', '2021-12-22', '2021-12-02 03:44:57', '2021-12-02 03:44:57'),
+(83, 75, 512, 'ok', '2021-12-07', '2021-12-02 03:45:22', '2021-12-02 03:45:22'),
+(84, 75, 513, 'ok', '2021-12-07', '2021-12-02 03:45:22', '2021-12-02 03:45:22'),
+(85, 76, 514, 'ok', '2021-12-20', '2021-12-02 03:45:31', '2021-12-02 03:45:31'),
+(86, 76, 515, 'ok', '2021-12-20', '2021-12-02 03:45:31', '2021-12-02 03:45:31'),
+(87, 78, 518, 'ok', '2021-11-29', '2021-12-02 03:45:40', '2021-12-02 03:45:40'),
+(88, 78, 519, 'ok', '2021-11-29', '2021-12-02 03:45:40', '2021-12-02 03:45:40'),
+(89, 12, 35, 'nok', '2021-12-01', '2021-12-03 08:52:21', '2021-12-03 08:51:40'),
+(90, 12, 36, 'ok', '2021-12-24', '2021-12-03 08:51:40', '2021-12-03 08:51:40'),
+(91, 12, 37, 'ok', '2021-12-24', '2021-12-03 08:51:40', '2021-12-03 08:51:40'),
+(92, 12, 38, 'ok', '2021-12-24', '2021-12-03 08:51:40', '2021-12-03 08:51:40');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `noseri_logistik`
+--
+
+CREATE TABLE `noseri_logistik` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `detail_logistik_id` bigint(20) UNSIGNED NOT NULL,
+  `noseri_detail_pesanan_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `noseri_logistik`
+--
+
+INSERT INTO `noseri_logistik` (`id`, `detail_logistik_id`, `noseri_detail_pesanan_id`, `created_at`, `updated_at`) VALUES
+(1, 13, 38, '2021-12-02 01:33:59', '2021-12-02 01:33:59'),
+(2, 13, 39, '2021-12-02 01:33:59', '2021-12-02 01:33:59'),
+(3, 14, 40, '2021-12-02 01:34:00', '2021-12-02 01:34:00'),
+(4, 14, 45, '2021-12-02 01:34:00', '2021-12-02 01:34:00'),
+(5, 15, 47, '2021-12-02 08:53:17', '2021-12-02 08:53:17'),
+(6, 16, 43, '2021-12-03 09:00:42', '2021-12-03 09:00:42');
 
 -- --------------------------------------------------------
 
@@ -17126,7 +17368,8 @@ INSERT INTO `penjualan_produk` (`id`, `nama`, `harga`, `created_at`, `updated_at
 (199, 'ZTP 300 + UPS', 57640000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (200, 'ZTP80AS-UPGRADE', 9680000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (201, 'ZTP80AS-UPGRADE + UPS', 25960000, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(216, 'FOX BABY+ UPS', 213, NULL, NULL);
+(216, 'FOX BABY+ UPS', 213, NULL, NULL),
+(217, 'ABPM50 + njj', 560000, '2021-12-03 08:25:37', '2021-12-03 08:25:37');
 
 -- --------------------------------------------------------
 
@@ -17171,10 +17414,10 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, `status_cek`, `created_at`, `updated_at`, `log_id`) VALUES
-(1, 'SO/EKAT/XI/2021/1', 'PO0001', '2021-11-09', NULL, NULL, NULL, 4, '2021-11-25 07:55:58', '2021-11-25 07:55:58', 6),
-(2, 'SO/EKAT/XI/2021/2', 'PO0002', '0000-00-00', '', '0000-00-00', '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
-(3, 'SO/EKAT/XI/2021/3', 'PO0003', '0000-00-00', '', '0000-00-00', '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
-(4, 'SO/EKAT/XI/2021/4', 'PO0004', '0000-00-00', '', '0000-00-00', '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
+(1, 'SO/EKAT/XI/2021/1', 'PO0001', '2021-11-09', NULL, NULL, NULL, 4, '2021-11-25 07:55:58', '2021-11-25 07:55:58', 8),
+(2, 'SO/EKAT/XI/2021/2', 'PO0002', '0000-00-00', '', '0000-00-00', '', 4, '0000-00-00 00:00:00', '2021-12-02 03:31:20', NULL),
+(3, 'SO/EKAT/XI/2021/3', 'PO0003', '0000-00-00', '', '0000-00-00', '', 4, '0000-00-00 00:00:00', '2021-12-02 03:34:46', NULL),
+(4, 'SO/EKAT/XI/2021/4', 'PO0004', '0000-00-00', '', '0000-00-00', '', 4, '0000-00-00 00:00:00', '2021-12-03 06:36:02', NULL),
 (5, 'SO/EKAT/XI/2021/5', 'PO0005', '0000-00-00', '', '0000-00-00', '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
 (6, 'SO/EKAT/XI/2021/6', 'PO0006', '0000-00-00', '', '0000-00-00', '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
 (7, 'SO/EKAT/XI/2021/7', 'PO0007', '0000-00-00', '', '0000-00-00', '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
@@ -17386,8 +17629,19 @@ INSERT INTO `pesanan` (`id`, `so`, `no_po`, `tgl_po`, `no_do`, `tgl_do`, `ket`, 
 (213, 'SO/SPB/XI/2021/84', 'POSPB162', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (214, 'SO/SPB/XI/2021/85', 'POSPB163', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (215, 'SO/SPB/XI/2021/86', 'POSPB164', '0000-00-00', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(216, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-29 02:12:34', '2021-11-29 02:12:34', NULL),
-(217, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-11-29 02:14:25', '2021-11-29 02:14:25', NULL);
+(224, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-12-06 07:10:32', '2021-12-06 07:10:32', NULL),
+(225, 'SO/EKAT/XII/2021/52', 'PO33444ENU', '2021-12-09', NULL, NULL, NULL, NULL, '2021-12-06 07:58:22', '2021-12-06 08:03:36', NULL),
+(226, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-12-07 02:24:07', '2021-12-07 02:24:07', NULL),
+(227, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-12-07 03:44:10', '2021-12-07 03:44:10', NULL),
+(228, 'SO/SPA/XII/2021/79', 'PO/AS/2021/11/001', '2021-12-07', NULL, NULL, NULL, NULL, '2021-12-07 04:13:56', '2021-12-07 04:13:56', NULL),
+(229, 'SO/SPA/XII/2021/80', 'PO/AS/2021/11/001', '2021-12-07', NULL, NULL, NULL, NULL, '2021-12-07 04:19:57', '2021-12-07 04:19:57', NULL),
+(230, 'SO/SPA/XII/2021/81', 'PO/AS/2021/11/001', '2021-12-07', NULL, NULL, NULL, NULL, '2021-12-07 04:21:11', '2021-12-07 04:21:11', NULL),
+(231, 'SO/SPA/XII/2021/82', 'PO/AS/2021/11/001', '2021-12-07', NULL, NULL, NULL, NULL, '2021-12-07 04:21:59', '2021-12-07 04:21:59', NULL),
+(232, 'SO/SPA/XII/2021/83', 'PO/AS/2021/11/001', '2021-12-07', NULL, NULL, NULL, NULL, '2021-12-07 04:23:40', '2021-12-07 04:23:40', NULL),
+(233, 'SO/SPA/XII/2021/84', 'PO/AS/2021/11/001', '2021-12-07', NULL, NULL, NULL, NULL, '2021-12-07 04:34:59', '2021-12-07 04:34:59', NULL),
+(234, 'SO/SPA/XII/2021/85', 'PO/BPTP/2021/11/00001', '2021-12-07', NULL, NULL, NULL, NULL, '2021-12-07 04:43:38', '2021-12-07 04:43:38', NULL),
+(235, 'SO/SPB/XII/2021/87', 'PO/BJPT/2021/12/007', '2021-12-07', NULL, NULL, NULL, NULL, '2021-12-07 07:04:06', '2021-12-07 07:04:06', NULL),
+(236, 'SO/SPB/XII/2021/88', 'PO/SPB/12/07/21/00001', '2021-12-01', 'DO/12/07/21/00090', '2021-12-31', NULL, NULL, '2021-12-07 07:42:09', '2021-12-07 07:42:09', NULL);
 
 -- --------------------------------------------------------
 
@@ -17403,6 +17657,7 @@ CREATE TABLE `produk` (
   `merk` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `nama` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `nama_coo` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `coo` enum('1','0','','') COLLATE utf8mb4_unicode_ci NOT NULL,
   `no_akd` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ket` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -17414,165 +17669,165 @@ CREATE TABLE `produk` (
 -- Dumping data untuk tabel `produk`
 --
 
-INSERT INTO `produk` (`id`, `produk_id`, `kelompok_produk_id`, `kode`, `merk`, `nama`, `nama_coo`, `no_akd`, `ket`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '', 'ELITECH', 'ABPM50', 'AMBULATORY BLOOD PRESSURE MONITOR', '20501510581', '', '1', NULL, NULL),
-(2, 2, 1, '', 'ELITECH', 'APRON (Full)', 'MEDICAL APRON', '11603021706', '', '1', NULL, NULL),
-(3, 2, 1, '', 'ELITECH', 'APRON (Half)', 'MEDICAL APRON', '11603021706', '', '1', NULL, NULL),
-(4, 3, 1, '', 'ELITECH', 'ASL300', 'AIR STERILIZER AND PURIFIER', '', '', '1', NULL, NULL),
-(5, 4, 1, '', 'ELITECH', 'BABY DIGIT-ONE', 'TIMBANGAN BAYI MEKANIK', '10901410295', '', '1', NULL, NULL),
-(6, 17, 1, '', 'ELITECH', 'BABY ONE', 'BABY SCALE', '10901318002', '', '1', NULL, NULL),
-(7, 5, 1, '', 'ELITECH', 'BACKUP POWER', 'BACKUP POWER', '', '', '1', NULL, NULL),
-(8, 6, 1, '', 'ELITECH', 'BATERAI MEL-02', 'BATERAI', '', '', '1', NULL, NULL),
-(9, 7, 1, '', 'ELITECH', 'BB-200', 'INFANT INCUBATOR', '20903900076', '', '1', NULL, NULL),
-(10, 8, 1, '', 'ELITECH', 'BL-50', 'INFANT PHOTOTHERAPY UNIT', '20903900073', '', '1', NULL, NULL),
-(11, 8, 1, '', 'ELITECH', 'BL-50B', 'INFANT PHOTOTHERAPY UNIT', '20903900073', '', '1', NULL, NULL),
-(12, 9, 1, '', 'ELITECH', 'BN-100', 'INFANT WARMER', '20903900074', '', '1', NULL, NULL),
-(13, 10, 1, '', 'ELITECH', 'BODY FAT', 'BODY FAT', '', '', '1', NULL, NULL),
-(14, 17, 1, '', 'ELITECH', 'BODY FAT PRO', 'DIGITAL SCALE / TIMBANGAN DIGITAL BMI ', '10901911085', '', '1', NULL, NULL),
-(15, 11, 1, '', 'ELITECH', 'BPM001 ', 'BLOOD PRESSURE MONITOR', '20501910739', '', '1', NULL, NULL),
-(16, 11, 1, '', 'ELITECH', 'BPM002 ', 'BLOOD PRESSURE MONITOR', '20501910740', '', '1', NULL, NULL),
-(17, 12, 1, '', 'ELITECH', 'BR-100', 'INFANT RESUSCITATOR', '20403022754', '', '1', NULL, NULL),
-(18, 13, 1, '', 'ELITECH', 'BT-100 (Big)', 'INFANT INCUBATOR TRANSPORT', '20902710901', '', '1', NULL, NULL),
-(19, 13, 1, '', 'ELITECH', 'BT-100 (Small)', 'INFANT INCUBATOR TRANSPORT', '20902710901', '', '1', NULL, NULL),
-(20, 14, 1, '', 'ELITECH', 'CENTRAL MONITOR PM-9000+ + PC + INSTALASI', 'CENTRAL MONITOR', '20903900075', '', '1', NULL, NULL),
-(21, 15, 1, '', 'ELITECH', 'CMS-600 PLUS', 'B-ULTRASOUND DIAGNOSTIC SYSTEM', '21102900256', '', '1', NULL, NULL),
-(22, 16, 1, '', 'ELITECH', 'CONVEX PROBE', 'CONVEX PROBE', '', '', '1', NULL, NULL),
-(23, 17, 1, '', 'ELITECH', 'DIGIT ONE', 'PATIENT SCALE', '10901318000', '', '1', NULL, NULL),
-(24, 18, 1, '', 'ELITECH', 'DIGIT-ONE BABY', 'TIMBANGAN BAYI DIGITAL', '10901410291', '', '1', NULL, NULL),
-(25, 17, 1, '', 'ELITECH', 'DIGIT-PRO', 'PATIENT SCALE', '10901318001', '', '1', NULL, NULL),
-(26, 17, 1, '', 'ELITECH', 'DIGIT-PRO BMI', 'PATIENT SCALE', '10901910723', '', '1', NULL, NULL),
-(27, 17, 1, '', 'ELITECH', 'DIGIT-PRO IDA', 'DIGITAL SCALE / TIMBANGAN DIGITAL IBU & ANAK', '10901910529', '', '1', NULL, NULL),
-(28, 19, 1, '', 'ELITECH', 'DP1', 'ULTRASONIC POCKET DOPPLER', '21101810460', '', '1', NULL, NULL),
-(29, 19, 1, '', 'ELITECH', 'DP1 + TELE', 'ULTRASONIC POCKET DOPPLER', '21101810460', '', '1', NULL, NULL),
-(30, 20, 1, '', 'ELITECH', 'DS-PRO100', 'PORTABLE SPIROMETER', '20401710665', '', '1', NULL, NULL),
-(31, 21, 1, '', 'ELITECH', 'ECG-100G', 'ELECTROCARDIOGRAPH', '20502900072', '', '1', NULL, NULL),
-(32, 21, 1, '', 'ELITECH', 'ECG-1200 MED', 'ELECTROCARDIOGRAPH', '20502810371', '', '1', NULL, NULL),
-(33, 21, 1, '', 'ELITECH', 'ECG-1200G', 'ELECTROCARDIOGRAPH', '20502310189', '', '1', NULL, NULL),
-(34, 21, 1, '', 'ELITECH', 'ECG-1800 MED', 'ELECTROCARDIOGRAPH', '20502810372', '', '1', NULL, NULL),
-(35, 21, 1, '', 'ELITECH', 'ECG-300G', 'ELECTROCARDIOGRAPH', '21102900255', '', '1', NULL, NULL),
-(36, 21, 1, '', 'ELITECH', 'ECG-300G TFT', 'ELECTROCARDIOGRAPH', '21102900255', '', '1', NULL, NULL),
-(37, 22, 1, '', 'ELITECH', 'END-1 (Dua Fungsi)', 'MEDICAL DESTROYER', '20902210075', '', '1', NULL, NULL),
-(38, 22, 1, '', 'ELITECH', 'END-1 (Satu Fungsi)', 'MEDICAL DESTROYER', '20902210075', '', '1', NULL, NULL),
-(39, 22, 1, '', 'ELITECH', 'END-1 (Tiga Fungsi)', 'MEDICAL DESTROYER', '20902210075', '', '1', NULL, NULL),
-(40, 23, 1, '', 'ELITECH', 'ESA 2000W', 'PROGRAMMABLE AUTO SAFETY TESTER FOR MEDICAL APPARATUS', 'FR.03.02/VA/2190/2020', '', '1', NULL, NULL),
-(41, 23, 1, '', 'ELITECH', 'ESA 500W', 'PROGRAMMABLE AUTO SAFETY TESTER FOR MEDICAL APPARATUS', 'FR.03.02/VA/2191/2020', '', '1', NULL, NULL),
-(42, 24, 1, '', 'ELITECH', 'FACE SHIELD ELITECH + 5 Visor', 'MEDICAL FACE SHIELD', '', '', '1', NULL, NULL),
-(43, 24, 1, '', 'ELITECH', 'FACE SHIELD HELM KUNING', 'MEDICAL FACE SHIELD', '', '', '1', NULL, NULL),
-(44, 24, 1, '', 'ELITECH', 'FACE SHIELD KACA MATA (Nagita)', 'MEDICAL FACE SHIELD', '', '', '1', NULL, NULL),
-(45, 24, 1, '', 'ELITECH', 'FACE SHIELD MODERN', 'MEDICAL FACE SHIELD', '', '', '1', NULL, NULL),
-(46, 24, 1, '', 'ELITECH', 'FACE SHIELD SWING', 'MEDICAL FACE SHIELD', '', '', '1', NULL, NULL),
-(47, 25, 1, '', 'ELITECH', 'FILTER AIR 3 MEDIA', 'FILTER AIR', '', '', '1', NULL, NULL),
-(48, 26, 1, '', 'ELITECH', 'FOX PRO', 'HANDHELD PULSE OXIMETER', '20502910952', '', '1', NULL, NULL),
-(49, 27, 1, '', 'ELITECH', 'FOX-1', 'PULSE OXIMETER', '', '', '1', NULL, NULL),
-(50, 27, 1, '', 'ELITECH', 'FOX-2', 'PULSE OXIMETER', '20502210102', '', '1', NULL, NULL),
-(51, 27, 1, '', 'ELITECH', 'FOX-3', 'PULSE OXIMETER', '20502210101', '', '1', NULL, NULL),
-(52, 27, 1, '', 'ELITECH', 'FOX-BABY', 'PULSE OXIMETER', '20502318005', '', '1', NULL, NULL),
-(53, 28, 1, '', 'ELITECH', 'FRAME FACE SHIELD ELITECH (Tanpa Visor)', 'FRAME MEDICAL FACE SHIELD ELITECH (Tanpa Visor)', '', '', '1', NULL, NULL),
-(54, 29, 1, '', 'ELITECH', 'GET 100E UV', 'STERILISATOR ELITECH GET 100E UV', '', '', '1', NULL, NULL),
-(55, 92, 1, '', 'ELITECH', 'GET 338 UO', 'STERILISATOR KERING', '20903800291', '', '1', NULL, NULL),
-(56, 31, 1, '', 'ELITECH', 'GET 338 UV', 'MEDICAL UV STERILIZER ', '', '', '1', NULL, NULL),
-(57, 92, 1, '', 'ELITECH', 'GET-160', 'STERILISATOR KERING', '20903800287', '', '1', NULL, NULL),
-(58, 92, 1, '', 'ELITECH', 'GET-80C', 'STERILISATOR KERING', '20903800282', '', '1', NULL, NULL),
-(59, 71, 1, '', 'ELITECH', 'HAZMAT COVER ALL', 'MEDICAL ISOLATION', '', '', '1', NULL, NULL),
-(60, 78, 1, '', 'ELITECH', 'ISOLATION GOWN-01', 'MEDICAL ISOLATION GOWN', '21603020315', '', '1', NULL, NULL),
-(61, 34, 1, '', 'ELITECH', 'KJF-B100', 'MEDICAL PLASMA AIR STERILIZER', '20903020466', '', '1', NULL, NULL),
-(62, 34, 1, '', 'ELITECH', 'KJF-Y100', 'MEDICAL PLASMA AIR STERILIZER', '20903020450', '', '1', NULL, NULL),
-(63, 3, 1, '', 'ELITECH', 'KJG200', 'AIR STERILIZER AND PURIFIER', '', '', '1', NULL, NULL),
-(64, 35, 1, '', 'ELITECH', 'LAMPU LED MEL-01', 'LAMPU LED ', '', '', '1', NULL, NULL),
-(65, 35, 1, '', 'ELITECH', 'LAMPU LED MOL-02 (2 LAMPU)', 'LAMPU LED ', '', '', '1', NULL, NULL),
-(66, 36, 1, '', 'ELITECH', 'LINEAR PROBE', 'LINEAR PROBE', '', '', '1', NULL, NULL),
-(67, 36, 1, '', 'ELITECH', 'LINEAR PROBE', 'LINEAR PROBE', '', '', '1', NULL, NULL),
-(68, 37, 1, '', 'ELITECH', 'MAP 380', 'MEDICAL AIR PURIFIER', '20902020924', '', '1', NULL, NULL),
-(69, 38, 1, '', 'ELITECH', 'MASKER DISPOSABLE 3 PLY', 'DISPOSABLE MASK', '', '', '1', NULL, NULL),
-(70, 39, 1, '', 'ELITECH', 'MASKER KN-95', 'PARTICULATE RESPIRATOR MASK', '', '', '1', NULL, NULL),
-(71, 40, 1, '', 'ELITECH', 'MASKER N-95', 'SURGICAL MASK', '', '', '1', NULL, NULL),
-(72, 41, 1, '', 'ELITECH', 'MATERNAL MED-02', 'FETAL MONITOR', '21101710864', '', '1', NULL, NULL),
-(73, 42, 1, '', 'ELITECH', 'MED-S100', 'SPO2 SIMULATOR', '20401710856', '', '1', NULL, NULL),
-(74, 43, 1, '', 'ELITECH', 'MED-S200', 'NIBP SIMULATOR', '20501710666', '', '1', NULL, NULL),
-(75, 44, 1, '', 'ELITECH', 'MED-S400', 'PATIENT SIMULATOR', '20502710662', '', '1', NULL, NULL),
-(76, 45, 1, '', 'ELITECH', 'MEL-02', 'LAMPU PERIKSA LED', '10903710660', '', '1', NULL, NULL),
-(77, 46, 1, '', 'ELITECH', 'MFT-01', 'MEDICAL NON CONTACT FOREHEAD THERMOMETER', '20901020234', '', '1', NULL, NULL),
-(78, 47, 1, '', 'ELITECH', 'MFV-01', 'X-RAY FILM VIEWER', '21501810001', '', '1', NULL, NULL),
-(79, 48, 1, '', 'ELITECH', 'MOC-A', 'OXYGEN CONCENTRATOR', '20403510582', '', '1', NULL, NULL),
-(80, 48, 1, '', 'ELITECH', 'MOC-D', 'OXYGEN CONCENTRATOR', '20403121586', '', '1', NULL, NULL),
-(81, 49, 1, '', 'ELITECH', 'MOL-01', 'LAMPU OPERASI LED', '21603710667', '', '1', NULL, NULL),
-(82, 49, 1, '', 'ELITECH', 'MOL-02', 'LAMPU OPERASI LED', '21603710788', '', '1', NULL, NULL),
-(83, 50, 1, '', 'ELITECH', 'MTB-2MTR', 'METERAN PENGUKUR TINGGI BADAN', '10901410291', '', '1', NULL, NULL),
-(84, 51, 1, '', 'ELITECH', 'MTR-BABY 001', 'PENGUKUR PANJANG BAYI', '10901410295', '', '1', NULL, NULL),
-(85, 5, 1, '', 'ELITECH', 'OUTLET', 'BACKUP POWER', '', '', '1', NULL, NULL),
-(86, 52, 1, '', 'ELITECH', 'PA-DC001', 'POWER ADAPTOR', '10901410291', '', '1', NULL, NULL),
-(87, 53, 1, '', 'ELITECH', 'PHASED ARRAY PROBE', 'PHASED ARRAY PROBE', '', '', '1', NULL, NULL),
-(88, 54, 1, '', 'ELITECH', 'PIPING', 'PIPING', '', '', '1', NULL, NULL),
-(89, 55, 1, '', 'ELITECH', 'PM PRO-1', 'PATIENT MONITOR', '20502810355', '', '1', NULL, NULL),
-(90, 55, 1, '', 'ELITECH', 'PM PRO-2', 'PATIENT MONITOR', '20502810356', '', '1', NULL, NULL),
-(91, 55, 1, '', 'ELITECH', 'PM PRO-3', 'PATIENT MONITOR', '20502020925', '', '1', NULL, NULL),
-(92, 56, 1, '', 'ELITECH', 'PM50', 'SPO2 MONITOR', '20502510583', '', '1', NULL, NULL),
-(93, 55, 1, '', 'ELITECH', 'PM-6500', 'PATIENT MONITOR', '20502310188', '', '1', NULL, NULL),
-(94, 55, 1, '', 'ELITECH', 'PM-9000+', 'PATIENT MONITOR', '20903900075', '', '1', NULL, NULL),
-(95, 57, 1, '', 'ELITECH', 'PM-VS5000', 'VITAL SIGN MONITOR', '20501310187', '', '1', NULL, NULL),
-(96, 52, 1, '', 'ELITECH', 'POWER ADAPTOR', 'POWER ADAPTOR', '', '', '1', NULL, NULL),
-(97, 58, 1, '', 'ELITECH', 'PRA-ONE', 'DIGITAL USG MONITOR', '21102410010', '', '1', NULL, NULL),
-(98, 59, 1, '', 'ELITECH', 'PRINTER', 'PRINTER', '', '', '1', NULL, NULL),
-(99, 60, 1, '', 'ELITECH', 'PRO SCANNER CONVEX ARRAY', 'HANDHELD USG PROBE SCANNER / ULTRASONOGRAPH', '21101020853', '', '1', NULL, NULL),
-(100, 60, 1, '', 'ELITECH', 'PRO SCANNER LINEAR ARRAY', 'HANDHELD USG PROBE SCANNER / ULTRASONOGRAPH', '21101020853', '', '1', NULL, NULL),
-(101, 60, 1, '', 'ELITECH', 'PRO SCANNER PHASED ARRAY', 'HANDHELD USG PROBE SCANNER / ULTRASONOGRAPH', '21101020853', '', '1', NULL, NULL),
-(102, 61, 1, '', 'ELITECH', 'PROMAX', 'USG 3D/4D COLOR DOPPLER ULTRASOUND', '21102410011', '', '1', NULL, NULL),
-(103, 62, 1, '', 'ELITECH', 'PROMIST 1', 'MINI COMPRESSOR NEBULIZER', '20403318003', '', '1', NULL, NULL),
-(104, 63, 1, '', 'ELITECH', 'PROMIST 2', 'MEDICAL NEBULIZER', '20403710512', '', '1', NULL, NULL),
-(105, 63, 1, '', 'ELITECH', 'PROMIST 3', 'MEDICAL NEBULIZER', '20403710661', '', '1', NULL, NULL),
-(106, 64, 1, '', 'ELITECH', 'PROTECTIVE SUIT-01', 'MEDICAL PROTECTIVE SUIT FOR OPERATING ROOM', '21603020348', '', '1', NULL, NULL),
-(107, 65, 1, '', 'ELITECH', 'PTB-2in1 ', 'PENGUKUR PANJANG BAYI DAN PENGUKUR TINGGI BADAN DEWASA', '10901121350', '', '1', NULL, NULL),
-(108, 66, 1, '', 'ELITECH', 'PTB-2MTR', 'PENGGARIS PENGUKUR TINGGI BADAN', '10901410291', '', '1', NULL, NULL),
-(109, 67, 1, '', 'ELITECH', 'RGB MEDICAL Electronic Thermometer', 'THERMOMETER', '', '', '1', NULL, NULL),
-(110, 92, 1, '', 'ELITECH', 'RLD 68-C  (Big)', 'STERILISATOR KERING', '', '', '1', NULL, NULL),
-(111, 92, 1, '', 'ELITECH', 'RLD 68-C (Small)', 'STERILISATOR KERING', '', '', '1', NULL, NULL),
-(112, 68, 1, '', 'ELITECH', 'ROLL PAPER ECG-100G ', 'ROLL PAPER', '', '', '1', NULL, NULL),
-(113, 69, 1, '', 'ELITECH', 'ROLL PAPER ECG-1200G', 'KERTAS ECG / ROLL PAPER', '20502310189', '', '1', NULL, NULL),
-(114, 69, 1, '', 'ELITECH', 'ROLL PAPER ECG-300G', 'KERTAS ECG / ROLL PAPER', '21102900255', '', '1', NULL, NULL),
-(115, 70, 1, '', 'ELITECH', 'SAFETY GOGGLE-01', 'MEDICAL SAFETY GOGGLE', '11603020313', '', '1', NULL, NULL),
-(116, 71, 1, '', 'ELITECH', 'SEPATU BOOT', 'MEDICAL ISOLATION ', '', '', '1', NULL, NULL),
-(117, 72, 1, '', 'ELITECH', 'SET ANTROPOMETRI KIT ', 'TAS PENYIMPANAN ALAT ANTROPOMETRI', 'FR.03.02/VA/4189/2019', '', '1', NULL, NULL),
-(118, 73, 1, '', 'ELITECH', 'SHOE COVER', 'MEDICAL SHOE COVER', '11603021451', '', '1', NULL, NULL),
-(119, 73, 1, '', 'ELITECH', 'SHOE COVER PANJANG', 'MEDICAL SHOE COVER', '', '', '1', NULL, NULL),
-(120, 41, 1, '', 'ELITECH', 'SONOTRAX MED-01', 'FETAL MONITOR', '21101710857', '', '1', NULL, NULL),
-(121, 74, 1, '', 'ELITECH', 'SONOTRAX PRO', 'DESKTOP FETAL DOPPLER / FETAL MONITOR', '21101318006', '', '1', NULL, NULL),
-(122, 86, 1, '', 'ELITECH', 'SONOTRAX PRO2', 'ULTRASONIC TABLE DOPPLER', '21101810461', '', '1', NULL, NULL),
-(123, 76, 1, '', 'ELITECH', 'SONOTRAX-A', 'POCKET FETAL DOPPLER', '21102800003', '', '1', NULL, NULL),
-(124, 76, 1, '', 'ELITECH', 'SONOTRAX-B', 'POCKET FETAL DOPPLER', '21102800003', '', '1', NULL, NULL),
-(125, 76, 1, '', 'ELITECH', 'SONOTRAX-C', 'POCKET FETAL DOPPLER', '21101710077', '', '1', NULL, NULL),
-(126, 77, 1, '', 'ELITECH', 'SP10', 'DIGITAL SPIROMETER DS-PRO', '20401610237', '', '1', NULL, NULL),
-(127, 78, 1, '', 'ELITECH', 'SURGICAL GOWN  (Cotton Water Repellen)', 'MEDICAL SURGICAL GOWN', '', '', '1', NULL, NULL),
-(128, 78, 1, '', 'ELITECH', 'SURGICAL GOWN (100% Cotton)', 'MEDICAL SURGICAL GOWN', '', '', '1', NULL, NULL),
-(129, 79, 1, '', 'ELITECH', 'TAS ANTROPOMETRI KIT ', 'TAS', '', '', '1', NULL, NULL),
-(130, 11, 1, '', 'ELITECH', 'TENSIONE', 'BLOOD PRESSURE MONITOR', '20501318004', '', '1', NULL, NULL),
-(131, 46, 1, '', 'ELITECH', 'THERM ONE', 'MEDICAL NON CONTACT FOREHEAD THERMOMETER', '20901020251', '', '1', NULL, NULL),
-(132, 80, 1, '', 'ELITECH', 'THERMAL PRINTER', 'THERMAL PRINTER', '', '', '1', NULL, NULL),
-(133, 81, 1, '', 'ELITECH', 'TOP-308', 'DENTAL UNIT', '10605900070', '', '1', NULL, NULL),
-(134, 82, 1, '', 'ELITECH', 'TRANSVAGINAL PROBE', 'TRANSVAGINAL PROBE', '', '', '1', NULL, NULL),
-(135, 83, 1, '', 'ELITECH', 'TROLLEY MEJA', 'TROLLEY MEJA', '', '', '1', NULL, NULL),
-(136, 84, 1, '', 'ELITECH', 'TROLLEY TIANG', 'TROLLEY TIANG', '', '', '1', NULL, NULL),
-(137, 85, 1, '', 'ELITECH', 'TROLLEY USG CMS-600', 'TROLLEY', '', '', '1', NULL, NULL),
-(138, 85, 1, '', 'ELITECH', 'TROLLEY USG PRAONE', 'TROLLEY', '', '', '1', NULL, NULL),
-(139, 85, 1, '', 'ELITECH', 'TROLLEY USG PROMAX', 'TROLLEY', '', '', '1', NULL, NULL),
-(140, 81, 1, '', 'ELITECH', 'TS-5830', 'DENTAL UNIT', '10605900071', '', '1', NULL, NULL),
-(141, 81, 1, '', 'ELITECH', 'TS-8830', 'DENTAL UNIT', '10605810069', '', '1', NULL, NULL),
-(142, 86, 1, '', 'ELITECH', 'ULTRA MIST', 'ULTRASONIC NEBULIZER', '20403710663', '', '1', NULL, NULL),
-(143, 87, 1, '', 'ELITECH', 'UPS', 'UNINTERRUPTIBLE POWER SUPPLY', '', '', '1', NULL, NULL),
-(144, 88, 1, '', 'ELITECH', 'UV-40W', 'UV WATER STERILIZER', '20903410009', '', '1', NULL, NULL),
-(145, 89, 1, '', 'ELITECH', 'VOLUME PROBE', 'VOLUME PROBE', '', '', '1', NULL, NULL),
-(146, 90, 1, '', 'ELITECH', 'WASTAFEL', 'WASTAFEL', '', '', '1', NULL, NULL),
-(147, 91, 1, '', 'ELITECH', 'WATER FILTER', 'WATER FILTER', '', '', '1', NULL, NULL),
-(148, 91, 1, '', 'ELITECH', 'WATERFILTER', 'WATERFILTER', '', '', '1', NULL, NULL),
-(149, 92, 1, '', 'ELITECH', 'ZTD 108C-S', 'STERILISATOR KERING ', '', '', '1', NULL, NULL),
-(150, 93, 1, '', 'ELITECH', 'ZTD 88-16', 'LEMARI STERIL  ', '', '', '1', NULL, NULL),
-(151, 93, 1, '', 'ELITECH', 'ZTD 88-28 ', 'LEMARI STERIL', '', '', '1', NULL, NULL),
-(152, 92, 1, '', 'ELITECH', 'ZTP 300', 'STERILISATOR KERING', '20903800288', '', '1', NULL, NULL),
-(153, 92, 1, '', 'ELITECH', 'ZTP 368 AS', 'STERILISATOR KERING', '', '', '1', NULL, NULL),
-(154, 92, 1, '', 'ELITECH', 'ZTP 80 - ECO SS', 'STERILISATOR KERING', '', '', '1', NULL, NULL),
-(155, 92, 1, '', 'ELITECH', 'ZTP-80 ECO SS UV', 'STERILISATOR KERING ', '', '', '1', NULL, NULL),
-(156, 92, 1, '', 'ELITECH', 'ZTP-80 ECO UV', 'STERILISATOR KERING ', '', '', '1', NULL, NULL),
-(157, 93, 1, '', 'ELITECH', 'ZTP-80A', 'LEMARI STERIL  ', '', '', '1', NULL, NULL),
-(158, 92, 1, '', 'ELITECH', 'ZTP80AS-UPGRADE', 'STERILISATOR KERING', '20903700359', '', '1', NULL, NULL);
+INSERT INTO `produk` (`id`, `produk_id`, `kelompok_produk_id`, `kode`, `merk`, `nama`, `nama_coo`, `coo`, `no_akd`, `ket`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, '', 'ELITECH', 'ABPM50', 'AMBULATORY BLOOD PRESSURE MONITOR', '1', '20501510581', '', '1', NULL, NULL),
+(2, 2, 1, '', 'ELITECH', 'APRON (Full)', 'MEDICAL APRON', '1', '11603021706', '', '1', NULL, NULL),
+(3, 2, 1, '', 'ELITECH', 'APRON (Half)', 'MEDICAL APRON', '1', '11603021706', '', '1', NULL, NULL),
+(4, 3, 1, '', 'ELITECH', 'ASL300', 'AIR STERILIZER AND PURIFIER', '1', '', '', '1', NULL, NULL),
+(5, 4, 1, '', 'ELITECH', 'BABY DIGIT-ONE', 'TIMBANGAN BAYI MEKANIK', '1', '10901410295', '', '1', NULL, NULL),
+(6, 17, 1, '', 'ELITECH', 'BABY ONE', 'BABY SCALE', '1', '10901318002', '', '1', NULL, NULL),
+(7, 5, 1, '', 'ELITECH', 'BACKUP POWER', 'BACKUP POWER', '0', '', '', '1', NULL, NULL),
+(8, 6, 1, '', 'ELITECH', 'BATERAI MEL-02', 'BATERAI', '0', '', '', '1', NULL, NULL),
+(9, 7, 1, '', 'ELITECH', 'BB-200', 'INFANT INCUBATOR', '1', '20903900076', '', '1', NULL, NULL),
+(10, 8, 1, '', 'ELITECH', 'BL-50', 'INFANT PHOTOTHERAPY UNIT', '1', '20903900073', '', '1', NULL, NULL),
+(11, 8, 1, '', 'ELITECH', 'BL-50B', 'INFANT PHOTOTHERAPY UNIT', '1', '20903900073', '', '1', NULL, NULL),
+(12, 9, 1, '', 'ELITECH', 'BN-100', 'INFANT WARMER', '1', '20903900074', '', '1', NULL, NULL),
+(13, 10, 1, '', 'ELITECH', 'BODY FAT', 'BODY FAT', '1', '', '', '1', NULL, NULL),
+(14, 17, 1, '', 'ELITECH', 'BODY FAT PRO', 'DIGITAL SCALE / TIMBANGAN DIGITAL BMI ', '1', '10901911085', '', '1', NULL, NULL),
+(15, 11, 1, '', 'ELITECH', 'BPM001 ', 'BLOOD PRESSURE MONITOR', '1', '20501910739', '', '1', NULL, NULL),
+(16, 11, 1, '', 'ELITECH', 'BPM002 ', 'BLOOD PRESSURE MONITOR', '1', '20501910740', '', '1', NULL, NULL),
+(17, 12, 1, '', 'ELITECH', 'BR-100', 'INFANT RESUSCITATOR', '1', '20403022754', '', '1', NULL, NULL),
+(18, 13, 1, '', 'ELITECH', 'BT-100 (Big)', 'INFANT INCUBATOR TRANSPORT', '1', '20902710901', '', '1', NULL, NULL),
+(19, 13, 1, '', 'ELITECH', 'BT-100 (Small)', 'INFANT INCUBATOR TRANSPORT', '1', '20902710901', '', '1', NULL, NULL),
+(20, 14, 1, '', 'ELITECH', 'CENTRAL MONITOR PM-9000+ + PC + INSTALASI', 'CENTRAL MONITOR', '1', '20903900075', '', '1', NULL, NULL),
+(21, 15, 1, '', 'ELITECH', 'CMS-600 PLUS', 'B-ULTRASOUND DIAGNOSTIC SYSTEM', '1', '21102900256', '', '1', NULL, NULL),
+(22, 16, 1, '', 'ELITECH', 'CONVEX PROBE', 'CONVEX PROBE', '1', '', '', '1', NULL, NULL),
+(23, 17, 1, '', 'ELITECH', 'DIGIT ONE', 'PATIENT SCALE', '1', '10901318000', '', '1', NULL, NULL),
+(24, 18, 1, '', 'ELITECH', 'DIGIT-ONE BABY', 'TIMBANGAN BAYI DIGITAL', '1', '10901410291', '', '1', NULL, NULL),
+(25, 17, 1, '', 'ELITECH', 'DIGIT-PRO', 'PATIENT SCALE', '1', '10901318001', '', '1', NULL, NULL),
+(26, 17, 1, '', 'ELITECH', 'DIGIT-PRO BMI', 'PATIENT SCALE', '1', '10901910723', '', '1', NULL, NULL),
+(27, 17, 1, '', 'ELITECH', 'DIGIT-PRO IDA', 'DIGITAL SCALE / TIMBANGAN DIGITAL IBU & ANAK', '1', '10901910529', '', '1', NULL, NULL),
+(28, 19, 1, '', 'ELITECH', 'DP1', 'ULTRASONIC POCKET DOPPLER', '1', '21101810460', '', '1', NULL, NULL),
+(29, 19, 1, '', 'ELITECH', 'DP1 + TELE', 'ULTRASONIC POCKET DOPPLER', '1', '21101810460', '', '1', NULL, NULL),
+(30, 20, 1, '', 'ELITECH', 'DS-PRO100', 'PORTABLE SPIROMETER', '1', '20401710665', '', '1', NULL, NULL),
+(31, 21, 1, '', 'ELITECH', 'ECG-100G', 'ELECTROCARDIOGRAPH', '1', '20502900072', '', '1', NULL, NULL),
+(32, 21, 1, '', 'ELITECH', 'ECG-1200 MED', 'ELECTROCARDIOGRAPH', '1', '20502810371', '', '1', NULL, NULL),
+(33, 21, 1, '', 'ELITECH', 'ECG-1200G', 'ELECTROCARDIOGRAPH', '1', '20502310189', '', '1', NULL, NULL),
+(34, 21, 1, '', 'ELITECH', 'ECG-1800 MED', 'ELECTROCARDIOGRAPH', '1', '20502810372', '', '1', NULL, NULL),
+(35, 21, 1, '', 'ELITECH', 'ECG-300G', 'ELECTROCARDIOGRAPH', '1', '21102900255', '', '1', NULL, NULL),
+(36, 21, 1, '', 'ELITECH', 'ECG-300G TFT', 'ELECTROCARDIOGRAPH', '1', '21102900255', '', '1', NULL, NULL),
+(37, 22, 1, '', 'ELITECH', 'END-1 (Dua Fungsi)', 'MEDICAL DESTROYER', '1', '20902210075', '', '1', NULL, NULL),
+(38, 22, 1, '', 'ELITECH', 'END-1 (Satu Fungsi)', 'MEDICAL DESTROYER', '1', '20902210075', '', '1', NULL, NULL),
+(39, 22, 1, '', 'ELITECH', 'END-1 (Tiga Fungsi)', 'MEDICAL DESTROYER', '1', '20902210075', '', '1', NULL, NULL),
+(40, 23, 1, '', 'ELITECH', 'ESA 2000W', 'PROGRAMMABLE AUTO SAFETY TESTER FOR MEDICAL APPARATUS', '1', 'FR.03.02/VA/2190/2020', '', '1', NULL, NULL),
+(41, 23, 1, '', 'ELITECH', 'ESA 500W', 'PROGRAMMABLE AUTO SAFETY TESTER FOR MEDICAL APPARATUS', '1', 'FR.03.02/VA/2191/2020', '', '1', NULL, NULL),
+(42, 24, 1, '', 'ELITECH', 'FACE SHIELD ELITECH + 5 Visor', 'MEDICAL FACE SHIELD', '1', '', '', '1', NULL, NULL),
+(43, 24, 1, '', 'ELITECH', 'FACE SHIELD HELM KUNING', 'MEDICAL FACE SHIELD', '1', '', '', '1', NULL, NULL),
+(44, 24, 1, '', 'ELITECH', 'FACE SHIELD KACA MATA (Nagita)', 'MEDICAL FACE SHIELD', '1', '', '', '1', NULL, NULL),
+(45, 24, 1, '', 'ELITECH', 'FACE SHIELD MODERN', 'MEDICAL FACE SHIELD', '1', '', '', '1', NULL, NULL),
+(46, 24, 1, '', 'ELITECH', 'FACE SHIELD SWING', 'MEDICAL FACE SHIELD', '1', '', '', '1', NULL, NULL),
+(47, 25, 1, '', 'ELITECH', 'FILTER AIR 3 MEDIA', 'FILTER AIR', '0', '', '', '1', NULL, NULL),
+(48, 26, 1, '', 'ELITECH', 'FOX PRO', 'HANDHELD PULSE OXIMETER', '1', '20502910952', '', '1', NULL, NULL),
+(49, 27, 1, '', 'ELITECH', 'FOX-1', 'PULSE OXIMETER', '1', '', '', '1', NULL, NULL),
+(50, 27, 1, '', 'ELITECH', 'FOX-2', 'PULSE OXIMETER', '1', '20502210102', '', '1', NULL, NULL),
+(51, 27, 1, '', 'ELITECH', 'FOX-3', 'PULSE OXIMETER', '1', '20502210101', '', '1', NULL, NULL),
+(52, 27, 1, '', 'ELITECH', 'FOX-BABY', 'PULSE OXIMETER', '1', '20502318005', '', '1', NULL, NULL),
+(53, 28, 1, '', 'ELITECH', 'FRAME FACE SHIELD ELITECH (Tanpa Visor)', 'FRAME MEDICAL FACE SHIELD ELITECH (Tanpa Visor)', '1', '', '', '1', NULL, NULL),
+(54, 29, 1, '', 'ELITECH', 'GET 100E UV', 'STERILISATOR ELITECH GET 100E UV', '1', '', '', '1', NULL, NULL),
+(55, 92, 1, '', 'ELITECH', 'GET 338 UO', 'STERILISATOR KERING', '1', '20903800291', '', '1', NULL, NULL),
+(56, 31, 1, '', 'ELITECH', 'GET 338 UV', 'MEDICAL UV STERILIZER ', '1', '', '', '1', NULL, NULL),
+(57, 92, 1, '', 'ELITECH', 'GET-160', 'STERILISATOR KERING', '1', '20903800287', '', '1', NULL, NULL),
+(58, 92, 1, '', 'ELITECH', 'GET-80C', 'STERILISATOR KERING', '1', '20903800282', '', '1', NULL, NULL),
+(59, 71, 1, '', 'ELITECH', 'HAZMAT COVER ALL', 'MEDICAL ISOLATION', '1', '', '', '1', NULL, NULL),
+(60, 78, 1, '', 'ELITECH', 'ISOLATION GOWN-01', 'MEDICAL ISOLATION GOWN', '1', '21603020315', '', '1', NULL, NULL),
+(61, 34, 1, '', 'ELITECH', 'KJF-B100', 'MEDICAL PLASMA AIR STERILIZER', '1', '20903020466', '', '1', NULL, NULL),
+(62, 34, 1, '', 'ELITECH', 'KJF-Y100', 'MEDICAL PLASMA AIR STERILIZER', '1', '20903020450', '', '1', NULL, NULL),
+(63, 3, 1, '', 'ELITECH', 'KJG200', 'AIR STERILIZER AND PURIFIER', '1', '', '', '1', NULL, NULL),
+(64, 35, 1, '', 'ELITECH', 'LAMPU LED MEL-01', 'LAMPU LED ', '1', '', '', '1', NULL, NULL),
+(65, 35, 1, '', 'ELITECH', 'LAMPU LED MOL-02 (2 LAMPU)', 'LAMPU LED ', '1', '', '', '1', NULL, NULL),
+(66, 36, 1, '', 'ELITECH', 'LINEAR PROBE', 'LINEAR PROBE', '0', '', '', '1', NULL, NULL),
+(67, 36, 1, '', 'ELITECH', 'LINEAR PROBE', 'LINEAR PROBE', '0', '', '', '1', NULL, NULL),
+(68, 37, 1, '', 'ELITECH', 'MAP 380', 'MEDICAL AIR PURIFIER', '1', '20902020924', '', '1', NULL, NULL),
+(69, 38, 1, '', 'ELITECH', 'MASKER DISPOSABLE 3 PLY', 'DISPOSABLE MASK', '1', '', '', '1', NULL, NULL),
+(70, 39, 1, '', 'ELITECH', 'MASKER KN-95', 'PARTICULATE RESPIRATOR MASK', '1', '', '', '1', NULL, NULL),
+(71, 40, 1, '', 'ELITECH', 'MASKER N-95', 'SURGICAL MASK', '1', '', '', '1', NULL, NULL),
+(72, 41, 1, '', 'ELITECH', 'MATERNAL MED-02', 'FETAL MONITOR', '1', '21101710864', '', '1', NULL, NULL),
+(73, 42, 1, '', 'ELITECH', 'MED-S100', 'SPO2 SIMULATOR', '1', '20401710856', '', '1', NULL, NULL),
+(74, 43, 1, '', 'ELITECH', 'MED-S200', 'NIBP SIMULATOR', '1', '20501710666', '', '1', NULL, NULL),
+(75, 44, 1, '', 'ELITECH', 'MED-S400', 'PATIENT SIMULATOR', '1', '20502710662', '', '1', NULL, NULL),
+(76, 45, 1, '', 'ELITECH', 'MEL-02', 'LAMPU PERIKSA LED', '1', '10903710660', '', '1', NULL, NULL),
+(77, 46, 1, '', 'ELITECH', 'MFT-01', 'MEDICAL NON CONTACT FOREHEAD THERMOMETER', '1', '20901020234', '', '1', NULL, NULL),
+(78, 47, 1, '', 'ELITECH', 'MFV-01', 'X-RAY FILM VIEWER', '1', '21501810001', '', '1', NULL, NULL),
+(79, 48, 1, '', 'ELITECH', 'MOC-A', 'OXYGEN CONCENTRATOR', '1', '20403510582', '', '1', NULL, NULL),
+(80, 48, 1, '', 'ELITECH', 'MOC-D', 'OXYGEN CONCENTRATOR', '1', '20403121586', '', '1', NULL, NULL),
+(81, 49, 1, '', 'ELITECH', 'MOL-01', 'LAMPU OPERASI LED', '1', '21603710667', '', '1', NULL, NULL),
+(82, 49, 1, '', 'ELITECH', 'MOL-02', 'LAMPU OPERASI LED', '1', '21603710788', '', '1', NULL, NULL),
+(83, 50, 1, '', 'ELITECH', 'MTB-2MTR', 'METERAN PENGUKUR TINGGI BADAN', '1', '10901410291', '', '1', NULL, NULL),
+(84, 51, 1, '', 'ELITECH', 'MTR-BABY 001', 'PENGUKUR PANJANG BAYI', '1', '10901410295', '', '1', NULL, NULL),
+(85, 5, 1, '', 'ELITECH', 'OUTLET', 'BACKUP POWER', '0', '', '', '1', NULL, NULL),
+(86, 52, 1, '', 'ELITECH', 'PA-DC001', 'POWER ADAPTOR', '0', '10901410291', '', '1', NULL, NULL),
+(87, 53, 1, '', 'ELITECH', 'PHASED ARRAY PROBE', 'PHASED ARRAY PROBE', '0', '', '', '1', NULL, NULL),
+(88, 54, 1, '', 'ELITECH', 'PIPING', 'PIPING', '0', '', '', '1', NULL, NULL),
+(89, 55, 1, '', 'ELITECH', 'PM PRO-1', 'PATIENT MONITOR', '1', '20502810355', '', '1', NULL, NULL),
+(90, 55, 1, '', 'ELITECH', 'PM PRO-2', 'PATIENT MONITOR', '1', '20502810356', '', '1', NULL, NULL),
+(91, 55, 1, '', 'ELITECH', 'PM PRO-3', 'PATIENT MONITOR', '1', '20502020925', '', '1', NULL, NULL),
+(92, 56, 1, '', 'ELITECH', 'PM50', 'SPO2 MONITOR', '1', '20502510583', '', '1', NULL, NULL),
+(93, 55, 1, '', 'ELITECH', 'PM-6500', 'PATIENT MONITOR', '1', '20502310188', '', '1', NULL, NULL),
+(94, 55, 1, '', 'ELITECH', 'PM-9000+', 'PATIENT MONITOR', '1', '20903900075', '', '1', NULL, NULL),
+(95, 57, 1, '', 'ELITECH', 'PM-VS5000', 'VITAL SIGN MONITOR', '1', '20501310187', '', '1', NULL, NULL),
+(96, 52, 1, '', 'ELITECH', 'POWER ADAPTOR', 'POWER ADAPTOR', '0', '', '', '1', NULL, NULL),
+(97, 58, 1, '', 'ELITECH', 'PRA-ONE', 'DIGITAL USG MONITOR', '1', '21102410010', '', '1', NULL, NULL),
+(98, 59, 1, '', 'ELITECH', 'PRINTER', 'PRINTER', '0', '', '', '1', NULL, NULL),
+(99, 60, 1, '', 'ELITECH', 'PRO SCANNER CONVEX ARRAY', 'HANDHELD USG PROBE SCANNER / ULTRASONOGRAPH', '0', '21101020853', '', '1', NULL, NULL),
+(100, 60, 1, '', 'ELITECH', 'PRO SCANNER LINEAR ARRAY', 'HANDHELD USG PROBE SCANNER / ULTRASONOGRAPH', '0', '21101020853', '', '1', NULL, NULL),
+(101, 60, 1, '', 'ELITECH', 'PRO SCANNER PHASED ARRAY', 'HANDHELD USG PROBE SCANNER / ULTRASONOGRAPH', '1', '21101020853', '', '1', NULL, NULL),
+(102, 61, 1, '', 'ELITECH', 'PROMAX', 'USG 3D/4D COLOR DOPPLER ULTRASOUND', '1', '21102410011', '', '1', NULL, NULL),
+(103, 62, 1, '', 'ELITECH', 'PROMIST 1', 'MINI COMPRESSOR NEBULIZER', '1', '20403318003', '', '1', NULL, NULL),
+(104, 63, 1, '', 'ELITECH', 'PROMIST 2', 'MEDICAL NEBULIZER', '1', '20403710512', '', '1', NULL, NULL),
+(105, 63, 1, '', 'ELITECH', 'PROMIST 3', 'MEDICAL NEBULIZER', '1', '20403710661', '', '1', NULL, NULL),
+(106, 64, 1, '', 'ELITECH', 'PROTECTIVE SUIT-01', 'MEDICAL PROTECTIVE SUIT FOR OPERATING ROOM', '1', '21603020348', '', '1', NULL, NULL),
+(107, 65, 1, '', 'ELITECH', 'PTB-2in1 ', 'PENGUKUR PANJANG BAYI DAN PENGUKUR TINGGI BADAN DEWASA', '1', '10901121350', '', '1', NULL, NULL),
+(108, 66, 1, '', 'ELITECH', 'PTB-2MTR', 'PENGGARIS PENGUKUR TINGGI BADAN', '1', '10901410291', '', '1', NULL, NULL),
+(109, 67, 1, '', 'ELITECH', 'RGB MEDICAL Electronic Thermometer', 'THERMOMETER', '1', '', '', '1', NULL, NULL),
+(110, 92, 1, '', 'ELITECH', 'RLD 68-C  (Big)', 'STERILISATOR KERING', '1', '', '', '1', NULL, NULL),
+(111, 92, 1, '', 'ELITECH', 'RLD 68-C (Small)', 'STERILISATOR KERING', '1', '', '', '1', NULL, NULL),
+(112, 68, 1, '', 'ELITECH', 'ROLL PAPER ECG-100G ', 'ROLL PAPER', '1', '', '', '1', NULL, NULL),
+(113, 69, 1, '', 'ELITECH', 'ROLL PAPER ECG-1200G', 'KERTAS ECG / ROLL PAPER', '1', '20502310189', '', '1', NULL, NULL),
+(114, 69, 1, '', 'ELITECH', 'ROLL PAPER ECG-300G', 'KERTAS ECG / ROLL PAPER', '1', '21102900255', '', '1', NULL, NULL),
+(115, 70, 1, '', 'ELITECH', 'SAFETY GOGGLE-01', 'MEDICAL SAFETY GOGGLE', '1', '11603020313', '', '1', NULL, NULL),
+(116, 71, 1, '', 'ELITECH', 'SEPATU BOOT', 'MEDICAL ISOLATION ', '1', '', '', '1', NULL, NULL),
+(117, 72, 1, '', 'ELITECH', 'SET ANTROPOMETRI KIT ', 'TAS PENYIMPANAN ALAT ANTROPOMETRI', '1', 'FR.03.02/VA/4189/2019', '', '1', NULL, NULL),
+(118, 73, 1, '', 'ELITECH', 'SHOE COVER', 'MEDICAL SHOE COVER', '1', '11603021451', '', '1', NULL, NULL),
+(119, 73, 1, '', 'ELITECH', 'SHOE COVER PANJANG', 'MEDICAL SHOE COVER', '1', '', '', '1', NULL, NULL),
+(120, 41, 1, '', 'ELITECH', 'SONOTRAX MED-01', 'FETAL MONITOR', '1', '21101710857', '', '1', NULL, NULL),
+(121, 74, 1, '', 'ELITECH', 'SONOTRAX PRO', 'DESKTOP FETAL DOPPLER / FETAL MONITOR', '1', '21101318006', '', '1', NULL, NULL),
+(122, 86, 1, '', 'ELITECH', 'SONOTRAX PRO2', 'ULTRASONIC TABLE DOPPLER', '1', '21101810461', '', '1', NULL, NULL),
+(123, 76, 1, '', 'ELITECH', 'SONOTRAX-A', 'POCKET FETAL DOPPLER', '1', '21102800003', '', '1', NULL, NULL),
+(124, 76, 1, '', 'ELITECH', 'SONOTRAX-B', 'POCKET FETAL DOPPLER', '1', '21102800003', '', '1', NULL, NULL),
+(125, 76, 1, '', 'ELITECH', 'SONOTRAX-C', 'POCKET FETAL DOPPLER', '1', '21101710077', '', '1', NULL, NULL),
+(126, 77, 1, '', 'ELITECH', 'SP10', 'DIGITAL SPIROMETER DS-PRO', '1', '20401610237', '', '1', NULL, NULL),
+(127, 78, 1, '', 'ELITECH', 'SURGICAL GOWN  (Cotton Water Repellen)', 'MEDICAL SURGICAL GOWN', '1', '', '', '1', NULL, NULL),
+(128, 78, 1, '', 'ELITECH', 'SURGICAL GOWN (100% Cotton)', 'MEDICAL SURGICAL GOWN', '1', '', '', '1', NULL, NULL),
+(129, 79, 1, '', 'ELITECH', 'TAS ANTROPOMETRI KIT ', 'TAS', '0', '', '', '1', NULL, NULL),
+(130, 11, 1, '', 'ELITECH', 'TENSIONE', 'BLOOD PRESSURE MONITOR', '1', '20501318004', '', '1', NULL, NULL),
+(131, 46, 1, '', 'ELITECH', 'THERM ONE', 'MEDICAL NON CONTACT FOREHEAD THERMOMETER', '1', '20901020251', '', '1', NULL, NULL),
+(132, 80, 1, '', 'ELITECH', 'THERMAL PRINTER', 'THERMAL PRINTER', '0', '', '', '1', NULL, NULL),
+(133, 81, 1, '', 'ELITECH', 'TOP-308', 'DENTAL UNIT', '1', '10605900070', '', '1', NULL, NULL),
+(134, 82, 1, '', 'ELITECH', 'TRANSVAGINAL PROBE', 'TRANSVAGINAL PROBE', '0', '', '', '1', NULL, NULL),
+(135, 83, 1, '', 'ELITECH', 'TROLLEY MEJA', 'TROLLEY MEJA', '0', '', '', '1', NULL, NULL),
+(136, 84, 1, '', 'ELITECH', 'TROLLEY TIANG', 'TROLLEY TIANG', '0', '', '', '1', NULL, NULL),
+(137, 85, 1, '', 'ELITECH', 'TROLLEY USG CMS-600', 'TROLLEY', '0', '', '', '1', NULL, NULL),
+(138, 85, 1, '', 'ELITECH', 'TROLLEY USG PRAONE', 'TROLLEY', '0', '', '', '1', NULL, NULL),
+(139, 85, 1, '', 'ELITECH', 'TROLLEY USG PROMAX', 'TROLLEY', '0', '', '', '1', NULL, NULL),
+(140, 81, 1, '', 'ELITECH', 'TS-5830', 'DENTAL UNIT', '1', '10605900071', '', '1', NULL, NULL),
+(141, 81, 1, '', 'ELITECH', 'TS-8830', 'DENTAL UNIT', '1', '10605810069', '', '1', NULL, NULL),
+(142, 86, 1, '', 'ELITECH', 'ULTRA MIST', 'ULTRASONIC NEBULIZER', '1', '20403710663', '', '1', NULL, NULL),
+(143, 87, 1, '', 'ELITECH', 'UPS', 'UNINTERRUPTIBLE POWER SUPPLY', '0', '', '', '1', NULL, NULL),
+(144, 88, 1, '', 'ELITECH', 'UV-40W', 'UV WATER STERILIZER', '1', '20903410009', '', '1', NULL, NULL),
+(145, 89, 1, '', 'ELITECH', 'VOLUME PROBE', 'VOLUME PROBE', '0', '', '', '1', NULL, NULL),
+(146, 90, 1, '', 'ELITECH', 'WASTAFEL', 'WASTAFEL', '0', '', '', '1', NULL, NULL),
+(147, 91, 1, '', 'ELITECH', 'WATER FILTER', 'WATER FILTER', '0', '', '', '1', NULL, NULL),
+(148, 91, 1, '', 'ELITECH', 'WATERFILTER', 'WATERFILTER', '0', '', '', '1', NULL, NULL),
+(149, 92, 1, '', 'ELITECH', 'ZTD 108C-S', 'STERILISATOR KERING ', '1', '', '', '1', NULL, NULL),
+(150, 93, 1, '', 'ELITECH', 'ZTD 88-16', 'LEMARI STERIL  ', '1', '', '', '1', NULL, NULL),
+(151, 93, 1, '', 'ELITECH', 'ZTD 88-28 ', 'LEMARI STERIL', '1', '', '', '1', NULL, NULL),
+(152, 92, 1, '', 'ELITECH', 'ZTP 300', 'STERILISATOR KERING', '1', '20903800288', '', '1', NULL, NULL),
+(153, 92, 1, '', 'ELITECH', 'ZTP 368 AS', 'STERILISATOR KERING', '1', '', '', '1', NULL, NULL),
+(154, 92, 1, '', 'ELITECH', 'ZTP 80 - ECO SS', 'STERILISATOR KERING', '1', '', '', '1', NULL, NULL),
+(155, 92, 1, '', 'ELITECH', 'ZTP-80 ECO SS UV', 'STERILISATOR KERING ', '1', '', '', '1', NULL, NULL),
+(156, 92, 1, '', 'ELITECH', 'ZTP-80 ECO UV', 'STERILISATOR KERING ', '1', '', '', '1', NULL, NULL),
+(157, 93, 1, '', 'ELITECH', 'ZTP-80A', 'LEMARI STERIL  ', '1', '', '', '1', NULL, NULL),
+(158, 92, 1, '', 'ELITECH', 'ZTP80AS-UPGRADE', 'STERILISATOR KERING', '1', '20903700359', '', '1', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -17727,7 +17982,13 @@ INSERT INTO `spa` (`id`, `customer_id`, `pesanan_id`, `ket`, `log`, `created_at`
 (75, 2, 126, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (76, 125, 127, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (77, 157, 128, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(78, 50, 129, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(78, 50, 129, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(79, 435, 228, NULL, 'penjualan', '2021-12-07 04:13:56', '2021-12-07 04:13:56'),
+(80, 435, 229, NULL, 'penjualan', '2021-12-07 04:19:57', '2021-12-07 04:19:57'),
+(81, 435, 230, NULL, 'penjualan', '2021-12-07 04:21:11', '2021-12-07 04:21:11'),
+(82, 435, 231, NULL, 'penjualan', '2021-12-07 04:21:59', '2021-12-07 04:21:59'),
+(83, 435, 232, NULL, 'penjualan', '2021-12-07 04:23:40', '2021-12-07 04:23:40'),
+(85, 355, 234, NULL, 'po', '2021-12-07 04:43:38', '2021-12-07 04:43:38');
 
 -- --------------------------------------------------------
 
@@ -17835,7 +18096,8 @@ INSERT INTO `spb` (`id`, `customer_id`, `pesanan_id`, `ket`, `log`, `created_at`
 (83, 74, 212, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (84, 112, 213, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (85, 15, 214, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(86, 78, 215, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(86, 78, 215, '', 'penjualan', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(88, 58, 236, NULL, 'po', '2021-12-07 07:42:09', '2021-12-07 07:42:09');
 
 -- --------------------------------------------------------
 
@@ -17932,7 +18194,75 @@ INSERT INTO `t_gbj` (`id`, `pesanan_id`, `tgl_masuk`, `tgl_keluar`, `dari`, `ke`
 (2, 2, NULL, '2021-11-26', NULL, 23, NULL, 1, 2, 'keluar', '2021-11-26 02:03:18', '2021-11-26 02:03:18'),
 (3, 3, NULL, '2021-11-26', NULL, 23, NULL, 1, 2, 'keluar', '2021-11-26 02:03:35', '2021-11-26 02:03:35'),
 (4, 4, NULL, '2021-11-26', NULL, 23, NULL, 1, 2, 'keluar', '2021-11-26 02:03:52', '2021-11-26 02:03:52'),
-(5, 5, NULL, '2021-11-26', NULL, 23, NULL, 1, 2, 'keluar', '2021-11-26 02:05:12', '2021-11-26 02:05:12');
+(5, 5, NULL, '2021-11-26', NULL, 23, NULL, 1, 2, 'keluar', '2021-11-26 02:05:12', '2021-11-26 02:05:12'),
+(12, 54, NULL, '2021-12-03', NULL, 23, 'Tf SPA', 1, 2, 'keluar', '2021-12-02 01:05:36', NULL),
+(13, 132, NULL, '2021-11-09', NULL, 23, 'tf spb', 1, 2, 'keluar', '2021-12-02 01:08:39', '2021-12-02 01:08:58'),
+(21, 6, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 03:56:35', '2021-12-02 03:56:35'),
+(125, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:12:41', '2021-12-02 08:12:41'),
+(126, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:12:53', '2021-12-02 08:12:53'),
+(127, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:14:54', '2021-12-02 08:14:54'),
+(128, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:15:07', '2021-12-02 08:15:07'),
+(129, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:15:36', '2021-12-02 08:15:36'),
+(130, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:16:40', '2021-12-02 08:16:40'),
+(131, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:18:12', '2021-12-02 08:18:12'),
+(132, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:21:18', '2021-12-02 08:21:18'),
+(133, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:22:43', '2021-12-02 08:22:43'),
+(134, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:24:22', '2021-12-02 08:24:22'),
+(135, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:24:59', '2021-12-02 08:25:00'),
+(136, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:25:10', '2021-12-02 08:25:10'),
+(137, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:26:03', '2021-12-02 08:26:03'),
+(138, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:26:57', '2021-12-02 08:26:57'),
+(139, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:27:43', '2021-12-02 08:27:43'),
+(140, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:29:37', '2021-12-02 08:29:37'),
+(141, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:30:12', '2021-12-02 08:30:12'),
+(142, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:31:15', '2021-12-02 08:31:15'),
+(143, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:32:07', '2021-12-02 08:32:07'),
+(144, 1, NULL, '2021-12-02', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-02 08:32:54', '2021-12-02 08:32:54'),
+(151, NULL, '2021-12-03', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-03 02:08:15', '2021-12-03 02:08:15'),
+(152, NULL, '2021-12-03', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-03 03:10:54', '2021-12-03 03:10:54'),
+(153, 1, NULL, '2021-12-03', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-03 06:45:15', '2021-12-03 06:45:15'),
+(154, NULL, '2021-12-03', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-03 07:23:02', '2021-12-03 07:23:02'),
+(155, NULL, '2021-12-03', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-03 07:23:05', '2021-12-03 07:23:05'),
+(156, NULL, '2021-12-03', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-03 07:23:15', '2021-12-03 07:23:15'),
+(157, NULL, '2021-12-03', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-03 07:23:23', '2021-12-03 07:23:23'),
+(158, NULL, '2021-12-03', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-03 07:23:23', '2021-12-06 03:45:05'),
+(159, NULL, NULL, '2021-11-30', NULL, 12, NULL, NULL, NULL, 'keluar', '2021-12-03 07:23:23', '2021-12-06 03:45:05'),
+(160, NULL, '2021-12-06', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-06 03:57:07', '2021-12-06 03:57:07'),
+(161, NULL, '2021-12-06', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-06 04:07:35', '2021-12-06 04:07:35'),
+(162, NULL, '2021-12-06', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-06 04:08:06', '2021-12-06 04:08:06'),
+(163, NULL, '2021-12-06', NULL, 17, NULL, NULL, NULL, NULL, 'masuk', '2021-12-06 04:17:29', '2021-12-06 04:17:29'),
+(191, NULL, '2021-12-07', NULL, 2, NULL, 'sad', 1, NULL, 'masuk', '2021-12-07 02:28:38', '2021-12-07 02:28:38'),
+(192, NULL, '2021-12-07', NULL, 1, NULL, 'sad', 1, NULL, 'masuk', '2021-12-07 02:36:33', '2021-12-07 02:36:33'),
+(193, NULL, '2021-12-07', NULL, 1, NULL, 'sad', 2, NULL, 'masuk', '2021-12-07 03:04:26', '2021-12-07 03:29:07'),
+(194, NULL, '2021-12-07', NULL, 1, NULL, 'sad', 2, NULL, 'masuk', '2021-12-07 03:06:02', '2021-12-07 03:06:02'),
+(195, 1, NULL, '2021-12-07', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-07 03:47:06', '2021-12-07 03:47:06'),
+(196, 1, NULL, '2021-12-07', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-07 03:47:33', '2021-12-07 03:47:33'),
+(197, 1, NULL, '2021-12-07', NULL, 23, NULL, 1, 2, 'keluar', '2021-12-07 03:50:31', '2021-12-07 03:50:31'),
+(198, NULL, NULL, '2021-12-07', NULL, 1, 'qwq', NULL, NULL, 'keluar', '2021-12-07 04:30:18', '2021-12-07 04:30:18'),
+(199, NULL, NULL, '2021-12-07', NULL, 1, 'qwq', NULL, NULL, 'keluar', '2021-12-07 04:31:57', '2021-12-07 04:31:57'),
+(200, NULL, NULL, '2021-12-07', NULL, 1, 'qwq', NULL, NULL, 'keluar', '2021-12-07 04:35:01', '2021-12-07 04:35:02'),
+(201, NULL, NULL, '2021-12-07', NULL, 1, 'qwq', NULL, NULL, 'keluar', '2021-12-07 04:35:30', '2021-12-07 04:35:30'),
+(202, NULL, NULL, '2021-12-07', NULL, 4, 'qwqg', NULL, NULL, 'keluar', '2021-12-07 04:35:32', '2021-12-07 04:35:32'),
+(203, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:01:13', '2021-12-07 05:01:13'),
+(204, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(205, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:02:38', '2021-12-07 05:02:38'),
+(206, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(207, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:03:51', '2021-12-07 05:03:51'),
+(208, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(209, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:04:20', '2021-12-07 05:04:20'),
+(210, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(211, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:05:34', '2021-12-07 05:05:34'),
+(212, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(213, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:05:46', '2021-12-07 05:05:46'),
+(214, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(215, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:06:31', '2021-12-07 05:06:31'),
+(216, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(217, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:07:38', '2021-12-07 05:07:38'),
+(218, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(219, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:08:22', '2021-12-07 05:08:22'),
+(220, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(221, NULL, NULL, '2021-12-07', NULL, 2, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:10:17', '2021-12-07 05:10:17'),
+(222, NULL, NULL, '2021-12-07', NULL, 16, 'eeq', NULL, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19');
 
 -- --------------------------------------------------------
 
@@ -17974,7 +18304,116 @@ INSERT INTO `t_gbj_detail` (`id`, `t_gbj_id`, `gdg_brg_jadi_id`, `qty`, `status_
 (15, 5, 139, 1, 1, 2, 'keluar', '2021-11-26 02:05:12', '2021-11-26 02:05:12'),
 (16, 5, 127, 4, 1, 2, 'keluar', '2021-11-26 02:05:12', '2021-11-26 02:05:12'),
 (17, 5, 196, 4, 1, 2, 'keluar', '2021-11-26 02:05:12', '2021-11-26 02:05:12'),
-(18, 5, 204, 4, 1, 2, 'keluar', '2021-11-26 02:05:12', '2021-11-26 02:05:12');
+(18, 5, 204, 4, 1, 2, 'keluar', '2021-11-26 02:05:12', '2021-11-26 02:05:12'),
+(26, 12, 166, 3, 3, 2, 'keluar', '2021-12-02 01:24:59', '2021-12-02 01:25:58'),
+(27, 12, 134, 3, 1, 2, 'keluar', '2021-12-02 01:26:04', NULL),
+(28, 12, 204, 3, 1, 1, NULL, '2021-12-02 01:34:53', NULL),
+(29, 13, 147, 2, NULL, NULL, NULL, '2021-12-02 01:51:14', NULL),
+(30, 13, 204, 2, NULL, NULL, NULL, '2021-12-02 01:51:14', NULL),
+(31, 13, 150, 2, NULL, NULL, NULL, '2021-12-02 01:51:38', NULL),
+(32, 13, 199, 2, NULL, NULL, NULL, '2021-12-02 01:51:38', NULL),
+(33, 13, 151, 2, NULL, NULL, NULL, '2021-12-02 01:51:50', NULL),
+(201, 125, 20, 1, 1, 2, 'keluar', '2021-12-02 08:12:44', '2021-12-02 08:12:44'),
+(202, 126, 20, 1, 1, 2, 'keluar', '2021-12-02 08:12:55', '2021-12-02 08:12:55'),
+(203, 126, 108, 2, 1, 2, 'keluar', '2021-12-02 08:12:55', '2021-12-02 08:12:55'),
+(204, 126, 204, 2, 1, 2, 'keluar', '2021-12-02 08:12:55', '2021-12-02 08:12:55'),
+(205, 127, 20, 1, 1, 2, 'keluar', '2021-12-02 08:14:56', '2021-12-02 08:14:56'),
+(206, 128, 20, 1, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(207, 128, 108, 2, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(208, 128, 204, 2, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(209, 129, 20, 1, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(210, 129, 108, 2, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(211, 129, 204, 2, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(212, 130, 20, 1, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(213, 130, 108, 2, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(214, 130, 204, 2, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(215, 131, 20, 1, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(216, 131, 108, 2, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(217, 131, 204, 2, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(218, 132, 20, 1, 1, 2, 'keluar', '2021-12-02 08:21:20', '2021-12-02 08:21:20'),
+(219, 133, 20, 1, 1, 2, 'keluar', '2021-12-02 08:22:46', '2021-12-02 08:22:46'),
+(220, 134, 20, 1, 1, 2, 'keluar', '2021-12-02 08:24:24', '2021-12-02 08:24:24'),
+(221, 134, 108, 2, 1, 2, 'keluar', '2021-12-02 08:24:25', '2021-12-02 08:24:25'),
+(222, 134, 204, 2, 1, 2, 'keluar', '2021-12-02 08:24:25', '2021-12-02 08:24:25'),
+(223, 135, 20, 1, 1, 2, 'keluar', '2021-12-02 08:25:02', '2021-12-02 08:25:02'),
+(224, 135, 108, 2, 1, 2, 'keluar', '2021-12-02 08:25:02', '2021-12-02 08:25:02'),
+(225, 135, 204, 2, 1, 2, 'keluar', '2021-12-02 08:25:02', '2021-12-02 08:25:02'),
+(226, 136, 20, 1, 1, 2, 'keluar', '2021-12-02 08:25:12', '2021-12-02 08:25:12'),
+(227, 136, 108, 2, 1, 2, 'keluar', '2021-12-02 08:25:12', '2021-12-02 08:25:12'),
+(228, 136, 204, 2, 1, 2, 'keluar', '2021-12-02 08:25:12', '2021-12-02 08:25:12'),
+(229, 137, 20, 1, 1, 2, 'keluar', '2021-12-02 08:26:05', '2021-12-02 08:26:05'),
+(230, 138, 20, 1, 1, 2, 'keluar', '2021-12-02 08:26:59', '2021-12-02 08:26:59'),
+(231, 138, 108, 2, 1, 2, 'keluar', '2021-12-02 08:26:59', '2021-12-02 08:26:59'),
+(232, 138, 204, 2, 1, 2, 'keluar', '2021-12-02 08:26:59', '2021-12-02 08:26:59'),
+(233, 139, 20, 1, 1, 2, 'keluar', '2021-12-02 08:27:45', '2021-12-02 08:27:45'),
+(234, 139, 108, 2, 1, 2, 'keluar', '2021-12-02 08:27:45', '2021-12-02 08:27:45'),
+(235, 139, 204, 2, 1, 2, 'keluar', '2021-12-02 08:27:45', '2021-12-02 08:27:45'),
+(236, 140, 20, 1, 1, 2, 'keluar', '2021-12-02 08:29:39', '2021-12-02 08:29:39'),
+(237, 140, 108, 2, 1, 2, 'keluar', '2021-12-02 08:29:39', '2021-12-02 08:29:39'),
+(238, 140, 204, 2, 1, 2, 'keluar', '2021-12-02 08:29:39', '2021-12-02 08:29:39'),
+(239, 141, 20, 1, 1, 2, 'keluar', '2021-12-02 08:30:14', '2021-12-02 08:30:14'),
+(240, 141, 108, 2, 1, 2, 'keluar', '2021-12-02 08:30:14', '2021-12-02 08:30:14'),
+(241, 141, 204, 2, 1, 2, 'keluar', '2021-12-02 08:30:14', '2021-12-02 08:30:14'),
+(242, 142, 20, 1, 1, 2, 'keluar', '2021-12-02 08:31:17', '2021-12-02 08:31:17'),
+(243, 143, 20, 1, 1, 2, 'keluar', '2021-12-02 08:32:09', '2021-12-02 08:32:09'),
+(244, 143, 108, 2, 1, 2, 'keluar', '2021-12-02 08:32:09', '2021-12-02 08:32:09'),
+(245, 143, 204, 2, 1, 2, 'keluar', '2021-12-02 08:32:09', '2021-12-02 08:32:09'),
+(246, 144, 20, 1, 1, 2, 'keluar', '2021-12-02 08:32:56', '2021-12-02 08:32:56'),
+(247, 144, 108, 2, 1, 2, 'keluar', '2021-12-02 08:32:56', '2021-12-02 08:32:56'),
+(248, 144, 204, 2, 1, 2, 'keluar', '2021-12-02 08:32:56', '2021-12-02 08:32:56'),
+(255, 151, 68, 20, NULL, NULL, 'masuk', '2021-12-03 02:08:17', '2021-12-03 02:08:17'),
+(256, 152, 68, 20, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(257, 153, 20, 1, 1, 2, 'keluar', '2021-12-03 06:45:17', '2021-12-03 06:45:17'),
+(258, 153, 108, 2, 1, 2, 'keluar', '2021-12-03 06:45:17', '2021-12-03 06:45:17'),
+(259, 153, 204, 2, 1, 2, 'keluar', '2021-12-03 06:45:17', '2021-12-03 06:45:17'),
+(260, 154, 68, 20, NULL, NULL, 'masuk', '2021-12-03 07:23:04', '2021-12-03 07:23:04'),
+(261, 155, 68, 20, NULL, NULL, 'masuk', '2021-12-03 07:23:07', '2021-12-03 07:23:07'),
+(262, 156, 68, 20, NULL, NULL, 'masuk', '2021-12-03 07:23:17', '2021-12-03 07:23:17'),
+(263, 157, 68, 20, NULL, NULL, 'masuk', '2021-12-03 07:23:25', '2021-12-03 07:23:25'),
+(264, 158, 5, 20, NULL, NULL, 'masuk', '2021-12-03 07:23:25', '2021-12-06 03:24:08'),
+(265, 159, 5, 20, NULL, NULL, 'keluar', '2021-12-03 07:23:25', '2021-12-06 03:24:08'),
+(266, 160, 15, 12, NULL, NULL, 'masuk', '2021-12-06 03:57:09', '2021-12-06 03:57:09'),
+(267, 161, 15, 12, NULL, NULL, 'masuk', '2021-12-06 04:07:37', '2021-12-06 04:07:37'),
+(268, 162, 15, 12, NULL, NULL, 'masuk', '2021-12-06 04:08:08', '2021-12-06 04:08:08'),
+(269, 163, 15, 12, NULL, NULL, 'masuk', '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(309, 191, 5, 2, 1, NULL, 'masuk', '2021-12-07 02:28:41', '2021-12-07 02:28:41'),
+(310, 191, 6, 4, 1, NULL, 'masuk', '2021-12-07 02:28:41', '2021-12-07 02:28:41'),
+(311, 192, 6, 2, 1, NULL, 'masuk', '2021-12-07 02:36:35', '2021-12-07 02:36:35'),
+(312, 193, 5, 2, 1, NULL, 'masuk', '2021-12-07 03:04:28', '2021-12-07 03:04:28'),
+(313, 194, 5, 2, 2, NULL, 'masuk', '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(314, 194, 6, 3, 2, NULL, 'masuk', '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(315, 195, 20, 1, 1, 2, 'keluar', '2021-12-07 03:47:08', '2021-12-07 03:47:08'),
+(316, 195, 108, 2, 1, 2, 'keluar', '2021-12-07 03:47:08', '2021-12-07 03:47:08'),
+(317, 195, 204, 2, 1, 2, 'keluar', '2021-12-07 03:47:08', '2021-12-07 03:47:08'),
+(318, 196, 20, 1, 1, 2, 'keluar', '2021-12-07 03:47:35', '2021-12-07 03:47:35'),
+(319, 197, 20, 1, 1, 2, 'keluar', '2021-12-07 03:50:34', '2021-12-07 03:50:34'),
+(320, 197, 108, 2, 1, 2, 'keluar', '2021-12-07 03:50:34', '2021-12-07 03:50:34'),
+(321, 197, 204, 2, 1, 2, 'keluar', '2021-12-07 03:50:34', '2021-12-07 03:50:34'),
+(322, 198, 20, 2, NULL, NULL, 'keluar', '2021-12-07 04:30:20', '2021-12-07 04:30:20'),
+(323, 199, 20, 3, NULL, NULL, 'keluar', '2021-12-07 04:31:59', '2021-12-07 04:31:59'),
+(324, 200, 20, 3, NULL, NULL, 'keluar', '2021-12-07 04:35:04', '2021-12-07 04:35:04'),
+(325, 201, 20, 3, NULL, NULL, 'keluar', '2021-12-07 04:35:32', '2021-12-07 04:35:32'),
+(326, 202, 108, 2, NULL, NULL, 'keluar', '2021-12-07 04:35:32', '2021-12-07 04:35:32'),
+(327, 203, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:01:15', '2021-12-07 05:01:15'),
+(328, 204, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(329, 205, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(330, 206, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(331, 207, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(332, 208, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(333, 209, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(334, 210, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(335, 211, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(336, 212, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(337, 213, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(338, 214, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(339, 215, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(340, 216, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(341, 217, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(342, 218, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(343, 219, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(344, 220, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(345, 221, 5, 5, NULL, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(346, 222, 20, 4, NULL, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19');
 
 -- --------------------------------------------------------
 
@@ -18058,7 +18497,245 @@ INSERT INTO `t_gbj_noseri` (`id`, `t_gbj_detail_id`, `noseri`, `noseri_id`, `lay
 (56, 18, '', 58, 1, NULL, NULL, 'keluar', '2021-11-26 02:47:17', NULL),
 (57, 18, '', 59, 1, NULL, NULL, 'keluar', '2021-11-26 02:47:17', NULL),
 (58, 18, '', 60, 1, NULL, NULL, 'keluar', '2021-11-26 02:47:17', NULL),
-(59, 18, '', 61, 1, NULL, NULL, 'keluar', '2021-11-26 02:47:17', NULL);
+(59, 18, '', 61, 1, NULL, NULL, 'keluar', '2021-11-26 02:47:17', NULL),
+(501, 26, NULL, 217, NULL, NULL, NULL, NULL, '2021-12-02 01:44:08', NULL),
+(502, 26, NULL, 218, NULL, NULL, NULL, NULL, '2021-12-02 01:44:08', '2021-12-02 01:44:23'),
+(503, 26, NULL, 219, NULL, NULL, NULL, NULL, '2021-12-02 01:44:33', NULL),
+(504, 27, NULL, 220, NULL, NULL, NULL, NULL, '2021-12-02 01:45:08', NULL),
+(505, 27, NULL, 221, NULL, NULL, NULL, NULL, '2021-12-02 01:45:08', '2021-12-02 01:45:40'),
+(506, 27, NULL, 222, NULL, NULL, NULL, NULL, '2021-12-02 01:45:27', NULL),
+(507, 28, NULL, 223, NULL, NULL, NULL, NULL, '2021-12-02 01:46:12', NULL),
+(508, 28, NULL, 224, NULL, NULL, NULL, NULL, '2021-12-02 01:46:12', NULL),
+(509, 28, NULL, 225, NULL, NULL, NULL, NULL, '2021-12-02 01:46:41', NULL),
+(510, 29, NULL, 226, NULL, NULL, NULL, NULL, '2021-12-02 01:58:28', NULL),
+(511, 29, NULL, 227, NULL, NULL, NULL, NULL, '2021-12-02 01:58:28', NULL),
+(512, 30, NULL, 228, NULL, NULL, NULL, NULL, '2021-12-02 01:58:49', NULL),
+(513, 30, NULL, 229, NULL, NULL, NULL, NULL, '2021-12-02 01:58:49', NULL),
+(514, 31, NULL, 230, NULL, NULL, NULL, NULL, '2021-12-02 01:59:15', NULL),
+(515, 31, NULL, 231, NULL, NULL, NULL, NULL, '2021-12-02 01:59:15', NULL),
+(516, 32, NULL, 232, NULL, NULL, NULL, NULL, '2021-12-02 01:59:54', NULL),
+(517, 32, NULL, 233, NULL, NULL, NULL, NULL, '2021-12-02 01:59:54', NULL),
+(518, 33, NULL, 234, NULL, NULL, NULL, NULL, '2021-12-02 02:00:27', NULL),
+(519, 33, NULL, 235, NULL, NULL, NULL, NULL, '2021-12-02 02:00:27', NULL),
+(638, 202, '30', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:12:55', '2021-12-02 08:12:55'),
+(639, 203, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:12:55', '2021-12-02 08:12:55'),
+(640, 203, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:12:55', '2021-12-02 08:12:55'),
+(641, 204, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:12:55', '2021-12-02 08:12:55'),
+(642, 204, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:12:55', '2021-12-02 08:12:55'),
+(643, 206, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(644, 206, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(645, 207, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(646, 207, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(647, 208, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(648, 208, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:09', '2021-12-02 08:15:09'),
+(649, 209, '31', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(650, 209, '31', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(651, 210, '5', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(652, 210, '5', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(653, 211, '28', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(654, 211, '28', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:15:39', '2021-12-02 08:15:39'),
+(655, 212, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(656, 212, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(657, 213, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(658, 213, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(659, 214, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(660, 214, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:16:42', '2021-12-02 08:16:42'),
+(661, 215, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(662, 215, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(663, 216, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(664, 216, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(665, 217, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(666, 217, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:18:14', '2021-12-02 08:18:14'),
+(667, 220, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:24:24', '2021-12-02 08:24:24'),
+(668, 220, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:24:24', '2021-12-02 08:24:24'),
+(669, 221, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:24:25', '2021-12-02 08:24:25'),
+(670, 221, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:24:25', '2021-12-02 08:24:25'),
+(671, 222, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:24:25', '2021-12-02 08:24:25'),
+(672, 222, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:24:25', '2021-12-02 08:24:25'),
+(673, 246, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:32:56', '2021-12-02 08:32:56'),
+(674, 246, '32', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:32:56', '2021-12-02 08:32:56'),
+(675, 247, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:32:56', '2021-12-02 08:32:56'),
+(676, 247, '6', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:32:56', '2021-12-02 08:32:56'),
+(677, 248, '223', NULL, 1, 1, 2, 'keluar', '2021-12-02 08:32:56', '2021-12-02 08:32:56'),
+(699, 255, NULL, 263, 1, 3, 3, 'masuk', '2021-12-03 02:08:17', '2021-12-03 03:07:42'),
+(700, 255, NULL, 264, 1, 3, 3, 'masuk', '2021-12-03 02:08:17', '2021-12-03 03:07:42'),
+(701, 255, NULL, 265, 1, 3, 3, 'masuk', '2021-12-03 02:08:17', '2021-12-03 03:47:40'),
+(702, 255, NULL, 266, 1, 3, 3, 'masuk', '2021-12-03 02:08:17', '2021-12-03 03:47:40'),
+(703, 255, NULL, 267, 1, 3, 3, 'masuk', '2021-12-03 02:08:17', '2021-12-03 06:29:29'),
+(704, 255, NULL, 268, 1, 3, 3, 'masuk', '2021-12-03 02:08:17', '2021-12-03 06:29:29'),
+(705, 255, NULL, 269, 1, NULL, 3, 'masuk', '2021-12-03 02:08:17', '2021-12-03 02:53:36'),
+(706, 255, NULL, 270, 1, NULL, 3, 'masuk', '2021-12-03 02:08:17', '2021-12-03 02:53:36'),
+(707, 255, NULL, 271, 1, NULL, 3, 'masuk', '2021-12-03 02:08:18', '2021-12-03 02:53:36'),
+(708, 255, NULL, 272, 1, NULL, 3, 'masuk', '2021-12-03 02:08:18', '2021-12-03 02:53:36'),
+(709, 256, NULL, 273, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(710, 256, NULL, 274, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(711, 256, NULL, 275, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(712, 256, NULL, 276, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(713, 256, NULL, 277, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(714, 256, NULL, 278, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(715, 256, NULL, 279, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(716, 256, NULL, 280, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(717, 256, NULL, 281, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(718, 256, NULL, 282, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(719, 256, NULL, 283, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(720, 256, NULL, 284, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(721, 256, NULL, 285, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(722, 256, NULL, 286, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(723, 256, NULL, 287, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(724, 256, NULL, 288, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(725, 256, NULL, 289, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:56', '2021-12-03 03:10:56'),
+(726, 256, NULL, 290, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:57', '2021-12-03 03:10:57'),
+(727, 256, NULL, 291, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:57', '2021-12-03 03:10:57'),
+(728, 256, NULL, 292, 1, NULL, NULL, 'masuk', '2021-12-03 03:10:57', '2021-12-03 03:10:57'),
+(729, 257, '29', NULL, 1, 1, 2, 'keluar', '2021-12-03 06:45:17', '2021-12-03 06:45:17'),
+(730, 258, '5', NULL, 1, 1, 2, 'keluar', '2021-12-03 06:45:17', '2021-12-03 06:45:17'),
+(731, 258, '5', NULL, 1, 1, 2, 'keluar', '2021-12-03 06:45:17', '2021-12-03 06:45:17'),
+(732, 259, '223', NULL, 1, 1, 2, 'keluar', '2021-12-03 06:45:17', '2021-12-03 06:45:17'),
+(733, 259, '223', NULL, 1, 1, 2, 'keluar', '2021-12-03 06:45:17', '2021-12-03 06:45:17'),
+(734, 260, NULL, 293, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:04', '2021-12-03 07:23:04'),
+(735, 260, NULL, 294, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:05', '2021-12-03 07:23:05'),
+(736, 260, NULL, 295, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:05', '2021-12-03 07:23:05'),
+(737, 261, NULL, 296, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:07', '2021-12-03 07:23:07'),
+(738, 261, NULL, 297, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:07', '2021-12-03 07:23:07'),
+(739, 261, NULL, 298, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:07', '2021-12-03 07:23:07'),
+(740, 262, NULL, 299, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:17', '2021-12-03 07:23:17'),
+(741, 262, NULL, 300, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:17', '2021-12-03 07:23:17'),
+(742, 262, NULL, 301, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:17', '2021-12-03 07:23:17'),
+(743, 263, NULL, 302, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:25', '2021-12-03 07:23:25'),
+(744, 263, NULL, 303, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:25', '2021-12-03 07:23:25'),
+(745, 263, NULL, 304, 1, NULL, NULL, 'masuk', '2021-12-03 07:23:25', '2021-12-03 07:23:25'),
+(746, 266, NULL, 305, 1, 3, NULL, 'masuk', '2021-12-06 03:57:09', '2021-12-06 07:27:04'),
+(748, 268, NULL, 307, 1, 3, NULL, 'masuk', '2021-12-06 04:08:08', '2021-12-06 07:27:42'),
+(749, 268, NULL, 308, 1, 3, NULL, 'masuk', '2021-12-06 04:08:08', '2021-12-06 07:27:42'),
+(750, 269, NULL, 309, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(751, 269, NULL, 310, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(752, 269, NULL, 311, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(753, 269, NULL, 312, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:31', '2021-12-06 04:17:31'),
+(754, 269, NULL, 313, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(755, 269, NULL, 314, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(756, 269, NULL, 315, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(757, 269, NULL, 316, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(758, 269, NULL, 317, 1, NULL, NULL, 'masuk', '2021-12-06 04:17:32', '2021-12-06 04:17:32'),
+(808, 309, NULL, 332, 1, 3, 2, 'keluar', '2021-12-07 02:28:41', '2021-12-07 02:45:28'),
+(809, 309, NULL, 333, 1, 3, 2, 'keluar', '2021-12-07 02:28:41', '2021-12-07 02:45:28'),
+(810, 310, NULL, 334, 1, 3, 2, 'keluar', '2021-12-07 02:28:41', '2021-12-07 02:45:28'),
+(811, 310, NULL, 335, 1, 3, 2, 'keluar', '2021-12-07 02:28:41', '2021-12-07 02:45:28'),
+(812, 310, NULL, 336, 1, 3, 2, 'keluar', '2021-12-07 02:28:41', '2021-12-07 02:45:28'),
+(813, 310, NULL, 337, 1, 3, 2, 'keluar', '2021-12-07 02:28:41', '2021-12-07 02:45:28'),
+(814, 311, NULL, 338, 1, 3, 2, 'keluar', '2021-12-07 02:36:36', '2021-12-07 02:36:36'),
+(815, 311, NULL, 339, 1, 3, 2, 'keluar', '2021-12-07 02:36:36', '2021-12-07 02:36:36'),
+(816, 312, NULL, 340, 1, 2, 2, 'keluar', '2021-12-07 03:04:28', '2021-12-07 03:29:07'),
+(817, 312, NULL, 341, 1, 2, 2, 'keluar', '2021-12-07 03:04:28', '2021-12-07 03:29:07'),
+(818, 313, NULL, 342, 1, 2, 3, 'keluar', '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(819, 313, NULL, 343, 1, 2, 3, 'keluar', '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(820, 314, NULL, 344, 1, 2, 3, 'keluar', '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(821, 314, NULL, 345, 1, 2, 3, 'keluar', '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(822, 314, NULL, 346, 1, 2, 3, 'keluar', '2021-12-07 03:06:05', '2021-12-07 03:06:05'),
+(823, 315, '29', NULL, 1, 1, 2, 'keluar', '2021-12-07 03:47:08', '2021-12-07 03:47:08'),
+(824, 316, '4', NULL, 1, 1, 2, 'keluar', '2021-12-07 03:47:08', '2021-12-07 03:47:08'),
+(825, 316, '5', NULL, 1, 1, 2, 'keluar', '2021-12-07 03:47:08', '2021-12-07 03:47:08'),
+(826, 317, '229', NULL, 1, 1, 2, 'keluar', '2021-12-07 03:47:08', '2021-12-07 03:47:08'),
+(827, 317, '28', NULL, 1, 1, 2, 'keluar', '2021-12-07 03:47:08', '2021-12-07 03:47:08'),
+(829, 319, NULL, 29, 1, 1, 2, 'keluar', '2021-12-07 03:50:34', '2021-12-07 03:50:34'),
+(830, 320, NULL, 4, 1, 1, 2, 'keluar', '2021-12-07 03:50:34', '2021-12-07 03:50:34'),
+(831, 320, NULL, 5, 1, 1, 2, 'keluar', '2021-12-07 03:50:34', '2021-12-07 03:50:34'),
+(832, 321, NULL, 229, 1, 1, 2, 'keluar', '2021-12-07 03:50:34', '2021-12-07 03:50:34'),
+(833, 321, NULL, 28, 1, 1, 2, 'keluar', '2021-12-07 03:50:34', '2021-12-07 03:50:34'),
+(834, 325, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 04:35:32', '2021-12-07 04:35:32'),
+(835, 325, NULL, 30, 1, 2, NULL, 'keluar', '2021-12-07 04:35:32', '2021-12-07 04:35:32'),
+(836, 326, NULL, 4, 1, 2, NULL, 'keluar', '2021-12-07 04:35:32', '2021-12-07 04:35:32'),
+(837, 326, NULL, 6, 1, 2, NULL, 'keluar', '2021-12-07 04:35:32', '2021-12-07 04:35:32'),
+(838, 326, NULL, 8, 1, 2, NULL, 'keluar', '2021-12-07 04:35:32', '2021-12-07 04:35:32'),
+(839, 327, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:01:15', '2021-12-07 05:01:15'),
+(840, 327, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(841, 327, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(842, 327, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(843, 327, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(844, 328, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(845, 328, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(846, 328, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(847, 328, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:01:16', '2021-12-07 05:01:16'),
+(848, 329, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(849, 329, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(850, 329, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(851, 329, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(852, 329, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(853, 330, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(854, 330, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(855, 330, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(856, 330, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:02:40', '2021-12-07 05:02:40'),
+(857, 331, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(858, 331, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(859, 331, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(860, 331, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(861, 331, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(862, 332, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(863, 332, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(864, 332, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(865, 332, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:03:53', '2021-12-07 05:03:53'),
+(866, 333, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(867, 333, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(868, 333, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(869, 333, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(870, 333, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(871, 334, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(872, 334, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(873, 334, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:04:22', '2021-12-07 05:04:22'),
+(874, 334, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:04:23', '2021-12-07 05:04:23'),
+(875, 335, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(876, 335, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(877, 335, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(878, 335, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(879, 335, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(880, 336, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(881, 336, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(882, 336, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(883, 336, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:05:36', '2021-12-07 05:05:36'),
+(884, 337, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(885, 337, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(886, 337, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(887, 337, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(888, 337, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(889, 338, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(890, 338, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(891, 338, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(892, 338, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:05:48', '2021-12-07 05:05:48'),
+(893, 339, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(894, 339, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(895, 339, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(896, 339, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(897, 339, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(898, 340, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(899, 340, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(900, 340, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(901, 340, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:06:33', '2021-12-07 05:06:33'),
+(902, 341, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(903, 341, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(904, 341, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(905, 341, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(906, 341, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(907, 342, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(908, 342, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(909, 342, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(910, 342, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:07:41', '2021-12-07 05:07:41'),
+(911, 343, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(912, 343, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(913, 343, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(914, 343, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(915, 343, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(916, 344, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(917, 344, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(918, 344, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(919, 344, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:08:24', '2021-12-07 05:08:24'),
+(920, 345, NULL, 3, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(921, 345, NULL, 340, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(922, 345, NULL, 343, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(923, 345, NULL, 342, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(924, 345, NULL, 341, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(925, 346, NULL, 29, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(926, 346, NULL, 31, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(927, 346, NULL, 33, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19'),
+(928, 346, NULL, 35, 1, 2, NULL, 'keluar', '2021-12-07 05:10:19', '2021-12-07 05:10:19');
 
 -- --------------------------------------------------------
 
@@ -18084,7 +18761,10 @@ CREATE TABLE `t_gk` (
 --
 
 INSERT INTO `t_gk` (`id`, `date_in`, `date_out`, `dari`, `ke`, `deskripsi`, `is_draft`, `is_keluar`, `created_at`, `updated_at`) VALUES
-(1, '2021-11-01', '2021-11-26', 10, 18, 'asa', 0, 1, NULL, NULL);
+(188, NULL, '2021-12-07', NULL, 1, 'a', 1, 1, '2021-12-07 09:24:36', '2021-12-07 09:24:36'),
+(189, NULL, '2021-12-07', NULL, 1, 'afddsf', 1, 1, '2021-12-07 09:27:04', '2021-12-07 09:27:04'),
+(190, NULL, '2021-12-07', NULL, 1, 'afddsf', 1, 1, '2021-12-07 09:31:09', '2021-12-07 09:31:09'),
+(191, NULL, '2021-12-07', NULL, 1, 'test', 0, 1, '2021-12-07 09:37:17', '2021-12-07 09:37:17');
 
 -- --------------------------------------------------------
 
@@ -18111,8 +18791,16 @@ CREATE TABLE `t_gk_detail` (
 --
 
 INSERT INTO `t_gk_detail` (`id`, `gk_id`, `gbj_id`, `sparepart_id`, `unit`, `qty_unit`, `qty_spr`, `is_draft`, `is_keluar`, `created_at`, `updated_at`) VALUES
-(1, 1, 5, NULL, NULL, 100, NULL, 0, 1, '2021-11-27 03:30:55', NULL),
-(2, 1, NULL, 3, NULL, NULL, 50, 0, 1, '2021-11-27 03:30:55', NULL);
+(233, 188, NULL, 1, NULL, NULL, 2, 1, 1, '2021-12-07 09:24:38', '2021-12-07 09:43:09'),
+(234, 188, 5, NULL, NULL, 3, NULL, 1, 1, '2021-12-07 09:24:38', '2021-12-07 09:43:09'),
+(235, 189, NULL, 1, NULL, NULL, 2, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:43:09'),
+(236, 189, NULL, 4, NULL, NULL, 3, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:43:09'),
+(237, 189, 5, NULL, NULL, 3, NULL, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:43:09'),
+(238, 189, 6, NULL, NULL, 4, NULL, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:43:09'),
+(239, 190, NULL, 1, NULL, NULL, 2, 1, 1, '2021-12-07 09:31:11', '2021-12-07 09:43:09'),
+(240, 190, 5, NULL, NULL, 3, NULL, 1, 1, '2021-12-07 09:31:12', '2021-12-07 09:43:09'),
+(241, 191, NULL, 1, NULL, NULL, 2, 0, 1, '2021-12-07 09:37:19', '2021-12-07 09:37:19'),
+(242, 191, 5, NULL, NULL, 3, NULL, 0, 1, '2021-12-07 09:37:19', '2021-12-07 09:37:19');
 
 -- --------------------------------------------------------
 
@@ -18137,10 +18825,33 @@ CREATE TABLE `t_gk_noseri` (
 --
 
 INSERT INTO `t_gk_noseri` (`id`, `gk_detail_id`, `noseri`, `remark`, `tk_kerusakan`, `is_draft`, `is_keluar`, `created_at`, `updated_at`) VALUES
-(1, 1, 'seri1', 'test', 1, 0, 1, '2021-11-27 03:32:20', NULL),
-(2, 1, 'seri2', 'werty', 2, 0, 1, '2021-11-27 03:32:20', NULL),
-(3, 2, 'seri3', 'qwerty', 1, 0, 1, '2021-11-27 03:32:20', NULL),
-(4, 2, 'seri4', 'gery', 3, 0, 1, '2021-11-27 03:32:20', NULL);
+(129, 233, 'q', 'w', 1, 1, 1, '2021-12-07 09:24:38', '2021-12-07 09:24:38'),
+(130, 233, 'a', 's', 2, 1, 1, '2021-12-07 09:24:38', '2021-12-07 09:24:38'),
+(131, 234, '1', '4', 2, 1, 1, '2021-12-07 09:24:38', '2021-12-07 09:24:38'),
+(132, 234, '2', '5', 3, 1, 1, '2021-12-07 09:24:38', '2021-12-07 09:24:38'),
+(133, 234, '3', '6', 1, 1, 1, '2021-12-07 09:24:38', '2021-12-07 09:24:38'),
+(134, 235, 'q', 'w', 1, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(135, 235, 'a', 's', 2, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(136, 236, 'qwe', '123', 1, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(137, 236, 'qas', '1234', 2, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(138, 236, 'qaz', '23231', 3, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(139, 237, '1', '4', 2, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(140, 237, '2', '5', 3, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(141, 237, '3', '6', 1, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(142, 238, 'q1', 're', 1, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(143, 238, 'q2', 'rew', 2, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(144, 238, 'q3', 'req', 3, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(145, 238, 'q4', 'res', 3, 1, 1, '2021-12-07 09:27:06', '2021-12-07 09:27:06'),
+(146, 239, '4', '1q', 1, 1, 1, '2021-12-07 09:31:11', '2021-12-07 09:31:11'),
+(147, 239, '42', 'q', 2, 1, 1, '2021-12-07 09:31:12', '2021-12-07 09:31:12'),
+(148, 240, '1', 'w', 1, 1, 1, '2021-12-07 09:31:12', '2021-12-07 09:31:12'),
+(149, 240, 'q', 's', 1, 1, 1, '2021-12-07 09:31:12', '2021-12-07 09:31:12'),
+(150, 240, 'w', 's', 1, 1, 1, '2021-12-07 09:31:12', '2021-12-07 09:31:12'),
+(151, 241, 'q', 'w', 1, 0, 1, '2021-12-07 09:37:19', '2021-12-07 09:37:19'),
+(152, 241, 'a', 's', 2, 0, 1, '2021-12-07 09:37:19', '2021-12-07 09:37:19'),
+(153, 242, 'q', '1', 1, 0, 1, '2021-12-07 09:37:19', '2021-12-07 09:37:19'),
+(154, 242, 'a', '2', 2, 0, 1, '2021-12-07 09:37:19', '2021-12-07 09:37:19'),
+(155, 242, 'z', '3', 3, 0, 1, '2021-12-07 09:37:19', '2021-12-07 09:37:19');
 
 -- --------------------------------------------------------
 
@@ -25244,7 +25955,9 @@ INSERT INTO `users` (`id`, `divisi_id`, `nama`, `username`, `email`, `password`,
 (22, 13, 'Nur Kholidah', 'idagbj02', 'ida@gmail.com', '$2y$10$YSEicx/W7euW/3GRGI7vmeAM/Aj.bEfn.k7C5Bzddf8FR9dfe0o9W', '', 'online', '', '2021-08-18 03:09:09', '2021-08-18 03:09:09'),
 (23, 2, 'Siek Agus Tinus', 'agus01', 'agus@gmail.com', '$2y$10$s6L/5NaPWtSh159m16Dj7.4fGeNMz0SVymR.wd32Tobfu2D1iuIBi', '', 'offline', NULL, '2021-11-25 02:18:49', '2021-11-25 02:18:49'),
 (24, 12, 'Yuli', 'yuli01', 'yuli@gmail.com', '$2y$10$n9Rhhrup0xDWTrIA88RcMu6/qbGL4LHHFdHpQqYvr0LMaLQi88dIi', '', 'offline', NULL, '2021-11-25 02:19:48', '2021-11-25 02:19:48'),
-(25, 15, 'Erna Cantika', 'ernalog01', 'erna@gmail.com', '$2y$10$HT.EOM9fRDb/I2EJ0YPNTeuhtsxCgXZ99Mpjep1suDE.xRcXUcGNm', '', 'online', NULL, NULL, NULL);
+(25, 15, 'Erna Cantika', 'ernalog01', 'erna@gmail.com', '$2y$10$HT.EOM9fRDb/I2EJ0YPNTeuhtsxCgXZ99Mpjep1suDE.xRcXUcGNm', '', 'online', NULL, NULL, NULL),
+(26, 9, 'Maria C', 'maria21', 'maria@gmail.com', '$2y$10$WCKaqKs7flqvdKS8.qa9J.k8C09JBGWdFQFts74TH9p.kI44.PuBG', '', 'online', NULL, NULL, NULL),
+(27, 8, 'Inayati Rosyida', 'osyi', 'osyi@gmail.com', '$2y$10$FcjUM60yJZpFrl9OiFKCNuy1tx1NeIHpVDPvw2fCyweaCUgxZz//G', '', 'offline', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -25278,8 +25991,8 @@ ALTER TABLE `customer`
 --
 ALTER TABLE `detail_logistik`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `detail_pesanan_id` (`detail_pesanan_id`),
-  ADD KEY `logistik_id` (`logistik_id`);
+  ADD KEY `logistik_id` (`logistik_id`),
+  ADD KEY `detail_logistik_ibfk_2` (`detail_pesanan_produk_id`);
 
 --
 -- Indeks untuk tabel `detail_penjualan_produk`
@@ -25293,17 +26006,17 @@ ALTER TABLE `detail_penjualan_produk`
 --
 ALTER TABLE `detail_pesanan`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `detail_pesanan_FK` (`pesanan_id`),
-  ADD KEY `detail_pesanan_FK_1` (`penjualan_produk_id`);
+  ADD KEY `pesanan_id` (`pesanan_id`,`penjualan_produk_id`),
+  ADD KEY `detail_pesanan_fk2` (`penjualan_produk_id`);
 
 --
 -- Indeks untuk tabel `detail_pesanan_produk`
 --
 ALTER TABLE `detail_pesanan_produk`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `detail_pesanan_produk_FK` (`gudang_barang_jadi_id`),
-  ADD KEY `detail_pesanan_produk_FK_1` (`detail_pesanan_id`),
-  ADD KEY `detail_pesanan_produk_FK_2` (`status_cek`);
+  ADD KEY `detail_pesanan_id` (`detail_pesanan_id`,`gudang_barang_jadi_id`),
+  ADD KEY `status_cek` (`status_cek`),
+  ADD KEY `detail_pesanan_produk_FK1` (`gudang_barang_jadi_id`);
 
 --
 -- Indeks untuk tabel `divisi`
@@ -25468,12 +26181,27 @@ ALTER TABLE `noseri_barang_jadi`
   ADD KEY `noseri_barang_jadi_ke_foreign` (`ke`);
 
 --
+-- Indeks untuk tabel `noseri_coo`
+--
+ALTER TABLE `noseri_coo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `tfbk_1` (`noseri_logistik_id`);
+
+--
 -- Indeks untuk tabel `noseri_detail_pesanan`
 --
 ALTER TABLE `noseri_detail_pesanan`
   ADD PRIMARY KEY (`id`),
   ADD KEY `noseri_detail_pesanan_FK_1` (`t_tfbj_noseri_id`),
   ADD KEY `noseri_detail_pesanan_FK` (`detail_pesanan_produk_id`);
+
+--
+-- Indeks untuk tabel `noseri_logistik`
+--
+ALTER TABLE `noseri_logistik`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `noseri_logistik_ibfk_2` (`noseri_detail_pesanan_id`),
+  ADD KEY `detail_logistik_id` (`detail_logistik_id`);
 
 --
 -- Indeks untuk tabel `password_resets`
@@ -25651,7 +26379,19 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT untuk tabel `detail_logistik`
 --
 ALTER TABLE `detail_logistik`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT untuk tabel `detail_pesanan`
+--
+ALTER TABLE `detail_pesanan`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=365;
+
+--
+-- AUTO_INCREMENT untuk tabel `detail_pesanan_produk`
+--
+ALTER TABLE `detail_pesanan_produk`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT untuk tabel `divisi`
@@ -25663,7 +26403,7 @@ ALTER TABLE `divisi`
 -- AUTO_INCREMENT untuk tabel `ekatalog`
 --
 ALTER TABLE `ekatalog`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT untuk tabel `ekspedisi`
@@ -25681,25 +26421,25 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT untuk tabel `gdg_barang_jadi`
 --
 ALTER TABLE `gdg_barang_jadi`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=222;
 
 --
 -- AUTO_INCREMENT untuk tabel `gdg_barang_jadi_his`
 --
 ALTER TABLE `gdg_barang_jadi_his`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `jadwal_perakitan`
 --
 ALTER TABLE `jadwal_perakitan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT untuk tabel `jadwal_rakit_noseri`
 --
 ALTER TABLE `jadwal_rakit_noseri`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT untuk tabel `jalur_ekspedisi`
@@ -25723,7 +26463,7 @@ ALTER TABLE `komentar_jadwal_perakitan`
 -- AUTO_INCREMENT untuk tabel `logistik`
 --
 ALTER TABLE `logistik`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `migrations`
@@ -25771,7 +26511,7 @@ ALTER TABLE `m_sparepart`
 -- AUTO_INCREMENT untuk tabel `m_state`
 --
 ALTER TABLE `m_state`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `m_status`
@@ -25783,19 +26523,31 @@ ALTER TABLE `m_status`
 -- AUTO_INCREMENT untuk tabel `noseri_barang_jadi`
 --
 ALTER TABLE `noseri_barang_jadi`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=347;
+
+--
+-- AUTO_INCREMENT untuk tabel `noseri_coo`
+--
+ALTER TABLE `noseri_coo`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `noseri_detail_pesanan`
 --
 ALTER TABLE `noseri_detail_pesanan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+
+--
+-- AUTO_INCREMENT untuk tabel `noseri_logistik`
+--
+ALTER TABLE `noseri_logistik`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `penjualan_produk`
 --
 ALTER TABLE `penjualan_produk`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=217;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=218;
 
 --
 -- AUTO_INCREMENT untuk tabel `personal_access_tokens`
@@ -25807,7 +26559,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=218;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
 
 --
 -- AUTO_INCREMENT untuk tabel `produk`
@@ -25825,13 +26577,13 @@ ALTER TABLE `provinsi`
 -- AUTO_INCREMENT untuk tabel `spa`
 --
 ALTER TABLE `spa`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT untuk tabel `spb`
 --
 ALTER TABLE `spb`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT untuk tabel `t_draft_gbj`
@@ -25855,37 +26607,37 @@ ALTER TABLE `t_draft_gbj_noseri`
 -- AUTO_INCREMENT untuk tabel `t_gbj`
 --
 ALTER TABLE `t_gbj`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
 
 --
 -- AUTO_INCREMENT untuk tabel `t_gbj_detail`
 --
 ALTER TABLE `t_gbj_detail`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=347;
 
 --
 -- AUTO_INCREMENT untuk tabel `t_gbj_noseri`
 --
 ALTER TABLE `t_gbj_noseri`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=491;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=929;
 
 --
 -- AUTO_INCREMENT untuk tabel `t_gk`
 --
 ALTER TABLE `t_gk`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
 
 --
 -- AUTO_INCREMENT untuk tabel `t_gk_detail`
 --
 ALTER TABLE `t_gk_detail`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=243;
 
 --
 -- AUTO_INCREMENT untuk tabel `t_gk_noseri`
 --
 ALTER TABLE `t_gk_noseri`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
 -- AUTO_INCREMENT untuk tabel `t_gs_his`
@@ -25897,7 +26649,7 @@ ALTER TABLE `t_gs_his`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT untuk tabel `websockets_statistics_entries`
@@ -25920,7 +26672,7 @@ ALTER TABLE `customer`
 --
 ALTER TABLE `detail_logistik`
   ADD CONSTRAINT `detail_logistik_ibfk_1` FOREIGN KEY (`logistik_id`) REFERENCES `logistik` (`id`),
-  ADD CONSTRAINT `detail_logistik_ibfk_2` FOREIGN KEY (`detail_pesanan_id`) REFERENCES `detail_pesanan` (`id`);
+  ADD CONSTRAINT `detail_logistik_ibfk_2` FOREIGN KEY (`detail_pesanan_produk_id`) REFERENCES `detail_pesanan_produk` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `detail_penjualan_produk`
@@ -25933,16 +26685,16 @@ ALTER TABLE `detail_penjualan_produk`
 -- Ketidakleluasaan untuk tabel `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
-  ADD CONSTRAINT `detail_pesanan_FK` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`),
-  ADD CONSTRAINT `detail_pesanan_FK_1` FOREIGN KEY (`penjualan_produk_id`) REFERENCES `penjualan_produk` (`id`);
+  ADD CONSTRAINT `detail_pesanan_fk1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`),
+  ADD CONSTRAINT `detail_pesanan_fk2` FOREIGN KEY (`penjualan_produk_id`) REFERENCES `penjualan_produk` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `detail_pesanan_produk`
 --
 ALTER TABLE `detail_pesanan_produk`
-  ADD CONSTRAINT `detail_pesanan_produk_FK` FOREIGN KEY (`gudang_barang_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`),
-  ADD CONSTRAINT `detail_pesanan_produk_FK_1` FOREIGN KEY (`detail_pesanan_id`) REFERENCES `detail_pesanan` (`id`),
-  ADD CONSTRAINT `detail_pesanan_produk_FK_2` FOREIGN KEY (`status_cek`) REFERENCES `m_status` (`id`);
+  ADD CONSTRAINT `detail_pesanan_produk_FK1` FOREIGN KEY (`gudang_barang_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`),
+  ADD CONSTRAINT `detail_pesanan_produk_FK2` FOREIGN KEY (`detail_pesanan_id`) REFERENCES `detail_pesanan` (`id`),
+  ADD CONSTRAINT `detail_pesanan_produk_FK3` FOREIGN KEY (`status_cek`) REFERENCES `m_status` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `ekatalog`
@@ -26027,7 +26779,15 @@ ALTER TABLE `m_state`
 -- Ketidakleluasaan untuk tabel `noseri_barang_jadi`
 --
 ALTER TABLE `noseri_barang_jadi`
-  ADD CONSTRAINT `noseri_barang_jadi_FK` FOREIGN KEY (`gdg_barang_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`);
+  ADD CONSTRAINT `noseri_barang_jadi_FK` FOREIGN KEY (`gdg_barang_jadi_id`) REFERENCES `gdg_barang_jadi` (`id`),
+  ADD CONSTRAINT `noseri_barang_jadi_FK_1` FOREIGN KEY (`dari`) REFERENCES `divisi` (`id`),
+  ADD CONSTRAINT `noseri_barang_jadi_FK_2` FOREIGN KEY (`ke`) REFERENCES `divisi` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `noseri_coo`
+--
+ALTER TABLE `noseri_coo`
+  ADD CONSTRAINT `tfbk_1` FOREIGN KEY (`noseri_logistik_id`) REFERENCES `noseri_logistik` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `noseri_detail_pesanan`
@@ -26035,6 +26795,13 @@ ALTER TABLE `noseri_barang_jadi`
 ALTER TABLE `noseri_detail_pesanan`
   ADD CONSTRAINT `noseri_detail_pesanan_FK` FOREIGN KEY (`detail_pesanan_produk_id`) REFERENCES `detail_pesanan_produk` (`id`),
   ADD CONSTRAINT `noseri_detail_pesanan_FK_1` FOREIGN KEY (`t_tfbj_noseri_id`) REFERENCES `t_gbj_noseri` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `noseri_logistik`
+--
+ALTER TABLE `noseri_logistik`
+  ADD CONSTRAINT `noseri_logistik_ibfk_1` FOREIGN KEY (`detail_logistik_id`) REFERENCES `detail_logistik` (`id`),
+  ADD CONSTRAINT `noseri_logistik_ibfk_2` FOREIGN KEY (`noseri_detail_pesanan_id`) REFERENCES `noseri_detail_pesanan` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `pesanan`

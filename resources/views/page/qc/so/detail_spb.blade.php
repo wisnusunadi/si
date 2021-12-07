@@ -553,6 +553,17 @@
             }
         });
 
+
+        function max_date() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+            //console.log(today);
+            $("#tanggal_uji").attr("max", today);
+        }
+
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             data = $(".nosericheck").data().value;
@@ -572,6 +583,7 @@
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     listnoseri(checkedAry, data, idtrf);
+                    max_date();
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {

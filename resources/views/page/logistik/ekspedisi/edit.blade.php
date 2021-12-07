@@ -107,7 +107,7 @@
                             <div class="form-group row hide" id="provinsi_select">
                                 <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
                                 <div class="col-8">
-                                    <select class="select-info form-control custom-select provinsi" name="provinsi" id="provinsi" style="width: 100%;">
+                                    <select class="select-info form-control custom-select provinsi" name="provinsi" id="provinsi" style="width: 100%;" data-value="">
                                     </select>
                                     <div class="invalid-feedback" id="msgprovinsi">
                                         @if($errors->has('provinsi'))

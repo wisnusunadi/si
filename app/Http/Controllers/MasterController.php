@@ -28,6 +28,7 @@ use App\Models\DetailPesananProduk;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Arr;
 
 use function PHPUnit\Framework\returnValueMap;
 
@@ -135,7 +136,22 @@ class MasterController extends Controller
                     </button>
                 </a>';
                 if ($divisi_id == "15") {
-                    $return .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="' . $data->id . '">
+                    $x = array();
+                    $y = array();
+
+                    $return .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="' . $data->id . '" data-value="';
+                    foreach ($data->jalurekspedisi as $s) {
+                        $x[] = $s->nama;
+                    }
+                    $return .= implode(',', $x);
+                    $return .= '" data-provinsi="';
+
+                    foreach ($data->provinsi as $u) {
+                        $y[] = $u->id;
+                    }
+                    $return .= implode(',', $y);
+
+                    $return .= '">
                     <button class="dropdown-item" type="button">
                         <i class="fas fa-pencil-alt"></i>
                         Edit
@@ -143,7 +159,6 @@ class MasterController extends Controller
                 </a>';
                 }
                 $return .= '</div>';
-
                 return $return;
             })
             ->rawColumns(['button', 'jurusan', 'via'])
@@ -649,6 +664,12 @@ class MasterController extends Controller
         echo json_encode($data);
     }
     public function select_provinsi(Request $request)
+    {
+        $data = Provinsi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')->get();
+        echo json_encode($data);
+    }
+    public function select_provinsi_edit(Request $request)
     {
         $data = Provinsi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
             ->orderby('nama', 'ASC')->get();

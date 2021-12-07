@@ -108,13 +108,13 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-success">
                                             <div class="inner">
-                                                <h3>3</h3>
+                                                <h3>{{$daftar_so}}</h3>
                                                 <p>Daftar SO</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fas fa-truck"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer active" id="pengirimanso">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer active" id="pengirimanso">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
@@ -126,7 +126,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-certificate"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="sotanpacoo">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer" id="sotanpacoo">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-6">
@@ -138,7 +138,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </div>
-                                            <a href="#" class="small-box-footer" id="lewatbataskontrak">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer" id="lewatbataskontrak">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
 
@@ -163,7 +163,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA102100001</td>
                                                     <td>
@@ -193,7 +193,7 @@
                                                     <td><span class="badge red-text">Belum Dikirim</span></td>
                                                     <td><a href=""><i class="fas fa-search"></i></a></td>
                                                 </tr>
-                                            </tbody>
+                                            </tbody> -->
                                         </table>
 
 
@@ -212,7 +212,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA092100093</td>
                                                     <td>
@@ -247,7 +247,7 @@
                                                         <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
                                                     </td>
                                                     <td><a href=""><i class="fas fa-search"></i></a></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
 
@@ -267,7 +267,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>SOSPA092100093</td>
                                                     <td>
@@ -296,7 +296,7 @@
                                                     </td>
                                                     <td><span class="badge red-text">Belum diproses</span></td>
                                                     <td><a href="{{route('dc.so.detail', ['id' => '1','value' => 's'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>

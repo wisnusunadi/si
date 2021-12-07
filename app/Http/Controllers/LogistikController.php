@@ -16,6 +16,7 @@ use App\Models\Pesanan;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
 use App\Models\NoseriTGbj;
+use App\Models\Spa;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Carbon;
 use function PHPUnit\Framework\returnSelf;
@@ -432,7 +433,7 @@ class LogistikController extends Controller
                 }
                 return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a href="' . route('logistik.so.detail', [$data->id, $x]) . '">
+                <a href="' . route('logistik.so.detail', [$y, $x]) . '">
                     <button class="dropdown-item" type="button">
                         <i class="fas fa-search"></i>
                         Detail
@@ -616,9 +617,28 @@ class LogistikController extends Controller
             // }
             return view('page.logistik.so.detail_ekatalog', ['data' => $data, 'detail_id' => $detail_id]);
         } elseif ($value == 'SPA') {
-            return view('page.logistik.so.detail_spa');
+            $data = Spa::where('id', $id)->get();
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('spa.id', $id);
+            })->get();
+
+            $detail_id[] = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
+
+            return view('page.logistik.so.detail_spa', ['data' => $data, 'detail_id' => $detail_id]);
         } else {
-            return view('page.logistik.so.detail_spb');
+            $data = Spa::where('id', $id)->get();
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('spa.id', $id);
+            })->get();
+
+            $detail_id[] = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
+            return view('page.logistik.so.detail_spb',  ['data' => $data, 'detail_id' => $detail_id]);
         }
     }
     public function create_logistik_view($detail_pesanan_id, $pesanan_id)
