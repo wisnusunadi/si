@@ -40,9 +40,7 @@ class LoginController extends Controller
 
     public function authenticated()
     {
-        if (auth()->user()->divisi->id == 24) {
-            return redirect('/ppic/dashboard');
-        } else if (auth()->user()->divisi->id == 15) {
+        if (auth()->user()->divisi->id == 15) {
             return redirect('/logistik/dashboard');
         } else if (auth()->user()->divisi->id == 23) {
             return redirect('/qc/dashboard');
@@ -52,9 +50,9 @@ class LoginController extends Controller
             return redirect('/gbj/dashboard');
         } elseif (auth()->user()->divisi->id == 17) {
             return redirect('/produksi/dashboard');
-        }elseif (auth()->user()->divisi->id == 12) {
+        } elseif (auth()->user()->divisi->id == 12) {
             return redirect('/gk/dashboard');
-        }elseif (auth()->user()->divisi->id == 2) {
+        } elseif (auth()->user()->divisi->id == 2) {
             return redirect('/direksi/dashboard');
         }
         return redirect('/home');
