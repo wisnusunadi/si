@@ -273,6 +273,7 @@ Route::prefix('/gk')->group(function() {
 
     // select
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
+    Route::get('/sel-tahun', [SparepartController::class, 'get_trx_tahun']);
 
     // store
     Route::post('/out-draft', [SparepartController::class, 'transfer_by_draft']);

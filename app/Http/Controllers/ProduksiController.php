@@ -358,8 +358,8 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('status_prd', function ($d) {
-                if (isset($d->status_cek)) {
-                    return '<span class="badge badge-success">Sudah dicek</span>';
+                if (isset($d->detailpesanan->pesanan->log_id)) {
+                    return '<span class="badge badge-success">Sudah dicek '.$d->detailpesanan->pesanan->log->nama.'</span>';
                 } else {
                     return '<span class="badge badge-danger">Belum dicek</span>';
                 }

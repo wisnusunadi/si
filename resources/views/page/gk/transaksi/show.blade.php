@@ -109,11 +109,11 @@
                             <div class="form-group row">
                                 <label for="years" class="col-md-5 col-form-label">Tahun</label>
                                 <div class="col-md-7">
-                                    <select name="" id="" class="form-control">
-                                        <option value="">2020</option>
-                                        <option value="">2021</option>
-                                        <option value="">2022</option>
-                                        <option value="">2023</option>
+                                    <select name="tahun" id="tahun" class="form-control">
+                                        <option value="#" selected>Pilih Tahun</option>
+                                        @foreach ($data as $d)
+                                            <option value="{{ $d->tahun }}">{{ $d->tahun }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -335,6 +335,7 @@
     })
 
     $('.tableProdukView').DataTable({
+        destroy: true,
         searching: false,
         "lengthChange": false,
         destroy: true,

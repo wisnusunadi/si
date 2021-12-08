@@ -431,7 +431,7 @@ class SparepartController extends Controller
 
     function get_noseri_history($id)
     {
-        $data = GudangKarantinaNoseri::with('detail')->where('gk_detail_id', $id)->where('is_draft', 0)->get();
+        $data = GudangKarantinaNoseri::with('detail')->where('gk_detail_id', $id)->where('is_draft', 0)->where('status', 1)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('noser', function ($d) {
@@ -441,10 +441,10 @@ class SparepartController extends Controller
                 return $d->remark;
             })
             ->addColumn('layout', function ($d) {
-                if (empty($d->detail->gbj_id)) {
-                    return $d->detail->sparepart->layout->ruang;
+                if (empty($d->layout_id)) {
+                    return '-';
                 } else {
-                    return $d->detail->units->layout->ruang;
+                    return $d->layout->ruang;
                 }
                 // return '-';
             })
@@ -497,7 +497,8 @@ class SparepartController extends Controller
     {
         // $d = GudangKarantinaDetail::find($id);
         $d = GudangKarantinaDetail::where('sparepart_id', $id)->orWhere('gbj_id', $id)->where('is_draft', 0)->limit(1)->get();
-        return view('page.gk.transaksi.show', compact('d'));
+        $data = GudangKarantina::select(DB::raw("distinct(date_format(date_out, '%Y')) as tahun"))->distinct()->get();
+        return view('page.gk.transaksi.show', compact('d', 'data'));
     }
 
     function get_detail_id($id)
@@ -543,7 +544,7 @@ class SparepartController extends Controller
 
     function get_trx($id)
     {
-        $cek = GudangKarantinaDetail::where('sparepart_id', $id)->orWhere('gbj_id', $id)->where('is_draft', 0)->get();
+        $cek = GudangKarantinaDetail::where('sparepart_id', $id)->where('is_draft', 0)->orWhere('gbj_id', $id)->get();
         return datatables()->of($cek)
             ->addColumn('tanggal', function($d) {
                 if (empty($d->header->date_in)) {
@@ -579,6 +580,18 @@ class SparepartController extends Controller
             })
             ->rawColumns(['aksi', 'divisi'])
             ->make(true);
+    }
+
+    function get_trx_tahun()
+    {
+        $data = GudangKarantina::select(DB::raw("distinct(date_format(date_out, '%Y')) as tahun"))->distinct()->get();
+        // $year = date('Y', strtotime($data));
+        return response()->json($data);
+    }
+
+    function get_grafik()
+    {
+        
     }
 
     // store
