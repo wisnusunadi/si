@@ -146,7 +146,7 @@ Route::middleware('auth')->prefix('/gk')->group(function () {
     Route::get('/gudang/sparepart/{id}', [SparepartController::class, 'detail_spr']);
     Route::get('/gudang/unit/{id}', [SparepartController::class, 'detail_unit']);
     Route::view('/terimaProduk', 'page.gk.terima.index');
-    Route::view('/terimaProduk/1', 'page.gk.terima.edit');
+    Route::get('/terimaProduk/{id}', [SparepartController::class, 'edit_terima']);
     Route::view('/transfer', 'page.gk.transfer.index');
     Route::get('/transfer/{id}', [SparepartController::class, 'edit_tf']);
     Route::view('/transaksi', 'page.gk.transaksi.index');

@@ -49,8 +49,8 @@
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Stok</label>
                                             <div class="col-12">
-                                                <input type="text" name="qty" id="qty"
-                                                    class="form-control number-input input-notzero qty">
+                                                <input type="text" id="qtyy"
+                                                    class="form-control number-input input-notzero qtyy">
                                                 {{-- <span class="form-text text-muted">Stok Input Maks. 20</span> --}}
                                                 <input type="text" class="stok-gudang" value="20" hidden>
                                             </div>
@@ -220,7 +220,7 @@
         let deskripsi = $('.deskripsi').val();
         let produk = $('.product').val();
         let d_produk = $('.product').find(':selected').text();
-        let stok = parseInt($('.qty').val());
+        let stok = parseInt($('.qtyy').val());
         // let stok_gudang = parseInt($('.stok-gudang').val());
 
         $.ajax({
@@ -254,10 +254,10 @@
                         timer: 1500
                     })
                     addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
-                    $('#post_ke').val(divisi);
-                    $('#post_deskripsi').val(deskripsi);
-                    $('#post_produk').val(produk);
-                    $('#post_qty').val(stok);
+                    // $('#post_ke').val(divisi);
+                    // $('#post_deskripsi').val(deskripsi);
+                    // $('#post_produk').val(produk);
+                    // $('#post_qty').val(stok);
                 }
             $('.btn-simpan').prop('hidden', false);
             }
@@ -366,7 +366,7 @@
         let ke = [];
         let desk = [];
         let gdg = [];
-        let stok = [];
+        let stok_push = [];
 
         $('input[name^="ke"]').each(function() {
             ke.push($(this).val());
@@ -382,8 +382,9 @@
         });
 
         $('input[name^="qty"]').each(function() {
-            stok.push($(this).val());
+            stok_push.push($(this).val());
         });
+        console.log(stok_push);
 
         $.ajax({
             url: "/api/tfp/create",
@@ -393,19 +394,19 @@
                 ke: ke,
                 deskripsi: desk,
                 gdg_brg_jadi_id: gdg,
-                qty: stok,
+                qty: stok_push,
                 noseri_id : seri,
             },
             success: function (res) {
                 console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
+                // Swal.fire({
+                //     position: 'center',
+                //     icon: 'success',
+                //     title: res.msg,
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // })
+                // location.reload();
             }
         });
     })

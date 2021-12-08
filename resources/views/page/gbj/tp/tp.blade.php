@@ -114,30 +114,7 @@
                                                 <td>Aksi</td>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>10-09-2022</td>
-                                                <td>10-09-2022</td>
-                                                <td><span class="badge badge-success">Divisi IT</span></td>
-                                                <td>Uji Coba Produk</td>
-                                                <td>641311666541</td>
-                                                <td>Uji Coba Produk</td>
-                                                <td>641311666541</td>
-                                                <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
-                                                            class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>10-09-2022</td>
-                                                <td>10-09-2022</td>
-                                                <td><span class="badge badge-info">Divisi IT</span></td>
-                                                <td>Uji Coba Produk</td>
-                                                <td>641311666541</td>
-                                                <td>Uji Coba Produk</td>
-                                                <td>641311666541</td>
-                                                <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
-                                                            class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -278,34 +255,7 @@
     }
 
     $(document).ready(function () {
-        $('.pertanggal').dataTable({
-            bFilter: false,
-            responsive: true
-        });
-
-        var $dTable = $('#history').dataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: "/api/transaksi/all",
-            },
-            columns: [
-                { data: 'date_in', name: 'date_in'},
-                { data: 'date_out', name: 'date_out'},
-                { data: 'divisi', name: 'divisi'},
-                { data: 'tujuan', name: 'tujuan'},
-                { data: 'so', name: 'so'},
-                { data: 'product', name: 'product'},
-                { data: 'jumlah', name: 'jumlah'},
-                { data: 'action', name: 'action'},
-            ],
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
-        });
-
+        
         $('#datetimepicker1').daterangepicker({
             autoUpdateInput: false
         });
@@ -329,6 +279,34 @@
 
         $("#divisi").on("change", function () {
             $dTable.columns(2).search($(this).val()).draw();
+        });
+
+        $("#kt_datatable_search_query").on("keyup", function () {
+            $dTable.search($(this).val()).draw();
+        });
+
+        var $dTable = $('#history').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: "/api/transaksi/all",
+            },
+            columns: [
+                { data: 'date_in', name: 'date_in'},
+                { data: 'date_out', name: 'date_out'},
+                { data: 'divisi', name: 'divisi'},
+                { data: 'tujuan', name: 'tujuan'},
+                { data: 'so', name: 'so'},
+                { data: 'product', name: 'product'},
+                { data: 'jumlah', name: 'jumlah'},
+                { data: 'action', name: 'action'},
+            ],
+            dom: 'Bfrtip',
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
         });
 
         var gudangbarang = $('#gudang-barang').dataTable({

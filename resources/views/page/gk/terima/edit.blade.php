@@ -37,7 +37,7 @@
 </style>
 <section class="content-header">
     <div class="container-fluid">
-        <h1>Edit Produk Gudang Karantina</h1>
+        <h1>Edit Penerimaan Gudang Karantina</h1>
     </div><!-- /.container-fluid -->
 </section>
 
@@ -49,15 +49,14 @@
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="tanggal">Tanggal Masuk</label>
-                            <input type="date" name="" id="datePicker" class="form-control" placeholder="" readonly>
+                            <input type="date" name="" id="datePicker" class="form-control" placeholder="" disabled>
                         </div>
                         <div class="form-group col">
                             <label for="dari">Dari</label>
-                            <input type="hidden" name="dari" value="">
                             <select class="form-control dari" name="dari" disabled>
-                                <option value="Divisi IT">Divisi IT</option>
+                                {{-- <option value="Divisi IT">Divisi IT</option>
                                 <option value="Divisi QC">Divisi QC</option>
-                                <option value="Divisi Perakitan">Divisi Perakitan</option>
+                                <option value="Divisi Perakitan">Divisi Perakitan</option> --}}
                             </select>
                         </div>
                     </div>
@@ -84,8 +83,8 @@
                                 <table class="table table-hover add_sparepart_table">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th style="width: 180px">Nama Produk</th>
-                                            <th style="width: 180px">Unit</th>
+                                            <th style="width: 150px">Nama Produk</th>
+                                            <th style="width: 150px">Unit</th>
                                             <th style="width: 150px">Jumlah</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -115,8 +114,8 @@
                                 <table class="table table-hover add_unit_table">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th style="width: 180px">Nama Produk</th>
-                                            <th>Jumlah</th>
+                                            <th style="width: 220px">Nama Produk</th>
+                                            <th style="width: 180px">Jumlah</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -142,198 +141,357 @@
 
 
 <div class="modal fade modalAddSparepart" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-sm">
-                                <label for="">Tanggal Masuk</label>
-                                <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body">
-                                        23-09-2021
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <label for="">Nama Produk</label>
-                                <div class="card" style="background-color: #F89F81">
-                                    <div class="card-body">
-                                        Produk 1
-                                    </div>
+aria-hidden="true">
+<div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm">
+                            <label for="">Tanggal Masuk</label>
+                            <div class="card" style="background-color: #C8E1A7">
+                                <div class="card-body">
+                                    23-09-2021
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm">
-                                <label for="">Unit</label>
-                                <div class="card" style="background-color: #FFCC83">
-                                    <div class="card-body">
-                                        Unit 1
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <label for="">Dari</label>
-                                <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body">
-                                        Divisi IT
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <label for="">Jumlah</label>
-                                <div class="card" style="background-color: #FFECB2">
-                                    <div class="card-body">
-                                        100 pcs
-                                    </div>
+                        <div class="col-sm">
+                            <label for="">Nama Produk</label>
+                            <div class="card" style="background-color: #F89F81">
+                                <div class="card-body">
+                                    Produk 1
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <table class="table table-striped scan-produk">
-                                    <thead>
-                                        <tr>
-                                            <th>No Seri</th>
-                                            <th>Kerusakan</th>
-                                            <th>Tingkat Kerusakan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td>
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">Level 1</option>
-                                                    <option value="">Level 1</option>
-                                                    <option value="">Level 1</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="row">
+                        <div class="col-sm">
+                            <label for="">Unit</label>
+                            <div class="card" style="background-color: #FFCC83">
+                                <div class="card-body">
+                                    Unit 1
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <label for="">Dari</label>
+                            <div class="card" style="background-color: #FFE0B4">
+                                <div class="card-body">
+                                    Divisi IT
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <label for="">Jumlah</label>
+                            <div class="card" style="background-color: #FFECB2">
+                                <div class="card-body">
+                                    100 pcs
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-striped scan-produk1">
+                                <thead>
+                                    <tr>
+                                        <th>No Seri</th>
+                                        <th>Kerusakan</th>
+                                        <th>Tingkat Kerusakan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
-            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" id="btnSeri" class="btn btn-primary">Simpan</button>
         </div>
     </div>
 </div>
+</div>
 
 <div class="modal fade modalAddUnit" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-sm">
-                                <label for="">Tanggal Masuk</label>
-                                <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body">
-                                        23-09-2021
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <label for="">Nama Produk</label>
-                                <div class="card" style="background-color: #F89F81">
-                                    <div class="card-body">
-                                        Produk 1
-                                    </div>
+aria-hidden="true">
+<div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm">
+                            <label for="">Tanggal Masuk</label>
+                            <div class="card" style="background-color: #C8E1A7">
+                                <div class="card-body">
+                                    23-09-2021
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm">
-                                <label for="">Dari</label>
-                                <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body">
-                                        Divisi IT
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <label for="">Jumlah</label>
-                                <div class="card" style="background-color: #FFECB2">
-                                    <div class="card-body">
-                                        100 pcs
-                                    </div>
+                        <div class="col-sm">
+                            <label for="">Nama Produk</label>
+                            <div class="card" style="background-color: #F89F81">
+                                <div class="card-body">
+                                    Produk 1
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <table class="table table-striped scan-produk">
-                                    <thead>
-                                        <tr>
-                                            <th>No Seri</th>
-                                            <th>Kerusakan</th>
-                                            <th>Tingkat Kerusakan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td>
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">Level 1</option>
-                                                    <option value="">Level 1</option>
-                                                    <option value="">Level 1</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="row">
+                        <div class="col-sm">
+                            <label for="">Dari</label>
+                            <div class="card" style="background-color: #FFE0B4">
+                                <div class="card-body">
+                                    Divisi IT
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <label for="">Jumlah</label>
+                            <div class="card" style="background-color: #FFECB2">
+                                <div class="card-body">
+                                    100 pcs
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-striped scan-produk">
+                                <thead>
+                                    <tr>
+                                        <th>No Seri</th>
+                                        <th>Kerusakan</th>
+                                        <th>Tingkat Kerusakan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{-- <tr>
+                                        <td><input type="text" class="form-control"></td>
+                                        <td><input type="text" class="form-control"></td>
+                                        <td>
+                                            <select name="" id="" class="form-control">
+                                                <option value="">Level 1</option>
+                                                <option value="">Level 1</option>
+                                                <option value="">Level 1</option>
+                                            </select>
+                                        </td>
+                                    </tr> --}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" id="btnAddUnit" class="btn btn-primary">Simpan</button>
+        </div>
     </div>
+</div>
 </div>
 @stop
 @section('adminlte_js')
 <script>
+    // Date
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
+    var yyyy = today.getFullYear();
+    if(dd<10){
+    dd='0'+dd
+    }
+    if(mm<10){
+    mm='0'+mm
+    }
+
+    today = yyyy+'-'+mm+'-'+dd;
+    document.getElementById("datePicker").setAttribute("max", today);
+
     document.getElementById('datePicker').valueAsDate = new Date();
-
-    function addSparepart() {
+    var i = 0;
+    function addSparepart(x) {
         $('.modalAddSparepart').modal('show');
+        $('.scan-produk1').DataTable().destroy();
+        $('.scan-produk1 tbody').empty();
+        for (let index = 0; index < x; index++) {
+        $('.scan-produk1 tbody').append('<tr><td><input type="text" name="noseri[]" id="noseri" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+        }
+        var tableScan = $('.scan-produk1').DataTable({
+            "destroy": true,
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+
+        $(".form-control").keyup(function () {
+            if (this.value.length == this.maxLength) {
+            $(this).next('.form-control').focus();
+            }
+        });
+
+        $(document).on('click', '#btnSeri', function(e) {
+            e.preventDefault();
+
+            let arr = [];
+            const data = tableScan.$('.seri').map(function() {
+                return $(this).val();
+            }).get();
+
+            data.forEach(function(item) {
+                if (item != '') {
+                    arr.push(item);
+                }
+            })
+
+            const count = arr =>
+                arr.reduce((a, b) => ({ ...a,
+                    [b]: (a[b] || 0) + 1
+                }), {})
+
+                const duplicates = dict =>
+                Object.keys(dict).filter((a) => dict[a] > 1)
+
+                if (duplicates(count(arr)).length > 0) {
+                            $('.seri').filter(function () {
+                                return $(this).val() == duplicates(count(arr))[0];
+                            }).addClass('is-invalid');
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                            })
+                }else{
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Nomor seri tersimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(function() {
+                        $('.modalAddSparepart').modal('hide');
+                    })
+
+                }
+        });
     }
 
-    function addUnit() {
+    function addUnit(x) {
         $('.modalAddUnit').modal('show');
+        $('.scan-produk').DataTable().destroy();
+        $('.scan-produk tbody').empty();
+        for (let index = 0; index < x; index++) {
+        $('.scan-produk tbody').append('<tr><td><input type="text" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" class="form-control"></td><td><select name="" id="" class="form-control"><option value="">Level 1</option><option value="">Level 1</option><option value="">Level 1</option></select></td></tr>');
+        }
+        var tableUnit = $('.scan-produk').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+
+        $(document).on('click', '#btnAddUnit', function(e) {
+            e.preventDefault();
+
+            let arr = [];
+            const data = tableUnit.$('.seri').map(function() {
+                return $(this).val();
+            }).get();
+
+            data.forEach(function(item) {
+                if (item != '') {
+                    arr.push(item);
+                }
+            })
+
+            const count = arr =>
+                arr.reduce((a, b) => ({ ...a,
+                    [b]: (a[b] || 0) + 1
+                }), {})
+
+                const duplicates = dict =>
+                Object.keys(dict).filter((a) => dict[a] > 1)
+
+                if (duplicates(count(arr)).length > 0) {
+                            $('.seri').filter(function () {
+                                return $(this).val() == duplicates(count(arr))[0];
+                            }).addClass('is-invalid');
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                            })
+                }else{
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Nomor seri tersimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(function() {
+                        $('.modalAddUnit').modal('hide');
+                    })
+                }
+        });
     }
+
+    $(document).on('click', '#btn_plus', function() {
+        var tr = $(this).closest('tr');
+        var x = tr.find('#jml').val();
+        console.log(x);
+        addSparepart(x);
+    })
+    $(document).on('click', '#btnPlus', function() {
+        var tr = $(this).closest('tr');
+        var x = tr.find('#jum').val();
+        console.log(x);
+        addUnit(x);
+    })
+
+    // function select_divisi() {
+        $.ajax({
+            url: '/api/gbj/sel-divisi',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                // ii++;
+                console.log(res);
+                $.each(res, function(key, value) {
+                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    $(".dari").append('<option value="'+value.id+'">'+value.nama+'</option');
+                });
+            }
+        });
+    // }
 
     function transfer() {
         Swal.fire({
@@ -355,13 +513,15 @@
         }
     });
     $(document).on('click','.add_sparepart', function () {
-        let table_sparepart = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addSparepart()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        i++;
+        let table_sparepart = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="jml['+i+']" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
         $('.produk').select2();
         $('.unit').select2();
     });
     $(document).on('click','.add_unit', function () {
-        let table_unit = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="" class="form-control"></td><td><button class="btn btn-primary" onclick="addUnit()"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        i++;
+        let table_unit = '<tr><td><select name="" id="" class="form-control produk"><option value="">Produk 1</option><option value="">Produk 2</option><option value="">Produk 3</option></select></td><td><input type="number" name="" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('.produk').select2();
     });
@@ -369,79 +529,90 @@
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
     });
-    $('.dari').select2({});
 
+    $(document).ready(function () {
+        $('.table-rancangan').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $('.dari').select2({});
+    });
     function terima() {
-        Swal.fire({
-            title: "Apakah anda yakin?",
-            text: "Data yang sudah di terima tidak dapat diubah!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-            showCancelButton: true,
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Terima!',
-                    'Data berhasil diterima!',
-                    'success'
-                )
-            }else{
-                Swal.fire(
-                    'Batal!',
-                    'Data tidak berhasil diterima!',
-                    'error'
-                )
-            }
-        });
-     }
-    function rancang() {
-        Swal.fire({
-            title: "Apakah anda yakin?",
-            text: "Data yang sudah di rancang tidak dapat diubah!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-            showCancelButton: true,
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Rancang!',
-                    'Data berhasil diterima!',
-                    'success'
+    Swal.fire({
+        title: "Apakah anda yakin?",
+        text: "Data yang sudah di terima tidak dapat diubah!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+    }).then((result) => {
+        if (result.value) {
+            Swal.fire(
+                'Terima!',
+                'Data berhasil diterima!',
+                'success'
+            )
+        }else{
+            Swal.fire(
+                'Batal!',
+                'Data tidak berhasil diterima!',
+                'error'
+            )
+        }
+    });
+ }
+function rancang() {
+    Swal.fire({
+        title: "Apakah anda yakin?",
+        text: "Data yang sudah di rancang tidak dapat diubah!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+    }).then((result) => {
+        if (result.value) {
+            Swal.fire(
+                'Rancang!',
+                'Data berhasil diterima!',
+                'success'
+            );
+        }else{
+            Swal.fire(
+                'Batal!',
+                'Data tidak berhasil diterima!',
+                'error'
+            );
+        }
+    });
+}
+function batal() {
+    Swal.fire({
+        title: "Apakah anda yakin?",
+        text: "Data yang sudah di batalkan tidak dapat dikembalikan!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+    }).then((result) => {
+        if (result.value) {
+            Swal.fire(
+                'Batal!',
+                'Data berhasil dibatalkan!',
+                'success'
                 );
-            }else{
-                Swal.fire(
-                    'Batal!',
-                    'Data tidak berhasil diterima!',
-                    'error'
+        }else{
+            Swal.fire(
+                'Batal!',
+                'Data tidak berhasil dibatalkan!',
+                'error'
                 );
-            }
-        });
-    }
-    function batal() {
-        Swal.fire({
-            title: "Apakah anda yakin?",
-            text: "Data yang sudah di batalkan tidak dapat dikembalikan!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-            showCancelButton: true,
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Batal!',
-                    'Data berhasil dibatalkan!',
-                    'success'
-                    );
-            }else{
-                Swal.fire(
-                    'Batal!',
-                    'Data tidak berhasil dibatalkan!',
-                    'error'
-                    );
-            }
-        });
-    }
+        }
+    });
+}
 </script>
 @stop

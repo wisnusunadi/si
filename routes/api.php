@@ -144,6 +144,7 @@ Route::prefix('/draft')->group(function () {
 
     // get
     Route::post('/data', [\App\Http\Controllers\GudangController::class, 'getDraftPerakitan']);
+    Route::post('/data-seri', [\App\Http\Controllers\GudangController::class, 'getNoseriDraftRakit']);
 });
 
 Route::prefix('/transaksi')->group(function () {
@@ -199,7 +200,7 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
     Route::post('/byso', [\App\Http\Controllers\ProduksiController::class, 'TfbySO']);
     Route::post('/create-noseri', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
-    Route::post('/create-final', [\App\Http\Controllers\GudangController::class, 'storeFinalRancang']);
+    Route::post('/create-final', [\App\Http\Controllers\GudangController::class, 'finalDraftRakit']);
 
     // get
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
@@ -248,7 +249,7 @@ Route::prefix('/prd')->group(function () {
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
-    Route::get('/detailSeri/{id}', [ProduksiController::class, 'detailSeri']);
+    Route::get('/historySeri/{id}/{value}', [ProduksiController::class, 'historySeri']);
     Route::get('/detailSeri1/{id}', [ProduksiController::class, 'detailSeri1']);
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
@@ -275,13 +276,23 @@ Route::prefix('/gk')->group(function () {
     Route::get('/his-unit/{id}', [SparepartController::class, 'history_unit']);
 
     Route::post('/draft-tf', [SparepartController::class, 'get_draft_tf']);
+    Route::post('/draft-terima', [SparepartController::class, 'get_draft_terima']);
     Route::get('/noseri/{id}', [SparepartController::class, 'headerSeri']);
+    Route::get('/coba', [SparepartController::class, 'coba']);
+    Route::post('/detailseri', [SparepartController::class, 'get_detail_id1']);
 
     // select
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
+    Route::get('/sel-tahun', [SparepartController::class, 'get_trx_tahun']);
 
     // store
     Route::post('/out-draft', [SparepartController::class, 'transfer_by_draft']);
+    Route::post('/out-final', [SparepartController::class, 'transfer_by_final']);
+
+    Route::post('/in-draft', [SparepartController::class, 'terima_by_draft']);
+    Route::post('/in-final', [SparepartController::class, 'terima_by_final']);
+
+    Route::post('/ubahunit', [SparepartController::class, 'updateUnit']);
 
     // history trx
     Route::prefix('/transaksi')->group(function () {
@@ -289,6 +300,7 @@ Route::prefix('/gk')->group(function () {
         Route::post('/all', [SparepartController::class, 'historyAll']);
         Route::get('/noseri/{id}', [SparepartController::class, 'get_noseri_history']);
         Route::get('/header/{id}', [App\Http\Controllers\SparepartController::class, 'get_detail_id']);
+        Route::get('/history/{id}', [App\Http\Controllers\SparepartController::class, 'get_trx']);
     });
 
     Route::prefix('/dashboard')->group(function () {

@@ -65,9 +65,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
-                {{-- @foreach ($did as $p) --}}
-                <input type="hidden" name="" id="id" value="{{ $did }}">
-                {{-- @endforeach --}}
+                @foreach ($d as $p)
+                @if ($p->sparepart_id != null)
+                <input type="hidden" name="" id="id" value="{{ $p->sparepart_id  }}">
+                @else
+                <input type="hidden" name="" id="id" value="{{ $p->gbj_id  }}">
+                @endif
+                @endforeach
                 <div class="card mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
@@ -77,20 +81,15 @@
                         <div class="col-md-8">
                             <div class="card-body ml-5">
                                 <div class="card-title">
-                                    <h2 class="text-bold" id="nama">Nama Produk</h2>
-                                    <h6 class="text-muted" id="kode">Kode Produk</h6>
+                                    <h2 class="text-bold" id="nama">-</h2>
+                                    <h6 class="text-muted" id="kode">-</h6>
                                 </div>
                                 <h5 class="card-text text-bold pt-2">Deskripsi</h5>
-                                <p class="card-text" id="desk">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam,
-                                    purus sit
-                                    amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor
-                                    purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper
-                                    eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque
-                                    fermentum dui faucibus in ornare quam viverra</p>
+                                <p class="card-text" id="desk">-</p>
                                 <h5 class="card-text text-bold pt-1">Dimensi</h5>
                                 <p class="text-bold" style="margin-bottom: 0">Panjang x Lebar x Tinggi</p>
-                                <p><span class="panjang">50</span> x <span class="lebar">10</span> x <span
-                                        class="tinggi">10</span></p>
+                                <p><span class="panjang">-</span> x <span class="lebar">-</span> x <span
+                                        class="tinggi">-</span></p>
                             </div>
                         </div>
                     </div>
@@ -100,17 +99,21 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-chart-pie mr-1"></i>
-                            Grafik Jumlah Terima / Transfer (Nama Produk) Per Tahun
+                            Grafik Jumlah Terima / Transfer
+                            <i></i>
+                            (<span id="nama_p">Nama Produk</span>)
+                            <i></i>
+                            Per Tahun
                         </h3>
                         <div class="card-tools">
                             <div class="form-group row">
                                 <label for="years" class="col-md-5 col-form-label">Tahun</label>
                                 <div class="col-md-7">
-                                    <select name="" id="" class="form-control">
-                                        <option value="">2020</option>
-                                        <option value="">2021</option>
-                                        <option value="">2022</option>
-                                        <option value="">2023</option>
+                                    <select name="tahun" id="tahun" class="form-control">
+                                        <option value="#" selected>Pilih Tahun</option>
+                                        @foreach ($data as $d)
+                                            <option value="{{ $d->tahun }}">{{ $d->tahun }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -271,7 +274,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Produk Ambulatory</h5>
+                <h5 class="modal-title">Produk <span id="produkk">Ambulatory</span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -311,7 +314,8 @@
 @stop
 @section('adminlte_js')
 <script>
-    var id = $('#id').val();
+     var id = $('#id').val();
+
     console.log(id);
 
     $.ajax({
@@ -320,6 +324,8 @@
         success: function(res) {
             console.log(res);
             $('h2#nama').text(res.nama);
+            $('span#nama_p').text(res.nama);
+            $('span#produkk').text(res.nama);
             $('h6#kode').text(res.kode);
             $('p#desk').text(res.desk);
             $('span#panjang').text(res.panjang);
@@ -327,14 +333,24 @@
             $('span#tinggi').text(res.tinggi);
         }
     })
-    $('.table-seri').DataTable({
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
-    });
+
     $('.tableProdukView').DataTable({
+        destroy: true,
         searching: false,
         "lengthChange": false,
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/api/gk/transaksi/history/" + id,
+        },
+        columns: [
+            {data: 'tanggal'},
+            {data: 'divisi'},
+            {data: 'tujuan'},
+            {data: 'jml'},
+            {data: 'aksi'},
+        ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
@@ -353,11 +369,37 @@
         $('.is-disable').removeClass('font-weight-light');
         $('.is-disable').addClass('font-weight-bold');
     });
-    $('#tanggalmasuk').daterangepicker({});
+    // $('#tanggalmasuk').daterangepicker({});
 
     function detailProduk() {
         $('.modalDetail').modal('show');
     }
+
+    $(document).on('click', '#btnDetail', function() {
+        var idd = $(this).data('id');
+        console.log(idd);
+        // console.log('ok');
+        $('.table-seri').DataTable({
+            autoWidth: false,
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/gk/transaksi/noseri/" + idd,
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'noser'},
+                {data: 'rusak'},
+                {data: 'tingkat'},
+                {data: 'layout'},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        detailProduk();
+    })
 
     const ctx = document.getElementById('myChart').getContext('2d');
 const myChart = new Chart(ctx, {

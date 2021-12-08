@@ -71,7 +71,7 @@
                             <div class="col"> <label for="">Kode Sparepart</label>
                                 <div class="card nomor-so">
                                     <div class="card-body">
-                                        {{ $h->spare->kode }}
+                                        {{ $h->kode }}
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                             <div class="col"> <label for="">Jumlah</label>
                                 <div class="card instansi">
                                     <div class="card-body">
-                                       {{ $h->stok }} pcs
+                                       {{ $h->jml }} pcs
                                     </div>
                                 </div>
                             </div>
@@ -198,35 +198,39 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <form action="" id="myForm" name="myForm">
+                            <input type="hidden" name="id" id="kode">
+
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="">Layout</label>
-                                <select name="" id="" class="form-control layout_edit">
-                                    <option value="">Layout 1</option>
-                                    <option value="">Layout 2</option>
-                                    <option value="">Layout 3</option>
+                                <select name="layout_id" id="layout_id" class="form-control layout_edit">
+                                    @foreach ($layout as $l)
+                                        <option value="{{ $l->id }}">{{ $l->ruang }}</option>
+                                   @endforeach
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="">Tingkat Kerusakan</label>
-                                <select name="" id="" class="form-control kerusakan_edit">
-                                    <option value="">Level 1</option>
-                                    <option value="">Level 2</option>
-                                    <option value="">Level 3</option>
+                                <select name="tk_kerusakan" id="tk_kerusakan" class="form-control kerusakan_edit">
+                                    <option value="1">Level 1</option>
+                                    <option value="2">Level 2</option>
+                                    <option value="3">Level 3</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                           <label for="">Kerusakan</label>
-                          <textarea name="" id="" cols="5" rows="5" class="form-control"></textarea>
+                          <textarea name="remark" id="remark" cols="5" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary" id="btnSave">Simpan</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -280,9 +284,9 @@
             }
         ]
     });
-
+    var id = '';
     $(document).on('click', '.detailModal', function() {
-        var id = $(this).data('id');
+        id = $(this).data('id');
         console.log(id);
 
         $.ajax({
@@ -296,7 +300,52 @@
             }
         })
 
+        $.ajax({
+            url: "/api/gk/detailseri",
+            type: "post",
+            data: {id : id},
+            dataType: "json",
+            success: function(res) {
+                console.log(res);
+                $('#kode').val(res.id);
+                $('#layout_id').val(res.layout);
+                $('#layout_id').select2().trigger('change');
+                $('#tk_kerusakan').val(res.tingkat);
+                $('#tk_kerusakan').select2().trigger('change');
+                $('#remark').val(res.note);
+            }
+        })
+
         changeStatus();
+    })
+
+    $('body').on('submit', '#myForm', function(e) {
+        e.preventDefault();
+        var actionType = $('#btnSave').val();
+        $('#btnSave').html('Sending..');
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "/api/gk/ubahunit",
+            data: formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success: (data) => {
+                $('#myForm').trigger('reset');
+                $('.changeStatus').modal('hide');
+                $('#btnSave').html('Kirim');
+                Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                $('.table_edit_sparepart').DataTable().ajax.reload();
+                location.reload();
+            }
+        });
     })
 </script>
 @stop

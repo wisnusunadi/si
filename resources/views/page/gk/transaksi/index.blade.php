@@ -213,7 +213,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Produk Ambulatory</h5>
+                <h5 class="modal-title">Produk <span id="produkk">Ambulatory</span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -379,30 +379,34 @@
         $("#jenis").on("change", function () {
             $dTable.columns(2).search($(this).val()).draw();
         });
-    });
-    $(document).on('click', '.detailModal', function() {
-        var id = $(this).data('id');
 
-        $('.table-seri').dataTable({
-            autoWidth: false,
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "/api/gk/transaksi/noseri/" + id,
-            },
-            columns: [
-                {data: 'noser'},
-                {data: 'rusak'},
-                {data: 'tingkat'},
-                {data: 'layout'},
-            ],
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
-        detailtanggal();
-    })
+        $(document).on('click', '.detailModal', function() {
+            var id = $(this).data('id');
+            var prd = $(this).data('produk');
+            $('span#produkk').text(prd);
+
+            $('.table-seri').dataTable({
+                autoWidth: false,
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "/api/gk/transaksi/noseri/" + id,
+                },
+                columns: [
+                    {data: 'noser'},
+                    {data: 'rusak'},
+                    {data: 'tingkat'},
+                    {data: 'layout'},
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+            });
+            detailtanggal();
+        })
+    });
+
 
     function detailProdukModal() {
         $('.produk-show').removeClass('hidden-product');

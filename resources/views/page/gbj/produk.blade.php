@@ -61,7 +61,7 @@
                                     <th>Kode Produk</th>
                                     <th>Nama Produk</th>
                                     <th>Stok Gudang</th>
-                                    <th>Stok</th>
+                                    <th>Stok Penjualan</th>
                                     <th>Kelompok</th>
                                     <th>Action</th>
                                 </tr>
@@ -102,55 +102,48 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <label for="">Nama Produk</label>
-                            <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror" placeholder="Nama Produk">
-                            @error('title')
-                            <span class="invalid-feedback">Silahkan isi Nama Produk</span>
-                            @enderror
-                        </div>
-                        <div class="col">
-                            <label for="">Satuan</label>
-                            <select name="satuan_id" id="satuan_id" class="form-control">
-                                <option value="">mm</option>
-                                <option value="">unit</option>
-                            </select>
-                        </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="">Nama Variasi</label>
+                    <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror" placeholder="Nama Variasi Produk">
+                    @error('title')
+                    <span class="invalid-feedback">Silahkan isi Nama Produk</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="">Deskripsi</label>
+                    <textarea class="form-control" id="deskripsi" name="deskripsi" cols="5" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="">Dimensi</label>
+                    <div class="d-flex justify-content-between">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">mm</div>
+                            </div>
+                        </div>&nbsp;
                     </div>
-                    <div class="form-group">
-                        <label for="">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi" name="deskripsi" cols="5" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" name="gambar" class="custom-file-input gambar" id="inputGroupFile02" />
+                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
                     </div>
-                    <div class="form-group">
-                        <label for="">Dimensi</label>
-                        <div class="d-flex justify-content-between">
-                            <div class="input-group mb-2">
-                                <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">mm</div>
-                                </div>
-                            </div>&nbsp;
-                            <div class="input-group mb-2">
-                                <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">mm</div>
-                                </div>
-                            </div>&nbsp;
-                            <div class="input-group mb-2">
-                                <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">mm</div>
-                                </div>
-                            </div>&nbsp;
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="custom-file">
-                            <input type="file" name="gambar" class="custom-file-input gambar" id="inputGroupFile02" />
-                            <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
-                        </div>
-                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
@@ -520,7 +513,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/gbj/data',
+            url: '/api/gbj/data',
         },
         columns: [{
                 data: 'DT_RowIndex',
@@ -538,7 +531,7 @@
                 data: 'jumlah'
             },
             {
-                data: 'jumlah'
+                data: 'jumlah1'
             },
             {
                 data: 'kelompok'
@@ -591,7 +584,7 @@
     $('#create').click(function(e) {
         $('#Submitmodalcreate').val('create-product');
         $('#produkForm').trigger("reset");
-        $('#exampleModalLabel').html('Tambah Produk');
+        $('#exampleModalLabel').html('Tambah Variasi Produk');
         $('#modal-create').modal('show');
     });
 
@@ -609,7 +602,7 @@
             dataType: 'json',
             success: function(res) {
                 console.log(res);
-                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.data[0].nama + '</b>');
+                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('#Submitmodalcreate').val('edit-product');
                 $('#modal-create').modal('show');
                 $('#id').val(res.data[0].id);
@@ -649,7 +642,7 @@
             success: function(res) {
                 console.log(res);
 
-                $('#header_data').html('Detail Produk ' + '<b>' + res.data[0].nama + '</b>');
+                $('#header_data').html('Detail Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('p#nama').text(res.data[0].nama);
                 $('p#deskripsi').text(res.data[0].deskripsi);
                 $('span#panjang').text(res.data[0].dim_p);

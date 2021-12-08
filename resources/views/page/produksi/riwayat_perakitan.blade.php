@@ -246,8 +246,8 @@
     $(document).on('click', '.detail', function() {
         // console.log('test');
         var id = $(this).data('id');
-        console.log(id);
-
+        var time = $(this).data('tf');
+        
         $.ajax({
             url: "/api/prd/history/header/" + id,
             type: "get",
@@ -274,7 +274,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "/api/prd/detailSeri1/" + id,
+                url: "/api/prd/historySeri/" + id + "/" + time,
             },
             columns: [
                 {data: 'no_seri'}

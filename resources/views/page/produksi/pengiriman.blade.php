@@ -227,7 +227,7 @@
             {data: "produk"},
             {data: "jml"},
             {data: "status"},
-            {data: "action"},   
+            {data: "action"},
         ],
         "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
@@ -348,7 +348,7 @@
         var rows_selected = table.column(0).checkboxes.selected();
         const seri = [];
 
-        $.each(rows_selected, function (index, rowId) { 
+        $.each(rows_selected, function (index, rowId) {
             seri.push(rowId);
        });
        $.ajax({
@@ -363,12 +363,20 @@
             },
             success: function(res) {
                 // console.log(res);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
             }
         })
     });
         modalRakit();
     });
-    
+
    });
 </script>
 @stop

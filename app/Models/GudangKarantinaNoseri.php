@@ -16,4 +16,8 @@ class GudangKarantinaNoseri extends Model
     function detail() {
         return $this->belongsTo(GudangKarantinaDetail::class, 'gk_detail_id');
     }
+
+    function layout() {
+        return $this->belongsTo(Layout::class, 'layout_id');
+    }
 }
