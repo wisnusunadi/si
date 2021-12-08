@@ -8,12 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Logistik extends Model
 {
     protected $table = 'logistik';
-    protected $fillable = ['ekspedisi_id', 'nosurat', 'tgl_kirim', 'nama_pengirim'];
+    protected $fillable = ['ekspedisi_id', 'status_id', 'nosurat', 'noresi', 'tgl_kirim', 'nama_pengirim'];
 
     public function Ekspedisi()
     {
         return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
     }
+
+    public function State()
+    {
+        return $this->belongsTo(State::class, 'status_id');
+    }
+
     public function DetailLogistik()
     {
         return $this->hasOne(DetailLogistik::class);

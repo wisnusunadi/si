@@ -205,7 +205,6 @@
                                                 <th>No SO</th>
                                                 <th>No SJ</th>
                                                 <th>Ekspedisi / Pengirim</th>
-                                                <th>No Resi</th>
                                                 <th>Tanggal Kirim</th>
                                                 <th>Nama Customer</th>
                                                 <th>Provinsi</th>
@@ -245,10 +244,44 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $(document).on('submit', '#form-pengiriman-update', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-pengiriman-update').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan ubah data Pengiriman',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#showtable').DataTable().ajax.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan ubah data Pengiriman',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-customer-update').serialize());
+                }
+            });
+            return false;
+        });
 
         $(document).on('click', '.editmodal', function() {
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
+            var logistik_id = $(this).attr('data-id');
             console.log(href);
             $.ajax({
                 url: href,
@@ -258,8 +291,8 @@
                 success: function(result) {
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    console.log(id);
                     ekspedisi_select();
+                    barang_detail(logistik_id);
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {
@@ -274,6 +307,35 @@
             })
         });
 
+        $(document).on('click', '#ubahstatus', function() {
+            var id = $(this).attr('data-id');
+            var status = $(this).attr('data-status');
+            $.ajax({
+                type: "GET",
+                url: "/api/logistik/pengiriman/status/update/" + id + "/" + status,
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan ubah data Pengiriman',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#showtable').DataTable().ajax.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan ubah data Pengiriman',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-customer-update').serialize());
+                }
+            });
+        });
+
         $(document).on('change', 'input[type="radio"][name="pengiriman"]', function(event) {
             $('#ekspedisi_id').removeClass('is-invalid');
             $('#msgekspedisi_id').text("");
@@ -281,12 +343,13 @@
             $('#msgnama_pengirim').text("");
             $('#no_polisi').removeClass('is-invalid');
             $('#msgno_polisi').text("");
+            $('#btnsimpan').attr('disabled', true);
             if ($('input[type="radio"][name="pengiriman"]:checked').val() == "ekspedisi") {
                 $('#ekspedisi').removeClass('hide');
                 $('#nonekspedisi').addClass('hide');
                 $('#no_polisi').val("");
                 $('#nama_pengirim').val("");
-                if ($('.ekspedisi_id').val() != "") {
+                if ($('.ekspedisi_id').val() != "" && $('.ekspedisi_id').val() != null) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -294,8 +357,8 @@
             } else if ($('input[type="radio"][name="pengiriman"]:checked').val() == "nonekspedisi") {
                 $('#ekspedisi').addClass('hide');
                 $('#nonekspedisi').removeClass('hide');
-                $('.ekspedisi_id').val("");
-                if ($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") {
+                $('.ekspedisi_id').val(null).trigger('change');
+                if ($('#nama_pengirim').val() != "") {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -319,7 +382,7 @@
             if ($(this).val() != "") {
                 $('#nama_pengirim').removeClass('is-invalid');
                 $('#msgnama_pengirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -331,27 +394,27 @@
             }
         });
 
-        $(document).on('change keyup', '#no_polisi', function(event) {
-            if ($(this).val() != "") {
-                $('#no_polisi').removeClass('is-invalid');
-                $('#msgno_polisi').text("");
-                if (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "") {
-                    $('#btnsimpan').removeAttr('disabled');
-                } else {
-                    $('#btnsimpan').attr('disabled', true);
-                }
-            } else if ($(this).val() == "") {
-                $('#no_polisi').addClass('is-invalid');
-                $('#msgno_polisi').text("No Kendaraan harus diisi");
-                $('#btnsimpan').attr('disabled', true);
-            }
-        });
+        // $(document).on('change keyup', '#no_polisi', function(event) {
+        //     if ($(this).val() != "") {
+        //         $('#no_polisi').removeClass('is-invalid');
+        //         $('#msgno_polisi').text("");
+        //         if (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "") {
+        //             $('#btnsimpan').removeAttr('disabled');
+        //         } else {
+        //             $('#btnsimpan').attr('disabled', true);
+        //         }
+        //     } else if ($(this).val() == "") {
+        //         $('#no_polisi').addClass('is-invalid');
+        //         $('#msgno_polisi').text("No Kendaraan harus diisi");
+        //         $('#btnsimpan').attr('disabled', true);
+        //     }
+        // });
 
         $(document).on('change keyup', '.ekspedisi_id', function(event) {
             if ($(this).val() != "") {
                 $('#ekspedisi_id').removeClass('is-invalid');
                 $('#msgekspedisi_id').text("");
-                if (($('#no_polisi').val() != "" && $('#nama_pengirim').val() != "") || $('#ekspedisi_id').val("") != "") {
+                if (($('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "") {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -367,6 +430,61 @@
             $('.ekspedisi_id').select2({
                 placeholder: "Pilih Ekspedisi",
                 allowClear: true,
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Ekspedisi",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/logistik/ekspedisi/select',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            });
+        }
+
+        function barang_detail(id) {
+            console.log('id ' + id);
+            $('#barangtable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/pengiriman/data/' + id,
+                    'type': 'GET',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk'
+                    },
+                    {
+                        data: 'jumlah',
+                    },
+                ]
             });
         }
         var showtable = $('#showtable').DataTable({
@@ -399,9 +517,6 @@
 
                 },
                 {
-                    data: 'no_resi',
-
-                }, {
                     data: 'tgl_kirim',
 
                 }, {

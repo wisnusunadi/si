@@ -120,7 +120,7 @@
                                     <b id="customer">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b>
                                 </div>
                                 <div class="margin">
-                                    <b id="alamat">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->alamat}}</b>
+                                    <b id="alamat">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat}}</b>
                                 </div>
                                 <div class="margin">
                                     <b id="provinsi">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}</b>
@@ -169,11 +169,21 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div><span class="badge blue-text">Dalam Pengiriman</span></div>
+                                    <div>
+                                        @if($l->status_id == "10")
+                                        @if(empty($l->noresi))
+                                        <span class="badge blue-text">Dalam Pengirman</span>
+                                        @else
+                                        <span class="badge green-text">Selesai</span>
+                                        @endif
+                                        @elseif($l->status_id == "11")
+                                        <span class="badge red-text">Draft Pengiriman</span>
+                                        @endif</span>
+                                    </div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Resi</small></div>
-                                    <div><b id="no_resi">-</b></div>
+                                    <div><b id="no_resi">@if(!empty($l->noresi)) {{$l->noresi}} @else - @endif</b></div>
                                 </div>
                             </div>
                         </div>
@@ -245,11 +255,21 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div><span class="badge blue-text">Dalam Pengiriman</span></div>
+                                    <div>
+                                        @if($l->status_id == "10")
+                                        @if(empty($l->noresi))
+                                        <span class="badge blue-text">Dalam Pengirman</span>
+                                        @else
+                                        <span class="badge green-text">Selesai</span>
+                                        @endif
+                                        @elseif($l->status_id == "11")
+                                        <span class="badge red-text">Draft Pengiriman</span>
+                                        @endif</span>
+                                    </div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Resi</small></div>
-                                    <div><b id="no_resi">-</b></div>
+                                    <div><b id="no_resi">@if(!empty($l->noresi)) {{$l->noresi}} @else - @endif</b></div>
                                 </div>
                             </div>
                         </div>
@@ -321,11 +341,21 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div><span class="badge blue-text">Dalam Pengiriman</span></div>
+                                    <div>
+                                        @if($l->status_id == "10")
+                                        @if(empty($l->noresi))
+                                        <span class="badge blue-text">Dalam Pengirman</span>
+                                        @else
+                                        <span class="badge green-text">Selesai</span>
+                                        @endif
+                                        @elseif($l->status_id == "11")
+                                        <span class="badge red-text">Draft Pengiriman</span>
+                                        @endif</span>
+                                    </div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Resi</small></div>
-                                    <div><b id="no_resi">-</b></div>
+                                    <div><b id="no_resi">@if(!empty($l->noresi)) {{$l->noresi}} @else - @endif</b></div>
                                 </div>
                             </div>
                         </div>
@@ -452,6 +482,7 @@
 
         $('#detailtable').on('click', '.detailmodal', function(event) {
             var data = $(this).attr('data-id');
+            alert("/api/logistik/so/noseri/detail/selesai_kirim/" + data);
             $.ajax({
                 url: "/api/logistik/so/noseri/detail/selesai_kirim/" + data,
                 beforeSend: function() {
@@ -461,7 +492,7 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    showtabless(data);
+                    // showtabless(data);
                 },
                 complete: function() {
                     $('#loader').hide();

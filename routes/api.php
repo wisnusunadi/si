@@ -258,9 +258,15 @@ Route::prefix('/logistik')->group(function () {
     Route::group(['prefix' => '/pengiriman'], function () {
         Route::get('/data', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
         Route::get('/data/{id}', [App\Http\Controllers\LogistikController::class, 'get_produk_detail_pengiriman']);
+        Route::put('/update/{id}', [App\Http\Controllers\LogistikController::class, 'update_pengiriman']);
+        Route::get('/status/update/{id}/{status}', [App\Http\Controllers\LogistikController::class, 'update_status_pengiriman']);
+        // Route::get('/edit/{id}', [App\Http\Controllers\LogistikController::class, 'update_modal_surat_jalan'])->name('logistik.pengiriman.edit');
         // Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_datas']);
         // Route::get('data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
+        Route::group(['prefix' => '/riwayat'], function () {
+            Route::get('/data', [App\Http\Controllers\LogistikController::class, 'get_data_riwayat_pengiriman']);
+        });
     });
 });
 Route::prefix('/dc')->group(function () {

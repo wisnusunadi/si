@@ -109,7 +109,7 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-success">
                                             <div class="inner">
-                                                <h3></h3>
+                                                <h3>{{$terbaru}}</h3>
                                                 <p>Pengiriman Terbaru</p>
                                             </div>
                                             <div class="icon">
@@ -121,7 +121,7 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box warning-bg">
                                             <div class="inner">
-                                                <h3></h3>
+                                                <h3>{{$belum_dikirim}}</h3>
                                                 <p>Belum dikirim</p>
                                             </div>
                                             <div class="icon">
@@ -133,7 +133,7 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-danger">
                                             <div class="inner">
-                                                <h3></h3>
+                                                <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Kirim</p>
                                             </div>
                                             <div class="icon">
@@ -358,77 +358,77 @@
         })
 
         function pengirimanbarutable() {
-            //     var pengirimanbarutable = $('#pengirimanbarutable').DataTable({
-            //         destroy: true,
-            //         processing: true,
-            //         serverSide: true,
-            //         ajax: {
-            //             'url': '/api/logistik/dashboard/data/terbaru',
+            var pengirimanbarutable = $('#pengirimanbarutable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/dashboard/data/terbaru',
 
-            //             'headers': {
-            //                 'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //             }
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
 
-            //         },
-            //         language: {
-            //             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            //         },
-            //         columns: [{
-            //             data: 'DT_RowIndex',
-            //             className: 'nowrap-text align-center',
-            //             orderable: false,
-            //             searchable: false
-            //         }, {
-            //             data: 'so',
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'so',
 
-            //         }, {
-            //             data: 'batas',
+                }, {
+                    data: 'batas',
 
-            //         }, {
-            //             data: 'status',
+                }, {
+                    data: 'status',
 
-            //         }, {
-            //             data: 'button',
-            //             orderable: false,
-            //             searchable: false
-            //         }]
-            //     })
-            // }
+                }, {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                }]
+            })
+        }
 
-            // function pengirimanbarutable_destroy() {
-            //     $('#pengirimanbarutable').DataTable().clear().destroy();
-            // }
+        function pengirimanbarutable_destroy() {
+            $('#pengirimanbarutable').DataTable().clear().destroy();
+        }
 
-            // function belumdikirimtable() {
-            //     var belumdikirimtable = $('#belumdikirimtable').DataTable({
-            //         destroy: true,
-            //         processing: true,
-            //         serverSide: true,
-            //         ajax: {
-            //             'url': '/api/logistik/dashboard/data/belum_dikirim',
+        function belumdikirimtable() {
+            var belumdikirimtable = $('#belumdikirimtable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/dashboard/data/belum_dikirim',
 
-            //             'headers': {
-            //                 'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //             }
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
 
-            //         },
-            //         language: {
-            //             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            //         },
-            //         columns: [{
-            //             data: 'DT_RowIndex',
-            //             className: 'nowrap-text align-center',
-            //             orderable: false,
-            //             searchable: false
-            //         }, {
-            //             data: 'so',
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'so',
 
-            //         }, {
-            //             data: 'batas',
-            //         }, {
-            //             data: 'button',
-            //         }]
-            //     })
+                }, {
+                    data: 'batas',
+                }, {
+                    data: 'button',
+                }]
+            })
         }
 
         function belumdikirimtable_destroy() {
@@ -436,41 +436,41 @@
         }
 
         function lewatbataskirimtable() {
-            // var lewatbataskirimtable = $('#lewatbataskirimtable').DataTable({
-            //     destroy: true,
-            //     processing: true,
-            //     serverSide: true,
-            //     ajax: {
-            //         'url': '/api/logistik/dashboard/data/lewat_batas',
+            var lewatbataskirimtable = $('#lewatbataskirimtable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/dashboard/data/lewat_batas',
 
-            //         'headers': {
-            //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //         }
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
 
-            //     },
-            //     language: {
-            //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            //     },
-            //     columns: [{
-            //         data: 'DT_RowIndex',
-            //         className: 'nowrap-text align-center',
-            //         orderable: false,
-            //         searchable: false
-            //     }, {
-            //         data: 'so',
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'so',
 
-            //     }, {
-            //         data: 'batas',
+                }, {
+                    data: 'batas',
 
-            //     }, {
-            //         data: 'status',
+                }, {
+                    data: 'status',
 
-            //     }, {
-            //         data: 'button',
-            //         orderable: false,
-            //         searchable: false
-            //     }]
-            // })
+                }, {
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
+                }]
+            })
         }
 
         function lewatbataskirimtable_destroy() {
