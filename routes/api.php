@@ -266,7 +266,10 @@ Route::prefix('/gk')->group(function() {
     Route::get('/his-unit/{id}', [SparepartController::class, 'history_unit']);
 
     Route::post('/draft-tf', [SparepartController::class, 'get_draft_tf']);
+    Route::post('/draft-terima', [SparepartController::class, 'get_draft_terima']);
     Route::get('/noseri/{id}', [SparepartController::class, 'headerSeri']);
+    Route::get('/coba', [SparepartController::class, 'coba']);
+    Route::post('/detailseri', [SparepartController::class, 'get_detail_id1']);
 
     // select
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
@@ -275,12 +278,18 @@ Route::prefix('/gk')->group(function() {
     Route::post('/out-draft', [SparepartController::class, 'transfer_by_draft']);
     Route::post('/out-final', [SparepartController::class, 'transfer_by_final']);
 
+    Route::post('/in-draft', [SparepartController::class, 'terima_by_draft']);
+    Route::post('/in-final', [SparepartController::class, 'terima_by_final']);
+
+    Route::post('/ubahunit', [SparepartController::class, 'updateUnit']);
+
     // history trx
     Route::prefix('/transaksi')->group(function () {
         Route::post('/by-product', [SparepartController::class, 'history_by_produk']);
         Route::post('/all', [SparepartController::class, 'historyAll']);
         Route::get('/noseri/{id}', [SparepartController::class, 'get_noseri_history']);
         Route::get('/header/{id}', [App\Http\Controllers\SparepartController::class, 'get_detail_id']);
+        Route::get('/history/{id}', [App\Http\Controllers\SparepartController::class, 'get_trx']);
     });
 
     Route::prefix('/dashboard')->group(function () {
