@@ -320,10 +320,10 @@ aria-hidden="true">
     var yyyy = today.getFullYear();
     if(dd<10){
     dd='0'+dd
-    } 
+    }
     if(mm<10){
     mm='0'+mm
-    } 
+    }
 
     today = yyyy+'-'+mm+'-'+dd;
     document.getElementById("datePicker").setAttribute("max", today);
@@ -375,7 +375,7 @@ aria-hidden="true">
 
                 const duplicates = dict =>
                 Object.keys(dict).filter((a) => dict[a] > 1)
-            
+
                 if (duplicates(count(arr)).length > 0) {
                             $('.seri').filter(function () {
                                 return $(this).val() == duplicates(count(arr))[0];
@@ -439,7 +439,7 @@ aria-hidden="true">
 
                 const duplicates = dict =>
                 Object.keys(dict).filter((a) => dict[a] > 1)
-            
+
                 if (duplicates(count(arr)).length > 0) {
                             $('.seri').filter(function () {
                                 return $(this).val() == duplicates(count(arr))[0];

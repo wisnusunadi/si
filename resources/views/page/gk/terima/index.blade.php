@@ -354,9 +354,6 @@
     @section('adminlte_js')
     <script>
         $(document).ready(function () {
-            $('.modalAddSparepart').on('hidden.bs.modal', function () {
-                
-            })
 
             // Date
         var today = new Date();
@@ -410,12 +407,12 @@
             //     }
             // });
 
-            $(document).on('click', '#btnSeri', function(e) {
+            $(document).on('click', "#btnSeri", function(e) {
+                var arrSparepart = []
+                var seriSparepart = [];
+                var kerusakanSparepart = [];
+                var tingkatSparepart = [];
                 e.preventDefault();
-                const arrSparepart = []
-                const seriSparepart = [];
-                const kerusakanSparepart = [];
-                const tingkatSparepart = [];
                 // No Seri
                 const data = tableScan.$('.seri').map(function() {
                     return $(this).val();
@@ -465,70 +462,66 @@
                 const duplicates = dict =>
                 Object.keys(dict).filter((a) => dict[a] > 1)
 
-                // if (duplicates(count(kerusakan)).length > 0  || duplicates(count(seri)).length > 0 || duplicates(count(tingkat)).length > 0) {
-                //     $('.seri').removeClass('is-invalid');
-                //     $('.remark').removeClass('is-invalid');
-                //     $('.layout_id').removeClass('is-invalid');
+                if (duplicates(count(kerusakan)).length > 0  || duplicates(count(seri)).length > 0 || duplicates(count(tingkat)).length > 0) {
+                    $('.seri').removeClass('is-invalid');
+                    $('.remark').removeClass('is-invalid');
+                    $('.layout_id').removeClass('is-invalid');
 
-                //     $('.seri').filter(function() {
-                //         return $(this).val() == '';
-                //     }).addClass('is-invalid');
+                    $('.seri').filter(function() {
+                        return $(this).val() == '';
+                    }).addClass('is-invalid');
 
-                //     $('.remark').filter(function() {
-                //         return $(this).val() == '';
-                //     }).addClass('is-invalid');
+                    $('.remark').filter(function() {
+                        return $(this).val() == '';
+                    }).addClass('is-invalid');
 
-                //     $('.layout_id').filter(function() {
-                //         return $(this).val() == '';
-                //     }).addClass('is-invalid');
-                // }
+                    $('.layout_id').filter(function() {
+                        return $(this).val() == '';
+                    }).addClass('is-invalid');
+                }
 
-                //     if (duplicates(count(arr)).length > 0 || duplicates(count(seri)).length > 0) {
-                //     $('.seri').removeClass('is-invalid');
-                //         $('.seri').filter(function () {
-                //             return $(this).val() == duplicates(count(arr))[0];
-                //         }).addClass('is-invalid');
+                    if (duplicates(count(arr)).length > 0 || duplicates(count(seri)).length > 0) {
+                    $('.seri').removeClass('is-invalid');
+                        $('.seri').filter(function () {
+                            return $(this).val() == duplicates(count(arr))[0];
+                        }).addClass('is-invalid');
 
-                //         $('.seri').filter(function() {
-                //             return $(this).val() == '';
-                //         }).addClass('is-invalid');
+                        $('.seri').filter(function() {
+                            return $(this).val() == '';
+                        }).addClass('is-invalid');
 
-                //         if (duplicates(count(arr)).length > 0) {
-                //             Swal.fire({
-                //             icon: 'error',
-                //             title: 'Oops...',
-                //             text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
-                //         })   
-                //         }
-                //     }
+                        if (duplicates(count(arr)).length > 0) {
+                            Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                        })   
+                        }
+                    }
 
-                    console.log(arrSparepart);
-                    console.log(seriSparepart);
-                    console.log(kerusakanSparepart);
-                    console.log(tingkatSparepart);
-                    // if ((duplicates(count(kerusakan)).length == 0 && duplicates(count(seri)).length == 0 && duplicates(count(tingkat)).length == 0 && duplicates(count(arr)).length == 0) == true ) {
-                    //     $('.seri').removeClass('is-invalid');
-                    //     $('.remark').removeClass('is-invalid');
-                    //     $('.layout_id').removeClass('is-invalid');
-                    //     Swal.fire({
-                    //         position: 'center',
-                    //         icon: 'success',
-                    //         title: 'Nomor seri tersimpan',
-                    //         showConfirmButton: false,
-                    //         timer: 1500
-                    //     }).then(function() {
-                    //         // $('.scan-produk1 tbody tr').each((index, value) => {
-                    //         //     const obj = {
-                    //         //         noseri: value.childNodes[0].firstChild.value,
-                    //         //         kerusakan: value.childNodes[1].firstChild.value,
-                    //         //         tingkat: value.childNodes[2].firstChild.value,
-                    //         //     }
-                    //         //     spr_arr.push(obj);
-                    //         // })
-                    //         // seri[id] = spr_arr;
-                    //         // spr_arr = [];
-                    //     })
-                    // }
+                    if ((duplicates(count(kerusakan)).length == 0 && duplicates(count(seri)).length == 0 && duplicates(count(tingkat)).length == 0 && duplicates(count(arr)).length == 0) == true ) {
+                        $('.seri').removeClass('is-invalid');
+                        $('.remark').removeClass('is-invalid');
+                        $('.layout_id').removeClass('is-invalid');
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            // $('.scan-produk1 tbody tr').each((index, value) => {
+                            //     const obj = {
+                            //         noseri: value.childNodes[0].firstChild.value,
+                            //         kerusakan: value.childNodes[1].firstChild.value,
+                            //         tingkat: value.childNodes[2].firstChild.value,
+                            //     }
+                            //     spr_arr.push(obj);
+                            // })
+                            // seri[id] = spr_arr;
+                            // spr_arr = [];
+                        })
+                    }
             });
         }
 
@@ -675,8 +668,30 @@
                 }
             });
         }
+        var nmrspr = 1;
+        $(document).on('click','.add_sparepart', function () {
+            $.ajax({
+                url: '/api/gk/sel-spare',
+                type: 'POST',
+                dataType: 'json',
+                success: function(res) {
+                    // ii++;
+                    console.log(res);
+                    $.each(res, function(key, value) {
+                        // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                        $(".produk").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    });
+                }
+            });
+            i++;
+            let table_sparepart = '<tr><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id=""><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+            $('.add_sparepart_table tbody').append(table_sparepart);
+            $('.produk').select2();
+            $('.unit').select2();
+            nmrspr++;
+        });
 
-        $(document).on('click', '#btn_plus', function() {
+        $(document).on('click', '.btn_plus'+nmrspr, function() {
             var tr = $(this).closest('tr');
             var x = tr.find('#jml').val();
             id = tr.find('#sparepart_id').val();
@@ -728,26 +743,7 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $(document).on('click','.add_sparepart', function () {
-            $.ajax({
-                url: '/api/gk/sel-spare',
-                type: 'POST',
-                dataType: 'json',
-                success: function(res) {
-                    // ii++;
-                    console.log(res);
-                    $.each(res, function(key, value) {
-                        // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                        $(".produk").append('<option value="'+value.id+'">'+value.nama+'</option');
-                    });
-                }
-            });
-            i++;
-            let table_sparepart = '<tr><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
-            $('.add_sparepart_table tbody').append(table_sparepart);
-            $('.produk').select2();
-            $('.unit').select2();
-        });
+        
         $(document).on('click','.add_unit', function () {
             $.ajax({
                 url: '/api/gbj/sel-gbj',
