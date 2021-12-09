@@ -61,13 +61,14 @@ class PpicController extends Controller
     public function get_data_perakitan($status = "all")
     {
         $this->updateStatus();
-        if ($status == "all") {
-            $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'desc')->get();
-        } else if ($status == "penyusunan") {
+        if ($status == "penyusunan") {
             $data = JadwalPerakitan::with('Produk.produk')->where('status', 'penyusunan')->orderBy('tanggal_mulai', 'desc')->get();
         } else if ($status == "pelaksanaan") {
             $data = JadwalPerakitan::with('Produk.produk')->where('status', 'pelaksanaan')->orderBy('tanggal_mulai', 'desc')->get();
+        } else {
+            $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'desc')->get();
         }
+
         return $data;
     }
 
@@ -148,25 +149,33 @@ class PpicController extends Controller
             $data->konfirmasi = $request->konfirmasi;
         }
         $data->save();
+
+        return $this->get_data_perakitan($request->status);
     }
 
     public function updateManyEvent(Request $request, $status)
     {
-        $event = JadwalPerakitan::where('status', $status)->get();
-        foreach ($event as $data) {
-            if (isset($request->tanggal_mulai)) {
-                $data->tanggal_mulai = $request->tanggal_mulai;
+        if (isset($request->data)) {
+            foreach ($request->data as $data) {
+                $this->updateEvent($request, $data['id']);
             }
-            if (isset($request->tanggal_selesai)) {
-                $data->tanggal_selesai = $request->tanggal_selesai;
+        } else {
+            $event = JadwalPerakitan::where('status', $status)->get();
+            foreach ($event as $data) {
+                if (isset($request->tanggal_mulai)) {
+                    $data->tanggal_mulai = $request->tanggal_mulai;
+                }
+                if (isset($request->tanggal_selesai)) {
+                    $data->tanggal_selesai = $request->tanggal_selesai;
+                }
+                if (isset($request->state)) {
+                    $data->state = $request->state;
+                }
+                if (isset($request->konfirmasi)) {
+                    $data->konfirmasi = $request->konfirmasi;
+                }
+                $data->save();
             }
-            if (isset($request->state)) {
-                $data->state = $request->state;
-            }
-            if (isset($request->konfirmasi)) {
-                $data->konfirmasi = $request->konfirmasi;
-            }
-            $data->save();
         }
 
         return $this->get_data_perakitan($status);

@@ -3,7 +3,13 @@
     <div class="columns">
       <div class="column is-12">
         <div class="box">
-          <table class="table is-fullwidth has-text-centered">
+          <table
+            v-if="
+              this.$store.state.konfirmasi == 0 &&
+              this.$store.state.state !== 'perencanaan'
+            "
+            class="table is-fullwidth has-text-centered"
+          >
             <thead v-if="this.$store.state.state === 'persetujuan'">
               <tr>
                 <th rowspan="2">Produk</th>
@@ -92,6 +98,7 @@
               </tr>
             </tbody>
           </table>
+          <div v-else class="has-text-centered">data kosong</div>
         </div>
       </div>
     </div>
@@ -103,14 +110,14 @@
         <button
           v-if="acc_jadwal.length + reject_jadwal.length === jadwal.length"
           class="button is-success"
-          @click="handleSetuju"
+          @click="handleKirim"
         >
           Kirim
         </button>
       </div>
       <div v-if="this.$store.state.state === 'perubahan'">
-        <button class="btn btn-success">Setuju</button>
-        <button class="btn btn-danger">Tolak</button>
+        <button class="button is-success" @click="handleSetuju">Setuju</button>
+        <button class="button is-danger" @click="handleTolak">Tolak</button>
       </div>
     </div>
   </div>
@@ -132,6 +139,13 @@ export default {
   },
 
   methods: {
+    resetData() {
+      this.acc_jadwal = [];
+      this.reject_jadwal = [];
+      this.all_acc_jadwal = false;
+      this.all_reject_jadwal = false;
+    },
+
     selectAllSetuju: function () {
       this.reject_jadwal = [];
       this.acc_jadwal = [];
@@ -166,9 +180,54 @@ export default {
       );
     },
 
+    async handleKirim() {
+      this.$store.commit("setIsLoading", true);
+      await axios.post(
+        "/api/ppic/update-many-event/" + this.$store.state.status,
+        {
+          data: this.acc_jadwal,
+          konfirmasi: 1,
+        }
+      );
+
+      await axios
+        .post("/api/ppic/update-many-event/" + this.$store.state.status, {
+          data: this.reject_jadwal,
+          konfirmasi: 2,
+        })
+        .then((response) => {
+          this.$store.commit("setJadwal", response.data);
+          this.resetData();
+        });
+      this.$store.commit("setIsLoading", false);
+    },
+
     async handleSetuju() {
       this.$store.commit("setIsLoading", true);
-      // await axios.post('/api/ppic/')
+      await axios
+        .post("/api/ppic/update-many-event/" + this.$store.state.status, {
+          state: "perencanaan",
+          konfirmasi: 0,
+        })
+        .then((response) => {
+          this.$store.commit("setJadwal", response.data);
+          this.resetData();
+        });
+      this.$store.commit("setIsLoading", false);
+    },
+
+    async handleTolak() {
+      this.$store.commit("setIsLoading", true);
+      await axios
+        .post("/api/ppic/update-many-event/" + this.$store.state.status, {
+          state: "persetujuan",
+          konfirmasi: 1,
+        })
+        .then((response) => {
+          this.$store.commit("setJadwal", response.data);
+          this.resetDate();
+        });
+      this.$store.commit("setIsLoading", false);
     },
   },
 

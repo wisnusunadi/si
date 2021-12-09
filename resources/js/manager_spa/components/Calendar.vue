@@ -24,8 +24,8 @@ export default {
         headerToolbar: {
           end: "",
         },
-        selectable: true,
-        editable: true,
+        selectable: false,
+        editable: false,
         weekends: false,
         showNonCurrentDates: false,
 
@@ -144,20 +144,17 @@ export default {
       return year + "-" + month + "-" + dt;
     },
 
-    sorting_jadwal() {
-      // this.local_data_perakitan.sort(
-      //   (a, b) => new Date(a.tanggal_mulai) - new Date(b.tanggal_mulai)
-      //   // (a, b) => a.jumlah - b.jumlah
-      // );
-      // console.log(this.local_data_perakitan);
-    },
-
     async handleEventDrop(info) {
       this.$store.commit("setIsLoading", true);
-      await axios.post("/api/ppic/update-event/" + info.event.id, {
-        tanggal_mulai: this.convert_date(info.event.start),
-        tanggal_selesai: this.convert_date(info.event.end),
-      });
+      await axios
+        .post("/api/ppic/update-event/" + info.event.id, {
+          tanggal_mulai: this.convert_date(info.event.start),
+          tanggal_selesai: this.convert_date(info.event.end),
+          status: this.$store.state.status,
+        })
+        .then((response) => {
+          this.$store.commit("setJadwal", response.data);
+        });
       this.$store.commit("setIsLoading", false);
     },
 
@@ -245,6 +242,16 @@ export default {
   watch: {
     jadwal(newVal, oldVal) {
       this.calendarOptions.events = this.convertJadwal(newVal);
+      // if (
+      //   this.$store.state.state_ppic === "pembuatan" ||
+      //   this.$store.state.state_ppic === "revisi"
+      // ) {
+      //   this.calendarOptions.selectable = true;
+      //   this.calendarOptions.editable = true;
+      // } else {
+      //   this.calendarOptions.selectable = false;
+      //   this.calendarOptions.editable = false;
+      // }
       if (!this.status && this.$store.state.status === "penyusunan") {
         this.calendar.next();
         this.status = this.$store.state.status;
