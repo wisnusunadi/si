@@ -94,6 +94,7 @@
             </div>
           </div>
         </section>
+        <footer class="modal-card-foot"></footer>
       </div>
     </div>
   </div>

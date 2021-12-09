@@ -1,16 +1,14 @@
 <template>
-  <Jadwal />
+  <Persetujuan />
 </template>
 
 <script>
 import axios from "axios";
-import Jadwal from "./Jadwal.vue";
+import Persetujuan from "./Persetujuan.vue";
 
 export default {
-  name: "JadwalPerencanaan",
-
   components: {
-    Jadwal,
+    Persetujuan,
   },
 
   methods: {

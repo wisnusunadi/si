@@ -30,7 +30,6 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/product', [App\Http\Controllers\PpicController::class, 'getProduk']);
     Route::get('/version/{id}', [App\Http\Controllers\PpicController::class, 'getVersionDetailProduk']);
     Route::get('/max-quantity/{id}', [App\Http\Controllers\PpicController::class, 'getMaxQuantity']);
-    Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
     Route::post('/delete-event', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
     Route::post('/update-event', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
     Route::get('/bppb/{status}', [App\Http\Controllers\PpicController::class, 'getBppb']);
@@ -41,9 +40,13 @@ Route::prefix('/ppic')->group(function () {
 
     // new
     Route::get('/gbj/data', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
-    Route::get('/perakitan/data', [App\Http\Controllers\PpicController::class, 'get_data_perakitan']);
+    Route::get('/perakitan/data/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan']);
     Route::get('/so/data', [App\Http\Controllers\PpicController::class, 'get_data_so']);
     Route::get('/schedule/{status?}', [App\Http\Controllers\PpicController::class, 'getEvent']);
+    Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
+    Route::post('/update-event/{id}', [App\Http\Controllers\PpicController::class, 'updateEvent']);
+    Route::post('/update-many-event/{status}', [App\Http\Controllers\PpicController::class, 'updateManyEvent']);
+    Route::post('/delete-event/{id}', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
     // new
 
     // Route::prefix('/ppic')->group(function () {

@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::get('/', function () {
     if (auth()->user()->divisi->id == 24) return redirect('/ppic');
-    else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik/dashboard');
+    else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik');
     else return view('home');
 })->middleware('auth');
 
@@ -44,8 +44,9 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
 });
 
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
-    Route::view('/dashboard', 'spa.manager_teknik.dashboard');
-    Route::view('/persetujuan_jadwal', 'spa.manager_teknik.persetujuan_jadwal');
+    Route::view('/{any?}', 'spa.manager_teknik.spa');
+    // Route::view('/dashboard', 'spa.manager_teknik.dashboard');
+    // Route::view('/persetujuan_jadwal', 'spa.manager_teknik.persetujuan_jadwal');
 });
 
 Route::middleware('auth')->prefix('/gbj')->group(function () {
