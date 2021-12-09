@@ -2861,8 +2861,6 @@
             "time": "2021-08-10T02:43:50+00:00"
         },
         {
-<<<<<<< HEAD
-=======
             "name": "phenx/php-font-lib",
             "version": "0.5.2",
             "source": {
@@ -2948,7 +2946,6 @@
             "time": "2019-09-11T20:02:13+00:00"
         },
         {
->>>>>>> b5e8be235b65ad7c34437199536d17b0095d0d4b
             "name": "phpoffice/phpspreadsheet",
             "version": "1.19.0",
             "source": {
