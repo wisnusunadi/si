@@ -68,7 +68,7 @@
                 <div class="card" style="width: 40rem">
                     <div class="row no-gutters">
                       <div class="col-md-5">
-                        <img src="https://elitech.id/img/products-img/cardiology/ecg300g/gambara.jpg" alt="...">
+                        <img src="{{ asset('upload/gbj/'. $d->gambar) }}" alt="...">
                       </div>
                       <div class="col-md-1"></div>
                       <div class="col-md-6">

@@ -846,7 +846,14 @@
             },
             success: function(res) {
                 console.log(res);
-                // location.reload();
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
             }
         })
     })
@@ -889,7 +896,7 @@
         $('.scan-produk1').DataTable().destroy();
         $('.scan-produk1 tbody').empty();
         let a = 0;
-        for (let index = 0; index < x; index++) { 
+        for (let index = 0; index < x; index++) {
             a++;
            $('.scan-produk1 tbody').append('<tr id="row'+a+'"><td><input type="checkbox" class="cb-child"  value="'+y+'"></td><td><input type="text" name="noseri_id[]['+a+']" id="noseri_id['+a+']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id['+a+']" id="layout_id['+a+']" class="form-control layout"></select></td></tr>');
         }
@@ -900,7 +907,7 @@
             "lengthChange": false,
         });
 
-        
+
     $(document).on('click', '#btnSeri', function(e) {
         e.preventDefault();
 
@@ -922,7 +929,7 @@
 
             const duplicates = dict =>
             Object.keys(dict).filter((a) => dict[a] > 1)
-        
+
             if (duplicates(count(arr)).length > 0) {
                         $('.seri').filter(function () {
                             return $(this).val() == duplicates(count(arr))[0];
@@ -962,7 +969,7 @@
                 // console.log(cb);
             }
 
-        
+
     });
     }
 

@@ -655,7 +655,7 @@ class GudangController extends Controller
                 $n->t_gbj_detail_id = $d->id;
                 $n->noseri_id = $nn->id;
                 $n->layout_id = $request->layout[$value][$k];
-                $n->jenis = 'keluar';
+                $n->jenis = 'masuk';
                 $n->status_id = 2;
                 $n->state_id = 3;
                 $n->save();
@@ -663,6 +663,7 @@ class GudangController extends Controller
         }
 
         // update stok
+
 
         return response()->json(['msg' => 'Successfully']);
     }
@@ -690,6 +691,8 @@ class GudangController extends Controller
                 }
             }
         }
+
+        return response()->json(['msg' => 'Data Berhasil Diterima']);
     }
 
     function storeCekSO(Request $request) {
