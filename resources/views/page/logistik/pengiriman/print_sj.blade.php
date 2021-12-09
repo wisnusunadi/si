@@ -60,7 +60,7 @@
 
     div.footer {
         position: fixed;
-        bottom: 20px;
+        bottom: 0px;
         left: 0px;
         right: 0px;
         height: auto;
@@ -80,13 +80,13 @@
         </tbody>
     </table>
 </div>
-
+@foreach($data as $d)
 <div class="body">
     <div class="row mdtxt">
         <div class="col-12">
             <table style="width:100%">
                 <tbody>
-                    @foreach($data as $d)
+
                     <tr>
                         <td colspan="4">Pengirim</td>
                         <td colspan="4"></td>
@@ -165,7 +165,20 @@
                     </tr>
                     <tr>
                         <td colspan="4"></td>
-                        <td colspan="4" class="wb">031793321217</td>
+                        <td colspan="4" class="wb">
+                            <?php
+                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+
+                            if ($name[1] == 'EKAT') {
+                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->telp;
+                            } else if ($name[1] == 'SPA') {
+                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp;
+                            } else {
+                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp;
+                            }
+
+                            ?>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -282,7 +295,7 @@
         </div>
     </div>
 </div>
-@endforeach
+
 <div class="footer">
     <table border=0 class="table align-center" width="100%">
         <thead>
@@ -305,6 +318,16 @@
             </tr>
             <tr>
                 <td></td>
+                <td>@if ($d->nama_pengirim == '')
+                    {{$d->Ekspedisi->nama}}
+                    @else
+                    {{$d->nama_pengirim}}
+                    @endif
+                </td>
+                <td>Erna Cantika A</td>
+            </tr>
+            <tr>
+                <td></td>
                 <td></td>
                 <td></td>
             </tr>
@@ -315,5 +338,6 @@
             </tr>
         </tbody>
     </table>
+    @endforeach
     <div class="align-right">No Dokumen: SPA-FR/GUD-04, Tanggal Terbit: 20 Maret 2020, Revisi:02</div>
 </div>

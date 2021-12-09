@@ -44,6 +44,7 @@ Route::prefix('/ppic')->group(function () {
 });
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
+    Route::get('select_edit', [App\Http\Controllers\MasterController::class, 'select_provinsi_edit']);
 });
 Route::prefix('/kota_kabupaten')->group(function () {
     Route::get('select', [App\Http\Controllers\ProvincesController::class, 'kota_kabupaten']);
@@ -278,6 +279,10 @@ Route::prefix('/dc')->group(function () {
         Route::get('detail/seri/{id}', [App\Http\Controllers\DCController::class, 'get_data_detail_seri_so']);
         Route::get('detail/seri/select/{id}/{value}', [App\Http\Controllers\DCController::class, 'get_data_detail_select_seri_so']);
     });
+});
+
+Route::prefix('/as')->group(function () {
+    Route::get('/so/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {

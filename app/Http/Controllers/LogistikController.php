@@ -115,7 +115,7 @@ class LogistikController extends Controller
             })
             ->addColumn('tgl_kirim', function ($data) {
                 if (isset($data->DetailLogistik->Logistik)) {
-                    return $data->DetailLogistik->Logistik->tgl_kirim;
+                    return  Carbon::createFromFormat('Y-m-d', $data->DetailLogistik->Logistik->tgl_kirim)->format('d-m-Y');
                 } else {
                     return '';
                 }
@@ -267,7 +267,7 @@ class LogistikController extends Controller
             })
             ->addColumn('tgl_kirim', function ($data) {
                 if (isset($data->Logistik)) {
-                    return $data->Logistik->tgl_kirim;
+                    return  Carbon::createFromFormat('Y-m-d', $data->Logistik->tgl_kirim)->format('d-m-Y');
                 } else {
                     return '';
                 }
@@ -469,7 +469,10 @@ class LogistikController extends Controller
 
     public function get_data_pengiriman()
     {
-        $data = Logistik::whereNull('noresi')->get();
+        $dataeks = Logistik::whereNull('noresi')->whereNotNull('ekspedisi_id')->get();
+        $datanoneks = Logistik::where('status_id', '11')->whereNotNull('nama_pengirim')->get();
+        $data = $dataeks->merge($datanoneks);
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -489,7 +492,7 @@ class LogistikController extends Controller
                 return "-";
             })
             ->addColumn('tgl_kirim', function ($data) {
-                return $data->tgl_kirim;
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_kirim)->format('d-m-Y');
             })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
@@ -548,7 +551,9 @@ class LogistikController extends Controller
 
     public function get_data_riwayat_pengiriman()
     {
-        $data = Logistik::whereNotNull('noresi')->get();
+        $dataeks = Logistik::whereNotNull('noresi')->whereNotNull('ekspedisi_id')->get();
+        $datanoneks = Logistik::where('status_id', '10')->whereNotNull('nama_pengirim')->get();
+        $data = $dataeks->merge($datanoneks);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -565,10 +570,14 @@ class LogistikController extends Controller
                 }
             })
             ->addColumn('no_resi', function ($data) {
-                return $data->noresi;
+                if ($data->noresi == "") {
+                    return '-';
+                } else {
+                    return $data->noresi;
+                }
             })
             ->addColumn('tgl_kirim', function ($data) {
-                return $data->tgl_kirim;
+                return  Carbon::createFromFormat('Y-m-d', $data->tgl_kirim)->format('d-m-Y');
             })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
@@ -955,7 +964,6 @@ class LogistikController extends Controller
     //Dashboard
     public function dashboard()
     {
-
         $terbaru = Pesanan::Has('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
             $q->where('tgl_uji', '>=', Carbon::now()->subdays(7));
         })->get()->count();
@@ -1010,7 +1018,6 @@ class LogistikController extends Controller
     }
     public function dashboard_data($value)
     {
-
         if ($value == 'terbaru') {
             $data = Pesanan::Has('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
                 $q->where('tgl_uji', '>=', Carbon::now()->subdays(7));
@@ -1035,19 +1042,19 @@ class LogistikController extends Controller
                             $hari = $to->diffInDays($from);
 
                             if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                                return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
                             } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                             } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                                return '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                             }
                         } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                         } else {
                             $to = Carbon::now();
                             $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
                             $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                            return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
                         return '';
@@ -1117,19 +1124,19 @@ class LogistikController extends Controller
                             $hari = $to->diffInDays($from);
 
                             if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                                return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
                             } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                             } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                                return '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                             }
                         } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                         } else {
                             $to = Carbon::now();
                             $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
                             $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                            return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
                         return '';
@@ -1189,19 +1196,19 @@ class LogistikController extends Controller
                             $hari = $to->diffInDays($from);
 
                             if ($hari > 7) {
-                                return ' <div class="info">' . $tgl_parameter . '</div> <small><i class="fas fa-clock"></i> Batas sisa ' . $hari . ' Hari</small>';
+                                return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
                             } else if ($hari > 0 && $hari <= 7) {
-                                return ' <div class="warning">' . $tgl_parameter . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
                             } else {
-                                return '' . $tgl_parameter . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                                return '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
                             }
                         } elseif ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . $tgl_parameter . '</div><small cla\ss="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                         } else {
                             $to = Carbon::now();
                             $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
                             $hari = $to->diffInDays($from);
-                            return '<div>' . $tgl_parameter . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                            return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
                         return '';
@@ -1294,11 +1301,11 @@ class LogistikController extends Controller
                 return '-';
             })
             ->addColumn('no_resi', function ($data) {
-                // if ($data->DetailLogistik->Logistik->no_resi == "") {
-                //     return '-';
-                // } else {
-                //     return $data->DetailLogistik->Logistik->no_resi;
-                // }
+                if ($data->Logistik->noresi == "") {
+                    return '-';
+                } else {
+                    return $data->Logistik->noresi;
+                }
             })
             ->addColumn('customer', function ($data) {
                 $name = explode('/', $data->DetailPesananProduk->DetailPesanan->pesanan->so);

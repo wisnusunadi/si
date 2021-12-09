@@ -745,8 +745,10 @@
 
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
+                $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
-                $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
                 $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                 select_data($(el).find('.penjualan_produk_id').attr('id'));
             });

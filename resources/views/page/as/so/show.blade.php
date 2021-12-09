@@ -26,6 +26,13 @@
         margin: 5px;
     }
 
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 25ch;
+    }
+
     @media screen and (min-width: 1440px) {
         section {
             font-size: 14px;
@@ -113,6 +120,7 @@
                                             <th>Tanggal Pengiriman</th>
                                             <th>Customer</th>
                                             <th>Alamat</th>
+                                            <th>Provinsi</th>
                                             <th>Telepon</th>
 
                                             <th>Status</th>
@@ -194,7 +202,58 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var showtable = $('#showtable').DataTable({});
+        $(function() {
+            $('#showtable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/as/so/data',
+                    'type': 'GET',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    }, {
+                        data: 'so'
+
+                    }, {
+                        data: 'tgl_kirim',
+
+                    }, {
+                        data: 'nama_customer',
+                        className: 'minimizechar',
+                    }, {
+                        data: 'alamat',
+                        className: 'minimizechar',
+
+                    }, {
+                        data: 'provinsi',
+
+                    },
+                    {
+                        data: 'telepon',
+
+                    }, {
+                        data: 'status',
+                    },
+                    {
+                        data: 'keterangan',
+
+                    }, {
+                        data: 'button',
+
+                    }
+                ]
+            });
+
+        })
 
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();

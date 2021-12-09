@@ -98,34 +98,34 @@
                 <div class="card">
                     <div class="card-body">
                         <h4>Info Penjualan</h4>
-                        @if($value == "EKAT")
+                        @foreach($data as $d)
                         <div class="row">
                             <div class="col-5">
                                 <div class="margin">
                                     <div><small class="text-muted">Distributor & Instansi</small></div>
                                 </div>
                                 <div class="margin">
-                                    <b id="distributor">{{$data->customer->nama}}</b><small> (Distributor)</small>
+                                    <b id="distributor">{{$d->customer->nama}}</b><small> (Distributor)</small>
                                 </div>
                                 <div class="margin">
-                                    <div><b id="no_akn">{{$data->satuan}}</b></div>
-                                    <small>({{$data->instansi}})</small>
+                                    <div><b id="no_akn">{{$d->satuan}}</b></div>
+                                    <small>({{$d->instansi}})</small>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No AKN</small></div>
-                                    <div><b id="no_akn">{{$data->no_paket}}</b></div>
+                                    <div><b id="no_akn">{{$d->no_paket}}</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">No SO</small></div>
-                                    <div><b id="no_so">{{$data->pesanan->so}}</b></div>
+                                    <div><b id="no_so">{{$d->pesanan->so}}</b></div>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
-                                    <div><b id="no_so">{{$data->pesanan->no_po}}</b></div>
+                                    <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Batas Pengiriman</small></div>
@@ -136,46 +136,11 @@
                             <div class="col-2">
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div>{!!$status!!}</div>
+                                    <div></div>
                                 </div>
                             </div>
                         </div>
-                        @elseif($value == "SPA" || $value == "SPB" )
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="margin">
-                                    <div><small class="text-muted">Customer</small></div>
-                                </div>
-                                <div class="margin">
-                                    <b id="distributor">{{$data->customer->nama}}</b>
-                                </div>
-                                <div class="margin">
-                                    <div><b id="no_akn">{{$data->customer->alamat}}</b></div>
-                                </div>
-                                <div class="margin">
-                                    <div><b id="no_akn">{{$data->customer->telp}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="margin">
-                                    <div><small class="text-muted">No SO</small></div>
-                                    <div><b id="no_so">{{$data->pesanan->so}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="margin">
-                                    <div><small class="text-muted">No PO</small></div>
-                                    <div><b id="no_so">{{$data->pesanan->no_po}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="margin">
-                                    <div><small class="text-muted">Status</small></div>
-                                    <div>{!!$status!!}</div>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -417,13 +382,6 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
-
-        today = yyyy + '-' + mm + '-' + dd;
-
         y = [];
         y = <?php echo json_encode($detail_id); ?>;
 
@@ -431,7 +389,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$data->pesanan_id}}',
+                'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$d->pesanan_id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -470,7 +428,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/so/data/detail/selesai_kirim/' + '{{$data->pesanan_id}}',
+                'url': '/api/logistik/so/data/detail/selesai_kirim/' + '{{$d->pesanan_id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -513,12 +471,7 @@
 
         $('#belumkirimtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
-            idtrf = <?php
-                    if (!isset($data->pesanan->TFProduksi->id)) {
-                        echo 0;
-                    } else {
-                        echo $data->pesanan->TFProduksi->id;
-                    } ?>;
+            idtrf = '{{$d->pesanan->TFProduksi->id}}';
             $('#belumkirimtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
@@ -585,7 +538,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert("Page cannot open. Error:" + error);
+                    alert($('#form-logistik-create').serialize());
                 }
             });
             return false;
@@ -762,7 +715,7 @@
                 if ($(this).val() != "") {
                     $('#ekspedisi_id').removeClass('is-invalid');
                     $('#msgekspedisi_id').text("");
-                    if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                    if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                         $('#btnsimpan').removeAttr('disabled');
                     } else {
                         $('#btnsimpan').attr('disabled', true);
@@ -776,6 +729,7 @@
                 console.log(value);
             });
         }
+
 
         function max_date() {
             var today = new Date();
@@ -792,7 +746,7 @@
             console.log(checkedAry);
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
-            var pesanan_id = '{{$data->id}}';
+            var pesanan_id = '{{$d->id}}';
 
             $.ajax({
                 url: "/logistik/so/create/" + checkedAry + '/' + pesanan_id,
@@ -805,7 +759,8 @@
                     $('#edit').html(result).show();
                     detailpesanan(checkedAry, pesanan_id);
                     ekspedisi_select();
-                    $('#tgl_kirim').attr('max', today);
+                    max_date();
+                    // alert(pesanan_id);
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {
@@ -830,7 +785,7 @@
                 $('#ekspedisi').removeClass('hide');
                 $('#nonekspedisi').addClass('hide');
                 $('#nama_pengirim').val("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -840,7 +795,7 @@
                 $('#ekspedisi').addClass('hide');
                 $('#nonekspedisi').removeClass('hide');
                 $('.ekspedisi_id').val("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -852,7 +807,7 @@
             if ($(this).val() != "") {
                 $('#no_invoice').removeClass('is-invalid');
                 $('#msgno_invoice').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -868,7 +823,7 @@
             if ($(this).val() != "") {
                 $('#tgl_kirim').removeClass('is-invalid');
                 $('#msgtgl_kirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -884,7 +839,7 @@
             if ($(this).val() != "") {
                 $('#nama_pengirim').removeClass('is-invalid');
                 $('#msgnama_pengirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -901,7 +856,7 @@
         //     if ($(this).val() != "") {
         //         $('#ekspedisi_id').removeClass('is-invalid');
         //         $('#msgekspedisi_id').text("");
-        //         if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val("") != "")) {
+        //         if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val("") != "")) {
         //             $('#btnsimpan').removeAttr('disabled');
         //         } else {
         //             $('#btnsimpan').attr('disabled', true);

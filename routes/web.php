@@ -169,6 +169,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/ekspedisi'], function () {
+        Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::view('/show', 'page.logistik.ekspedisi.show')->name('logistik.ekspedisi.show');
         Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_ekspedisi'])->name('logistik.ekspedisi.detail');
@@ -198,7 +199,7 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
-    Route::view('/dashboard', 'page.dc.dashboard')->name('dc.dashboard');
+    Route::get('/dashboard',   [App\Http\Controllers\DcController::class, 'dashboard'])->name('dc.dashboard');
 
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.dc.so.show')->name('dc.so.show');

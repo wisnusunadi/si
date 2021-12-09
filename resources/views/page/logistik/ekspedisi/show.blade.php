@@ -289,13 +289,40 @@
             }]
         });
 
+        function checkvalue(g) {
+            for (var i = 0; i < g.length; i++) {
+                $(":checkbox").filter(function() {
+                    return this.value == g[i];
+                }).prop("checked", "true");
+            }
+        }
 
+
+        function checkvalueprovinsi(k) {
+            if (k != 35) {
+                $('#provinsi_select').removeClass('hide');
+                $("input[name=jurusan][value='provinsi']").prop("checked", true);
+
+            } else {
+                $("input[name=jurusan][value='indonesia']").prop("checked", true);
+                $('#provinsi_select').addClass('hide');
+            }
+        }
 
         $(document).on('click', '.editmodal', function(event) {
+            var k = "provinsi";
+            var g = $(this).data().value;
+            var h = $(this).data().provinsi;
+            var h_str = h.toString();
+            var jurusan_arr = new Array();
+            var prov_arr = new Array();
+            jurusan_arr = g.split(",");
+            prov_arr = h_str.split(",");
+
+            //console.log(prov_arr);
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
-            console.log(id);
             $.ajax({
                 url: "/logistik/ekspedisi/edit/" + id,
                 beforeSend: function() {
@@ -306,10 +333,17 @@
 
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    console.log(id);
+
                     // $("#editform").attr("action", href);
+                    checkvalue(jurusan_arr);
+                    checkvalueprovinsi(prov_arr);
+
                     provinsi();
-                    kota_kabupaten();
+                    // $('.provinsi').val([prov_arr]);
+                    // $('.provinsi').trigger('change');
+                    // $('.provinsi').select2().select2('val', prov_arr);
+                    console.log(prov_arr);
+                    // $('.provinsi').select2('val', prov_arr);
 
                 },
                 complete: function() {
@@ -381,17 +415,12 @@
 
         $(document).on('change', 'input[type="radio"][name="jurusan"]', function() {
             $(".provinsi").val(null).trigger('change');
-            $(".kota_kabupaten").val(null).trigger('change');
+
             if ($(this).val() != "") {
                 if ($(this).val() == "provinsi") {
                     $('#provinsi_select').removeClass('hide');
-                    $('#kota_kabupaten_select').addClass('hide');
-                } else if ($(this).val() == "kota_kabupaten") {
-                    $('#provinsi_select').addClass('hide');
-                    $('#kota_kabupaten_select').removeClass('hide');
                 } else if ($(this).val() == "indonesia") {
                     $('#provinsi_select').addClass('hide');
-                    $('#kota_kabupaten_select').addClass('hide');
                 }
                 $('#msgjurusan').text("");
                 $('#jurusan').removeClass("is-invalid");
@@ -422,8 +451,6 @@
                 $("#btntambah").attr('disabled', true);
             }
         });
-
-
         $(document).on('keyup change', 'input[name="email"]', function() {
             var errorhandling = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
             if ($(this).val() != "") {
@@ -474,43 +501,7 @@
                         };
                     },
                 }
-            });
-        }
-
-        function kota_kabupaten() {
-            $('.kota_kabupaten').select2({
-                ajax: {
-                    multiple: true,
-                    minimumResultsForSearch: 20,
-                    placeholder: "Pilih Kota Kabupaten",
-                    dataType: 'json',
-                    theme: "bootstrap",
-                    delay: 250,
-                    type: 'GET',
-                    url: '/api/kota_kabupaten/select',
-                    data: function(params) {
-                        return {
-                            term: params.term
-                        }
-                    },
-                    processResults: function(data) {
-                        console.log(data);
-                        return {
-                            results: $.map(data, function(obj) {
-                                return {
-                                    text: obj.text,
-                                    children: $.map(obj.children, function(objs) {
-                                        return {
-                                            id: objs.id,
-                                            text: objs.text
-                                        }
-                                    })
-                                };
-                            })
-                        };
-                    },
-                }
-            });
+            })
         }
 
         $('#filter').submit(function() {

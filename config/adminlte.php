@@ -527,31 +527,31 @@ return [
         //     'auth' => [14, 17, 26]
         // ],
         // produksi (17) & QC(23)
-        [
-            'text' => 'Data Karyawan',
-            'icon' => 'fas fa-users',
-            'auth' => [14, 17, 23, 28],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Jadwal Kerja Operator',
-                    'url'  => '/karyawan',
-                    'auth' => [],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Daftar Karyawan',
-                    'url'  => '/daftar_karyawan',
-                    'auth' => [28],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Permohonan Penugasan',
-                    'url'  => '/karyawan/peminjaman',
-                    'auth' => [],
-                ],
-            ],
-        ],
+        // [
+        //     'text' => 'Data Karyawan',
+        //     'icon' => 'fas fa-users',
+        //     'auth' => [14, 17, 23, 28],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Jadwal Kerja Operator',
+        //             'url'  => '/karyawan',
+        //             'auth' => [],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Daftar Karyawan',
+        //             'url'  => '/daftar_karyawan',
+        //             'auth' => [28],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Permohonan Penugasan',
+        //             'url'  => '/karyawan/peminjaman',
+        //             'auth' => [],
+        //         ],
+        //     ],
+        // ],
         [
             'text'    => 'Inventory',
             'icon'    => 'fas fa-boxes',
@@ -911,111 +911,111 @@ return [
         //     'auth' => [17],
         // ],
         // QC (23) & Lab (22)
-        [
-            'header' => 'TRANSAKSI',
-            'auth' => [22],
-            'header' => 'INCOMING',
-            'auth' => [23]
-        ],
+        // [
+        //     'header' => 'TRANSAKSI',
+        //     'auth' => [22],
+        //     'header' => 'INCOMING',
+        //     'auth' => [23]
+        // ],
 
-        [
-            'text' => 'Kedatangan',
-            'icon' => 'fas fa-dolly-flatbed',
-            'auth' => [23],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Packing List',
-                    'url'  => '/kedatangan/packing_list',
-                    'auth' => [23],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Analisa',
-                    'url'  => '/kedatangan/analisa',
-                    'auth' => [23],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Sampling',
-                    'url'  => '/kedatangan/sampling',
-                    'auth' => [23],
-                ],
-            ],
-        ],
-        [
-            'text' => 'BPPB',
-            'icon' => 'fas fa-project-diagram',
-            'url' => '/bppb',
-            'auth' => [23],
-        ],
-        [
-            'header' => 'INPROCESS',
-            'auth' => [23]
-        ],
-        [
-            'text'    => 'Perakitan',
-            'icon'    => 'fas fa-cogs',
-            'auth' => [23],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Laporan',
-                    'url'  => '/perakitan/pemeriksaan',
-                    'auth' => [23],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'IK Pemeriksaan',
-                    'url'  => '/perakitan/ik_pemeriksaan',
-                    'auth' => [23],
-                ],
-            ],
-        ],
-        [
-            'text'    => 'Pengujian',
-            'icon'    => 'fab fa-searchengin',
-            'auth' => [23],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Laporan',
-                    'url'  => '/pengujian',
-                    'auth' => [23],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Kalibrasi',
-                    'url'  => '/kalibrasi',
-                    'auth' => [23],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'IK Pemeriksaan',
-                    'url'  => '/pengujian/ik_pemeriksaan',
-                    'auth' => [23],
-                ],
-            ],
-        ],
-        [
-            'text'    => 'Pengemasan',
-            'icon'    => 'fas fa-box-open',
-            'auth' => [23],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Laporan',
-                    'url'  => '/pengemasan/qc',
-                    'auth' => [23],
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'IK Pemeriksaan',
-                    'url'  => '/pengemasan/ik_pemeriksaan',
-                    'auth' => [23],
-                ],
-            ],
-        ],
+        // [
+        //     'text' => 'Kedatangan',
+        //     'icon' => 'fas fa-dolly-flatbed',
+        //     'auth' => [23],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Packing List',
+        //             'url'  => '/kedatangan/packing_list',
+        //             'auth' => [23],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Analisa',
+        //             'url'  => '/kedatangan/analisa',
+        //             'auth' => [23],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Sampling',
+        //             'url'  => '/kedatangan/sampling',
+        //             'auth' => [23],
+        //         ],
+        //     ],
+        // ],
+        // [
+        //     'text' => 'BPPB',
+        //     'icon' => 'fas fa-project-diagram',
+        //     'url' => '/bppb',
+        //     'auth' => [23],
+        // ],
+        // [
+        //     'header' => 'INPROCESS',
+        //     'auth' => [23]
+        // ],
+        // [
+        //     'text'    => 'Perakitan',
+        //     'icon'    => 'fas fa-cogs',
+        //     'auth' => [23],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Laporan',
+        //             'url'  => '/perakitan/pemeriksaan',
+        //             'auth' => [23],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'IK Pemeriksaan',
+        //             'url'  => '/perakitan/ik_pemeriksaan',
+        //             'auth' => [23],
+        //         ],
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'Pengujian',
+        //     'icon'    => 'fab fa-searchengin',
+        //     'auth' => [23],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Laporan',
+        //             'url'  => '/pengujian',
+        //             'auth' => [23],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Kalibrasi',
+        //             'url'  => '/kalibrasi',
+        //             'auth' => [23],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'IK Pemeriksaan',
+        //             'url'  => '/pengujian/ik_pemeriksaan',
+        //             'auth' => [23],
+        //         ],
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'Pengemasan',
+        //     'icon'    => 'fas fa-box-open',
+        //     'auth' => [23],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Laporan',
+        //             'url'  => '/pengemasan/qc',
+        //             'auth' => [23],
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'IK Pemeriksaan',
+        //             'url'  => '/pengemasan/ik_pemeriksaan',
+        //             'auth' => [23],
+        //         ],
+        //     ],
+        // ],
         [
             'header' => 'OUTGOING',
             'auth' => [23]

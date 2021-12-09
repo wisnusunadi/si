@@ -28,12 +28,18 @@
     }
 
 
-    #warning {
-        color: #FFC700;
+    .urgent {
+        color: #dc3545;
+        font-weight: 600;
     }
 
-    #info {
-        color: #3a7bb0;
+    .warning {
+        color: #FFC700;
+        font-weight: 600;
+    }
+
+    .info {
+        color: #4682B4
     }
 
     .fa-search:hover {
