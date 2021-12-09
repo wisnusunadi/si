@@ -363,7 +363,8 @@ class SparepartController extends Controller
 
     function edit_terima($id)
     {
-        return view('page.gk.terima.edit');
+        $did = GudangKarantina::find($id);
+        return view('page.gk.terima.edit', compact('did'));
     }
     // final
 
@@ -819,6 +820,8 @@ class SparepartController extends Controller
             $x = $request->noseri;
             $id = $sprr->id;
 
+            // validasi
+
             for ($i = 0; $i < count($request->noseri[$v]); $i++) {
                 $noseri = new GudangKarantinaNoseri();
                 $noseri->gk_detail_id = $id;
@@ -856,7 +859,43 @@ class SparepartController extends Controller
             }
         }
 
-        return response()->json(['msg' => 'Data Berhasil dirancang']);
+        return response()->json(['msg' => 'Data Berhasil Diterima']);
+    }
+
+    function edit_draft_terima(Request $request) {
+        $cekid = GudangKarantina::find($request->id);
+        // $arr_header = [
+        //     'masuk' => $cekid->date_in,
+        //     'dari'  => $cekid->from->nama,
+        //     'kode'  => $cekid->id,
+        // ];
+        $sprid = GudangKarantinaDetail::where('gk_id', $cekid->id)->whereNotNull('sparepart_id')->get();
+        $arr_spr = [];
+        foreach($sprid as $s) {
+            $arr_spr[] = [
+                'sparepart_id' => $s->sparepart_id,
+                'qty'           => $s->qty_spr,
+                'kode'          => $s->id,
+                'seri'          => 'x',
+            ];
+        }
+
+        $unitid = GudangKarantinaDetail::where('gk_id', $cekid->id)->whereNotNull('gbj_id')->get();
+        $arr_unit = [];
+        foreach($unitid as $u) {
+            $arr_unit[] = [
+                'gbj_id'        => $u->gbj_id,
+                'qty'           => $u->qty_unit,
+                'kode'          => $u->id,
+                'seri'          => 'x',
+            ];
+        }
+
+        return response()->json([
+            'header' => $cekid,
+            'unit' => $arr_unit,
+            'spr'   => $arr_spr,
+        ]);
     }
 
     // transaksi noseri

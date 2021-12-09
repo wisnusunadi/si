@@ -663,7 +663,15 @@ class GudangController extends Controller
         }
 
         // update stok
+        $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
+        $i = 0;
+        foreach ($gdg as $vv) {
+            $i++;
 
+            $vv['stok'] = $vv['stok'] + $request->qty[$key];
+            // print_r($vv['stok'] - $request->qty[$i]);
+            GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+        }
 
         return response()->json(['msg' => 'Successfully']);
     }

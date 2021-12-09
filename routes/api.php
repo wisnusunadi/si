@@ -287,6 +287,8 @@ Route::prefix('/gk')->group(function() {
     Route::post('/in-final', [SparepartController::class, 'terima_by_final']);
 
     Route::post('/ubahunit', [SparepartController::class, 'updateUnit']);
+    Route::post('/edit-in', [SparepartController::class, 'edit_draft_terima']);
+
 
     // history trx
     Route::prefix('/transaksi')->group(function () {

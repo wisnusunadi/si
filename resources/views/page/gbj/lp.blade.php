@@ -650,7 +650,6 @@
         var tr = $(this).closest('tr');
         x = tr.find('#qty').val();
         y = tr.find('.productt').val();
-
         console.log(x);
         console.log(y);
         tambahanPerakitan(x);
@@ -823,17 +822,6 @@
         }
     });
 
-
-
-    // $(document).on('click', '#btnPlus', function() {
-    //     const prd = [];
-
-    //     var prdid = $('.productt').val();
-    //     var jml = $('.number-input').val();
-    //     // for()
-    //     tambahanPerakitan();
-    // })
-
     $(document).on('click', '#btnSave', function() {
         // console.log(id);
 
@@ -931,8 +919,13 @@
             Object.keys(dict).filter((a) => dict[a] > 1)
 
             if (duplicates(count(arr)).length > 0) {
+                $('.seri').removeClass('is-invalid');
                         $('.seri').filter(function () {
-                            return $(this).val() == duplicates(count(arr))[0];
+                    for (let index = 0; index < duplicates(count(arr)).length; index++) {
+                    if ($(this).val() == duplicates(count(arr))[index]) {
+                        return true;
+                    }
+                }
                         }).addClass('is-invalid');
 
                         Swal.fire({
@@ -968,8 +961,6 @@
                 layout[y] = lay;
                 // console.log(cb);
             }
-
-
     });
     }
 
