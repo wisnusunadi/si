@@ -413,10 +413,10 @@
         </div>
 
         <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
-            <div class="modal-dialog modal-md" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content" style="margin: 10px">
-                    <div class="modal-header bg-info">
-                        <h4 class="modal-title">Info</h4>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Logistik</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -436,7 +436,6 @@
 <script>
     $(function() {
         var role = "{{Auth::user()->divisi->id}}";
-        console.log(role);
         var showtable = $('#detailtable').DataTable({
             processing: true,
             serverSide: true,
@@ -503,7 +502,6 @@
 
         $('#detailtable').on('click', '.detailmodal', function(event) {
             var data = $(this).attr('data-id');
-            alert("/api/logistik/so/noseri/detail/selesai_kirim/" + data);
             $.ajax({
                 url: "/api/logistik/so/noseri/detail/selesai_kirim/" + data,
                 beforeSend: function() {
@@ -513,7 +511,7 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    // showtabless(data);
+                    showtabless(data);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -523,7 +521,7 @@
                     alert("Page cannot open. Error:" + error);
                     $('#loader').hide();
                 },
-                timeout: 80
+                timeout: 5000
             });
         })
     })

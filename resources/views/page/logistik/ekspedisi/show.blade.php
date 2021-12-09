@@ -521,9 +521,9 @@
                         };
                     },
                 }
-            });
-            $('select[name="provinsi[]"]').val(['1', '2']);
-            $('select[name="provinsi[]"]').trigger("change");
+            }).val([1, 2]).trigger('change');
+            // $('select[name="provinsi[]"]').val(['1', '2']);
+            // $('select[name="provinsi[]"]').trigger("change");
         }
 
 
