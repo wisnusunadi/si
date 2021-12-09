@@ -1007,7 +1007,7 @@ class GudangController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 1')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) >= 0');
+            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
             // $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(1) );
             // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(1), Carbon::now()->startOfDay()]);
         })->get();
@@ -1018,7 +1018,7 @@ class GudangController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 2')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) >= 0');
+            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
             // $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(2) );
             // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(2), Carbon::now()->startOfDay()]);
         })->get();
@@ -1029,7 +1029,7 @@ class GudangController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 3')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) >= 0');
+            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
             // $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(3));
             // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(3), Carbon::now()->startOfDay()] );
         })->get();
@@ -1042,7 +1042,7 @@ class GudangController extends Controller
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             // $q->where('tgl_masuk', '>=', Carbon::now()->subDays()->format('Y-m-d') );
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 1')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) >= 0');
+            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
             // $q->whereBetween('tgl_masuk', [Carbon::now()->subDays(1), Carbon::now()]);
         })->get();
         return datatables()->of($data)
@@ -1077,7 +1077,7 @@ class GudangController extends Controller
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             // $q->where('tgl_masuk', '>=', Carbon::now()->subDays(2)->format('Y-m-d') );
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 2')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) >= 0');
+            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
             // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(2), Carbon::now()->startOfDay()]);
         })->get();
         return datatables()->of($data)
@@ -1112,7 +1112,7 @@ class GudangController extends Controller
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             // $q->where('tgl_masuk', '<=', Carbon::now()->subDays(3)->format('Y-m-d'));
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 3')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) >= 0');
+            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
             // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(3), Carbon::now()->startOfDay()] );
         })->get();
         return datatables()->of($data)
@@ -1144,7 +1144,7 @@ class GudangController extends Controller
 
     function getPenerimaanAll()
     {
-        $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
+        $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->where('state_id', 16)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
@@ -1163,7 +1163,7 @@ class GudangController extends Controller
                         return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                     }
                 } else {
-                    return '-';
+                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
                 }
             })
             ->addColumn('product', function ($d) {
@@ -1190,7 +1190,7 @@ class GudangController extends Controller
             $q->whereNotNull('no_po');
         })
         ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 1')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1209,7 +1209,7 @@ class GudangController extends Controller
             $q->whereNotNull('no_po');
         })
         ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 2')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1228,7 +1228,7 @@ class GudangController extends Controller
             $q->whereNotNull('no_po');
         })
         ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 3')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1246,7 +1246,7 @@ class GudangController extends Controller
             $q->whereNotNull('no_po');
         })
         ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 1')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1294,7 +1294,7 @@ class GudangController extends Controller
             $q->whereNotNull('no_po');
         })
         ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 2')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1343,7 +1343,7 @@ class GudangController extends Controller
             $q->whereNotNull('no_po');
         })
         ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 3')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');

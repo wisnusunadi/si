@@ -21,7 +21,10 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Alert;
+use App\Models\GudangKarantinaDetail;
+use App\Models\GudangKarantinaNoseri;
 use App\Models\SparepartGudang;
+use Illuminate\Support\Facades\DB;
 
 class MasterController extends Controller
 {
@@ -479,5 +482,39 @@ class MasterController extends Controller
     {
         $data = SparepartGudang::all();
         return response()->json($data);
+    }
+
+    function select_gk_spr()
+    {
+        $data = GudangKarantinaDetail::select('t_gk_detail.sparepart_id', 'm_gs.nama')
+                ->whereNotNull('t_gk_detail.sparepart_id')
+                ->where('is_draft', 0)
+                ->where('is_keluar', 0)
+                ->groupBy('t_gk_detail.sparepart_id')
+                ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
+                ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
+                ->get();
+        return $data;
+    }
+
+    function select_gk_unit()
+    {
+        $data = GudangKarantinaDetail::select('t_gk_detail.gbj_id', DB::raw('CONCAT(produk.nama," ",gdg_barang_jadi.nama) as name'))
+                ->whereNotNull('t_gk_detail.gbj_id')
+                ->where('is_draft', 0)
+                ->where('is_keluar', 0)
+                ->groupBy('t_gk_detail.gbj_id')
+                ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
+                ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+                ->get();
+        // $data = GudangKarantinaDetail::with('units.produk')->groupBy('gbj_id')->where('is_draft',0)->where('is_keluar', 0)->whereNotNull('gbj_id')->get()->pluck('gbj_id', 'units.produk.nama');
+        return $data;
+    }
+
+    function select_gk_layout()
+    {
+        $data = GudangKarantinaNoseri::with('layout')->groupBy('layout_id')->whereNotNull('layout_id')->get();
+        return $data;
+
     }
 }

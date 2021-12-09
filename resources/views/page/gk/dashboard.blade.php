@@ -606,15 +606,8 @@
                             <div class="col-sm"><h5><b>Layout 1</b></h5></div>
                             <div class="col-sm text-right">Layout :</div>
                             <div class="col-sm">
-                                <select class="select2 form-control" multiple="multiple">
+                                <select class="select2 form-control layout" multiple="multiple">
                                 <option selected>All Layout</option>
-                                <option>Layout 1</option>
-                                <option>Layout 2</option>
-                                <option>Layout 3</option>
-                                <option>Layout 4</option>
-                                <option>Layout 5</option>
-                                <option>Layout 6</option>
-                                <option>Layout 7</option>
                               </select>
                             </div>
                         </div>
@@ -962,6 +955,19 @@
             $('.produk-masuk-6-bulan-table').addClass('hidden');
             $('.produk-masuk-3-bulan-table').addClass('hidden');
         })
+        $.ajax({
+                url: '/api/gk/gklayout',
+                type: 'POST',
+                dataType: 'json',
+                success: function(res) {
+                    // ii++;
+                    console.log(res);
+                    $.each(res, function(key, value) {
+                        // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                        $(".layout").append('<option value="'+value.layout.ruang+'">'+value.layout.ruang+'</option');
+                    });
+                }
+            });
         $('.select2').select2({});
         $.ajax({
             url: "/api/gk/dashboard/stok/34/h",

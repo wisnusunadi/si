@@ -96,7 +96,7 @@
                                     <input type="date" name="date_in" id="datePicker" class="form-control" placeholder="">
                                 </div>
                                 <div class="form-group col">
-                                    <label for="dari">Dari</label>
+                                    <label for="dari">Ke</label>
                                     <select class="form-control dari" name="dari">
                                         {{-- <option value="Divisi IT">Divisi IT</option>
                                         <option value="Divisi QC">Divisi QC</option>
@@ -630,7 +630,7 @@
 
     $(document).on('click','.add_sparepart', function () {
         $.ajax({
-            url: '/api/gk/sel-spare',
+            url: '/api/gk/gkspr',
             type: 'POST',
             dataType: 'json',
             success: function(res) {
@@ -638,7 +638,7 @@
                 console.log(res);
                 $.each(res, function(key, value) {
                     // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                    $(".produk").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    $(".produk").append('<option value="'+value.sparepart_id+'">'+value.nama+'</option');
                 });
             }
         });
@@ -646,19 +646,19 @@
         let table_sparepart = '<tr id="'+i+'"><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary" data-id="" data-jml="" id="btn_plus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
         $('.produk').select2();
-        $('.unit').select2();
+        $('.produkk').select2();
     });
     $(document).on('click','.add_unit', function () {
         $.ajax({
-            url: '/api/gbj/sel-gbj',
-            type: 'get',
+            url: '/api/gk/gkunit',
+            type: 'post',
             dataType: 'json',
             success: function(res) {
                 // ii++;
                 console.log(res);
                 $.each(res, function(key, value) {
                     // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                    $(".produkk").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
+                    $(".produkk").append('<option value="'+value.gbj_id+'">'+value.name+'</option');
                 });
             }
         });
@@ -666,6 +666,7 @@
         let table_unit = '<tr id="'+k+'"><td><select name="gbj_id[]" id="gbj_id" class="form-control produkk"></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('.produk').select2();
+        $('.produkk').select2();
     });
     $(document).on('click', '.btn-delete', function (e) {
         $(this).parent().parent().remove();

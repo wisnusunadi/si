@@ -273,6 +273,10 @@ Route::prefix('/gk')->group(function() {
 
     // select
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
+
+    Route::post('/gkspr', [MasterController::class, 'select_gk_spr']);
+    Route::post('/gkunit', [MasterController::class, 'select_gk_unit']);
+    Route::post('/gklayout', [MasterController::class, 'select_gk_layout']);
     Route::get('/sel-tahun', [SparepartController::class, 'get_trx_tahun']);
 
     // store
