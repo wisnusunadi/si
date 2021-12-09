@@ -215,8 +215,9 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
         Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
         Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
         Route::get('/edit/{id}/{Value}', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
-        Route::get('/pdf/semua/{id}', [App\Http\Controllers\DcController::class, 'pdf_semua_coo'])->name('dc.coo.semua.pdf');
-        Route::get('/pdf/{id}', [App\Http\Controllers\DcController::class, 'pdf_seri_coo'])->name('dc.seri.coo.pdf');
+        Route::get('/pdf/so/{id}/{value}', [App\Http\Controllers\DcController::class, 'pdf_semua_so_coo'])->name('dc.coo.semua.so.pdf');
+        Route::get('/pdf/semua/{id}/{value}', [App\Http\Controllers\DcController::class, 'pdf_semua_coo'])->name('dc.coo.semua.pdf');
+        Route::get('/pdf/{id}/{value}', [App\Http\Controllers\DcController::class, 'pdf_seri_coo'])->name('dc.seri.coo.pdf');
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.dc.laporan.show')->name('dc.coo.laporan.show');
         });

@@ -138,7 +138,7 @@
                                 </div>
                                 <div class="filter">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div><b><span class="badge yellow-text">Sebagian Diproses</span></b></div>
+                                    <div><b>{!!$status!!}</b></div>
                                 </div>
                             </div>
                         </div>
@@ -319,7 +319,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/dc/so/detail/1',
+                'url': '/api/dc/so/detail/{{$data->id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -447,7 +447,6 @@
             $('#noseritable').DataTable().ajax.url('/api/dc/so/detail/seri/' + data).load();
             //  console.log(data);
         });
-
 
         $(document).on('submit', '#form-create-coo', function(e) {
             e.preventDefault();

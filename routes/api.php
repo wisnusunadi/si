@@ -270,8 +270,10 @@ Route::prefix('/logistik')->group(function () {
         });
     });
 });
+
 Route::prefix('/dc')->group(function () {
     Route::get('data', [App\Http\Controllers\DCController::class, 'get_data_coo']);
+    Route::post('dashboard/data/{value}', [App\Http\Controllers\DCController::class, 'dashboard_data']);
     Route::prefix('/so')->group(function () {
         Route::post('create/{value}', [App\Http\Controllers\DCController::class, 'create_coo']);
         Route::get('data', [App\Http\Controllers\DCController::class, 'get_data_so']);

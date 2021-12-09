@@ -96,13 +96,19 @@
 
 <body>
     <?php
-    if ($count > 1) {
-        echo ' <div class="page-break">';
-    } else {
-        echo '<div>';
-    }
+    $jumlah = 0;
+    $len = count($data);
     ?>
     @foreach($data as $d)
+    <?php
+    if ($jumlah == $len - 1) {
+        echo '<div>';
+    } else {
+
+        echo ' <div class="page-break">';
+    }
+
+    ?>
     <div class="header">
         <table border="0" style="border-collapse: collapse; text-align:right;width:625px" class="table">
             <tbody>
@@ -217,35 +223,7 @@
                     <tr>
                         <td class="wb">
                             <b>
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}
-                            </b>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="row mdtxt">
-            <table border="0" class="table align-center" width="100%" style="border-collapse: collapse;">
-                <tbody>
-                    <tr>
-                        <td style="height:20px">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="align-center">Untuk ID & Nama Paket :</td>
-                    </tr>
-                    <tr>
-                        <td style="height:3px"></td>
-                    </tr>
-                    <tr>
-                        <td class="wb"><b>
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket}}
-                            </b></td>
-                    </tr>
-                    <tr style="min-height: 20px; max-height: 65px;">
-                        <td class="wb">
-                            <b class="font-size:auto;">
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->deskripsi}}
+                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->customer->Nama}}
                             </b>
                         </td>
                     </tr>
@@ -307,5 +285,6 @@
         </div>
     </div>
     </div>
+    <?php $jumlah++ ?>
     @endforeach
 </body>

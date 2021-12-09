@@ -1117,7 +1117,6 @@ class LogistikController extends Controller
                         $tgl_sekarang = Carbon::now()->format('Y-m-d');
                         $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
 
-
                         if ($tgl_sekarang < $tgl_parameter) {
                             $to = Carbon::now();
                             $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);

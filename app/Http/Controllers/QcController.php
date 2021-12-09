@@ -248,10 +248,7 @@ class QcController extends Controller
                 $jumlah = 0;
                 foreach ($data->detailpesanan as $d) {
                     $x[] = $d->id;
-                    $z[] = $d->jumlah;
-                    foreach ($d->penjualanproduk->produk as $l) {
-                        $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
-                    }
+                    $jumlah++;
                 }
                 $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
 
