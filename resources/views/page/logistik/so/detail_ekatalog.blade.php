@@ -850,16 +850,33 @@
 
         $(document).on('change keyup', '#no_invoice', function(event) {
             if ($(this).val() != "") {
-                $('#no_invoice').removeClass('is-invalid');
-                $('#msgno_invoice').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
-                    $('#btnsimpan').removeAttr('disabled');
-                } else {
-                    $('#btnsimpan').attr('disabled', true);
-                }
+                var val = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: '/api/logistik/cek/no_sj/' + val,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.data > 0) {
+                            $('#no_invoice').addClass('is-invalid');
+                            $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
+                            $('#btnsimpan').attr('disabled', true);
+                        } else {
+                            $('#no_invoice').removeClass('is-invalid');
+                            $('#msgnoinvoice').text("");
+                            if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                                $('#btnsimpan').removeAttr('disabled');
+                            } else {
+                                $('#btnsimpan').attr('disabled', true);
+                            }
+                        }
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
             } else if ($(this).val() == "") {
                 $('#no_invoice').addClass('is-invalid');
-                $('#msgno_invoice').text("No Invoice harus diisi");
+                $('#msgnoinvoice').text("No Surat Jalan tidak boleh kosong");
                 $('#btnsimpan').attr('disabled', true);
             }
         });

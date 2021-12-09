@@ -2,7 +2,7 @@
     {{ csrf_field() }}
     <div class="row d-flex justify-content-center">
         <div class="col-11">
-            <h5>Info Customer</h5>
+            <h5>Info Ekspedisi</h5>
             <div class="card">
                 <div class="card-body">
                     @if(session()->has('error'))
@@ -107,7 +107,7 @@
                             <div class="form-group row hide" id="provinsi_select">
                                 <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
                                 <div class="col-8">
-                                    <select class="select-info form-control custom-select provinsi" name="provinsi" id="provinsi" style="width: 100%;" data-value="">
+                                    <select class="select-info form-control custom-select provinsi" name="provinsi[]" id="provinsi" style="width: 100%;" data-value="">
                                     </select>
                                     <div class="invalid-feedback" id="msgprovinsi">
                                         @if($errors->has('provinsi'))

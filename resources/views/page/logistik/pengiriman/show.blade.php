@@ -1,7 +1,26 @@
 @extends('adminlte.page')
 
 @section('title', 'ERP')
-
+@section('content_header')
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Pengiriman</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Pengiriman</li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Pengiriman</li>
+                @endif
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
 @section('adminlte_css')
 <style>
     li.list-group-item {
@@ -368,9 +387,27 @@
 
         $(document).on('change keyup', '#no_resi', function(event) {
             if ($(this).val() != "") {
-                $('#no_resi').removeClass('is-invalid');
-                $('#msgno_resi').text("");
-                $('#btnsimpan').removeAttr('disabled');
+                var values = $(this).val();
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '/api/logistik/cek/no_resi/' + values,
+                    success: function(data) {
+                        if (data.data > 0) {
+                            $('#no_resi').addClass('is-invalid');
+                            $('#msgno_resi').text("No Resi sudah terpakai");
+                            $('#btnsimpan').attr('disabled', true);
+                        } else {
+                            $('#no_resi').removeClass('is-invalid');
+                            $('#msgno_resi').text("");
+                            $('#btnsimpan').removeAttr('disabled');
+                        }
+                    },
+                    error: function(data) {
+                        return values;
+                    }
+                });
+
             } else if ($(this).val() == "") {
                 $('#no_resi').addClass('is-invalid');
                 $('#msgno_resi').text("No Resi harus diisi");
@@ -491,7 +528,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/pengiriman/data',
+                'url': '/logistik/pengiriman/data',
                 'type': 'GET',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'

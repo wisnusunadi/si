@@ -262,6 +262,7 @@
             <div class="col-5 hide" id="noseridetail">
                 <div class="card">
                     <div class="card-body">
+                        @if(Auth::user()->divisi_id == "23")
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
@@ -284,12 +285,14 @@
                                 </span>
                             </div>
                         </div>
+                        @endif
 
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
                                     <table class="table" style="text-align:center; width:100%" id="noseritable">
                                         <thead>
+                                            @if(Auth::user()->divisi_id == "23")
                                             <th>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
@@ -297,10 +300,10 @@
                                                     </label>
                                                 </div>
                                             </th>
+                                            @endif
                                             <th>No Seri</th>
                                             <th>Tanggal Uji</th>
                                             <th>Hasil</th>
-
                                         </thead>
                                         <tbody>
                                             <!-- <tr>
@@ -366,6 +369,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var role = "{{Auth::user()->divisi_id}}"
         y = [];
         y = <?php echo json_encode($detail_id); ?>;
 
@@ -479,7 +483,8 @@
                 data: 'checkbox',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: role == 23 ? true : false
             }, {
                 data: 'seri',
                 className: 'nowrap-text align-center',

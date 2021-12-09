@@ -164,6 +164,9 @@ class PpicController extends Controller
                 return $data->Produk->nama . " " . $data->nama;
             })
             ->addColumn('gbj', function ($data) {
+                return $data->stok;
+            })
+            ->addColumn('penjualan', function ($data) {
                 $jumlah_gbj = $data->stok;
                 $jumlah_stok_permintaan = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id);
                 $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
@@ -172,9 +175,6 @@ class PpicController extends Controller
                 } else {
                     return '<div style="color:red;">' . $jumlah . '</div>';
                 }
-            })
-            ->addColumn('gk', function ($data) {
-                return "-";
             })
             ->addColumn('sepakat', function ($data) {
                 // $id = $data->id;
@@ -297,7 +297,7 @@ class PpicController extends Controller
             ->addColumn('aksi', function ($data) {
                 return '<i class="fas fa-search"></i>';
             })
-            ->rawColumns(['gbj', 'aksi'])
+            ->rawColumns(['gbj', 'aksi', 'penjualan'])
             ->make(true);
     }
 
