@@ -204,7 +204,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/so/data/',
+                'url': '/logistik/so/data/',
 
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'

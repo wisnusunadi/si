@@ -3,7 +3,24 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Ekspedisi</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Ekspedisi</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Ekspedisi</li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Ekspedisi</li>
+                @endif
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
 
 @section('adminlte_css')
@@ -339,10 +356,13 @@
                     checkvalueprovinsi(prov_arr);
 
                     provinsi();
+                    // $('.provinsi').val(['1']).trigger('change');
+                    // $(".provinsi").select2().select2('1');
+                    // provinsi_selected(prov_arr);
                     // $('.provinsi').val([prov_arr]);
                     // $('.provinsi').trigger('change');
                     // $('.provinsi').select2().select2('val', prov_arr);
-                    console.log(prov_arr);
+
                     // $('.provinsi').select2('val', prov_arr);
 
                 },
@@ -501,8 +521,11 @@
                         };
                     },
                 }
-            })
+            }).val([1, 2]).trigger('change');
+            // $('select[name="provinsi[]"]').val(['1', '2']);
+            // $('select[name="provinsi[]"]').trigger("change");
         }
+
 
         $('#filter').submit(function() {
             var jalur = [];

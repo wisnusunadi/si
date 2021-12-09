@@ -410,7 +410,7 @@ return [
             'text' => 'Beranda',
             'url'  => '/penjualan/dashboard',
             'icon' => 'fas fa-home',
-            'auth' => [26]
+            'auth' => [26, 8]
         ],
         // [
         //     'header' => 'DATA',

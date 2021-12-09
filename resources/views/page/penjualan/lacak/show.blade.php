@@ -3,7 +3,24 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Lacak</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Lacak</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "26" || Auth::user()->divisi_id == "8")
+                <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Lacak</li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Lacak</li>
+                @endif
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
 
 @section('adminlte_css')
@@ -206,6 +223,7 @@
             placeholder: "Pilih Data Lacak",
             allowClear: true
         });
+
         $('#potable').DataTable({
             processing: true,
             serverSide: true,
@@ -237,6 +255,7 @@
                 searchable: false
             }, ]
         });
+
         $('#nosotable').DataTable({
             processing: true,
             serverSide: true,
@@ -264,6 +283,7 @@
                 searchable: false
             }, ]
         });
+
         $('#noakntable').DataTable({
             processing: true,
             serverSide: true,
@@ -324,6 +344,8 @@
 
         $('#btncari').on('click', function() {
             if ($('.pilih_data').val() == "no_seri") {
+                var data = $('#data').val();
+                $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
                 $('#noseri').removeClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noakn').addClass('hide');
@@ -354,6 +376,8 @@
                 $('#noso').removeClass('hide');
                 $('#nosj').addClass('hide');
             } else if ($('.pilih_data').val() == "no_sj") {
+                var data = $('#data').val();
+                $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
                 $('#nosj').removeClass('hide');
                 $('#noseri').addClass('hide');
                 $('#nopo').addClass('hide');
@@ -366,7 +390,7 @@
         });
 
         $('#btnbatal').on('click', function() {
-            $('.pilih_data').prop('selectedIndex', -1);
+            $('.pilih_data').val(null).trigger('change');
             $('#data').val('');
             $('#data').removeAttr('disabled');
             $('#pilih_data').attr('disabled', true);

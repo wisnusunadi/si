@@ -2,6 +2,27 @@
 
 @section('title', 'ERP')
 
+@section('content_header')
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Pengiriman</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Detail Pengiriman</li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+
+                <li class="breadcrumb-item active">Detail Pengiriman</li>
+                @endif
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
 
 @section('adminlte_css')
 <style>
@@ -392,10 +413,10 @@
         </div>
 
         <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
-            <div class="modal-dialog modal-md" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content" style="margin: 10px">
-                    <div class="modal-header bg-info">
-                        <h4 class="modal-title">Info</h4>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Logistik</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -415,7 +436,6 @@
 <script>
     $(function() {
         var role = "{{Auth::user()->divisi->id}}";
-        console.log(role);
         var showtable = $('#detailtable').DataTable({
             processing: true,
             serverSide: true,
@@ -482,7 +502,6 @@
 
         $('#detailtable').on('click', '.detailmodal', function(event) {
             var data = $(this).attr('data-id');
-            alert("/api/logistik/so/noseri/detail/selesai_kirim/" + data);
             $.ajax({
                 url: "/api/logistik/so/noseri/detail/selesai_kirim/" + data,
                 beforeSend: function() {
@@ -492,7 +511,7 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
-                    // showtabless(data);
+                    showtabless(data);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -502,7 +521,7 @@
                     alert("Page cannot open. Error:" + error);
                     $('#loader').hide();
                 },
-                timeout: 80
+                timeout: 5000
             });
         })
     })

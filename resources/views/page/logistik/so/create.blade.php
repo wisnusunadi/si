@@ -17,8 +17,9 @@
                                                     <span class="input-group-text">SPA-</span>
                                                 </div>
                                                 <input type="text" class="form-control col-form-label" name="no_invoice" id="no_invoice">
+                                                <div class="invalid-feedback" id="msgnoinvoice"></div>
                                             </div>
-                                            <div class="invalid-feedback" id="msgno_invoice"></div>
+
                                         </div>
                                     </div>
                                     <div class="form-group row">

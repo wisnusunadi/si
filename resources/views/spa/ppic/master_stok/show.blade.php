@@ -3,7 +3,21 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Sales Order</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Master Stok</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Master Stok</li>
+                @endif
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
 
 @section('content')
@@ -23,11 +37,10 @@
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap" colspan="2">Stok</th>
                                                 <th class="nowrap" colspan="4">Penjualan</th>
-                                                <th class="nowrap" rowspan="2">Aksi</th>
                                             </tr>
                                             <tr>
                                                 <th>GBJ</th>
-                                                <th>GK</th>
+                                                <th>Penjualan</th>
                                                 <th>Sepakat</th>
                                                 <th>Nego</th>
                                                 <th>Batal</th>
@@ -79,7 +92,7 @@
 
                 },
                 {
-                    data: 'gk',
+                    data: 'penjualan',
 
                 },
                 {
@@ -97,9 +110,6 @@
                 {
                     data: 'po',
                 },
-                {
-                    data: 'aksi',
-                }
             ]
         });
     });

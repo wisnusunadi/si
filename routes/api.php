@@ -239,7 +239,7 @@ Route::prefix('/logistik')->group(function () {
     Route::get('dashboard/data/{value}', [App\Http\Controllers\LogistikController::class, 'dashboard_data']);
     Route::group(['prefix' => '/so'], function () {
         Route::post('create/{detail_pesanan_id}/{id_produk}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
-        Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
+        // Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('noseri/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so']);
         Route::get('noseri/detail/belum_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_belum_kirim']);
         Route::get('noseri/detail/selesai_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim']);
@@ -257,7 +257,7 @@ Route::prefix('/logistik')->group(function () {
     });
 
     Route::group(['prefix' => '/pengiriman'], function () {
-        Route::get('/data', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
+        // Route::get('/data', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
         Route::get('/data/{id}', [App\Http\Controllers\LogistikController::class, 'get_produk_detail_pengiriman']);
         Route::put('/update/{id}', [App\Http\Controllers\LogistikController::class, 'update_pengiriman']);
         Route::get('/status/update/{id}/{status}', [App\Http\Controllers\LogistikController::class, 'update_status_pengiriman']);
@@ -268,6 +268,11 @@ Route::prefix('/logistik')->group(function () {
         Route::group(['prefix' => '/riwayat'], function () {
             Route::get('/data', [App\Http\Controllers\LogistikController::class, 'get_data_riwayat_pengiriman']);
         });
+    });
+
+    Route::group(['prefix' => '/cek'], function () {
+        Route::get('/no_sj/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_sj']);
+        Route::get('/no_resi/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_resi']);
     });
 });
 
