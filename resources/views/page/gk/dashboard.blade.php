@@ -20,6 +20,9 @@
     #DataTables_Table_8_filter{
         display: none;
     }
+    #DataTables_Table_7_filter{
+        display: none;
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
@@ -209,11 +212,10 @@
                     </div>
                     <div class="card-body">
                         <div class="row mb-3">
-                            <div class="col-sm"><h5><b>Layout 1</b></h5></div>
                             <div class="col-sm text-right">Layout :</div>
                             <div class="col-sm">
                                 <select class="select2 form-control layout" id="layoutTable" multiple="multiple">
-                                <option selected>All Layout</option>
+                                <option value="" selected>All Layout</option>
                               </select>
                             </div>
                         </div>
@@ -605,7 +607,6 @@
             destroy: true,
             "ordering": true,
             "autoWidth": false,
-            searching: false,
             "lengthChange": false,
             processing: true,
             serverSide: true,
@@ -630,13 +631,15 @@
             }
         });
         
-        $(document).on('change','#layoutTable', function() {
+        $('#layoutTable').on('change', function() {
             var search = [];
 
             $.each($('#layoutTable option:selected'), function () { 
                  search.push($(this).val());
             });  
-            tableStok.columns(3).search(search.join('|'), true, false).draw();
+            search = search.join('|');
+            console.log(search);
+            tableStok.columns(3).search(search, true, false).draw();
         });
         
 

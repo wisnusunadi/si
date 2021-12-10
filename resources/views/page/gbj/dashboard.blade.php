@@ -410,14 +410,6 @@
                                         <div class="col-sm text-right">Layout :</div>
                                         <div class="col-sm">
                                             <select class="select2 form-control layout" id="layout" multiple="multiple">
-                                            <option selected>All Layout</option>
-                                            <option>Layout 1</option>
-                                            <option>Layout 2</option>
-                                            <option>Layout 3</option>
-                                            <option>Layout 4</option>
-                                            <option>Layout 5</option>
-                                            <option>Layout 6</option>
-                                            <option>Layout 7</option>
                                           </select>
                                         </div>
                                     </div>
@@ -916,7 +908,6 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            searching: false,
             "lengthChange": false,
             ajax: {
                 url: '/api/dashboard-gbj/byproduct',
@@ -932,10 +923,20 @@
             initComplete: function () {
           this.api().columns([3]).every( function () {
             var column = this;
-            console.log(column);
-            var select = $("#layout"); 
+            var select = $('<select class="form-control"><option value="">All Layout</option></select>')
+                .appendTo( $(column.footer()).empty() )
+                .on( 'change', function () {
+                    var val = $.fn.dataTable.util.escapeRegex(
+                        $(this).val()
+                    );
+ 
+                    column
+                        .search( val ? '^'+val+'$' : '', true, false )
+                        .draw();
+                } );
+ 
             column.data().unique().sort().each( function ( d, j ) {
-              select.append( '<option value="'+d+'">'+d+'</option>' )
+                select.append( '<option value="'+d+'">'+d+'</option>' )
             } );
           } );
           $("#layout").select2();
@@ -951,6 +952,7 @@
             });
             
             search = search.join('|');
+            console.log(search);
             table.column(3).search(search, true, false).draw();  
         });
         $('.table-produk-batas-receipt-one-day').DataTable().destroy();
