@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pesanan extends Model
 {
     protected $table = 'pesanan';
-    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket'];
+    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id'];
 
     public function Ekatalog()
     {
@@ -22,14 +22,17 @@ class Pesanan extends Model
     {
         return $this->hasOne(Spb::class);
     }
+
     public function DetailPesanan()
     {
         return $this->hasMany(DetailPesanan::class);
     }
+
     function TFProduksi()
     {
         return $this->hasOne(TFProduksi::class);
     }
+
     public function getJumlahPesanan()
     {
         $id = $this->id;
@@ -40,6 +43,15 @@ class Pesanan extends Model
                 $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
             }
         }
+        return $jumlah;
+    }
+
+    public function getJumlahSeri()
+    {
+        $id = $this->id;
+        $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->count();
         return $jumlah;
     }
 
@@ -59,5 +71,10 @@ class Pesanan extends Model
             $q->where('pesanan_id', $id);
         })->count();
         return $jumlah;
+    }
+
+    public function State()
+    {
+        return $this->belongsTo(State::class, 'log_id');
     }
 }

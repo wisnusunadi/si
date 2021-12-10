@@ -15,4 +15,9 @@ class State extends Model
     {
         return $this->hasMany(Logistik::class, 'status_id');
     }
+
+    public function Pesanan()
+    {
+        return $this->hasMany(Pesanan::class, 'log_id');
+    }
 }

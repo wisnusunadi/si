@@ -7,16 +7,16 @@
     <div class="row mb-2">
         <div class="col-sm-6">
             <h1 class="m-0  text-dark">Ekspedisi</h1>
-        </div><!-- /.col -->
+        </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 @if(Auth::user()->divisi_id == "15")
                 <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
-                <li class="breadcrumb-item active">Ekspedisi</li>
                 @elseif(Auth::user()->divisi_id == "2")
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
-                <li class="breadcrumb-item active">Ekspedisi</li>
                 @endif
+                <li class="breadcrumb-item active">Ekspedisi</li>
+
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -319,7 +319,6 @@
             if (k != 35) {
                 $('#provinsi_select').removeClass('hide');
                 $("input[name=jurusan][value='provinsi']").prop("checked", true);
-
             } else {
                 $("input[name=jurusan][value='indonesia']").prop("checked", true);
                 $('#provinsi_select').addClass('hide');
@@ -354,8 +353,8 @@
                     // $("#editform").attr("action", href);
                     checkvalue(jurusan_arr);
                     checkvalueprovinsi(prov_arr);
-
                     provinsi();
+
                     // $('.provinsi').val(['1']).trigger('change');
                     // $(".provinsi").select2().select2('1');
                     // provinsi_selected(prov_arr);
@@ -521,9 +520,8 @@
                         };
                     },
                 }
-            }).val([1, 2]).trigger('change');
-            // $('select[name="provinsi[]"]').val(['1', '2']);
-            // $('select[name="provinsi[]"]').trigger("change");
+            });
+            $('.provinsi').val('1').trigger("change");
         }
 
 

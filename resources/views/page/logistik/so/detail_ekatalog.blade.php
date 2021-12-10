@@ -557,6 +557,7 @@
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
+            console.log(action);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -565,8 +566,8 @@
                 url: action,
                 data: $('#form-logistik-create').serialize(),
                 success: function(response) {
-                    // console.log(response);
                     if (response['data'] == "success") {
+                        // console.log(response['data']);
                         swal.fire(
                             'Berhasil',
                             'Berhasil menambahkan Pengiriman',
