@@ -840,15 +840,14 @@
                 $(document).on('click', '.add_unit', function () {
                     $.ajax({
                         url: '/api/gk/gkunit',
-                        type: 'get',
+                        type: 'post',
                         dataType: 'json',
                         success: function (res) {
                             // ii++;
                             console.log(res);
                             $.each(res, function (key, value) {
                                 // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                                $(".produkk").append('<option value="' + value.id + '">' + value
-                                    .produk.nama + ' ' + value.nama + '</option');
+                                    $(".produkk").append('<option value="'+value.gbj_id+'">'+value.name+'</option');
                             });
                         }
                     });
