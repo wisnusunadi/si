@@ -17,17 +17,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::prefix('/ppic')->group(function () {
     Route::get('/part', [App\Http\Controllers\PpicController::class, 'getPart']);
-    Route::get('/schedule/{status}', [App\Http\Controllers\PpicController::class, 'getEvent']);
     Route::get('/product', [App\Http\Controllers\PpicController::class, 'getProduk']);
     Route::get('/version/{id}', [App\Http\Controllers\PpicController::class, 'getVersionDetailProduk']);
     Route::get('/max-quantity/{id}', [App\Http\Controllers\PpicController::class, 'getMaxQuantity']);
-    Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
     Route::post('/delete-event', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
     Route::post('/update-event', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
     Route::get('/bppb/{status}', [App\Http\Controllers\PpicController::class, 'getBppb']);
@@ -35,6 +37,18 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/bppb/{id}', [App\Http\Controllers\PpicController::class, 'findSeriesBppb']);
     Route::get('/reset', [App\Http\Controllers\PpicController::class, 'resetConfirmation']);
     Route::get('/part-schedule/{id}', [App\Http\Controllers\PpicController::class, 'getPartFromSchedule']);
+
+    // new
+    Route::get('/gbj/data', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
+    Route::get('/perakitan/data/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan']);
+    Route::get('/so/data', [App\Http\Controllers\PpicController::class, 'get_data_so']);
+    Route::get('/schedule/{status?}', [App\Http\Controllers\PpicController::class, 'getEvent']);
+    Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
+    Route::post('/update-event/{id}', [App\Http\Controllers\PpicController::class, 'updateEvent']);
+    Route::post('/update-many-event/{status}', [App\Http\Controllers\PpicController::class, 'updateManyEvent']);
+    Route::post('/delete-event/{id}', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
+    // new
+
     // Route::prefix('/ppic')->group(function () {
     //     Route::get('part', [App\Http\Controllers\PpicController::class, 'getPart']);
     Route::get('/get-gbj-query', [App\Http\Controllers\PpicController::class, 'getGbjQuery']);
@@ -206,7 +220,7 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
 });
 
-Route::prefix('/prd')->group(function() {
+Route::prefix('/prd')->group(function () {
     Route::post('/minus10/h', [ProduksiController::class, 'h_minus10']);
     Route::post('/minus5/h', [ProduksiController::class, 'h_minus5']);
     Route::post('/exp/h', [ProduksiController::class, 'h_exp']);
@@ -244,7 +258,7 @@ Route::prefix('/prd')->group(function() {
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
 
     // riwayat
-    Route::prefix('/history')->group(function() {
+    Route::prefix('/history')->group(function () {
         Route::post('/rakit/h', [ProduksiController::class, 'h_rakit']);
         Route::post('/unit/h', [ProduksiController::class, 'h_unit']);
         Route::get('/header/{id}', [ProduksiController::class, 'header_his_rakit']);
@@ -257,10 +271,9 @@ Route::prefix('/spr')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\SparepartController::class, 'update']);
     Route::delete('/delete/{id}', [App\Http\Controllers\SparepartController::class, 'delete']);
     Route::get('/data/{id}', [App\Http\Controllers\SparepartController::class, 'getId']);
-
 });
 
-Route::prefix('/gk')->group(function() {
+Route::prefix('/gk')->group(function () {
     Route::get('/his-spr/{id}', [SparepartController::class, 'history_spr']);
     Route::get('/unit', [SparepartController::class, 'get_unit']);
     Route::get('/his-unit/{id}', [SparepartController::class, 'history_unit']);

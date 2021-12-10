@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 Route::get('/', function () {
-    if (auth()->user()->divisi->id == 24) return redirect('/ppic/dashboard');
-    else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik/dashboard');
+    if (auth()->user()->divisi->id == 24) return redirect('/ppic');
+    else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik');
     else return view('home');
 })->middleware('auth');
 
@@ -30,22 +30,23 @@ Route::get('/home', function () {
 })->middleware('auth');
 
 Route::middleware('auth')->prefix('/ppic')->group(function () {
-    Route::view('/dashboard', 'spa.ppic.dashboard');
-    Route::get('/data/{status}', function ($status) {
-        return view('spa.ppic.data', ['status' => $status]);
-    });
-    Route::get('/jadwal/{status}', function ($status) {
-        return view('spa.ppic.jadwal', ['status' => $status]);
-    });
+    Route::view('/{any?}', 'spa.ppic.spa');
+    // Route::get('/data/{status}', function ($status) {
+    //     return view('spa.ppic.data', ['status' => $status]);
+    // });
+    // Route::get('/jadwal/{status}', function ($status) {
+    //     return view('spa.ppic.jadwal', ['status' => $status]);
+    // });
 
-    //test
-    Route::view('/bppb/{any}', 'spa.ppic.bppb');
-    Route::view('/test', 'spa.ppic');
+    // //test
+    // Route::view('/bppb/{any}', 'spa.ppic.bppb');
+    // Route::view('/test', 'spa.ppic');
 });
 
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
-    Route::view('/dashboard', 'spa.manager_teknik.dashboard');
-    Route::view('/persetujuan_jadwal', 'spa.manager_teknik.persetujuan_jadwal');
+    Route::view('/{any?}', 'spa.manager_teknik.spa');
+    // Route::view('/dashboard', 'spa.manager_teknik.dashboard');
+    // Route::view('/persetujuan_jadwal', 'spa.manager_teknik.persetujuan_jadwal');
 });
 
 Route::middleware('auth')->prefix('/gbj')->group(function () {
