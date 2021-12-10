@@ -824,7 +824,7 @@
                             console.log(res);
                             $.each(res, function (key, value) {
                                 // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                                $(".produk").append('<option value="' + value.id + '">' + value
+                                $(".produk").append('<option value="' + value.sparepart_id + '">' + value
                                     .nama + '</option');
                             });
                         }
