@@ -17,6 +17,9 @@
     body{
         font-size: 14px;
     }
+    #DataTables_Table_8_filter{
+        display: none;
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
@@ -69,58 +72,7 @@
                                         <th>Jumlah</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                         <div class="jml-produk-5-table hidden">
@@ -132,58 +84,7 @@
                                         <th>Jumlah</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 3</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 3</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 3</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 3</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 3</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 3</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 3</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 3</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 3</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 3</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                         <div class="jml-produk-4-table hidden">
@@ -195,58 +96,7 @@
                                         <th>Jumlah</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 4</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 5</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 4</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 5</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 4</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 5</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 4</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 5</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>Produk 4</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>Produk 5</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                             </div>
                     </div>
@@ -300,68 +150,7 @@
                                         <th>Jumlah</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>10-04-2021</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>23-09-2021</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>10-04-2021</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>23-09-2021</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>10-04-2021</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>23-09-2021</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>10-04-2021</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>23-09-2021</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>10-04-2021</td>
-                                        <td>Produk 1</td>
-                                        <td>10 Unit</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td>23-09-2021</td>
-                                        <td>Produk 2</td>
-                                        <td>20 Unit</td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                         {{-- Produk Masuk 6 Bulan --}}
@@ -375,68 +164,7 @@
                                     <th>Jumlah</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                         </div>
                         {{-- Produk Masuk 1 Tahun --}}
@@ -450,68 +178,7 @@
                                     <th>Jumlah</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 4</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 4</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 4</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 4</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 4</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 4</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 4</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 4</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 3</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                         </div>
                         {{-- Produk Masuk 3 Tahun --}}
@@ -525,68 +192,7 @@
                                     <th>Jumlah</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>10-04-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>10 Unit</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>23-09-2021</td>
-                                    <td>Produk 5</td>
-                                    <td>20 Unit</td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                     </div>
@@ -606,15 +212,8 @@
                             <div class="col-sm"><h5><b>Layout 1</b></h5></div>
                             <div class="col-sm text-right">Layout :</div>
                             <div class="col-sm">
-                                <select class="select2 form-control" multiple="multiple">
+                                <select class="select2 form-control layout" id="layoutTable" multiple="multiple">
                                 <option selected>All Layout</option>
-                                <option>Layout 1</option>
-                                <option>Layout 2</option>
-                                <option>Layout 3</option>
-                                <option>Layout 4</option>
-                                <option>Layout 5</option>
-                                <option>Layout 6</option>
-                                <option>Layout 7</option>
                               </select>
                             </div>
                         </div>
@@ -627,68 +226,7 @@
                                     <th>Layout</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 1</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 2</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 1</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 2</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 1</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 2</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 1</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 2</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 1</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Layout 2</td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -702,42 +240,6 @@
                     </div>
                     <div class="card-body">
                         <div class="col-xl-12 d-flex justify-content-end">
-                            <span class="float-right filter">
-                                <button class="btn btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-filter"></i> Filter Jenis
-                                </button>
-                                <div class="dropdown-menu">
-                                    <div class="px-3 py-3">
-                                        <div class="form-group">
-                                            <label for="jenis_penjualan">Jenis</label>
-                                        </div>
-                                        {{-- <div class="form-group">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
-                                                <label class="form-check-label" for="jenis1">
-                                                    All
-                                                </label>
-                                            </div>
-                                        </div> --}}
-                                        <div class="form-group">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="Sparepart" id="sparepart" />
-                                                <label class="form-check-label" for="jenis1">
-                                                    Sparepart
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="Unit" id="unit" />
-                                                <label class="form-check-label" for="jenis2">
-                                                    Unit
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </span> &nbsp;
                             <span class="float-right filter">
                                 <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-filter"></i> Filter Kerusakan
@@ -781,6 +283,34 @@
                                         </div>
                                     </div>
                                 </div>
+                            </span>&nbsp;
+                            <span class="float-right filter">
+                                <button class="btn btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-filter"></i> Filter Jenis
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div class="px-3 py-3">
+                                        <div class="form-group">
+                                            <label for="jenis_penjualan">Jenis</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="Sparepart" id="sparepart" />
+                                                <label class="form-check-label" for="jenis1">
+                                                    Sparepart
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="Unit" id="unit" />
+                                                <label class="form-check-label" for="jenis2">
+                                                    Unit
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </span>
                         </div>
                         <table class="table tableKerusakan">
@@ -795,98 +325,7 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {{-- <tr>
-                                    <td scope="row">1</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 1</td>
-                                    <td>Sparepart</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 2</td>
-                                    <td>Unit</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 1</td>
-                                    <td>Sparepart</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 2</td>
-                                    <td>Unit</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 1</td>
-                                    <td>Sparepart</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 2</td>
-                                    <td>Unit</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 1</td>
-                                    <td>Sparepart</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 2</td>
-                                    <td>Unit</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 1</td>
-                                    <td>Sparepart</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>65465456464</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td>Level 2</td>
-                                    <td>Unit</td>
-                                    <td><a href="{{ url('gk/gudang') }}" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i></a></td>
-                                </tr> --}}
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -962,6 +401,19 @@
             $('.produk-masuk-6-bulan-table').addClass('hidden');
             $('.produk-masuk-3-bulan-table').addClass('hidden');
         })
+        $.ajax({
+                url: '/api/gk/gklayout',
+                type: 'POST',
+                dataType: 'json',
+                success: function(res) {
+                    // ii++;
+                    console.log(res);
+                    $.each(res, function(key, value) {
+                        // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                        $(".layout").append('<option value="'+value.layout.ruang+'">'+value.layout.ruang+'</option');
+                    });
+                }
+            });
         $('.select2').select2({});
         $.ajax({
             url: "/api/gk/dashboard/stok/34/h",
@@ -1149,7 +601,7 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $('.tableStokLayout').DataTable({
+        var tableStok = $('.tableStokLayout').DataTable({
             destroy: true,
             "ordering": true,
             "autoWidth": false,
@@ -1177,6 +629,16 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+        
+        $(document).on('change','#layoutTable', function() {
+            var search = [];
+
+            $.each($('#layoutTable option:selected'), function () { 
+                 search.push($(this).val());
+            });  
+            tableStok.columns(3).search(search.join('|'), true, false).draw();
+        });
+        
 
         $('#sparepart').click(function () {
             if ($(this).prop('checked') == true) {

@@ -11,6 +11,8 @@ class TFProduksiDetail extends Model
 
     protected $table = 't_gbj_detail';
 
+    protected $fillable = ['status_id', 'state_id'];
+
     function header() {
         return $this->belongsTo(TFProduksi::class, 't_gbj_id');
     }

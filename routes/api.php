@@ -286,6 +286,10 @@ Route::prefix('/gk')->group(function () {
 
     // select
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
+
+    Route::post('/gkspr', [MasterController::class, 'select_gk_spr']);
+    Route::post('/gkunit', [MasterController::class, 'select_gk_unit']);
+    Route::post('/gklayout', [MasterController::class, 'select_gk_layout']);
     Route::get('/sel-tahun', [SparepartController::class, 'get_trx_tahun']);
 
     // store
@@ -296,6 +300,8 @@ Route::prefix('/gk')->group(function () {
     Route::post('/in-final', [SparepartController::class, 'terima_by_final']);
 
     Route::post('/ubahunit', [SparepartController::class, 'updateUnit']);
+    Route::post('/edit-in', [SparepartController::class, 'edit_draft_terima']);
+
 
     // history trx
     Route::prefix('/transaksi')->group(function () {

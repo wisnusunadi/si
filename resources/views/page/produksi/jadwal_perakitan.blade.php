@@ -321,8 +321,13 @@
                     Object.keys(dict).filter((a) => dict[a] > 1)
 
                     if (duplicates(count(arr)).length > 0) {
+                        $('.noseri').removeClass('is-invalid');
                         $('.noseri').filter(function () {
-                            return $(this).val() == duplicates(count(arr))[0];
+                            for (let index = 0; index < duplicates(count(arr)).length; index++) {
+                            if ($(this).val() == duplicates(count(arr))[index]) {
+                                return true;
+                            }
+                        }
                         }).addClass('is-invalid');
 
                         Swal.fire({
@@ -342,7 +347,7 @@
                         },
                         success: function(res) {
                             console.log(res);
-                            if (res.msg == 'success') {
+                            if (res.msg == 'Successfully') {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil',
@@ -367,7 +372,7 @@
             })
         })
 
-      
+
     function modalRakit() {
 
         $('.modalRakit').modal('show');

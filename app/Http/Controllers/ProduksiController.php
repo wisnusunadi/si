@@ -470,7 +470,7 @@ class ProduksiController extends Controller
             $q->whereNotNull('no_po');
         })
             ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 10')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -490,7 +490,7 @@ class ProduksiController extends Controller
             $q->whereNotNull('no_po');
         })
             ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 5')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -529,7 +529,7 @@ class ProduksiController extends Controller
             $q->whereNotNull('no_po');
         })
             ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 5')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -574,7 +574,7 @@ class ProduksiController extends Controller
             $q->whereNotNull('no_po');
         })
             ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 10')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) >= 0')
+            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -666,7 +666,7 @@ class ProduksiController extends Controller
     {
         $data = JadwalPerakitan::
                 whereRaw('DATEDIFF(tanggal_selesai, now()) <= 10')
-                ->whereRaw('DATEDIFF(tanggal_selesai, now()) >= 0')
+                ->whereRaw('DATEDIFF(tanggal_selesai, now()) > 0')
             ->get();
         return datatables()->of($data)
             ->addColumn('start', function ($d) {
@@ -718,7 +718,7 @@ class ProduksiController extends Controller
     function exp_rakit_h()
     {
         $data = JadwalPerakitan::whereRaw('DATEDIFF(tanggal_selesai, now()) <= 10')
-                ->whereRaw('DATEDIFF(tanggal_selesai, now()) >= 0')->get();
+                ->whereRaw('DATEDIFF(tanggal_selesai, now()) > 0')->get();
         return count($data);
     }
 
@@ -864,13 +864,6 @@ class ProduksiController extends Controller
     function getSelesaiRakit()
     {
         $data = JadwalPerakitan::whereIn('status_tf', [15,13,12])->where('status', 'pelaksanaan')->get();
-        // $data = JadwalRakitNoseri::whereHas('header', function($q) {
-        //     $q->whereIn('status_tf', [15,13,12])->where('status', 'pelaksanaan');
-        // })->groupBy('jadwal_id')->get();
-        // $data = JadwalRakitNoseri::with('header')
-        //         ->groupBy('jadwal_id')
-                // ->get();
-        // $data = JadwalRakitNoseri::select('jadwal_id', 'date_in', DB::raw('count(*) as jml'))->groupBy('jadwal_id')->get();
         return datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -949,24 +942,26 @@ class ProduksiController extends Controller
                     $seri->save();
                 }
             }
-            return response()->json([
-                'status' => 'success',
-            ]);
+            // return response()->json([
+            //     'status' => 'success',
+            // ]);
+
+            $d = JadwalPerakitan::find($request->jadwal_id);
+            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
+            if ($d->jumlah == $jj) {
+                $d->status_tf = 15;
+                $d->save();
+            } else {
+                $d->status_tf = 12;
+                $d->save();
+            }
+
+            return response()->json(['msg' => 'Successfully']);
         } else {
             return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
         }
 
-        $d = JadwalPerakitan::find($request->jadwal_id);
-        $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
-        if ($d->jumlah == $jj) {
-            $d->status_tf = 15;
-            $d->save();
-        } else {
-            $d->status_tf = 12;
-            $d->save();
-        }
 
-        return response()->json(['msg' => 'Successfully']);
     }
 
     function getHeaderSeri($id)
@@ -986,12 +981,6 @@ class ProduksiController extends Controller
 
     function historySeri($id, $dd)
     {
-        // $dd = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
-        //     ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-        //     ->groupBy('jadwal_rakit_noseri.jadwal_id')
-        //     ->groupBy('jadwal_rakit_noseri.date_in')
-        //     ->groupBy('jadwal_rakit_noseri.waktu_tf')
-        //     ->get()->pluck('waktu_tf');
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
         })->where('waktu_tf', $dd)->get();
@@ -1071,6 +1060,7 @@ class ProduksiController extends Controller
         if ($rakitseri->jumlah == $jj) {
             # code...
             $rakitseri->status_tf = 14;
+            $rakitseri->status = 'selesai';
             $rakitseri->save();
         } else {
             $rakitseri->status_tf = 13;
@@ -1087,8 +1077,11 @@ class ProduksiController extends Controller
         $i = 0;
         foreach($seri as $s) {
             $i++;
-            NoseriTGbj::find($s['id'])->update(['status_id' => 3]);
+            NoseriTGbj::find($s['id'])->update(['status_id' => 3, 'state_id' => 16]);
             NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
+
+            $hid = NoseriTGbj::find($s['id']);
+            TFProduksiDetail::find($hid->t_gbj_detail_id)->update(['status_id' => 3, 'state_id' => 16]);
 
             $gid = NoseriBarangJadi::where('id', $s['noseri_id'])->get();
             foreach($gid as $g) {
@@ -1112,8 +1105,6 @@ class ProduksiController extends Controller
 
     function h_unit()
     {
-        // $data = JadwalPerakitan::where('status_tf', 14)->get()->sum('jumlah');
-        // return $data;
         $data = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->get();
         return $data;
     }
@@ -1153,19 +1144,28 @@ class ProduksiController extends Controller
             ->groupBy('jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.date_in')
             ->groupBy('jadwal_rakit_noseri.waktu_tf')
+            ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
             ->get();
         return datatables()->of($d)
             ->addColumn('day_rakit', function ($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
             })
             ->addColumn('day_kirim', function ($d) {
-                return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
+                if (isset($d->waktu_tf)) {
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('time_rakit', function ($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i');
             })
             ->addColumn('time_kirim', function ($d) {
-                return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
+                if (isset($d->waktu_tf)) {
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('bppb', function ($d) {
                 return '-';

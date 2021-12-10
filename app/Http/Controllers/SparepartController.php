@@ -28,6 +28,7 @@ class SparepartController extends Controller
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_spr) as jml'))
                 ->whereNotNull('t_gk_detail.sparepart_id')
                 ->where('is_draft', 0)
+                ->where('is_keluar', 0)
                 ->groupBy('t_gk_detail.sparepart_id')
                 ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
                 ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
@@ -60,6 +61,7 @@ class SparepartController extends Controller
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
                 ->whereNotNull('t_gk_detail.gbj_id')
                 ->where('is_draft', 0)
+                ->where('is_keluar', 0)
                 ->groupBy('t_gk_detail.gbj_id')
                 ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
                 ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
@@ -92,6 +94,7 @@ class SparepartController extends Controller
         $header = GudangKarantinaDetail::select('*', DB::raw('sum(qty_spr) as jml'))
                 ->whereNotNull('t_gk_detail.sparepart_id')
                 ->where('is_draft', 0)
+                ->where('is_keluar', 0)
                 ->where('m_gs.id', $id)
                 ->groupBy('t_gk_detail.sparepart_id')
                 ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
@@ -106,6 +109,7 @@ class SparepartController extends Controller
         $header1 = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'), 'gdg_barang_jadi.nama as variasi', 'produk.nama as nama', 'm_satuan.nama as satuan')
                 ->whereNotNull('t_gk_detail.gbj_id')
                 ->where('is_draft', 0)
+                ->where('is_keluar', 0)
                 ->where('gdg_barang_jadi.id', $id)
                 ->groupBy('t_gk_detail.gbj_id')
                 ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
@@ -194,8 +198,8 @@ class SparepartController extends Controller
         $d = GudangKarantinaNoseri::find($id);
         return response()->json([
             'noser' => $d->noseri,
-            'in' => date('d-m-Y', strtotime($d->detail->header->date_in)),
-            'out' => date('d-m-Y', strtotime($d->detail->header->date_out))
+            'in' => $d->detail->header->date_in ? date('d-m-Y', strtotime($d->detail->header->date_in)) : '-',
+            'out' => $d->detail->header->date_out ? date('d-m-Y', strtotime($d->detail->header->date_out)) : '-'
         ]);
     }
 
@@ -359,7 +363,8 @@ class SparepartController extends Controller
 
     function edit_terima($id)
     {
-        return view('page.gk.terima.edit');
+        $did = GudangKarantina::find($id);
+        return view('page.gk.terima.edit', compact('did'));
     }
     // final
 
@@ -456,7 +461,7 @@ class SparepartController extends Controller
 
     function history_by_produk(Request $request)
     {
-        $data = GudangKarantinaDetail::with('sparepart.Spare', 'units.produk')->where('is_draft', 0)->get();
+        $data = GudangKarantinaDetail::with('sparepart.Spare', 'units.produk')->where('is_draft', 0)->groupBy('sparepart_id')->groupBy('gbj_id')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('jenis', function ($d) {
@@ -591,7 +596,7 @@ class SparepartController extends Controller
 
     function get_grafik()
     {
-        
+
     }
 
     // store
@@ -815,6 +820,8 @@ class SparepartController extends Controller
             $x = $request->noseri;
             $id = $sprr->id;
 
+            // validasi
+
             for ($i = 0; $i < count($request->noseri[$v]); $i++) {
                 $noseri = new GudangKarantinaNoseri();
                 $noseri->gk_detail_id = $id;
@@ -852,7 +859,43 @@ class SparepartController extends Controller
             }
         }
 
-        return response()->json(['msg' => 'Data Berhasil dirancang']);
+        return response()->json(['msg' => 'Data Berhasil Diterima']);
+    }
+
+    function edit_draft_terima(Request $request) {
+        $cekid = GudangKarantina::find($request->id);
+        // $arr_header = [
+        //     'masuk' => $cekid->date_in,
+        //     'dari'  => $cekid->from->nama,
+        //     'kode'  => $cekid->id,
+        // ];
+        $sprid = GudangKarantinaDetail::where('gk_id', $cekid->id)->whereNotNull('sparepart_id')->get();
+        $arr_spr = [];
+        foreach($sprid as $s) {
+            $arr_spr[] = [
+                'sparepart_id' => $s->sparepart_id,
+                'qty'           => $s->qty_spr,
+                'kode'          => $s->id,
+                'seri'          => 'x',
+            ];
+        }
+
+        $unitid = GudangKarantinaDetail::where('gk_id', $cekid->id)->whereNotNull('gbj_id')->get();
+        $arr_unit = [];
+        foreach($unitid as $u) {
+            $arr_unit[] = [
+                'gbj_id'        => $u->gbj_id,
+                'qty'           => $u->qty_unit,
+                'kode'          => $u->id,
+                'seri'          => 'x',
+            ];
+        }
+
+        return response()->json([
+            'header' => $cekid,
+            'unit' => $arr_unit,
+            'spr'   => $arr_spr,
+        ]);
     }
 
     // transaksi noseri
@@ -1446,10 +1489,10 @@ class SparepartController extends Controller
                 }
             })
             ->addColumn('layout', function ($d) {
-                if (empty($d->detail->gbj_id)) {
-                    return $d->detail->sparepart->Layout->ruang;
+                if (empty($d->layout_id)) {
+                    return $d->Layout->ruang;
                 } else {
-                    return $d->detail->units->layout->ruang;
+                    return $d->layout->ruang;
                 }
             })
             ->make(true);

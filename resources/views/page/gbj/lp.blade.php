@@ -650,7 +650,6 @@
         var tr = $(this).closest('tr');
         x = tr.find('#qty').val();
         y = tr.find('.productt').val();
-
         console.log(x);
         console.log(y);
         tambahanPerakitan(x);
@@ -823,17 +822,6 @@
         }
     });
 
-
-
-    // $(document).on('click', '#btnPlus', function() {
-    //     const prd = [];
-
-    //     var prdid = $('.productt').val();
-    //     var jml = $('.number-input').val();
-    //     // for()
-    //     tambahanPerakitan();
-    // })
-
     $(document).on('click', '#btnSave', function() {
         // console.log(id);
 
@@ -846,7 +834,14 @@
             },
             success: function(res) {
                 console.log(res);
-                // location.reload();
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
             }
         })
     })
@@ -889,7 +884,7 @@
         $('.scan-produk1').DataTable().destroy();
         $('.scan-produk1 tbody').empty();
         let a = 0;
-        for (let index = 0; index < x; index++) { 
+        for (let index = 0; index < x; index++) {
             a++;
            $('.scan-produk1 tbody').append('<tr id="row'+a+'"><td><input type="checkbox" class="cb-child"  value="'+y+'"></td><td><input type="text" name="noseri_id[]['+a+']" id="noseri_id['+a+']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id['+a+']" id="layout_id['+a+']" class="form-control layout"></select></td></tr>');
         }
@@ -900,7 +895,7 @@
             "lengthChange": false,
         });
 
-        
+
     $(document).on('click', '#btnSeri', function(e) {
         e.preventDefault();
 
@@ -922,10 +917,15 @@
 
             const duplicates = dict =>
             Object.keys(dict).filter((a) => dict[a] > 1)
-        
+
             if (duplicates(count(arr)).length > 0) {
+                $('.seri').removeClass('is-invalid');
                         $('.seri').filter(function () {
-                            return $(this).val() == duplicates(count(arr))[0];
+                    for (let index = 0; index < duplicates(count(arr)).length; index++) {
+                    if ($(this).val() == duplicates(count(arr))[index]) {
+                        return true;
+                    }
+                }
                         }).addClass('is-invalid');
 
                         Swal.fire({
@@ -961,8 +961,6 @@
                 layout[y] = lay;
                 // console.log(cb);
             }
-
-        
     });
     }
 
