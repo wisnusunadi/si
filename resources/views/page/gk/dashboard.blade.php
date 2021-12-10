@@ -1,5 +1,5 @@
 @extends('adminlte.page')
-
+ 
 @section('title', 'ERP')
 
 @section('content')
@@ -630,18 +630,18 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        
+
         $('#layoutTable').on('change', function() {
             var search = [];
 
-            $.each($('#layoutTable option:selected'), function () { 
+            $.each($('#layoutTable option:selected'), function () {
                  search.push($(this).val());
-            });  
+            });
             search = search.join('|');
             console.log(search);
             tableStok.columns(3).search(search, true, false).draw();
         });
-        
+
 
         $('#sparepart').click(function () {
             if ($(this).prop('checked') == true) {

@@ -1,5 +1,5 @@
 @extends('adminlte.page')
-
+ 
 @section('title', 'ERP')
 
 @section('content')
@@ -200,7 +200,7 @@
                         </div>
                     </div>
                 </div>
-            </section> 
+            </section>
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
             <section class="content">
@@ -548,7 +548,7 @@
         </div>
     </div>
 </div>
- 
+
 {{-- Modal Penerimaan --}}
 <div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -929,12 +929,12 @@
                     var val = $.fn.dataTable.util.escapeRegex(
                         $(this).val()
                     );
- 
+
                     column
                         .search( val ? '^'+val+'$' : '', true, false )
                         .draw();
                 } );
- 
+
             column.data().unique().sort().each( function ( d, j ) {
                 select.append( '<option value="'+d+'">'+d+'</option>' )
             } );
@@ -946,14 +946,14 @@
 
         $('#layout').on('change', function(){
     	var search = [];
-      
+
             $.each($('#layout option:selected'), function(){
                     search.push($(this).val());
             });
-            
+
             search = search.join('|');
             console.log(search);
-            table.column(3).search(search, true, false).draw();  
+            table.column(3).search(search, true, false).draw();
         });
         $('.table-produk-batas-receipt-one-day').DataTable().destroy();
         $('.table-produk-batas-receipt-two-day').DataTable().destroy();
@@ -1289,7 +1289,7 @@
             }
         }
         }
-        function modalPenerimaan() { 
+        function modalPenerimaan() {
             $('.detail-layout').modal('show');
         }
         function modalSO() {
