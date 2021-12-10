@@ -706,7 +706,7 @@
                 return $(this).val() == '';
             }).addClass('is-invalid');
         }
-        
+
         if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0) {
             $('.seri').removeClass('is-invalid');
             $('.seri').filter(function () {
@@ -720,7 +720,7 @@
                 return $(this).val() == '';
             }).addClass('is-invalid');
             if (duplicates(count(arrUnit)).length > 0) {
-               
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -816,7 +816,7 @@
                 var nmrspr = 1;
                 $(document).on('click', '.add_sparepart', function () {
                     $.ajax({
-                        url: '/api/gk/sel-spare',
+                        url: '/api/gk/gkspr',
                         type: 'POST',
                         dataType: 'json',
                         success: function (res) {
@@ -839,7 +839,7 @@
                 var nmrunt = 1;
                 $(document).on('click', '.add_unit', function () {
                     $.ajax({
-                        url: '/api/gbj/sel-gbj',
+                        url: '/api/gk/gkunit',
                         type: 'get',
                         dataType: 'json',
                         success: function (res) {
