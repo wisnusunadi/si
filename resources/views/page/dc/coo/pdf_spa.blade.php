@@ -131,8 +131,8 @@
                         <td class="nospace vera"><b>Kementrian Kesehatan Nomor</b></td>
                         <td class="nospace vera"><b>:</b></td>
                         <td class="wb vera"><b>KEMENKES RI AKD
-                                @if ($data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '')
-                                {{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd}}
+                                @if ($data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '')
+                                {{$data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd}}
                                 @endif
                             </b></td>
                     </tr>
@@ -158,8 +158,8 @@
                             <td class="nospace trheight">Nama Produk</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                @if ($data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '')
-                                {{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo}}
+                                @if ($data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '')
+                                {{$data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo}}
                                 @endif
                             </td>
                         </tr>
@@ -167,19 +167,19 @@
                             <td style="width:2%"></td>
                             <td class="nospace trheight">Tipe</td>
                             <td class="nospace align-center"> : </td>
-                            <td class="wb">{{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama}}</td>
+                            <td class="wb">{{$data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama}}</td>
                         </tr>
                         <tr class="vera bold">
                             <td style="width:2%"></td>
                             <td class="nospace trheight">Nomor Seri</td>
                             <td class="nospace align-center"> : </td>
-                            <td class="wb">{{$data->Noserilogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}</td>
+                            <td class="wb">{{$data->NoseriDetailLogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}</td>
                         </tr>
                         <tr class="vera bold">
                             <td style="width:2%"></td>
                             <td class="nospace trheight">Merk Produk</td>
                             <td class="nospace align-center"> : </td>
-                            <td class="wb">{{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->merk}}</td>
+                            <td class="wb">{{$data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->merk}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -200,7 +200,7 @@
                     </tr>
                     <tr>
                         <td class="wb">
-                            <b>{{$data->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}</b>
+                            <b>{{$data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}</b>
                         </td>
                     </tr>
                 </tbody>

@@ -117,7 +117,7 @@
                 <tr>
                     <td style="width:52.3%;"></td>
                     <td class="veramd align-center" style="width:47.7%;">
-                        <h3> {{$d->id}}/ SKA / {{App\Http\Controllers\DcController::bulan_romawi($d->Noserilogistik->DetailLogistik->logistik->tgl_kirim)}} / SPA / {{App\Http\Controllers\DcController::tahun($d->Noserilogistik->DetailLogistik->logistik->tgl_kirim)}} </h3>
+                        <h3> {{$d->id}}/ SKA / {{App\Http\Controllers\DcController::bulan_romawi($d->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim)}} / SPA / {{App\Http\Controllers\DcController::tahun($d->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim)}} </h3>
                     </td>
                 </tr>
             </tbody>
@@ -149,8 +149,8 @@
                         <td class="nospace vera"><b>Kementrian Kesehatan Nomor</b></td>
                         <td class="nospace vera"><b>:</b></td>
                         <td class="wb vera"><b>KEMENKES RI AKD
-                                @if ($d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '')
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd}}
+                                @if ($d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '')
+                                {{$d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd}}
                                 @endif
                             </b></td>
                     </tr>
@@ -176,8 +176,8 @@
                             <td class="nospace trheight">Nama Produk</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                @if ($d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '')
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo}}
+                                @if ($d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '')
+                                {{$d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo}}
                                 @endif
                             </td>
                         </tr>
@@ -186,7 +186,7 @@
                             <td class="nospace trheight">Tipe</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama}}
+                                {{$d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama}}
                             </td>
                         </tr>
                         <tr class="vera bold">
@@ -194,7 +194,7 @@
                             <td class="nospace trheight">Nomor Seri</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                {{$d->Noserilogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
+                                {{$d->NoseriDetailLogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
                             </td>
                         </tr>
                         <tr class="vera bold">
@@ -202,7 +202,7 @@
                             <td class="nospace trheight">Merk Produk</td>
                             <td class="nospace align-center"> : </td>
                             <td class="wb">
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->merk}}
+                                {{$d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->merk}}
                             </td>
                         </tr>
                     </tbody>
@@ -225,7 +225,7 @@
                     <tr>
                         <td class="wb">
                             <b>
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}
+                                {{$d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}
                             </b>
                         </td>
                     </tr>
@@ -247,13 +247,13 @@
                     </tr>
                     <tr>
                         <td class="wb"><b>
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket}}
+                                {{$d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket}}
                             </b></td>
                     </tr>
                     <tr style="min-height: 20px; max-height: 65px;">
                         <td class="wb">
                             <b class="font-size:auto;">
-                                {{$d->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->deskripsi}}
+                                {{$d->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->deskripsi}}
                             </b>
                         </td>
                     </tr>
@@ -279,7 +279,7 @@
                 <tbody>
                     <tr>
                         <td width="50%"></td>
-                        <td class="align-center">Surabaya, {{App\Http\Controllers\DcController::tgl_footer($d->Noserilogistik->DetailLogistik->logistik->tgl_kirim)}}
+                        <td class="align-center">Surabaya, {{App\Http\Controllers\DcController::tgl_footer($d->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim)}}
                         </td>
                     </tr>
                     <tr>

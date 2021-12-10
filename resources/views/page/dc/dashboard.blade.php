@@ -132,7 +132,7 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-danger">
                                             <div class="inner">
-                                                <h3>3</h3>
+                                                <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Kontrak</p>
                                             </div>
                                             <div class="icon">
@@ -432,7 +432,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/ekatalog/pengiriman/data/sotanpacootable',
+                    'url': '/api/dc/dashboard/data/sotanpacootable',
                     'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -448,19 +448,20 @@
                         searchable: false
                     },
                     {
-                        data: 'DT_RowIndex',
+                        data: 'so',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
                     },
                     {
-                        data: 'DT_RowIndex',
+                        data: 'batas_kontrak',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
                     },
+
                     {
-                        data: 'DT_RowIndex',
+                        data: 'button',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
@@ -479,7 +480,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/ekatalog/pengiriman/data/lewatbataskontraktable',
+                    'url': '/api/dc/dashboard/data/lewatbataskontraktable',
                     'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -495,19 +496,25 @@
                         searchable: false
                     },
                     {
-                        data: 'DT_RowIndex',
+                        data: 'so',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
                     },
                     {
-                        data: 'DT_RowIndex',
+                        data: 'batas_kontrak',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
                     },
                     {
-                        data: 'DT_RowIndex',
+                        data: 'status',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
