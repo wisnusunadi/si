@@ -1337,27 +1337,27 @@ return [
                     'icon' => 'far fa-circle',
                     'auth' => [2]
                 ],
-                [
-                    'text' => 'Lacak',
-                    'icon' => 'far fa-circle',
-                    'url' => '/penjualan/lacak/show',
-                    'auth' => [2],
-                ],
+                // [
+                //     'text' => 'Lacak',
+                //     'icon' => 'far fa-circle',
+                //     'url' => '/penjualan/lacak/show',
+                //     'auth' => [2],
+                // ],
             ],
         ],
-        [
-            'text'    => 'PPIC',
-            'icon'    => 'fas fa-database',
-            'auth' => [2],
-            'submenu' => [
-                [
-                    'text' => 'Master Stok',
-                    'icon' => 'far fa-circle',
-                    'url' => '/ppic/master_stok/show',
-                    'auth' => [2],
-                ],
-            ],
-        ],
+        // [
+        //     'text'    => 'PPIC',
+        //     'icon'    => 'fas fa-database',
+        //     'auth' => [2],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'Master Stok',
+        //             'icon' => 'far fa-circle',
+        //             'url' => '/ppic/master_stok/show',
+        //             'auth' => [2],
+        //         ],
+        //     ],
+        // ],
         [
             'text' => 'PPIC',
             'icon' => 'fas fa-truck-loading',
