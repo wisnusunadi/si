@@ -16,8 +16,8 @@ class NoseriTGbj extends Model
     function detail() {
         return $this->belongsTo(TFProduksiDetail::class, 't_gbj_detail_id');
     }
-
-    function layout() {
+    function layout()
+    {
         return $this->belongsTo(Layout::class, 'layout_id');
     }
 
@@ -29,4 +29,12 @@ class NoseriTGbj extends Model
         'noseri_id' => 'array',
         't_gbj_detail_id' => 'array',
    ];
+    function NoseriBarangJadi()
+    {
+        return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
+    }
+    function NoseriDetailPesanan()
+    {
+        return $this->hasOne(NoseriDetailPesanan::class);
+    }
 }

@@ -267,4 +267,206 @@ class PpicController extends Controller
         broadcast(new TestEvent($request->message))->toOthers();
         return "success";
     }
+
+    public function get_master_stok_data()
+    {
+        // $data = GudangBarangJadi::has('DetailPesananProduk')->orWhereHas('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) {
+        //     $q->whereIn('status', ['sepakat', 'nego'])->whereIn('log', ['penjualan', 'po']);
+        // })->orWhereHas('DetailPesananProduk.DetailPesanan.Pesanan.Spa', function ($q) {
+        //     $q->whereIn('log', ['penjualan', 'po']);
+        // })->orWhereHas('DetailPesananProduk.DetailPesanan.Pesanan.Spb', function ($q) {
+        //     $q->whereIn('log', ['penjualan', 'po']);
+        // })->count();
+
+        $Ekatalog = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) {
+            $q->whereIn('status', ['sepakat', 'nego', 'batal'])->whereIn('log', ['penjualan', 'po']);
+        })->get();
+        $Spa = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Spa', function ($q) {
+            $q->whereIn('log', ['penjualan', 'po']);
+        })->get();
+        $Spb = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Spb', function ($q) {
+            $q->whereIn('log', ['penjualan', 'po']);
+        })->get();
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                return $data->Produk->nama . " " . $data->nama;
+            })
+            ->addColumn('gbj', function ($data) {
+                return $data->stok;
+            })
+            ->addColumn('penjualan', function ($data) {
+                $jumlah_gbj = $data->stok;
+                $jumlah_stok_permintaan = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id);
+                $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
+                if ($jumlah >= 0) {
+                    return "<div>" . $jumlah . "</div>";
+                } else {
+                    return '<div style="color:red;">' . $jumlah . '</div>';
+                }
+            })
+            ->addColumn('sepakat', function ($data) {
+                // $id = $data->id;
+                // $result = Ekatalog::whereHas('Pesanan.DetailPesanan.DetailPesananProduk', function ($q) use ($id) {
+                //     $q->where('gudang_barang_jadi_id', $id);
+                // })->where('status', '=', 'sepakat')->whereIn('log', ['penjualan', 'po'])->get();
+
+                // $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                //     $q->where('gudang_barang_jadi_id', $id);
+                // })->whereHas('Pesanan.Ekatalog', function ($q) {
+                //     $q->where('status', '=', 'sepakat')->whereIn('log', ['penjualan', 'po']);
+                // })->get();
+                // $jumlah = 0;
+                // foreach ($res as $a) {
+                //     $a->jumlah;
+                //     foreach ($a->PenjualanProduk->Produk as $b) {
+                //         if ($b->id == $data->produk->id) {
+                //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                //         }
+                //     }
+                // }
+                // return $result;
+                // $gs = array();
+                // // $hs = array();
+                // $jumlah = 0;
+                // foreach ($result as $f) {
+                //     foreach ($f->Pesanan->DetailPesanan as $g) {
+                //         $gs[] = $g;
+                //         $jumlahpivot = 0;
+                //         $jumlahbarang = 0;
+                // $hs[] = $g->PenjualanProduk->Produk->pivot->id;
+
+                // foreach ($g->PenjualanProduk->Produk as $h) {
+                //     if ($h->id == $data->produk->id) {
+                //         $jumlahpivot = $h->pivot->jumlah;
+                //         $jumlahbarang = $g->jumlah;
+
+                //         $jumlah = $jumlah + ($jumlahpivot * $jumlahbarang);
+                // $hs[] = " jumlah pivot " . $h->pivot->jumlah . ' jumlah barang ' . $g->jumlah;
+                // }
+
+                // foreach ($h as $i) {
+                // }
+                // if ($h->produk_id == $data->produk->id) {
+                //     $hs[] = $h->produk_id;
+                // }
+                // $hs[]['id'] = $h->produk_id;
+                // $hs[]['jumlah'] = $h->pivot->jumlah;
+                // $hs[]['id_produk'] = $data->produk_id;
+                // return $h->pivot->jumlah . " produk id mtom " . $h->id . " produk data " . $data->produk->id;
+                // }
+
+                // foreach ($g->DetailPesananProduk as $h) {
+                //     if ($h->gudang_barang_jadi_id == $id) {
+                //         $hs[] = 
+                //     }
+                // }
+                // }
+                // }
+                // return $hs;
+                // return $jumlah;
+                return $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat');
+                // foreach ($result as $f) {
+                //     foreach ($f->Pesanan->DetailPesanan as $g) {
+                //         return $g->id;
+                //         foreach ($g->PenjualanProduk->Produk as $h) {
+                //             return $h->pivot->jumlah . " produk id mtom " . $h->id . " produk data " . $data->produk->id;
+                //         }
+                //         // return $g->PenjualanProduk->Produk->first()->pivot->jumlah . " produk id mtom " . $g->PenjualanProduk->Produk->first()->id . " produk data " . $data->produk->id;
+                //         // if ($data->produk->id) {
+                //         //     $jumlah = $g->PenjualanProduk->Produk->first()->pivot->jumlah;
+                //         //     return $jumlah;
+                //         // }
+                //     }
+                // }
+            })
+            ->addColumn('nego', function ($data) {
+                // $id = $data->id;
+                // $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                //     $q->where('gudang_barang_jadi_id', $id);
+                // })->whereHas('Pesanan.Ekatalog', function ($q) {
+                //     $q->where('status', '=', 'negosiasi')->whereIn('log', ['penjualan', 'po']);
+                // })->get();
+                // $jumlah = 0;
+                // foreach ($res as $a) {
+                //     $a->jumlah;
+                //     foreach ($a->PenjualanProduk->Produk as $b) {
+                //         if ($b->id == $data->produk->id) {
+                //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                //         }
+                //     }
+                // }
+                // // return $hs;
+                return $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi');
+            })
+            ->addColumn('batal', function ($data) {
+                // $id = $data->id;
+                // $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                //     $q->where('gudang_barang_jadi_id', $id);
+                // })->whereHas('Pesanan.Ekatalog', function ($q) {
+                //     $q->where('status', '=', 'batal')->whereIn('log', ['penjualan', 'po']);
+                // })->get();
+                // $jumlah = 0;
+                // foreach ($res as $a) {
+                //     $a->jumlah;
+                //     foreach ($a->PenjualanProduk->Produk as $b) {
+                //         if ($b->id == $data->produk->id) {
+                //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                //         }
+                //     }
+                // }
+                // return $hs;
+
+                // return $jumlah;
+                return $this->get_count_ekatalog($data->id, $data->produk->id, 'batal');
+            })
+            ->addColumn('po', function ($data) {
+                return $this->get_count_spa_spb_po($data->id);
+            })
+            ->addColumn('aksi', function ($data) {
+                return '<i class="fas fa-search"></i>';
+            })
+            ->rawColumns(['gbj', 'aksi', 'penjualan'])
+            ->make(true);
+    }
+
+    public function get_count_ekatalog($id, $produk_id, $status)
+    {
+        $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('gudang_barang_jadi_id', $id);
+        })->whereHas('Pesanan.Ekatalog', function ($q) use ($status) {
+            $q->where('status', '=', $status)->whereIn('log', ['penjualan', 'po']);
+        })->get();
+        $jumlah = 0;
+        foreach ($res as $a) {
+            $a->jumlah;
+            foreach ($a->PenjualanProduk->Produk as $b) {
+                if ($b->id == $produk_id) {
+                    $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                }
+            }
+        }
+        return $jumlah;
+    }
+
+    public function get_count_spa_spb_po($id)
+    {
+        $res1 = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('gudang_barang_jadi_id', $id);
+        })->whereHas('Pesanan.Spa', function ($q) {
+            $q->whereIn('log', ['penjualan', 'po']);
+        })->get();
+
+        $res2 = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('gudang_barang_jadi_id', $id);
+        })->whereHas('Pesanan.Spb', function ($q) {
+            $q->whereIn('log', ['penjualan', 'po']);
+        })->get();
+
+        $jumlah = $res1->merge($res2)->count();
+        return $jumlah;
+    }
 }

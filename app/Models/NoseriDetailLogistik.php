@@ -20,6 +20,6 @@ class NoseriDetailLogistik extends Model
     }
     public function NoseriCoo()
     {
-        return $this->hasOne(NoseriCoo::class);
+        return $this->hasOne(NoseriCoo::class, 'noseri_logistik_id');
     }
 }

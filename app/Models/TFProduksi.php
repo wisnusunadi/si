@@ -29,6 +29,7 @@ class TFProduksi extends Model
     {
         return $this->belongsTo(Divisi::class, 'ke');
     }
+
     function darii()
     {
         return $this->belongsTo(Divisi::class, 'dari');

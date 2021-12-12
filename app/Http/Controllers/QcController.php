@@ -77,7 +77,6 @@ class QcController extends Controller
             ->addColumn('checkbox', function ($data) {
                 return '  <div class="form-check">
                 <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
-
                 </div>';
             })
             ->addColumn('seri', function ($data) {
@@ -248,10 +247,7 @@ class QcController extends Controller
                 $jumlah = 0;
                 foreach ($data->detailpesanan as $d) {
                     $x[] = $d->id;
-                    $z[] = $d->jumlah;
-                    foreach ($d->penjualanproduk->produk as $l) {
-                        $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
-                    }
+                    $jumlah++;
                 }
                 $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
 
