@@ -9,6 +9,8 @@ class TFProduksi extends Model
 {
     use HasFactory;
 
+    //protected $table = 't_tfbj';
+
     protected $table = 't_gbj';
 
     protected $fillable = ['ke', 'deskripsi'];

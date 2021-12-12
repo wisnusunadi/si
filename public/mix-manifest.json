@@ -1,4 +1,6 @@
 {
+    "/native/js/plugin.js": "/native/js/plugin.js",
     "/native/js/ppic_spa.js": "/native/js/ppic_spa.js",
-    "/native/js/manager_spa.js": "/native/js/manager_spa.js"
+    "/native/js/manager_spa.js": "/native/js/manager_spa.js",
+    "/native/css/plugin.css": "/native/css/plugin.css"
 }

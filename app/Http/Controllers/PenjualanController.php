@@ -6,6 +6,7 @@ use App\Exports\LaporanPenjualan;
 use App\Models\Customer;
 use App\Models\DetailEkatalog;
 use App\Models\DetailPesanan;
+use App\Models\DetailPesananProduk;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
 use App\Models\Ekatalog;
@@ -13,6 +14,7 @@ use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
+use App\Models\TFProduksi;
 use Carbon\Doctrine\CarbonType;
 use Hamcrest\Core\IsNot;
 use Illuminate\Http\Request;
@@ -21,6 +23,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Validator;
 use League\Fractal\Resource\Item;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 use function PHPUnit\Framework\assertIsNotArray;
 
@@ -29,11 +32,9 @@ class PenjualanController extends Controller
     //Get Data Table
     public function penjualan_data()
     {
-        // $data  = Ekatalog::all();
-
-        $Ekatalog = collect(Ekatalog::with('Pesanan')->get());
-        $Spa = collect(Spa::with('Pesanan')->get());
-        $Spb = collect(Spb::with('Pesanan')->get());
+        $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+        $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+        $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         return datatables()->of($data)
@@ -49,7 +50,7 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
+                return $data->Customer['nama'];
             })
             ->addColumn('no_paket', function ($data) {
                 if (isset($data->no_paket)) {
@@ -118,20 +119,22 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if ($data->log == "penjualan") {
-                    $datas .= '<span class="red-text badge">';
-                } else if ($data->log == "po") {
-                    $datas .= '<span class="purple-text badge">';
-                } else if ($data->log == "gudang") {
-                    $datas .= '<span class="orange-text badge">';
-                } else if ($data->log == "qc") {
-                    $datas .= '<span class="yellow-text badge">';
-                } else if ($data->log == "logistik") {
-                    $datas .= '<span class="blue-text badge">';
-                } else if ($data->log == "selesai") {
-                    $datas .= '<span class="green-text badge">';
+                if (!empty($data->log)) {
+                    if ($data->log == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->log == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->log == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->log == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->log == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->log == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->log) . '</span>';
                 }
-                $datas .= ucfirst($data->log) . '</span>';
                 return $datas;
             })
             ->addColumn('button', function ($data) {
@@ -234,6 +237,7 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function ($data) {
+                    $status = "";
                     if ($data->status == "draft") {
                         $status = '<span class="badge blue-text">Draft</span>';
                     } else if ($data->status == "sepakat") {
@@ -499,13 +503,16 @@ class PenjualanController extends Controller
 
     public function get_data_ekatalog($value)
     {
+        $divisi_id = Auth::user()->divisi->id;
         $x = explode(',', $value);
+        $data = "";
 
         if ($value == 0 || $value == 'kosong') {
-            $data  = Ekatalog::with('pesanan')->get();
+            $data  = Ekatalog::with('pesanan', 'customer')->orderBy('id', 'DESC')->get();
         } else {
-            $data  = Ekatalog::with('pesanan')->whereIN('status', $x);
+            $data  = Ekatalog::with('pesanan', 'customer')->orderBy('id', 'DESC')->whereIN('status', $x);
         }
+
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -517,6 +524,7 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
+                $status = "";
                 if ($data->status == "draft") {
                     $status = '<span class="blue-text badge">Draft</span>';
                 } else if ($data->status == "sepakat") {
@@ -526,7 +534,6 @@ class PenjualanController extends Controller
                 } else if ($data->status == "batal") {
                     $status =  '<span class="red-text badge">Batal</span>';
                 }
-
                 return $status;
             })
             ->addColumn('nopo', function ($data) {
@@ -537,7 +544,9 @@ class PenjualanController extends Controller
                 }
             })
             ->editColumn('tgl_buat', function ($data) {
-                return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
+                if (!empty($data->tgl_buat)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
+                }
             })->editColumn('tgl_kontrak', function ($data) {
                 if ($data->status == "batal" || $data->status == "draft") {
                     return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
@@ -575,55 +584,60 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
-            })
-            ->addColumn('button', function ($data) {
-                if ($data->status == 'sepakat' && $data->pesanan == '') {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
-                      Details
-                    </button>
-                </a>
-                <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
-                    <button class="dropdown-item" type="button" >
-                      <i class="fas fa-pencil-alt"></i>
-                      Edit
-                    </button>
-                </a>
-                <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
-                <button class="dropdown-item" type="button" >
-                <i class="fas fa-plus"></i>
-                  Tambah PO
-                </button>
-            </a>
-                </div>';
-                } else {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
-                      Details
-                    </button>
-                </a>
-                <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">                      
-                    <button class="dropdown-item" type="button" >
-                      <i class="fas fa-pencil-alt"></i>
-                      Edit
-                    </button>
-                </a>
-                </div>';
+                if (isset($data->Customer)) {
+                    return $data->Customer['nama'];
                 }
+            })
+            ->addColumn('button', function ($data) use ($divisi_id) {
+
+                $return = "";
+                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                <button class="dropdown-item" type="button">
+                      <i class="fas fa-search"></i>
+                      Details
+                    </button>
+                </a>';
+                if ($divisi_id == "26") {
+                    if ($data->log == "penjualan" || $data->log == "po") {
+                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
+                        </button>
+                    </a>';
+
+                        if ($data->status == 'sepakat') {
+                            if ($data->Pesanan == '') {
+                                $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="fas fa-plus"></i>
+                            Tambah PO
+                            </button>
+                        </a>';
+                            } else {
+                                if ($data->Pesanan->so == '') {
+                                    $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="fas fa-plus"></i>
+                                    Tambah PO
+                                    </button>
+                                </a>';
+                                }
+                            }
+                        }
+                    }
+                }
+                $return .= '</div>';
+                return $return;
             })
             ->rawColumns(['button', 'status', 'tgl_kontrak'])
             ->make(true);
     }
     public function get_data_spa()
     {
-        $data  = Spa::with('pesanan')->get();
+        $data  = Spa::with('pesanan')->orderBy('id', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -660,7 +674,7 @@ class PenjualanController extends Controller
             })
             ->addColumn('tglpo', function ($data) {
                 if ($data->Pesanan) {
-                    if ($data->Pesanan->tgl_po == "0000-00-00") {
+                    if ($data->Pesanan->tgl_po == "0000-00-00" || empty($data->Pesanan->tgl_po)) {
                         return '-';
                     } else {
                         return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
@@ -673,52 +687,51 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                if ($data->Pesanan) {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
-                    <button class="dropdown-item" type="button">
-                          <i class="fas fa-search"></i>
-                          Details
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
-                        <button class="dropdown-item" type="button" >
-                          <i class="fas fa-pencil-alt"></i>
-                          Edit
-                        </button>
-                    </a>
-                    </div>';
-                } else {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
-                    <button class="dropdown-item" type="button">
-                          <i class="fas fa-search"></i>
-                          Details
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">                      
-                        <button class="dropdown-item" type="button" >
-                          <i class="fas fa-pencil-alt"></i>
-                          Edit
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
-                    <button class="dropdown-item" type="button" >
-                    <i class="fas fa-plus"></i>
-                      Tambah PO
+                $divisi_id = Auth::user()->divisi->id;
+                $return = "";
+                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
+                <button class="dropdown-item" type="button">
+                      <i class="fas fa-search"></i>
+                      Details
                     </button>
-                </a>
-                    </div>';
+                </a>';
+                if ($divisi_id == "26") {
+                    if (!empty($data->Pesanan)) {
+                        if ($data->log == "penjualan" || $data->log == "po") {
+                            $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                          <i class="fas fa-pencil-alt"></i>
+                          Edit
+                        </button>
+                    </a>';
+                        }
+                    } else {
+
+                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                          <i class="fas fa-pencil-alt"></i>
+                          Edit
+                        </button>
+                    </a>
+                    <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-plus"></i>
+                        Tambah PO
+                        </button>
+                    </a>';
+                    }
                 }
+                $return .= '</div>';
+                return $return;
             })
             ->rawColumns(['button', 'status'])
             ->make(true);
     }
     public function get_data_spb()
     {
-        $data  = Spb::with('pesanan')->get();
+        $data  = Spb::with('pesanan')->orderBy('id', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -768,45 +781,44 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                if ($data->Pesanan) {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
-                    <button class="dropdown-item" type="button">
-                          <i class="fas fa-search"></i>
-                          Details
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
-                        <button class="dropdown-item" type="button" >
-                          <i class="fas fa-pencil-alt"></i>
-                          Edit
-                        </button>
-                    </a>
-                    </div>';
-                } else {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
-                    <button class="dropdown-item" type="button">
-                          <i class="fas fa-search"></i>
-                          Details
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">                      
-                        <button class="dropdown-item" type="button" >
-                          <i class="fas fa-pencil-alt"></i>
-                          Edit
-                        </button>
-                    </a>
-                    <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">                      
-                    <button class="dropdown-item" type="button" >
-                    <i class="fas fa-plus"></i>
-                      Tambah PO
+                $divisi_id = Auth::user()->divisi->id;
+                $return = "";
+                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
+                <button class="dropdown-item" type="button">
+                      <i class="fas fa-search"></i>
+                      Details
                     </button>
-                </a>
-                    </div>';
+                </a>';
+                if ($divisi_id == "26") {
+                    if (!empty($data->Pesanan)) {
+                        if ($data->log == "penjualan" || $data->log == "po") {
+                            $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                          <i class="fas fa-pencil-alt"></i>
+                          Edit
+                        </button>
+                    </a>';
+                        }
+                    } else {
+
+                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                          <i class="fas fa-pencil-alt"></i>
+                          Edit
+                        </button>
+                    </a>
+                    <a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-plus"></i>
+                        Tambah PO
+                        </button>
+                    </a>';
+                    }
                 }
+                $return .= '</div>';
+                return $return;
             })
             ->rawColumns(['button', 'status'])
             ->make(true);
@@ -846,12 +858,20 @@ class PenjualanController extends Controller
             // $y = Carbon::now()->format('Y');
             // $m = Carbon::now()->format('m');
             // $filter = new IntToRoman();
+            $x = "";
+            $pesanan = Pesanan::create([
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+                'log_id' => '7'
+            ]);
+            $x = $pesanan->id;
 
             $Ekatalog = Ekatalog::create([
                 'customer_id' => $request->customer_id,
+                'provinsi_id' => $request->provinsi,
+                'pesanan_id' => $x,
                 'no_paket' => 'AK1-' . $request->no_paket,
                 'deskripsi' => $request->deskripsi,
-                'provinsi_id' => $request->provinsi,
                 'instansi' => $request->instansi,
                 'alamat' => $request->alamatinstansi,
                 'satuan' => $request->satuan_kerja,
@@ -866,16 +886,25 @@ class PenjualanController extends Controller
                 if ($request->status != 'draft') {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $dekat = DetailPesanan::create([
+                            'pesanan_id' => $x,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
-                            $dekat->GudangBarangJadi()->attach($request->variasi[$i][$j], ['jumlah' => 1]);
-                        }
+
                         if (!$dekat) {
                             $bool = false;
+                        } else {
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                $dekatp = DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $dekat->id,
+                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                ]);
+                                if (!$dekatp) {
+                                    $bool = false;
+                                }
+                            }
                         }
                     }
                 } else {
@@ -889,23 +918,22 @@ class PenjualanController extends Controller
             } else if ($bool == false) {
                 return redirect()->back()->with('error', 'Gagal menambahkan Ekatalog');
             }
-        } elseif ($request->jenis_penjualan == 'spa') {
-            if (!empty($request->input('no_po'))) {
-                $pesanan = Pesanan::create([
-                    'so' => $this->createSO('SPA'),
-                    'no_po' => $request->no_po,
-                    'tgl_po' => $request->tanggal_po,
-                    'no_do' => $request->no_do,
-                    'tgl_do' => $request->tanggal_do,
-                    'ket' =>  $request->keterangan,
-                ]);
-                $x = $pesanan->id;
-            }
+        } else if ($request->jenis_penjualan == 'spa') {
+            $pesanan = Pesanan::create([
+                'so' => $this->createSO('SPA'),
+                'no_po' => $request->no_po,
+                'tgl_po' => $request->tanggal_po,
+                'no_do' => $request->no_do,
+                'tgl_do' => $request->tanggal_do,
+                'ket' =>  $request->keterangan,
+                'log_id' => '9'
+            ]);
+            $x = $pesanan->id;
             $Spa = Spa::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
                 'ket' => $request->keterangan,
-                'log' => 'penjualan'
+                'log' => 'po'
             ]);
             $bool = true;
             if ($Spa) {
@@ -919,6 +947,16 @@ class PenjualanController extends Controller
                     ]);
                     if (!$dspa) {
                         $bool = false;
+                    } else {
+                        for ($j = 0; $j < count(array($request->variasi[$i])); $j++) {
+                            $dspap = DetailPesananProduk::create([
+                                'detail_pesanan_id' => $dspa->id,
+                                'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                            ]);
+                            if (!$dspap) {
+                                $bool = false;
+                            }
+                        }
                     }
                 }
             } else {
@@ -931,24 +969,22 @@ class PenjualanController extends Controller
                 return redirect()->back()->with('error', 'Gagal menambahkan SPA');
             }
         } else {
-
-            if (!empty($request->input('no_po'))) {
-                $pesanan = Pesanan::create([
-                    'so' => $this->createSO('SPB'),
-                    'no_po' => $request->no_po,
-                    'tgl_po' => $request->tanggal_po,
-                    'no_do' => $request->no_do,
-                    'tgl_do' => $request->tanggal_do,
-                    'ket' =>  $request->keterangan,
-                ]);
-                $x = $pesanan->id;
-            }
+            $pesanan = Pesanan::create([
+                'so' => $this->createSO('SPB'),
+                'no_po' => $request->no_po,
+                'tgl_po' => $request->tanggal_po,
+                'no_do' => $request->no_do,
+                'tgl_do' => $request->tanggal_do,
+                'ket' =>  $request->keterangan,
+                'log_id' => '9'
+            ]);
+            $x = $pesanan->id;
 
             $Spb = Spb::create([
                 'customer_id' => $request->customer_id,
                 'pesanan_id' => $x,
                 'ket' => $request->keterangan,
-                'log' => 'penjualan'
+                'log' => 'po'
             ]);
             $bool = true;
             if ($Spb) {
@@ -962,6 +998,16 @@ class PenjualanController extends Controller
                     ]);
                     if (!$dspb) {
                         $bool = false;
+                    } else {
+                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                            $dspbp = DetailPesananProduk::create([
+                                'detail_pesanan_id' => $dspb->id,
+                                'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                            ]);
+                            if (!$dspbp) {
+                                $bool = false;
+                            }
+                        }
                     }
                 }
             } else {
@@ -1013,28 +1059,46 @@ class PenjualanController extends Controller
         //         'jumlah.required' => 'Jumlah Produk harus di isi',
         //         'penjualan_produk_id.required' => 'Produk harus di pilih',
         //     ]
-
         // );
         $bool = true;
-        $pesanan =  Pesanan::create([
-            'so' => $this->createSO('EKAT'),
-            'no_po' => $request->no_po,
-            'tgl_po' => $request->tanggal_po,
-            'no_do' => $request->no_do,
-            'tgl_do' => $request->tanggal_do,
-            'ket' => $request->keterangan
-        ]);
-        if (!$pesanan) {
-            $bool = false;
-        } else {
-            $ekatalog = Ekatalog::find($id);
-            $ekatalog->pesanan_id = $pesanan->id;
-            $ekat = $ekatalog->save();
-            if (!$ekat) {
+
+        $ekatalog = Ekatalog::find($id);
+        $p = Pesanan::find($ekatalog->pesanan_id);
+
+
+        if (isset($p)) {
+            $p->so = $this->createSO('EKAT');
+            $p->no_po = $request->no_po;
+            $p->tgl_po = $request->tanggal_po;
+            $p->no_do = $request->no_do;
+            $p->tgl_do = $request->tanggal_do;
+            $p->ket = $request->keterangan;
+            $p->log_id = "9";
+            $pes = $p->save();
+            if (!$pes) {
                 $bool = false;
+            }
+        } else {
+            $po = Pesanan::create([
+                'so' => $this->createSO('EKAT'),
+                'no_po' => $request->no_po,
+                'tgl_po' => $request->tanggal_po,
+                'no_do' => $request->no_do,
+                'tgl_do' => $request->tanggal_do,
+                'ket' => $request->keterangan
+            ]);
+
+            if ($po) {
+                $ekatalog->pesanan_id = $po->id;
+                $eksave = $ekatalog->save();
+                if (!$eksave) {
+                    $bool = false;
+                }
             }
         }
 
+        $ekatalog->log = "po";
+        $ekatalog->save();
         if ($bool == true) {
             return redirect()->back()->with('success', 'Berhasil menambahkan PO');
         } else if ($bool == false) {
@@ -1046,8 +1110,8 @@ class PenjualanController extends Controller
     public function update_penjualan($id, $jenis)
     {
         if ($jenis == 'ekatalog') {
-            $ekatalog = Ekatalog::where('id', $id)->get();
-            return view('page.penjualan.penjualan.edit_ekatalog', ['ekatalog' => $ekatalog]);
+            $ekatalog = Ekatalog::find($id);
+            return view('page.penjualan.penjualan.edit_ekatalog', ['e' => $ekatalog]);
         } else if ($jenis == 'spa') {
             $spa = Spa::where('id', $id)->get();
             return view('page.penjualan.penjualan.edit_spa', ['spa' => $spa]);
@@ -1058,9 +1122,10 @@ class PenjualanController extends Controller
     }
     public function update_ekatalog(Request $request, $id)
     {
+        echo json_encode($request->all());
         $ekatalog = Ekatalog::find($id);
+        $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $request->customer_id;
-        $ekatalog->pesanan_id = $request->pesanan_id;
         $ekatalog->provinsi_id = $request->provinsi;
         $ekatalog->deskripsi = $request->deskripsi;
         $ekatalog->instansi = $request->instansi;
@@ -1071,18 +1136,48 @@ class PenjualanController extends Controller
         $ekat = $ekatalog->save();
         $bool = true;
         if ($ekat) {
-            $dekat = DetailEkatalog::where('ekatalog_id', $id)->delete();
-            if ($dekat) {
+            $dekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                $q->where('pesanan_id', $poid);
+            })->get();
+
+            if (count($dekatp) > 0) {
+                $deldekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                    $q->where('pesanan_id', $poid);
+                })->delete();
+                if (!$deldekatp) {
+                    $bool = false;
+                }
+            }
+
+            $dekat = DetailPesanan::where('pesanan_id', $poid)->get();
+            if (count($dekat) > 0) {
+                $deldekat = DetailPesanan::where('pesanan_id', $poid)->delete();
+                if (!$deldekat) {
+                    $bool = false;
+                }
+            }
+            if ($bool == true) {
+
                 if ($request->status != "draft") {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                        $cdekat = DetailEkatalog::create([
-                            'ekatalog_id' => $id,
+                        $c = DetailPesanan::create([
+                            'pesanan_id' => $poid,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
-                            'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-                        if (!$cdekat) {
+                        if ($c) {
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                $v = DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $c->id,
+                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                ]);
+                                if (!$v) {
+                                    $bool = false;
+                                }
+                            }
+                        } else {
                             $bool = false;
                         }
                     }
@@ -1103,6 +1198,7 @@ class PenjualanController extends Controller
     public function update_spa(Request $request, $id)
     {
         $spa = Spa::find($id);
+        $poid = $spa->pesanan_id;
         $spa->customer_id = $request->customer_id;
         $uspa = $spa->save();
         $bool = true;
@@ -1113,18 +1209,48 @@ class PenjualanController extends Controller
             $pesanan->ket = $request->keterangan;
             $po = $pesanan->save();
             if ($po) {
-                $dspa = DetailPesanan::where('pesanan_id', $pesanan->id)->delete();
+
+                $dspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                    $q->where('pesanan_id', $poid);
+                })->get();
+                if (count($dspap) > 0) {
+                    $deldspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                        $q->where('pesanan_id', $poid);
+                    })->delete();
+                    if (!$deldspap) {
+                        $bool = false;
+                    }
+                }
+
+                $dspa = DetailPesanan::where('pesanan_id', $poid)->get();
+                if (count($dspa) > 0) {
+                    $deldspa = DetailPesanan::where('pesanan_id', $poid)->delete();
+                    if (!$deldspa) {
+                        $bool = false;
+                    }
+                }
+
                 if ($dspa) {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                        $cdspa = DetailPesanan::create([
-                            'pesanan_id' => $pesanan->id,
+                        $c = DetailPesanan::create([
+                            'pesanan_id' => $poid,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
-                            'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-                        if (!$cdspa) {
+                        if (!$c) {
                             $bool = false;
+                        } else {
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                $cd = DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $c->id,
+                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                ]);
+                                if (!$cd) {
+                                    $bool = false;
+                                }
+                            }
                         }
                     }
                 } else {
@@ -1146,6 +1272,7 @@ class PenjualanController extends Controller
     public function update_spb(Request $request, $id)
     {
         $spb = Spb::find($id);
+        $poid = $spb->pesanan_id;
         $spb->customer_id = $request->customer_id;
         $uspb = $spb->save();
         $bool = true;
@@ -1157,19 +1284,47 @@ class PenjualanController extends Controller
             $po = $pesanan->save();
 
             if ($po) {
-                $dspb = DetailPesanan::where('pesanan_id', $pesanan->id)->delete();
+                $dspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                    $q->where('pesanan_id', $poid);
+                })->get();
+                if (count($dspbp) > 0) {
+                    $deldspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                        $q->where('pesanan_id', $poid);
+                    })->delete();
+                    if (!$deldspbp) {
+                        $bool = false;
+                    }
+                }
+
+                $dspb = DetailPesanan::where('pesanan_id', $poid)->get();
+                if (count($dspb) > 0) {
+                    $deldspb = DetailPesanan::where('pesanan_id', $poid)->delete();
+                    if (!$deldspb) {
+                        $bool = false;
+                    }
+                }
+
                 if ($dspb) {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                        $cdspb = DetailPesanan::create([
-                            'pesanan_id' => $pesanan->id,
+                        $c = DetailPesanan::create([
+                            'pesanan_id' => $spb->pesanan_id,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
-                            'harga' => str_replace(".", "", $request->produk_harga[$i]),
+                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-
-                        if (!$cdspb) {
-                            $bool = true;
+                        if (!$c) {
+                            $bool = false;
+                        } else {
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                $dspbp = DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $c->id,
+                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                ]);
+                                if (!$dspbp) {
+                                    $bool = false;
+                                }
+                            }
                         }
                     }
                 } else {
@@ -1606,7 +1761,18 @@ class PenjualanController extends Controller
 
         return response()->json(compact('ekatalog_graph', 'spa_graph', 'spb_graph'));
     }
-    //Another 
+
+    //Dashboard
+    public function dashboard()
+    {
+        $belum_so = Ekatalog::whereNull('pesanan_id')->get()->count();
+        $so_belum_gudang = Pesanan::DoesntHave('TFProduksi')->get()->count();
+        $so_belum_qc = TFProduksi::Has('Pesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get()->count();
+        $so_belum_logistik = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananProduk.DetailLogistik')->get()->count();
+        return view('page.penjualan.dashboard', ['belum_so' => $belum_so, 'so_belum_gudang' => $so_belum_gudang, 'so_belum_qc' => $so_belum_qc, 'so_belum_logistik' => $so_belum_logistik]);
+    }
+
+    //Another
     function toRomawi($number)
     {
         $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
@@ -1649,5 +1815,16 @@ class PenjualanController extends Controller
         }
         $no = 'SO/' . $value . '/' . $this->getMonth() . '/' . $this->getYear() . '/' . ($max_number + 1) . '';
         return $no;
+    }
+
+    public function check_no_paket($id, $val)
+    {
+        if ($id != "0") {
+            $e = Ekatalog::where('no_paket', 'AK1-' . $val)->whereNotIn('id', [$id])->count();
+            return response()->json(['data' => $e]);
+        } else {
+            $e = Ekatalog::where('no_paket', 'AK1-' . $val)->count();
+            return response()->json(['data' => $e]);
+        }
     }
 }

@@ -390,6 +390,5 @@
             dangerMode: true,
         });
     };
-
 </script>
 @stop

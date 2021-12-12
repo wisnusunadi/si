@@ -55,7 +55,6 @@
                                     <td>8457938475938475</td>
                                     <td>Rumah Sakit Dr. Soetomo</td>
                                     <td>10 Oktober 2021</td>
-
                                     <td><span class="badge badge-info">Tersimpan ke rancangan</span></td>
                                     <td>
                                         <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
@@ -74,7 +73,6 @@
                                     <td>8457938475938475</td>
                                     <td>Rumah Sakit Dr. Soetomo</td>
                                     <td>10 Oktober 2021</td>
-
                                     <td><span class="badge badge-danger">Produk belum disiapkan</span></td>
                                     <td>
                                         <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
@@ -154,7 +152,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>

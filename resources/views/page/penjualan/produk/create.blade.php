@@ -3,60 +3,79 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Produk</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Produk</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "26")
+                <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="{{route('penjualan.produk.show')}}">Produk</a></li>
+                <li class="breadcrumb-item active">Tambah PO</li>
+                @endif
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        @if(session()->has('error') || count($errors) > 0 )
-        <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
-            <strong>Gagal menambahkan!</strong> Periksa
-            kembali data yang diinput
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        @elseif(session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
-            <strong>Berhasil menambahkan data</strong>,
-            Terima kasih
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        @endif
-        <form action="/api/penjualan_produk/create" method="post">
-            <div class="row d-flex justify-content-center">
-
-                <div class="col-11">
-                    <h5>Info Umum Paket</h5>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group row">
-                                        <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Nama Paket</label>
-                                        <div class="col-6">
-                                            <input type="text" class="form-control @error('nama_paket') is-invalid @enderror" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" />
-                                            <div class="invalid-feedback" id="msgnama_paket">
-                                                @if($errors->has('nama_paket'))
-                                                {{ $errors->first('nama_paket')}}
-                                                @endif
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                @if(Session::has('error') || count($errors) > 0 )
+                <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+                    <strong>Gagal menambahkan!</strong> Periksa
+                    kembali data yang diinput
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @elseif(Session::has('success'))
+                <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+                    <strong>Berhasil menambahkan data</strong>,
+                    Terima kasih
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
+                <form action="{{route('penjualan.produk.store')}}" method="post">
+                    {{csrf_field()}}
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-11">
+                            <h5>Info Umum Paket</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group row">
+                                                <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Nama Paket</label>
+                                                <div class="col-6">
+                                                    <input type="text" class="form-control @error('nama_paket') is-invalid @enderror" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" />
+                                                    <div class="invalid-feedback" id="msgnama_paket">
+                                                        @if($errors->has('nama_paket'))
+                                                        {{ $errors->first('nama_paket')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Harga</label>
-                                        <div class="input-group col-5">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">Rp</span>
-                                            </div>
-                                            <input type="text" class="form-control" name="harga" id="harga" placeholder="Masukkan Harga" />
-                                            <div class="invalid-feedback" id="msgharga">
-                                                @if($errors->has('harga'))
-                                                {{ $errors->first('harga')}}
-                                                @endif
+                                            <div class="form-group row">
+                                                <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Harga</label>
+                                                <div class="input-group col-5">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Rp</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="harga" id="harga" placeholder="Masukkan Harga" />
+                                                    <div class="invalid-feedback" id="msgharga">
+                                                        @if($errors->has('harga'))
+                                                        {{ $errors->first('harga')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -64,80 +83,80 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row d-flex justify-content-center">
-                <div class="col-11">
-                    <h5>Detail Produk Paket</h5>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive">
-                                        <table class="table" style="text-align: center;" id="createtable">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="5">
-                                                        <button type="button" class="btn btn-primary float-right" id="addrow">
-                                                            <i class="fas fa-plus"></i>
-                                                            Produk
-                                                        </button>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th width="15%">Nama Produk</th>
-                                                    <th>Kelompok</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>
-                                                        <div class="form-group row">
-                                                            <div class="col-12">
-                                                                <select class="select-info form-control produk_id " name="produk_id[]" id="0">
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td><span class="badge" id="kelompok_produk"></span></td>
-                                                    <td>
-                                                        <div class="form-group d-flex justify-content-center">
-                                                            <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-11">
+                            <h5>Detail Produk Paket</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table class="table" style="text-align: center;" id="createtable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="5">
+                                                                <button type="button" class="btn btn-primary float-right" id="addrow">
+                                                                    <i class="fas fa-plus"></i>
+                                                                    Produk
+                                                                </button>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th width="5%">No</th>
+                                                            <th width="40%">Nama Produk</th>
+                                                            <th width="32%">Kelompok</th>
+                                                            <th width="18%">Jumlah</th>
+                                                            <th width="5%">Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>
+                                                                <div class="form-group row">
+                                                                    <div class="col-12">
+                                                                        <select class="select-info form-control produk_id " name="produk_id[]" id="0">
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td><span class="badge" name="kelompok_produk[]" id="kelompok_produk0"></span></td>
+                                                            <td>
+                                                                <div class="form-group d-flex justify-content-center">
+                                                                    <input type="number" class="form-control" name="jumlah[]" id="jumlah0" style="width: 50%" />
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row d-flex justify-content-center">
-                <div class="col-11">
-                    <span>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-11">
+                            <span>
 
-                        <a type="button" class="btn btn-danger" href="{{route('penjualan.produk.show')}}">
-                            Batal
-                        </a>
-                    </span>
-                    <span class="float-right">
-                        <button type="submit" class="btn btn-info float-right disabled" id="btntambah">Tambah</button>
-                    </span>
-                </div>
+                                <a type="button" class="btn btn-danger" href="{{route('penjualan.produk.show')}}">
+                                    Batal
+                                </a>
+                            </span>
+                            <span class="float-right">
+                                <button type="submit" class="btn btn-info float-right disabled" id="btntambah">Tambah</button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</section>
 @endsection
 
 @section('adminlte_js')
@@ -150,7 +169,10 @@
             $t.find("tr").each(function(ind, el) {
                 $(el).find("td:eq(0)").html(++c);
                 var j = c - 1;
-                $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
+                $(el).find('.jumlah').attr('name', 'jumlah[' + j + ']');
+                $(el).find('.jumlah').attr('id', 'jumlah' + j);
+                $(el).find('.kelompok_produk').attr('name', 'kelompok_produk[' + j + ']');
+                $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
                 $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                 $(el).find('.produk_id').attr('id', j);
                 select_data();
@@ -159,22 +181,24 @@
 
         $('#addrow').on('click', function() {
             $('#createtable tr:last').after(`<tr>
-            <td></td>
-            <td>
-                <div class="form-group">
-                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0">
-                    </select>
-                </div>
-            </td>
-            <td><span class="badge" id="kelompok_produk"></span></td>
-            <td>
-                <div class="form-group d-flex justify-content-center">
-                    <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
-                </div>
-            </td>
-            <td>
-                <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
-            </td>
+                <td></td>
+                <td>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <select class="select-info form-control produk_id " name="produk_id[]" id="0">
+                            </select>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="badge kelompok_produk" name="kelompok_produk[]" id="kelompok_produk0"></span></td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control jumlah" name="jumlah[]" id="jumlah0" style="width: 50%" />
+                    </div>
+                </td>
+                <td>
+                    <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+                </td>
             </tr>`);
             numberRows($("#createtable"));
         });
@@ -206,14 +230,28 @@
 
         $('#nama_paket').on('keyup change', function() {
             if ($(this).val() != "") {
-                $('#msgnama_paket').text("");
-                $('#nama_paket').removeClass("is-invalid");
-                console.log($("#createtable tbody").length);
-                if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
-                    $('#btntambah').removeClass('disabled');
-                } else {
-                    $('#btntambah').addClass('disabled');
-                }
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '/api/penjualan_produk/check/0/' + $(this).val(),
+                    success: function(data) {
+                        if (data.jumlah >= 1) {
+                            $("#msgnama_paket").text("Nama sudah terpakai");
+                            $('#nama_paket').addClass('is-invalid');
+                            $('#btntambah').addClass('disabled');
+                        } else {
+                            $('#msgnama_paket').text("");
+                            $('#nama_paket').removeClass("is-invalid");
+                            console.log($("#createtable tbody").length);
+                            if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
+                                $('#btntambah').removeClass('disabled');
+                            } else {
+                                $('#btntambah').addClass('disabled');
+                            }
+                        }
+                    }
+                });
+
             } else if ($(this).val() == "") {
                 $('#msgnama_paket').text("Nama Paket Harus diisi");
                 $('#nama_paket').addClass("is-invalid");
@@ -242,14 +280,27 @@
                             results: $.map(data, function(obj) {
                                 return {
                                     id: obj.id,
-                                    text: obj.tipe
+                                    text: obj.nama
                                 };
                             })
                         };
                     },
                 }
             }).change(function() {
-
+                var value = $(this).val();
+                var index = $(this).attr('id');
+                console.log(index);
+                // var id = $(#produk_id).val();
+                $.ajax({
+                    url: '/api/produk/select/' + value,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
+                        console.log(data[0].kelompok_produk.nama);
+                    }
+                });
             });
         }
     });

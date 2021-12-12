@@ -255,7 +255,7 @@
     }
 
     $(document).ready(function () {
-        
+
         $('#datetimepicker1').daterangepicker({
             autoUpdateInput: false
         });

@@ -1,5 +1,5 @@
 @extends('adminlte.page')
- 
+
 @section('title', 'ERP')
 
 @section('content')
@@ -548,7 +548,6 @@
         </div>
     </div>
 </div>
-
 {{-- Modal Penerimaan --}}
 <div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">

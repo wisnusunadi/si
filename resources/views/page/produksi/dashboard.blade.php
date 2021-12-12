@@ -10,7 +10,6 @@
     .hidden {
         display: none !important;
     }
-
     .otg:hover {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
@@ -457,7 +456,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>

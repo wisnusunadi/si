@@ -8,17 +8,20 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 // model
 use App\Models\Produk;
 use App\Models\JadwalPerakitan;
 use App\Models\GudangBarangJadi;
-use App\Models\Ekatalog;
-use App\Models\Spa;
-use App\Models\Spb;
 
 // event
 use App\Events\TestEvent;
+use App\Models\DetailPesananProduk;
+use App\Models\DetailPesanan;
+use App\Models\Ekatalog;
+use App\Models\Spa;
+use App\Models\Spb;
 
 class PpicController extends Controller
 {

@@ -17,4 +17,8 @@ class Provinsi extends Model
     {
         return $this->hasMany(Ekatalog::class);
     }
+    public function Ekspedisi()
+    {
+        return $this->belongsToMany(Ekspedisi::class, 'ekspedisi_provinsi');
+    }
 }

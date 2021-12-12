@@ -44,8 +44,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function divisi()
+    public function Divisi()
     {
-        return $this->belongsTo(Divisi::class, 'divisi_id', 'id');
+        return $this->belongsTo(Divisi::class);
     }
 }

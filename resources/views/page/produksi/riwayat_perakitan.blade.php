@@ -96,7 +96,6 @@
                                         <td>100 Unit</td>
                                         <td><button class="btn btn-outline-secondary" data-toggle="modal" data-target=".modal_id"><i class="far fa-eye"></i> Detail</button></td>
                                     </tr>
-
                                 </tbody>
                         </table>
                         </div>
@@ -247,7 +246,7 @@
         // console.log('test');
         var id = $(this).data('id');
         var time = $(this).data('tf');
-        
+
         $.ajax({
             url: "/api/prd/history/header/" + id,
             type: "get",
@@ -345,6 +344,5 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
-
 </script>
 @stop

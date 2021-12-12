@@ -20,15 +20,154 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 use Alert;
+use App\Models\DetailLogistik;
+use App\Models\DetailPesanan;
+use App\Models\DetailPesananProduk;
+use App\Models\Ekspedisi;
+use App\Models\Logistik;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Arr;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
 use App\Models\SparepartGudang;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\returnValueMap;
+
 class MasterController extends Controller
 {
     //Get Data Table
+    public function  get_data_detail_ekspedisi($id)
+    {
+        $data = Logistik::where('ekspedisi_id', $id)->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so;
+            })
+            ->addColumn('sj', function ($data) {
+                return $data->nosurat;
+            })
+            ->addColumn('tgl', function ($data) {
+                return $data->tgl_kirim;
+            })
+            ->addColumn('nama_customer', function ($data) {
+                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
+                } elseif ($name[1] == 'SPA') {
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
+                } else {
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->nama;
+                }
+                return;
+            })
+            ->addColumn('alamat', function ($data) {
+                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->alamat;
+                } elseif ($name[1] == 'SPA') {
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->alamat;
+                } else {
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->alamat;
+                }
+                return;
+            })
+            ->addColumn('telp', function ($data) {
+                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->telp;
+                } elseif ($name[1] == 'SPA') {
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->telp;
+                } else {
+                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->telp;
+                }
+                return;
+            })
+            ->addColumn('status', function ($data) {
+                // $y = array();
+                // $count = 0;
+                // $x = DetailPesananProduk::where('pesanan_id', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->id)->get();
+                // foreach ($x  as $d) {
+                //     $y[] = $d->id;
+                //     $count++;
+                // }
+                // $detail_logistik  = DetailLogistik::whereIN('detail_pesanan_id', $y)->get()->Count();
+
+                // if ($count == $detail_logistik) {
+                //     return  '<span class="badge green-text">Sudah Dikirim</span>';
+                // } else {
+                //     if ($detail_logistik == 0) {
+                //         return ' <span class="badge red-text">Belum Dikirim</span>';
+                //     } else {
+                //         return  '<span class="badge yellow-text">Sebagian Dikirim</span>';
+                //     }
+                // }
+            })
+            ->addColumn('button', function ($data) {
+                $return = "";
+            })
+            ->rawColumns(['status'])
+            ->make(true);
+    }
+    public function get_data_ekspedisi()
+    {
+        $divisi_id = auth()->user()->divisi->id;
+        $data = Ekspedisi::select();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jurusan', function ($data) {
+                return implode(', ', $data->provinsi->pluck('nama')->toArray());
+            })
+            ->addColumn('via', function ($data) {
+                $list = array();
+                foreach ($data->jalurekspedisi as $s) {
+                    $list[] = '<div class="badge ' . $s->nama . '-text">' . ucfirst($s->nama) . '</div>';
+                }
+                return implode('<br>', $list);
+            })
+            ->addColumn('button', function ($data) use ($divisi_id) {
+                $return = "";
+                $return .= '
+            <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a href="' . route('logistik.ekspedisi.detail', ['id' => $data->id]) . '">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-search"></i>
+                        Detail
+                    </button>
+                </a>';
+                if ($divisi_id == "15") {
+                    $x = array();
+                    $y = array();
+
+                    $return .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="' . $data->id . '" data-value="';
+                    foreach ($data->jalurekspedisi as $s) {
+                        $x[] = $s->nama;
+                    }
+                    $return .= implode(',', $x);
+                    $return .= '" data-provinsi="';
+
+                    foreach ($data->provinsi as $u) {
+                        $y[] = $u->id;
+                    }
+                    $return .= implode(',', $y);
+
+                    $return .= '">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
+                    </button>
+                </a>';
+                }
+                $return .= '</div>';
+                return $return;
+            })
+            ->rawColumns(['button', 'jurusan', 'via'])
+            ->make(true);
+    }
     public function get_data_produk()
     {
         return datatables()->of(Produk::with('KelompokProduk'))->toJson();
@@ -49,6 +188,7 @@ class MasterController extends Controller
                 return $data->provinsi->nama;
             })
             ->addColumn('button', function ($data) {
+                $divisi_id = Auth::user()->divisi->id;
                 $datas = "";
                 $datas .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -58,12 +198,14 @@ class MasterController extends Controller
                       Detail
                     </button>
                 </a>';
-                $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
+                if ($divisi_id == "26") {
+                    $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
                         <button class="dropdown-item" type="button" >
                         <i class="fas fa-pencil-alt"></i>
                         Edit
                         </button>
                     </a>';
+                }
                 $datas .= '</div>';
                 return $datas;
             })
@@ -82,6 +224,9 @@ class MasterController extends Controller
         }
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('nama', function ($data) {
+                return $data->nama;
+            })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -97,8 +242,19 @@ class MasterController extends Controller
                     </a>
                 </div>';
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['nama', 'button'])
             ->make(true);
+    }
+
+    public function get_nama_customer($id, $val)
+    {
+        if ($id != "0") {
+            $c = Customer::where('nama', $val)->whereNotIn('id', [$id])->count();
+            return response()->json(['data' => $c]);
+        } else {
+            $c = Customer::where('nama', $val)->count();
+            return response()->json(['data' => $c]);
+        }
     }
     //public function get_data_detail_penjualan_produk($id)
     //{
@@ -132,12 +288,24 @@ class MasterController extends Controller
             // })
             // ->rawColumns(['produk_nama'])
             ->addColumn('kelompok', function ($data) {
-                return $data->KelompokProduk->nama;
+                $return = "";
+                if ($data->KelompokProduk->nama == 'Alat Kesehatan') {
+                    $return .= '<span class="badge blue-text">';
+                } else if ($data->KelompokProduk->nama == 'Water Treatment') {
+                    $return .= '<span class="badge orange-text">';
+                } else {
+                    $return .= '<span class="badge purple-text">';
+                }
+                $return .= $data->KelompokProduk->nama;
+                $return .= '</span>';
+
+                return $return;
             })
             ->addColumn('jumlah', function ($data) {
                 return $data->PenjualanProduk->first()->pivot->jumlah;
             })
             ->addIndexColumn()
+            ->rawColumns(['kelompok'])
             ->make(true);
     }
     public function get_data_pesanan($id)
@@ -180,9 +348,13 @@ class MasterController extends Controller
                 })
                 ->addColumn('tglpo', function ($data) {
                     if ($data->Pesanan) {
-                        return $data->Pesanan->tgl_po;
+                        if (empty($data->Pesanan->tgl_po) || $data->Pesanan->tgl_po == "0000-00-00") {
+                            return '-';
+                        } else {
+                            return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
+                        }
                     } else {
-                        return '';
+                        return '-';
                     }
                 })
                 ->addColumn('status', function ($data) {
@@ -207,6 +379,37 @@ class MasterController extends Controller
                 ->make(true);
     }
     //Create
+    public function create_ekspedisi(Request $request)
+    {
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'nama' => 'required',
+        //         'jalur' => 'required',
+        //         'tipe' => 'required|unique:produk',
+
+        //     ],
+        //     [
+        //         'nama.required' => 'Kelompok Produk harus di isi',
+        //         'jalur.required' => 'Merk Produk harus di isi',
+        //         'tipe.required' => 'Tipe Produk harus di isi',
+        //     ]
+        // );
+        $ekspedisi =  Ekspedisi::create([
+            'nama' => $request->nama_ekspedisi,
+            'alamat' => $request->alamat,
+            'email' => $request->email,
+            'telp' => $request->telepon,
+            'ket' => $request->keterangan,
+        ]);
+        $ekspedisi->JalurEkspedisi()->attach($request->jalur);
+
+        if ($request->jurusan == 'provinsi') {
+            $ekspedisi->Provinsi()->attach($request->provinsi);
+        } else {
+            $ekspedisi->Provinsi()->attach(35);
+        }
+    }
     public function create_produk(Request $request)
     {
         $this->validate(
@@ -215,7 +418,6 @@ class MasterController extends Controller
                 'kelompok_produk_id' => 'required',
                 'merk' => 'required',
                 'tipe' => 'required|unique:produk',
-
             ],
             [
                 'kelompok_produk_id.required' => 'Kelompok Produk harus di isi',
@@ -409,18 +611,27 @@ class MasterController extends Controller
         $data = Customer::where('nama', $value)->get();
         echo json_encode($data);
     }
-    public function check_penjualan_produk($value)
+    public function check_penjualan_produk($id, $value)
     {
-        $data = PenjualanProduk::where('nama', $value)->get();
-        echo json_encode($data);
+        if ($id != "0") {
+            $data = PenjualanProduk::where('nama', $value)->whereNotIn('id', [$id])->count();
+            return response()->json(['jumlah' => $data]);
+        } else {
+            $data = PenjualanProduk::where('nama', $value)->count();
+            return response()->json(['jumlah' => $data]);
+        }
     }
 
     //Show Modal
-
     public function update_customer_modal($id)
     {
         $customer = Customer::find($id);
         return view("page.penjualan.customer.edit", ['customer' => $customer]);
+    }
+    public function update_ekspedisi_modal($id)
+    {
+        $ekspedisi = Ekspedisi::where('id', $id)->get();
+        return view("page.logistik.ekspedisi.edit", ['ekspedisi' => $ekspedisi]);
     }
 
 
@@ -431,13 +642,17 @@ class MasterController extends Controller
         $customer = Customer::find($id);
         return view('page.penjualan.customer.detail', ['customer' => $customer]);
     }
-
+    public function detail_ekspedisi($id)
+    {
+        $ekspedisi = Ekspedisi::where('id', $id)->get();
+        return view('page.logistik.ekspedisi.detail', ['ekspedisi' => $ekspedisi]);
+    }
 
     //Select
     public function select_produk(Request $request)
     {
-        $data = Produk::where('tipe', 'LIKE', '%' . $request->input('term', '') . '%')
-            ->orderby('tipe', 'ASC')->get();
+        $data = Produk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
     public function select_produk_id($id)
@@ -453,6 +668,12 @@ class MasterController extends Controller
         echo json_encode($data);
     }
     public function select_provinsi(Request $request)
+    {
+        $data = Provinsi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')->get();
+        echo json_encode($data);
+    }
+    public function select_provinsi_edit(Request $request)
     {
         $data = Provinsi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
             ->orderby('nama', 'ASC')->get();
@@ -477,7 +698,6 @@ class MasterController extends Controller
 
         echo json_encode($data);
     }
-
     function select_sparepart()
     {
         $data = SparepartGudang::all();
@@ -510,11 +730,16 @@ class MasterController extends Controller
         // $data = GudangKarantinaDetail::with('units.produk')->groupBy('gbj_id')->where('is_draft',0)->where('is_keluar', 0)->whereNotNull('gbj_id')->get()->pluck('gbj_id', 'units.produk.nama');
         return $data;
     }
+    public function select_ekspedisi(Request $request)
+    {
+        $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')->get();
+        echo json_encode($data);
+    }
 
     function select_gk_layout()
     {
         $data = GudangKarantinaNoseri::with('layout')->groupBy('layout_id')->whereNotNull('layout_id')->get();
         return $data;
-
     }
 }

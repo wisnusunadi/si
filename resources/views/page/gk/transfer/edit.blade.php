@@ -624,7 +624,7 @@ aria-hidden="true">
                 return $(this).val() == '';
             }).addClass('is-invalid');
         }
-        
+
         if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0) {
             $('.seri').removeClass('is-invalid');
             $('.seri').filter(function () {
@@ -638,7 +638,7 @@ aria-hidden="true">
                 return $(this).val() == '';
             }).addClass('is-invalid');
             if (duplicates(count(arrUnit)).length > 0) {
-               
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',

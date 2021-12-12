@@ -33,7 +33,6 @@
     top: 0;
     z-index: 30;
     }
-
 </style>
 <section class="content-header">
     <div class="container-fluid">
@@ -77,7 +76,6 @@
                                 <td>Divisi IT</td>
                                 <td><a href="{{ url('gk/transfer/1') }}" class="btn btn-outline-info"><i class="far fa-edit"></i>Edit Produk</a></td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>

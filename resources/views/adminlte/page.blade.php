@@ -74,6 +74,8 @@
 @yield('adminlte_css')
 @stop
 
+@include('sweetalert::alert')
+
 @section('classes_body', $LayoutHelper->makeBodyClasses())
 
 @section('body_data', $LayoutHelper->makeBodyData())
@@ -141,10 +143,10 @@
         }, 100);
 
 
-        // $('.select2').select2({
-        //     placeholder: "Pilih Data",
-        //     allowClear: true
-        // });
+        $('.select2s').select2({
+            placeholder: "Pilih Data",
+            allowClear: true
+        });
 
         OverlayScrollbars(document.getElementsByTagName('body'), {
             className: "os-theme-dark",

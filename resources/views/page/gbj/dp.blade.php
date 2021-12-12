@@ -115,7 +115,6 @@
           </div>
       </div>
   </div>
-
   <!-- Modal Ubah Layout-->
   <div class="modal fade" id="ubah-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -142,7 +141,6 @@
           </div>
       </div>
   </div>
-
   <!-- Modal -->
   <div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
       <div class="modal-dialog modal-xl" role="document">

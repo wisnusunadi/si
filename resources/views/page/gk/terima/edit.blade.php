@@ -91,7 +91,6 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tambah_data">
-
                                     </tbody>
                                 </table>
                             </div>
