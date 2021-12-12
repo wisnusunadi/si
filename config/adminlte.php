@@ -554,7 +554,7 @@ return [
         [
             'text'    => 'Inventory',
             'icon'    => 'fas fa-boxes',
-            'auth' => [14, 17],
+            'auth' => [14],
             'submenu' => [
                 [
                     'icon' => 'far fa-circle',
@@ -1408,24 +1408,24 @@ return [
             'icon'    => 'fas fa-shipping-fast',
             'auth' => [2],
             'submenu' => [
-                [
-                    'text' => 'Pengiriman',
-                    'icon' => 'far fa-circle',
-                    'url' => '/logistik/pengiriman/show',
-                    'auth' => [2],
-                ],
+                // [
+                //     'text' => 'Pengiriman',
+                //     'icon' => 'far fa-circle',
+                //     'url' => '/logistik/pengiriman/show',
+                //     'auth' => [2],
+                // ],
                 [
                     'text' => 'Riwayat Pengiriman',
                     'icon' => 'far fa-circle',
                     'url' => '/logistik/pengiriman/riwayat/show',
                     'auth' => [2],
                 ],
-                [
-                    'text' => 'Jasa Ekspedisi',
-                    'icon' => 'far fa-circle',
-                    'url' => '/logistik/ekspedisi/show',
-                    'auth' => [2],
-                ],
+                // [
+                //     'text' => 'Jasa Ekspedisi',
+                //     'icon' => 'far fa-circle',
+                //     'url' => '/logistik/ekspedisi/show',
+                //     'auth' => [2],
+                // ],
             ],
         ],
         [
@@ -1437,6 +1437,20 @@ return [
                     'text' => 'COO',
                     'icon' => 'far fa-circle',
                     'url' => '/dc/coo/show',
+                    'auth' => [2],
+                ],
+            ],
+        ],
+
+        [
+            'text'    => 'After Sales',
+            'icon'    => 'fas fa-headset',
+            'auth' => [2],
+            'submenu' => [
+                [
+                    'text' => 'Lacak',
+                    'icon' => 'far fa-circle',
+                    'url' => '/penjualan/lacak/show',
                     'auth' => [2],
                 ],
             ],

@@ -17,7 +17,7 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">
-                    <i class="fas fa-layer-group"></i> Perencanaan Perakitan Bulan Desember
+                    <i class="fas fa-layer-group"></i> Perencanaan Perakitan Bulan {{ Carbon\Carbon::now()->addMonth()->isoFormat('MMMM') }}
                 </h5>
             </div>
             <div class="card-body">
@@ -83,6 +83,7 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            
             //Random default events
             // events: [
             //     {

@@ -361,6 +361,7 @@
         $('.table-seri').dataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: "/api/transaksi/all-detail/" + id,
                 // data: {id: id},

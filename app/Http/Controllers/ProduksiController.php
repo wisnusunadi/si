@@ -758,7 +758,7 @@ class ProduksiController extends Controller
     // perakitan
     function plan_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '>', Carbon::now()->format('m'))->get();
+        $data = JadwalPerakitan::whereMonth('tanggal_mulai', Carbon::now()->addMonth())->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -788,7 +788,7 @@ class ProduksiController extends Controller
 
     function calender_plan()
     {
-        $data = JadwalPerakitan::with('Produk.Produk')->whereMonth('tanggal_mulai', '>', Carbon::now()->format('m'))->get();
+        $data = JadwalPerakitan::with('Produk.Produk')->whereMonth('tanggal_mulai', Carbon::now()->addMonth())->get();
         return response()->json($data);
     }
 

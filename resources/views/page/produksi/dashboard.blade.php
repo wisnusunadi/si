@@ -529,6 +529,7 @@
             processing: true,
             serverSide: true,
             dom: "Bfrtip",
+            autoWidth: false,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
@@ -605,6 +606,7 @@
             processing: true,
             serverSide: true,
             dom: "Bfrtip",
+            autoWidth: false,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
@@ -680,6 +682,7 @@
             processing: true,
             serverSide: true,
             dom: "Bfrtip",
+            autoWidth: false,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },

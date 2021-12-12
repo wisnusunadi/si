@@ -11,11 +11,8 @@ class NoseriBarangJadi extends Model
 
     protected $table = "noseri_barang_jadi";
 
-<<<<<<< HEAD
     protected $fillable = ['is_aktif'];
 
-=======
->>>>>>> e3ed8d46af6187cffca008bb645795785e6aa7b5
     function from()
     {
         return $this->belongsTo(Divisi::class, 'dari');

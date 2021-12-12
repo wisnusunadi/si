@@ -324,6 +324,7 @@
             processing: true,
             serverSide: true,
             destroy: true,
+            autoWidth: false,
             ajax: {
                 url: "/api/transaksi/history-detail-seri/" + id,
             },

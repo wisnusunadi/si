@@ -226,6 +226,7 @@
             destroy: true,
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
