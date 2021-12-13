@@ -567,7 +567,8 @@
                 data: $('#form-logistik-create').serialize(),
                 success: function(response) {
                     if (response['data'] == "success") {
-                        // console.log(response['data']);
+                        // 
+                        console.log(response['data']);
                         swal.fire(
                             'Berhasil',
                             'Berhasil menambahkan Pengiriman',
