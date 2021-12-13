@@ -13,7 +13,7 @@
                             <div class="col-8">
                                 <h3 class="card-title">Produk Gudang Barang Jadi</h3>
                             </div>
-                            <div class="col-4 d-flex justify-content-end">
+                            <div class="col-4">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         @if (Auth::user()->divisi->id != 2)
@@ -24,10 +24,9 @@
                                             </button>
                                         </span>
                                         @endif
-                                        <span class="dropdown" id="semuaprodukfilter"
-                                            style="margin-right: 5px">
+                                        <span class="float-right">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
-                                                id="semuaprodukfilter" data-toggle="dropdown"><i class="fas fa-filter"></i>&nbsp;
+                                                id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
                                                 Filter
                                             </button>
                                             <div class="dropdown-menu p-3 text-nowrap"
