@@ -193,7 +193,7 @@
                     <div class="card-body">
                         <h4>Hasil Pencarian Surat Jalan</h4>
                         <div class="table-responsive">
-                            <table class="table table-hover" id="table" style="width:100%">
+                            <table class="table table-hover" id="nosjtable" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -315,6 +315,50 @@
                 }
             ]
         });
+
+        $('#nosjtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/no_sj/0',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nosurat',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'po',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_kirim',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'tgl_kirim',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'tgl_kirim',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+
+
+
+
         $('#noseritable').DataTable();
 
         $('#data').on('keyup change', function() {
@@ -377,7 +421,7 @@
                 $('#nosj').addClass('hide');
             } else if ($('.pilih_data').val() == "no_sj") {
                 var data = $('#data').val();
-                $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
+                $('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
                 $('#nosj').removeClass('hide');
                 $('#noseri').addClass('hide');
                 $('#nopo').addClass('hide');
