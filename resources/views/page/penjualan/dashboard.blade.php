@@ -383,7 +383,6 @@
                     },
                     {
                         data: 'nama_produk',
-
                     },
                     {
                         data: 'harga',
@@ -442,7 +441,6 @@
                 },
             })
         }
-
     });
 </script>
 <script>

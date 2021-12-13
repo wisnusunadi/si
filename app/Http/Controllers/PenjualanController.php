@@ -1149,7 +1149,6 @@ class PenjualanController extends Controller
                     $bool = false;
                 }
             }
-
             $dekat = DetailPesanan::where('pesanan_id', $poid)->get();
             if (count($dekat) > 0) {
                 $deldekat = DetailPesanan::where('pesanan_id', $poid)->delete();
@@ -1158,7 +1157,6 @@ class PenjualanController extends Controller
                 }
             }
             if ($bool == true) {
-
                 if ($request->status != "draft") {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $c = DetailPesanan::create([
