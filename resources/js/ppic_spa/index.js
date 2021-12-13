@@ -21,7 +21,6 @@ axios.defaults.headers.common = {
 }
 // axios.defaults.baseURL = "http://localhost:8000/"
 
-
 new Vue({
     router,
     store,
