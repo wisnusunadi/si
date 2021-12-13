@@ -927,6 +927,10 @@ class LogistikController extends Controller
     public function create_logistik(Request $request, $detail_pesanan_id, $id_produk)
     {
         $array = array_values(json_decode($detail_pesanan_id, true));
+        $ids = "";
+
+        // return response()->json(['data' =>  $poid]);
+
         $bool = true;
         $Logistik = "";
         if ($request->pengiriman == 'ekspedisi') {
@@ -952,6 +956,7 @@ class LogistikController extends Controller
                     'logistik_id' => $Logistik->id,
                     'detail_pesanan_produk_id' => $array[$i]['id'],
                 ]);
+                $ids =  $array[$i]['id'];
                 if ($c) {
                     for ($y = 0; $y < count($array[$i]['noseri']); $y++) {
                         $b = NoseriDetailLogistik::create([
@@ -969,11 +974,29 @@ class LogistikController extends Controller
         } else {
             return response()->json(['data' =>  $Logistik]);
         }
+        // echo $ids;
+        // $poid = "";
+        if ($ids) {
+            $iddpp = DetailPesananProduk::find($ids);
+            $poid = strval($iddpp->DetailPesanan->Pesanan->id);
+            $po = Pesanan::find($poid);
+            if ($po) {
+                if ($po->getJumlahKirim() > 0) {
+                    if ($po->getJumlahPesanan() > $po->getJumlahKirim()) {
+                        $po->log_id = '13';
+                        $po->save();
+                    } else if ($po->getJumlahPesanan() == $po->getJumlahKirim()) {
+                        $po->log_id = '10';
+                        $po->save();
+                    }
+                }
+            }
+        }
 
         if ($bool == true) {
-            return response()->json(['data' =>  'success']);
+            return response()->json(['data' => "success"]);
         } else {
-            return response()->json(['data' =>  'error']);
+            return response()->json(['data' => 'error']);
         }
     }
 
@@ -1136,6 +1159,7 @@ class LogistikController extends Controller
                         $x =  'ekatalog';
                         $tgl_sekarang = Carbon::now()->format('Y-m-d');
                         $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+
 
                         if ($tgl_sekarang < $tgl_parameter) {
                             $to = Carbon::now();

@@ -83,6 +83,8 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            locale: 'id',
+            weekends: false,
             
             //Random default events
             // events: [
@@ -142,6 +144,7 @@
                 })
             }
         });
+        calendar.next();
 
         calendar.render();
         var oTable = $('.table-produk-perakitan').DataTable({

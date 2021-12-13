@@ -77,6 +77,7 @@ class QcController extends Controller
             ->addColumn('checkbox', function ($data) {
                 return '  <div class="form-check">
                 <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
+
                 </div>';
             })
             ->addColumn('seri', function ($data) {
@@ -247,7 +248,10 @@ class QcController extends Controller
                 $jumlah = 0;
                 foreach ($data->detailpesanan as $d) {
                     $x[] = $d->id;
-                    $jumlah++;
+                    $z[] = $d->jumlah;
+                    foreach ($d->penjualanproduk->produk as $l) {
+                        $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                    }
                 }
                 $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
 
@@ -513,7 +517,6 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc($seri_id, $tfgbj_id, $pesanan_id, $produk_id, Request $request)
     {
-
         $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
             $q->where('Pesanan_id', $pesanan_id);
         })->where('gudang_barang_jadi_id', $produk_id)->first();
@@ -546,6 +549,13 @@ class QcController extends Controller
                 }
             }
         }
+
+        $po = Pesanan::find($pesanan_id);
+        if (($po->getJumlahCek() > 0 && $po->getJumlahPesanan >= $po->getJumlahCek()) && $po->getJumlahKirim() == 0) {
+            $po->log_id = '8';
+            $po->save();
+        }
+
         if ($bool == true) {
             return response()->json(['data' =>  'success']);
         } else {

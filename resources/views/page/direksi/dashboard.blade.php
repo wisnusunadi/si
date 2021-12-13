@@ -781,11 +781,6 @@
         }
 
         // Produksi
-        var date = new Date()
-        var d = date.getDate(),
-            m = date.getMonth(),
-            y = date.getFullYear()
-
         var Calendar = FullCalendar.Calendar;
         var calendarEl = document.getElementById('calendar');
 
@@ -798,6 +793,9 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            weekends: false,
+            locale: 'id',
+            stickyFooterScrollbar : false,
             events: function( fetchInfo, successCallback, failureCallback ) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",
@@ -822,7 +820,7 @@
             },
         });
 
-        calendar.render();
+            calendar.render();
     });
     $(document).ready(function () {
         $.ajax({

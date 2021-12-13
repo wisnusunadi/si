@@ -192,6 +192,9 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            weekends: false,
+            locale: 'id',
+            contentHeight: 'auto',
             events: function( fetchInfo, successCallback, failureCallback ) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",

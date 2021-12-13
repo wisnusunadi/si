@@ -1337,32 +1337,25 @@ return [
                     'icon' => 'far fa-circle',
                     'auth' => [2]
                 ],
-                // [
-                //     'text' => 'Lacak',
-                //     'icon' => 'far fa-circle',
-                //     'url' => '/penjualan/lacak/show',
-                //     'auth' => [2],
-                // ],
+                [
+                    'text' => 'Lacak',
+                    'icon' => 'far fa-circle',
+                    'url' => '/penjualan/lacak/show',
+                    'auth' => [2],
+                ],
             ],
         ],
-        // [
-        //     'text'    => 'PPIC',
-        //     'icon'    => 'fas fa-database',
-        //     'auth' => [2],
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Master Stok',
-        //             'icon' => 'far fa-circle',
-        //             'url' => '/ppic/master_stok/show',
-        //             'auth' => [2],
-        //         ],
-        //     ],
-        // ],
         [
-            'text' => 'PPIC',
-            'icon' => 'fas fa-truck-loading',
+            'text'    => 'PPIC',
+            'icon'    => 'fas fa-database',
             'auth' => [2],
             'submenu' => [
+                [
+                    'text' => 'Master Stok',
+                    'icon' => 'far fa-circle',
+                    'url' => '/ppic/master_stok/show',
+                    'auth' => [2],
+                ],
                 [
                     'text' => 'Perencanaan',
                     'url'  => '/ppic/jadwal/penyusunan',
@@ -1371,16 +1364,22 @@ return [
                 ],
             ],
         ],
+        // [
+        //     'text' => 'PPIC',
+        //     'icon' => 'fas fa-truck-loading',
+        //     'auth' => [2],
+        //     'submenu' => [],
+        // ],
         [
             'text'    => 'Produksi',
             'icon'    => 'fas fa-cogs',
             'auth' => [2],
             'submenu' => [
                 [
-                        'text' => 'Riwayat Perakitan',
-                        'url'  => 'produksi/riwayat_perakitan',
-                        'icon' => 'far fa-circle',
-                        'auth' => [2]
+                    'text' => 'Riwayat Perakitan',
+                    'url'  => 'produksi/riwayat_perakitan',
+                    'icon' => 'far fa-circle',
+                    'auth' => [2]
                 ],
             ],
         ],
@@ -1408,24 +1407,24 @@ return [
             'icon'    => 'fas fa-shipping-fast',
             'auth' => [2],
             'submenu' => [
-                // [
-                //     'text' => 'Pengiriman',
-                //     'icon' => 'far fa-circle',
-                //     'url' => '/logistik/pengiriman/show',
-                //     'auth' => [2],
-                // ],
+                [
+                    'text' => 'Pengiriman',
+                    'icon' => 'far fa-circle',
+                    'url' => '/logistik/pengiriman/show',
+                    'auth' => [2],
+                ],
                 [
                     'text' => 'Riwayat Pengiriman',
                     'icon' => 'far fa-circle',
                     'url' => '/logistik/pengiriman/riwayat/show',
                     'auth' => [2],
                 ],
-                // [
-                //     'text' => 'Jasa Ekspedisi',
-                //     'icon' => 'far fa-circle',
-                //     'url' => '/logistik/ekspedisi/show',
-                //     'auth' => [2],
-                // ],
+                [
+                    'text' => 'Jasa Ekspedisi',
+                    'icon' => 'far fa-circle',
+                    'url' => '/logistik/ekspedisi/show',
+                    'auth' => [2],
+                ],
             ],
         ],
         [
@@ -1442,19 +1441,19 @@ return [
             ],
         ],
 
-        [
-            'text'    => 'After Sales',
-            'icon'    => 'fas fa-headset',
-            'auth' => [2],
-            'submenu' => [
-                [
-                    'text' => 'Lacak',
-                    'icon' => 'far fa-circle',
-                    'url' => '/penjualan/lacak/show',
-                    'auth' => [2],
-                ],
-            ],
-        ],
+        // [
+        //     'text'    => 'After Sales',
+        //     'icon'    => 'fas fa-headset',
+        //     'auth' => [2],
+        //     'submenu' => [
+        //         [
+        //             'text' => 'Lacak',
+        //             'icon' => 'far fa-circle',
+        //             'url' => '/penjualan/lacak/show',
+        //             'auth' => [2],
+        //         ],
+        //     ],
+        // ],
 
 
 

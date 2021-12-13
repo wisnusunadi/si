@@ -65,4 +65,9 @@ class Pesanan extends Model
     {
         return $this->belongsTo(State::class, 'log_id');
     }
+
+    public function State()
+    {
+        return $this->belongsTo(State::class, 'log_id');
+    }
 }

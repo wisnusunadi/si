@@ -41,6 +41,7 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
     // //test
     // Route::view('/bppb/{any}', 'spa.ppic.bppb');
     // Route::view('/test', 'spa.ppic');
+    Route::view('/master_stok/show', 'spa.ppic.master_stok.show');
 });
 
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
