@@ -24,11 +24,10 @@
                                             </button>
                                         </span>
                                         @endif
-                                        <span class="dropdown float-right" id="semuaprodukfilter"
+                                        <span class="dropdown" id="semuaprodukfilter"
                                             style="margin-right: 5px">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
-                                                id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
+                                                id="semuaprodukfilter" data-toggle="dropdown"><i class="fas fa-filter"></i>&nbsp;
                                                 Filter
                                             </button>
                                             <div class="dropdown-menu p-3 text-nowrap"
