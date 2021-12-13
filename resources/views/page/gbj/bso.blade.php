@@ -384,15 +384,15 @@
                     noseri_id: prd1,
                 },
                 success: function(res) {
-                    console.log(res);
-                    // Swal.fire({
-                    //     position: 'center',
-                    //     icon: 'success',
-                    //     title: res.msg,
-                    //     showConfirmButton: false,
-                    //     timer: 1500
-                    // })
-                    // location.reload();
+                    // console.log(res);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: res.msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    location.reload();
                 }
             })
         })
