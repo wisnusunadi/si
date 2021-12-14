@@ -83,7 +83,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label for="" class="col-form-label col-4" style="text-align: right">Jurusan</label>
                                 <div class="col-8 col-form-label">
                                     <div class="form-check form-check-inline">
@@ -93,17 +93,16 @@
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
                                         <label class="form-check-label" for="jurusan2">Per Provinsi</label>
-                                    </div>
-                                    <!-- <div class="form-check form-check-inline">
+                                    </div> -->
+                            <!-- <div class="form-check form-check-inline">
                                         <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
                                         <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
                                     </div> -->
-
-                                    <div class="invalid-feedback" id="msgjurusan">
-                                    </div>
-                                </div>
+                            <!-- <div class="invalid-feedback" id="msgjurusan">
                             </div>
-                            <div class="form-group row hide" id="provinsi_select">
+                        </div>
+                    </div> -->
+                            <!-- <div class="form-group row hide" id="provinsi_select">
                                 <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
                                 <div class="col-8">
                                     <select class="select-info form-control custom-select provinsi" name="provinsi[]" id="provinsi" style="width: 100%;" multiple>
@@ -115,7 +114,7 @@
                                         @endif
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="form-group row hide" id="kota_kabupaten_select">
                                 <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Kota / Kabupaten</label>

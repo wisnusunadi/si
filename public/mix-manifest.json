@@ -1,6 +1,15 @@
 {
     "/native/js/plugin.js": "/native/js/plugin.js",
+<<<<<<< HEAD
     "/native/js/ppic_spa.js": "/native/js/ppic_spa.js",
     "/native/js/manager_spa.js": "/native/js/manager_spa.js",
+=======
+    "/native/js/gbj/stok.js": "/native/js/gbj/stok.js",
+    "/native/js/gbj/penjualan.js": "/native/js/gbj/penjualan.js",
+    "/native/js/penjualan/produk.js": "/native/js/penjualan/produk.js",
+    "/native/js/penjualan/customer.js": "/native/js/penjualan/customer.js",
+    "/native/js/penjualan/penjualan.js": "/native/js/penjualan/penjualan.js",
+    "/native/js/penjualan/po.js": "/native/js/penjualan/po.js",
+>>>>>>> 53417ad86da7b323b32ee4da6ad885ad07967d7b
     "/native/css/plugin.css": "/native/css/plugin.css"
 }

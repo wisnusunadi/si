@@ -25,7 +25,7 @@ class DetailPesananProduk extends Model
     }
     public function DetailLogistik()
     {
-        return $this->hasMany(DetailLogistik::class);
+        return $this->hasMany(DetailLogistik::class, 'detail_pesanan_produk_id');
     }
 
     function status() {

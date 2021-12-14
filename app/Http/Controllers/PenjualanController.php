@@ -10,6 +10,7 @@ use App\Models\DetailPesananProduk;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
 use App\Models\Ekatalog;
+use App\Models\Logistik;
 use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
@@ -357,6 +358,31 @@ class PenjualanController extends Controller
                 ->rawColumns(['log'])
                 ->make(true);
         } elseif ($parameter == 'no_sj') {
+            $data = Logistik::where('nosurat', 'LIKE', '%' . $value . '%');
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('po', function ($data) {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
+                })
+                ->addColumn('status', function ($data) {
+                    $datas = "";
+                    if ($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->state->nama == "penjualan") {
+                        $datas .= '<span class="red-text badge">';
+                    } else if ($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->state->nama == "po") {
+                        $datas .= '<span class="purple-text badge">';
+                    } else if ($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->state->nama == "gudang") {
+                        $datas .= '<span class="orange-text badge">';
+                    } else if ($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->state->nama == "qc") {
+                        $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->state->nama == "logistik") {
+                        $datas .= '<span class="blue-text badge">';
+                    } else if ($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->state->nama == "selesai") {
+                        $datas .= '<span class="green-text badge">';
+                    }
+                    $datas .= ucfirst($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->state->nama) . '</span>';
+                    return $datas;
+                })
+                ->make(true);
         }
     }
     public function get_data_detail_spa($value)
@@ -1253,7 +1279,6 @@ class PenjualanController extends Controller
                     $bool = false;
                 }
             }
-
             $dekat = DetailPesanan::where('pesanan_id', $poid)->get();
             if (count($dekat) > 0) {
                 $deldekat = DetailPesanan::where('pesanan_id', $poid)->delete();
@@ -1262,7 +1287,6 @@ class PenjualanController extends Controller
                 }
             }
             if ($bool == true) {
-
                 if ($request->status != "draft") {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $c = DetailPesanan::create([
