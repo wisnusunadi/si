@@ -160,7 +160,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="ok">Transfer</button>
+                <button type="button" class="btn btn-success" id="okk">Transfer</button>
                 <button type="button" class="btn btn-info" id="rancang">Rancang</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
@@ -180,7 +180,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped scan-produk">
+                <table class="table table-striped scan-produk" id="scan">
                     <thead>
                         <tr>
                             <th>Nomor Seri</th>
@@ -211,62 +211,14 @@
 @section('adminlte_js')
 <script>
     var mytable = '';
+
     $(document).ready(function () {
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
 
-    });
-
-    var id = '';
-        $(document).on('click', '.editmodal', function(e) {
-        var x = $(this).data('value');
-        console.log(x);
-        id = $(this).data('id');
-            console.log(id);
-            $.ajax({
-                url: "/api/tfp/header-so/" +id+"/"+x,
-                success: function(res) {
-                    console.log(res);
-                    $('span#so').text(res.so);
-                    $('span#po').text(res.po);
-                    $('span#akn').text(res.akn);
-                    // $('span#instansi').text(res.customer);
-                }
-        });
-        // $('#addProduk').DataTable().destroy();
-        $('#addProduk').DataTable({
-            // retrieve: true,
-            destroy: true,
-            autoWidth: false,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "/api/tfp/detail-so/" +id+"/"+x,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
-            },
-            columns: [
-                // { data: 'ids', name: 'ids'},
-                { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
-                // { data: 'tipe', name: 'tipe'},
-                { data: 'merk', name: 'merk'},
-                { data: 'action', name: 'action'},
-            ],
-            "order": [
-                [1, 'asc']
-            ],
-            "oLanguage": {
-            "sSearch": "Cari:"
-            }
-        })
-        $('#addProdukModal').modal('show');
-        });
-
-    let a = $('#gudang-barang').DataTable({
+        let a = $('#gudang-barang').DataTable({
             processing: true,
             serverSide: true,
             destroy: true,
@@ -303,11 +255,61 @@
         });
     }).draw();
 
+    });
+
+    var id = '';
+    $(document).on('click', '.editmodal', function(e) {
+    var x = $(this).data('value');
+    console.log(x);
+    id = $(this).data('id');
+        console.log(id);
+        $.ajax({
+            url: "/api/tfp/header-so/" +id+"/"+x,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.po);
+                $('span#akn').text(res.akn);
+                // $('span#instansi').text(res.customer);
+            }
+    });
+        // $('#addProduk').DataTable().destroy();
+        $('#addProduk').DataTable({
+            // retrieve: true,
+            destroy: true,
+            autoWidth: false,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id+"/"+x,
+                // data: {id: id},
+                // type: "post",
+                // dataType: "json",
+            },
+            columns: [
+                // { data: 'ids', name: 'ids'},
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                // { data: 'tipe', name: 'tipe'},
+                { data: 'merk', name: 'merk'},
+                { data: 'action', name: 'action'},
+            ],
+            "order": [
+                [1, 'asc']
+            ],
+            "oLanguage": {
+            "sSearch": "Cari:"
+            }
+        })
+        $('#addProdukModal').modal('show');
+        });
+
     var prd = '';
+    var jml = '';
         $(document).on('click', '.detailmodal', function(e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
-        var jml = $(this).data('jml');
+        jml = $(this).data('jml');
         console.log(jml);
         console.log(prd);
         // $('.scan-produk').DataTable().destroy();
@@ -343,59 +345,117 @@
     const prd1 = {};
     var t = 0;
     $(document).on('click', '#simpan', function(e) {
-        // console.log('ok');
 
         const ids = [];
         $('.cb-child').each(function() {
-            if ($(this).is(":checked")) {
-                ids.push($(this).val());
+            if($(this).is(":checked")) {
+                if ($('input:checkbox:checked').length > jml) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Melebihi Batas Maksimal'
+                    })
+                } else {
+                    ids.push($(this).val());
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Noseri Berhasil Disimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    // $('#scan').modal('hide');
+                }
             }
+
         })
         prd1[prd] = ids;
 
         console.log(prd1);
-        t++;
+        // console.log($('input:checkbox:checked').length);
+        // t++;
     })
 
     $(document).on('click', '#rancang', function(e) {
-            e.preventDefault();
+        e.preventDefault();
 
-            const prdd = [];
-            const qtyy = [];
-            // const noseri = [];
+        const prdd = [];
+        const qtyy = [];
+        // const noseri = [];
 
-            $('input[name^="gdg_brg_jadi_id"]').each(function() {
-                prdd.push($(this).val());
-            });
+        $('input[name^="gdg_brg_jadi_id"]').each(function() {
+            prdd.push($(this).val());
+        });
 
-            $('input[name^="qty"]').each(function() {
-                qtyy.push($(this).val());
-            });
+        $('input[name^="qty"]').each(function() {
+            qtyy.push($(this).val());
+        });
 
-            // console.log(ids.length);
-            $.ajax({
-                url: "/api/tfp/byso",
-                type: "post",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    pesanan_id: id,
-                    gdg_brg_jadi_id: prdd,
-                    qty: qtyy,
-                    noseri_id: prd1,
-                },
-                success: function(res) {
-                    // console.log(res);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: res.msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    location.reload();
-                }
-            })
+        // console.log(ids.length);
+        $.ajax({
+            url: "/api/tfp/byso",
+            type: "post",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                pesanan_id: id,
+                gdg_brg_jadi_id: prdd,
+                qty: qtyy,
+                noseri_id: prd1,
+            },
+            success: function(res) {
+                // console.log(res);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
+            }
         })
+    })
 
+
+    $(document).on('click', '#okk', function(e) {
+        // console.log('test');
+        e.preventDefault();
+
+        const prdd = [];
+        const qtyy = [];
+        // const noseri = [];
+
+        $('input[name^="gdg_brg_jadi_id"]').each(function() {
+            prdd.push($(this).val());
+        });
+
+        $('input[name^="qty"]').each(function() {
+            qtyy.push($(this).val());
+        });
+
+        // console.log(ids.length);
+        $.ajax({
+            url: "/api/tfp/byso-final",
+            type: "post",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                pesanan_id: id,
+                gdg_brg_jadi_id: prdd,
+                qty: qtyy,
+                noseri_id: prd1,
+            },
+            success: function(res) {
+                // console.log(res);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
+            }
+        })
+    })
 </script>
 @stop

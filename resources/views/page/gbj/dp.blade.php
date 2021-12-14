@@ -20,42 +20,7 @@
           </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>10-11-2021</td>
-                <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                <td>100 Unit</td>
-                <td><div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
-                    <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
-                            <i class="far fa-edit"></i>&nbsp;Terima
-                          </button>
-                          <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                          </button>
-                    </div>
-                </div></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>11-11-2021</td>
-                <td>AMBULATORY BLOOD PRESSURE TESTING</td>
-                <td>100</td>
-                <td><div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
-                    <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
-                            <i class="far fa-edit"></i>&nbsp;Terima
-                          </button>
-                          <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                          </button>
-                    </div>
-                </div></td>
-            </tr>
+
         </tbody>
       </table>
     </div>
@@ -80,7 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        {{-- <tr>
                             <td><input type="checkbox" class="cb-child" value="1"></td>
                             <td>36541654654654564</td>
                             <td><select name="" id="" class="form-control">
@@ -103,7 +68,7 @@
                                 <option value="1">Layout 1</option>
                                 <option value="2">Layout 2</option>
                                 </select></td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -129,8 +94,9 @@
                   <div class="form-group">
                       <label for="">Layout</label>
                       <select name="" id="change-layout" class="form-control">
-                        <option value="1">Layout 1</option>
-                        <option value="2">Layout 2</option>
+                        @foreach ($layout as $l)
+                            <option value="{{ $l->id }}">{{ $l->ruang }}</option>
+                        @endforeach
                     </select>
                   </div>
               </div>
@@ -205,24 +171,6 @@
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
-
-        $.ajax({
-            url: '/api/gbj/sel-layout',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $("#change-layout").empty();
-                    // $("#divisi").append('<option value="">All</option>');
-                    $.each(res, function(key, value) {
-                        $("#change-layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                    });
-                } else {
-                    $("#change-layout").empty();
-                }
-            }
-        });
     });
 
     function ubahData() {
@@ -248,17 +196,23 @@
 
         $('.scan-produk').DataTable().destroy();
         $('.scan-produk').DataTable({
-            serverSide: true,
+            serverSide: false,
             autoWidth: false,
             processing: true,
+            "ordering": false,
+            stateSave: true,
+            'bPaginate': true,
             ajax: {
                 url: '/api/tfp/rakit-terima/' + id,
             },
             columns: [
-                { data: 'checkbox', orderable: 'false'},
+                { data: 'checkbox'},
                 { data: 'noserii'},
                 { data: 'layout'},
             ],
+            // columnDefs: [
+            //     { className: 'cb-child no-click', targets: 0 },
+            // ],
                 "oLanguage": {
             "sSearch": "Cari:"
             }
@@ -327,9 +281,13 @@
     $(document).on('click', '#simpanseri', function() {
         console.log('test');
         const ids = [];
+        const lay = [];
+        var tr = $(this).closest('tr');
+        layval = tr.find('#layout_id').val();
         $('.cb-child').each(function() {
             if ($(this).is(":checked")) {
                 ids.push($(this).val());
+                lay.push($(this).parent().next().next().children().val());
             }
         })
 
@@ -339,17 +297,18 @@
             data: {
                 "_token" : "{{ csrf_token() }}",
                 seri: ids,
+                layout: lay,
             },
             success: function(res) {
-                // console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
+                console.log(res);
+                // Swal.fire({
+                //     position: 'center',
+                //     icon: 'success',
+                //     title: res.msg,
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // })
+                // location.reload();
             }
         })
     })

@@ -59,7 +59,7 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/transferproduk', 'page.gbj.transferproduk');
     Route::view('/bso', 'page.gbj.bso');
     Route::view('/tso', 'page.gbj.tso');
-    Route::get('/dp', [GudangController::class, 'terimaRakit']);
+    Route::get('/dp', [GudangController::class, 'terimaRakit']); 
     Route::view('/lp', 'page.gbj.lp');
     Route::view('/dashboard', 'page.gbj.dashboard');
     Route::group(['prefix' => '/tp'], function () {

@@ -294,7 +294,10 @@ class GudangController extends Controller
 
     function getRakit()
     {
-        $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
+        $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get()
+                ->sortByDesc(function($q) {
+                    return $q->header->tgl_masuk;
+                })->all();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
@@ -353,13 +356,15 @@ class GudangController extends Controller
     {
         $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->where('status_id', null)->get();
         $layout = Layout::where('jenis_id', 1)->get();
+        $a = 0;
         return datatables()->of($data)
-            ->addColumn('layout', function ($d) use($layout) {
+            ->addColumn('layout', function ($d) use($layout, $a) {
                 $opt = '';
+                $a++;
                 foreach($layout as $l) {
                     $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
                 }
-                return '<select name="layout_id[]" id="layout_id[]" class="form-control">
+                return '<select name="layout_id['.$a.']" id="layout_id[]" class="form-control layout">
                         ' . $opt . '
                         </select>';
             })
@@ -449,6 +454,11 @@ class GudangController extends Controller
             })
             ->rawColumns(['checkbox', 'posisi'])
             ->make(true);
+    }
+
+    function terimaRakit() {
+        $layout = Layout::where('jenis_id', 1)->get();
+        return view('page.gbj.dp', compact('layout'));
     }
 
     // store
