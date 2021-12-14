@@ -70,7 +70,7 @@
                                                             @endif
                                                             {{ucfirst($data->Pesanan->State->nama)}}</span>
                                                         @endif
-                                </b>
+                                </b>s
                             </b>
                         </div>
                     </div>
