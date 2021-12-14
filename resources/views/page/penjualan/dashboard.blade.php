@@ -145,7 +145,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -202,7 +202,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <!-- <div class="col-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -251,7 +251,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -478,15 +478,6 @@
                         ]
                     },
                     options: {
-                        animations: {
-                            tension: {
-                                duration: 4000,
-                                easing: 'linear',
-                                from: 1,
-                                to: 0,
-                                loop: true
-                            }
-                        },
                         plugins: {
                             title: {
                                 display: true,
@@ -494,7 +485,6 @@
                             }
                         },
                         scales: {
-
                             // y: { // defining min and max so hiding the dataset does not change scale range
                             //     min: 0,
                             //     max: 2,
@@ -512,8 +502,4 @@
         });
     });
 </script>
-<script>
-
-</script>
-
 @stop
