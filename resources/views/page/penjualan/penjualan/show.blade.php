@@ -125,6 +125,8 @@
         vertical-align: top;
     }
 
+
+
     @media screen and (min-width: 1440px) {
 
         section {

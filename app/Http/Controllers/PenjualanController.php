@@ -9,10 +9,12 @@ use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
+use App\Models\NoseriTGbj;
 use App\Models\Ekatalog;
 use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
+use App\Models\Logistik;
 use App\Models\Provinsi;
 use App\Models\TFProduksi;
 use Carbon\Doctrine\CarbonType;
@@ -270,6 +272,37 @@ class PenjualanController extends Controller
                 ->rawColumns(['status', 'log'])
                 ->make(true);
         } elseif ($parameter == 'no_seri') {
+            $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
+                $q->where('noseri', 'LIKE', '%' . $value . '%');
+            })->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('noseri', function ($data) {
+                    return $data->NoseriBarangJadi->noseri;
+                })
+                ->addColumn('no_so', function ($data) {
+                    if ($data->detail->header->pesanan_id) {
+                        return $data->detail->header->pesanan->so;
+                    } else {
+                        return "-";
+                    }
+                })
+                ->addColumn('tanggal', function ($data) {
+                    if (!empty($data->detail->header->tgl_masuk)) {
+                        return '<div class="success">' . $data->detail->header->tgl_masuk . '</div>';
+                    } else if (!empty($data->detail->header->tgl_keluar)) {
+                        return '<div class="urgent">' . $data->detail->header->tgl_keluar . '</div>';
+                    }
+                })
+                ->addColumn('divisi_id', function ($data) {
+                    if (!empty($data->detail->header->dari)) {
+                        return '<div class="badge badge-success">' . $data->detail->header->darii->nama . '<div>';
+                    } else if (!empty($data->detail->header->ke)) {
+                        return '<div class="badge badge-info">' . $data->detail->header->divisi->nama . '<div>';
+                    }
+                })
+                ->rawColumns(['divisi_id', 'tanggal'])
+                ->make(true);
         } elseif ($parameter == 'no_so') {
             $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
                 $q->where('so', 'LIKE', '%' . $value . '%');
@@ -325,6 +358,39 @@ class PenjualanController extends Controller
                 ->rawColumns(['log'])
                 ->make(true);
         } elseif ($parameter == 'no_sj') {
+            $data = Logistik::where('nosurat', 'LIKE', '%' . $value . '%')->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('no_so', function ($data) {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                })
+                ->addColumn('po', function ($data) {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
+                })
+                ->addColumn('log', function ($data) {
+                    $datas = "";
+                    if (!empty($data->status_id)) {
+                        if ($data->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        } else if ($data->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        }
+                        $datas .= ucfirst($data->State->nama) . '</span>';
+                    };
+                    return $datas;
+                })
+                ->rawColumns(['log'])
+                ->make(true);
         }
     }
     public function get_data_detail_spa($value)
