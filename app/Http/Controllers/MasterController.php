@@ -380,7 +380,42 @@ class MasterController extends Controller
                     $datas .= ucfirst($data->log) . '</span>';
                     return $datas;
                 })
-                ->rawColumns(['status'])
+                ->addColumn('button', function ($data) {
+                    $name =  $data->getTable();
+
+                    if ($name == 'ekatalog') {
+                        return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button">
+                                  <i class="fas fa-search"></i>
+                                  Details
+                                </button>
+                            </a>
+                    <div>';
+                    } else if ($name == 'spa') {
+                        return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button">
+                                  <i class="fas fa-search"></i>
+                                  Details
+                                </button>
+                            </a>
+                            </div>';
+                    } else {
+                        return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button">
+                                  <i class="fas fa-search"></i>
+                                  Details
+                                </button>
+                            </a>
+                            </div>';
+                    }
+                })
+                ->rawColumns(['status', 'button'])
                 ->make(true);
     }
     //Create
@@ -712,26 +747,26 @@ class MasterController extends Controller
     function select_gk_spr()
     {
         $data = GudangKarantinaDetail::select('t_gk_detail.sparepart_id', 'm_gs.nama')
-                ->whereNotNull('t_gk_detail.sparepart_id')
-                ->where('is_draft', 0)
-                ->where('is_keluar', 0)
-                ->groupBy('t_gk_detail.sparepart_id')
-                ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
-                ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
-                ->get();
+            ->whereNotNull('t_gk_detail.sparepart_id')
+            ->where('is_draft', 0)
+            ->where('is_keluar', 0)
+            ->groupBy('t_gk_detail.sparepart_id')
+            ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
+            ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
+            ->get();
         return $data;
     }
 
     function select_gk_unit()
     {
         $data = GudangKarantinaDetail::select('t_gk_detail.gbj_id', DB::raw('CONCAT(produk.nama," ",gdg_barang_jadi.nama) as name'))
-                ->whereNotNull('t_gk_detail.gbj_id')
-                ->where('is_draft', 0)
-                ->where('is_keluar', 0)
-                ->groupBy('t_gk_detail.gbj_id')
-                ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
-                ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
-                ->get();
+            ->whereNotNull('t_gk_detail.gbj_id')
+            ->where('is_draft', 0)
+            ->where('is_keluar', 0)
+            ->groupBy('t_gk_detail.gbj_id')
+            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
+            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+            ->get();
         // $data = GudangKarantinaDetail::with('units.produk')->groupBy('gbj_id')->where('is_draft',0)->where('is_keluar', 0)->whereNotNull('gbj_id')->get()->pluck('gbj_id', 'units.produk.nama');
         return $data;
     }

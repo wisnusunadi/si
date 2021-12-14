@@ -125,6 +125,7 @@
                                     <th>Harga</th>
                                     <th>Subtotal</th>
                                     <th>Status</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -162,6 +163,7 @@
                                     <th>Harga</th>
                                     <th>Subtotal</th>
                                     <th>Status</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -193,6 +195,7 @@
                                     <th>Harga</th>
                                     <th>Subtotal</th>
                                     <th>Status</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -225,6 +228,7 @@
                                     <th>Harga</th>
                                     <th>Subtotal</th>
                                     <th>Status</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -335,6 +339,9 @@
                 {
                     data: 'log'
                 },
+                {
+                    data: 'ket'
+                }
             ],
             rowGroup: {
                 startRender: function(rows, group) {
@@ -439,6 +446,9 @@
                 },
                 {
                     data: 'log'
+                },
+                {
+                    data: 'ket'
                 }
             ],
             rowGroup: {
@@ -516,6 +526,8 @@
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }, {
                 data: 'log'
+            }, {
+                data: 'ket'
             }],
             rowGroup: {
                 startRender: function(rows, group) {
@@ -591,6 +603,8 @@
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }, {
                 data: 'log'
+            }, {
+                data: 'ket'
             }],
             rowGroup: {
                 startRender: function(rows, group) {
@@ -652,7 +666,6 @@
                 if ($('input[type="radio"][name="penjualan"]').val() != undefined && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
-
                     $("#btncetak").attr('disabled', true);
                 }
             } else {

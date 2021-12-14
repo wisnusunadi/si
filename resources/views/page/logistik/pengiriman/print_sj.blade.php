@@ -84,100 +84,57 @@
 <div class="body">
     <div class="row mdtxt">
         <div class="col-12">
-            <table style="width:100%">
+            <table style="width:100%; table-layout: fixed" border="0">
                 <tbody>
-
                     <tr>
-                        <td colspan="4">Pengirim</td>
-                        <td colspan="4"></td>
+                        <td style="width:10%;" class="vera">Nomor SJ</td>
+                        <td style="width:2% ;" class="vera">:</td>
+                        <td class="wb">SJ.{{$d->nosurat}}</td>
+                        <td class="align-right">
+                            Tanggal : {{App\Http\Controllers\LogistikController::tgl_footer($d->tgl_kirim)}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table style="width:100%; table-layout: fixed" border="0">
+                <tbody>
+                    <tr>
+                        <td style="width:10%;" class="vera">Nomor PO</td>
+                        <td style="width:2% ;" class="vera">:</td>
+                        <td class="wb" class="vera">{{$d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</td>
                     </tr>
                     <tr>
-                        <td colspan="4" class="wb">PT. Sinko Prima Alloy</td>
-                        <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="wb">Pergudangan Osowilangun Permai Blok E7-E10</td>
-                        <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="wb">Surabaya, Jawa Timur</td>
-                        <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="wb">08119092890</td>
-                        <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td colspan="4">Kepada Yth</td>
-
-                    </tr>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td colspan="4" class="wb">
+                        <td class="vera">Kepada</td>
+                        <td class="vera">:</td>
+                        <td class="vera">
                             <?php
                             $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
-
                             if ($name[1] == 'EKAT') {
-                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
                             } else if ($name[1] == 'SPA') {
                                 echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                             } else {
                                 echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                             }
-
                             ?>
+
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="4"></td>
-                        <td colspan="4" class="wb">
+                        <td class="vera">Alamat</td>
+                        <td class="vera">:</td>
+                        <td class="vera">
                             <?php
                             $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
-
                             if ($name[1] == 'EKAT') {
-                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->alamat;
+                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
                             } else if ($name[1] == 'SPA') {
                                 echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
                             } else {
                                 echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
                             }
-
                             ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td colspan="4" class="wb">
-                            <?php
-                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
 
-                            if ($name[1] == 'EKAT') {
-                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->Provinsi->nama;
-                            } else if ($name[1] == 'SPA') {
-                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
-                            } else {
-                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
-                            }
-
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td colspan="4" class="wb">
-                            <?php
-                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
-
-                            if ($name[1] == 'EKAT') {
-                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->telp;
-                            } else if ($name[1] == 'SPA') {
-                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp;
-                            } else {
-                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp;
-                            }
-
-                            ?>
                         </td>
                     </tr>
                 </tbody>
@@ -193,44 +150,12 @@
             </tbody>
         </table>
     </div>
-    <div class="row">
-        <div class="col-12 align-left" style="border-bottom: 1px solid;">
-            <h4>{{$d->nosurat}}</h4>
-        </div>
-    </div><br>
-    <div class="row mdtxt">
-        <div class="col-12">
-            <table class="table" border="0" style="border-collapse: collapse; text-align:center; " width="100%">
-                <thead class="align-center">
-                    <tr>
-                        <th class="nospace">No SO</th>
-                        <th class="nospace">No PO</th>
-                        <th class="nospace">No Invoice</th>
-                        <th>Tanggal Kirim</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="nospace">{{$d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</td>
-                        <td class="nospace">{{$d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</td>
-                        <td class="wb">-</td>
-                        <td class="nospace">
-                            {{App\Http\Controllers\LogistikController::tgl_footer($d->tgl_kirim)}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 align-left">
-            <h4>Produk</h4>
-        </div>
-    </div>
+
     <div class="row mdtxt">
         <div class="col-12">
             <table class="table" border="0" style="border-collapse: collapse; text-align:center;" width="100%">
-                <thead class="align-center" style="border-bottom: 1px solid black;">
+
+                <thead class="align-center" style="border-top: 1px solid black; border-bottom: 1px solid black;">
                     <tr>
                         <th>Nama Barang</th>
                         <th class="nospace">Jumlah</th>
