@@ -10,6 +10,8 @@ use App\Models\DetailPesananProduk;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
 use App\Models\Ekatalog;
+use App\Models\Logistik;
+use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
@@ -231,7 +233,7 @@ class PenjualanController extends Controller
                 })
                 ->rawColumns(['log'])
                 ->make(true);
-        } elseif ($parameter == 'no_akn') {
+        } else if ($parameter == 'no_akn') {
             $data = Ekatalog::where('no_paket', 'LIKE', '%' . $value . '%')
                 ->get();
             return datatables()->of($data)
@@ -269,8 +271,47 @@ class PenjualanController extends Controller
                 })
                 ->rawColumns(['status', 'log'])
                 ->make(true);
-        } elseif ($parameter == 'no_seri') {
-        } elseif ($parameter == 'no_so') {
+        } else if ($parameter == 'no_seri') {
+            $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
+                $q->where('noseri', 'LIKE', '%' . $value . '%');
+            })->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('noseri', function ($data) {
+                    return $data->NoseriBarangJadi->noseri;
+                })
+                ->addColumn('no_so', function ($data) {
+                    if ($data->detail->header->pesanan_id) {
+                        return $data->detail->header->pesanan->so;
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('tgl_masuk', function ($data) {
+                    if (!empty($data->detail->header->tgl_masuk)) {
+                        return $data->detail->header->tgl_masuk;
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('tgl_keluar', function ($data) {
+                    if (!empty($data->detail->header->tgl_keluar)) {
+                        return $data->detail->header->tgl_keluar;
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('divisi_id', function ($data) {
+                    if (!empty($data->detail->header->dari)) {
+                        return '<div class="badge badge-success">' . $data->detail->header->darii->nama . '</div>';
+                    } else if (!empty($data->detail->header->ke)) {
+                        return '<div class="badge badge-info">' . $data->detail->header->divisi->nama . '</div>';
+                    }
+                })
+                ->rawColumns(['divisi_id', 'log'])
+                ->make(true);
+        } else if ($parameter == 'no_so') {
             $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
                 $q->where('so', 'LIKE', '%' . $value . '%');
             })->get());
@@ -325,6 +366,41 @@ class PenjualanController extends Controller
                 ->rawColumns(['log'])
                 ->make(true);
         } elseif ($parameter == 'no_sj') {
+            $data = Logistik::where('nosurat',  'LIKE', '%' . $value . '%')->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('no_so', function ($data) {
+                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                })
+                ->addColumn('nosurat', function ($data) {
+                    return $data->nosurat;
+                })
+                ->addColumn('customer', function ($data) {
+                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
+                    } else if ($name[1] == 'SPA') {
+                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                    } else if ($name[1] == 'SPB') {
+                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                    }
+                })
+                ->addColumn('tgl_kirim', function ($data) {
+                    if ($data->tgl_kirim) {
+                        return $data->tgl_kirim;
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('status', function ($data) {
+                    if ($data->status_id == "10") {
+                        return '<div class="badge blue-text">' . $data->State->nama . '</div>';
+                    } else if ($data->status_id == "11") {
+                        return '<div class="badge red-text">' . $data->State->nama . '</div>';
+                    }
+                })
+                ->rawColumns(['status'])
+                ->make(true);
         }
     }
     public function get_data_detail_spa($value)

@@ -135,10 +135,10 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No Seri</th>
-                                        <th>Nama Produk</th>
-                                        <th>Tanggal</th>
-                                        <th>Posisi</th>
-                                        <th>Status</th>
+                                        <th>No SO</th>
+                                        <th>Tanggal Masuk</th>
+                                        <th>Tanggal Keluar</th>
+                                        <th>Dari / Ke</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -193,14 +193,14 @@
                     <div class="card-body">
                         <h4>Hasil Pencarian Surat Jalan</h4>
                         <div class="table-responsive">
-                            <table class="table table-hover" id="table" style="width:100%">
+                            <table class="table table-hover" id="nosjtable" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>No Surat Jalan</th>
-                                        <th>No PO</th>
+                                        <th>No SO</th>
+                                        <th>Customer</th>
                                         <th>Tanggal Kirim</th>
-                                        <th>Posisi</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -315,7 +315,88 @@
                 }
             ]
         });
-        $('#noseritable').DataTable();
+        $('#noseritable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/no_seri/0',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'noseri',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'no_so',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_masuk',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_keluar',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'divisi_id',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+        $('#nosjtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/no_sj/0',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nosurat',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'no_so',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'customer',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_kirim',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'status',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
 
         $('#data').on('keyup change', function() {
             if ($(this).val() != "") {
@@ -345,7 +426,7 @@
         $('#btncari').on('click', function() {
             if ($('.pilih_data').val() == "no_seri") {
                 var data = $('#data').val();
-                $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
+                $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
                 $('#noseri').removeClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noakn').addClass('hide');
@@ -377,7 +458,7 @@
                 $('#nosj').addClass('hide');
             } else if ($('.pilih_data').val() == "no_sj") {
                 var data = $('#data').val();
-                $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
+                $('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
                 $('#nosj').removeClass('hide');
                 $('#noseri').addClass('hide');
                 $('#nopo').addClass('hide');

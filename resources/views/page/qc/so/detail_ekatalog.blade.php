@@ -107,10 +107,9 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4>Info Penjualan </h4>
+                        <h4>Info Penjualan Ekatalog</h4>
                         <?php $item = array(); ?>
                         @foreach($data as $d)
-                        <h4>Info Ekatalog</h4>
                         <div class="row">
                             <div class="col-5">
                                 <div class="margin">
@@ -121,7 +120,12 @@
                                 </div>
                                 <div class="margin">
                                     <div><b id="no_akn">{{$d->satuan}}</b></div>
-                                    <small>({{$d->instansi}})</small>
+                                </div>
+                                <div class="margin">
+                                    <div><b id="no_akn">@if($d->alamat) {{$d->alamat}} @else - @endif</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><b id="no_akn">@if($d->provinsi_id) {{$d->Provinsi->nama}} @else - @endif</b></div>
                                 </div>
                             </div>
                             <div class="col-2">

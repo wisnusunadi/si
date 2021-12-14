@@ -125,6 +125,13 @@
         vertical-align: top;
     }
 
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
     @media screen and (min-width: 1440px) {
 
         section {
@@ -188,7 +195,6 @@
                             <div class="row">
                                 <div class="col-12">
                                     @if(Auth::user()->divisi->id == "26")
-
                                     <span class="float-right filter">
                                         <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
                                                 <i class="fas fa-plus"></i> Tambah

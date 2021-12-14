@@ -2,50 +2,77 @@
     <div class="col-12">
         <div class="row filter">
             <div class="col-5">
-                <h5>Info</h5>
                 <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Info Customer</h5>
+                    </div>
                     <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item bordertopnone">
-                                <a>Nama Customer</a>
-                                <b class="float-right" id="nama_customer">{{$data->customer->nama}}</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>No PO</a>
-                                <b class="float-right" id="no_po">
-                                    @if ($data->Pesanan)
-                                    {{ $data->Pesanan->no_po}}
-                                    @endif
+                        <div class="row">
+                            <div class="col-12 align-center">
+                                <!-- <div id="profileImage" class="center margin-all"></div> -->
+                                <div>
+                                    <h6><b>{{$data->Customer->nama}}</b></h6>
+                                </div>
+                                <div><b>{{$data->Customer->alamat}}</b></div>
+                                <div><b>{{$data->Customer->Provinsi->nama}}</b></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Info Penjualan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="margin">
+                            <a class="text-muted">No SO</a>
+                            <b class="float-right">@if ($data->Pesanan->so)
+                                {{ $data->Pesanan->so}}
+                                @else
+                                -
+                                @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">No PO</a>
+                            <b class="float-right">
+                                @if ($data->Pesanan->no_po)
+                                {{ $data->Pesanan->no_po}}
+                                @else
+                                -
+                                @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Tanggal PO</a>
+                            <b class="float-right">@if ($data->Pesanan->tgl_po)
+                                {{ $data->Pesanan->tgl_po}}
+                                @else
+                                -
+                                @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Status</a>
+                            <b class="float-right" id="status">
+                                <b class="float-right" id="status">
+                                    @if (!empty($data->Pesanan->log_id))
+                                    @if ($data->Pesanan->State->nama == "Penjualan")
+                                    <span class="red-text badge">
+                                        @elseif ($data->Pesanan->State->nama == "PO")
+                                        <span class="purple-text badge">
+                                            @elseif ($data->Pesanan->State->nama == "Gudang")
+                                            <span class="orange-text badge">
+                                                @elseif ($data->Pesanan->State->nama == "QC")
+                                                <span class="yellow-text badge">
+                                                    @elseif ($data->Pesanan->State->nama == "Terkirim Sebagian")
+                                                    <span class="blue-text badge">
+                                                        @elseif ($data->Pesanan->State->nama == "Kirim")
+                                                        <span class="green-text badge">
+                                                            @endif
+                                                            {{ucfirst($data->Pesanan->State->nama)}}</span>
+                                                        @endif
                                 </b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Tanggal PO</a>
-                                <b class="float-right" id="tanggal_pemesanan">
-                                    @if ($data->Pesanan)
-                                    {{ $data->Pesanan->tgl_po}}
-                                    @endif
-                                </b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Status</a>
-                                <b class="float-right" id="status">@if ($data->log == "penjualan")
-                                    <span class="red-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "po")
-                                    <span class="purple-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "gudang")
-                                    <span class="orange-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "qc")
-                                    <span class="yellow-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "logistik")
-                                    <span class="blue-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "selesai")
-                                    <span class="green-text badge">{{ucfirst($data->log)}}</span>
-                                    @endif</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a class="text-muted" id="keterangan">{{$data->ket}}</a>
-                            </li>
-                        </ul>
+                            </b>
+                        </div>
                     </div>
                 </div>
             </div>
