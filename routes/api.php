@@ -344,7 +344,9 @@ Route::prefix('/noseri')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\NoseriController::class, 'UpdateNoSeri']);
     Route::delete('/delete/{id}', [App\Http\Controllers\NoseriController::class, 'DestroyNoSeri']);
 });
-
+Route::prefix('/produk')->group(function () {
+    Route::get('/variasi_stok/{id}', [App\Http\Controllers\PenjualanController::class, 'check_variasi_jumlah']);
+});
 Route::prefix('/ekatalog')->group(function () {
     // Route::get('data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
     Route::post('pengiriman/data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_pengiriman']);
@@ -375,7 +377,7 @@ Route::prefix('/spb')->group(function () {
 Route::prefix('/qc')->group(function () {
     Route::get('dashboard/data/{value}', [App\Http\Controllers\QcController::class, 'dashboard_data']);
     Route::prefix('/so')->group(function () {
-        Route::post('create/{seri_id}/{tfgbj_id}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
+        Route::put('create/{seri_id}/{tfgbj_id}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::get('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
         Route::get('seri/{value}/{tfgbj_id}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
         Route::get('seri/select/{seri_id}/{produk_id}/{tfgbj_id}', [App\Http\Controllers\QcController::class, 'get_data_select_seri']);

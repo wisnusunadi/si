@@ -102,12 +102,7 @@
 
     }
 
-    .overflowy {
-        max-height: 450px;
-        width: auto;
-        overflow-y: scroll;
-        box-shadow: none;
-    }
+
 
     .removeshadow {
         box-shadow: none;
@@ -139,11 +134,18 @@
         }
 
         #detailmodal {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .btn {
             font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 550px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
     }
 
@@ -164,6 +166,13 @@
 
         .btn {
             font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 450px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
     }
 </style>
@@ -876,9 +885,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header">
-                        <div id="modal-title">
-                            <h4>Detail</h4>
-                        </div>
+                        <h4 id="modal-title">Detail</h4>
                     </div>
                     <div class="modal-body" id="detail">
 

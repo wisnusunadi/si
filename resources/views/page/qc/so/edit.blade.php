@@ -1,4 +1,5 @@
 <form method="POST" action="/api/qc/so/create/{{$id}}/{{$tfgbj_id}}/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
+    @method('PUT')
     @csrf
     <div class="row d-flex justify-content-center">
         <div class="col-11">
@@ -77,5 +78,4 @@
             </div>
         </div>
     </div>
-    {{$id}}
 </form>

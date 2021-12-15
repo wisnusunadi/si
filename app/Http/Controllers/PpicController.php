@@ -300,7 +300,7 @@ class PpicController extends Controller
             })
             ->addColumn('penjualan', function ($data) {
                 $jumlah_gbj = $data->stok;
-                $jumlah_stok_permintaan = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id);
+                $jumlah_stok_permintaan = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id, $data->produk->id);
                 $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
                 if ($jumlah >= 0) {
                     return "<div>" . $jumlah . "</div>";
@@ -424,7 +424,7 @@ class PpicController extends Controller
                 return $this->get_count_ekatalog($data->id, $data->produk->id, 'batal');
             })
             ->addColumn('po', function ($data) {
-                return $this->get_count_spa_spb_po($data->id);
+                return $this->get_count_spa_spb_po($data->id, $data->produk->id);
             })
             ->addColumn('aksi', function ($data) {
                 return '<i class="fas fa-search"></i>';
@@ -452,21 +452,22 @@ class PpicController extends Controller
         return $jumlah;
     }
 
-    public function get_count_spa_spb_po($id)
+    public function get_count_spa_spb_po($id, $produk_id)
     {
-        $res1 = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+        $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
             $q->where('gudang_barang_jadi_id', $id);
-        })->whereHas('Pesanan.Spa', function ($q) {
-            $q->whereIn('log', ['penjualan', 'po']);
-        })->get();
-
-        $res2 = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
-            $q->where('gudang_barang_jadi_id', $id);
-        })->whereHas('Pesanan.Spb', function ($q) {
-            $q->whereIn('log', ['penjualan', 'po']);
-        })->get();
-
-        $jumlah = $res1->merge($res2)->count();
+        })->whereHas('Pesanan', function ($q) {
+            $q->whereIn('log_id', ['7', '9']);
+        })->doesntHave('Pesanan.Ekatalog')->get();
+        $jumlah = 0;
+        foreach ($res as $a) {
+            $a->jumlah;
+            foreach ($a->PenjualanProduk->Produk as $b) {
+                if ($b->id == $produk_id) {
+                    $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                }
+            }
+        }
         return $jumlah;
     }
 }

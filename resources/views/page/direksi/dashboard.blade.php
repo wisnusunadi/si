@@ -9,9 +9,10 @@
 
 @section('adminlte_css')
 <style lang="scss">
-    .fc-event-time{
-    display : none;
+    .fc-event-time {
+        display: none;
     }
+
     body {
         font-size: 14px;
     }
@@ -148,6 +149,7 @@
     #tableKerusakan_filter {
         display: none;
     }
+
     .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
@@ -173,8 +175,7 @@
                                             <div class="col-12">
                                                 <h4></h4>
                                                 <div class="chart h-100">
-                                                    <canvas id="myChart"
-                                                        style="min-height: 250px; height: 250px; max-height: 100%; max-width: 100%;"></canvas>
+                                                    <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 100%; max-width: 100%;"></canvas>
                                                 </div>
                                             </div>
                                         </div>
@@ -223,9 +224,7 @@
                                                                 <h3 id="so_dc">3</h3>
                                                                 <p class="so-title">SO Belum Diproses DC</p>
                                                             </div>
-                                                            <div class="card-footer align-center"><a href="/dc/so/show"
-                                                                    id="belumdikirim" class="link">Lihat Laporan <i
-                                                                        class="fas fa-arrow-circle-right"></i></a></div>
+                                                            <div class="card-footer align-center"><a href="/dc/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -320,30 +319,26 @@
                                         <div class="row produkgbj hidden">
                                             <div class="col-sm-4">
                                                 <div class="card">
-                                                    <div class="card-body text-center"
-                                                        style="background-color: #FEF7EA">
+                                                    <div class="card-body text-center" style="background-color: #FEF7EA">
                                                         <h4 id="prd1">10</h4>
                                                         <p class="card-text">Produk dengan jumlah stok 10 sampai 20</p>
                                                     </div>
                                                 </div>
                                                 <div class="card">
-                                                    <div class="card-body text-center"
-                                                        style="background-color: #FFBD67">
+                                                    <div class="card-body text-center" style="background-color: #FFBD67">
                                                         <h4 id="prd3">10</h4>
                                                         <p class="card-text">Produk dengan jumlah stok 1 sampai 4</p>
                                                     </div>
                                                 </div>
                                                 <div class="card">
-                                                    <div class="card-body text-center"
-                                                        style="background-color: #FA8282">
+                                                    <div class="card-body text-center" style="background-color: #FA8282">
                                                         <h4 id="prd4">10</h4>
                                                         <p class="card-text font-weight">Produk masuk 3 bulan sampai 6
                                                             bulan</p>
                                                     </div>
                                                 </div>
                                                 <div class="card">
-                                                    <div class="card-body text-center"
-                                                        style="background-color: #FF6464">
+                                                    <div class="card-body text-center" style="background-color: #FF6464">
                                                         <h4 id="prd7">10</h4>
                                                         <p class="card-text font-weight">Produk masuk lebih dari 3 tahun
                                                         </p>
@@ -361,8 +356,7 @@
                                                             </div>
                                                             <div class="col-sm text-right">Layout :</div>
                                                             <div class="col-sm">
-                                                                <select class="select2 form-control layout"
-                                                                    multiple="multiple">
+                                                                <select class="select2 form-control layout" multiple="multiple">
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -389,7 +383,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 class="card-title pb-3">
-                                        Gudang Karantina <i class="fas fa-toolbox"></i>
+                                            Gudang Karantina <i class="fas fa-toolbox"></i>
                                         </h5>
                                     </div>
                                     <div class="card-body" style="font-size: 12px">
@@ -558,53 +552,53 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                       </div>
-                                       <div class="produkGbj">
-                                        <table class="table table-produk-gbj">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tanggal Mulai</th>
-                                                    <th>Tanggal Selesai</th>
-                                                    <th>Nomor BPPB</th>
-                                                    <th>Produk</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                       </div>
-                                       <div class="produkPerakitan hidden">
-                                           <table class="table table-waktu-perakitan">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tanggal Mulai</th>
-                                                    <th>Tanggal Selesai</th>
-                                                    <th>Nomor BPPB</th>
-                                                    <th>Produk</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                           </table>
-                                       </div>
-                                       <div class="perubahanPerakitan hidden">
-                                           <table class="table table-perubahan-perakitan">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tanggal Mulai</th>
-                                                    <th>Tanggal Selesai</th>
-                                                    <th>Nomor BPPB</th>
-                                                    <th>Produk</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                           </table>
-                                       </div>
+                                        </div>
+                                        <div class="produkGbj">
+                                            <table class="table table-produk-gbj">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tanggal Mulai</th>
+                                                        <th>Tanggal Selesai</th>
+                                                        <th>Nomor BPPB</th>
+                                                        <th>Produk</th>
+                                                        <th>Jumlah</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="produkPerakitan hidden">
+                                            <table class="table table-waktu-perakitan">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tanggal Mulai</th>
+                                                        <th>Tanggal Selesai</th>
+                                                        <th>Nomor BPPB</th>
+                                                        <th>Produk</th>
+                                                        <th>Jumlah</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="perubahanPerakitan hidden">
+                                            <table class="table table-perubahan-perakitan">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tanggal Mulai</th>
+                                                        <th>Tanggal Selesai</th>
+                                                        <th>Nomor BPPB</th>
+                                                        <th>Produk</th>
+                                                        <th>Jumlah</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -618,7 +612,7 @@
 @stop
 @section('adminlte_js')
 <script>
-    $(function () {
+    $(function() {
         $('#divisitable').DataTable({});
         var pengirimantable = $('#pengirimantable').DataTable({
             processing: true,
@@ -670,19 +664,19 @@
             ]
         })
     });
-    $(function () {
-        $(document).on('click', '.detailmodal', function (event) {
+    $(function() {
+        $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data("id");
             var label = $(this).data("target");
             $.ajax({
                 url: href,
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#loader').show();
                 },
                 // return the result
-                success: function (result) {
+                success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
                     if (label == 'ekatalog') {
@@ -693,10 +687,10 @@
                         detailtabel_spb(id);
                     }
                 },
-                complete: function () {
+                complete: function() {
                     $('#loader').hide();
                 },
-                error: function (jqXHR, testStatus, error) {
+                error: function(jqXHR, testStatus, error) {
                     alert("Page " + href + " cannot open. Error:" + error);
                     $('#loader').hide();
                 },
@@ -748,11 +742,11 @@
                         searchable: false
                     },
                 ],
-                footerCallback: function (row, data, start, end, display) {
+                footerCallback: function(row, data, start, end, display) {
                     var api = this.api(),
                         data;
                     // converting to interger to find total
-                    var intVal = function (i) {
+                    var intVal = function(i) {
                         return typeof i === 'string' ?
                             i.replace(/[\$,]/g, '') * 1 :
                             typeof i === 'number' ?
@@ -762,14 +756,14 @@
                     var jumlah_pesanan = api
                         .column(3)
                         .data()
-                        .reduce(function (a, b) {
+                        .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
                     // computing column Total of the complete result
                     var total_pesanan = api
                         .column(4)
                         .data()
-                        .reduce(function (a, b) {
+                        .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
                     var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
@@ -795,8 +789,8 @@
             },
             weekends: false,
             locale: 'id',
-            stickyFooterScrollbar : false,
-            events: function( fetchInfo, successCallback, failureCallback ) {
+            stickyFooterScrollbar: false,
+            events: function(fetchInfo, successCallback, failureCallback) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",
                     type: "post",
@@ -820,13 +814,13 @@
             },
         });
 
-            calendar.render();
+        calendar.render();
     });
-    $(document).ready(function () {
+    $(document).ready(function() {
         $.ajax({
             url: "/api/penjualan/chart",
             method: "GET",
-            success: function (data) {
+            success: function(data) {
                 var ctx = document.getElementById("myChart");
                 var myChart = new Chart(ctx, {
                     type: 'line',
@@ -879,15 +873,15 @@
                         ]
                     },
                     options: {
-                        animations: {
-                            tension: {
-                                duration: 4000,
-                                easing: 'linear',
-                                from: 1,
-                                to: 0,
-                                loop: true
-                            }
-                        },
+                        // animations: {
+                        //     tension: {
+                        //         duration: 4000,
+                        //         easing: 'linear',
+                        //         from: 1,
+                        //         to: 0,
+                        //         loop: true
+                        //     }
+                        // },
                         plugins: {
                             title: {
                                 display: true,
@@ -914,137 +908,137 @@
         // GBJ
         // Penjualan
         $('.penjualangbj').removeClass('hidden');
-                $('.produkgbj').addClass('hidden');
-                $.ajax({
-                    url: "/api/dashboard-gbj/list1/h",
-                    type: "post",
-                    success: function (res) {
-                        $('h4#he1').text(res);
-                    }
-                })
+        $('.produkgbj').addClass('hidden');
+        $.ajax({
+            url: "/api/dashboard-gbj/list1/h",
+            type: "post",
+            success: function(res) {
+                $('h4#he1').text(res);
+            }
+        })
 
-                $.ajax({
-                    url: "/api/dashboard-gbj/list2/h",
-                    type: "post",
-                    success: function (res) {
-                        $('h4#he2').text(res);
-                    }
-                });
-                $.ajax({
-                    url: "/api/dashboard-gbj/list/h",
-                    type: "post",
-                    success: function (res) {
-                        $('h4#he3').text(res);
-                    }
-                });
-                $('.table-jml-stok').DataTable({
-                    dom: 'frtip',
-                    processing: true,
-                    serverSide: true,
-                    autoWidth: false,
-                    "lengthChange": false,
-                    pageLength: 7,
-                    ajax: {
-                        url: '/api/dashboard-gbj/list-all',
-                        type: "post",
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'produk'
-                        },
-                        {
-                            data: 'permintaan'
-                        },
-                        {
-                            data: 'current_stok'
-                        },
-                    ],
-                    "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                    }
-                });
+        $.ajax({
+            url: "/api/dashboard-gbj/list2/h",
+            type: "post",
+            success: function(res) {
+                $('h4#he2').text(res);
+            }
+        });
+        $.ajax({
+            url: "/api/dashboard-gbj/list/h",
+            type: "post",
+            success: function(res) {
+                $('h4#he3').text(res);
+            }
+        });
+        $('.table-jml-stok').DataTable({
+            dom: 'frtip',
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            "lengthChange": false,
+            pageLength: 7,
+            ajax: {
+                url: '/api/dashboard-gbj/list-all',
+                type: "post",
+            },
+            columns: [{
+                    data: 'DT_RowIndex'
+                },
+                {
+                    data: 'produk'
+                },
+                {
+                    data: 'permintaan'
+                },
+                {
+                    data: 'current_stok'
+                },
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
         // Produk
         $('.tableStokLayout').DataTable({
             dom: 'frtip',
 
-                    processing: true,
-                    serverSide: true,
-                    autoWidth: false,
-                    searching: false,
-                    "lengthChange": false,
-                    pageLength: 5,
-                    ajax: {
-                        url: '/api/dashboard-gbj/byproduct',
-                        type: "get",
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'prd'
-                        },
-                        {
-                            data: 'jml'
-                        },
-                        {
-                            data: 'layout'
-                        },
-                        // {data: 'action'},
-                    ],
-                    "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                    }
-                });
-                $.ajax({
-                    url: '/api/gbj/sel-layout',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res) {
-                            $(".layout").empty();
-                            $(".layout").append(
-                                '<option value="" selected>All Layout</option>');
-                            $.each(res, function (key, value) {
-                                $(".layout").append('<option value="' + value
-                                    .ruang + '">' + value.ruang + '</option');
-                            });
-                        } else {
-                            $(".layout").empty();
-                        }
-                    }
-                });
-                $.ajax({
-                    url: "/api/dashboard-gbj/stok/1020/h",
-                    success: function (res) {
-                        $('h4#prd1').text(res);
-                    }
-                })
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            searching: false,
+            "lengthChange": false,
+            pageLength: 5,
+            ajax: {
+                url: '/api/dashboard-gbj/byproduct',
+                type: "get",
+            },
+            columns: [{
+                    data: 'DT_RowIndex'
+                },
+                {
+                    data: 'prd'
+                },
+                {
+                    data: 'jml'
+                },
+                {
+                    data: 'layout'
+                },
+                // {data: 'action'},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                if (res) {
+                    $(".layout").empty();
+                    $(".layout").append(
+                        '<option value="" selected>All Layout</option>');
+                    $.each(res, function(key, value) {
+                        $(".layout").append('<option value="' + value
+                            .ruang + '">' + value.ruang + '</option');
+                    });
+                } else {
+                    $(".layout").empty();
+                }
+            }
+        });
+        $.ajax({
+            url: "/api/dashboard-gbj/stok/1020/h",
+            success: function(res) {
+                $('h4#prd1').text(res);
+            }
+        })
 
-                $.ajax({
-                    url: "/api/dashboard-gbj/stok/14/h",
-                    success: function (res) {
-                        $('h4#prd3').text(res);
-                    }
-                })
+        $.ajax({
+            url: "/api/dashboard-gbj/stok/14/h",
+            success: function(res) {
+                $('h4#prd3').text(res);
+            }
+        })
 
-                $.ajax({
-                    url: "/api/dashboard-gbj/in/36/h",
-                    type: "post",
-                    success: function (res) {
-                        $('h4#prd4').text(res);
-                    }
-                })
+        $.ajax({
+            url: "/api/dashboard-gbj/in/36/h",
+            type: "post",
+            success: function(res) {
+                $('h4#prd4').text(res);
+            }
+        })
 
-                $.ajax({
-                    url: "/api/dashboard-gbj/in/36plus/h",
-                    type: "post",
-                    success: function (res) {
-                        $('h4#prd7').text(res);
-                    }
-                })
-        $('#gbj').change(function (e) {
+        $.ajax({
+            url: "/api/dashboard-gbj/in/36plus/h",
+            type: "post",
+            success: function(res) {
+                $('h4#prd7').text(res);
+            }
+        })
+        $('#gbj').change(function(e) {
             if ($(this).val() == 'penjualan') {
                 $('.penjualangbj').removeClass('hidden');
                 $('.produkgbj').addClass('hidden');
@@ -1055,8 +1049,8 @@
             }
         });
 
-            // GK
-            $.ajax({
+        // GK
+        $.ajax({
             url: "/api/gk/dashboard/stok/34/h",
             type: "post",
             success: function(res) {
@@ -1085,40 +1079,40 @@
             }
         })
 
-        $('#sparepart').click(function () {
+        $('#sparepart').click(function() {
             if ($(this).prop('checked') == true) {
                 table.column(3).search($(this).val()).draw();
-            }else{
+            } else {
                 table.column(3).search('').draw();
             }
         })
 
-        $('#unit').click(function () {
+        $('#unit').click(function() {
             if ($(this).prop('checked') == true) {
                 table.column(3).search($(this).val()).draw();
-            }else{
+            } else {
                 table.column(3).search('').draw();
             }
         })
 
-        $('#level1').click(function () {
+        $('#level1').click(function() {
             if ($(this).prop('checked') == true) {
                 table.column(2).search($(this).val()).draw();
-            }else{
+            } else {
                 table.column(2).search('').draw();
             }
         })
-        $('#level2').click(function () {
+        $('#level2').click(function() {
             if ($(this).prop('checked') == true) {
                 table.column(2).search($(this).val()).draw();
-            }else{
+            } else {
                 table.column(2).search('').draw();
             }
         })
-        $('#level3').click(function () {
+        $('#level3').click(function() {
             if ($(this).prop('checked') == true) {
                 table.column(2).search($(this).val()).draw();
-            }else{
+            } else {
                 table.column(2).search('').draw();
             }
         })
@@ -1133,19 +1127,26 @@
                 url: "/api/gk/dashboard/tingkat",
                 type: "post",
             },
-            columns: [
-                {data: 'produk'},
-                {data: 'jumlah'},
-                {data: 'tingkat'},
-                {data: 'jenis'},
+            columns: [{
+                    data: 'produk'
+                },
+                {
+                    data: 'jumlah'
+                },
+                {
+                    data: 'tingkat'
+                },
+                {
+                    data: 'jenis'
+                },
             ],
             "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                    }
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         });
     });
-      // rakit
-      $.ajax({
+    // rakit
+    $.ajax({
         url: "/api/prd/exp_rakit/h",
         type: "post",
         success: function(res) {
@@ -1155,36 +1156,46 @@
     })
 
     $('.table-produk-gbj').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            dom: "Bfrtip",
-            ajax: {
-                url: "/api/prd/exp_rakit",
-                type: "post",
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        dom: "Bfrtip",
+        ajax: {
+            url: "/api/prd/exp_rakit",
+            type: "post",
+        },
+        columns: [{
+                data: 'start'
             },
-            columns: [
-                {data: 'start'},
-                {data: 'end'},
-                {data: 'no_bppb'},
-                {data: 'produk'},
-                {data: 'jml'},
-                {data: 'button1'}
-            ],
-            columnDefs: [{
-                targets: [5],
-                "visible": document.getElementById('auth').value == '2' ? false : true
-            },{
-                targets: [3],
-                className: 'text-center'
+            {
+                data: 'end'
+            },
+            {
+                data: 'no_bppb'
+            },
+            {
+                data: 'produk'
+            },
+            {
+                data: 'jml'
+            },
+            {
+                data: 'button1'
             }
-            ],
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
+        ],
+        columnDefs: [{
+            targets: [5],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }, {
+            targets: [3],
+            className: 'text-center'
+        }],
+        "ordering": false,
+        "autoWidth": false,
+        "lengthChange": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
     });
 
     $.ajax({
@@ -1197,36 +1208,46 @@
     })
 
     $('.table-waktu-perakitan').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            dom: "Bfrtip",
-            ajax: {
-                url: "/api/prd/exp_rakit",
-                type: "post",
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        dom: "Bfrtip",
+        ajax: {
+            url: "/api/prd/exp_rakit",
+            type: "post",
+        },
+        columns: [{
+                data: 'start'
             },
-            columns: [
-                {data: 'start'},
-                {data: 'end'},
-                {data: 'no_bppb'},
-                {data: 'produk'},
-                {data: 'jml'},
-                {data: 'button'}
-            ],
-            columnDefs: [{
-                targets: [5],
-                "visible": document.getElementById('auth').value == '2' ? false : true
-            },{
-                targets: [3],
-                className: 'text-center'
+            {
+                data: 'end'
+            },
+            {
+                data: 'no_bppb'
+            },
+            {
+                data: 'produk'
+            },
+            {
+                data: 'jml'
+            },
+            {
+                data: 'button'
             }
-            ],
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
+        ],
+        columnDefs: [{
+            targets: [5],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }, {
+            targets: [3],
+            className: 'text-center'
+        }],
+        "ordering": false,
+        "autoWidth": false,
+        "lengthChange": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
     });
 
     $.ajax({
@@ -1239,37 +1260,48 @@
     })
 
     $('.table-perubahan-perakitan').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            dom: "Bfrtip",
-            ajax: {
-                url: "/api/prd/exp_jadwal",
-                type: "post",
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        dom: "Bfrtip",
+        ajax: {
+            url: "/api/prd/exp_jadwal",
+            type: "post",
+        },
+        columns: [{
+                data: 'start'
             },
-            columns: [
-                {data: 'start'},
-                {data: 'end'},
-                {data: 'no_bppb'},
-                {data: 'produk'},
-                {data: 'jml'},
-                {data: 'button'}
-            ],
-            columnDefs: [{
-                targets: [5],
-                "visible": document.getElementById('auth').value == '2' ? false : true
-            },{
-                targets: [3],
-                className: 'text-center'
-            }],
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            {
+                data: 'end'
+            },
+            {
+                data: 'no_bppb'
+            },
+            {
+                data: 'produk'
+            },
+            {
+                data: 'jml'
+            },
+            {
+                data: 'button'
             }
+        ],
+        columnDefs: [{
+            targets: [5],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }, {
+            targets: [3],
+            className: 'text-center'
+        }],
+        "ordering": false,
+        "autoWidth": false,
+        "lengthChange": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
     });
-    $(document).on('click','#bataswaktupenyerahan', function () {
+    $(document).on('click', '#bataswaktupenyerahan', function() {
         $('#bataswaktupenyerahan').addClass('active');
         $('#bataswaktuperakitan').removeClass('active');
         $('#perubahanperakitan').removeClass('active');
@@ -1278,7 +1310,7 @@
         $('.perubahanPerakitan').addClass('hidden');
     });
 
-    $(document).on('click','#bataswaktuperakitan', function () {
+    $(document).on('click', '#bataswaktuperakitan', function() {
         $('#bataswaktuperakitan').addClass('active');
         $('#bataswaktupenyerahan').removeClass('active');
         $('#perubahanperakitan').removeClass('active');
@@ -1287,7 +1319,7 @@
         $('.perubahanPerakitan').addClass('hidden');
     });
 
-    $(document).on('click','#perubahanperakitan', function () {
+    $(document).on('click', '#perubahanperakitan', function() {
         $('#perubahanperakitan').addClass('active');
         $('#bataswaktupenyerahan').removeClass('active');
         $('#bataswaktuperakitan').removeClass('active');

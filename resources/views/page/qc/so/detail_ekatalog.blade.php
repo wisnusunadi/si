@@ -447,15 +447,19 @@
                 url: action,
                 data: $('#form-pengujian-update').serialize(),
                 success: function(response) {
-                    if (response['data'] == "success") {
+                    if (response['data'] != "error") {
+                        // alert(response);
+                        // console.log(response);
                         swal.fire(
                             'Berhasil',
                             'Berhasil melakukan Penambahan Data Pengujian',
                             'success'
                         );
                         $("#editmodal").modal('hide');
-                        //$('#noseritable').DataTable().ajax.reload();
+                        $('#noseritable').DataTable().ajax.reload();
+                        $('#showtable').DataTable().ajax.reload();
                         location.reload();
+
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
@@ -465,7 +469,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert($('#form-customer-update').serialize());
+                    alert($('#form-pengujian-update').serialize());
                 }
             });
             return false;

@@ -1,6 +1,5 @@
 <div class="row filter">
     <div class="col-12">
-        <h4><b>SPA</b></h4>
         <div class="row">
             <div class="col-5">
                 <div class="card">
