@@ -287,6 +287,12 @@ Route::prefix('/gk')->group(function () {
     Route::get('/coba', [SparepartController::class, 'coba']);
     Route::post('/detailseri', [SparepartController::class, 'get_detail_id1']);
 
+    // cek
+    Route::post('/cekseri', [SparepartController::class, 'cekNoseriTerima']);
+    Route::post('/getseri/spr', [SparepartController::class, 'getSeriDoneSpr']);
+    Route::post('/getseri/unit', [SparepartController::class, 'getSeriDoneUnit']);
+    Route::post('/header/spr', [SparepartController::class, 'headerNoseriSpr']);
+
     // select
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
 
