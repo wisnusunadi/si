@@ -337,7 +337,7 @@
             "oLanguage": {
             "sSearch": "Masukkan Nomor Seri:"
             }
-        });
+        }); 
 
         $('#viewProdukModal').modal('show');
     });

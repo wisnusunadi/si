@@ -408,7 +408,7 @@
     }
 
     function clickSparepart(c,d) {
-        console.log(d);
+        // console.log(c);
         var tableScan = $('.scan-produk1').dataTable({
             "destroy": true,
             "ordering": false,
@@ -517,26 +517,43 @@
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk1 tbody tr').each((index, value) => {
-                    const obj = {
-                        noseri: value.childNodes[0].firstChild.value,
-                        kerusakan: value.childNodes[1].firstChild.value,
-                        tingkat: value.childNodes[2].firstChild.value,
-                    }
+            $.ajax({
+                url: "/api/gk/cekseri",
+                type: "post",
+                data: {noseri:data},
+                success: function(res) {
+                    if(res.msg) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: res.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            $('.scan-produk1 tbody tr').each((index, value) => {
+                                const obj = {
+                                    noseri: value.childNodes[0].firstChild.value,
+                                    kerusakan: value.childNodes[1].firstChild.value,
+                                    tingkat: value.childNodes[2].firstChild.value,
+                                }
 
-                    spr_arr.push(obj);
-                })
-                seri[d] = spr_arr;
-                spr_arr = [];
-                $('.modalAddSparepart').modal('hide');
+                                spr_arr.push(obj);
+                            })
+                            seri[d] = spr_arr;
+                            spr_arr = [];
+                            $('.modalAddSparepart').modal('hide');
+                        })
+                    } else {
+                        // console.log(res);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: res.error,
+                        })
+                    }
+                },
             })
+
         }
     }
 
@@ -579,7 +596,7 @@
     }
 
     function clickUnit(c) {
-        console.log(c);
+        // console.log(c);
         var tableUnit = $('.scan-produk').DataTable({
             "destroy": true,
             "ordering": false,
@@ -683,26 +700,42 @@
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk tbody tr').each((index, value) => {
-                                const obj1 = {
-                                    noseri: value.childNodes[0].firstChild.value,
-                                    kerusakan: value.childNodes[1].firstChild.value,
-                                    tingkat: value.childNodes[2].firstChild.value,
-                                }
-                                unit_arr.push(obj1);
-                            })
-                            seri_unit[c] = unit_arr;
-                            unit_arr = [];
-                            console.log(seri_unit)
-                            $('.modalAddUnit').modal('hide');
+            $.ajax({
+                url: "/api/gk/cekseri",
+                type: "post",
+                data: {noseri: dataUnit},
+                success: function(res) {
+                    if(res.msg) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: res.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            $('.scan-produk tbody tr').each((index, value) => {
+                                            const obj1 = {
+                                                noseri: value.childNodes[0].firstChild.value,
+                                                kerusakan: value.childNodes[1].firstChild.value,
+                                                tingkat: value.childNodes[2].firstChild.value,
+                                            }
+                                            unit_arr.push(obj1);
+                                        })
+                                        seri_unit[c] = unit_arr;
+                                        unit_arr = [];
+                                        console.log(seri_unit)
+                                        $('.modalAddUnit').modal('hide');
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: res.error,
+                        })
+                    }
+                }
             })
+
         }
     }
 

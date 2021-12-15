@@ -49,7 +49,7 @@
                     @foreach ($data as $d)
                     <div class="form-row">
                         <div class="form-group col">
-                            <label for="tanggal">Tanggal Masuk</label>
+                            <label for="tanggal">Tanggal Keluar</label>
                             <input type="text" name="date_out" value="{{ $d->date_out }}" id="datePicker" class="form-control" placeholder="" readonly>
                         </div>
                         <div class="form-group col">
@@ -155,7 +155,7 @@ aria-hidden="true">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm">
-                            <label for="">Tanggal Masuk</label>
+                            <label for="">Tanggal Keluar</label>
                             <div class="card" style="background-color: #C8E1A7">
                                 <div class="card-body">
                                     23-09-2021
@@ -239,7 +239,7 @@ aria-hidden="true">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-sm">
-                            <label for="">Tanggal Masuk</label>
+                            <label for="">Tanggal Keluar</label>
                             <div class="card" style="background-color: #C8E1A7">
                                 <div class="card-body">
                                     23-09-2021

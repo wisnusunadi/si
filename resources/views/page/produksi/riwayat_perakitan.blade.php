@@ -3,6 +3,11 @@
 @section('title', 'ERP')
 
 @section('content')
+<style>
+    #DataTables_Table_0_filter{
+        display: none;
+    }
+</style>
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -18,13 +23,7 @@
             <div class="col-sm-3">
                 <div class="form-group">
                     <label for="">Pilih Produk</label>
-                    <select name="" id="" class="form-control produk" multiple>
-                        <option value="" selected>All Produk</option>
-                        <option value="">Produk 1</option>
-                        <option value="">Produk 2</option>
-                        <option value="">Produk 3</option>
-                        <option value="">Produk 4</option>
-                        <option value="">Produk 5</option>
+                    <select name="" id="" class="form-control" id="produk_select" multiple>
                     </select>
                 </div>
             </div>
@@ -71,32 +70,7 @@
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                    <tr class="table-dark text-bold">
-                                        <td scope="row">Selasa 23-09-2021</td>
-                                        <td>Rabu 24-09-2021</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>13.00</td>
-                                        <td>14.00</td>
-                                        <td>564564641654</td>
-                                        <td>Produk 3</td>
-                                        <td>100 Unit</td>
-                                        <td><button class="btn btn-outline-secondary" data-toggle="modal" data-target=".modal_id"><i class="far fa-eye"></i> Detail</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>15.00</td>
-                                        <td>16.00</td>
-                                        <td>564564641654</td>
-                                        <td>Produk 4</td>
-                                        <td>100 Unit</td>
-                                        <td><button class="btn btn-outline-secondary" data-toggle="modal" data-target=".modal_id"><i class="far fa-eye"></i> Detail</button></td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                         </table>
                         </div>
                     </div>
@@ -185,49 +159,9 @@
                                     <thead>
                                         <tr>
                                             <th>Nomor Seri</th>
-                                            {{-- <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th> --}}
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {{-- <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>984654654565</td>
-                                            <td>652656666544</td>
-                                        </tr>
-                                        <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>656645644654</td>
-                                            <td>656886451212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>656645644654</td>
-                                            <td>656886451212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>656645644654</td>
-                                            <td>656886451212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>656645644654</td>
-                                            <td>656886451212</td>
-                                        </tr> --}}
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
@@ -283,7 +217,6 @@
             }
         });
     })
-    $('.produk').select2({});
     $('.daterange').daterangepicker({
         locale: {
             format: 'DD/MM/YYYY'
@@ -291,14 +224,13 @@
     });
     var groupColumn = 0;
     var groupColumn1 = 2;
-    $('.table-history').DataTable({
+    var table = $('.table-history').DataTable({
         "columnDefs": [
             { "visible": false, "targets": groupColumn },
             { "visible": false, "targets": groupColumn1 }
         ],
         destroy: true,
         "lengthChange": false,
-        "searching": false,
         "ordering": false,
         "info": false,
         "responsive": true,
@@ -323,7 +255,6 @@
         },
         autoWidth: false,
         processing: true,
-        serverSide: true,
         ajax: {
             url: "/api/prd/ajax_his_rakit",
             headers: {
@@ -342,6 +273,27 @@
         ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        },
+        initComplete: function () {
+            this.api.columns(3).every( function () {
+                var column = this;
+                var select = $('<select class="form-control"><option value="">Pilih</option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+        $('#produk_select').select2();
         }
     });
 </script>

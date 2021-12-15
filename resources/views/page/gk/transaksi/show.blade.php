@@ -59,7 +59,9 @@
         /* Jika Gambar Diatas */
         /* width: 100px; */
     }
-
+    #DataTables_Table_0_filter{
+        display: none;
+    }
 </style>
 <section class="content">
     <div class="container-fluid">
@@ -143,11 +145,8 @@
                                         <div class="col-md-4">
                                             <div class="d-flex align-items-center">
                                                 <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
-                                                <input type="text" name="" id="tanggalmasuk" class="form-control">
+                                                <input type="text" name="" id="datetimepicker1" class="form-control">
                                             </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a href="#" class="btn btn-outline-primary">Search</a>
                                         </div>
                                     </div>
                                 </div>
@@ -179,88 +178,7 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -332,15 +250,36 @@
             $('span#lebar').text(res.lebar);
             $('span#tinggi').text(res.tinggi);
         }
-    })
+    });
 
-    $('.tableProdukView').DataTable({
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+
+        var evalDate = parseDateValue(aData[0]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    let table = $('.tableProdukView').DataTable({
         destroy: true,
-        searching: false,
         "lengthChange": false,
         destroy: true,
         processing: true,
-        serverSide: true,
         ajax: {
             url: "/api/gk/transaksi/history/" + id,
         },
@@ -353,8 +292,37 @@
         ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
+        },
+        columnDefs:[{
+            targets: [4],
+            searching: false,
+        }]
     });
+
+    $('#kt_datatable_search_query').on('keyup', function() {
+        table.search($(this).val()).draw();
+    });
+
+    $('#datetimepicker1').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#datetimepicker1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            table.draw();
+        });
+
+        $('#datetimepicker1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            table.draw();
+        });
     $('#nav-deskripsi-tab').click(function (e) {
         e.preventDefault();
         $('.is-active').addClass('font-weight-bold');
@@ -383,7 +351,6 @@
             autoWidth: false,
             destroy: true,
             processing: true,
-            serverSide: true,
             ajax: {
                 url: "/api/gk/transaksi/noseri/" + idd,
             },

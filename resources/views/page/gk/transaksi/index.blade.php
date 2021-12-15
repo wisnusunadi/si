@@ -228,20 +228,7 @@
                             <th>Layout</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td scope="row">65465465465</td>
-                            <td>Kerusakan Komponen</td>
-                            <td>Level 1</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">65465465465</td>
-                            <td>Kerusakan Komponen</td>
-                            <td>Level 1</td>
-                            <td>Layout 1</td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
