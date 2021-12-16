@@ -291,7 +291,7 @@
                 var x = ['semua']
             }
             console.log(x);
-            $('#showtable').DataTable().ajax.url(' /api/qc/so/data/' + x).load();
+            $('#showtable').DataTable().ajax.url('/api/qc/so/data/' + x).load();
             return false;
         });
     })

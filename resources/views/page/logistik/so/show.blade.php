@@ -72,44 +72,46 @@
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Pengiriman</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
-                                                    <label class="form-check-label" for="defaultCheck1">
-                                                        Belum Dikirim
-                                                    </label>
+                                    <form id="filter">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Pengiriman</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                        Sebagian Dikirim
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="belum_kirim" id="defaultCheck1" />
+                                                        <label class="form-check-label" for="defaultCheck1">
+                                                            Belum Dikirim
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                        Sudah Dikirim
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="sebagian_kirim" id="defaultCheck2" />
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            Sebagian Dikirim
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="sudah_kirim" id="defaultCheck2" />
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            Sudah Dikirim
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </span>
                             </div>
                         </div>
@@ -204,7 +206,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/logistik/so/data/',
+                'url': '/logistik/so/data/semua',
 
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -260,7 +262,21 @@
             ]
 
         })
+        $('#filter').submit(function() {
+            var values = [];
+            $("input:checked").each(function() {
+                values.push($(this).val());
+            });
+            if (values != 0) {
+                var x = values;
 
+            } else {
+                var x = ['semua']
+            }
+            console.log(x);
+            $('#showtable').DataTable().ajax.url('/logistik/so/data/' + x).load();
+            return false;
+        });
     })
 </script>
 @stop

@@ -125,6 +125,13 @@
         vertical-align: top;
     }
 
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
     @media screen and (min-width: 1440px) {
 
         section {
@@ -188,7 +195,6 @@
                             <div class="row">
                                 <div class="col-12">
                                     @if(Auth::user()->divisi->id == "26")
-
                                     <span class="float-right filter">
                                         <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
                                                 <i class="fas fa-plus"></i> Tambah
@@ -605,60 +611,62 @@
                                         <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-filter"></i> Filter
                                         </button>
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Status</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                        <label class="form-check-label" for="status4">
-                                                            PO
-                                                        </label>
+                                        <form id="filter_spa">
+                                            <div class="dropdown-menu">
+                                                <div class="px-3 py-3">
+                                                    <div class="form-group">
+                                                        <label for="jenis_penjualan">Status</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                        <label class="form-check-label" for="status5">
-                                                            Gudang
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="po" id="status4" />
+                                                            <label class="form-check-label" for="status4">
+                                                                PO
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                        <label class="form-check-label" for="status6">
-                                                            QC
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
+                                                            <label class="form-check-label" for="status5">
+                                                                Gudang
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                        <label class="form-check-label" for="status7">
-                                                            Logistik
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="qc" id="status6" />
+                                                            <label class="form-check-label" for="status6">
+                                                                QC
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                        <label class="form-check-label" for="status8">
-                                                            Pengiriman
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
+                                                            <label class="form-check-label" for="status7">
+                                                                Logistik
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary">
-                                                            Cari
-                                                        </button>
-                                                    </span>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
+                                                            <label class="form-check-label" for="status8">
+                                                                Pengiriman
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <span class="float-right">
+                                                            <button class="btn btn-primary">
+                                                                Cari
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </span>
                                 </div>
                             </div>
@@ -933,7 +941,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/penjualan/penjualan/ekatalog/data/' + 0,
+                'url': '/penjualan/penjualan/ekatalog/data/semua',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -1386,21 +1394,35 @@
                 },
             })
         }
-
         $('#filter_ekat').submit(function() {
-            var values = [];
+            var values_ekat = [];
             $("input:checked").each(function() {
-                values.push($(this).val());
+                values_ekat.push($(this).val());
             });
-            if (values != 0) {
-                var x = values;
+            if (values_ekat != 0) {
+                var x = values_ekat;
 
             } else {
-                var x = ['kosong']
+                var x = ['semua'];
+            }
+            console.log(x);
+            $('#ekatalogtable').DataTable().ajax.url('/penjualan/penjualan/ekatalog/data/' + x).load();
+            return false;
+        });
+        $('#filter_spa').submit(function() {
+            var values_spa = [];
+            $("input:checked").each(function() {
+                values_spa.push($(this).val());
+            });
+            if (values_spa != 0) {
+                var x = values_spa;
+
+            } else {
+                var x = ['semua'];
             }
 
             console.log(x);
-            $('#ekatalogtable').DataTable().ajax.url('/api/ekatalog/data/' + x).load();
+            //      $('#ekatalogtable').DataTable().ajax.url('/penjualan/penjualan/ekatalog/data/' + x).load();
             return false;
 
         });

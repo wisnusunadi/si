@@ -138,11 +138,27 @@ class DcController extends Controller
             ->rawColumns(['laporan'])
             ->make(true);
     }
-    public function get_data_so()
+    public function get_data_so($value)
     {
-        $Ekatalog = collect(Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->Has('Ekatalog')->get());
-        $Spa = collect(Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->Has('Spa')->get());
-        $data = $Ekatalog->merge($Spa);
+        $array_id = array();
+        $x = explode(',', $value);
+        $datas = Pesanan::Has('DetailPesanan.DetailPesananProduk.Noseridetailpesanan.NoseriDetailLogistik')->get();
+
+        foreach ($datas as $d) {
+            if ($value == 'semua') {
+                $array_id[] = $d->id;
+            } else if ($value == 'belum_diproses') {
+                if ($d->getJumlahCoo() == 0) {
+                    $array_id[] = $d->id;
+                }
+            } else {
+                if ($d->getJumlahCoo() < $d->getJumlahPaketPesanan() && $d->getJumlahCoo() != 0) {
+                    $array_id[] = $d->id;
+                }
+            }
+        }
+
+        $data = Pesanan::DoesntHave('Spb')->whereIn('id', $array_id)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('no_paket', function ($data) {
@@ -194,6 +210,7 @@ class DcController extends Controller
                 }
             })
             ->addColumn('instansi', function ($data) {
+
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
                     return $data->ekatalog->instansi;
@@ -203,44 +220,10 @@ class DcController extends Controller
             })
             ->addColumn('status', function ($data) {
 
-                $x = array();
-
-                $jumlah = 0;
-                foreach ($data->detailpesanan as $d) {
-                    $x[] = $d->id;
-                    $jumlah += $d->jumlah;
-                }
-
-                $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
-
-                $y = array();
-
-                foreach ($detail_pesanan_produk as $d) {
-                    $y[] = $d->id;
-                }
-
-                $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get();
-
-
-                $r = array();
-                foreach ($noseri as $j) {
-
-                    $r[] = $j->id;
-                }
-                $logistik = NoseriDetailLogistik::whereIN('noseri_detail_pesanan_id', $r)->get();
-
-                $d = array();
-
-                foreach ($logistik as $l) {
-                    $d[] =  $l->id;
-                }
-
-                $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
-
-                if ($jumlah == $coo) {
+                if ($data->getJumlahPaketPesanan() == $data->getJumlahCoo()) {
                     return ' <span class="badge green-text">Sudah Diproses</span>';
                 } else {
-                    if ($coo == 0) {
+                    if ($data->getJumlahCoo() == 0) {
                         return  '<span class="badge red-text">Belum Diproses</span>';
                     } else {
                         return '<span class="badge yellow-text">Sebagian Diproses</span>';

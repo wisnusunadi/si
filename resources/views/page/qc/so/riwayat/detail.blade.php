@@ -2,8 +2,45 @@
     <div class="row d-flex justify-content">
         <div class="col-5">
             <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Info Customer</h5>
+                </div>
                 <div class="card-body">
-                    <h4>Info Produk</h4>
+                    <div class="row">
+                        <div class="col-12 align-center">
+                            @if(isset($res->Pesanan->Ekatalog))
+                            <!-- <div id="profileImage" class="center margin-all"></div> -->
+                            <div class="margin">
+                                <h6><b>{{$res->Pesanan->Ekatalog->Customer->nama}}</b></h6>
+                            </div>
+                            <div class="margin"><b>{{$res->Pesanan->Ekatalog->satuan}}</b></div>
+                            <div class="margin"><b>{{$res->Pesanan->Ekatalog->alamat}}</b></div>
+                            <div class="margin"><b>{{$res->Pesanan->Ekatalog->Provinsi->nama}}</b></div>
+                            @elseif(isset($res->Pesanan->Spa))
+                            <!-- <div id="profileImage" class="center margin-all"></div> -->
+                            <div class="margin">
+                                <h6><b>{{$res->Pesanan->Spa->Customer->nama}}</b></h6>
+                            </div>
+                            <div class="margin">{{$res->Pesanan->Spa->Customer->alamat}}</div>
+                            <div class="margin">{{$res->Pesanan->Spa->Customer->Provinsi->nama}}</div>
+                            @elseif(isset($res->Pesanan->Spb))
+                            <!-- <div id="profileImage" class="center margin-all"></div> -->
+                            <div class="margin">
+                                <h6><b>{{$res->Pesanan->Spb->Customer->nama}}</b></h6>
+                            </div>
+                            <div class="margin">{{$res->Pesanan->Spb->Customer->alamat}}</div>
+                            <div class="margin">{{$res->Pesanan->Spb->Customer->Provinsi->nama}}</div>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Info Produk</h5>
+                </div>
+                <div class="card-body">
                     <div class="margin">
                         <div><small class="text-muted">Nama Produk</small></div>
                         <div><b>{{$res->PenjualanProduk->nama}}</b></div>

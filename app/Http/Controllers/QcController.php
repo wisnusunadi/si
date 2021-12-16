@@ -154,24 +154,29 @@ class QcController extends Controller
     {
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::Has('TFProduksi')->get();
+            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $data = Pesanan::Has('TFProduksi')->Has('Ekatalog')->Has('SPA')->get();
+            $Ekat = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
+            $Spa = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
+            $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $data = Pesanan::Has('TFProduksi')->Has('Ekatalog')->Has('SPB')->get();
+            $Ekat = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
+            $Spb = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
+            $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $data = Pesanan::Has('TFProduksi')->Has('SPA')->Has('SPB')->get();
+            $Spa = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
+            $Spb = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
+            $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::Has('TFProduksi')->Has('Ekatalog')->get();
+            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::Has('TFProduksi')->Has('Spa')->get();
+            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::Has('TFProduksi')->Has('Spb')->get();
+            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get();
         } else {
-            $data = Pesanan::Has('TFProduksi')->get();
+            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->get();
         }
 
-        $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_customer', function ($data) {

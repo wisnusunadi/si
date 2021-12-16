@@ -397,7 +397,7 @@ Route::prefix('/qc')->group(function () {
 Route::prefix('/logistik')->group(function () {
     Route::get('dashboard/data/{value}', [App\Http\Controllers\LogistikController::class, 'dashboard_data']);
     Route::group(['prefix' => '/so'], function () {
-        Route::post('create/{detail_pesanan_id}/{id_produk}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
+        Route::put('create/{detail_pesanan_id}/{id_produk}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
         // Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('noseri/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so']);
         Route::get('noseri/detail/belum_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_belum_kirim']);
@@ -440,7 +440,7 @@ Route::prefix('/dc')->group(function () {
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::prefix('/so')->group(function () {
         Route::post('create/{value}', [App\Http\Controllers\DcController::class, 'create_coo']);
-        Route::get('data', [App\Http\Controllers\DcController::class, 'get_data_so']);
+        Route::get('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
         Route::get('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::get('detail/seri/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
         Route::get('detail/seri/select/{id}/{value}', [App\Http\Controllers\DcController::class, 'get_data_detail_select_seri_so']);

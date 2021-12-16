@@ -75,7 +75,6 @@ class LogistikController extends Controller
             $data = DetailPesananProduk::whereIN('id', $x)->get();
         }
 
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
@@ -345,16 +344,53 @@ class LogistikController extends Controller
         //     ->make(true);
     }
     //Get Data
-    public function get_data_so()
+    public function get_data_so($value)
     {
+        $x = explode(',', $value);
         $datas = Pesanan::Has('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->get();
         $array_id = array();
         foreach ($datas as $d) {
-            if ($d->getJumlahPesanan() > $d->getJumlahKirim() || $d->getJumlahKirim() == "0") {
-                $array_id[] = $d->id;
+            if ($value == 'semua') {
+                if ($d->getJumlahPesanan() > $d->getJumlahKirim() || $d->getJumlahKirim() == "0") {
+                    $array_id[] = $d->id;
+                }
+            } else if ($x == ['sebagian_kirim', 'sudah_kirim']) {
+                if ($d->getJumlahCek() != $d->getJumlahKirim() ||  $d->getJumlahCek() == $d->getJumlahKirim()) {
+                    $array_id[] = $d->id;
+                }
+            } else if ($x == ['belum_kirim', 'sebagian_kirim']) {
+                if ($d->getJumlahCek() != $d->getJumlahKirim() || $d->getJumlahKirim() == "0") {
+                    $array_id[] = $d->id;
+                }
+            } else if ($x == ['belum_kirim', 'sudah_kirim']) {
+                if ($d->getJumlahKirim() == "0" || $d->getJumlahCek() == $d->getJumlahKirim()) {
+                    $array_id[] = $d->id;
+                }
+            } else if ($value == 'sebagian_kirim') {
+                if ($d->getJumlahCek() != $d->getJumlahKirim()) {
+                    $array_id[] = $d->id;
+                }
+            } else if ($value == 'sudah_kirim') {
+                if ($d->getJumlahCek() == $d->getJumlahKirim()) {
+                    $array_id[] = $d->id;
+                }
+            } else if ($value == 'belum_kirim') {
+                if ($d->getJumlahKirim() == 0) {
+                    $array_id[] = $d->id;
+                }
+            } else {
+                if ($d->getJumlahPesanan() > $d->getJumlahKirim() || $d->getJumlahKirim() == "0") {
+                    $array_id[] = $d->id;
+                }
             }
         }
+        // $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($array_id) {
+        //     $q->where('pesanan_id', $array_id);
+        // })->count();
 
+        // $jumlahsudahuji = NoseriDetailPesanan::where('status', 'ok')->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($array_id) {
+        //     $q->where('pesanan_id', $array_id);
+        // })->count();
         $data = Pesanan::whereIn('id', $array_id)->get();
         return datatables()->of($data)
             ->addIndexColumn()

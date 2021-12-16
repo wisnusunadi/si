@@ -192,7 +192,7 @@
                                     <div><small class="text-muted">Status</small></div>
                                     <div>
                                         @if($l->status_id == "10")
-                                        @if(empty($l->noresi))
+                                        @if(empty($l->noresi) && !empty($l->ekspedisi_id))
                                         <span class="badge blue-text">Dalam Pengirman</span>
                                         @else
                                         <span class="badge green-text">Selesai</span>

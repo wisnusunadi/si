@@ -84,7 +84,7 @@
                 <form method="post" action="{{route('penjualan.penjualan.store')}}">
                     {{csrf_field()}}
                     <div class="row d-flex justify-content-center">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Info Customer</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -136,7 +136,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center hide" id="akn">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Info AKN</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -200,10 +200,10 @@
                                         <div class="form-group row">
                                             <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
                                             <div class="col-5 col-form-label">
-                                                <div class="form-check form-check-inline">
+                                                <!-- <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
                                                     <label class="form-check-label" for="satuan4">Draft</label>
-                                                </div>
+                                                </div> -->
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
                                                     <label class="form-check-label" for="satuan1">Sepakat</label>
@@ -271,7 +271,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center hide" id="nonakn">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Info Penjualan</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -344,7 +344,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center hide" id="dataproduk">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Data Produk</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -430,7 +430,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center hide" id="datapart">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Data Part</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -506,7 +506,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center">
-                        <div class="col-10">
+                        <div class="col-11">
                             <span>
                                 <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
                                     Batal
@@ -617,11 +617,14 @@
         $('input[type="radio"][name="jenis_penjualan"]').on('change', function() {
             reset_akn();
             reset_penjualan();
+
             if ($(this).val() == "ekatalog") {
+
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").addClass("hide");
                 $("#akn").removeClass("hide");
+                $(".os-content-arrange").text("hail");
             } else if ($(this).val() == "spa") {
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");

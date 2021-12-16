@@ -66,44 +66,46 @@
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="status">Status</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" value="semua" id="status3" name="status" />
-                                                    <label class="form-check-label" for="status3">
-                                                        Semua
-                                                    </label>
+                                    <form id="filter">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="status">Status</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" value="belum_diproses" id="status2" name="status" />
-                                                    <label class="form-check-label" for="status2">
-                                                        Belum Diproses
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" value="semua" id="status3" name="status" />
+                                                        <label class="form-check-label" for="status3">
+                                                            Semua
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" value="sebagian_diproses" id="status1" name="status" />
-                                                    <label class="form-check-label" for="status1">
-                                                        Sebagian Diproses
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" value="belum_diproses" id="status2" name="status" />
+                                                        <label class="form-check-label" for="status2">
+                                                            Belum Diproses
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" value="sebagian_diproses" id="status1" name="status" />
+                                                        <label class="form-check-label" for="status1">
+                                                            Sebagian Diproses
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </span>
                             </div>
                         </div>
@@ -255,7 +257,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/dc/so/data',
+                'url': '/api/dc/so/data/semua',
 
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -288,7 +290,21 @@
                 data: 'button',
             }]
         })
+        $('#filter').submit(function() {
+            var values = [];
+            $("input:checked").each(function() {
+                values.push($(this).val());
+            });
+            if (values != 0) {
+                var x = values;
 
+            } else {
+                var x = ['semua']
+            }
+            console.log(x);
+            $('#showtable').DataTable().ajax.url('/api/dc/so/data/' + x).load();
+            return false;
+        });
     })
 </script>
 @stop

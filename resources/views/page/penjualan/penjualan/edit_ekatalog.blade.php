@@ -275,10 +275,10 @@
                                                         <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
 
                                                         <div class="col-5 col-form-label">
-                                                            <div class="form-check form-check-inline">
+                                                            <!-- <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
                                                                 <label class="form-check-label" for="status_akn4">Draft</label>
-                                                            </div>
+                                                            </div> -->
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="sepakat" />
                                                                 <label class="form-check-label" for="status_akn1">Sepakat</label>

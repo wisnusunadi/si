@@ -342,7 +342,6 @@
             })
         });
 
-
         $(document).on('keyup change', 'input[name="nama_customer"]', function() {
             var id = $('#form-customer-update').attr('data-id');
             if ($(this).val() == "") {
@@ -518,7 +517,7 @@
                 var x = ['kosong']
             }
             console.log(x);
-            $('#showtable').DataTable().ajax.url(' /api/customer/data/' + x).load();
+            $('#showtable').DataTable().ajax.url(' /penjualan/customer/data/' + x).load();
             return false;
         });
     })

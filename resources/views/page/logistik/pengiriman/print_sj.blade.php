@@ -1,4 +1,8 @@
 <style>
+    .page-break {
+        page-break-after: always;
+    }
+
     .mdtxt {
         font-size: 15px;
     }
@@ -39,230 +43,232 @@
 
     .imgsize {
         width: auto;
-        height: 35px;
+        height: 70px;
     }
 
     div.header {
-        position: fixed;
+
         height: auto;
-        top: -50px;
+        top: -30px;
         left: 0px;
         right: 0px;
     }
 
     div.body {
-        position: fixed;
+
         height: auto;
-        top: 30px;
+        top: 50px;
         left: 0px;
         right: 0px;
     }
 
     div.footer {
-        position: fixed;
         bottom: 0px;
         left: 0px;
         right: 0px;
         height: auto;
     }
 </style>
-<div class="header">
-    <table border="0" style="border-collapse: collapse; text-align:center;" class="table" width="100%">
-        <tbody style="border-bottom: 1px solid;">
-            <tr>
-                <td>
-                    <h2>SURAT JALAN</h2>
-                </td>
-                <td class="align-right">
-                    <img src="{{public_path('assets/image/logo/spa_long.png') }}" alt="" class="imgsize">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-@foreach($data as $d)
-<div class="body">
-    <div class="row mdtxt">
-        <div class="col-12">
-            <table style="width:100%; table-layout: fixed" border="0">
-                <tbody>
-                    <tr>
-                        <td style="width:10%;" class="vera">Nomor SJ</td>
-                        <td style="width:2% ;" class="vera">:</td>
-                        <td class="wb">SJ.{{$d->nosurat}}</td>
-                        <td class="align-right">
-                            Tanggal : {{App\Http\Controllers\LogistikController::tgl_footer($d->tgl_kirim)}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table style="width:100%; table-layout: fixed" border="0">
-                <tbody>
-                    <tr>
-                        <td style="width:10%;" class="vera">Nomor PO</td>
-                        <td style="width:2% ;" class="vera">:</td>
-                        <td class="wb" class="vera">{{$d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</td>
-                    </tr>
-                    <tr>
-                        <td class="vera">Kepada</td>
-                        <td class="vera">:</td>
-                        <td class="vera">
-                            <?php
-                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
-                            if ($name[1] == 'EKAT') {
-                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
-                            } else if ($name[1] == 'SPA') {
-                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
-                            } else {
-                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
-                            }
-                            ?>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="vera">Alamat</td>
-                        <td class="vera">:</td>
-                        <td class="vera">
-                            <?php
-                            $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
-                            if ($name[1] == 'EKAT') {
-                                echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
-                            } else if ($name[1] == 'SPA') {
-                                echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
-                            } else {
-                                echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
-                            }
-                            ?>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <table border=0 class="table" width="100%">
-            <tbody>
+<div class="wrapper-page">
+    <div class="header">
+        <table border="0" style="border-collapse: collapse; text-align:center;" class="table" width="100%">
+            <tbody style="border-bottom: 1px solid;">
                 <tr>
-                    <td></td>
+                    <td style="width:370px;">
+                        <h2>SURAT JALAN</h2>
+                    </td>
+                    <td class="align-right">
+                        <img src="{{public_path('assets/image/logo/spa_long.png') }}" alt="" class="imgsize">
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
+    @foreach($data as $d)
+    <div class="body">
+        <div class="row mdtxt">
+            <div class="col-12">
+                <table style="width:100%; table-layout: fixed" border="0">
+                    <tbody>
+                        <tr>
+                            <td style="width:10%;" class="vera">Nomor SJ</td>
+                            <td style="width:2% ;" class="vera">:</td>
+                            <td class="wb">SJ.{{$d->nosurat}}</td>
+                            <td class="align-right">
+                                Tanggal : {{App\Http\Controllers\LogistikController::tgl_footer($d->tgl_kirim)}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table style="width:100%; table-layout: fixed" border="0">
+                    <tbody>
+                        <tr>
+                            <td style="width:10%;" class="vera">Nomor PO</td>
+                            <td style="width:2% ;" class="vera">:</td>
+                            <td class="wb" class="vera">{{$d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</td>
+                        </tr>
+                        <tr>
+                            <td class="vera">Kepada</td>
+                            <td class="vera">:</td>
+                            <td class="vera">
+                                <?php
+                                $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                                if ($name[1] == 'EKAT') {
+                                    echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                                } else if ($name[1] == 'SPA') {
+                                    echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                                } else {
+                                    echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                                }
+                                ?>
 
-    <div class="row mdtxt">
-        <div class="col-12">
-            <table class="table" border="0" style="border-collapse: collapse; text-align:center;" width="100%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vera">Alamat</td>
+                            <td class="vera">:</td>
+                            <td class="vera">
+                                <?php
+                                $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                                if ($name[1] == 'EKAT') {
+                                    echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
+                                } else if ($name[1] == 'SPA') {
+                                    echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
+                                } else {
+                                    echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
+                                }
+                                ?>
 
-                <thead class="align-center" style="border-top: 1px solid black; border-bottom: 1px solid black;">
-                    <tr>
-                        <th>Nama Barang</th>
-                        <th class="nospace">Jumlah</th>
-                        <th>No Seri</th>
-                        <th>Keterangan</th>
-                    </tr>
-                </thead>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <table border=0 class="table" width="100%">
                 <tbody>
-                    @foreach($data_produk as $e)
                     <tr>
-                        <td class="wb align-left">
-                            @if($e->DetailPesananProduk->GudangBarangJadi->nama == '')
-                            {{$e->DetailPesananProduk->GudangBarangJadi->produk->nama}}
-                            @else
-                            {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
-                            @endif
-                        </td>
-                        <td class="nospace align-right">{{$e->NoseriDetailLogistik->count()}} pcs</td>
-                        <td class="wb">
-                            @foreach($e->NoseriDetailLogistik as $x)
-                            {{$x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
-                            @if( !$loop->last)
-                            ,
-                            @endif
-                            @endforeach
-                        </td>
-                        <td class="wb">-</td>
+                        <td></td>
                     </tr>
-                    @endforeach
                 </tbody>
             </table>
         </div>
-    </div>
-    <br>
-    <div class="row mdtxt">
-        <div class="col-12">
-            <table class="table" border="0" style="border-collapse: collapse;" width="100%">
-                <tbody>
+
+        <div class="row mdtxt">
+            <div class="col-12">
+                <table class="table" border="1" style="border-collapse: collapse; text-align:center;" width="100%">
+                    <thead class="align-center" style="border-top: 1px solid black; border-bottom: 1px solid black;">
+                        <tr>
+                            <th>Nama Barang</th>
+                            <th class="nospace">Jumlah</th>
+                            <th>No Seri</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($data_produk as $e)
+                        <tr>
+                            <td class="wb align-left">
+                                @if($e->DetailPesananProduk->GudangBarangJadi->nama == '')
+                                {{$e->DetailPesananProduk->GudangBarangJadi->produk->nama}}
+                                @else
+                                {{$e->DetailPesananProduk->GudangBarangJadi->nama}}
+                                @endif
+                            </td>
+                            <td class="nospace align-right">{{$e->NoseriDetailLogistik->count()}} pcs</td>
+                            <td class="wb">
+                                @foreach($e->NoseriDetailLogistik as $x)
+                                {{$x->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}
+                                @if( !$loop->last)
+                                ,
+                                @endif
+                                @endforeach
+                            </td>
+                            <td class="wb">-</td>
+                        </tr>
+                        @endforeach
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="row mdtxt">
+            <div class="col-12">
+                <table class="table" border="0" style="border-collapse: collapse;" width="100%">
+                    <tbody>
+                        <tr>
+                            <td class="nospace">Ekspedisi </td>
+                            <td class="nospace"> : </td>
+                            <td class="wb align-left">
+                                @if ($d->nama_pengirim == '')
+                                {{$d->Ekspedisi->nama}}
+                                @else
+                                {{$d->nama_pengirim}}
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nospace">Total Ongkir </td>
+                            <td class="nospace"> : </td>
+                            <td class="wb align-left">-</td>
+                        </tr>
+                        <tr>
+                            <td class="nospace">Catatan </td>
+                            <td class="nospace"> : </td>
+                            <td class="wb align-left">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="footer">
+            <table border=0 class="table align-center" width="100%">
+                <thead>
                     <tr>
-                        <td class="nospace">Ekspedisi </td>
-                        <td class="nospace"> : </td>
-                        <td class="wb align-left">
-                            @if ($d->nama_pengirim == '')
+                        <th>Diterima Oleh,</th>
+                        <th>Dibawa Oleh,</th>
+                        <th>Dibuat Oleh,</th>
+                    </tr>
+                </thead>
+                <tbody style="border-bottom: 1px solid black;">
+                    <tr style="border-bottom: 1px solid;">
+                        <td style="height:40px;"></td>
+                        <td style="height:40px;"></td>
+                        <td style="height:40px;"></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid;">
+                        <td>_____________</td>
+                        <td>_____________</td>
+                        <td>_____________</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>@if ($d->nama_pengirim == '')
                             {{$d->Ekspedisi->nama}}
                             @else
                             {{$d->nama_pengirim}}
                             @endif
                         </td>
+                        <td>Erna Cantika A</td>
                     </tr>
                     <tr>
-                        <td class="nospace">Total Ongkir </td>
-                        <td class="nospace"> : </td>
-                        <td class="wb align-left">-</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr>
-                        <td class="nospace">Catatan </td>
-                        <td class="nospace"> : </td>
-                        <td class="wb align-left">-</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
+            <div class="align-right">No Dokumen: SPA-FR/GUD-04, Tanggal Terbit: 20 Maret 2020, Revisi:02</div>
         </div>
+        @endforeach
     </div>
-</div>
-
-<div class="footer">
-    <table border=0 class="table align-center" width="100%">
-        <thead>
-            <tr>
-                <th>Diterima Oleh,</th>
-                <th>Dibawa Oleh,</th>
-                <th>Dibuat Oleh,</th>
-            </tr>
-        </thead>
-        <tbody style="border-bottom: 1px solid black;">
-            <tr style="border-bottom: 1px solid;">
-                <td style="height:40px;"></td>
-                <td style="height:40px;"></td>
-                <td style="height:40px;"></td>
-            </tr>
-            <tr style="border-bottom: 1px solid;">
-                <td>_____________</td>
-                <td>_____________</td>
-                <td>_____________</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>@if ($d->nama_pengirim == '')
-                    {{$d->Ekspedisi->nama}}
-                    @else
-                    {{$d->nama_pengirim}}
-                    @endif
-                </td>
-                <td>Erna Cantika A</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    @endforeach
-    <div class="align-right">No Dokumen: SPA-FR/GUD-04, Tanggal Terbit: 20 Maret 2020, Revisi:02</div>
 </div>

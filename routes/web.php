@@ -167,7 +167,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
-        Route::get('/data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
+        Route::get('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
         Route::get('/create/{detail_pesanan_id}/{pesanan_id}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
         Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');

@@ -302,7 +302,12 @@ class MasterController extends Controller
                 return $return;
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->PenjualanProduk->first()->pivot->jumlah;
+                foreach ($data->PenjualanProduk as $k) {
+                    if ($k->pivot->produk_id == $data->id) {
+                        return $k->pivot->jumlah;
+                    }
+                }
+                // return $data->PenjualanProduk->first()->pivot->jumlah;
             })
             ->addIndexColumn()
             ->rawColumns(['kelompok'])

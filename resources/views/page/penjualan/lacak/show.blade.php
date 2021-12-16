@@ -135,10 +135,10 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No Seri</th>
-                                        <th>Nama Produk</th>
-                                        <th>Tanggal</th>
-                                        <th>Posisi</th>
-                                        <th>Status</th>
+                                        <th>No SO</th>
+                                        <th>Tanggal Masuk</th>
+                                        <th>Tanggal Keluar</th>
+                                        <th>Dari / Ke</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -198,9 +198,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No Surat Jalan</th>
-                                        <th>No PO</th>
+                                        <th>No SO</th>
+                                        <th>Customer</th>
                                         <th>Tanggal Kirim</th>
-                                        <th>Posisi</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -315,7 +315,47 @@
                 }
             ]
         });
-
+        $('#noseritable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/no_seri/0',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'noseri',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'no_so',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_masuk',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'tgl_keluar',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'divisi_id',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
         $('#nosjtable').DataTable({
             processing: true,
             serverSide: true,
@@ -336,7 +376,12 @@
                     searchable: false
                 },
                 {
-                    data: 'po',
+                    data: 'no_so',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'customer',
                     orderable: false,
                     searchable: false
                 },
@@ -344,22 +389,14 @@
                     data: 'tgl_kirim',
                     orderable: false,
                     searchable: false
-                }, {
-                    data: 'tgl_kirim',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'tgl_kirim',
+                },
+                {
+                    data: 'status',
                     orderable: false,
                     searchable: false
                 }
             ]
         });
-
-
-
-
-        $('#noseritable').DataTable();
 
         $('#data').on('keyup change', function() {
             if ($(this).val() != "") {
@@ -389,7 +426,7 @@
         $('#btncari').on('click', function() {
             if ($('.pilih_data').val() == "no_seri") {
                 var data = $('#data').val();
-                $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
+                $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
                 $('#noseri').removeClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noakn').addClass('hide');
