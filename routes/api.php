@@ -99,7 +99,7 @@ Route::prefix('/penjualan_produk')->group(function () {
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
     Route::get('chart', [App\Http\Controllers\PenjualanController::class, 'chart_penjualan']);
-    Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
+    // Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
 
 

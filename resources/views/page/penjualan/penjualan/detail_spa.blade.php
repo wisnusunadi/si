@@ -44,8 +44,8 @@
                         </div>
                         <div class="margin">
                             <a class="text-muted">Tanggal PO</a>
-                            <b class="float-right">@if ($data->Pesanan->tgl_po)
-                                {{ $data->Pesanan->tgl_po}}
+                            <b class="float-right">@if ($data->Pesanan->tgl_po != "" && $data->Pesanan->tgl_po != "0000-00-00")
+                                {{ date('d-m-Y', strtotime($data->Pesanan->tgl_po)) }}
                                 @else
                                 -
                                 @endif</b>

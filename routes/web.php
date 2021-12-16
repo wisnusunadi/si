@@ -109,9 +109,10 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
         Route::view('/create_new', 'page.penjualan.penjualan.create_new')->name('penjualan.penjualan.create_new');
 
+        Route::get('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
         Route::get('/ekatalog/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
-        Route::get('/spa/data', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
-        Route::get('/spb/data', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
+        Route::get('/spa/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
+        Route::get('/spb/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
 
         Route::post('/store', [App\Http\Controllers\PenjualanController::class, 'create_penjualan'])->name('penjualan.penjualan.store');
         Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
