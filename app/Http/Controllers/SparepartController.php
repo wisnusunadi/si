@@ -7,6 +7,7 @@ use App\Models\GudangKarantina;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
 use App\Models\Layout;
+use App\Models\NoseriKeluarGK;
 use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use App\Models\SparepartHis;
@@ -602,11 +603,12 @@ class SparepartController extends Controller
     {
         $data = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($request) {
             $q->where('sparepart_id', $request->sparepart_id);
-        })->where('status', 1)->get();
-
+        })->where('status', 1)->where('is_draft', 0)->where('is_ready', 0)->get();
+        $i = 0;
         return datatables()->of($data)
-            ->addColumn('kode', function ($d) {
-                return '<input type="checkbox" class="cb-child" value="'.$d->id.'">';
+            ->addColumn('kode', function ($d) use($i) {
+                $i++;
+                return '<input type="checkbox" class="cb-child" name="noseri_id[]['.$i.']" value="'.$d->id.'">';
             })
             ->addColumn('seri', function ($d) {
                 return $d->noseri;
@@ -625,11 +627,12 @@ class SparepartController extends Controller
     {
         $data = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($request) {
             $q->where('gbj_id', $request->gbj_id);
-        })->where('status', 1)->get();
-
+        })->where('status', 1)->where('is_draft', 0)->where('is_ready', 0)->get();
+        $i = 0;
         return datatables()->of($data)
-            ->addColumn('kode', function ($d) {
-                return $d->id;
+            ->addColumn('kode', function ($d) use($i) {
+                $i++;
+                return '<input type="checkbox" class="cb-unit" name="noseri_id[]['.$i.']" value="'.$d->id.'">';
             })
             ->addColumn('seri', function ($d) {
                 return $d->noseri;
@@ -640,6 +643,7 @@ class SparepartController extends Controller
             ->addColumn('tingkat', function ($d) {
                 return 'Level '.$d->tk_kerusakan;
             })
+            ->rawColumns(['kode'])
             ->make(true);
     }
 
@@ -697,15 +701,25 @@ class SparepartController extends Controller
             $x = $request->noseri;
             $id = $sprr->id;
 
-            for ($i = 0; $i < count($request->noseri[$v]); $i++) {
-                $noseri = new GudangKarantinaNoseri();
+            // for ($i = 0; $i < count($request->noseri[$v]); $i++) {
+            //     $noseri = new GudangKarantinaNoseri();
+            //     $noseri->gk_detail_id = $id;
+            //     $noseri->noseri = $request->noseri[$v][$i]["noseri"];
+            //     $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
+            //     $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
+            //     $noseri->is_draft = 1;
+            //     $noseri->is_keluar = 1;
+            //     $noseri->save();
+            // }
+
+            for ($i=0; $i < count($request->noseri[$v]); $i++) {
+                $noseri = new NoseriKeluarGK();
                 $noseri->gk_detail_id = $id;
-                $noseri->noseri = $request->noseri[$v][$i]["noseri"];
-                $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
-                $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
-                $noseri->is_draft = 1;
-                $noseri->is_keluar = 1;
+                $noseri->noseri_id = json_decode($request->noseri[$v][$i], true);
+                $noseri->created_at = Carbon::now();
                 $noseri->save();
+
+                GudangKarantinaNoseri::find(json_decode($request->noseri[$v][$i], true))->update(['is_ready' => 1]);
             }
         }
 
@@ -721,16 +735,26 @@ class SparepartController extends Controller
 
             $idd = $unitt->id;
 
-            for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
+            // for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
 
-                $noserii = new GudangKarantinaNoseri();
-                $noserii->gk_detail_id = $idd;
-                $noserii->noseri = $request->seriunit[$vv][$m]["noseri"];
-                $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
-                $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
-                $noserii->is_draft = 1;
-                $noserii->is_keluar = 1;
+            //     $noserii = new GudangKarantinaNoseri();
+            //     $noserii->gk_detail_id = $idd;
+            //     $noserii->noseri = $request->seriunit[$vv][$m]["noseri"];
+            //     $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
+            //     $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
+            //     $noserii->is_draft = 1;
+            //     $noserii->is_keluar = 1;
+            //     $noserii->save();
+            // }
+
+            for ($m=0; $m < count($request->seriunit[$vv]); $m++) {
+                $noserii = new NoseriKeluarGK();
+                $noserii->gk_detail_id = $id;
+                $noserii->noseri_id = json_decode($request->seriunit[$vv][$m], true);
+                $noserii->created_at = Carbon::now();
                 $noserii->save();
+
+                GudangKarantinaNoseri::find(json_decode($request->seriunit[$vv][$m], true))->update(['is_ready' => 1]);
             }
         }
 

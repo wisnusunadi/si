@@ -55,7 +55,6 @@
                         <div class="form-group col">
                             <label for="dari">Dari</label>
                             <select class="form-control dari" name="dari" disabled>
-
                             </select>
                         </div>
                     </div>
@@ -870,7 +869,7 @@
             }
         });
         i++;
-        let table_sparepart = '<tr><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_sparepart = '<tr><td><select name="sparepart_id[]" id="" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
 
         $('.add_sparepart_table tbody').append(table_sparepart);
         $('.produk').select2();
@@ -893,7 +892,7 @@
             }
         });
         i++;
-        let table_unit = '<tr><td><select name="gbj_id[]" id="gbj_id" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr><td><select name="gbj_id[]" id="" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('.produkk').select2();
     nmrunt++;
@@ -1160,7 +1159,7 @@
                             });
                         }
                     });
-                    $('.add_unit_table tbody').append('<tr><td><select name="gbj_id[]" id="gbj_id" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>');
+                    $('.add_unit_table tbody').append('<tr><td><select name="gbj_id[]" id="" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>');
                     $.each(val.seri, function(ii, vall) {
                         console.log(vall);
                         $('.scan-produk tbody').append('<tr id="row' + ii + '"><td><input type="text" value="'+vall.noseri+'" name="noseri[][' + ii +

@@ -375,6 +375,9 @@
 @stop
 @section('adminlte_js')
 <script>
+    $(document).ready(function () {
+
+    });
     // Date
     var today = new Date();
     var dd = today.getDate();
@@ -803,20 +806,16 @@
                         type: 'POST',
                         dataType: 'json',
                         success: function (res) {
-                            // ii++;
-                            console.log(res);
-                            $.each(res, function (key, value) {
-                                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                                $(".produk").append('<option value="' + value.id + '">' + value
-                                    .nama + '</option');
-                            });
+                        $.each(res, function (key, value) {
+                            // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                            $('.produk').append('<option value="' + value.id + '">' + value.nama + '</option');
+                        });
+                        $('.produk').select2();
                         }
                     });
                     i++;
-                    let table_sparepart = '<tr><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
-
+                    let table_sparepart = '<tr><td><select name="sparepart_id[]" id="" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
                     $('.add_sparepart_table tbody').append(table_sparepart);
-                    $('.produk').select2();
                 nmrspr++;
                 });
                 var nmrunt = 1;
@@ -836,7 +835,7 @@
                         }
                     });
                     i++;
-                    let table_unit = '<tr><td><select name="gbj_id[]" id="gbj_id" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+                    let table_unit = '<tr><td><select name="gbj_id[]" id="" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
                     $('.add_unit_table tbody').append(table_unit);
                     $('.produkk').select2();
                 nmrunt++;

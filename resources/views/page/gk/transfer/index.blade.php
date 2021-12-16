@@ -101,7 +101,6 @@
                                 <div class="form-group col">
                                     <label for="dari">Ke</label>
                                     <select class="form-control dari" name="dari">
-
                                     </select>
                                 </div>
                             </div>
@@ -289,7 +288,7 @@
                             <div class="col-sm">
                                 <label for="">Tanggal Keluar</label>
                                 <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body">
+                                    <div class="card-body out_unit">
                                         23-09-2021
                                     </div>
                                 </div>
@@ -297,7 +296,7 @@
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
-                                    <div class="card-body">
+                                    <div class="card-body prd_unit">
                                         Produk 1
                                     </div>
                                 </div>
@@ -307,7 +306,7 @@
                             <div class="col-sm">
                                 <label for="">Dari</label>
                                 <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body">
+                                    <div class="card-body unit_divisi">
                                         Divisi IT
                                     </div>
                                 </div>
@@ -315,7 +314,7 @@
                             <div class="col-sm">
                                 <label for="">Jumlah</label>
                                 <div class="card" style="background-color: #FFECB2">
-                                    <div class="card-body">
+                                    <div class="card-body jml1">
                                         100 pcs
                                     </div>
                                 </div>
@@ -328,7 +327,7 @@
                                 <table class="table table-striped scan-produk">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" id="head-cb"></th>
+                                            <th><input type="checkbox" id="head-cb1"></th>
                                             <th>No Seri</th>
                                             <th>Kerusakan</th>
                                             <th>Tingkat Kerusakan</th>
@@ -435,7 +434,6 @@
     const seri_unit = {};
     let spr_arr = [];
     let unit_arr = [];
-    var spr_table = null;
 
     function addSpare(a) {
         var b = $(".btn_plus" + a).parent().prev().children().val();
@@ -445,6 +443,7 @@
 
     function clickSparepart(c, d, e) {
         // alert(e);
+        console.log('spr '+d);
         var tableScan = $('.scan-produk1').dataTable({
             "destroy": true,
             "ordering": false,
@@ -453,20 +452,7 @@
             "lengthChange": false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            },
-            ajax: {
-                url: "/api/gk/getseri/spr",
-                data: {
-                    sparepart_id: d,
-                },
-                type: "post",
-            },
-            columns: [
-                {data: 'kode'},
-                {data: 'seri'},
-                {data: 'note'},
-                {data: 'tingkat'},
-            ],
+            }
         });
 
         var arrSparepart = []
@@ -566,49 +552,32 @@
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
+            const ids = [];
             $('.cb-child').each(function() {
-                if($(this).is(":checked")) {
-                    if ($('input:checkbox:checked').length > e) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Melebihi Batas Maksimal'
-                        })
-                    } else {
-                        // ids.push($(this).val());
+            if($(this).is(":checked")) {
+                // cek validasi
+                // if ($('input:checkbox:checked').length > e) {
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Oops...',
+                //         text: 'Melebihi Batas Maksimal'
+                //     })
+                // } else {
+
+                        ids.push($(this).val());
+                        seri[d] = ids;
+                        console.log(seri);
                         // Swal.fire({
                         //     position: 'center',
                         //     icon: 'success',
-                        //     title: 'Noseri Berhasil Disimpan',
+                        //     title: 'Nomor seri tersimpan',
                         //     showConfirmButton: false,
                         //     timer: 1500
                         // })
-                        // $('#scan').modal('hide');
-                    }
+                        // $('.modalAddSparepart').modal('hide');
+                    // }
                 }
-
             })
-            // console.log(c);
-            // Swal.fire({
-            //     position: 'center',
-            //     icon: 'success',
-            //     title: 'Nomor seri tersimpan',
-            //     showConfirmButton: false,
-            //     timer: 1500
-            // }).then(function () {
-            //     // $('.scan-produk1 tbody tr').each((index, value) => {
-            //     //     const obj = {
-            //     //         noseri: value.childNodes[0].firstChild.value,
-            //     //         kerusakan: value.childNodes[1].firstChild.value,
-            //     //         tingkat: value.childNodes[2].firstChild.value,
-            //     //     }
-
-            //     //     spr_arr.push(obj);
-            //     // })
-            //     // seri[d] = spr_arr;
-            //     // spr_arr = [];
-                // $('.modalAddSparepart').modal('hide');
-            // })
         }
     }
 
@@ -623,20 +592,18 @@
         $('.modalAddSparepart').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
-        // $('.scan-produk1').DataTable().destroy();
+        $('.scan-produk1').DataTable().destroy();
         // $('.scan-produk1 tbody').empty();
         // for (let index = 0; index < x; index++) {
         //     ii++;
         //     $('.scan-produk1 tbody').append('<tr><td>' + ii +
         //         '</td><td>noseri1</td><td>srgrgrg</td><td>Level 1</td></tr>');
         // }
-        spr_table = $('.scan-produk1').DataTable({
-            "destroy": true,
-            "autoWidth": false,
-            "lengthChange": false,
-            processing: true,
-            serverSide: true,
+        $('.scan-produk1').DataTable({
             "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
@@ -664,8 +631,8 @@
         addUnit(j, k);
     }
 
-    function clickUnit(c) {
-        console.log(c);
+    function clickUnit(c, p) {
+        console.log('unit '+c);
         var tableUnit = $('.scan-produk').DataTable({
             "destroy": true,
             "ordering": false,
@@ -770,43 +737,50 @@
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk tbody tr').each((index, value) => {
-                    const obj1 = {
-                        noseri: value.childNodes[0].firstChild.value,
-                        kerusakan: value.childNodes[1].firstChild.value,
-                        tingkat: value.childNodes[2].firstChild.value,
-                    }
-                    unit_arr.push(obj1);
-                })
-                seri_unit[c] = unit_arr;
-                unit_arr = [];
-                console.log(seri_unit)
-                $('.modalAddUnit').modal('hide');
+            const uids = [];
+            $('.cb-unit').each(function() {
+            if($(this).is(":checked")) {
+                // cek validasi
+                // if ($('input:checkbox:checked').length > p) {
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Oops...',
+                //         text: 'Melebihi Batas Maksimal'
+                //     })
+                // } else {
+                    uids.push($(this).val());
+                    seri_unit[c] = uids;
+                    console.log(seri_unit);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Nomor seri tersimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('.modalAddUnit').modal('hide');
+                    // }
+                }
             })
+
         }
     }
 
     function addUnit(x, y, z) {
-        alert(x);
+        // alert(x);
+        console.log(x);
         $('.modalAddUnit').modal('show');
-        $('.modalAddUnit').find('#btnAddUnit').attr('onclick', 'clickUnit(' + y + ')');
+        $('.modalAddUnit').find('#btnAddUnit').attr('onclick', 'clickUnit(' + y + ', '+ x +')');
         $('.modalAddUnit').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
         $('.scan-produk').DataTable().destroy();
-        $('.scan-produk tbody').empty();
-        for (let index = 0; index < x; index++) {
-            kk++;
-            $('.scan-produk tbody').append('<tr><td>' + ii +
-                '</td><td>noseri1</td><td>srgrgrg</td><td>Level 1</td></tr>');
-        }
+        // $('.scan-produk tbody').empty();
+        // for (let index = 0; index < x; index++) {
+        //     kk++;
+        //     $('.scan-produk tbody').append('<tr><td>' + ii +
+        //         '</td><td>noseri1</td><td>srgrgrg</td><td>Level 1</td></tr>');
+        // }
         $('.scan-produk').DataTable({
             "ordering": false,
             "autoWidth": false,
@@ -828,25 +802,7 @@
                 {data: 'note'},
                 {data: 'tingkat'},
             ],
-            columnDefs: [{
-                    targets: [0],
-                    orderable: false,
-                    checkboxes: {
-                        selectRow: true
-                    }
-                },
-                {
-                    targets: [2, 3],
-                    searchable: false
-                },
-                {
-                    targets: [3],
-                    width: '20%'
-                }
-            ],
-            select: {
-                style: 'multi'
-            },
+
         });
     }
 
@@ -897,7 +853,7 @@
         });
         i++;
         let table_sparepart =
-            '<tr><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus' +
+            '<tr><td><select name="sparepart_id[]" id="" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus' +
             nmrspr + '" data-id="" data-jml="" id="" onclick=addSpare(' + nmrspr +
             ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
 
@@ -923,7 +879,7 @@
         });
         i++;
         let table_unit =
-            '<tr><td><select name="gbj_id[]" id="gbj_id" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus' +
+            '<tr><td><select name="gbj_id[]" id="" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus' +
             nmrunt + '" id="" onclick=addUn(' + nmrunt +
             ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
@@ -939,6 +895,11 @@
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
+        });
+
+        $("#head-cb1").on('click', function () {
+            var isChecked1 = $("#head-cb1").prop('checked')
+            $('.cb-unit').prop('checked', isChecked1)
         });
 
         $('.table-rancangan').DataTable({
@@ -1053,11 +1014,11 @@
             });
         });
     }
+    // submit draft
     $(document).on('click', '.simpan', function () {
         let out = $('#datePicker').val();
         let to = $('.dari').val();
         let tujuan = $('#tujuan_draft').val();
-        // let seri1 = $('.seri_spr').val();
         console.log(out);
         console.log(to);
         console.log(tujuan);
@@ -1071,9 +1032,6 @@
         $('input[name^="qty_spr"]').each(function () {
             jml.push($(this).val());
         });
-        // $('input[name^="noseri"]').each(function() {
-        //     spr.push(seri_spr.push(seri1));
-        // });
         $('select[name^="gbj_id"]').each(function () {
             unit1.push($(this).val());
         });
@@ -1096,6 +1054,78 @@
                 );
                 $.ajax({
                     url: "/api/gk/out-draft",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        date_out: out,
+                        ke: to,
+                        deskripsi: tujuan,
+                        sparepart_id: spr1,
+                        qty_spr: jml,
+                        noseri: seri,
+                        gbj_id: unit1,
+                        qty_unit: jum,
+                        seriunit: seri_unit,
+                    },
+                    success: function (res) {
+                        console.log(res);
+                    },
+                })
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                Swal.fire(
+                    'Data gagal di rancangan!',
+                    '',
+                    'error'
+                );
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        });
+    });
+    // submit transfer
+    $(document).on('click', '.simpan', function () {
+        let out = $('#datePicker').val();
+        let to = $('.dari').val();
+        let tujuan = $('#tujuan_tf').val();
+        console.log(out);
+        console.log(to);
+        console.log(tujuan);
+        const spr1 = [];
+        const jml = [];
+        const unit1 = [];
+        const jum = [];
+        $('select[name^="sparepart_id"]').each(function () {
+            spr1.push($(this).val());
+        });
+        $('input[name^="qty_spr"]').each(function () {
+            jml.push($(this).val());
+        });
+        $('select[name^="gbj_id"]').each(function () {
+            unit1.push($(this).val());
+        });
+        $('input[name^="qty_unit"]').each(function () {
+            jum.push($(this).val());
+        });
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di rancangan tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((success) => {
+            if (success) {
+                Swal.fire(
+                    'Data berhasil di rancangan!',
+                    '',
+                    'success'
+                );
+                $.ajax({
+                    url: "/api/gk/out-final",
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",

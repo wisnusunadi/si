@@ -54,6 +54,23 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-chart-line"></i> Grafik Perakitan Produk</h5>
+                        <div class="card-tools">
+                            <select name="" id="all-produk" class="form-control allprd">
+                                <option value="">Pilih Produk</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="myChart" width="400" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-6">
                 <div class="card">
                     <div class="card-header">
@@ -368,23 +385,7 @@
                                     <th>Nomor Seri</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>846464654654</td>
-                                    <td>654654654654</td>
-                                    <td>957489688845</td>
-                                </tr>
-                                <tr>
-                                    <td>846464654654</td>
-                                    <td>654654654654</td>
-                                    <td>957489688845</td>
-                                </tr>
-                                <tr>
-                                    <td>846464654654</td>
-                                    <td>654654654654</td>
-                                    <td>957489688845</td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -470,6 +471,77 @@
 
 @section('adminlte_js')
 <script>
+    // Charts
+        var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [], // data diambil 5 hari sebelum hari ini dan sesudah hari ini, misalkan hari ini tanggal (15-12-2021) maka yang diambil data tanggal 5 hari sebelumnya dan data tanggal 5 hari setelahnya.
+                datasets: [
+                    {
+                        label: '', // nama produk
+                        data: [
+
+                        ], // jumlah produk
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                        ],
+                        borderWidth: 5
+                    },
+                ]
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function labelTools(tooltipItem) {
+                            return tooltipItem.yLabel;
+                        }
+                    }
+                },
+            } 
+        });
+            $.ajax({
+                type: "get",
+                url: "/api/prd/allproduk",
+                success: function (response) {
+                    $.each(response, function (index, value) {
+                        $('#all-produk').append('<option value="' + index + '">' + value +'</option')
+                    });
+                    $('.allprd').select2({});
+                }
+            });
+            $.ajax({
+                type: "get",
+                url: "/api/prd/dashboard",
+                success: function (response) {
+                    response.forEach(element => {
+                        myChart.data.labels.push(element);
+                    });
+                    myChart.update();
+                }
+            });
+        $(document).on('change', '#all-produk', function () {
+            labe
+            $.ajax({
+                url: "/api/prd/grafikproduk/" + this.value,
+                type: "get",
+                success: function(res) {
+                    // res.forEach(element => {
+                        // myChart.data.datasets.label.push(element.produk_id);
+                        myChart.data.datasets.forEach((res) => {
+                            res.data.push(res[0].total);
+                        })
+                    // });
+                    myChart.update();
+                }
+            })
+        });
     // sale
     $.ajax({
         url: "/api/prd/minus5/h",
