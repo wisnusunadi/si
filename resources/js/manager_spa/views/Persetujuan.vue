@@ -110,14 +110,44 @@
         <button
           v-if="acc_jadwal.length + reject_jadwal.length === jadwal.length"
           class="button is-success"
-          @click="handleKirim"
+          @click="handleSend('kirim')"
         >
           Kirim
         </button>
       </div>
       <div v-if="this.$store.state.state === 'perubahan'">
-        <button class="button is-success" @click="handleSetuju">Setuju</button>
-        <button class="button is-danger" @click="handleTolak">Tolak</button>
+        <button class="button is-success" @click="handleSend('setuju')">
+          Setuju
+        </button>
+        <button class="button is-danger" @click="handleSend('tolak')">
+          Tolak
+        </button>
+      </div>
+    </div>
+
+    <!-- modal -->
+    <div v-if="showModal" class="modal" :class="{ 'is-active': showModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Komentar</p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="showModal = !showModal"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <div class="control">
+              <textarea class="textarea" placeholder="Komentar"></textarea>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="handle_func">Kirim</button>
+          <button class="button" @click="showModal = false">Batal</button>
+        </footer>
       </div>
     </div>
   </div>
@@ -135,6 +165,9 @@ export default {
       reject_jadwal: [],
       all_acc_jadwal: false,
       all_reject_jadwal: false,
+
+      showModal: false,
+      handle_func: null,
     };
   },
 
@@ -200,6 +233,7 @@ export default {
           this.resetData();
         });
       this.$store.commit("setIsLoading", false);
+      this.showModal = false;
     },
 
     async handleSetuju() {
@@ -214,6 +248,7 @@ export default {
           this.resetData();
         });
       this.$store.commit("setIsLoading", false);
+      this.showModal = false;
     },
 
     async handleTolak() {
@@ -228,6 +263,18 @@ export default {
           this.resetDate();
         });
       this.$store.commit("setIsLoading", false);
+      this.showModal = false;
+    },
+
+    handleSend(status) {
+      this.showModal = true;
+      if (status === "kirim") {
+        this.handle_func = this.handleKirim;
+      } else if (status === "setuju") {
+        this.handle_func = this.handleSetuju;
+      } else if (status === "tolak") {
+        this.handle_func = this.handleTolak;
+      }
     },
   },
 

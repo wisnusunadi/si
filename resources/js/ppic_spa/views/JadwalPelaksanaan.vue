@@ -17,7 +17,7 @@ export default {
     async loadData() {
       this.$store.commit("setIsLoading", true);
       await axios
-        .get("/api/ppic/perakitan/data/pelaksanaan")
+        .get("/api/ppic/data/perakitan/pelaksanaan")
         .then((response) => {
           this.$store.commit("setJadwal", response.data);
           if (response.data.length == 0)

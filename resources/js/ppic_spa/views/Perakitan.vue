@@ -26,6 +26,11 @@
                 <progress
                   class="progress"
                   :value="countVal(d.status)"
+                  :class="{
+                    'is-danger': d.status === 'penyusunan',
+                    'is-warning': d.status === 'pelaksanaan',
+                    'is-success': d.status === 'selesai',
+                  }"
                   max="100"
                 >
                   {{ countVal(d.status) }}%
@@ -67,7 +72,7 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/perakitan/data").then((response) => {
+      await axios.get("/api/ppic/data/perakitan").then((response) => {
         this.data = response.data;
       });
       this.$store.commit("setIsLoading", false);

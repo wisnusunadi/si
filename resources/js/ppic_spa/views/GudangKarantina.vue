@@ -5,10 +5,7 @@
       <div class="column is-12">
         <div class="tabs is-centered">
           <ul>
-            <li
-              :class="{ 'is-active': !tabs }"
-              @click="changeView('sparepart')"
-            >
+            <li :class="{ 'is-active': !tabs }" @click="tabs = false">
               <a>
                 <span class="icon is-small"
                   ><i class="fab fa-whmcs" aria-hidden="true"></i
@@ -16,7 +13,7 @@
                 <span>Sparepart</span>
               </a>
             </li>
-            <li :class="{ 'is-active': tabs }" @click="changeView('unit')">
+            <li :class="{ 'is-active': tabs }" @click="tabs = true">
               <a>
                 <span class="icon is-small"
                   ><i class="fas fa-tools" aria-hidden="true"></i
@@ -40,68 +37,7 @@
                 <th>Jumlah</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
 
@@ -115,59 +51,7 @@
                 <th>Jumlah</th>
               </tr>
             </thead>
-
-            <tbody>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
       </div>
@@ -177,6 +61,7 @@
 
 <script>
 import $ from "jquery";
+import axios from "axios";
 
 export default {
   name: "GudangKarantina",
@@ -190,20 +75,9 @@ export default {
   },
 
   methods: {
-    changeView(view) {
-      if (view === "sparepart") {
-        this.tabs = false;
-        // if (this.table_sparepart) {
-        //   this.table_sparepart.destroy();
-        // }
-        // // this.table_sparepart = $("#table-sparepart").DataTable();
-      } else if (view === "unit") {
-        this.tabs = true;
-        // if (this.table_unit) {
-        //   this.table_unit.destroy();
-        // }
-        // // this.table_unit = $("#table-unit").DataTable();
-      }
+    async loadData() {
+      this.$store.commit("setIsLoading", true);
+      await axios.get("/api/ppic/data/gk");
     },
   },
 

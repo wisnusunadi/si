@@ -166,13 +166,12 @@ export default {
     async sendEvent(state) {
       this.$store.commit("setIsLoading", true);
       await axios
-        .post("/api/ppic/update-many-event/" + this.$store.state.status, {
+        .post("/api/ppic/update/perakitans/" + this.$store.state.status, {
           state: state,
           konfirmasi: 0,
         })
         .then((response) => {
           this.$store.commit("setJadwal", response.data);
-          console.log(response.data);
         });
       this.$store.commit("setIsLoading", false);
     },
@@ -180,7 +179,6 @@ export default {
 
   computed: {
     sorting_jadwal() {
-      console.log("change sorting");
       return this.$store.state.jadwal.sort(
         (a, b) => new Date(a.tanggal_mulai) - new Date(b.tanggal_mulai)
       );

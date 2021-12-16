@@ -118,7 +118,7 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/gbj/data").then((response) => {
+      await axios.get("/api/ppic/data/gbj").then((response) => {
         this.data = response.data;
       });
       this.$store.commit("setIsLoading", false);
@@ -134,7 +134,6 @@ export default {
         })
         .then((response) => {
           this.detail = response.data;
-          console.log(response.data);
           this.showModal = true;
         });
       this.$store.commit("setIsLoading", false);
@@ -142,7 +141,6 @@ export default {
   },
 
   mounted() {
-    console.log($("#table"));
     this.loadData();
   },
 };

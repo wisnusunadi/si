@@ -243,7 +243,6 @@ export default {
 
   data() {
     return {
-      data_perakitan: [],
       data_gbj: [],
       // data_gk: [],
       // data_so: [],
@@ -295,16 +294,21 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/perakitan/data").then((response) => {
-        this.data_perakitan = response.data;
-      });
-      await axios.get("/api/ppic/gbj/data").then((response) => {
+      await axios
+        .get("/api/ppic/counting/status/perakitan")
+        .then((response) => {
+          this.series = [
+            {
+              name: "data",
+              data: response.data,
+            },
+          ];
+          console.log(response.data);
+        });
+      await axios.get("/api/ppic/data/gbj").then((response) => {
         this.data_gbj = response.data;
       });
       $("#table_gbj").DataTable();
-      // await axios.get("/api/ppic/gk/data").then((response) => {
-      //   this.data_perakitan = response.data;
-      // });
       this.$store.commit("setIsLoading", false);
     },
   },

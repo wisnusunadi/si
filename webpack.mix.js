@@ -16,8 +16,8 @@ const mix = require('laravel-mix');
 //     .sass('resources/sass/app.scss', 'public/css');
 
 // plugin library
-mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
-mix.sass('resources/css/bootstrap.scss', 'public/native/css/plugin.css')
+// mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
+// mix.sass('resources/css/bootstrap.scss', 'public/native/css/plugin.css')
 
 // ppic
 // mix.js('resources/js/ppic/jadwal/app.js', 'public/native/js/ppic/jadwal.js').vue()
@@ -26,6 +26,6 @@ mix.sass('resources/css/bootstrap.scss', 'public/native/css/plugin.css')
 // mix.js('resources/js/manager/app.js', 'public/native/js/ppic/manager.js').vue()
 
 mix.js('resources/js/ppic_spa/index.js', 'public/native/js/ppic_spa.js').vue()
-mix.js('resources/js/manager_spa/index.js', 'public/native/js/manager_spa.js').vue()
+// mix.js('resources/js/manager_spa/index.js', 'public/native/js/manager_spa.js').vue()
 
 // mix.browserSync("http://localhost:8000")
