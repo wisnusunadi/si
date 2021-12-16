@@ -68,6 +68,8 @@
                                                     <span class="green-text badge">
                                                         @endif
                                                         {{ucfirst($data->Pesanan->State->nama)}}</span>
+                                                    @else
+                                                    -
                                                     @endif
 
                             </b>
