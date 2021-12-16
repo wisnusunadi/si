@@ -384,35 +384,18 @@ class MasterController extends Controller
                     $name =  $data->getTable();
 
                     if ($name == 'ekatalog') {
-                        return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button">
+                        return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
                                   <i class="fas fa-search"></i>
-                                  Details
-                                </button>
-                            </a>
-                    <div>';
+                            </a>';
                     } else if ($name == 'spa') {
-                        return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button">
+                        return  '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
                                   <i class="fas fa-search"></i>
-                                  Details
-                                </button>
-                            </a>
-                            </div>';
+                            </a>';
                     } else {
-                        return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        return  '
                             <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button">
                                   <i class="fas fa-search"></i>
-                                  Details
-                                </button>
-                            </a>
-                            </div>';
+                            </a>';
                     }
                 })
                 ->rawColumns(['status', 'button'])

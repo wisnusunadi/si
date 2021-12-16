@@ -64,6 +64,51 @@
         width: 50%;
     }
 
+    #detailekat {
+        background-color: #E9DDE5;
+
+    }
+
+    #detailspa {
+        background-color: #FFE6C9;
+    }
+
+    #detailspb {
+        background-color: #E1EBF2;
+        /* color: #7D6378; */
+
+    }
+
+    .overflowy {
+        max-height: 550px;
+        width: auto;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
+
+    .removeshadow {
+        box-shadow: none;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .bordertopnone {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        vertical-align: top;
+    }
+
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
     @media screen and (min-width: 1440px) {
         section {
             font-size: 14px;
@@ -156,7 +201,7 @@
                                         <th>Tanggal PO</th>
                                         <th>Jenis</th>
                                         <th>Status</th>
-                                        <th></th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -171,7 +216,7 @@
     <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-warning">
+                <div class="modal-header">
                     <h4>Detail</h4>
                 </div>
                 <div class="modal-body" id="detail">
@@ -221,6 +266,8 @@
                 },
                 {
                     data: 'button',
+                    orderable: false,
+                    searchable: false
                 }
             ]
         });
@@ -253,10 +300,19 @@
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
                     if (label == 'ekatalog') {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
+                        $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                         detailtabel_ekatalog(id);
                     } else if (label == 'spa') {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+                        $('#detailmodal').find(".modal-header > h4").text('SPA');
                         detailtabel_spa(id);
                     } else {
+                        $('#detailmodal').find(".modal-header").attr('id', '');
+                        $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
+                        $('#detailmodal').find(".modal-header > h4").text('SPB');
                         detailtabel_spb(id);
                     }
 

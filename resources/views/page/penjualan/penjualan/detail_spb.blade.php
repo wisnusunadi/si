@@ -53,24 +53,23 @@
                         <div class="margin">
                             <a class="text-muted">Status</a>
                             <b class="float-right" id="status">
-                                <b class="float-right" id="status">
-                                    @if (!empty($data->Pesanan->log_id))
-                                    @if ($data->Pesanan->State->nama == "Penjualan")
-                                    <span class="red-text badge">
-                                        @elseif ($data->Pesanan->State->nama == "PO")
-                                        <span class="purple-text badge">
-                                            @elseif ($data->Pesanan->State->nama == "Gudang")
-                                            <span class="orange-text badge">
-                                                @elseif ($data->Pesanan->State->nama == "QC")
-                                                <span class="yellow-text badge">
-                                                    @elseif ($data->Pesanan->State->nama == "Terkirim Sebagian")
-                                                    <span class="blue-text badge">
-                                                        @elseif ($data->Pesanan->State->nama == "Kirim")
-                                                        <span class="green-text badge">
-                                                            @endif
-                                                            {{ucfirst($data->Pesanan->State->nama)}}</span>
+                                @if (!empty($data->Pesanan->log_id))
+                                @if ($data->Pesanan->State->nama == "Penjualan")
+                                <span class="red-text badge">
+                                    @elseif ($data->Pesanan->State->nama == "PO")
+                                    <span class="purple-text badge">
+                                        @elseif ($data->Pesanan->State->nama == "Gudang")
+                                        <span class="orange-text badge">
+                                            @elseif ($data->Pesanan->State->nama == "QC")
+                                            <span class="yellow-text badge">
+                                                @elseif ($data->Pesanan->State->nama == "Terkirim Sebagian")
+                                                <span class="blue-text badge">
+                                                    @elseif ($data->Pesanan->State->nama == "Kirim")
+                                                    <span class="green-text badge">
                                                         @endif
-                                </b>s
+                                                        {{ucfirst($data->Pesanan->State->nama)}}</span>
+                                                    @endif
+
                             </b>
                         </div>
                     </div>

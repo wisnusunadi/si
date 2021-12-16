@@ -33,6 +33,10 @@
         display: none !important;
     }
 
+    .nowraps {
+        white-space: nowrap;
+    }
+
     @media screen and (min-width: 1440px) {
         section {
             font-size: 14px;
@@ -114,8 +118,9 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>No SO</th>
                                         <th>No PO</th>
-                                        <th>Tanggal</th>
+                                        <th>Tanggal PO</th>
                                         <th>Customer</th>
                                         <th>Status</th>
                                     </tr>
@@ -136,9 +141,10 @@
                                         <th>No</th>
                                         <th>No Seri</th>
                                         <th>No SO</th>
-                                        <th>Tanggal Masuk</th>
-                                        <th>Tanggal Keluar</th>
-                                        <th>Dari / Ke</th>
+                                        <th>Nama Produk</th>
+                                        <th>Tanggal Uji</th>
+                                        <th>Tanggal Kirim</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -156,8 +162,11 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No AKN</th>
-                                        <th>No PO</th>
-                                        <th>Tanggal</th>
+                                        <th>No SO</th>
+                                        <th>Tgl Buat</th>
+                                        <th>Batas Kontrak</th>
+                                        <th>Customer</th>
+                                        <th>Instansi</th>
                                         <th>Posisi</th>
                                         <th>Status</th>
                                     </tr>
@@ -178,9 +187,10 @@
                                         <th>No</th>
                                         <th>No SO</th>
                                         <th>No PO</th>
-                                        <th>Jenis</th>
-                                        <th>Tanggal</th>
-                                        <th>Posisi</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Tanggal Kirim</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -236,23 +246,23 @@
             columns: [{
                 data: 'DT_RowIndex',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                className: 'nowraps'
+            }, {
+                data: 'so',
+                className: 'nowraps'
             }, {
                 data: 'no_po',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, {
                 data: 'tgl_po',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, {
                 data: 'nama_customer',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, {
                 data: 'log',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, ]
         });
 
@@ -268,19 +278,25 @@
             columns: [{
                 data: 'DT_RowIndex',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                className: 'nowraps'
             }, {
                 data: 'so',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
+            }, {
+                data: 'no_po',
+                className: 'nowraps'
             }, {
                 data: 'tgl_po',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
+            }, {
+                data: 'tgl_kirim',
+                className: 'nowraps'
+            }, {
+                data: 'nama_customer',
             }, {
                 data: 'log',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, ]
         });
 
@@ -296,22 +312,38 @@
             columns: [{
                     data: 'DT_RowIndex',
                     orderable: false,
-                    searchable: false
+                    searchable: false,
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_paket',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'so',
+                    className: 'nowraps'
                 },
                 {
                     data: 'tgl_buat',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_kontrak',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'customer',
+                },
+                {
+                    data: 'instansi',
                 },
                 {
                     data: 'log',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 },
                 {
                     data: 'status',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 }
             ]
         });
@@ -331,28 +363,27 @@
                 },
                 {
                     data: 'noseri',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 },
                 {
                     data: 'no_so',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 },
                 {
-                    data: 'tgl_masuk',
-                    orderable: false,
-                    searchable: false
+                    data: 'nama_produk',
+                    className: 'nowraps'
                 },
                 {
-                    data: 'tgl_keluar',
-                    orderable: false,
-                    searchable: false
+                    data: 'tgl_uji',
+                    className: 'nowraps'
                 },
                 {
-                    data: 'divisi_id',
-                    orderable: false,
-                    searchable: false
+                    data: 'tgl_kirim',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'status',
+                    className: 'nowraps'
                 }
             ]
         });
@@ -368,32 +399,27 @@
             columns: [{
                     data: 'DT_RowIndex',
                     orderable: false,
-                    searchable: false
+                    searchable: false,
+                    className: 'nowraps'
                 },
                 {
                     data: 'nosurat',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 },
                 {
                     data: 'no_so',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 },
                 {
-                    data: 'customer',
-                    orderable: false,
-                    searchable: false
+                    data: 'customer'
                 },
                 {
                     data: 'tgl_kirim',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 },
                 {
                     data: 'status',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 }
             ]
         });

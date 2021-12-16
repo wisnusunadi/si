@@ -443,8 +443,8 @@
                             'success'
                         );
                         $("#editmodal").modal('hide');
-                        // $('#noseritable').DataTable().ajax.reload();
-                        // $('#showtable').DataTable().ajax.reload();
+                        $('#noseritable').DataTable().ajax.reload();
+                        $('#showtable').DataTable().ajax.reload();
 
                         location.reload();
                     } else if (response['data'] == "error") {

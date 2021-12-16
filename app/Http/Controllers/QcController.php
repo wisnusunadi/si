@@ -114,31 +114,71 @@ class QcController extends Controller
     public function get_data_detail_so($id)
     {
         $x = explode(',', $id);
-        $data = DetailPesananProduk::with('noseridetailpesanan')->whereIN('detail_pesanan_id', $x)->get();
+        $data = DetailPesananProduk::with('noseridetailpesanan')->whereIN('detail_pesanan_id', $x)->groupby('gudang_barang_jadi_id')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
                 if (empty($data->gudangbarangjadi->nama)) {
                     return $data->gudangbarangjadi->produk->nama;
                 } else {
-                    return $data->gudangbarangjadi->nama;
+                    return $data->gudangbarangjadi->produk->nama . " - <b>" . $data->gudangbarangjadi->nama . "</b>";
                 }
             })
-            ->addColumn('jumlah', function ($data) {
-                return $data->detailpesanan->jumlah * $data->detailpesanan->Penjualanproduk->produk->first()->pivot->jumlah;
+            ->addColumn('jumlah', function ($data) use ($x) {
+
+                // $j = DetailPesanan::whereIN('id', $x)->whereHas('DetailPesananProduk', function ($q) use ($id) {
+                // })->get();
+                // $jumlah_pesanan = 0;
+                // $jumlah_pivot = 0;
+                // $jumlah = 0;
+                // foreach ($j->detailpesanan as $k) {
+                //     // if ($data->gdg_barang_jadi_id == $k->DetailPesananProduk->gdg_barang_jadi_id) {
+                //     $jumlah_pesanan = $k->jumlah;
+                //     foreach ($k->PenjualanProduk as $l) {
+                //         if ($l->produk->id == $data->GudangBarangJadi->produk_id) {
+                //             $jumlah_pivot = $l->produk->pivot->jumlah;
+                //             $jumlah = $jumlah + ($jumlah_pesanan * $jumlah_pivot);
+                //         }
+                //     }
+                //     // }
+                // }
+                // return $jumlah;
+
+                $id = $data->gudang_barang_jadi_id;
+                $pesanan_id = $data->DetailPesanan->pesanan_id;
+                $jumlah = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+                    $q->where('gdg_brg_jadi_id', $id);
+                })->whereHas('detail.header', function ($q) use ($pesanan_id) {
+                    $q->where('pesanan_id', $pesanan_id);
+                })->count();
+                return $jumlah;
+                // return $data->detailpesanan->jumlah * $data->detailpesanan->Penjualanproduk->produk->first()->pivot->jumlah;
             })
-            ->addColumn('jumlah_ok', function ($data) {
-                $c = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $data->id, 'status' => 'ok'])->get()->count();
+            ->addColumn('jumlah_ok', function ($data) use ($x) {
+                $id = $data->gudang_barang_jadi_id;
+                $c = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id, $x) {
+                    $q->where([
+                        ['gudang_barang_jadi_id', '=', $id],
+                        ['status', '=', 'ok']
+                    ])->whereIn('detail_pesanan_id', $x);
+                })->get()->count();
+
                 return $c;
             })
-            ->addColumn('jumlah_nok', function ($data) {
-                $c = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $data->id, 'status' => 'nok'])->get()->count();
+            ->addColumn('jumlah_nok', function ($data) use ($x) {
+                $id = $data->gudang_barang_jadi_id;
+                $c = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id, $x) {
+                    $q->where([
+                        ['gudang_barang_jadi_id', '=', $id],
+                        ['status', '=', 'nok']
+                    ])->whereIn('detail_pesanan_id', $x);
+                })->get()->count();
                 return $c;
             })
             ->addColumn('button', function ($data) {
                 return '<a type="button" class="noserishow" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['nama_produk', 'button'])
             ->make(true);
         //echo json_encode($data);
     }
@@ -556,13 +596,15 @@ class QcController extends Controller
         }
 
         $po = Pesanan::find($pesanan_id);
-        if (($po->getJumlahCek() > 0 && $po->getJumlahPesanan >= $po->getJumlahCek()) && $po->getJumlahKirim() == 0) {
-            $po->log_id = '8';
-            $po->save();
+        if ($po->getJumlahPesanan() == $po->getJumlahSeri()) {
+            if ($po->getJumlahCek() > 0 && ($po->getJumlahPesanan() >= $po->getJumlahCek()) && $po->getJumlahKirim() == 0) {
+                $po->log_id = '8';
+                $po->save();
+            }
         }
 
         if ($bool == true) {
-            return response()->json(['data' =>  'success']);
+            return response()->json(['data' => 'success']);
         } else {
             return response()->json(['data' =>  'error']);
         }
