@@ -239,7 +239,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="spa" name="jenis_penjualan[]" id="jenis3" />
+                                                            <input class="form-check-input" type="checkbox" value="spb" name="jenis_penjualan[]" id="jenis3" />
                                                             <label class="form-check-label" for="jenis3">
                                                                 SPB
                                                             </label>

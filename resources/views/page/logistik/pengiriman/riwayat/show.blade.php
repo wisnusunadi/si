@@ -147,46 +147,85 @@
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Status</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                                    <label class="form-check-label" for="status1">
-                                                        Sudah Dikirim
-                                                    </label>
+                                    <form id="filter_logistik">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="pengiriman">Pengiriman</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                                    <label class="form-check-label" for="status2">
-                                                        Sebagian Dikirim
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="ekspedisi" name="pengiriman[]" id="pengiriman1" />
+                                                        <label class="form-check-label" for="pengiriman1">
+                                                            Ekspedisi
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                                    <label class="form-check-label" for="status3">
-                                                        Belum Dikirim
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="nonekspedisi" name="pengiriman[]" id="pengiriman2" />
+                                                        <label class="form-check-label" for="pengiriman2">
+                                                            Non Ekspedisi
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <label for="provinsi">Provinsi</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="2" name="provinsi[]" id="provinsi1" />
+                                                        <label class="form-check-label" for="provinsi1">
+                                                            Jawa
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="1" name="provinsi[]" id="provinsi2" />
+                                                        <label class="form-check-label" for="provinsi2">
+                                                            Luar Jawa
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Jenis Penjualan</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="ekat" name="jenis_penjualan[]" id="jenis_penjualan1" />
+                                                        <label class="form-check-label" for="jenis_penjualan1">
+                                                            Ekatalog
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="spa" name="jenis_penjualan[]" id="jenis_penjualan2" />
+                                                        <label class="form-check-label" for="jenis_penjualan2">
+                                                            SPA
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="spb" name="jenis_penjualan[]" id="jenis_penjualan3" />
+                                                        <label class="form-check-label" for="jenis_penjualan3">
+                                                            SPB
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary" id="filter_logistik" type="submit">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </span>
-
                             </div>
                         </div>
                         <div class="row">
@@ -244,7 +283,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/pengiriman/riwayat/data',
+                'url': '/api/logistik/pengiriman/riwayat/data/semua/semua/semua',
                 'type': 'GET',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -289,6 +328,45 @@
 
                 }
             ]
+        });
+
+        $('#filter_logistik').submit(function() {
+            var values_pengiriman = [];
+            $('input[name="pengiriman[]"]:checked').each(function() {
+                values_pengiriman.push($(this).val());
+            });
+
+            var values_provinsi = [];
+            $('input[name="provinsi[]"]:checked').each(function() {
+                values_provinsi.push($(this).val());
+            });
+
+            var values_jenis_penjualan = [];
+            $('input[name="jenis_penjualan[]"]:checked').each(function() {
+                values_jenis_penjualan.push($(this).val());
+            });
+            // alert(values_spb);
+            if (values_pengiriman != 0) {
+                var x = values_pengiriman;
+            } else {
+                var x = ['semua'];
+            }
+
+            if (values_provinsi != 0) {
+                var y = values_provinsi;
+            } else {
+                var y = ['semua'];
+            }
+
+            if (values_jenis_penjualan != 0) {
+                var z = values_jenis_penjualan;
+            } else {
+                var z = ['semua'];
+            }
+
+            console.log(x);
+            $('#showtable').DataTable().ajax.url('/api/logistik/pengiriman/riwayat/data/' + x + '/' + y + '/' + z).load();
+            return false;
         });
 
     })

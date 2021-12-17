@@ -70,7 +70,7 @@ class PenjualanController extends Controller
                 $data = $Spa->merge($Spb);
             } else if ($Ekatalog != "" && $Spa == "" && $Spb == "") {
                 $data = $Ekatalog;
-            } else if ($Ekatalog != "" && $Spa != "" && $Spb == "") {
+            } else if ($Ekatalog == "" && $Spa != "" && $Spb == "") {
                 $data = $Spa;
             } else if ($Ekatalog == "" && $Spa == "" && $Spb != "") {
                 $data = $Spb;
@@ -133,7 +133,7 @@ class PenjualanController extends Controller
                 $data = $Spa->merge($Spb);
             } else if ($Ekatalog != "" && $Spa == "" && $Spb == "") {
                 $data = $Ekatalog;
-            } else if ($Ekatalog != "" && $Spa != "" && $Spb == "") {
+            } else if ($Ekatalog == "" && $Spa != "" && $Spb == "") {
                 $data = $Spa;
             } else if ($Ekatalog == "" && $Spa == "" && $Spb != "") {
                 $data = $Spb;
