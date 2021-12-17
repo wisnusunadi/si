@@ -423,7 +423,6 @@
                 }
             ]
         });
-
         $('#data').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('.pilih_data').removeAttr('disabled');

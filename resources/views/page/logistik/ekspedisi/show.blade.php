@@ -133,7 +133,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="darat" id="status1" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="darat" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status1">
                                                         Darat
                                                     </label>
@@ -141,7 +141,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="laut" id="status2" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="laut" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status2">
                                                         Laut
                                                     </label>
@@ -149,7 +149,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="udara" id="status3" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="udara" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status3">
                                                         Udara
                                                     </label>
@@ -157,7 +157,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="lain" id="status4" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="lain" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status4">
                                                         Lain
                                                     </label>
@@ -184,7 +184,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="0" name='jurusan' />
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="semua" name='jurusan' />
                                                     <label class="form-check-label" for="dropdownStatus3">
                                                         Semua
                                                     </label>
@@ -253,7 +253,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/logistik/ekspedisi/data/',
+                'url': '/logistik/ekspedisi/data/semua/semua',
 
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -524,10 +524,10 @@
             $('.provinsi').val('1').trigger("change");
         }
 
-
         $('#filter').submit(function() {
             var jalur = [];
             var jurusan = [];
+
             $("input[name=jalur]:checked").each(function() {
                 jalur.push($(this).val());
             });
@@ -546,7 +546,9 @@
             } else {
                 var x = ['kosong']
             }
+            console.log(x);
             console.log(y);
+            $('#showtable').DataTable().ajax.url('/logistik/ekspedisi/data/' + x + '/' + y).load();
 
             return false;
         });
