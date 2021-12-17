@@ -1825,8 +1825,6 @@ class LogistikController extends Controller
                 //     }
                 //     $a++;
                 // }
-
-
             }
         }
 
@@ -2203,12 +2201,12 @@ class LogistikController extends Controller
     public function check_no_sj($val)
     {
         $e = Logistik::where('nosurat', 'SPA-' . $val)->count();
-        return response()->json(['data' => $e]);
+        return $e;
     }
 
     public function check_no_resi($val)
     {
         $e = Logistik::where('noresi', $val)->count();
-        return response()->json(['data' => $e]);
+        return $e;
     }
 }

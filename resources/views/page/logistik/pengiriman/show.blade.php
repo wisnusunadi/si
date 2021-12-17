@@ -314,7 +314,7 @@
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
             var logistik_id = $(this).attr('data-id');
-            console.log(href);
+
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -398,28 +398,36 @@
             }
         });
 
+        function check_no_resi(value) {
+            var hasil = "";
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                async: false,
+                url: '/api/logistik/cek/no_resi/' + value,
+                success: function(data) {
+                    hasil = data;
+                },
+                error: function(data) {
+                    hasil = data;
+                }
+            });
+            return hasil;
+        }
+
         $(document).on('change keyup', '#no_resi', function(event) {
             if ($(this).val() != "") {
                 var values = $(this).val();
-                $.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    url: '/api/logistik/cek/no_resi/' + values,
-                    success: function(data) {
-                        if (data.data > 0) {
-                            $('#no_resi').addClass('is-invalid');
-                            $('#msgno_resi').text("No Resi sudah terpakai");
-                            $('#btnsimpan').attr('disabled', true);
-                        } else {
-                            $('#no_resi').removeClass('is-invalid');
-                            $('#msgno_resi').text("");
-                            $('#btnsimpan').removeAttr('disabled');
-                        }
-                    },
-                    error: function(data) {
-                        return values;
-                    }
-                });
+
+                if (check_no_resi(values) > 0) {
+                    $('#no_resi').addClass('is-invalid');
+                    $('#msgno_resi').text("No Resi sudah terpakai");
+                    $('#btnsimpan').attr('disabled', true);
+                } else {
+                    $('#no_resi').removeClass('is-invalid');
+                    $('#msgno_resi').text("");
+                    $('#btnsimpan').removeAttr('disabled');
+                }
 
             } else if ($(this).val() == "") {
                 $('#no_resi').addClass('is-invalid');
@@ -494,7 +502,7 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -509,7 +517,6 @@
         }
 
         function barang_detail(id) {
-            console.log('id ' + id);
             $('#barangtable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -619,7 +626,6 @@
                 var z = ['semua'];
             }
 
-            console.log(x);
             $('#showtable').DataTable().ajax.url('/logistik/pengiriman/data/' + x + '/' + y + '/' + z).load();
             return false;
         });
