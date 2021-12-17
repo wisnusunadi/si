@@ -171,44 +171,46 @@
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Status</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                                    <label class="form-check-label" for="status1">
-                                                        Selesai Diperiksa
-                                                    </label>
+                                    <form id="filter">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Status</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                                    <label class="form-check-label" for="status2">
-                                                        Sebagian Diperiksa
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
+                                                        <label class="form-check-label" for="status1">
+                                                            Selesai Diperiksa
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                                    <label class="form-check-label" for="status3">
-                                                        Belum Diperiksa
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
+                                                        <label class="form-check-label" for="status2">
+                                                            Sebagian Diperiksa
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
+                                                        <label class="form-check-label" for="status3">
+                                                            Belum Diperiksa
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </span>
                             </div>
                         </div>
@@ -639,6 +641,23 @@
         //     return false;
         // });
 
+        $('#filter').submit(function() {
+            var values_spa = [];
+            $("input:checked").each(function() {
+                values_spa.push($(this).val());
+            });
+            if (values_spa != 0) {
+                var x = values_spa;
+
+            } else {
+                var x = ['semua'];
+            }
+
+            console.log(x);
+            //      $('#ekatalogtable').DataTable().ajax.url('/penjualan/penjualan/ekatalog/data/' + x).load();
+            return false;
+
+        });
     })
 </script>
 @stop

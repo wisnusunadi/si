@@ -907,7 +907,7 @@
             serverSide: true,
             ajax: {
                 'url': '/api/penjualan/data',
-                'method': 'POST',
+                'method ': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

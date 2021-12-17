@@ -112,10 +112,32 @@ class MasterController extends Controller
             ->rawColumns(['status'])
             ->make(true);
     }
-    public function get_data_ekspedisi()
+    public function get_data_ekspedisi($value1, $value2)
     {
+        $x = explode(',', $value1);
         $divisi_id = auth()->user()->divisi->id;
-        $data = Ekspedisi::select();
+
+        if ($value1 == 'semua' && $value2 == 'semua' || $value1 == 'kosong' && $value2 == 'semua') {
+            $data = Ekspedisi::select();
+        } else if ($value1 == 'kosong' && $value2 == '1') {
+            $data = Ekspedisi::Has('JalurEkspedisi')->whereHas('Provinsi', function ($q) {
+                $q->where('status', 1);
+            })->get();
+        } else if ($value1 == 'kosong' && $value2 == '2') {
+            $data = Ekspedisi::Has('JalurEkspedisi')->whereHas('Provinsi', function ($q) {
+                $q->where('status', 2);
+            })->get();
+        } else if ($value1 != 'kosong' && $value2 == 'kosong' ||  $value2 == 'semua') {
+            $data = Ekspedisi::whereHas('JalurEkspedisi', function ($q) use ($x) {
+                $q->whereIN('nama', $x);
+            })->get();
+        } else if ($value1 != 'kosong' && $value2 != 'kosong') {
+            $data = Ekspedisi::whereHas('JalurEkspedisi', function ($q) use ($x) {
+                $q->whereIN('nama', $x);
+            })->whereHas('Provinsi', function ($q) use ($value2) {
+                $q->where('status', $value2);
+            })->get();
+        }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('jurusan', function ($data) {

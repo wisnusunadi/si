@@ -115,6 +115,18 @@ class QcController extends Controller
     {
         $x = explode(',', $id);
         $data = DetailPesananProduk::with('noseridetailpesanan')->whereIN('detail_pesanan_id', $x)->groupby('gudang_barang_jadi_id')->get();
+
+
+        // $array_seri = array();
+        // foreach ($data as $d) {
+        //     $array_seri[] = $d->id;
+        // }
+
+        // $c = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id, $x) {
+        //     $q->whereIn('detail_pesanan_id', $array_seri);
+        // })->get();
+
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {

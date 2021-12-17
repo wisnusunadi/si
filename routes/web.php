@@ -180,7 +180,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/ekspedisi'], function () {
-        Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
+        Route::get('/data/{value_1}/{value_2}', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::view('/show', 'page.logistik.ekspedisi.show')->name('logistik.ekspedisi.show');
         Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_ekspedisi'])->name('logistik.ekspedisi.detail');
