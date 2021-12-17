@@ -117,16 +117,6 @@ class QcController extends Controller
         $data = DetailPesananProduk::with('noseridetailpesanan')->whereIN('detail_pesanan_id', $x)->groupby('gudang_barang_jadi_id')->get();
 
 
-        // $array_seri = array();
-        // foreach ($data as $d) {
-        //     $array_seri[] = $d->id;
-        // }
-
-        // $c = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id, $x) {
-        //     $q->whereIn('detail_pesanan_id', $array_seri);
-        // })->get();
-
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
@@ -137,7 +127,6 @@ class QcController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) use ($x) {
-
                 // $j = DetailPesanan::whereIN('id', $x)->whereHas('DetailPesananProduk', function ($q) use ($id) {
                 // })->get();
                 // $jumlah_pesanan = 0;
@@ -155,7 +144,6 @@ class QcController extends Controller
                 //     // }
                 // }
                 // return $jumlah;
-
                 $id = $data->gudang_barang_jadi_id;
                 $pesanan_id = $data->DetailPesanan->pesanan_id;
                 $jumlah = NoseriTGbj::whereHas('detail', function ($q) use ($id) {

@@ -61,7 +61,6 @@
     }
 </style>
 @stop
-
 @section('content')
 <section class="content">
     <div class="container-fluid">
@@ -108,7 +107,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="1" />
+                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="1" name="produk" />
                                                             <label class="form-check-label" for="dropdownkelompokproduk">
                                                                 Alat Kesehatan
                                                             </label>
@@ -116,7 +115,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="2" />
+                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="2" name="produk" />
                                                             <label class="form-check-label" for="dropdownkelompokproduk">
                                                                 Sarana Kesehatan
                                                             </label>
@@ -124,7 +123,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="3" />
+                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="3" name="produk" />
                                                             <label class="form-check-label" for="dropdownkelompokproduk">
                                                                 Aksesoris
                                                             </label>
@@ -132,19 +131,19 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="4" />
+                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="4" name="produk" />
                                                             <label class="form-check-label" for="dropdownkelompokproduk">
                                                                 Lain - lain
                                                             </label>
                                                         </div>
                                                     </div>
-
+                                                    <!-- 
                                                     <div class="dropdown-header">
                                                         Stok
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" />
+                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" name="stok" value="tersedia" />
                                                             <label class="form-check-label" for="dropdownstok">
                                                                 Tersedia
                                                             </label>
@@ -152,7 +151,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" />
+                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" name="stok" value="hammpir" />
                                                             <label class="form-check-label" for="dropdownstok">
                                                                 Hampir Habis
                                                             </label>
@@ -160,12 +159,26 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" />
+                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" name="stok" value="habis" />
                                                             <label class="form-check-label" for="dropdownstok">
                                                                 Habis
                                                             </label>
                                                         </div>
+                                                    </div> -->
+
+                                                    <div class="dropdown-header">
+                                                        Harga Minimum
                                                     </div>
+                                                    <div class="form-group">
+                                                        <input type="text" style="width:200px;" class="form-control" id="harga_min" name="stok" value="0" />
+                                                    </div>
+                                                    <div class="dropdown-header">
+                                                        Harga Maksimum
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" style="width:200px;" class="form-control" id="harga_maks" name="stok" value="0" disabled />
+                                                    </div>
+
                                                     <button class="btn btn-primary float-right">
                                                         Cari
                                                     </button>
@@ -310,7 +323,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/penjualan_produk/data/' + 0,
+                'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -552,19 +565,69 @@
                 $('#btnsimpan').addClass('disabled');
             }
         });
+
+
+        $('#harga_min').on('keyup change', function() {
+
+            if ($(this).val().startsWith("0")) {
+                $(this).val('0');
+                $("#harga_maks").val('0');
+            }
+
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+            if ($(this).val() == "") {
+                $("#harga_maks").attr('disabled', true);
+            } else if ($(this).val().startsWith("0")) {
+                $("#harga_maks").attr('disabled', true);
+            } else {
+                $("#harga_maks").removeAttr('disabled');
+            }
+
+        });
+        $('#harga_maks').on('keyup change', function() {
+
+            if ($(this).val().startsWith("0")) {
+                $(this).val('0');
+            }
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+
+        });
+
         $('#filter').submit(function() {
-            var values = [];
-            $("input:checked").each(function() {
-                values.push($(this).val());
+            var produk = [];
+            var harga_min = $('#harga_min').val();
+            var harga_maks = $('#harga_maks').val();
+
+            $("input[name=produk]:checked").each(function() {
+                produk.push($(this).val());
             });
-            if (values != 0) {
-                var x = values;
+
+            if (produk != 0) {
+                var x = produk;
 
             } else {
                 var x = ['kosong']
             }
+
+            if (harga_min != 0) {
+                var y = harga_min.replace(/\./g, '')
+
+            } else {
+                var y = ['kosong']
+            }
+            if (harga_maks != 0) {
+                var z = harga_maks.replace(/\./g, '');
+
+            } else {
+                var z = ['kosong']
+            }
+            console.log(y);
+            console.log(z);
             console.log(x);
-            $('#showtable').DataTable().ajax.url(' /api/penjualan_produk/data/' + x).load();
+
+            $('#showtable').DataTable().ajax.url('/api/penjualan_produk/data/' + x + '/' + y + '/' + z + '').load();
             return false;
         });
     });

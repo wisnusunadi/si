@@ -902,7 +902,6 @@
     </div>
 </section>
 @stop
-
 @section('adminlte_js')
 <script>
     $(function() {
