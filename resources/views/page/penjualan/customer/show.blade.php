@@ -245,7 +245,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/penjualan/customer/data/' + 0,
+                'url': '/api/penjualan/customer/data/0',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

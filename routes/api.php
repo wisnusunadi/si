@@ -102,6 +102,7 @@ Route::prefix('/penjualan')->group(function () {
     // Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
 
+    //   Route::get('customer/data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
 
 
     Route::prefix('/lacak')->group(function () {
