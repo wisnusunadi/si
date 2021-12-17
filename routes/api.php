@@ -316,6 +316,9 @@ Route::prefix('/gk')->group(function () {
     Route::post('/ubahunit', [SparepartController::class, 'updateUnit']);
     Route::post('/edit-in', [SparepartController::class, 'edit_draft_terima']);
 
+    Route::post('/updateDraft', [SparepartController::class, 'updateTerima']);
+    Route::post('/deleteDraftTerima', [SparepartController::class, 'deleteDraftTerima']);
+
 
     // history trx
     Route::prefix('/transaksi')->group(function () {
@@ -324,6 +327,7 @@ Route::prefix('/gk')->group(function () {
         Route::get('/noseri/{id}', [SparepartController::class, 'get_noseri_history']);
         Route::get('/header/{id}', [App\Http\Controllers\SparepartController::class, 'get_detail_id']);
         Route::get('/history/{id}', [App\Http\Controllers\SparepartController::class, 'get_trx']);
+        Route::post('/grafik-trf', [SparepartController::class, 'grafik_trf']);
     });
 
     Route::prefix('/dashboard')->group(function () {

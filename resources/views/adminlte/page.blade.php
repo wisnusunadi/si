@@ -135,6 +135,7 @@
 
 @section('master_js')
 <script>
+    
     console.log('preparing...');
     $(document).ready(function() {
         console.log('ready...');

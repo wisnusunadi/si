@@ -360,13 +360,14 @@ class GudangController extends Controller
         return datatables()->of($data)
             ->addColumn('layout', function ($d) use($layout, $a) {
                 $opt = '';
-                $a++;
+
                 foreach($layout as $l) {
                     $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
                 }
-                return '<select name="layout_id['.$a.']" id="layout_id[]" class="form-control layout">
+                return '<select name="layout_id[]" id="layout_id[]" class="form-control layout">
                         ' . $opt . '
                         </select>';
+                $a++;
             })
             ->addColumn('noserii', function ($d) {
                 return $d->seri->noseri.'<input type="hidden" name="noseri[]" id="noseri[]" value="'.$d->seri->noseri.'">';

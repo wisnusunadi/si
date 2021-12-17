@@ -185,7 +185,6 @@
 </div>
 </div>
 
-
 <div class="modal fade modalAddSparepart" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
     aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -556,26 +555,25 @@
             $('.cb-child').each(function() {
             if($(this).is(":checked")) {
                 // cek validasi
-                // if ($('input:checkbox:checked').length > e) {
-                //     Swal.fire({
-                //         icon: 'error',
-                //         title: 'Oops...',
-                //         text: 'Melebihi Batas Maksimal'
-                //     })
-                // } else {
-
-                        ids.push($(this).val());
-                        seri[d] = ids;
-                        console.log(seri);
-                        // Swal.fire({
-                        //     position: 'center',
-                        //     icon: 'success',
-                        //     title: 'Nomor seri tersimpan',
-                        //     showConfirmButton: false,
-                        //     timer: 1500
-                        // })
-                        // $('.modalAddSparepart').modal('hide');
-                    // }
+                if ($('.cb-child').filter(':checked').length > e) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Melebihi Batas Maksimal'
+                    })
+                } else {
+                    ids.push($(this).val());
+                    seri[d] = ids;
+                    console.log(seri);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Nomor seri tersimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('.modalAddSparepart').modal('hide');
+                }
                 }
             })
         }
@@ -583,7 +581,7 @@
 
     function addSparepart(x, y, z) {
         // alert(x); //get jumlah
-        console.log(x);
+        console.log($('#sparepart_id :selected').text());
         $('.jumlah_spr').text(x + ' Unit')
         $('.date_out').text(document.getElementsByName("date_in")[0].value)
         $('.divisi').text(document.getElementsByName("dari")[0].selectedOptions[0].dataset.name)
@@ -741,13 +739,13 @@
             $('.cb-unit').each(function() {
             if($(this).is(":checked")) {
                 // cek validasi
-                // if ($('input:checkbox:checked').length > p) {
-                //     Swal.fire({
-                //         icon: 'error',
-                //         title: 'Oops...',
-                //         text: 'Melebihi Batas Maksimal'
-                //     })
-                // } else {
+                if ($('.cb-unit').filter(':checked').length > p) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Melebihi Batas Maksimal'
+                    })
+                } else {
                     uids.push($(this).val());
                     seri_unit[c] = uids;
                     console.log(seri_unit);
@@ -759,8 +757,9 @@
                         timer: 1500
                     })
                     $('.modalAddUnit').modal('hide');
-                    // }
                 }
+            }
+
             })
 
         }
@@ -806,7 +805,6 @@
         });
     }
 
-    // function select_divisi() {
     $.ajax({
         url: '/api/gbj/sel-divisi',
         type: 'GET',
@@ -821,7 +819,6 @@
             });
         }
     });
-    // }
 
     function transfer() {
         Swal.fire({
@@ -853,14 +850,15 @@
         });
         i++;
         let table_sparepart =
-            '<tr><td><select name="sparepart_id[]" id="" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus' +
+            '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_id'+nmrspr+'" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus' +
             nmrspr + '" data-id="" data-jml="" id="" onclick=addSpare(' + nmrspr +
             ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
 
         $('.add_sparepart_table tbody').append(table_sparepart);
-        $('.produk').select2();
+        $('#sparepart_id'+nmrspr+'').select2();
         nmrspr++;
     });
+
     var nmrunt = 1;
     $(document).on('click', '.add_unit', function () {
         $.ajax({
@@ -879,13 +877,14 @@
         });
         i++;
         let table_unit =
-            '<tr><td><select name="gbj_id[]" id="" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus' +
+            '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_id'+nmrunt+'" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus' +
             nmrunt + '" id="" onclick=addUn(' + nmrunt +
             ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
-        $('.produkk').select2();
+        $('#gbj_id'+nmrunt+'').select2();
         nmrunt++;
     });
+
     $(document).on('click', '.btn-delete', function (e) {
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
@@ -1014,6 +1013,7 @@
             });
         });
     }
+
     // submit draft
     $(document).on('click', '.simpan', function () {
         let out = $('#datePicker').val();

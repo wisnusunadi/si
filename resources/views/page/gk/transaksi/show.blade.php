@@ -108,17 +108,14 @@
                             Per Tahun
                         </h3>
                         <div class="card-tools">
-                            <div class="form-group row">
-                                <label for="years" class="col-md-5 col-form-label">Tahun</label>
-                                <div class="col-md-7">
                                     <select name="tahun" id="tahun" class="form-control">
-                                        <option value="#" selected>Pilih Tahun</option>
+                                        <option value="" selected>Pilih Tahun</option>
                                         @foreach ($data as $d)
-                                            <option value="{{ $d->tahun }}">{{ $d->tahun }}</option>
+                                            @if ($d->tahun != null)
+                                                <option value="{{ $d->tahun }}">{{ $d->tahun }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -369,7 +366,7 @@
     })
 
     const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
+    const myChart = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
@@ -398,6 +395,19 @@ const myChart = new Chart(ctx, {
             }
         }
     }
+});
+$('#tahun').change(function (e) { 
+    $.ajax({
+        type: "post",
+        url: "/api/gk/transaksi/grafik-trf/",
+        data: {
+            id: id,
+            tahun: this.value,
+        },
+        success: function (response) {
+            console.log(response);
+        }
+    });
 });
 
 </script>

@@ -50,11 +50,13 @@
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="tanggal">Tanggal Masuk</label>
-                            <input type="date" name="" id="datePicker" class="form-control" placeholder="" disabled>
+                            <input type="hidden" name="date_in" id="date_in">
+                            <input type="date" name="date_in" id="datePicker" class="form-control" placeholder="" disabled>
                         </div>
                         <div class="form-group col">
                             <label for="dari">Dari</label>
-                            <select class="form-control dari" name="dari" disabled>
+                            <input type="hidden" name="dari" id="darii">
+                            <select class="form-control dari" name="dari" id="dari" disabled>
                             </select>
                         </div>
                     </div>
@@ -238,7 +240,7 @@
                             <div class="col-sm">
                                 <label for="">Tanggal Masuk</label>
                                 <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body">
+                                    <div class="card-body edit_in">
                                         23-09-2021
                                     </div>
                                 </div>
@@ -246,7 +248,7 @@
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
-                                    <div class="card-body">
+                                    <div class="card-body edit_spr">
                                         Produk 1
                                     </div>
                                 </div>
@@ -256,7 +258,7 @@
                             <div class="col-sm">
                                 <label for="">Unit</label>
                                 <div class="card" style="background-color: #FFCC83">
-                                    <div class="card-body">
+                                    <div class="card-body edit_unit">
                                         Unit 1
                                     </div>
                                 </div>
@@ -264,7 +266,7 @@
                             <div class="col-sm">
                                 <label for="">Dari</label>
                                 <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body">
+                                    <div class="card-body ">
                                         Divisi IT
                                     </div>
                                 </div>
@@ -292,6 +294,7 @@
                                     </thead>
                                     <tbody>
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>
@@ -300,7 +303,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" id="btnSeri" class="btn btn-primary">Simpan</button>
+                <button type="button" id="btnSeriEdit" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
@@ -454,7 +457,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" id="btnAddUnit" class="btn btn-primary">Simpan</button>
+                <button type="button" id="btnEditUnit" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
@@ -462,12 +465,23 @@
 @stop
 @section('adminlte_js')
 <script>
-    // get edit spr
+    var kodee = $('#kode').val();
+
+    $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            $.each(res, function (key, value) {
+                $(".dari").append('<option value="' + value.id + '">' + value.nama +
+                    '</option');
+            });
+        }
+    });
     getSpr();
-    // Date
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0 so need to add 1 to make it 1!
+    var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
     if (dd < 10) {
         dd = '0' + dd
@@ -513,7 +527,6 @@
         var seriSparepart = [];
         var kerusakanSparepart = [];
         var tingkatSparepart = [];
-        // No Seri
         const data = tableScan.$('.seri').map(function () {
             return $(this).val();
         }).get();
@@ -524,7 +537,6 @@
             }
         })
 
-        // Data Null
         const ker = tableScan.$('.remark').map(function () {
             return $(this).val();
         }).get();
@@ -533,21 +545,18 @@
             return $(this).val();
         }).get();
 
-        // No Seri
         data.forEach(function (item) {
             if (item == '') {
                 seriSparepart.push(item);
             }
         })
 
-        // Kerusakan
         ker.forEach(function (item) {
             if (item == '') {
                 kerusakanSparepart.push(item);
             }
         })
 
-        // Tingkat
         ting.forEach(function (item) {
             if (item == '') {
                 tingkatSparepart.push(item);
@@ -779,17 +788,17 @@
                 timer: 1500
             }).then(function () {
                 $('.scan-produk tbody tr').each((index, value) => {
-                                const obj1 = {
-                                    noseri: value.childNodes[0].firstChild.value,
-                                    kerusakan: value.childNodes[1].firstChild.value,
-                                    tingkat: value.childNodes[2].firstChild.value,
-                                }
-                                unit_arr.push(obj1);
-                            })
-                            seri_unit[e] = unit_arr;
-                            unit_arr = [];
-                            console.log(seri_unit)
-                            $('.modalAddUnit').modal('hide');
+                    const obj1 = {
+                        noseri: value.childNodes[0].firstChild.value,
+                        kerusakan: value.childNodes[1].firstChild.value,
+                        tingkat: value.childNodes[2].firstChild.value,
+                    }
+                    unit_arr.push(obj1);
+                })
+                seri_unit[c] = unit_arr;
+                unit_arr = [];
+                console.log(seri_unit)
+                $('.modalAddUnit').modal('hide');
             })
         }
     }
@@ -824,23 +833,6 @@
         });
     }
 
-    // function select_divisi() {
-    $.ajax({
-        url: '/api/gbj/sel-divisi',
-        type: 'GET',
-        dataType: 'json',
-        success: function (res) {
-            // ii++;
-            console.log(res);
-            $.each(res, function (key, value) {
-                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                $(".dari").append('<option value="' + value.id + '">' + value.nama +
-                    '</option');
-            });
-        }
-    });
-    // }
-
     function transfer() {
         Swal.fire({
             title: "Apakah anda yakin?",
@@ -859,22 +851,21 @@
             type: 'POST',
             dataType: 'json',
             success: function (res) {
-                // ii++;
                 console.log(res);
                 $.each(res, function (key, value) {
-                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                     $(".produk").append('<option value="' + value.id + '">' + value
                         .nama + '</option');
                 });
             }
         });
         i++;
-        let table_sparepart = '<tr><td><select name="sparepart_id[]" id="" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_sparepart = '<tr><td><select name="sparepart_id[]" id="sparepart_idd" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
 
         $('.add_sparepart_table tbody').append(table_sparepart);
-        $('.produk').select2();
+        $('#sparepart_idd'+nmrspr).select2();
     nmrspr++;
     });
+
     var nmrunt = 1;
     $(document).on('click', '.add_unit', function () {
         $.ajax({
@@ -882,23 +873,62 @@
             type: 'get',
             dataType: 'json',
             success: function (res) {
-                // ii++;
                 console.log(res);
                 $.each(res, function (key, value) {
-                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                     $(".produkk").append('<option value="' + value.id + '">' + value
                         .produk.nama + ' ' + value.nama + '</option');
                 });
             }
         });
         i++;
-        let table_unit = '<tr><td><select name="gbj_id[]" id="" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr><td><select name="gbj_id[]" id="gbj_idd" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
-        $('.produkk').select2();
+        $('#gbj_idd'+nmrunt).select2();
     nmrunt++;
-    }); $(document).on('click', '.btn-delete', function (e) {
+    });
+
+    $(document).on('click', '.btn-delete', function (e) {
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
+    });
+    var kodespr = '';
+    var urutspr = 0;
+    $(document).on('click', '.btn-delete-edit', function (e) {
+        urutspr++;
+        console.log($('#kodespr'+urutspr)[0].value);
+        kodespr = $('#kodespr'+urutspr)[0].value;
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/api/gk/deleteDraftTerima",
+                    type: "post",
+                    data: { id: kodespr},
+                    success: function(res) {
+                        console.log(res);
+                        Swal.fire(
+                            'Deleted!',
+                            'Your data has been deleted.',
+                            'success'
+                        )
+
+                        location.reload();
+                    }
+                })
+                $(this).parent().parent().remove();
+                var check = $('tbody.tambah_data tr').length;
+
+            }
+        })
+
     });
 
     $(document).ready(function () {
@@ -928,7 +958,8 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $('.dari').select2({});
+
+
     });
 
     function terima() {
@@ -1023,6 +1054,8 @@
                 const jml = [];
                 const unit1 = [];
                 const jum = [];
+                const kodespr = [];
+                const kodeunit = [];
 
                 $('select[name^="sparepart_id"]').each(function () {
                     spr1.push($(this).val());
@@ -1031,6 +1064,14 @@
                 $('input[name^="qty_spr"]').each(function () {
                     jml.push($(this).val());
                 });
+
+                $('.kodespr').each(function () {
+                    kodespr.push($(this).val());
+                })
+
+                $('.kodeunit').each(function () {
+                    kodeunit.push($(this).val());
+                })
 
                 $('select[name^="gbj_id"]').each(function () {
                     unit1.push($(this).val());
@@ -1041,27 +1082,30 @@
                 });
 
                 $.ajax({
-                    url: "/api/gk/in-draft",
+                    url: "/api/gk/updateDraft",
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",
                         date_in: out,
+                        id: kodee,
                         dari: to,
+                        sprid : kodespr,
                         sparepart_id: spr1,
                         qty_spr: jml,
                         noseri: seri,
-                        gbj_id: unit1,
-                        qty_unit: jum,
-                        seriunit: seri_unit,
+                        // unitid: kodeunit,
+                        // gbj_id: unit1,
+                        // qty_unit: jum,
+                        // seriunit: seri_unit,
                     },
                     success: function (res) {
                         console.log(res);
-                        Swal.fire(
-                            'Rancang!',
-                            'Data berhasil diterima!',
-                            'success'
-                        );
-                        location.reload();
+                        // Swal.fire(
+                        //     'Rancang!',
+                        //     'Data berhasil diterima!',
+                        //     'success'
+                        // );
+                        // location.reload();
                     },
                 })
 
@@ -1100,6 +1144,7 @@
         });
     }
 
+    // edit
     function getSpr() {
         var kode = $('#kode').val();
         $.ajax({
@@ -1108,73 +1153,374 @@
             type: "post",
             dataType: "json",
             success: function(res) {
+                console.log(res);
+                $('#datePicker').val(res.header.date_in);
+                $('.dari').val(res.header.dari).change();
                 var o = 0;
                 $.each(res.spr, function(i, val) {
-                    console.log(val.seri);
-                    o++;
+                    // console.log(res.spr);
                     $.ajax({
                         url: '/api/gk/sel-spare',
                         type: 'POST',
                         dataType: 'json',
                         success: function (res) {
-                            // ii++;
-                            $(".produk").append(new Option(val.nama, val.sparepart_id));
-                            // var c = res.nama.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+                            $('#sparepart_id'+i).append(new Option(val.nama, val.sparepart_id));
                             $.each(res, function (key, value) {
-                                $(".produk").append('<option value="' + value.id + '">' + value
+                                $("#sparepart_id"+i).append('<option value="' + value.id + '">' + value
                                     .nama + '</option');
                             });
                         }
                     });
 
-
-                    $('.add_sparepart_table tbody').append('<tr><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>');
-
-                    // $.each(val.seri, function(ii, vall) {
-                        // console.log(vall);
-                        $('.scan-produk1-edit tbody').append('<tr id="row' + ii + '"><td><input type="text" value="'+val.seri[o].noseri+'" name="noseri[][' + ii +
-                                                        ']" id="noseri' + ii +
-                                                        '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
-                                                        ii + ']" id="remark' + ii +
-                                                        '" value="'+val.seri[o].remark+'" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
-                                                        ii + ']" id="layout_id' + ii +
-                                                        '" class="form-control layout_id"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>')
-                    // })
-                })
-
-                $.each(res.unit, function(i, val) {
+                    $('.add_sparepart_table tbody').append('<tr id='+i+'><input type="hidden" name="id" id="kodespr'+i+'" value="'+val.kode+'" class="kodespr"><td><select name="sparepart_id[]" id="sparepart_id'+i+'" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btn_edit'+i+'" data-id="" data-jml="" id="" onclick=editSpare('+i+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>');
+                    $('#sparepart_id'+i).select2();
+                    o++;
+                    // console.log("array test");
                     // console.log(val);
+                    $.each(val, function(index, vall) {
+                        // console.log(res.spr[i].seri, vall);
+                       $.each(vall, function(index, valll) {
+                        console.log('test');
+                       })
 
+                    //     $('.scan-produk1-edit tbody').append('<tr id="row' + iseri + '"><td><input type="text" value="'+res.spr[i].seri[iseri].noseri+'" name="noseri[][' + iseri +
+                    //                                     ']" id="noseri' + iseri +
+                    //                                     '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
+                    //                                     iseri + ']" id="remark' + iseri +
+                    //                                     '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
+                    //                                     iseri + ']" id="layout_id' + iseri +
+                    //                                     '" class="form-control layout_id" value=""><option value="">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>')
+                    //     // $("#layout_id"+iseri).val(vall.tk_kerusakan).change();
+                    })
+                })
+                var oo = 0
+                $.each(res.unit, function(i, val) {
+                    // console.log(val.seri);
+                    oo++;
                     $.ajax({
                         url: '/api/gbj/sel-gbj',
                         type: 'get',
                         dataType: 'json',
                         success: function (res) {
-                            // ii++;
-                            $(".produkk").append(new Option(val.nama, val.gbj_id));
+                            $('#gbj_id'+i).append(new Option(val.nama, val.gbj_id));
                             $.each(res, function (key, value) {
-                                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                                $(".produkk").append('<option value="' + value.id + '">' + value
+                                $('#gbj_id'+i).append('<option value="' + value.id + '">' + value
                                     .produk.nama + ' ' + value.nama + '</option');
                             });
                         }
                     });
-                    $('.add_unit_table tbody').append('<tr><td><select name="gbj_id[]" id="" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>');
-                    $.each(val.seri, function(ii, vall) {
-                        console.log(vall);
-                        $('.scan-produk tbody').append('<tr id="row' + ii + '"><td><input type="text" value="'+vall.noseri+'" name="noseri[][' + ii +
-                                                        ']" id="noseri' + ii +
-                                                        '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
-                                                        ii + ']" id="remark' + ii +
-                                                        '" value="'+vall.remark+'" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
-                                                        ii + ']" id="layout_id' + ii +
-                                                        '" class="form-control layout_id"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>')
+                    $('.add_unit_table tbody').append('<tr id='+i+'><input type="hidden" name="id" id="kodeunit" value="'+val.kode+'" class="kodeunit"><td><select name="gbj_id[]" id="gbj_id'+i+'" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btnEdit'+i+'" id="" onclick=editUn('+i+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>');
+                    $('#gbj_id'+i).select2();
+                    $.each(val.seri, function(iii, valll) {
+                        $('.scan-produk-edit tbody').append('<tr id="u' + iii + '"><td><input type="text" value="'+valll.noseri+'" name="noseri[][' + iii +
+                                                        ']" id="noseri' + iii +
+                                                        '" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
+                                                        iii + ']" id="remark' + iii + '" value="'+valll.remark+'" class="form-control kerusakan"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="tk_kerusakan[][' + iii +
+                                                        ']" id="tk_kerusakan' + iii +
+                                                        '" class="form-control tingkat"><option value="#">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
+                                                        );
+                        $("#tk_kerusakan"+iii).val(valll.tk_kerusakan).change();
                     })
                 })
             }
         })
     }
 
+    function editSpare(a) {
+        var b = $(".btn_edit" + a).parent().prev().children().val();
+        var c = $(".btn_edit" + a).parent().prev().prev().prev().children().val();
+        editSparepart(b, a, c);
+    }
 
+    function clickSparepartEdit(c,d) {
+        console.log(d);
+        var tableScan = $('.scan-produk1-edit').dataTable({
+            "destroy": true,
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+        });
+
+        var arrSparepart = []
+        var seriSparepart = [];
+        var kerusakanSparepart = [];
+        var tingkatSparepart = [];
+
+        const data = tableScan.$('.seri').map(function () {
+            return $(this).val();
+        }).get();
+
+        data.forEach(function (item) {
+            if (item != '') {
+                arrSparepart.push(item);
+            }
+        })
+
+        const ker = tableScan.$('.remark').map(function () {
+            return $(this).val();
+        }).get();
+
+        const ting = tableScan.$('.layout_id').map(function () {
+            return $(this).val();
+        }).get();
+
+        data.forEach(function (item) {
+            if (item == '') {
+                seriSparepart.push(item);
+            }
+        })
+
+        ker.forEach(function (item) {
+            if (item == '') {
+                kerusakanSparepart.push(item);
+            }
+        })
+
+        ting.forEach(function (item) {
+            if (item == '') {
+                tingkatSparepart.push(item);
+            }
+        })
+
+        const count = arr =>
+            arr.reduce((a, b) => ({
+                ...a,
+                [b]: (a[b] || 0) + 1
+            }), {})
+
+        const duplicates = dict =>
+            Object.keys(dict).filter((a) => dict[a] > 1)
+
+
+        if (duplicates(count(arrSparepart)).length > 0 || duplicates(count(seriSparepart)).length > 0 || duplicates(
+                count(tingkatSparepart)).length > 0 || duplicates(count(kerusakanSparepart)).length > 0) {
+            $('.seri').removeClass('is-invalid');
+            $('.remark').removeClass('is-invalid');
+            $('.layout_id').removeClass('is-invalid');
+            $('.seri').filter(function () {
+                return $(this).val() == '';
+            }).addClass('is-invalid');
+            $('.remark').filter(function () {
+                return $(this).val() == '';
+            }).addClass('is-invalid');
+            $('.layout_id').filter(function () {
+                return $(this).val() == '';
+            }).addClass('is-invalid');
+        }
+
+        if (duplicates(count(arrSparepart)).length > 0 || duplicates(count(seriSparepart)).length > 0) {
+            $('.seri').removeClass('is-invalid');
+            $('.seri').filter(function () {
+                for (let index = 0; index < duplicates(count(arrSparepart)).length; index++) {
+                    if ($(this).val() == duplicates(count(arrSparepart))[index]) {
+                        return true;
+                    }
+                }
+            }).addClass('is-invalid');
+            $('.seri').filter(function () {
+                return $(this).val() == '';
+            }).addClass('is-invalid');
+            if (duplicates(count(arrSparepart)).length > 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri ' + duplicates(count(arrSparepart)) + ' ada yang sama.',
+                })
+            }
+        }
+
+
+        if ((duplicates(count(kerusakanSparepart)).length == 0 && duplicates(count(seriSparepart)).length == 0 &&
+                duplicates(count(tingkatSparepart)).length == 0 && duplicates(count(arrSparepart)).length == 0) ==
+            true) {
+            $('.seri').removeClass('is-invalid');
+            $('.remark').removeClass('is-invalid');
+            $('.layout_id').removeClass('is-invalid');
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Nomor seri tersimpan',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(function () {
+                $('.scan-produk1-edit tbody tr').each((index, value) => {
+                    const obj = {
+                        noseri: value.childNodes[0].firstChild.value,
+                        kerusakan: value.childNodes[1].firstChild.value,
+                        tingkat: value.childNodes[2].firstChild.value,
+                    }
+
+                    spr_arr.push(obj);
+                })
+                seri[d] = spr_arr;
+                spr_arr = [];
+                $('.modalAddSparepartEdit').modal('hide');
+            })
+        }
+    }
+
+    function editSparepart(x, y, z) {
+        $('.modalAddSparepartEdit').modal('show');
+        $('.modalAddSparepartEdit').find('#btnSeriEdit').attr('onclick', 'clickSparepartEdit(' + y + ','+z+')');
+        $('.modalAddSparepartEdit').on('shown.bs.modal', function () {
+            $(this).find('tbody input.seri').first().focus();
+        })
+        $('.scan-produk1-edit').DataTable().destroy();
+        $('.scan-produk1-edit').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+        });
+    }
+
+    // Unit
+    function editUn(l) {
+        var j = $(".btnEdit" + l).parent().prev().children().val();
+        var k = $(".btnEdit" + l).parent().prev().prev().children().val();
+        editUnit(j, k);
+    }
+
+    function clickUnitEdit(c, e) {
+        var tableUnit = $('.scan-produk-edit').DataTable({
+            "destroy": true,
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+
+        var arrUnit = [];
+        var seriUnit = [];
+        var kerusakanUnit = [];
+        var tingkatUnit = [];
+
+        const dataUnit = tableUnit.$('.seri').map(function () {
+            return $(this).val();
+        }).get();
+
+        const ker = tableUnit.$('.kerusakan').map(function () {
+            return $(this).val();
+        }).get();
+
+        const ting = tableUnit.$('.tingkat').map(function () {
+            return $(this).val();
+        }).get();
+
+        dataUnit.forEach(function (item) {
+            if (item != '') {
+                arrUnit.push(item);
+            }
+        });
+
+        dataUnit.forEach(function (item) {
+            if (item == '') {
+                seriUnit.push(item);
+            }
+        });
+
+        ker.forEach(function (item) {
+            if (item == '') {
+                kerusakanUnit.push(item);
+            }
+        });
+
+        ting.forEach(function (item) {
+            if (item == '') {
+                tingkatUnit.push(item);
+            }
+        });
+
+        const count = arr =>
+            arr.reduce((a, b) => ({
+                ...a,
+                [b]: (a[b] || 0) + 1
+            }), {})
+
+        const duplicates = dict =>
+            Object.keys(dict).filter((a) => dict[a] > 1)
+
+        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0 || duplicates(count(kerusakanUnit)).length > 0 || duplicates(count(tingkatUnit)).length > 0) {
+            $('.seri').removeClass('is-invalid');
+            $('.kerusakan').removeClass('is-invalid');
+            $('.tingkat').removeClass('is-invalid');
+            $('.seri').filter(function () {
+                return $(this).val() == '';
+            }).addClass('is-invalid');
+            $('.kerusakan').filter(function () {
+                return $(this).val() == '';
+            }).addClass('is-invalid');
+            $('.tingkat').filter(function () {
+                return $(this).val() == '';
+            }).addClass('is-invalid');
+        }
+
+        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0) {
+            $('.seri').removeClass('is-invalid');
+            $('.seri').filter(function () {
+                for (let index = 0; index < duplicates(count(arrUnit)).length; index++) {
+                    if ($(this).val() == duplicates(count(arrUnit))[index]) {
+                        return true;
+                    }
+                }
+            }).addClass('is-invalid');
+            $('.seri').filter(function () {
+                return $(this).val() == '';
+            }).addClass('is-invalid');
+            if (duplicates(count(arrUnit)).length > 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri ' + duplicates(count(arrUnit)) + ' ada yang sama.',
+                })
+            }
+        }
+
+        if ((duplicates(count(kerusakanUnit)).length == 0 && duplicates(count(seriUnit)).length == 0 && duplicates(count(tingkatUnit)).length == 0 && duplicates(count(arrUnit)).length == 0) == true) {
+            $('.seri').removeClass('is-invalid');
+            $('.kerusakan').removeClass('is-invalid');
+            $('.tingkat').removeClass('is-invalid');
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Nomor seri tersimpan',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(function () {
+                console.log('ok');
+                $('.scan-produk-edit tbody tr').each((index, value) => {
+                    const obj1 = {
+                        noseri: value.childNodes[0].firstChild.value,
+                        kerusakan: value.childNodes[1].firstChild.value,
+                        tingkat: value.childNodes[2].firstChild.value,
+                    }
+                    unit_arr.push(obj1);
+                })
+                seri_unit[c] = unit_arr;
+                unit_arr = [];
+                console.log(seri_unit)
+                $('.modalAddUnitEdit').modal('hide');
+            })
+        }
+    }
+
+    function editUnit(x,y,z) {
+        console.log(x,y);
+        $('.modalAddUnitEdit').modal('show');
+        $('.modalAddUnitEdit').find('#btnEditUnit').attr('onclick', 'clickUnitEdit(' + y + ')');
+        $('.modalAddUnitEdit').on('shown.bs.modal', function () {
+            $(this).find('tbody input.seri').first().focus();
+        })
+    }
 </script>
 @stop
