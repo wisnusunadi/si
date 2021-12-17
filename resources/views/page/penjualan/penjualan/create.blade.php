@@ -959,32 +959,37 @@
             id = $('select[name="' + name + '"]').attr('data-id');
             vals = $('select[name="' + name + '"]').select2('data')[0];
             var kebutuhan = jumlah * vals.jumlah;
+            if (cek_stok(vals.id) < kebutuhan) {
+                var jumlah_kekurangan = 0;
+                if (cek_stok(vals.id) < 0) {
+                    jumlah_kekurangan = kebutuhan;
+                } else {
+                    jumlah_kekurangan = Math.abs(cek_stok(vals.id) - kebutuhan);
+                }
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' + jumlah_kekurangan + ' dari Permintaan');
+            } else if (cek_stok(vals.id) >= kebutuhan) {
+                $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
+            }
+        })
+
+        function cek_stok(id) {
+            var jumlah = 0;
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
                 async: false,
-                url: '/api/produk/variasi_stok/' + vals.id,
+                url: '/api/produk/variasi_stok/' + id,
                 success: function(data) {
-                    if (data < kebutuhan) {
-                        $jumlah_kekurangan = 0;
-                        if (data < 0) {
-                            $jumlah_kekurangan = kebutuhan;
-                        } else {
-                            $jumlah_kekurangan = Math.abs(data - kebutuhan);
-                        }
-                        $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
-                        $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' + $jumlah_kekurangan + ' dari Permintaan');
-                    } else if (data >= kebutuhan) {
-                        $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
-                        $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
-                    }
+                    jumlah = data;
                 },
                 error: function(data) {
-                    return data;
+                    jumlah = data;
                 }
             });
-
-        })
+            return jumlah;
+        }
 
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
@@ -1069,7 +1074,7 @@
                                     id: res[0].produk[x].gudang_barang_jadi[0].id,
                                     text: res[0].produk[x].nama,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
                                 });
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
@@ -1077,7 +1082,7 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: res[0].produk[x].gudang_barang_jadi[y].nama,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                        qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
                                     });
                                 }
                             }
@@ -1151,30 +1156,20 @@
                 for (var i = 0; i < variasi.length; i++) {
                     var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
                     var kebutuhan = jumlah * variasires.jumlah;
-                    $.ajax({
-                        type: 'GET',
-                        dataType: 'json',
-                        async: false,
-                        url: '/api/produk/variasi_stok/' + variasires.id,
-                        success: function(data) {
-                            if (data < kebutuhan) {
-                                $jumlah_kekurangan = 0;
-                                if (data < 0) {
-                                    $jumlah_kekurangan = kebutuhan;
-                                } else {
-                                    $jumlah_kekurangan = Math.abs(data - kebutuhan);
-                                }
-                                $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
-                                $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang ' + $jumlah_kekurangan + ' dari Permintaan');
-                            } else if (data >= kebutuhan) {
-                                $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
-                                $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
-                            }
-                        },
-                        error: function(data) {
-                            return data;
+
+                    if (cek_stok(variasires.id) < kebutuhan) {
+                        var jumlah_kekurangan = 0;
+                        if (cek_stok(variasires.id) < 0) {
+                            jumlah_kekurangan = kebutuhan;
+                        } else {
+                            jumlah_kekurangan = Math.abs(cek_stok(variasires.id) - kebutuhan);
                         }
-                    });
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang ' + jumlah_kekurangan + ' dari Permintaan');
+                    } else if (cek_stok(variasires.id) >= kebutuhan) {
+                        $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
+                    }
                 }
             } else {
                 subtotal.val(formatmoney("0"));
@@ -1211,13 +1206,8 @@
                 for (var k = 0; k < variasi.length; k++) {
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
-                    // var idk = $(el).find('.ketstok').attr('data-attr');
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
-                    // $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
-                    // $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
-                    // $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
-                    // $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);

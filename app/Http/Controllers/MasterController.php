@@ -234,14 +234,26 @@ class MasterController extends Controller
             ->rawColumns(['button'])
             ->make(true);
     }
-    public function get_data_penjualan_produk($value)
+    public function get_data_penjualan_produk($value, $min, $max)
     {
         $x = explode(',', $value);
-        if ($value == 0 || $value == 'kosong') {
+        if ($value == 'kosong' && $min == 'kosong' && $max == 'kosong') {
             $data = PenjualanProduk::select();
-        } else {
-            $data = PenjualanProduk::whereHas('Produk', function ($q) use ($value) {
-                $q->where('kelompok_produk_id', $value);
+        } else if ($value == 'kosong' && $min != 'kosong'  && $max == 'kosong') {
+            $data = PenjualanProduk::Has('Produk')->where('harga', '>=', $min)->orderby('harga', 'ASC')->get();
+        } else if ($value == 'kosong' && $min != 'kosong'  && $max != 'kosong') {
+            $data = PenjualanProduk::Has('Produk')->whereBetween('harga', array($min, $max))->orderby('harga', 'ASC')->get();
+        } else if ($value != 'kosong' && $min != 'kosong'  && $max != 'kosong') {
+            $data = PenjualanProduk::whereHas('Produk', function ($q) use ($x) {
+                $q->whereIN('kelompok_produk_id', $x);
+            })->whereBetween('harga', array($min, $max))->orderby('harga', 'ASC')->get();
+        } else if ($value != 'kosong' && $min != 'kosong'  && $max == 'kosong') {
+            $data = PenjualanProduk::whereHas('Produk', function ($q) use ($x) {
+                $q->whereIN('kelompok_produk_id', $x);
+            })->where('harga', '>=', $min)->orderby('harga', 'ASC')->get();
+        } else if ($value != 'kosong' && $min == 'kosong') {
+            $data = PenjualanProduk::whereHas('Produk', function ($q) use ($x) {
+                $q->whereIN('kelompok_produk_id', $x);
             })->get();
         }
         return datatables()->of($data)

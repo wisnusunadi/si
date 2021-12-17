@@ -37,6 +37,7 @@
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap" colspan="2">Stok</th>
                                                 <th class="nowrap" colspan="4">Penjualan</th>
+                                                <th rowspan="2">Aksi</th>
                                             </tr>
                                             <tr>
                                                 <th>GBJ</th>
@@ -109,6 +110,11 @@
                 },
                 {
                     data: 'po',
+                },
+                {
+                    data: 'aksi',
+                    orderable: false,
+                    searchable: false
                 },
             ]
         });

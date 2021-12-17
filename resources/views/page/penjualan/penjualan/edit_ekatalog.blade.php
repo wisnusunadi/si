@@ -408,7 +408,6 @@
                                                                                             <h6>{{$g->GudangBarangJadi->Produk->nama}}</h6>
                                                                                             <select class="form-control variasi" name="variasi[{{$produkpenjualan}}][{{$variasi}}]" id="variasi{{$produkpenjualan}}{{$variasi}}" style="width:100%;" data-attr="variasi{{$variasi}}" data-id="{{$variasi}}">
                                                                                                 <option value="{{$g->GudangBarangJadi->id}}">
-
                                                                                                     @if(!empty($g->GudangBarangJadi->nama))
                                                                                                     {{$g->GudangBarangJadi->Produk->nama}} {{$g->GudangBarangJadi->nama}}
                                                                                                     @else
@@ -450,7 +449,7 @@
                                                                                 <div class="input-group-prepend">
                                                                                     <span class="input-group-text" id="prdsub">Rp</span>
                                                                                 </div>
-                                                                                <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[{{$produkpenjualan}}]" id=" produk_subtotal{{$produkpenjualan}}" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
+                                                                                <input type="text" class="form-control produk_subtotal" name="produk_subtotal[{{$produkpenjualan}}]" id="produk_subtotal{{$produkpenjualan}}" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
                                                                             </div>
                                                                         </td>
                                                                         <td>
@@ -496,7 +495,7 @@
                                                                                 <div class="input-group-prepend">
                                                                                     <span class="input-group-text" id="prdsub">Rp</span>
                                                                                 </div>
-                                                                                <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[0]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
+                                                                                <input type="text" class="form-control produk_subtotal" name="produk_subtotal[0]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
                                                                             </div>
                                                                         </td>
                                                                         <td>
@@ -541,7 +540,7 @@
                                                                                 <div class="input-group-prepend">
                                                                                     <span class="input-group-text" id="prdsub">Rp</span>
                                                                                 </div>
-                                                                                <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[0]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
+                                                                                <input type="text" class="form-control produk_subtotal" name="produk_subtotal[0]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
                                                                             </div>
                                                                         </td>
                                                                         <td>
@@ -619,6 +618,22 @@
             }
         }
 
+        function cek_stok(id) {
+            var jumlah = 0;
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                async: false,
+                url: '/api/produk/variasi_stok/' + id,
+                success: function(data) {
+                    jumlah = data;
+                },
+                error: function(data) {
+                    jumlah = data;
+                }
+            });
+            return jumlah;
+        }
 
         $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
         $('#customer_id').on('keyup change', function() {
@@ -752,20 +767,18 @@
                 $(el).find('.penjualan_produk_id').attr('id', j);
                 var variasi = $(el).find('.variasi');
                 for (var k = 0; k < variasi.length; k++) {
-                    // var id = $(el).find('.variasi').attr('id');
-                    // $(el).find(id).attr('name', 'variasi[' + j + '][]');
-                    // $(el).find('input[name="variasi[' + j + '][]"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
-
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
-                $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
-                $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
                 $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
+                $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
+                $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                 $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                 select_data($(el).find('.penjualan_produk_id').attr('id'));
             });
@@ -800,10 +813,16 @@
                 for (var i = 0; i < variasi.length; i++) {
                     var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
                     var kebutuhan = jumlah * variasires.jumlah;
-                    if (variasires.qt < kebutuhan) {
+                    if (cek_stok(variasires.id) < kebutuhan) {
+                        var jumlah_kekurangan = 0;
+                        if (cek_stok(variasires.id) < 0) {
+                            jumlah_kekurangan = kebutuhan;
+                        } else {
+                            jumlah_kekurangan = Math.abs(cek_stok(variasires.id) - kebutuhan);
+                        }
                         $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
-                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang dari Permintaan');
-                    } else if (variasires.qt >= kebutuhan) {
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang ' + jumlah_kekurangan + ' dari Permintaan');
+                    } else if (cek_stok(variasires.id) >= kebutuhan) {
                         $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
                         $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
                     }
@@ -825,10 +844,16 @@
             id = $('select[name="' + name + '"]').attr('data-id');
             vals = $('select[name="' + name + '"]').select2('data')[0];
             var kebutuhan = jumlah * vals.jumlah;
-            if (vals.qt < kebutuhan) {
+            if (cek_stok(vals.id) < kebutuhan) {
+                var jumlah_kekurangan = 0;
+                if (cek_stok(vals.id) < 0) {
+                    jumlah_kekurangan = kebutuhan;
+                } else {
+                    jumlah_kekurangan = Math.abs(cek_stok(vals.id) - kebutuhan);
+                }
                 $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
-                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang dari Permintaan');
-            } else if (vals.qt >= kebutuhan) {
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' + jumlah_kekurangan + ' dari Permintaan');
+            } else if (cek_stok(vals.id) >= kebutuhan) {
                 $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                 $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
             }
@@ -857,17 +882,17 @@
                 <td>
                     <div class="form-group">
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                            <option value=""></option>
                         </select>
+                        <div class="detailjual" id="tes0">
+                        </div>
                     </div>
-                    <div class="detail_produk" id="detail_produk0">
-                    </div>
-                    <div class="detailjual" id="tes0">
-                    </div>
+                    <div id="detail_produk" class="detail_produk"></div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group">
-                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;" value="">
+                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="produk_satuan">pcs</span>
                             </div>
@@ -878,21 +903,21 @@
                 <td>
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="prdhrg">Rp</span>
+                            <span class="input-group-text">Rp</span>
                         </div>
-                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
+                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="prdsub">Rp</span>
+                            <span class="input-group-text">Rp</span>
                         </div>
-                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
+                        <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
                 <td>
-                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
             </tr>`;
             return data;
@@ -1022,6 +1047,8 @@
                     dataType: 'json',
                     success: function(res) {
                         $('#produk_harga' + index).val(formatmoney(res[0].harga));
+                        $('#produk_subtotal' + index).val(formatmoney(res[0].harga * $('#produk_jumlah' + index).val()));
+                        totalhargaprd();
                         console.log(res);
                         var tes = $('#detail_produk' + index);
                         tes.empty();
@@ -1040,7 +1067,7 @@
                                     id: res[0].produk[x].gudang_barang_jadi[0].id,
                                     text: res[0].produk[x].nama,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
                                 });
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
@@ -1048,7 +1075,7 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: res[0].produk[x].gudang_barang_jadi[y].nama,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                        qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
                                     });
                                 }
                             }
@@ -1105,7 +1132,7 @@
                                         id: res[0].produk[x].gudang_barang_jadi[0].id,
                                         text: res[0].produk[x].nama,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                        qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
                                     });
                                 } else {
                                     for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
@@ -1113,7 +1140,7 @@
                                             id: res[0].produk[x].gudang_barang_jadi[y].id,
                                             text: res[0].produk[x].gudang_barang_jadi[y].nama,
                                             jumlah: res[0].produk[x].pivot.jumlah,
-                                            qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                            qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
                                         });
                                     }
                                 }

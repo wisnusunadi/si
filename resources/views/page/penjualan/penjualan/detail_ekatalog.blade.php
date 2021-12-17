@@ -36,11 +36,11 @@
                         </div>
                         <div class="margin">
                             <a class="text-muted">Tgl Order</a>
-                            <b class="float-right">{{ $data->tgl_buat}}</b>
+                            <b class="float-right">{{ date('d-m-Y', strtotime($data->tgl_buat)) }}</b>
                         </div>
                         <div class="margin">
                             <a class="text-muted">Tgl Kontrak</a>
-                            <b class="float-right">{{ $data->tgl_buat}}</b>
+                            <b class="float-right">{{ date('d-m-Y', strtotime($data->tgl_kontrak)) }}</b>
                         </div>
                         <div class="margin">
                             <a class="text-muted">No PO</a>
@@ -78,12 +78,9 @@
             </div>
 
             <div class="col-7">
-
-                <div class="card overflowy">
-                    <div class="card-header">
-                        <h5 class="card-title">Detail Pemesanan</h5>
-                    </div>
-                    <div class="card-body" id="detailekat">
+                <h5>Detail Pemesanan</h5>
+                <div class="card overflowy" id="detailekat">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>
                             @if(isset($data->Pesanan))

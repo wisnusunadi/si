@@ -32,24 +32,165 @@ use function PHPUnit\Framework\assertIsNotArray;
 
 class PenjualanController extends Controller
 {
-    //Get Data Table
-    public function penjualan_data()
+    public function in_array_all($needles, $haystack)
     {
-        $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
-        $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
-        $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        return empty(array_diff($needles, $haystack));
+    }
+    //Get Data Table
+    public function penjualan_data($jenis, $status)
+    {
+        $x = explode(',', $jenis);
+        $y = explode(',', $status);
+        $data = "";
+        if ($jenis == "semua" && $status == "semua") {
+            $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+            $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+            $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+            $data = $Ekatalog->merge($Spa)->merge($Spb);
+        } else if ($jenis != "semua" && $status == "semua") {
+            $Ekatalog = "";
+            $Spa = "";
+            $Spb = "";
+            if (in_array('ekatalog', $x)) {
+                $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+            }
+            if (in_array('spa', $x)) {
+                $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+            }
+            if (in_array('spb', $x)) {
+                $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+            }
+            if ($Ekatalog != "" && $Spa != "" && $Spb != "") {
+                $data = $Ekatalog->merge($Spa)->merge($Spb);
+            } else if ($Ekatalog != "" && $Spa != "" && $Spb == "") {
+                $data = $Ekatalog->merge($Spa);
+            } else if ($Ekatalog != "" && $Spa == "" && $Spb != "") {
+                $data = $Ekatalog->merge($Spb);
+            } else if ($Ekatalog == "" && $Spa != "" && $Spb != "") {
+                $data = $Spa->merge($Spb);
+            } else if ($Ekatalog != "" && $Spa == "" && $Spb == "") {
+                $data = $Ekatalog;
+            } else if ($Ekatalog != "" && $Spa != "" && $Spb == "") {
+                $data = $Spa;
+            } else if ($Ekatalog == "" && $Spa == "" && $Spb != "") {
+                $data = $Spb;
+            }
+            // if ($this->in_array_all(['ekatalog', 'spa', 'spb'], $jenis)) {
+            //     $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $data = $Ekatalog->merge($Spa)->merge($Spb);
+            // } else if ($this->in_array_all(['ekatalog', 'spa'], $jenis)) {
+            //     $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $data = $Ekatalog->merge($Spa);
+            // } else if ($this->in_array_all(['ekatalog', 'spb'], $jenis)) {
+            //     $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $data = $Ekatalog->merge($Spb);
+            // } else if ($this->in_array_all(['spa', 'spb'], $jenis)) {
+            //     $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+            //     $data = $Spa->merge($Spb);
+            // }
+        } else if ($jenis == "semua" && $status != "semua") {
+            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+                $q->whereIN('log_id', $y);
+            })->orderBy('id', 'DESC')->get());
+            $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+                $q->whereIN('log_id', $y);
+            })->orderBy('id', 'DESC')->get());
+            $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+                $q->whereIN('log_id', $y);
+            })->orderBy('id', 'DESC')->get());
+            $data = $Ekatalog->merge($Spa)->merge($Spb);
+        } else {
+            $Ekatalog = "";
+            $Spa = "";
+            $Spb = "";
+            if (in_array('ekatalog', $x)) {
+                $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+                    $q->whereIN('log_id', $y);
+                })->orderBy('id', 'DESC')->get());
+            }
+            if (in_array('spa', $x)) {
+                $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+                    $q->whereIN('log_id', $y);
+                })->orderBy('id', 'DESC')->get());
+            }
+            if (in_array('spb', $x)) {
+                $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+                    $q->whereIN('log_id', $y);
+                })->orderBy('id', 'DESC')->get());
+            }
+            if ($Ekatalog != "" && $Spa != "" && $Spb != "") {
+                $data = $Ekatalog->merge($Spa)->merge($Spb);
+            } else if ($Ekatalog != "" && $Spa != "" && $Spb == "") {
+                $data = $Ekatalog->merge($Spa);
+            } else if ($Ekatalog != "" && $Spa == "" && $Spb != "") {
+                $data = $Ekatalog->merge($Spb);
+            } else if ($Ekatalog == "" && $Spa != "" && $Spb != "") {
+                $data = $Spa->merge($Spb);
+            } else if ($Ekatalog != "" && $Spa == "" && $Spb == "") {
+                $data = $Ekatalog;
+            } else if ($Ekatalog != "" && $Spa != "" && $Spb == "") {
+                $data = $Spa;
+            } else if ($Ekatalog == "" && $Spa == "" && $Spb != "") {
+                $data = $Spb;
+            }
 
+
+
+            // if ($this->in_array_all(['ekatalog', 'spa', 'spb'], $jenis)) {
+            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+
+            //     $data = $Ekatalog->merge($Spa)->merge($Spb);
+            // } else if ($this->in_array_all(['ekatalog', 'spa'], $jenis)) {
+            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+
+            //     $data = $Ekatalog->merge($Spa);
+            // } else if ($this->in_array_all(['ekatalog', 'spb'], $jenis)) {
+            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+
+            //     $data = $Ekatalog->merge($Spb);
+            // } else if ($this->in_array_all(['spa', 'spb'], $jenis)) {
+            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+            //         $q->whereIN('log_id', $y);
+            //     })->orderBy('id', 'DESC')->get());
+            //     $data = $Spa->merge($Spb);
+            // }
+        }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('jenis', function ($data) {
-                $name =  $data->getTable();
+                $name = $data->getTable();
                 if ($name == 'ekatalog') {
-                    return 'E-Catalogue';
+                    return "E-Catalogue";
                 } else if ($name == 'spa') {
-                    return 'SPA';
-                } else {
-                    return 'SPB';
+                    return "SPA";
+                } else if ($name[1] == 'spb') {
+                    return "SPB";
                 }
             })
             ->addColumn('nama_customer', function ($data) {
@@ -720,7 +861,6 @@ class PenjualanController extends Controller
             $data  = Ekatalog::orderBy('id', 'DESC')->whereIN('status', $x)->get();
         }
 
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -732,21 +872,17 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if (!empty($data->Pesanan->log_id)) {
-                    if ($data->Pesanan->State->nama == "Penjualan") {
+                if (!empty($data->status)) {
+                    if ($data->status == "batal") {
                         $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "PO") {
-                        $datas .= '<span class="purple-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Gudang") {
-                        $datas .= '<span class="orange-text badge">';
-                    } else if ($data->Pesanan->State->nama == "QC") {
+                    } else if ($data->status == "negosiasi") {
                         $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
+                    } else if ($data->status == "draft") {
                         $datas .= '<span class="blue-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Kirim") {
+                    } else if ($data->status == "sepakat") {
                         $datas .= '<span class="green-text badge">';
                     }
-                    $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                    $datas .= ucfirst($data->status) . '</span>';
                 }
                 return $datas;
             })
@@ -879,9 +1015,19 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'status', 'tgl_kontrak'])
             ->make(true);
     }
-    public function get_data_spa()
+    public function get_data_spa($value)
     {
-        $data  = Spa::with('pesanan')->orderBy('id', 'DESC')->get();
+        $divisi_id = Auth::user()->divisi->id;
+        $x = explode(',', $value);
+        $data = "";
+        if ($value == 'semua') {
+            $data  = Spa::with('pesanan')->orderBy('id', 'DESC')->get();
+        } else {
+            $data  = Spa::whereHas('pesanan', function ($q) use ($x) {
+                $q->whereIN('log_id', $x);
+            })->orderBy('id', 'DESC')->get();
+        }
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -969,9 +1115,18 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'status'])
             ->make(true);
     }
-    public function get_data_spb()
+    public function get_data_spb($value)
     {
-        $data  = Spb::with('pesanan')->orderBy('id', 'DESC')->get();
+        $divisi_id = Auth::user()->divisi->id;
+        $x = explode(',', $value);
+        $data = "";
+        if ($value == 'semua') {
+            $data  = Spb::with('pesanan')->orderBy('id', 'DESC')->get();
+        } else {
+            $data  = Spb::whereHas('pesanan', function ($q) use ($x) {
+                $q->whereIN('log_id', $x);
+            })->orderBy('id', 'DESC')->get();
+        }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {

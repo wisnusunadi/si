@@ -85,7 +85,7 @@ Route::prefix('/produk')->group(function () {
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_produk_id']);
 });
 Route::prefix('/penjualan_produk')->group(function () {
-    Route::get('data/{value}', [App\Http\Controllers\MasterController::class, 'get_data_penjualan_produk']);
+    Route::get('data/{value}/{min}/{max}', [App\Http\Controllers\MasterController::class, 'get_data_penjualan_produk']);
     // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_penjualan_produk']);
     // Route::post('update/{id}', [App\Http\Controllers\MasterController::class, 'update_penjualan_produk']);
     Route::post('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_penjualan_produk']);
@@ -99,7 +99,7 @@ Route::prefix('/penjualan_produk')->group(function () {
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
     Route::get('chart', [App\Http\Controllers\PenjualanController::class, 'chart_penjualan']);
-    Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
+    // Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
 
 
