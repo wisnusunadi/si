@@ -247,20 +247,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>Ambulatory</td>
-                                    <td>100 Unit</td>
-                                    <td><button class="btn btn-info" onclick="tambahanRancangan()"><i
-                                                class="far fa-edit"></i> Detail</button></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>Ambulatory</td>
-                                    <td>100 Unit</td>
-                                    <td><button class="btn btn-info" onclick="tambahanRancangan()"><i
-                                                class="far fa-edit"></i> Detail</button></td>
-                                </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -295,30 +282,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td><input type="text" name="" id="" class="form-control"></td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
+
                     </tbody>
                 </table>
                 <br>
@@ -344,39 +308,16 @@
                 <table class="table table-striped scan-produk">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="head-cb"></th>
+                            <th><input type="checkbox" id="head-cb-rancang"></th>
                             <th>Nomor Seri</th>
                             <th>Layout</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
+
                     </tbody>
                 </table>
-                <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
+                <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout-rancang">Ubah Layout</button>
                 <button type="button" class="btn btn-primary" id="seriBtn">Simpan</button>
             </div>
         </div>
@@ -408,13 +349,34 @@
     </div>
 </div>
 
+<div class="modal fade" id="ubah-layout-rancang" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Layout</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Layout</label>
+                    <select name="" id="change_layout_rancang" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary" onclick="ubahDataRancang()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @stop
 
 @section('adminlte_js')
 <script>
-    // Max date
-    // import swal from 'sweetalert2/src/sweetalert2.js'
-    // Restricts input for each element in the set of matched elements to the given inputFilter.
     (function ($) {
         $.fn.inputFilter = function (inputFilter) {
             return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
@@ -431,16 +393,6 @@
             });
         };
     }(jQuery));
-    $(document).ready(function () {
-        $('.division').select2();
-        $('.productt').select2();
-
-        $(".number-input").inputFilter(function (value) {
-            return /^\d*$/.test(value);
-            var value = $(this).val();
-        });
-
-    });
 
     $(document).on('click', '.btn-tambah', function () {
         $.ajax({
@@ -470,15 +422,13 @@
             }
         });
 
-        i++;
-        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg['+i+']" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty" name="qty['+i+']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+
+        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg'+i+'" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty" name="qty['+i+']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
+        $('.productt').select2();
+        i++;
     }
 
-    function addSeri() {
-        // i++;
-        // let seri_data = '<tr id="seri'+i+'"><td><input type="checkbox" class="cb-child" value="'+i+'"></td><td><input type="text" name="noseri['+i+']" id="noseri['+i+']" class="form-control"></td><td><select name="layout_id['+i+']" id="layout_idd['+i+']" class="form-control"><option value="1">Layout 1</option><option value="2">Layout 2</option></select></td></tr>'
-    }
     $(document).on('click', '.btn-delete', function (e) {
         e.preventDefault();
         $(this).parent().parent().remove();
@@ -490,6 +440,7 @@
         }
     });
     var id = '';
+    var gbj ;
     $(document).on('click', '.editmodal', function() {
         id = $(this).data('id');
         console.log(id);
@@ -534,7 +485,9 @@
 
     $(document).on('click', '.detail', function(e) {
         var id = $(this).data('id');
+        gbj = $(this).data('gbj');
         console.log(id);
+        console.log(gbj);
 
         $('.scan-produk').DataTable({
             destroy: true,
@@ -561,19 +514,35 @@
         tambahanRancangan();
     })
 
-
     $(document).ready(function () {
+        $('.division').select2();
+        $('.productt').select2();
+
+        $(".number-input").inputFilter(function (value) {
+            return /^\d*$/.test(value);
+            var value = $(this).val();
+        });
 
         $.ajax({
             url: '/api/gbj/sel-layout',
             type: 'GET',
             dataType: 'json',
             success: function(res) {
-                // ii++;
                 console.log(res);
                 $.each(res, function(key, value) {
                     $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                    // $(".layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                });
+            }
+        });
+
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $.each(res, function(key, value) {
+                    $("#change_layout_rancang").append('<option value="'+value.id+'">'+value.ruang+'</option');
                 });
             }
         });
@@ -588,7 +557,6 @@
                 type: "post",
             },
             columns: [
-                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 { data: 'in', name: 'in'},
                 { data: 'from', name: 'from'},
                 { data: 'tujuan'},
@@ -604,6 +572,11 @@
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
+        });
+
+        $("#head-cb-rancang").on('click', function () {
+            var isChecked = $("#head-cb-rancang").prop('checked')
+            $('.cb-child-rancang').prop('checked', isChecked)
         });
 
         // divisi
@@ -629,6 +602,7 @@
 
     const seri = {};
     const layout = {};
+    const serir = {};
     var nose;
     var lay;
 
@@ -718,7 +692,7 @@
                         layout : layout,
                     },
                     success: function(res) {
-                        // console.log(res);
+                        console.log(res);
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
@@ -808,6 +782,17 @@
         }
     });
 
+    $(document).on('click', '#seriBtn', function(e) {
+        // console.log('test');
+        const ids = [];
+        $('.cb-child-rancang').each(function() {
+            if($(this).is(':checked')) {
+                ids.push($(this).val());
+            }
+            serir[gbj] = ids;
+        })
+        console.log(serir);
+    })
     $(document).on('click', '#btnSave', function() {
         // console.log(id);
 
@@ -817,13 +802,14 @@
             data: {
                 "_token": "{{csrf_token()}}",
                 id: id,
+                seri: serir,
             },
             success: function(res) {
                 console.log(res);
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: res.msg,
+                    title: 'Data Berhasil diterima',
                     showConfirmButton: false,
                     timer: 1500
                 })
@@ -834,12 +820,21 @@
 
     // load modal
     function ubahData() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let checkbox_terpilih = $('.scan-produk1 tbody .cb-child:checked');
         let layout = $('#change_layout').val();
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('#ubah-layout').modal('hide');
+    }
+
+    function ubahDataRancang() {
+        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let layout = $('#change_layout_rancang').val();
+        $.each(checkbox_terpilih, function (index, elm) {
+            let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
+        });
+        $('#ubah-layout-rancang').modal('hide');
     }
 
     $('#datetimepicker1').daterangepicker({});
@@ -858,10 +853,8 @@
             type: 'GET',
             dataType: 'json',
             success: function(res) {
-                // ii++;
                 console.log(res);
                 $.each(res, function(key, value) {
-                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                     $(".layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                 });
             }
@@ -872,7 +865,7 @@
         let a = 0;
         for (let index = 0; index < x; index++) {
             a++;
-           $('.scan-produk1 tbody').append('<tr id="row'+a+'"><td><input type="checkbox" class="cb-child"  value="'+y+'"></td><td><input type="text" name="noseri_id[]['+a+']" id="noseri_id['+a+']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id['+a+']" id="layout_id['+a+']" class="form-control layout"></select></td></tr>');
+           $('.scan-produk1 tbody').append('<tr id="row'+a+'"><td><input type="checkbox" class="cb-child"  value="'+y+'"></td><td><input type="text" name="noseri_id[]['+a+']" id="noseri_id['+a+']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id['+a+']" id="layout_id'+a+'" class="form-control layout"></select></td></tr>');
         }
         var tableScan = $('.scan-produk1').DataTable({
             "ordering": false,
@@ -881,74 +874,84 @@
             "lengthChange": false,
         });
 
+        $(document).on('click', '#btnSeri', function(e) {
+            e.preventDefault();
 
-    $(document).on('click', '#btnSeri', function(e) {
-        e.preventDefault();
+            let arr = [];
+            const data = tableScan.$('.seri').map(function() {
+                return $(this).val();
+            }).get();
 
-        let arr = [];
-        const data = tableScan.$('.seri').map(function() {
-            return $(this).val();
-        }).get();
-
-        data.forEach(function(item) {
-            if (item != '') {
-                arr.push(item);
-            }
-        })
-
-        const count = arr =>
-            arr.reduce((a, b) => ({ ...a,
-                [b]: (a[b] || 0) + 1
-            }), {})
-
-            const duplicates = dict =>
-            Object.keys(dict).filter((a) => dict[a] > 1)
-
-            if (duplicates(count(arr)).length > 0) {
-                $('.seri').removeClass('is-invalid');
-                        $('.seri').filter(function () {
-                    for (let index = 0; index < duplicates(count(arr)).length; index++) {
-                    if ($(this).val() == duplicates(count(arr))[index]) {
-                        return true;
-                    }
+            data.forEach(function(item) {
+                if (item != '') {
+                    arr.push(item);
                 }
-                        }).addClass('is-invalid');
+            })
 
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
-                        })
-            }else{
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Nomor seri tersimpan',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(function() {
-                    $('.tambahan-perakitan').modal('hide');
-                })
-                nose = [];
-                lay = [];
+            const count = arr =>
+                arr.reduce((a, b) => ({ ...a,
+                    [b]: (a[b] || 0) + 1
+                }), {})
 
-                const cb = [];
+                const duplicates = dict =>
+                Object.keys(dict).filter((a) => dict[a] > 1)
 
-                $.each($("input[class='cb-child']:checked"), function() {
-                    var row = $(this).parent().parent();
-                    cb.push($(this).val());
-                    nose.push(row.find('.seri').val());
-                    lay.push(row.find('.layout').val());
-                    if (row.find(".cb-child:checked").length) {cb.push(row.find(".cb-child:checked").val());}
-                })
-                // seri[y] = cb;
-                console.log(nose, lay);
-                seri[y] = nose;
-                layout[y] = lay;
-                // console.log(cb);
-            }
-    });
+                if (duplicates(count(arr)).length > 0) {
+                    $('.seri').removeClass('is-invalid');
+                            $('.seri').filter(function () {
+                        for (let index = 0; index < duplicates(count(arr)).length; index++) {
+                        if ($(this).val() == duplicates(count(arr))[index]) {
+                            return true;
+                        }
+                    }
+                            }).addClass('is-invalid');
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Nomor seri '+ duplicates(count(arr)) +' ada yang sama.',
+                            })
+                }else{
+                    const ids = [];
+                    const noserii = [];
+                    const lay = [];
+                    $('.cb-child').each(function() {
+                        if ($(this).is(":checked")) {
+                            ids.push($(this).parent().next().children().val());
+                            lay.push($(this).parent().next().next().children().val());
+                            // console.log(ids, lay);
+                            $.ajax({
+                                url: "/api/gbj/ceknoseri",
+                                type: "post",
+                                data: {noseri: ids},
+                                success: function(res) {
+                                    if(res.msg) {
+                                        seri[y] = ids;
+                                        layout[y] = lay;
+                                        Swal.fire({
+                                            position: 'center',
+                                            icon: 'success',
+                                            title: 'Nomor seri tersimpan',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        })
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: res.error
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                }
+        });
     }
+
+
 
 </script>
 @stop

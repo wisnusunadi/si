@@ -141,8 +141,6 @@
 
 @section('adminlte_js')
 <script>
-    // import swal from 'sweetalert2/src/sweetalert2.js'
-    // Restricts input for each element in the set of matched elements to the given inputFilter.
     (function ($) {
         $.fn.inputFilter = function (inputFilter) {
             return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
@@ -243,9 +241,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     })
-                    // console.log('tidak');
                 } else {
-                    // console.log('ok');
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -254,10 +250,6 @@
                         timer: 1500
                     })
                     addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
-                    // $('#post_ke').val(divisi);
-                    // $('#post_deskripsi').val(deskripsi);
-                    // $('#post_produk').val(produk);
-                    // $('#post_qty').val(stok);
                 }
             $('.btn-simpan').prop('hidden', false);
             }
@@ -273,7 +265,6 @@
         }
 
         i++;
-        // console.log(deskripsi.length);
         let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" ><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
 
@@ -314,6 +305,7 @@
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
+                    ordering: false,
                     ajax: {
                         url: '/api/tfp/noseri/' + id,
                     },
@@ -321,18 +313,11 @@
                         { data: 'noseri', name: 'noseri'},
                         { data: 'checkbox', name: 'checkbox', orderable: 'false'},
                     ],
-                    // 'columnDefs': [{
-                    //     'targets': 1,
-                    //     'checkboxes': {
-                    //         'selectRow': true
-                    //     },
-                    // }],
+
                     'select': {
                         'style': 'multi'
                     },
-                    // 'order': [
-                    //     [0, 'asc']
-                    // ],
+
                     "oLanguage": {
                     "sSearch": "Scan Nomor Seri:"
                     }
@@ -343,7 +328,8 @@
     })
     const seri = {};
     $(document).on('click', '#btnSave', function() {
-        console.log('ok');
+        console.log('jum '+jml);
+
         const ids = [];
         $('.cb-child').each(function() {
             if ($(this).is(":checked")) {

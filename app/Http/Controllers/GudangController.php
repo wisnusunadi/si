@@ -23,7 +23,6 @@ use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
-// use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -219,7 +218,7 @@ class GudangController extends Controller
     function getDetailHistory($id)
     {
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
-        // return $data1;
+
         return datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
@@ -407,8 +406,11 @@ class GudangController extends Controller
                 ->addColumn('jml', function ($d) {
                     return $d->qty . ' ' . $d->produk->satuan->nama.'<input type="hidden" name="qty[]" id="qty" value="'.$d->qty.'">';
                 })
+                ->addColumn('kode_prd', function($d) {
+                    return $d->gdg_brg_jadi_id;
+                })
                 ->addColumn('action', function ($d) {
-                    return '<a data-toggle="modal" data-target="#detail" class="detail" data-attr=""  data-id="' . $d->id . '">
+                    return '<a data-toggle="modal" data-target="#detail" class="detail" data-attr="" data-gbj='.$d->gdg_brg_jadi_id.' data-id="' . $d->id . '">
                                 <button class="btn btn-info"><i
                                 class="far fa-eye"></i> Detail</button>
                             </a>';
@@ -464,7 +466,7 @@ class GudangController extends Controller
                         </select>';
             })
             ->addColumn('checkbox', function($d) {
-                return '<input type="checkbox" class="cb-child" value="'.$d->id.'" data-id="'.$d->noseri_id.'">';
+                return '<input type="checkbox" class="cb-child-rancang" value="'.$d->id.'" data-id="'.$d->noseri_id.'">';
             })
             ->rawColumns(['checkbox', 'posisi'])
             ->make(true);
@@ -473,6 +475,20 @@ class GudangController extends Controller
     function terimaRakit() {
         $layout = Layout::where('jenis_id', 1)->get();
         return view('page.gbj.dp', compact('layout'));
+    }
+
+    function ceknoseri(Request $request) {
+        $cek = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get()->count();
+        $data = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get();
+        $arr_seri = [];
+        if($cek > 0) {
+            foreach($data as $d) {
+                array_push($arr_seri, $d->noseri);
+            }
+            return response()->json(['error' => 'Nomor seri ' . implode(', ', $arr_seri) . ' sudah terdaftar']);
+        } else {
+            return response()->json(['msg' => 'Noseri tersimpan']);
+        }
     }
 
     // store
@@ -541,7 +557,6 @@ class GudangController extends Controller
                 $brg_jadi->satuan_id = $request->satuan_id;
                 $brg_jadi->nama = $request->nama;
                 $brg_jadi->deskripsi = $request->deskripsi;
-                // $brg_jadi->stok = 0;
                 $image = $request->file('gambar');
                 if ($image) {
                     $path = 'upload/gbj/';
@@ -561,7 +576,6 @@ class GudangController extends Controller
                 $brg_his->satuan_id = $request->satuan_id;
                 $brg_his->nama = $request->nama;
                 $brg_his->deskripsi = $request->deskripsi;
-                // $brg_his->stok = 0;
                 $brg_his->status = $request->status;
                 $brg_his->created_at = Carbon::now();
                 $brg_his->save();
@@ -634,7 +648,7 @@ class GudangController extends Controller
                 $n = new NoseriTGbj();
                 $n->t_gbj_detail_id = $d->id;
                 $n->noseri_id = $nn->id;
-                $n->layout_id = $request->layout[$value][$k];
+                $n->layout_id = json_decode($request->layout[$value][$k], true);
                 $n->jenis = 'keluar';
                 $n->status_id = 1;
                 $n->state_id = 2;
@@ -647,6 +661,7 @@ class GudangController extends Controller
 
     function storeFinalRancang(Request $request)
     {
+        // dd($request->all());
         $h = new TFProduksi();
         $h->tgl_masuk = Carbon::now();
         $h->dari = $request->dari;
@@ -678,7 +693,7 @@ class GudangController extends Controller
                 $n = new NoseriTGbj();
                 $n->t_gbj_detail_id = $d->id;
                 $n->noseri_id = $nn->id;
-                $n->layout_id = $request->layout[$value][$k];
+                $n->layout_id = json_decode($request->layout[$value][$k], true);
                 $n->jenis = 'masuk';
                 $n->status_id = 2;
                 $n->state_id = 3;
@@ -690,10 +705,8 @@ class GudangController extends Controller
         $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
         $i = 0;
         foreach ($gdg as $vv) {
+            $vv['stok'] = $vv['stok'] + $request->qty[$i];
             $i++;
-
-            $vv['stok'] = $vv['stok'] + $request->qty[$key];
-            // print_r($vv['stok'] - $request->qty[$i]);
             GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
         }
 
@@ -701,34 +714,43 @@ class GudangController extends Controller
     }
 
     function finalDraftRakit(Request $request) {
+        // dd($request->all());
         $header = TFProduksi::find($request->id);
-        $header->status_id = 2;
-        $header->updated_at = Carbon::now();
-        $header->save();
-        $dd = TFProduksiDetail::where('t_gbj_id', $header->id)->get()->toArray();
-        $i = 0;
+
+        $dd = TFProduksiDetail::where('t_gbj_id', $request->id)->get()->toArray();
+        // dd($dd);
+        // $i = 0;
         foreach($dd as $dd) {
-            $i++;
-            NoseriTGbj::whereIn('t_gbj_detail_id', [$dd['id']])->update(['status_id' => 2]);
-            $a = NoseriTGbj::where('t_gbj_detail_id', $dd['id'])->get()->toArray();
-            foreach($a as $a) {
-                NoseriBarangJadi::find($a['noseri_id'])->update(['is_aktif' => 1]);
-                $b = NoseriBarangJadi::whereIn('id',[$a['noseri_id']])->get()->toArray();
-                foreach($b as $b) {
-                    $ac = GudangBarangJadi::where('id', $b['gdg_barang_jadi_id'])->get()->toArray();
-                    foreach($ac as $vv) {
-                        $vv['stok'] = $vv['stok'] + count($ac);
-                        GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+            for ($i=0; $i < count($request->seri[$dd['gdg_brg_jadi_id']]); $i++) {
+                # code...
+                NoseriTGbj::where('id', $request->seri[$dd['gdg_brg_jadi_id']][$i])->update(['status_id' => 2]);
+                $a = NoseriTGbj::where('id', $request->seri[$dd['gdg_brg_jadi_id']][$i])->get()->toArray();
+                foreach ($a as $a) {
+                    # code...
+                    echo NoseriBarangJadi::where('id',$a['noseri_id'])->get();
+                    NoseriBarangJadi::where('id',$a['noseri_id'])->update(['is_aktif' => 1]);
+                    $b = NoseriBarangJadi::whereIn('id',[$a['noseri_id']])->get()->toArray();
+                    foreach($b as $b) {
+                        $ac = GudangBarangJadi::where('id', $b['gdg_barang_jadi_id'])->get()->toArray();
+                        foreach($ac as $vv) {
+                            $vv['stok'] = $vv['stok'] + count($ac);
+                            // print_r($vv['stok']);
+                            GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                        }
                     }
+
                 }
             }
         }
 
-        return response()->json(['msg' => 'Data Berhasil Diterima']);
+        $header->status_id = 2;
+        $header->updated_at = Carbon::now();
+        $header->save();
+        
+        // return response()->json(['msg' => 'Data Berhasil Diterima']);
     }
 
     function storeCekSO(Request $request) {
-        // dd($request->all());
         $check_array = $request->gbj_id;
         $id = $request->pesanan_id;
         $h = Pesanan::find($request->pesanan_id);
@@ -788,7 +810,6 @@ class GudangController extends Controller
         $data = NoseriTGbj::whereHas('detail', function($q) use($id) {
             $q->where('gdg_brg_jadi_id', $id);
         })->get();
-        // $data = NoseriTGbj::with('detail', 'layout', 'seri')->get();
         return datatables()->of($data)
             ->addColumn('noser', function($d) {
                 return $d->seri->noseri;
@@ -822,8 +843,7 @@ class GudangController extends Controller
 
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereBetween('tgl_masuk', [Carbon::now()->subMonths(6), Carbon::now()->subMonths(3)]);
-                // ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(6), Carbon::now()->startOfMonth()]);
-        })->get();
+                })->get();
 
         return count($data);
     }
@@ -832,7 +852,6 @@ class GudangController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereBetween('tgl_masuk', [Carbon::now()->subMonths(12), Carbon::now()->subMonths(6)]);
-                // ->where('tgl_masuk', [Carbon::now()->startOfYear()->subYears(1), Carbon::now()->startOfYear()]);
         })->get();
 
         return count($data);
@@ -842,7 +861,6 @@ class GudangController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereBetween('tgl_masuk', [Carbon::now()->subYears(3), Carbon::now()->subYears(1)]);
-                // ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(3), Carbon::now()->startOfYear()]);
         })->get();
 
         return count($data);
@@ -913,7 +931,6 @@ class GudangController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereBetween('tgl_masuk', [Carbon::now()->subMonths(6), Carbon::now()->subMonths(3)]);
-                // ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfMonth()->subMonths(6), Carbon::now()->startOfMonth()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -923,13 +940,10 @@ class GudangController extends Controller
                     $a = Carbon::now()->diffInDays($d->header->tgl_masuk);
 
                     if ($a == 1) {
-                        // return 'a';
                         return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-info">Lewat ' . $a . ' Hari</span>';
                     } else if ($a == 2) {
-                        // return 'b';
                         return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-warning">Lewat ' . $a . ' Hari</span>';
                     } else if ($a >= 3) {
-                        // return 'c';
                         return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                     }
                 } else {
@@ -949,7 +963,6 @@ class GudangController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereBetween('tgl_masuk', [Carbon::now()->subMonths(12), Carbon::now()->subMonths(6)]);
-                // ->where('tgl_masuk', [Carbon::now()->startOfYear()->subYears(1), Carbon::now()->startOfYear()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -973,7 +986,6 @@ class GudangController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereBetween('tgl_masuk', [Carbon::now()->subYears(3), Carbon::now()->subYears(1)]);
-                // ->orwhereBetween('tgl_masuk', [Carbon::now()->startOfYear()->subYears(3), Carbon::now()->startOfYear()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1043,8 +1055,6 @@ class GudangController extends Controller
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 1')
             ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
-            // $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(1) );
-            // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(1), Carbon::now()->startOfDay()]);
         })->get();
         return count($data);
     }
@@ -1054,8 +1064,6 @@ class GudangController extends Controller
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 2')
             ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
-            // $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(2) );
-            // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(2), Carbon::now()->startOfDay()]);
         })->get();
         return count($data);
     }
@@ -1065,20 +1073,15 @@ class GudangController extends Controller
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 3')
             ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
-            // $q->where('tgl_masuk', '<=', Carbon::now()->startOfDay()->subDays(3));
-            // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(3), Carbon::now()->startOfDay()] );
         })->get();
         return count($data);
     }
 
     function getPenerimaanProduk1(Request $request)
     {
-        // $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            // $q->where('tgl_masuk', '>=', Carbon::now()->subDays()->format('Y-m-d') );
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 1')
             ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
-            // $q->whereBetween('tgl_masuk', [Carbon::now()->subDays(1), Carbon::now()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1108,12 +1111,9 @@ class GudangController extends Controller
 
     function getPenerimaanProduk2(Request $request)
     {
-        // $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            // $q->where('tgl_masuk', '>=', Carbon::now()->subDays(2)->format('Y-m-d') );
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 2')
             ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
-            // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(2), Carbon::now()->startOfDay()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1143,12 +1143,9 @@ class GudangController extends Controller
 
     function getPenerimaanProduk3(Request $request)
     {
-        // $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            // $q->where('tgl_masuk', '<=', Carbon::now()->subDays(3)->format('Y-m-d'));
             $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 3')
             ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
-            // $q->whereBetween('tgl_masuk', [Carbon::now()->startOfDay()->subDays(3), Carbon::now()->startOfDay()] );
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1188,13 +1185,10 @@ class GudangController extends Controller
                     $a = Carbon::now()->diffInDays($d->header->tgl_masuk);
 
                     if ($a == 1) {
-                        // return 'a';
                         return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-info">Lewat ' . $a . ' Hari</span>';
                     } else if ($a == 2) {
-                        // return 'b';
                         return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-warning">Lewat ' . $a . ' Hari</span>';
                     } else if ($a >= 3) {
-                        // return 'c';
                         return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                     }
                 } else {
@@ -1451,11 +1445,7 @@ class GudangController extends Controller
     function outSO()
     {
         $data = DetailPesananProduk::with('GudangBarangJadi', 'detailpesanan')
-                // ->where('GudangBarangJadi.stok', '>', 'detailpesanan.jumlah')
                 ->get();
-        // $data = DetailPesananProduk::with(['GudangBarangJadi','detailpesanan' => function($q) {
-        //     $q->where('jumlah', '>=', 'GudangBarangJadi.stok');
-        // }])->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('produk', function($d) {
@@ -1472,27 +1462,7 @@ class GudangController extends Controller
 
     function test(Request $request)
     {
-        // $stok = GudangBarangJadi::all()->pluck('stok');
-        // $data = DetailPesananProduk::whereHas('GudangBarangJadi', function($q) use($request) {
-        //     // $q->where('stok', '>', 'jumlah');
-        // })
-        // ->get();
-        // // $data = DetailPesananProduk::with('GudangBarangJadi', 'DetailPesanan')
-        // //         ->get();
-        // return datatables()->of($data)
-        //     ->addIndexColumn()
-        //     ->addColumn('produk', function($d) {
-        //         return $d->GudangBarangJadi->produk->nama;
-        //     })
-        //     ->addColumn('permintaan', function($d) {
-        //         return $d->DetailPesanan->jumlah.' '.$d->GudangBarangJadi->Satuan->nama;
-        //     })
-        //     ->addColumn('current_stok', function($d) {
-        //         return $d->GudangBarangJadi->stok.' '.$d->GudangBarangJadi->Satuan->nama;
-        //     })
-        //     ->make(true);
 
-        // return $stok;
         $data = Ekatalog::where('tgl_kontrak', '>=', Carbon::now())->get();
         return $data;
     }
