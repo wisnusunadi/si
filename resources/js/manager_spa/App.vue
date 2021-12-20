@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import Navbar from "./components/Navbar.vue";
+import Navbar from "../ppic_spa/components/Navbar.vue";
 import Sidebar from "./components/Sidebar.vue";
 
 import axios from "axios";

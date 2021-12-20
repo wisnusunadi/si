@@ -76,7 +76,7 @@ export default {
 
     async handleSelect(selectInfo) {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/gbj/data").then((response) => {
+      await axios.get("/api/ppic/data/gbj").then((response) => {
         this.data_gbj = response.data;
         console.log(this.data_gbj);
       });
@@ -122,7 +122,7 @@ export default {
         jsEvent.pageY <= y2
       ) {
         this.$store.commit("setIsLoading", true);
-        await axios.post("/api/ppic/delete-event/" + event.id).then(() => {
+        await axios.post("/api/ppic/delete/perakitan/" + event.id).then(() => {
           event.remove();
         });
         this.$store.commit("setIsLoading", false);
@@ -147,7 +147,7 @@ export default {
     async handleEventDrop(info) {
       this.$store.commit("setIsLoading", true);
       await axios
-        .post("/api/ppic/update-event/" + info.event.id, {
+        .post("/api/ppic/update/perakitan/" + info.event.id, {
           tanggal_mulai: this.convert_date(info.event.start),
           tanggal_selesai: this.convert_date(info.event.end),
           status: this.$store.state.status,
@@ -160,7 +160,7 @@ export default {
 
     async handleEventResize(info) {
       this.$store.commit("setIsLoading", true);
-      await axios.post("/api/ppic/update-event/" + info.event.id, {
+      await axios.post("/api/ppic/update/perakitan/" + info.event.id, {
         tanggal_selesai: this.convert_date(info.event.end),
       });
       this.$store.commit("setIsLoading", false);
@@ -194,7 +194,7 @@ export default {
         konfirmasi: this.$store.state.konfirmasi,
         warna: this.color,
       };
-      await axios.post("/api/ppic/add-event", data).then((response) => {
+      await axios.post("/api/ppic/create/perakitan", data).then((response) => {
         this.$store.commit("setJadwal", response.data);
       });
       this.$store.commit("setIsLoading", false);
@@ -241,6 +241,7 @@ export default {
 
   watch: {
     jadwal(newVal, oldVal) {
+      console.log("watch jadwal", this.status, this.$store.state.status);
       this.calendarOptions.events = this.convertJadwal(newVal);
       if (
         this.$store.state.state_ppic === "pembuatan" ||

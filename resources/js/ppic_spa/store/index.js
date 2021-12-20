@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import mixins from '../mixins'
 
 Vue.use(Vuex)
 
@@ -45,8 +46,8 @@ const store = new Vuex.Store({
             }
 
             if (jadwal.length > 0) {
-                state.state = jadwal[0].state
-                state.status = jadwal[0].status
+                state.state = mixins.methods.change_state(jadwal[0].state)
+                state.status = mixins.methods.change_status(jadwal[0].status)
             }
 
             // set ppic state

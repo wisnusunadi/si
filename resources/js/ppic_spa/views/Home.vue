@@ -3,15 +3,17 @@
     <h1 class="title">DashBoard</h1>
     <div class="columns is-multiline">
       <div class="column is-12">
-        <div class="box">
-          <apexcharts
-            width="100%"
-            height="350"
-            type="bar"
-            :options="chartOptions"
-            :series="series"
-          ></apexcharts>
-        </div>
+        <template v-if="!$store.state.isLoading">
+          <div class="box">
+            <apexcharts
+              width="100%"
+              height="350"
+              type="bar"
+              :options="chartOptions"
+              :series="series"
+            ></apexcharts>
+          </div>
+        </template>
       </div>
       <div class="column is-12">
         <div class="box">

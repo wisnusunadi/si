@@ -16,14 +16,32 @@ use App\Models\GudangKarantinaDetail;
 
 class PpicController extends Controller
 {
+    // Properties
+    public function change_status($status)
+    {
+        if ($status == 'penyusunan') return 6;
+        else if ($status == 'pelaksanaan') return 7;
+        else if ($status == 'selesai') return 8;
+        return $status;
+    }
+
+    public function change_state($state)
+    {
+        if ($state == 'perencanaan') return 17;
+        else if ($state == 'persetujuan') return 18;
+        else if ($state == 'perubahan') return 19;
+        return $state;
+    }
+
     // API
     public function get_data_perakitan($status = "all")
     {
         $this->update_perakitan_status();
-        if ($status == "penyusunan") {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', 'penyusunan')->orderBy('tanggal_mulai', 'desc')->get();
-        } else if ($status == "pelaksanaan") {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', 'pelaksanaan')->orderBy('tanggal_mulai', 'desc')->get();
+        $status = $this->change_status($status);
+        if ($status == $this->change_status('penyusunan')) {
+            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'desc')->get();
+        } else if ($status == $this->change_status("pelaksanaan")) {
+            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'desc')->get();
         } else {
             $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'desc')->get();
         }
@@ -52,19 +70,22 @@ class PpicController extends Controller
 
     public function create_data_perakitan(Request $request)
     {
+        $status = $this->change_status($request->status);
+        $state = $this->change_state($request->state);
+
         $data = [
             'produk_id' => $request->produk_id,
             'jumlah' => $request->jumlah,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
-            'status' => $request->status,
-            'state' => $request->state,
+            'status' => $status,
+            'state' => $state,
             'konfirmasi' => $request->konfirmasi,
             'warna' => $request->warna,
         ];
         JadwalPerakitan::create($data);
 
-        return $this->get_data_perakitan($request->status);
+        return $this->get_data_perakitan($status);
     }
 
     public function update_data_perakitan(Request $request, $id)
@@ -77,7 +98,8 @@ class PpicController extends Controller
             $data->tanggal_selesai = $request->tanggal_selesai;
         }
         if (isset($request->state)) {
-            $data->state = $request->state;
+            $state = $this->change_state($request->state);
+            $data->state = $state;
         }
         if (isset($request->konfirmasi)) {
             $data->konfirmasi = $request->konfirmasi;
@@ -94,7 +116,7 @@ class PpicController extends Controller
                 $this->update_data_perakitan($request, $data['id']);
             }
         } else {
-            $event = JadwalPerakitan::where('status', $status)->get();
+            $event = JadwalPerakitan::where('status', $this->change_status($status))->get();
             foreach ($event as $data) {
                 if (isset($request->tanggal_mulai)) {
                     $data->tanggal_mulai = $request->tanggal_mulai;
@@ -103,7 +125,8 @@ class PpicController extends Controller
                     $data->tanggal_selesai = $request->tanggal_selesai;
                 }
                 if (isset($request->state)) {
-                    $data->state = $request->state;
+                    $state = $this->change_state($request->state);
+                    $data->state = $state;
                 }
                 if (isset($request->konfirmasi)) {
                     $data->konfirmasi = $request->konfirmasi;
@@ -115,7 +138,7 @@ class PpicController extends Controller
         return $this->get_data_perakitan($status);
     }
 
-    public function delete_data_perakita(Request $request, $id)
+    public function delete_data_perakitan(Request $request, $id)
     {
         $data = JadwalPerakitan::find($id);
         $data->delete();
@@ -123,9 +146,9 @@ class PpicController extends Controller
 
     public function counting_status_data_perakitan()
     {
-        $penyusunan = count(JadwalPerakitan::where('status', 'penyusunan')->get());
-        $pelaksanaan = count(JadwalPerakitan::where('status', 'pelaksanaan')->get());
-        $selesai = count(JadwalPerakitan::where('status', 'selesai')->get());
+        $penyusunan = count(JadwalPerakitan::where('status', $this->change_status('penyusunan'))->get());
+        $pelaksanaan = count(JadwalPerakitan::where('status', $this->change_status('pelaksanaan'))->get());
+        $selesai = count(JadwalPerakitan::where('status', $this->change_status('selesai'))->get());
 
         return [$penyusunan, $pelaksanaan, $selesai];
     }
@@ -146,33 +169,35 @@ class PpicController extends Controller
         }
         $penyusunan = JadwalPerakitan::where('tanggal_mulai', '>=', "$new_year-$new_month-01")->get();
         foreach ($penyusunan as $data) {
-            $data->status = 'penyusunan';
+            $data->status = $this->change_status('penyusunan');
             $data->save();
         }
 
         $pelaksanaan = JadwalPerakitan::whereYear('tanggal_mulai', $year)->whereMonth('tanggal_mulai', $month)->get();
         foreach ($pelaksanaan as $data) {
-            $data->status = 'pelaksanaan';
+            $data->status = $this->change_status('pelaksanaan');
             $data->save();
         }
 
         $selesai = JadwalPerakitan::where('tanggal_mulai', '<', "$year-$month-01")->get();
         foreach ($selesai as $data) {
-            $data->status = 'selesai';
+            $data->status = $this->change_status('selesai');
             $data->save();
         }
     }
 
     public function test_query()
     {
-        $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_spr) as jml'))
-            ->whereNotNull('t_gk_detail.sparepart_id')
-            ->where('is_draft', 0)
-            ->where('is_keluar', 0)
-            ->groupBy('t_gk_detail.sparepart_id')
-            ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
-            ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
-            ->get();
+        $data = JadwalPerakitan::all();
+        foreach ($data as $item) {
+            if ($this->change_status($item->status) == 'penyusunan') {
+                $item->state = 17;
+            } else {
+                $item->state = 18;
+            }
+
+            $item->save();
+        }
         return $data;
     }
 }

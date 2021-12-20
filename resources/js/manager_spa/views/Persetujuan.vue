@@ -216,7 +216,7 @@ export default {
     async handleKirim() {
       this.$store.commit("setIsLoading", true);
       await axios.post(
-        "/api/ppic/update-many-event/" + this.$store.state.status,
+        "/api/ppic/update/perakitans/" + this.$store.state.status,
         {
           data: this.acc_jadwal,
           konfirmasi: 1,
@@ -224,7 +224,7 @@ export default {
       );
 
       await axios
-        .post("/api/ppic/update-many-event/" + this.$store.state.status, {
+        .post("/api/ppic/update/perakitans/" + this.$store.state.status, {
           data: this.reject_jadwal,
           konfirmasi: 2,
         })
@@ -239,7 +239,7 @@ export default {
     async handleSetuju() {
       this.$store.commit("setIsLoading", true);
       await axios
-        .post("/api/ppic/update-many-event/" + this.$store.state.status, {
+        .post("/api/ppic/update/perakitans/" + this.$store.state.status, {
           state: "perencanaan",
           konfirmasi: 0,
         })
@@ -254,7 +254,7 @@ export default {
     async handleTolak() {
       this.$store.commit("setIsLoading", true);
       await axios
-        .post("/api/ppic/update-many-event/" + this.$store.state.status, {
+        .post("/api/ppic/update/perakitan/" + this.$store.state.status, {
           state: "persetujuan",
           konfirmasi: 1,
         })

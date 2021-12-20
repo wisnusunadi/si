@@ -119,18 +119,20 @@
         </div>
       </div>
     </div>
-    <div class="box" :class="{ 'is-hidden': isCalendar }">
-      <div v-if="this.$store.state.jadwal.length == 0" class="p-3">
-        Data Kosong
+    <template v-if="!isCalendar">
+      <div class="box">
+        <div v-if="this.$store.state.jadwal.length == 0" class="p-3">
+          Data Kosong
+        </div>
+        <apexchart
+          v-else
+          type="rangeBar"
+          height="200"
+          :options="options"
+          :series="series"
+        ></apexchart>
       </div>
-      <apexchart
-        v-else
-        type="rangeBar"
-        height="200"
-        :options="options"
-        :series="series"
-      ></apexchart>
-    </div>
+    </template>
   </div>
 </template>
 

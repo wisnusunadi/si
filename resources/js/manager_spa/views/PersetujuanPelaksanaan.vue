@@ -15,7 +15,7 @@ export default {
     async loadData() {
       this.$store.commit("setIsLoading", true);
       await axios
-        .get("/api/ppic/perakitan/data/pelaksanaan", {
+        .get("/api/ppic/data/perakitan/pelaksanaan", {
           params: {
             konfirmasi: "0",
           },

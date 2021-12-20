@@ -26,6 +26,6 @@ const mix = require('laravel-mix');
 // mix.js('resources/js/manager/app.js', 'public/native/js/ppic/manager.js').vue()
 
 mix.js('resources/js/ppic_spa/index.js', 'public/native/js/ppic_spa.js').vue()
-// mix.js('resources/js/manager_spa/index.js', 'public/native/js/manager_spa.js').vue()
+mix.js('resources/js/manager_spa/index.js', 'public/native/js/manager_spa.js').vue()
 
 // mix.browserSync("http://localhost:8000")
