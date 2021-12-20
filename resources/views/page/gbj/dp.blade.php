@@ -45,30 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr> --}}
+
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
@@ -190,7 +167,7 @@
             url: '/api/tfp/rakit-terima/' + id,
             success: function(res) {
                 console.log(res);
-                // $('span#title').text(res.data[0].title);
+                $('span#title').text(res.data[0].title);
             }
         })
 
@@ -210,9 +187,6 @@
                 { data: 'noserii'},
                 { data: 'layout'},
             ],
-            // columnDefs: [
-            //     { className: 'cb-child no-click', targets: 0 },
-            // ],
                 "oLanguage": {
             "sSearch": "Cari:"
             }
@@ -226,7 +200,6 @@
                 if(res) {
                     console.log(res);
                     $("#layout_id").empty();
-                    // $("#divisi").append('<option value="">All</option>');
                     $.each(res, function(key, value) {
                         $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
                     });
@@ -279,11 +252,8 @@
 
     // submit
     $(document).on('click', '#simpanseri', function() {
-        console.log('test');
         const ids = [];
         const lay = [];
-        var tr = $(this).closest('tr');
-        layval = tr.find('#layout_id').val();
         $('.cb-child').each(function() {
             if ($(this).is(":checked")) {
                 ids.push($(this).val());
@@ -300,15 +270,14 @@
                 layout: lay,
             },
             success: function(res) {
-                console.log(res);
-                // Swal.fire({
-                //     position: 'center',
-                //     icon: 'success',
-                //     title: res.msg,
-                //     showConfirmButton: false,
-                //     timer: 1500
-                // })
-                // location.reload();
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
             }
         })
     })

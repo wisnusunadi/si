@@ -66,108 +66,7 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Sparepart 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 pcs</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/sparepart/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -191,98 +90,7 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">Kode 1</td>
-                                        <td>Unit 1</td>
-                                        <td>100 Unit</td>
-                                        <td>
-                                            <a class="btn btn-outline-info" href="{{ url('gk/gudang/unit/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                               <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -303,8 +111,10 @@
         "info": true,
         "autoWidth": false,
         "responsive": true,
-        processing: true,
-        serverSide: true,
+        bProcessing: true,
+        bServerSide: true,
+        bSortClasses: true,
+        bDeferRender: true,
         ajax: {
             url: "/api/spr/data",
         },
@@ -330,6 +140,8 @@
         "responsive": true,
         processing: true,
         serverSide: true,
+        bSortClasses: true,
+        bDeferRender: true,
         ajax: {
             url: "/api/gk/unit",
         },

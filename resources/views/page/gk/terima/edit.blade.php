@@ -1177,11 +1177,9 @@
                     o++;
                     // console.log("array test");
                     // console.log(val);
-                    $.each(val, function(index, vall) {
+                    $.each(val.seri, function(index, vall) {
                         // console.log(res.spr[i].seri, vall);
-                       $.each(vall, function(index, valll) {
-                        console.log('test');
-                       })
+                        console.log(vall);
 
                     //     $('.scan-produk1-edit tbody').append('<tr id="row' + iseri + '"><td><input type="text" value="'+res.spr[i].seri[iseri].noseri+'" name="noseri[][' + iseri +
                     //                                     ']" id="noseri' + iseri +

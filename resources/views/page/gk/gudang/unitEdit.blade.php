@@ -31,6 +31,17 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
+    .sudah_ditransfer {
+        float: left;
+        width: auto;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #AEE1FC;
+        background-color: #AEE1FC;
+        color: #5170FD;
+        font-size: 14px;
+        border-radius: 6px;
+    }
 
     .belum_diterima {
         float: left;
@@ -106,7 +117,6 @@
                             <th rowspan="2">Layout</th>
                             <th rowspan="2">Kerusakan</th>
                             <th rowspan="2">Tingkat Kerusakan</th>
-                            {{-- Status Akan Berubah secara otomatis Jika dia sudah mengubah data kerusakan atau tingkat kerusakan --}}
                             <th rowspan="2">Status</th>
                             <th rowspan="2">Aksi</th>
                         </tr>

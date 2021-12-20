@@ -315,30 +315,7 @@
                     <tbody>
 
                     </tbody>
-                    {{-- <tr>
-                        <td><input type="checkbox" class="cb-child" value="1"></td>
-                        <td>5474598674958698645</td>
-                        <td>
-                            <select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                            </select>
-                            </td> <td>
-                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="cb-child" value="2"></td>
-                        <td>5474598674958698645</td>
-                        <td>
-                            <select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                            </select>
-                            </td> <td>
-                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                        </td>
-                    </tr> --}}
+                    
                 </table>
             </div>
             <div class="modal-footer">

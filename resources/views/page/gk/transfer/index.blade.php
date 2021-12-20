@@ -910,7 +910,7 @@
             serverSide: true,
             destroy: true,
             ajax: {
-                url: "/api/gk/draft-terima",
+                url: "/api/gk/draft-tf",
                 type: "post",
             },
             columns: [{
@@ -1054,78 +1054,6 @@
                 );
                 $.ajax({
                     url: "/api/gk/out-draft",
-                    type: "post",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        date_out: out,
-                        ke: to,
-                        deskripsi: tujuan,
-                        sparepart_id: spr1,
-                        qty_spr: jml,
-                        noseri: seri,
-                        gbj_id: unit1,
-                        qty_unit: jum,
-                        seriunit: seri_unit,
-                    },
-                    success: function (res) {
-                        console.log(res);
-                    },
-                })
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            } else {
-                Swal.fire(
-                    'Data gagal di rancangan!',
-                    '',
-                    'error'
-                );
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            }
-        });
-    });
-    // submit transfer
-    $(document).on('click', '.simpan', function () {
-        let out = $('#datePicker').val();
-        let to = $('.dari').val();
-        let tujuan = $('#tujuan_tf').val();
-        console.log(out);
-        console.log(to);
-        console.log(tujuan);
-        const spr1 = [];
-        const jml = [];
-        const unit1 = [];
-        const jum = [];
-        $('select[name^="sparepart_id"]').each(function () {
-            spr1.push($(this).val());
-        });
-        $('input[name^="qty_spr"]').each(function () {
-            jml.push($(this).val());
-        });
-        $('select[name^="gbj_id"]').each(function () {
-            unit1.push($(this).val());
-        });
-        $('input[name^="qty_unit"]').each(function () {
-            jum.push($(this).val());
-        });
-        Swal.fire({
-            title: "Apakah anda yakin?",
-            text: "Data yang sudah di rancangan tidak dapat diubah!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-            showCancelButton: true,
-        }).then((success) => {
-            if (success) {
-                Swal.fire(
-                    'Data berhasil di rancangan!',
-                    '',
-                    'success'
-                );
-                $.ajax({
-                    url: "/api/gk/out-final",
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",

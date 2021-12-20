@@ -289,7 +289,7 @@ Route::prefix('/gk')->group(function () {
     Route::post('/draft-tf', [SparepartController::class, 'get_draft_tf']);
     Route::post('/draft-terima', [SparepartController::class, 'get_draft_terima']);
     Route::get('/noseri/{id}', [SparepartController::class, 'headerSeri']);
-    Route::get('/coba', [SparepartController::class, 'coba']);
+    Route::get('/coba', [SparepartController::class, 'testing']);
     Route::post('/detailseri', [SparepartController::class, 'get_detail_id1']);
 
     // cek
@@ -300,7 +300,6 @@ Route::prefix('/gk')->group(function () {
 
     // select
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
-
     Route::post('/gkspr', [MasterController::class, 'select_gk_spr']);
     Route::post('/gkunit', [MasterController::class, 'select_gk_unit']);
     Route::post('/gklayout', [MasterController::class, 'select_gk_layout']);

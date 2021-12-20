@@ -78,9 +78,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-                                        <a href="#" class="btn btn-outline-primary">Search</a>
-                                    </div> --}}
+                                   
                                 </div>
                             </div>
                             <div class="col-sm-4">

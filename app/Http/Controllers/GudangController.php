@@ -36,7 +36,6 @@ class GudangController extends Controller
     public function get_data_barang_jadi()
     {
         $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get();
-        // return response()->json($auth);
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -51,7 +50,6 @@ class GudangController extends Controller
             })
             ->addColumn('jumlah1', function ($data) {
                 if ($data->id) {
-                    # code...
                     $ss = DetailPesananProduk::with('detailpesanan')->where('gudang_barang_jadi_id', $data->id)->get();
                     return $data->stok - $ss->sum('detailpesanan.jumlah') . ' ' . $data->satuan->nama;
                 } else {
@@ -63,19 +61,7 @@ class GudangController extends Controller
                 return $data->produk->KelompokProduk->nama;
             })
             ->addColumn('action', function ($data) {
-            // $auth = auth()->user()->divisi->id;
-                // if ($auth == '2') {
-                //     return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                //         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                //         <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
-                //             <button class="dropdown-item" type="button" >
-                //             <i class="far fa-eye"></i>&nbsp;Detail
-                //             </button>
-                //         </a>
-
-                //         </div>';
-                // }else {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
                         <button class="dropdown-item" type="button" >
@@ -90,10 +76,19 @@ class GudangController extends Controller
                     </a>
 
                     </div>';
-                // }
-
             })
-            ->rawColumns(['action'])
+            ->addColumn('action_direksi', function($data) {
+                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="far fa-eye"></i>&nbsp;Detail
+                        </button>
+                    </a>
+
+                    </div>';
+            })
+            ->rawColumns(['action', 'action_direksi'])
             ->make(true);
     }
 
@@ -111,7 +106,6 @@ class GudangController extends Controller
     function getNoseri(Request $request, $id)
     {
         $data = GudangBarangJadi::with('noseri')->where('id', $id)->get();
-        // $data = NoseriBarangJadi::with('gudang', 'from', 'to')->where('gdg_barang_jadi_id', $id)->get();
         return response()->json($data);
     }
 
@@ -148,7 +142,7 @@ class GudangController extends Controller
 
     function getAllTransaksi()
     {
-        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->get();
+        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->orderBy('header.tgl_masuk', 'desc')->get();
         $g = datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
@@ -316,7 +310,22 @@ class GudangController extends Controller
                 return $c . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                $seri = NoseriTGbj::where('t_gbj_detail_id', $d->id)->get();
+                $seri_final = NoseriTGbj::where('t_gbj_detail_id', $d->id)->where('status_id', 3)->get();
+                $cc = count(($seri_final));
+                $c = count($seri);
+                if($cc == $c) {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Detail
+                            </button>
+                        </a>
+
+                        </div>';
+                } else {
+                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
                             <button class="dropdown-item" type="button" >
@@ -331,6 +340,8 @@ class GudangController extends Controller
                         </a>
 
                         </div>';
+                }
+
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -364,11 +375,13 @@ class GudangController extends Controller
                 foreach($layout as $l) {
                     $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
                 }
-                return '<select name="layout_id[]" id="layout_id[]" class="form-control layout">
+                $a++;
+                return '<select name="layout_id[]" id="layout_id" class="form-control layout">
                         ' . $opt . '
                         </select>';
-                $a++;
+
             })
+
             ->addColumn('noserii', function ($d) {
                 return $d->seri->noseri.'<input type="hidden" name="noseri[]" id="noseri[]" value="'.$d->seri->noseri.'">';
             })

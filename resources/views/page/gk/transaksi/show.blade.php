@@ -369,10 +369,12 @@
     const myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-        datasets: [{
+        // labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+        labels: [],
+        datasets: [
+            {
             label: 'Terima',
-            data: [15, 20, 30, 15, 29, 38, 35, 15, 18, 34, 10, 45],
+            data: [],
             backgroundColor: [
                 'rgba(255, 159, 64, 0.2)',
             ],
@@ -380,7 +382,7 @@
         },
         {
             label: 'Transfer',
-            data: [11, 15, 20, 10, 25, 30, 20, 15, 20, 30, 13, 25],
+            data: [],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
             ],
@@ -391,21 +393,36 @@
     options: {
         scales: {
             y: {
-                beginAtZero: false
+                beginAtZero: true
             }
         }
     }
 });
-$('#tahun').change(function (e) { 
+$('#tahun').change(function (e) {
     $.ajax({
         type: "post",
-        url: "/api/gk/transaksi/grafik-trf/",
+        url: "/api/gk/transaksi/grafik-trf",
         data: {
             id: id,
             tahun: this.value,
         },
-        success: function (response) {
-            console.log(response);
+        success: function (res) {
+            console.log(res);
+            if (res.masuk && res.data != null) {
+                myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
+                myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
+                myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
+                myChart.update();
+            }
+            else if (res.masuk != null) {
+                myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
+                myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
+                myChart.update();
+            }else if (res.data != null) {
+                myChart.data.labels = res.data.map(r => res.data[0].bulan);
+                myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
+                myChart.update();
+            }
         }
     });
 });

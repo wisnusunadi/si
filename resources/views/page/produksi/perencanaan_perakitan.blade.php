@@ -107,15 +107,8 @@
 <script>
     $(function () {
 
-
-        /* initialize the calendar
-         -----------------------------------------------------------------*/
-
         var Calendar = FullCalendar.Calendar;
         var calendarEl = document.getElementById('calendar');
-
-        // initialize the external events
-        // -----------------------------------------------------------------
 
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
@@ -124,40 +117,7 @@
                 right: ''
             },
             locale: 'id',
-            // contentHeight: 'auto',
-            //Random default events
-            // events: [
-            //     {
-            //         title: 'Perakitan Perakitan 1',
-            //         start: new Date(y, m, d+31),
-            //         end: new Date(y, m, d+33),
-            //         backgroundColor: '#FF0000', //red
-            //         borderColor: '#FF0000' //red
-            //     },
-            //     {
-            //         title: 'Perakitan Perakitan 2',
-            //         start: new Date(y, m, d + 35, 15, 25),
-            //         end: new Date(y, m, d + 32),
-            //         backgroundColor: '#AF0404', //yellow
-            //         borderColor: '#AF0404   ' //yellow
-            //     },
-            //     {
-            //         title: 'Perakitan Perakitan 3',
-            //         start: new Date(y, m, d +32, 10, 30),
-            //         end: new Date(y, m, d + 34, 14, 0),
-            //         allDay: false,
-            //         backgroundColor: '#414141', //Blue
-            //         borderColor: '#414141' //Blue
-            //     },
-            //     {
-            //         title: 'Perakitan Perakitan 4',
-            //         start: new Date(y, m, +38, 10, 30),
-            //         end: new Date(y, m, d + 48, 14, 0),
-            //         allDay: false,
-            //         backgroundColor: '#252525', //Blue
-            //         borderColor: '#252525' //Blue
-            //     },
-            // ],
+
             dateClick: function (info) {
                 $('.tanggalModal').text(moment(info.dateStr).format('DD-MM-YYYY'));
                 $('.modalPertanggal').modal('show');

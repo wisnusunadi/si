@@ -146,22 +146,13 @@ class ProduksiController extends Controller
             }
 
             // kurang stok ??
-            // $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
-            // $i = 0;
-            // foreach ($gdg as $vv) {
-            //     $i++;
-            //     $vv['stok'] = $vv['stok'] - $request->qty[$i];
-            //     GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-            // }
 
             return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
-            // }
         }
     }
 
     function TfbySOFinal(Request $request)
     {
-        // dd($request->all());
         $data = TFProduksi::where('pesanan_id', $request->pesanan_id)->where('status_id', 2)->where('state_id', 8)->get();
         if (count($data) > 0) {
             return response()->json(['msg' => 'Data Sudah Ada']);
@@ -343,7 +334,6 @@ class ProduksiController extends Controller
     function getDetailSO(Request $request, $id, $value)
     {
         if ($value == "ekatalog") {
-            // $data = Ekatalog::where('id', $id)->get();
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
             })->get();
@@ -354,7 +344,6 @@ class ProduksiController extends Controller
 
             $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
         } else if ($value == "spa") {
-            // $data = Spa::where('pesanan_id', $id)->get();
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
             })->get();
@@ -365,7 +354,6 @@ class ProduksiController extends Controller
 
             $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
         } else if ($value == "spb") {
-            // $data = Spb::where('id', $id)->get();
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
             })->get();
@@ -376,8 +364,6 @@ class ProduksiController extends Controller
 
             $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
         }
-
-        //return $g;
 
         return datatables()->of($g)
             ->addIndexColumn()
@@ -508,20 +494,6 @@ class ProduksiController extends Controller
         return $gdg;
     }
 
-    function test()
-    {
-        // $data = TFProduksi::where('pesanan_id', 2)->get();
-        // if (count($data) > 0) {
-        //     return 'Data Sudah ada';
-        // } else {
-        //     return 'Data belum ada';
-        // }
-        // // return $data;
-
-        $a = [];
-    }
-
-
     // dashboard produksi
     public function dashboard(Request $request)
     {
@@ -530,8 +502,9 @@ class ProduksiController extends Controller
         $period = CarbonPeriod::create($dateCurrent, $dateFuture);
         $data = [];
         foreach ($period as $date) {
-            array_push($data, $date->format('d-M-Y'));
+            array_push($data, $date->format('d-m-Y'));
         }
+
         return response()->json($data);
     }
 
@@ -543,19 +516,19 @@ class ProduksiController extends Controller
 
     function getGrafikProduk(Request $request, $id)
     {
-        $produk = JadwalPerakitan::select('produk_id', 'tanggal_selesai', DB::raw('sum(jumlah) as total'))
-            ->groupBy('produk_id')->groupBy('tanggal_selesai')
-            ->where('produk_id', $id)
-            ->where('tanggal_selesai', '>=', Carbon::now()->subDays(5)->toDateTimeString())
-            ->where('tanggal_selesai', '<=', Carbon::now()->addDays(5)->toDateTimeString())
-            ->get();
-        $data = [];
-        foreach ($produk as $produk) {
-            array_push($data, $produk);
+        $data = Db::table('v_prd_dashboard')->where('produk_id', $id)->get();
+        $data_arr = [];
+        foreach($data as $d) {
+            $data_arr[] = [
+                'tgl' => Carbon::parse($d->tgl)->locale('id')->isoFormat('dddd, D MMMM Y'),
+                'produk_id' => $d->produk_id == null ? '-' : $d->produk_id,
+                'nama' => $d->produk == null ? '-' : $d->produk,
+                'jumlah' => $d->jml == null ? 0 : $d->jml
+            ];
         }
-        return response()->json($data);
-        // return view('page.produksi.dashboard', compact('produk'));
+        return response()->json($data_arr);
     }
+
     // sale
     function h_minus10()
     {
@@ -954,7 +927,7 @@ class ProduksiController extends Controller
 
     function getSelesaiRakit()
     {
-        $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->where('status', 'pelaksanaan')->get();
+        $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->where('status', 7)->get();
         return datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -991,9 +964,9 @@ class ProduksiController extends Controller
                 })->get();
                 $a = count($jj);
                 if ($d->status_tf == 12) {
-                    return '<span class="belum_diterima">Sudah Terisi ' . $c . ' Unit</span>';
+                    return '<span class="belum_diterima">Sudah Terisi Sebagian</span>';
                 } elseif ($d->status_tf == 13) {
-                    return '<span class="belum_diterima">Sudah Terkirim ' . $a . ' Unit</span>';
+                    return '<span class="belum_diterima">Sudah Terkirim Sebagian</span>';
                 } else {
                     return '<span class="sudah_diterima">Sudah Terisi Semua</span>';
                     // return 'xx';
@@ -1033,9 +1006,6 @@ class ProduksiController extends Controller
                     $seri->save();
                 }
             }
-            // return response()->json([
-            //     'status' => 'success',
-            // ]);
 
             $d = JadwalPerakitan::find($request->jadwal_id);
             $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
@@ -1146,7 +1116,6 @@ class ProduksiController extends Controller
         })->get()->count();
         $rakitseri = JadwalPerakitan::find($request->jadwal_id);
         if ($rakitseri->jumlah == $jj) {
-            # code...
             $rakitseri->status_tf = 14;
             $rakitseri->status = 'selesai';
             $rakitseri->save();
@@ -1156,38 +1125,6 @@ class ProduksiController extends Controller
         }
 
         return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
-    }
-
-    // gbj
-    function terimaseri(Request $request)
-    {
-        $seri = NoseriTGbj::whereIn('id', $request->seri)->get()->toArray();
-        $i = 0;
-        foreach ($seri as $s) {
-            $i++;
-
-            for ($k = 0; $k < count($request->layout); $k++) {
-                # code...
-                NoseriTGbj::find($s['id'])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => $request->layout[$k]]);
-            }
-
-            // NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
-
-            // $hid = NoseriTGbj::find($s['id']);
-            // TFProduksiDetail::find($hid->t_gbj_detail_id)->update(['status_id' => 3, 'state_id' => 16]);
-
-            // $gid = NoseriBarangJadi::where('id', $s['noseri_id'])->get();
-            // foreach($gid as $g) {
-            //     $gdg = GudangBarangJadi::where('id', $g->gdg_barang_jadi_id)->get()->toArray();
-            //     foreach ($gdg as $vv) {
-            //         $i++;
-            //         $vv['stok'] = $vv['stok'] + count($gid);
-            //         GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-            //     }
-            // }
-        }
-        return response()->json(['msg' => 'Successfully']);
-        // dd($request->all());
     }
 
     // riwayat rakit
@@ -1229,8 +1166,8 @@ class ProduksiController extends Controller
             ];
         }
         return $a;
-        // $data = JadwalPerakitan::find($id);
     }
+
     function ajax_history_rakit()
     {
         $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
@@ -1285,6 +1222,7 @@ class ProduksiController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+
     public function product_his_rakit()
     {
         $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
@@ -1294,7 +1232,7 @@ class ProduksiController extends Controller
             ->groupBy('jadwal_rakit_noseri.waktu_tf')
             ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
             ->get();
-        
+
         $produk = [];
         foreach ($d as $item) {
             $a = GudangBarangJadi::find($item->produk_id);
@@ -1304,43 +1242,33 @@ class ProduksiController extends Controller
         return response()->json($data);
     }
 
-    function testing()
+    // gbj
+    function terimaseri(Request $request)
     {
-        $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
-            ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-            ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy('jadwal_rakit_noseri.date_in')
-            ->groupBy('jadwal_rakit_noseri.waktu_tf')
-            ->get()->pluck('waktu_tf');
+        $seri = NoseriTGbj::whereIn('id', $request->seri)->get()->toArray();
+        $i = 0;
+        foreach ($seri as $s) {
+            $i++;
 
-        return $d;
-        // return datatables()->of($d)
-        //     ->addColumn('day_rakit', function ($d) {
-        //         return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
-        //     })
-        //     ->addColumn('day_kirim', function ($d) {
-        //         return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
-        //     })
-        //     ->addColumn('time_rakit', function ($d) {
-        //         return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i');
-        //     })
-        //     ->addColumn('time_kirim', function ($d) {
-        //         return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
-        //     })
-        //     ->addColumn('bppb', function ($d) {
-        //         return '-';
-        //     })
-        //     ->addColumn('produk', function($d) {
-        //         $a = GudangBarangJadi::find($d->produk_id);
-        //         return $a->produk->nama.' '.$a->nama;
-        //     })
-        //     ->addColumn('jml', function ($d) {
-        //         return $d->jml . ' Unit';
-        //     })
-        //     ->addColumn('action', function ($d) {
-        //         return '<button class="btn btn-outline-secondary detail" data-jml="'.$d->jml.'" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
-        //     })
-        //     ->rawColumns(['action'])
-        //     ->make(true);
+            for ($k = 0; $k < count($request->layout); $k++) {
+                NoseriTGbj::where('id', $request->seri[$k])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => json_decode($request->layout[$k], true)]);
+            }
+
+            NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
+
+            $hid = NoseriTGbj::find($s['id']);
+            TFProduksiDetail::find($hid->t_gbj_detail_id)->update(['status_id' => 3, 'state_id' => 16]);
+
+            $gid = NoseriBarangJadi::where('id', $s['noseri_id'])->get();
+            foreach($gid as $g) {
+                $gdg = GudangBarangJadi::where('id', $g->gdg_barang_jadi_id)->get()->toArray();
+                foreach ($gdg as $vv) {
+                    $i++;
+                    $vv['stok'] = $vv['stok'] + count($gid);
+                    GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                }
+            }
+        }
+        return response()->json(['msg' => 'Successfully']);
     }
 }

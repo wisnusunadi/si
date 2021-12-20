@@ -17,7 +17,7 @@ class NoseriKeluarGK extends Model
         return $this->belongsTo(GudangKarantinaDetail::class, 'gk_detail_id');
     }
 
-    function noseri() {
+    function seri() {
         return $this->belongsTo(GudangKarantinaNoseri::class, 'noseri_id');
     }
 }

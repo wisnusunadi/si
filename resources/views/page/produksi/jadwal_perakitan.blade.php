@@ -197,9 +197,7 @@
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
-        /* initialize the calendar
-         -----------------------------------------------------------------*/
-        //Date for the calendar events (dummy data)
+
         var date = new Date()
         var d = date.getDate(),
             m = date.getMonth(),
@@ -208,9 +206,6 @@
         var Calendar = FullCalendar.Calendar;
         var calendarEl = document.getElementById('calendar');
 
-        // initialize the external events
-        // -----------------------------------------------------------------
-
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
                 left: '',
@@ -218,7 +213,6 @@
                 right: ''
             },
             locale: 'id',
-            // contentHeight: 'auto',
             events: function (fetchInfo, successCallback, failureCallback) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",
@@ -306,8 +300,6 @@
 
             $('.modalRakit').modal('show');
 
-            // var i = 0;
-            // i++;
             $('.scan-produk').DataTable().destroy();
             $('.scan-produk tbody').empty();
 

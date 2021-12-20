@@ -80,7 +80,6 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="table-responsive ">
-                                            {{-- Tanggal Masuk dan Tanggal Keluar --}}
                                             <table class="table table-hover pertanggal" width="100%">
                                                 <thead>
                                                     <tr>
@@ -91,20 +90,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>10-09-2022</td>
-                                                        <td>Divisi IT</td>
-                                                        <td>Uji Coba Produk</td>
-                                                        <td><button class="btn btn-info" onclick="modalRancangan()"><i
-                                                                    class="far fa-eye"></i> Detail</button></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>10-09-2022</td>
-                                                        <td>Divisi IT</td>
-                                                        <td>Uji Coba Produk</td>
-                                                        <td><button class="btn btn-info" onclick="modalRancangan()"><i
-                                                                    class="far fa-eye"></i> Detail</button></td>
-                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>

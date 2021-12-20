@@ -60,7 +60,7 @@
                         <h5 class="card-title"><i class="fas fa-chart-line"></i> Grafik Perakitan Produk</h5>
                         <div class="card-tools">
                             <select name="" id="all-produk" class="form-control allprd">
-                                <option value="">Pilih Produk</option>
+                                <option>Pilih Produk</option>
                             </select>
                         </div>
                     </div>
@@ -369,76 +369,85 @@
 @section('adminlte_js')
 <script>
     // Charts
-        var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [], // data diambil 5 hari sebelum hari ini dan sesudah hari ini, misalkan hari ini tanggal (15-12-2021) maka yang diambil data tanggal 5 hari sebelumnya dan data tanggal 5 hari setelahnya.
-                datasets: [
-                    {
-                        label: '', // nama produk
-                        data: [
+        $.ajax({
+            type: "get",
+            url: "/api/prd/allproduk",
+            success: function (response) {
+                $.each(response, function (index, value) {
+                    $('#all-produk').append('<option value="' + index + '">' + value +'</option')
+                });
+                $('.allprd').select2({});
+            }
+        });
+            // $.ajax({
+            //     type: "get",
+            //     url: "/api/prd/dashboard",
+            //     success: function (response) {
+            //         console.log(response);
+            //         response.forEach(element => {
+            //             myChart.data.labels.push(element);
+            //         });
+            //         myChart.update();
+            //     }
+            // });
 
-                        ], // jumlah produk
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                        ],
-                        borderWidth: 5
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [], // data diambil 5 hari sebelum hari ini dan sesudah hari ini, misalkan hari ini tanggal (15-12-2021) maka yang diambil data tanggal 5 hari sebelumnya dan data tanggal 5 hari setelahnya.
+                    datasets: [
+                        {
+                            label: [], // nama produk
+                            data: [], // jumlah produk
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                            ],
+                            borderWidth: 5
+                        },
+                    ]
+                },
+                options: {
+                    legend: {
+                        display: false
                     },
-                ]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                tooltips: {
-                    callbacks: {
-                        label: function labelTools(tooltipItem) {
-                            return tooltipItem.yLabel;
+                    tooltips: {
+                        callbacks: {
+                            label: function labelTools(tooltipItem) {
+                                return tooltipItem.yLabel;
+                            }
                         }
+                    },
+                }
+            });
+
+            $(document).on('change', '#all-produk', function () {
+                $.ajax({
+                    url: "/api/prd/grafikproduk/" +this.value,
+                    type: "get",
+                    success: function(res) {
+                        if (myChart.data.labels.length > 0) {
+                            myChart.data.labels = [];
+                            myChart.data.datasets[0].label = [];
+                            myChart.data.datasets[0].data = [];
+                        }
+                        let elementNama = [];
+                        $.each(res, function(index, element) {
+                            myChart.data.labels.push(element.tgl);
+                            elementNama.push(element.nama);
+                            myChart.data.datasets[0].data.push(element.jumlah);
+                        });
+                        let uniqueNama = [...new Set(elementNama)];
+                        uniqueNama.forEach(element => {
+                            myChart.data.datasets[0].label.push(element);
+                        });
+                        myChart.update();
                     }
-                },
-            } 
-        });
-            $.ajax({
-                type: "get",
-                url: "/api/prd/allproduk",
-                success: function (response) {
-                    $.each(response, function (index, value) {
-                        $('#all-produk').append('<option value="' + index + '">' + value +'</option')
-                    });
-                    $('.allprd').select2({});
-                }
+                });
             });
-            $.ajax({
-                type: "get",
-                url: "/api/prd/dashboard",
-                success: function (response) {
-                    response.forEach(element => {
-                        myChart.data.labels.push(element);
-                    });
-                    myChart.update();
-                }
-            });
-        $(document).on('change', '#all-produk', function () {
-            labe
-            $.ajax({
-                url: "/api/prd/grafikproduk/" + this.value,
-                type: "get",
-                success: function(res) {
-                    // res.forEach(element => {
-                        // myChart.data.datasets.label.push(element.produk_id);
-                        myChart.data.datasets.forEach((res) => {
-                            res.data.push(res[0].total);
-                        })
-                    // });
-                    myChart.update();
-                }
-            })
-        });
     // sale
     $.ajax({
         url: "/api/prd/minus5/h",
