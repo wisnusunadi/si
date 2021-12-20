@@ -8,11 +8,16 @@ use Illuminate\Support\Facades\DB;
 
 // model
 use App\Models\JadwalPerakitan;
+use App\Models\JadwalPerakitanRencana;
+use App\Models\JadwalPerakitanLog;
 use App\Models\GudangBarangJadi;
+use App\Models\KomentarJadwalPerakitan;
 
 // event
 use App\Models\DetailPesananProduk;
 use App\Models\GudangKarantinaDetail;
+
+use function PHPSTORM_META\type;
 
 class PpicController extends Controller
 {
@@ -49,6 +54,12 @@ class PpicController extends Controller
         return $data;
     }
 
+    public function get_data_perakitan_rencana()
+    {
+        $data = JadwalPerakitanRencana::with('JadwalPerakitan.Produk.produk')->orderBy('tanggal_mulai', 'asc')->get();
+        return $data;
+    }
+
     public function get_data_barang_jadi()
     {
         $data = GudangBarangJadi::with('produk.KelompokProduk', 'produk.product', 'satuan')->get();
@@ -64,6 +75,32 @@ class PpicController extends Controller
             'DetailPesanan.Pesanan.Spb.Customer',
             'DetailPesanan.Pesanan.log'
         )
+            ->get();
+        return $data;
+    }
+
+    public function get_data_sparepart_gk()
+    {
+        $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_spr) as jml'))
+            ->whereNotNull('t_gk_detail.sparepart_id')
+            ->where('is_draft', 0)
+            ->where('is_keluar', 0)
+            ->groupBy('t_gk_detail.sparepart_id')
+            ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
+            ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
+            ->get();
+        return $data;
+    }
+
+    public function get_data_unit_gk()
+    {
+        $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
+            ->whereNotNull('t_gk_detail.gbj_id')
+            ->where('is_draft', 0)
+            ->where('is_keluar', 0)
+            ->groupBy('t_gk_detail.gbj_id')
+            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
+            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
             ->get();
         return $data;
     }
@@ -88,15 +125,49 @@ class PpicController extends Controller
         return $this->get_data_perakitan($status);
     }
 
+    public function create_komentar_jadwal_perakitan(Request $request)
+    {
+        KomentarJadwalPerakitan::create([
+            'tanggal_permintaan' => $request->tanggal_permintaan,
+            'tanggal_hasil' => $request->tanggal_hasil,
+            'state' => $request->state,
+            'status' => $request->status,
+            'hasil' => $request->hasil,
+            'komentar' => $request->tanggal_permintaan,
+        ]);
+    }
+
+    public function update_komentar_jadwal_perakitan(Request $request)
+    {
+        $data = KomentarJadwalPerakitan::where("status", $request->status)->first();
+        $data->tanggal_hasil = $request->tanggal_hasil;
+        $data->hasil = $request->hasil;
+        $data->komentar = $request->komentar;
+        $data->save();
+    }
+
     public function update_data_perakitan(Request $request, $id)
     {
         $data = JadwalPerakitan::find($id);
+
+        $object = new JadwalPerakitanLog();
+        $object->jadwal_perakitan_id = $data->id;
+        $object->tanggal_mulai = $data->tanggal_mulai;
+        $object->tanggal_selesai = $data->tanggal_selesai;
+
         if (isset($request->tanggal_mulai)) {
             $data->tanggal_mulai = $request->tanggal_mulai;
+            $object->tanggal_mulai_baru = $request->tanggal_mulai;
+        } else {
+            $object->tanggal_mulai_baru = $data->tanggal_mulai;
         }
         if (isset($request->tanggal_selesai)) {
             $data->tanggal_selesai = $request->tanggal_selesai;
+            $object->tanggal_selesai_baru = $request->tanggal_selesai;
+        } else {
+            $object->tanggal_selesai_baru = $data->tanggal_selesai;
         }
+
         if (isset($request->state)) {
             $state = $this->change_state($request->state);
             $data->state = $state;
@@ -104,6 +175,7 @@ class PpicController extends Controller
         if (isset($request->konfirmasi)) {
             $data->konfirmasi = $request->konfirmasi;
         }
+        $object->save();
         $data->save();
 
         return $this->get_data_perakitan($request->status);
@@ -118,12 +190,25 @@ class PpicController extends Controller
         } else {
             $event = JadwalPerakitan::where('status', $this->change_status($status))->get();
             foreach ($event as $data) {
+                $object = new JadwalPerakitanLog();
+                $object->jadwal_perakitan_id = $data->id;
+                $object->tanggal_mulai = $data->tanggal_mulai;
+                $object->tanggal_selesai = $data->tanggal_selesai;
+
                 if (isset($request->tanggal_mulai)) {
                     $data->tanggal_mulai = $request->tanggal_mulai;
+                    $object->tanggal_mulai_baru = $request->tanggal_mulai;
+                } else {
+                    $object->tanggal_mulai_baru = $data->tanggal_mulai;
                 }
+
                 if (isset($request->tanggal_selesai)) {
                     $data->tanggal_selesai = $request->tanggal_selesai;
+                    $object->tanggal_selesai_baru = $request->tanggal_selesai;
+                } else {
+                    $object->tanggal_selesai_baru = $data->tanggal_selesai;
                 }
+
                 if (isset($request->state)) {
                     $state = $this->change_state($request->state);
                     $data->state = $state;
@@ -131,6 +216,7 @@ class PpicController extends Controller
                 if (isset($request->konfirmasi)) {
                     $data->konfirmasi = $request->konfirmasi;
                 }
+                $object->save();
                 $data->save();
             }
         }
@@ -157,6 +243,7 @@ class PpicController extends Controller
     // helper function
     public function update_perakitan_status()
     {
+        // update jadwal_perakitan
         $month = date('m');
         $year = date('Y');
 
@@ -173,10 +260,29 @@ class PpicController extends Controller
             $data->save();
         }
 
+        $update_rencana_jadwal = false;
+        if (
+            count(JadwalPerakitanRencana::all()) == 0 ||
+            $month != date('m', strtotime(JadwalPerakitanRencana::first()->tanggal_mulai))
+        ) {
+            // empty jadwal_perakitan_rencana table
+            JadwalPerakitanRencana::truncate();
+            $update_rencana_jadwal = true;
+        }
+
         $pelaksanaan = JadwalPerakitan::whereYear('tanggal_mulai', $year)->whereMonth('tanggal_mulai', $month)->get();
         foreach ($pelaksanaan as $data) {
             $data->status = $this->change_status('pelaksanaan');
             $data->save();
+
+            if ($update_rencana_jadwal) {
+                // insert data to jadwal_perakitan_rencana                
+                JadwalPerakitanRencana::create([
+                    'jadwal_perakitan_id' => $data->id,
+                    'tanggal_mulai' => $data->tanggal_mulai,
+                    'tanggal_selesai' => $data->tanggal_selesai,
+                ]);
+            }
         }
 
         $selesai = JadwalPerakitan::where('tanggal_mulai', '<', "$year-$month-01")->get();
@@ -188,16 +294,10 @@ class PpicController extends Controller
 
     public function test_query()
     {
-        $data = JadwalPerakitan::all();
-        foreach ($data as $item) {
-            if ($this->change_status($item->status) == 'penyusunan') {
-                $item->state = 17;
-            } else {
-                $item->state = 18;
-            }
-
-            $item->save();
-        }
-        return $data;
+        $data = JadwalPerakitan::first();
+        $data = $data->tanggal_mulai;
+        $month = gettype(date('m', strtotime($data)));
+        $current_month = gettype(date('m'));
+        return [$month, $current_month];
     }
 }

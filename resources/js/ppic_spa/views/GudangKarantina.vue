@@ -37,7 +37,14 @@
                 <th>Jumlah</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <tr v-for="item in data_sparepart" :key="item.id">
+                <td>{{ item.kode }}</td>
+                <td>{{ item.nama }}</td>
+                <td>{{ item.unit }}</td>
+                <td>{{ item.jml }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
@@ -51,7 +58,13 @@
                 <th>Jumlah</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <tr v-for="item in data_unit" :key="item.id">
+                <td>{{ item.kode }}</td>
+                <td>{{ item.nama }}</td>
+                <td>{{ item.jml }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -69,6 +82,8 @@ export default {
   data() {
     return {
       tabs: false,
+      data_sparepart: [],
+      data_unit: [],
       table_sparepart: null,
       table_unit: null,
     };
@@ -77,13 +92,21 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/gk");
+      await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
+        this.data_sparepart = response.data;
+      });
+      this.table_sparepart = $("#table-sparepart").DataTable();
+
+      await axios.get("/api/ppic/data/gk/unit").then((response) => {
+        this.data_unit = response.data;
+      });
+      this.table_unit = $("#table-unit").DataTable();
+      this.$store.commit("setIsLoading", false);
     },
   },
 
   mounted() {
-    this.table_sparepart = $("#table-sparepart").DataTable();
-    this.table_unit = $("#table-unit").DataTable();
+    this.loadData();
   },
 };
 </script>

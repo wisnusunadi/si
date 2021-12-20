@@ -160,9 +160,14 @@ export default {
 
     async handleEventResize(info) {
       this.$store.commit("setIsLoading", true);
-      await axios.post("/api/ppic/update/perakitan/" + info.event.id, {
-        tanggal_selesai: this.convert_date(info.event.end),
-      });
+      await axios
+        .post("/api/ppic/update/perakitan/" + info.event.id, {
+          tanggal_selesai: this.convert_date(info.event.end),
+          status: this.$store.state.status,
+        })
+        .then((response) => {
+          this.$store.commit("setJadwal", response.data);
+        });
       this.$store.commit("setIsLoading", false);
     },
 

@@ -132,6 +132,16 @@
           :series="series"
         ></apexchart>
       </div>
+      <template v-if="$store.state.status === 'pelaksanaan'">
+        <div class="box">
+          <apexchart
+            type="rangeBar"
+            height="200"
+            :options="options"
+            :series="series_rencana"
+          ></apexchart>
+        </div>
+      </template>
     </template>
   </div>
 </template>
@@ -161,10 +171,21 @@ export default {
           type: "datetime",
         },
       },
+
+      jadwal_rencana: [],
     };
   },
 
   methods: {
+    async loadData() {
+      this.$store.commit("setIsLoading", true);
+      await axios.get("/api/ppic/data/rencana_perakitan").then((response) => {
+        this.jadwal_rencana = response.data;
+        console.log(this.jadwal_rencana);
+      });
+      this.$store.commit("setIsLoading", false);
+    },
+
     async sendEvent(state) {
       this.$store.commit("setIsLoading", true);
       await axios
@@ -177,6 +198,10 @@ export default {
         });
       this.$store.commit("setIsLoading", false);
     },
+  },
+
+  mounted() {
+    this.loadData();
   },
 
   computed: {
@@ -193,6 +218,20 @@ export default {
             y: [
               new Date(event.tanggal_mulai).getTime(),
               new Date(event.tanggal_selesai).getTime(),
+            ],
+          })),
+        },
+      ];
+    },
+
+    series_rencana: function () {
+      return [
+        {
+          data: this.jadwal_rencana.map((data) => ({
+            x: `${data.jadwal_perakitan.produk.produk.nama} ${data.jadwal_perakitan.produk.nama}`,
+            y: [
+              new Date(data.tanggal_mulai).getTime(),
+              new Date(data.tanggal_selesai).getTime(),
             ],
           })),
         },

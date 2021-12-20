@@ -305,7 +305,6 @@ export default {
               data: response.data,
             },
           ];
-          console.log(response.data);
         });
       await axios.get("/api/ppic/data/gbj").then((response) => {
         this.data_gbj = response.data;
