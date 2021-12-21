@@ -24,19 +24,21 @@
     }
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Transfer Produk Berdasarkan SO</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-12">
         <div class="row">
             <div class="col-lg-12">
                 <!-- Card -->
                 <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-8">
-                                <h3 class="card-title">Transfer Produk Berdasarkan SO</h3>
-                            </div>
-                        </div>
-                    </div>
                     <div class="card-body">
                         <table class="table table-bordered" id="gudang-barang">
                             <thead>

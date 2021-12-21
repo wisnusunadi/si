@@ -297,28 +297,23 @@ class ProduksiController extends Controller
             ->addColumn('action', function ($data) {
                 $x = $data->getTable();
                 if (isset($data->Pesanan->status_cek)) {
-                    return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                            <button class="dropdown-item" type="button">
-                                <i class="far fa-eye"></i>&nbsp;View
-                            </button>
-                        </a>
-                        </div>';
+                    return '<button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '" class="btn btn-success detailmodal"><i class="far fa-eye"></i> Detail</button>';
                 } else {
-                    return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '" data-id="' . $data->pesanan_id . '">
-                            <button class="dropdown-item" type="button">
-                                <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                            </button>
-                        </a>
-                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                            <button class="dropdown-item" type="button">
-                                <i class="far fa-eye"></i>&nbsp;View
-                            </button>
-                        </a>
-                        </div>';
+                    // return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    //     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    //     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '" data-id="' . $data->pesanan_id . '">
+                    //         <button class="dropdown-item" type="button">
+                    //             <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                    //         </button>
+                    //     </a>
+                    //     <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
+                    //         <button class="dropdown-item" type="button">
+                    //             <i class="far fa-eye"></i>&nbsp;View
+                    //         </button>
+                    //     </a>
+                    //     </div>';
+                    return '<button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="' . $x . '" data-id="' . $data->pesanan_id . '" class="btn btn-primary editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '" class="btn btn-success detailmodal"><i class="far fa-eye"></i> Detail</button>';
                 }
             })
             ->addColumn('button_prd', function ($d) {
@@ -514,19 +509,40 @@ class ProduksiController extends Controller
         return response()->json($produk);
     }
 
-    function getGrafikProduk(Request $request, $id)
+    function getGrafikProduk(Request $request)
     {
-        $data = Db::table('v_prd_dashboard')->where('produk_id', $id)->get();
-        $data_arr = [];
+        // $data = Db::table('v_prd_dashboard')->where('produk_id', $id)->get();
+        // $data_arr = [];
+        // foreach($data as $d) {
+        //     $data_arr[] = [
+        //         'tgl' => Carbon::parse($d->tgl)->locale('id')->isoFormat('dddd, D MMMM Y'),
+        //         'produk_id' => $d->produk_id == null ? '-' : $d->produk_id,
+        //         'nama' => $d->produk == null ? '-' : $d->produk,
+        //         'jumlah' => $d->jml == null ? 0 : $d->jml
+        //     ];
+        // }
+        // return response()->json($data_arr);
+
+        $data = DB::table('prd_dashboard_view')
+                ->where([
+                    ['filter', '=', $request->filter],
+                    ['filter', '<>', null],
+                ])
+                ->get();
+        $arr = [];
         foreach($data as $d) {
-            $data_arr[] = [
-                'tgl' => Carbon::parse($d->tgl)->locale('id')->isoFormat('dddd, D MMMM Y'),
-                'produk_id' => $d->produk_id == null ? '-' : $d->produk_id,
-                'nama' => $d->produk == null ? '-' : $d->produk,
-                'jumlah' => $d->jml == null ? 0 : $d->jml
+            $arr[] = [
+                'tgl_rakit' => $d->tgl_rakit == null ? '-' : $d->tgl_rakit,
+                'kode' => $d->produk_id == null ? '-' : $d->produk_id,
+                'nama' => $d->prd_nm == null ? '-' : $d->prd_nm,
+                'total' => $d->jml == 0 ? 0 : $d->jml,
+                'filter' => $d->filter == null ? '-' : $d->filter,
             ];
         }
-        return response()->json($data_arr);
+
+        return response()->json([
+            'data' => $arr,
+        ]);
     }
 
     // sale
@@ -1240,6 +1256,11 @@ class ProduksiController extends Controller
         }
         $data = array_unique($produk);
         return response()->json($data);
+    }
+
+    function test(Request $request) {
+        $data = DetailPesananProduk::with('GudangBarangJadi.produk')->get();
+        return $data;
     }
 
     // gbj

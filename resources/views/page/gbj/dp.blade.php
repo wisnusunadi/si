@@ -3,10 +3,16 @@
 @section('title', 'ERP')
 
 @section('content')
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Produk dari Perakitan</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">Produk dari Perakitan </h3>
-    </div>
     <!-- /.card-header -->
     <div class="card-body">
       <table class="table table-bordered dalam-perakitan">

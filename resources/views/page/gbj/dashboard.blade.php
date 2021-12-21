@@ -72,6 +72,15 @@
 </style>
 <div class="content-header">
     <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Dashboard</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+<div class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <nav>
@@ -523,7 +532,7 @@
                                 <div class="card-header">
                                     <h5 class="card-title">
                                         <i class="fas fa-chart-pie mr-1"></i>
-                                        Daftar Permintaan Transfer Produk
+                                        Daftar Penerimaan Transfer Produk
                                     </h5>
                                 </div>
                                 <div class="card-body">

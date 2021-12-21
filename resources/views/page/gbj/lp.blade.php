@@ -46,6 +46,15 @@
 }
 
 </style>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Penerimaan Selain Perakitan</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -116,7 +125,7 @@
                                                                                     Masuk</label>
                                                                                 <div class="col-12">
                                                                                     <input type="date"
-                                                                                        class="form-control tgl_masuk " id="tgl_masuk" name="tgl_masuk">
+                                                                                        class="form-control tgl_masuk" id="tgl_masuk" name="tgl_masuk">
                                                                                         <div class="invalid-feedback">
                                                                                             Silahkan Masukkan Tanggal Masuk
                                                                                           </div>
@@ -423,9 +432,12 @@
         });
 
 
-        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg'+i+'" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number-input" id="qty" name="qty['+i+']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg'+i+'" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number" id="qty" name="qty['+i+']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
         $('.productt').select2();
+        $(".number").inputFilter(function(value) {
+            return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+        });
         i++;
     }
 
@@ -517,11 +529,6 @@
     $(document).ready(function () {
         $('.division').select2();
         $('.productt').select2();
-
-        $(".number-input").inputFilter(function (value) {
-            return /^\d*$/.test(value);
-            var value = $(this).val();
-        });
 
         $.ajax({
             url: '/api/gbj/sel-layout',
@@ -683,7 +690,7 @@
                     type: "post",
                     data: {
                         "_token" : "{{ csrf_token() }}",
-                        tgl_masuk : $('.tanggal').val(),
+                        tgl_masuk : $('#tgl_masuk').val(),
                         dari: $('#divisi').val(),
                         deskripsi: $('#deskripsi').val(),
                         gdg_brg_jadi_id: prd1,
@@ -759,7 +766,7 @@
             type: "post",
             data: {
                 "_token" : "{{ csrf_token() }}",
-                tgl_masuk : $('.tanggal').val(),
+                tgl_masuk : $('#tgl_masuk').val(),
                 dari: $('#divisi').val(),
                 deskripsi: $('#deskripsi').val(),
                 gdg_brg_jadi_id: prd,
@@ -829,7 +836,7 @@
     }
 
     function ubahDataRancang() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let checkbox_terpilih = $('.scan-produk tbody .cb-child-rancang:checked');
         let layout = $('#change_layout_rancang').val();
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
@@ -950,8 +957,6 @@
                 }
         });
     }
-
-
 
 </script>
 @stop

@@ -30,19 +30,21 @@
     }
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Daftar Sales Order</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-12">
         <div class="row">
             <div class="col-lg-12">
                 <!-- Card -->
                 <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-8">
-                                <h3 class="card-title">Daftar SO Gudang Barang Jadi</h3>
-                            </div>
-                        </div>
-                    </div>
                     <div class="card-body">
                         <table class="table table-bordered" id="gudang-barang">
                             <thead>
@@ -52,55 +54,9 @@
                                     <th>Customer</th>
                                     <th>Batas Transfer</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>2</td>
-                                    <td>8457938475938475</td>
-                                    <td>Rumah Sakit Dr. Soetomo</td>
-                                    <td>10 Oktober 2021</td>
-                                    {{-- Menggunakan Perkondisian Jika Data Sudah Dicek Maka Tampil Seperti ini --}}
-                                    <td><span class="badge badge-primary">Sudah Dicek</span></td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                                                </button>
-                                                <button type="button" class="dropdown-item viewProduk" id="">
-                                                    <i class="far fa-eye"></i>&nbsp;Detail
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>8457938475938475</td>
-                                    <td>Rumah Sakit Dr. Soetomo</td>
-                                    <td>10 Oktober 2021</td>
-                                    {{-- Menggunakan Perkondisian Jika Data Belum Dicek Maka Tampil Seperti ini --}}
-                                    <td><span class="badge badge-danger">Belum Dicek</span></td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Add Produk
-                                                </button>
-                                                <button type="button" class="dropdown-item viewProduk" id="">
-                                                    <i class="far fa-eye"></i>&nbsp;View
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -355,7 +311,8 @@
                 "columnDefs": [
         {
             "targets": [5],
-            "visible": document.getElementById('auth').value == '2' ? false : true
+            "visible": document.getElementById('auth').value == '2' ? false : true,
+            "width": "20%",
         }
     ]
     });

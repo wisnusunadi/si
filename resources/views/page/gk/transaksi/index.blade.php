@@ -131,6 +131,7 @@
                             </div>
                         </div>
                         <div class="row">
+                            <a href="{{ route('gk.export') }}" class="btn btn-primary btn-md">EXPORT</a>
                             <div class="col-lg-12">
                                 <div class="table-responsive">
                                     {{-- Tanggal Masuk dan Tanggal Keluar --}}
@@ -143,7 +144,7 @@
                                                 <th>Produk</th>
                                                 <th>Unit</th>
                                                 <th>Jumlah</th>
-                                                <th>Tujuan</th>
+                                                <th>Keterangan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -286,6 +287,12 @@
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
+            columnDefs: [
+                {
+                    targets: [4],
+                    visible: false,
+                },
+            ],
         });
 
         $('#datetimepicker1').daterangepicker({

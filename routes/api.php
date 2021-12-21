@@ -229,7 +229,7 @@ Route::prefix('/tfp')->group(function () {
 Route::prefix('/prd')->group(function () {
     Route::get('/dashboard', [ProduksiController::class, 'dashboard']);
     Route::get('/allproduk', [ProduksiController::class, 'getAllProduk']);
-    Route::get('/grafikproduk/{id}', [ProduksiController::class, 'getGrafikProduk']);
+    Route::post('/grafikproduk', [ProduksiController::class, 'getGrafikProduk']);
 
     Route::post('/minus10/h', [ProduksiController::class, 'h_minus10']);
     Route::post('/minus5/h', [ProduksiController::class, 'h_minus5']);
@@ -258,7 +258,7 @@ Route::prefix('/prd')->group(function () {
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
 
-    Route::get('/testing', [ProduksiController::class, 'testing']);
+    Route::get('/testing', [ProduksiController::class, 'test']);
 
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);

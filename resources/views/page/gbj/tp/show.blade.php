@@ -65,6 +65,15 @@
     width: 500px !important;
 }
 </style>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h4 class="m-0">Detail Riwayat Transaksi {{ $header->produk->nama }} {{ $header->nama }}</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <section class="content">
     <div class="container-fluid">
         <div class="row">

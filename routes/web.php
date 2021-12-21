@@ -273,6 +273,7 @@ Route::middleware('auth')->prefix('/gk')->group(function () {
     Route::get('/transfer/{id}', [SparepartController::class, 'edit_tf']);
     Route::view('/transaksi', 'page.gk.transaksi.index');
     Route::get('/transaksi/{id}', [SparepartController::class, 'detail_trx']);
+    Route::get('/export', [SparepartController::class, 'exportTransaksi'])->name('gk.export');
 });
 
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {

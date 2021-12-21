@@ -3,6 +3,15 @@
 @section('title', 'ERP')
 
 @section('content')
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Produk Gudang Barang Jadi</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -11,7 +20,6 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
-                                <h3 class="card-title">Produk Gudang Barang Jadi</h3>
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -24,7 +32,7 @@
                                             </button>
                                         </span>
                                         @endif
-                                        <span class="float-right">
+                                        <span class="float-right mr-1">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
                                                 id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
                                                 Filter
@@ -68,7 +76,7 @@
                                     <th>Stok Gudang</th>
                                     <th>Stok Penjualan</th>
                                     <th>Kelompok</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                         </table>

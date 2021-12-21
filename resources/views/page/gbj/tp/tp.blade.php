@@ -30,6 +30,15 @@
     }
 
 </style>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Riwayat Transaksi</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -129,7 +138,7 @@
                                         <th>Stok Gudang</th>
                                         <th>Stok</th>
                                         <th>Kelompok</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

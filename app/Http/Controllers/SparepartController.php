@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TransaksiGKExport;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangKarantina;
 use App\Models\GudangKarantinaDetail;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Excel as ExcelExcel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SparepartController extends Controller
 {
@@ -495,7 +498,7 @@ class SparepartController extends Controller
 
     function get_noseri_history($id)
     {
-        $cek1 = GudangKarantinaNoseri::with('detail')->where('gk_detail_id', $id)->where('is_draft', 0)->where('status', 1)->get();
+        $cek1 = GudangKarantinaNoseri::with('detail')->where('gk_detail_id', $id)->get();
         $cek = NoseriKeluarGK::where('gk_detail_id', $id)->get();
         $data = $cek1->merge($cek);
         return datatables()->of($data)
@@ -531,6 +534,10 @@ class SparepartController extends Controller
                 return 'Level ' . $d->tk_kerusakan;
             })
             ->make(true);
+    }
+
+    function exportTransaksi(Request $request) {
+        return Excel::download(new TransaksiGKExport(), 'test.xlsx');
     }
 
     function history_by_produk(Request $request)
@@ -1610,8 +1617,35 @@ class SparepartController extends Controller
 
     function testing()
     {
-        $cek = NoseriKeluarGK::where('out_noseri')->get();
-        return $cek;
+        $cek = GudangKarantinaDetail::with('sparepart.Spare', 'units.produk', 'header.from', 'header.to')->where('is_draft', 0)->get();
+        $arr = [];
+        foreach($cek as $c) {
+            $cc = GudangKarantinaNoseri::with('detail', 'layout')->where('gk_detail_id', $c->id)->get();
+            $ccc = NoseriKeluarGK::where('gk_detail_id', $c->id)->get();
+            $data = $cc->merge($ccc);
+            foreach($data as $d) {
+                $arr[] = [
+                    'Jenis' => $c->qty_unit == null ? 'Sparepart' : 'Unit',
+                    'Produk' => $c->gbj_id == null ? $c->sparepart->nama : $c->units->produk->nama . ' ' . $c->units->nama,
+                    'Masuk' => $c->is_keluar == 0 ? date('d-m-Y', strtotime($c->header->date_in)) : '-',
+                    'Keluar' => $c->is_keluar == 1 ? date('d-m-Y', strtotime($c->header->date_out)) : '-',
+                    'Status' => $c->is_keluar == 1 ? 'Keluar' : 'Masuk',
+                    'Dari/Ke' => $c->is_keluar == 1 ? $c->header->to->nama : $c->header->from->nama,
+                    'Jumlah' => $c->qty_unit == null ? $c->qty_spr.' Unit' : $c->qty_unit . ' ' . $c->units->satuan->nama,
+                    'Keterangan' => $c->header->deskripsi == null ? '-' : $c->header->deskripsi,
+                    'Noseri' => [
+                        'seri' => $d->seri ? $d->seri->noseri : $d->noseri,
+                        'remark' => $d->seri ? $d->seri->remark : $d->remark,
+                        'layout' => $d->seri ? $d->seri->layout->ruang : $d->layout_id == null ? '-' : $d->layout->ruang,
+                        'tingkat' => $d->seri ? 'Level '.$d->seri->tk_kerusakan : 'Level '.$d->tk_kerusakan,
+                    ]
+                ];
+            }
+
+        }
+        return response()->json([
+            'data' => $arr,
+        ]);
     }
 
 

@@ -73,7 +73,6 @@ class GudangController extends Controller
                         <i class="far fa-eye"></i>&nbsp;Detail
                         </button>
                     </a>
-
                     </div>';
             })
             ->addColumn('action_direksi', function($data) {
@@ -141,7 +140,7 @@ class GudangController extends Controller
 
     function getAllTransaksi()
     {
-        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->orderBy('header.tgl_masuk', 'desc')->get();
+        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->get();
         $g = datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
@@ -280,9 +279,10 @@ class GudangController extends Controller
     }
 
     function getDetailHistory1($id) {
+        $header = GudangBarangJadi::with('produk')->where('id', $id)->first();
         $data = GudangBarangJadi::with('produk')->where('id', $id)->get();
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
-        return view('page.gbj.tp.show', compact('data', 'data1'));
+        return view('page.gbj.tp.show', compact('data', 'data1', 'header'));
     }
 
     function getRakit()
@@ -618,7 +618,7 @@ class GudangController extends Controller
     function storeDraftRancang(Request $request)
     {
         $h = new TFProduksi();
-        $h->tgl_masuk = Carbon::now();
+        $h->tgl_masuk = $request->tgl_masuk;
         $h->dari = $request->dari;
         $h->deskripsi = $request->deskripsi;
         $h->status_id = 1;
@@ -663,7 +663,7 @@ class GudangController extends Controller
     {
         // dd($request->all());
         $h = new TFProduksi();
-        $h->tgl_masuk = Carbon::now();
+        $h->tgl_masuk = $request->tgl_masuk;
         $h->dari = $request->dari;
         $h->deskripsi = $request->deskripsi;
         $h->status_id = 2;
@@ -746,7 +746,7 @@ class GudangController extends Controller
         $header->status_id = 2;
         $header->updated_at = Carbon::now();
         $header->save();
-        
+
         // return response()->json(['msg' => 'Data Berhasil Diterima']);
     }
 

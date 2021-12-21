@@ -135,10 +135,32 @@
 
 @section('master_js')
 <script>
-    
+        // Restricts input for the given textbox to the given inputFilter.
+        // Restricts input for the given textbox to the given inputFilter.
+(function($) {
+  $.fn.inputFilter = function(inputFilter) {
+    return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+      if (inputFilter(this.value)) {
+        this.oldValue = this.value;
+        this.oldSelectionStart = this.selectionStart;
+        this.oldSelectionEnd = this.selectionEnd;
+      } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue;
+        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+      } else {
+        this.value = "";
+      }
+    });
+  };
+}(jQuery));
     console.log('preparing...');
+
     $(document).ready(function() {
         console.log('ready...');
+
+        $(".number").inputFilter(function(value) {
+            return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+        });
         setTimeout(function() {
             $('#loader').fadeOut();
         }, 100);
