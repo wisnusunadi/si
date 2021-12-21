@@ -306,9 +306,6 @@
                 }
             ]
         });
-
-
-
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
@@ -325,10 +322,7 @@
                     $('#edit').html(result).show();
                     console.log(id);
                     // $("#editform").attr("action", href);
-
                     select_data();
-
-
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -341,7 +335,6 @@
                 timeout: 8000
             })
         });
-
         $(document).on('keyup change', 'input[name="nama_customer"]', function() {
             var id = $('#form-customer-update').attr('data-id');
             if ($(this).val() == "") {
@@ -370,11 +363,6 @@
                 });
             }
         })
-
-        $('input[name="nama_customer"]').on('keyup change', function() {
-
-        });
-
         $(document).on('keyup change', 'input[name="telepon"]', function() {
             if ($(this).val() == "") {
                 $("#msgtelepon").text("Telepon tidak boleh kosong");
@@ -452,7 +440,6 @@
                 }
             }
         });
-
         $(document).on('keyup change', 'input[name="email"]', function() {
             var errorhandling = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
             if ($(this).val() != "") {
