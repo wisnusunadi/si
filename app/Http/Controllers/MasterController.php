@@ -194,8 +194,9 @@ class MasterController extends Controller
     {
         return datatables()->of(Produk::with('KelompokProduk'))->toJson();
     }
-    public function get_data_customer($value)
+    public function get_data_customer($divisi_id, $value)
     {
+        $divisi = $divisi_id;
         $x = explode(',', $value);
         if ($value == 0 || $value == 'kosong') {
             $data = Customer::select();
@@ -209,8 +210,8 @@ class MasterController extends Controller
             ->addColumn('prov', function ($data) {
                 return $data->provinsi->nama;
             })
-            ->addColumn('button', function ($data) {
-                $divisi_id = Auth::user()->divisi->id;
+            ->addColumn('button', function ($data) use ($divisi) {
+
                 $datas = "";
                 $datas .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -220,7 +221,7 @@ class MasterController extends Controller
                       Detail
                     </button>
                 </a>';
-                if ($divisi_id == "26") {
+                if ($divisi == "26") {
                     $datas .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
                         <button class="dropdown-item" type="button" >
                         <i class="fas fa-pencil-alt"></i>
@@ -284,10 +285,10 @@ class MasterController extends Controller
     {
         if ($id != "0") {
             $c = Customer::where('nama', $val)->whereNotIn('id', [$id])->count();
-            return response()->json(['data' => $c]);
+            return $c;
         } else {
             $c = Customer::where('nama', $val)->count();
-            return response()->json(['data' => $c]);
+            return $c;
         }
     }
     //public function get_data_detail_penjualan_produk($id)

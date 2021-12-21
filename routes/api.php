@@ -63,7 +63,8 @@ Route::prefix('/kota_kabupaten')->group(function () {
     Route::get('select', [App\Http\Controllers\ProvincesController::class, 'kota_kabupaten']);
 });
 Route::prefix('/customer')->group(function () {
-    // Route::get('data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
+    Route::get('data/{divisi_id}/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
+
     Route::get('nama/{id}/{val}', [App\Http\Controllers\MasterController::class, 'get_nama_customer']);
     Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_pesanan']);
     // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_customer']);
@@ -98,6 +99,7 @@ Route::prefix('/penjualan_produk')->group(function () {
 });
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
+    Route::get('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('chart', [App\Http\Controllers\PenjualanController::class, 'chart_penjualan']);
     // Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
