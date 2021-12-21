@@ -557,7 +557,6 @@
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
-            console.log(action);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -567,8 +566,6 @@
                 data: $('#form-logistik-create').serialize(),
                 success: function(response) {
                     if (response['data'] == "success") {
-                        // 
-                        console.log(response['data']);
                         swal.fire(
                             'Berhasil',
                             'Berhasil menambahkan Pengiriman',
@@ -749,7 +746,6 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -764,7 +760,7 @@
                 if ($(this).val() != "") {
                     $('#ekspedisi_id').removeClass('is-invalid');
                     $('#msgekspedisi_id').text("");
-                    if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                    if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                         $('#btnsimpan').removeAttr('disabled');
                     } else {
                         $('#btnsimpan').attr('disabled', true);
@@ -775,7 +771,6 @@
                     $('#btnsimpan').attr('disabled', true);
                 }
                 var value = $(this).val();
-                console.log(value);
             });
         }
 
@@ -791,7 +786,6 @@
 
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
-            console.log(checkedAry);
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
             var pesanan_id = '{{$data->id}}';
@@ -832,7 +826,7 @@
                 $('#ekspedisi').removeClass('hide');
                 $('#nonekspedisi').addClass('hide');
                 $('#nama_pengirim').val("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -842,7 +836,7 @@
                 $('#ekspedisi').addClass('hide');
                 $('#nonekspedisi').removeClass('hide');
                 $('.ekspedisi_id').val("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -850,32 +844,39 @@
             }
         });
 
+        function check_no_sj(val) {
+            var hasil = "";
+            $.ajax({
+                type: "GET",
+                url: '/api/logistik/cek/no_sj/' + val,
+                async: false,
+                dataType: 'json',
+                success: function(data) {
+                    hasil = data;
+                },
+                error: function() {
+                    alert('Error occured');
+                }
+            });
+            return hasil;
+        }
         $(document).on('change keyup', '#no_invoice', function(event) {
             if ($(this).val() != "") {
                 var val = $(this).val();
-                $.ajax({
-                    type: "GET",
-                    url: '/api/logistik/cek/no_sj/' + val,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.data > 0) {
-                            $('#no_invoice').addClass('is-invalid');
-                            $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
-                            $('#btnsimpan').attr('disabled', true);
-                        } else {
-                            $('#no_invoice').removeClass('is-invalid');
-                            $('#msgnoinvoice').text("");
-                            if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
-                                $('#btnsimpan').removeAttr('disabled');
-                            } else {
-                                $('#btnsimpan').attr('disabled', true);
-                            }
-                        }
-                    },
-                    error: function() {
-                        alert('Error occured');
+
+                if (check_no_sj(val) > 0) {
+                    $('#no_invoice').addClass('is-invalid');
+                    $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
+                    $('#btnsimpan').attr('disabled', true);
+                } else {
+                    $('#no_invoice').removeClass('is-invalid');
+                    $('#msgnoinvoice').text("");
+                    if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                        $('#btnsimpan').removeAttr('disabled');
+                    } else {
+                        $('#btnsimpan').attr('disabled', true);
                     }
-                });
+                }
             } else if ($(this).val() == "") {
                 $('#no_invoice').addClass('is-invalid');
                 $('#msgnoinvoice').text("No Surat Jalan tidak boleh kosong");
@@ -887,7 +888,7 @@
             if ($(this).val() != "") {
                 $('#tgl_kirim').removeClass('is-invalid');
                 $('#msgtgl_kirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -903,7 +904,7 @@
             if ($(this).val() != "") {
                 $('#nama_pengirim').removeClass('is-invalid');
                 $('#msgnama_pengirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);

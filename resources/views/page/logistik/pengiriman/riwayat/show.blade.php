@@ -345,7 +345,7 @@
             $('input[name="jenis_penjualan[]"]:checked').each(function() {
                 values_jenis_penjualan.push($(this).val());
             });
-            // alert(values_spb);
+
             if (values_pengiriman != 0) {
                 var x = values_pengiriman;
             } else {
@@ -364,7 +364,6 @@
                 var z = ['semua'];
             }
 
-            console.log(x);
             $('#showtable').DataTable().ajax.url('/api/logistik/pengiriman/riwayat/data/' + x + '/' + y + '/' + z).load();
             return false;
         });

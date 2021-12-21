@@ -2229,10 +2229,10 @@ class PenjualanController extends Controller
     {
         if ($id != "0") {
             $e = Ekatalog::where('no_paket', 'AK1-' . $val)->whereNotIn('id', [$id])->count();
-            return response()->json(['data' => $e]);
+            return $e;
         } else {
             $e = Ekatalog::where('no_paket', 'AK1-' . $val)->count();
-            return response()->json(['data' => $e]);
+            return $e;
         }
     }
 

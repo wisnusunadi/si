@@ -905,11 +905,12 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var divisi_id = "{{Auth::user()->divisi->id}}";
         var penjualantable = $('#penjualantable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/penjualan/penjualan/penjualan/data/semua/semua',
+                'url': "/api/penjualan/penjualan/data/semua/semua",
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -967,27 +968,21 @@
                 },
                 {
                     data: 'no_paket',
-
                 },
                 {
                     data: 'nopo',
-
                 },
                 {
                     data: 'tgl_buat',
-
                 },
                 {
                     data: 'tgl_kontrak',
-
                 },
                 {
                     data: 'nama_customer',
                 },
-
                 {
                     data: 'status',
-
                 },
                 {
                     data: 'button',
@@ -1070,10 +1065,6 @@
                 }
             ]
         })
-
-
-
-
     })
 </script>
 
@@ -1417,8 +1408,7 @@
                 var x = ['semua'];
                 var y = ['semua'];
             }
-            console.log('/penjualan/penjualan/penjualan/data/' + x + '/' + y);
-            $('#penjualantable').DataTable().ajax.url('/penjualan/penjualan/penjualan/data/' + x + '/' + y).load();
+            $('#penjualantable').DataTable().ajax.url('/api/penjualan/penjualan/data/' + x + '/' + y).load();
             return false;
         });
         $('#filter_ekat').submit(function() {
