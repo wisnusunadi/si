@@ -240,6 +240,10 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'page.as.dashboard')->name('as.dashboard');
 
+    Route::group(['prefix' => '/penjualan'], function () {
+        Route::view('/show', 'page.as.penjualan.show')->name('as.penjualan.show');
+    });
+
     Route::group(['prefix' => '/so'], function () {
         Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so'])->name('as.so.show');
         Route::view('/show', 'page.as.so.show')->name('as.so.show');

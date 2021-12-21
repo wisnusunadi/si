@@ -67,6 +67,156 @@
         }
     }
 </style>
+<style>
+    .filter {
+        margin: 5px;
+    }
+
+    thead {
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    #urgent {
+        color: #dc3545;
+        font-weight: 600;
+    }
+
+    #warning {
+        color: #FFC700;
+        font-weight: 600;
+    }
+
+    #info {
+        color: #3a7bb0;
+        font-weight: 600;
+    }
+
+    .minimizechar {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 13ch;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .dropdown-toggle:hover {
+        color: #4682B4;
+    }
+
+    .dropdown-toggle:active {
+        color: #C0C0C0;
+    }
+
+    td.details-control {
+        content: "\f055";
+        font-family: FontAwesome;
+        left: -5px;
+        position: absolute;
+        top: 0;
+    }
+
+    tr.details td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+
+    #detailekat {
+        background-color: #E9DDE5;
+
+    }
+
+    #detailspa {
+        background-color: #FFE6C9;
+    }
+
+    #detailspb {
+        background-color: #E1EBF2;
+        /* color: #7D6378; */
+
+    }
+
+
+
+    .removeshadow {
+        box-shadow: none;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .bordertopnone {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        vertical-align: top;
+    }
+
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        section {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 550px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+
+        label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 450px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+    }
+</style>
 @stop
 
 @section('content')

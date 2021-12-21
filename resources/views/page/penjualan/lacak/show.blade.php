@@ -141,8 +141,10 @@
                                         <th>No</th>
                                         <th>No Seri</th>
                                         <th>No SO</th>
+                                        <th>Customer</th>
                                         <th>Nama Produk</th>
                                         <th>Tanggal Uji</th>
+                                        <th>No SJ</th>
                                         <th>Tanggal Kirim</th>
                                         <th>Status</th>
                                     </tr>
@@ -370,11 +372,19 @@
                     className: 'nowraps'
                 },
                 {
+                    data: 'nama_customer',
+                    className: 'nowraps'
+                },
+                {
                     data: 'nama_produk',
                     className: 'nowraps'
                 },
                 {
                     data: 'tgl_uji',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_sj',
                     className: 'nowraps'
                 },
                 {

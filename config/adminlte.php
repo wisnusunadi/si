@@ -1220,6 +1220,12 @@ return [
             'auth' => [8],
         ],
         [
+            'text' => 'Penjualan',
+            'icon' => 'far fa-circle',
+            'url' => '/as/penjualan/show',
+            'auth' => [8],
+        ],
+        [
             'text' => 'Sales Order',
             'icon' => 'far fa-circle',
             'url' => '/as/so/show',

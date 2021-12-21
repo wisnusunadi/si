@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Logistik;
+use App\Models\Spb;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AfterSalesController extends Controller
 {
@@ -77,6 +79,12 @@ class AfterSalesController extends Controller
                         <button class="dropdown-item" type="button">
                             <i class="fas fa-search"></i>
                             Detail
+                        </button>
+                    </a>
+                    <a href="' . route('logistik.pengiriman.print', ['id' => $data->id]) . '" target="_blank">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Laporan PDF
                         </button>
                     </a>
                 </div>';
