@@ -1,20 +1,20 @@
 <table>
     <thead>
     <tr>
-        <th colspan="2">Tanggal</th>
-        <th rowspan="2">Dari/Ke</th>
-        <th rowspan="2">Jenis</th>
-        <th rowspan="2">Produk</th>
-        <th rowspan="2">Jumlah</th>
-        <th rowspan="2">Keterangan</th>
-        <th rowspan="2">Noseri</th>
-        <th rowspan="2">Catatan</th>
-        <th rowspan="2">Tingkat Kerusakan</th>
-        <th rowspan="2">Layout</th>
+        <th colspan="2"><b>Tanggal</b></th>
+        <th rowspan="2"><b>Dari/Ke</b></th>
+        <th rowspan="2"><b>Jenis</b></th>
+        <th rowspan="2"><b>Produk</b></th>
+        <th rowspan="2"><b>Jumlah</b></th>
+        <th rowspan="2"><b>Keterangan</b></th>
+        <th rowspan="2"><b>Noseri</b></th>
+        <th rowspan="2"><b>Catatan</b></th>
+        <th rowspan="2"><b>Tingkat Kerusakan</b></th>
+        <th rowspan="2"><b>Layout</b></th>
     </tr>
     <tr>
-        <th>Masuk</th>
-        <th>Keluar</th>
+        <th><b>Masuk</b></th>
+        <th><b>Keluar</b></th>
     </tr>
     </thead>
     <tbody>

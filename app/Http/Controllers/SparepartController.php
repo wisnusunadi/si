@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProdukGKExport;
 use App\Exports\TransaksiGKExport;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangKarantina;
@@ -537,7 +538,11 @@ class SparepartController extends Controller
     }
 
     function exportTransaksi(Request $request) {
-        return Excel::download(new TransaksiGKExport(), 'test.xlsx');
+        return Excel::download(new TransaksiGKExport(), 'transaksi.xlsx');
+    }
+
+    function exportProduk() {
+        return Excel::download(new ProdukGKExport(), 'produk.xlsx');
     }
 
     function history_by_produk(Request $request)
@@ -1045,8 +1050,17 @@ class SparepartController extends Controller
 
         $sprid = GudangKarantinaDetail::where('gk_id', $cekid->id)->whereNotNull('sparepart_id')->get();
         $arr_spr = [];
+        $arr_serispr = [];
         foreach ($sprid as $s) {
             $serisprid = GudangKarantinaNoseri::where('gk_detail_id', $s->id)->get();
+            foreach($serisprid as $ss) {
+                $arr_serispr[] = [
+                    'seri' => $ss->noseri,
+                    'remark' => $ss->remark,
+                    'tingkat' => $ss->tk_kerusakan,
+                    'id' => $ss->id
+                ];
+            }
             $arr_spr[] = [
                 'sparepart_id' => $s->sparepart_id,
                 'qty'           => $s->qty_spr,
@@ -1059,14 +1073,23 @@ class SparepartController extends Controller
 
         $unitid = GudangKarantinaDetail::where('gk_id', $cekid->id)->whereNotNull('gbj_id')->get();
         $arr_unit = [];
+        $arr_seriunit = [];
         foreach ($unitid as $u) {
             $seriunitid = GudangKarantinaNoseri::where('gk_detail_id', $u->id)->get();
+            foreach($seriunitid as $uu) {
+                $arr_seriunit[] = [
+                    'seri' => $uu->noseri,
+                    'remark' => $uu->remark,
+                    'tingkat' => $uu->tk_kerusakan,
+                    'id' => $uu->id
+                ];
+            }
             $arr_unit[] = [
                 'gbj_id'        => $u->gbj_id,
                 'qty'           => $u->qty_unit,
                 'nama'          => $u->units->produk->nama . ' ' . $u->units->nama,
                 'kode'          => $u->id,
-                'seri'          => $seriunitid,
+                'seri'          => $arr_seriunit,
 
             ];
         }
@@ -1617,31 +1640,31 @@ class SparepartController extends Controller
 
     function testing()
     {
-        $cek = GudangKarantinaDetail::with('sparepart.Spare', 'units.produk', 'header.from', 'header.to')->where('is_draft', 0)->get();
+        $dataspr = GudangKarantinaDetail::select('*', DB::raw('sum(qty_spr) as jml'))
+            ->whereNotNull('t_gk_detail.sparepart_id')
+            ->where('is_draft', 0)
+            ->where('is_keluar', 0)
+            ->groupBy('t_gk_detail.sparepart_id')
+            ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
+            ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
+            ->get();
+        $dataunit = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
+            ->whereNotNull('t_gk_detail.gbj_id')
+            ->where('is_draft', 0)
+            ->where('is_keluar', 0)
+            ->groupBy('t_gk_detail.gbj_id')
+            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
+            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+            ->get();
+        $data = $dataspr->merge($dataunit);
         $arr = [];
-        foreach($cek as $c) {
-            $cc = GudangKarantinaNoseri::with('detail', 'layout')->where('gk_detail_id', $c->id)->get();
-            $ccc = NoseriKeluarGK::where('gk_detail_id', $c->id)->get();
-            $data = $cc->merge($ccc);
-            foreach($data as $d) {
-                $arr[] = [
-                    'Jenis' => $c->qty_unit == null ? 'Sparepart' : 'Unit',
-                    'Produk' => $c->gbj_id == null ? $c->sparepart->nama : $c->units->produk->nama . ' ' . $c->units->nama,
-                    'Masuk' => $c->is_keluar == 0 ? date('d-m-Y', strtotime($c->header->date_in)) : '-',
-                    'Keluar' => $c->is_keluar == 1 ? date('d-m-Y', strtotime($c->header->date_out)) : '-',
-                    'Status' => $c->is_keluar == 1 ? 'Keluar' : 'Masuk',
-                    'Dari/Ke' => $c->is_keluar == 1 ? $c->header->to->nama : $c->header->from->nama,
-                    'Jumlah' => $c->qty_unit == null ? $c->qty_spr.' Unit' : $c->qty_unit . ' ' . $c->units->satuan->nama,
-                    'Keterangan' => $c->header->deskripsi == null ? '-' : $c->header->deskripsi,
-                    'Noseri' => [
-                        'seri' => $d->seri ? $d->seri->noseri : $d->noseri,
-                        'remark' => $d->seri ? $d->seri->remark : $d->remark,
-                        'layout' => $d->seri ? $d->seri->layout->ruang : $d->layout_id == null ? '-' : $d->layout->ruang,
-                        'tingkat' => $d->seri ? 'Level '.$d->seri->tk_kerusakan : 'Level '.$d->tk_kerusakan,
-                    ]
-                ];
-            }
-
+        foreach($data as $d) {
+            $arr[] = [
+                'kode' => $d->kode,
+                'nama' => $d->nama,
+                'jml' => $d->jml. ' Unit',
+                'jenis' => $d->sparepart_id == null ? 'Unit' : 'Sparepart',
+            ];
         }
         return response()->json([
             'data' => $arr,

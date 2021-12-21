@@ -24,7 +24,10 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Produk Gudang Karantina</h1>
+                <h1 class="m-0">Produk Gudang Karantina
+                    <a href="{{ route('gk.export-produk') }}" class="btn btn-primary btn-sm">Export</a>
+                </h1>
+
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -61,7 +64,7 @@
                                     <tr>
                                         <th>Kode Sparepart</th>
                                         <th>Nama</th>
-                                        <th>Unit</th>
+                                        {{-- <th>Unit</th> --}}
                                         <th>Jumlah</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -121,7 +124,7 @@
         columns: [
             {data: 'kode'},
             {data: 'produk'},
-            {data: 'unit'},
+            // {data: 'unit'},
             {data: 'jml'},
             {data: 'button'},
         ],

@@ -1150,8 +1150,9 @@
     }
 
     // edit
+    var kode = '';
     function getSpr() {
-        var kode = $('#kode').val();
+        kode = $('#kode').val();
         $.ajax({
             url: "/api/gk/edit-in",
             data: {id: kode},
@@ -1177,7 +1178,7 @@
                         }
                     });
 
-                    $('.add_sparepart_table tbody').append('<tr id='+i+'><input type="hidden" name="id" id="kodespr'+i+'" value="'+val.kode+'" class="kodespr"><td><select name="sparepart_id[]" id="sparepart_id'+i+'" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btn_edit'+i+'" data-id="" data-jml="" id="" onclick=editSpare('+i+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>');
+                    $('.add_sparepart_table tbody').append('<tr id='+i+'><input type="hidden" name="id" id="kodespr'+i+'" value="'+val.kode+'" class="kodespr"><td><select name="sparepart_id[]" id="sparepart_id'+i+'" class="form-control produk"></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btn_edit'+i+'" data-id="" data-jml="" id="" onclick=editSpare('+i+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>');
                     $('#sparepart_id'+i).select2();
                     o++;
                     // console.log("array test");
@@ -1231,12 +1232,13 @@
 
     function editSpare(a) {
         var b = $(".btn_edit" + a).parent().prev().children().val();
-        var c = $(".btn_edit" + a).parent().prev().prev().prev().children().val();
+        var c = $(".btn_edit" + a).parent().prev().prev().children().val();
         editSparepart(b, a, c);
     }
 
     function clickSparepartEdit(c,d) {
         console.log(d);
+        console.log(kode);
         var tableScan = $('.scan-produk1-edit').dataTable({
             "destroy": true,
             "ordering": false,
