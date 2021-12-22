@@ -186,6 +186,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_ekspedisi'])->name('logistik.ekspedisi.detail');
         Route::view('/create', 'page.logistik.ekspedisi.create')->name('logistik.ekspedisi.create');
+        Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_ekspedisi'])->name('logistik.ekspedisi.store');
         Route::get('/edit/{id}', [App\Http\Controllers\MasterController::class, 'update_ekspedisi_modal'])->name('logistik.ekspedisi.edit');
     });
 
@@ -246,6 +247,7 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/so'], function () {
         Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so'])->name('as.so.show');
+        Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so'])->name('as.so.detail');
         Route::view('/show', 'page.as.so.show')->name('as.so.show');
         Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
     });

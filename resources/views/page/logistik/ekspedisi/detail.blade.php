@@ -26,6 +26,10 @@
         max-width: 25ch;
     }
 
+    .wb {
+        word-break: break-all;
+    }
+
     .fa-search:hover {
         color: #4682B4;
     }
@@ -133,6 +137,7 @@
                                         <th>No SO</th>
                                         <th>No SJ</th>
                                         <th>Tanggal Kirim</th>
+                                        <th>No Resi</th>
                                         <th>Nama Customer</th>
                                         <th>Alamat</th>
                                         <th>Telepon</th>
@@ -220,12 +225,16 @@
 
                 },
                 {
-                    data: 'nama_customer',
+                    data: 'noresi',
 
                 },
                 {
+                    data: 'nama_customer',
+                    className: 'wb',
+                },
+                {
                     data: 'alamat',
-
+                    className: 'wb',
                 },
                 {
                     data: 'telp',

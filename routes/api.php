@@ -417,7 +417,7 @@ Route::prefix('/logistik')->group(function () {
         // Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('select', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
         Route::get('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_ekspedisi']);
-        Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
+        // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });
 
     Route::group(['prefix' => '/pengiriman'], function () {
@@ -454,6 +454,7 @@ Route::prefix('/dc')->group(function () {
 
 Route::prefix('/as')->group(function () {
     Route::get('/so/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
+    Route::get('/so/detail/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_pengiriman']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {

@@ -116,15 +116,15 @@
                                     <table class="table" style="text-align:center;" id="showtable">
                                         <thead>
                                             <th>No</th>
+                                            <th>Nama Produk</th>
                                             <th>No SO</th>
-                                            <th>Tanggal Pengiriman</th>
+                                            <th>Tanggal Kirim</th>
                                             <th>Customer</th>
                                             <th>Alamat</th>
                                             <th>Provinsi</th>
                                             <th>Telepon</th>
-
-                                            <th>Status</th>
                                             <th>Keterangan</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </thead>
                                         <tbody>
@@ -221,31 +221,27 @@
                         orderable: false,
                         searchable: false
                     }, {
+                        data: 'nama_produk'
+                    }, {
                         data: 'so'
-
                     }, {
                         data: 'tgl_kirim',
-
                     }, {
                         data: 'nama_customer',
                         className: 'minimizechar',
                     }, {
                         data: 'alamat',
                         className: 'minimizechar',
-
                     }, {
                         data: 'provinsi',
-
                     },
                     {
                         data: 'telepon',
-
+                    }, {
+                        data: 'keterangan',
+                        className: 'minimizechar',
                     }, {
                         data: 'status',
-                    },
-                    {
-                        data: 'keterangan',
-
                     }, {
                         data: 'button',
 

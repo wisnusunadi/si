@@ -1183,6 +1183,12 @@ return [
             'url' => '/logistik/laporan/show',
             'auth' => [15],
         ],
+        [
+            'text' => 'Lacak',
+            'icon' => 'far fa-circle',
+            'url' => '/penjualan/lacak/show',
+            'auth' => [15],
+        ],
 
         //DOCUMENT CONTROL
         [

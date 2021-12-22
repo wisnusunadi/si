@@ -320,7 +320,7 @@
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal Order</th>
-                                                    <th>Batas Kontrak</th>
+                                                    <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Jenis</th>
                                                     <th>Status</th>
@@ -536,7 +536,7 @@
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal Order</th>
-                                                    <th>Batas Kontrak</th>
+                                                    <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
