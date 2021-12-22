@@ -262,7 +262,7 @@ Route::get('/test/{name?}', function ($name = null) {
     return $name;
 });
 
-Route::middleware('auth')->prefix('/gk')->group(function () {
+Route::group(['prefix' => '/gk', 'middleware' => 'auth'],function () {
     Route::view('/dashboard', 'page.gk.dashboard');
     Route::view('/gudang', 'page.gk.gudang.index');
     Route::get('/gudang/sparepart/{id}', [SparepartController::class, 'detail_spr']);

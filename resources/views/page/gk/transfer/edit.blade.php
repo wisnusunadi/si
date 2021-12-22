@@ -46,6 +46,7 @@
 <section class="content">
     <div class="row">
         <div class="col-xl-12">
+            <input type="hidden" name="" id="user_id" value="{{ Auth::user()->id }}">
             <div class="card">
                 <div class="card-body">
                     <div class="form-row">

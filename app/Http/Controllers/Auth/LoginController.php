@@ -38,6 +38,10 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    function username() {
+        return 'username';
+    }
+
     public function authenticated()
     {
         if (auth()->user()->divisi->id == 24) {

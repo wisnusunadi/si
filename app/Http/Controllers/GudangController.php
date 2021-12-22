@@ -26,6 +26,7 @@ use App\Models\TFProduksiDetail;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,7 +36,6 @@ class GudangController extends Controller
     public function get_data_barang_jadi()
     {
         $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get();
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
@@ -314,31 +314,23 @@ class GudangController extends Controller
                 $cc = count(($seri_final));
                 $c = count($seri);
                 if($cc == $c) {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                            </button>
-                        </a>
-
-                        </div>';
+                    return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
+                                <button class="btn btn-info btn-sm" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>';
                 } else {
-                    return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-edit"></i>&nbsp;Terima
-                            </button>
-                        </a>
+                    return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
+                                <button class="btn btn-primary btn-sm" type="button" >
+                                <i class="far fa-edit"></i>&nbsp;Terima
+                                </button>
+                            </a>
 
-                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                            </button>
-                        </a>
-
-                        </div>';
+                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
+                                <button class="btn btn-info btn-sm" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>';
                 }
 
             })

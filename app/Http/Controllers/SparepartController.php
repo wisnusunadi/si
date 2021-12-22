@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class SparepartController extends Controller
 {
@@ -852,6 +853,8 @@ class SparepartController extends Controller
         $header->deskripsi = $request->deskripsi;
         $header->is_draft = 1;
         $header->is_keluar = 1;
+        $header->created_at = Carbon::now();
+        $header->created_by = $request->userid;
         $header->save();
 
         $spr = $request->sparepart_id;
@@ -863,6 +866,8 @@ class SparepartController extends Controller
             $sprr->qty_spr = $request->qty_spr[$k];
             $sprr->is_draft = 1;
             $sprr->is_keluar = 1;
+            $sprr->created_at = Carbon::now();
+            $sprr->created_by = $request->userid;
             $sprr->save();
 
             $x = $request->noseri;
@@ -873,6 +878,7 @@ class SparepartController extends Controller
                 $noseri->gk_detail_id = $id;
                 $noseri->noseri_id = json_decode($request->noseri[$v][$i], true);
                 $noseri->created_at = Carbon::now();
+                $noseri->created_by = $request->userid;
                 $noseri->save();
 
                 GudangKarantinaNoseri::find(json_decode($request->noseri[$v][$i], true))->update(['is_ready' => 1]);
@@ -887,6 +893,7 @@ class SparepartController extends Controller
             $unitt->qty_unit = $request->qty_unit[$j];
             $unitt->is_draft = 1;
             $unitt->is_keluar = 1;
+            $unitt->created_by = $request->userid;
             $unitt->save();
 
             $idd = $unitt->id;
@@ -896,6 +903,7 @@ class SparepartController extends Controller
                 $noserii->gk_detail_id = $idd;
                 $noserii->noseri_id = json_decode($request->seriunit[$vv][$m], true);
                 $noserii->created_at = Carbon::now();
+                $noserii->created_by = $request->userid;
                 $noserii->save();
 
                 GudangKarantinaNoseri::find(json_decode($request->seriunit[$vv][$m], true))->update(['is_ready' => 1]);
@@ -913,6 +921,8 @@ class SparepartController extends Controller
         $header->deskripsi = $request->deskripsi;
         $header->is_draft = 0;
         $header->is_keluar = 1;
+        $header->created_at = Carbon::now();
+        $header->created_by = $request->userid;
         $header->save();
 
         $spr = $request->sparepart_id;
@@ -924,6 +934,8 @@ class SparepartController extends Controller
             $sprr->qty_spr = $request->qty_spr[$k];
             $sprr->is_draft = 0;
             $sprr->is_keluar = 1;
+            $sprr->created_at = Carbon::now();
+            $sprr->created_by = $request->userid;
             $sprr->save();
 
             $x = $request->noseri;
@@ -934,6 +946,8 @@ class SparepartController extends Controller
                 $noseri->gk_detail_id = $id;
                 $noseri->noseri_id = json_decode($request->noseri[$v][$i], true);
                 $noseri->created_at = Carbon::now();
+                $noseri->created_by = $request->userid;
+                $noseri->created_by = $request->userid;
                 $noseri->save();
 
                 GudangKarantinaNoseri::find(json_decode($request->noseri[$v][$i], true))->update(['is_ready' => 1]);
@@ -948,6 +962,7 @@ class SparepartController extends Controller
             $unitt->qty_unit = $request->qty_unit[$j];
             $unitt->is_draft = 0;
             $unitt->is_keluar = 1;
+            $unitt->created_by = $request->userid;
             $unitt->save();
 
             $idd = $unitt->id;
@@ -957,6 +972,7 @@ class SparepartController extends Controller
                 $noserii->gk_detail_id = $idd;
                 $noserii->noseri_id = json_decode($request->seriunit[$vv][$m], true);
                 $noserii->created_at = Carbon::now();
+                $noserii->created_by = $request->userid;
                 $noserii->save();
 
                 GudangKarantinaNoseri::find(json_decode($request->seriunit[$vv][$m], true))->update(['is_ready' => 1]);
@@ -973,6 +989,8 @@ class SparepartController extends Controller
         $header->dari = $request->dari;
         $header->is_draft = 1;
         $header->is_keluar = 0;
+        $header->created_at = Carbon::now();
+        $header->created_by = $request->userid;
         $header->save();
 
         $spr = $request->sparepart_id;
@@ -984,6 +1002,8 @@ class SparepartController extends Controller
             $sprr->qty_spr = $request->qty_spr[$k];
             $sprr->is_draft = 1;
             $sprr->is_keluar = 0;
+            $sprr->created_at = Carbon::now();
+            $sprr->created_by = $request->userid;
             $sprr->save();
 
             $x = $request->noseri;
@@ -997,6 +1017,8 @@ class SparepartController extends Controller
                 $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
                 $noseri->is_draft = 1;
                 $noseri->is_keluar = 0;
+                $noseri->created_at = Carbon::now();
+                $noseri->created_by = $request->userid;
                 $noseri->save();
             }
         }
@@ -1009,6 +1031,8 @@ class SparepartController extends Controller
             $unitt->qty_unit = $request->qty_unit[$j];
             $unitt->is_draft = 1;
             $unitt->is_keluar = 0;
+            $unitt->created_at = Carbon::now();
+            $unitt->created_by = $request->userid;
             $unitt->save();
 
             $idd = $unitt->id;
@@ -1022,6 +1046,8 @@ class SparepartController extends Controller
                 $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
                 $noserii->is_draft = 1;
                 $noserii->is_keluar = 0;
+                $noserii->created_at = Carbon::now();
+                $noserii->created_by = $request->userid;
                 $noserii->save();
             }
         }
@@ -1036,6 +1062,8 @@ class SparepartController extends Controller
         $header->dari = $request->dari;
         $header->is_draft = 0;
         $header->is_keluar = 0;
+        $header->created_at = Carbon::now();
+        $header->created_by = $request->userid;
         $header->save();
 
         $spr = $request->sparepart_id;
@@ -1047,6 +1075,8 @@ class SparepartController extends Controller
             $sprr->qty_spr = $request->qty_spr[$k];
             $sprr->is_draft = 0;
             $sprr->is_keluar = 0;
+            $sprr->created_at = Carbon::now();
+            $sprr->created_by = $request->userid;
             $sprr->save();
 
             $x = $request->noseri;
@@ -1060,6 +1090,8 @@ class SparepartController extends Controller
                 $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
                 $noseri->is_draft = 0;
                 $noseri->is_keluar = 0;
+                $noseri->created_at = Carbon::now();
+                $noseri->created_by = $request->userid;
                 $noseri->save();
             }
         }
@@ -1072,6 +1104,8 @@ class SparepartController extends Controller
             $unitt->qty_unit = $request->qty_unit[$j];
             $unitt->is_draft = 0;
             $unitt->is_keluar = 0;
+            $unitt->created_at = Carbon::now();
+            $unitt->created_by = $request->userid;
             $unitt->save();
 
             $idd = $unitt->id;
@@ -1085,6 +1119,8 @@ class SparepartController extends Controller
                 $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
                 $noserii->is_draft = 0;
                 $noserii->is_keluar = 0;
+                $noserii->created_at = Carbon::now();
+                $noserii->created_by = $request->userid;
                 $noserii->save();
             }
         }
@@ -1155,6 +1191,8 @@ class SparepartController extends Controller
 
         $header->is_draft = 1;
         $header->is_keluar = 0;
+        $header->updated_at = Carbon::now();
+        $header->updated_by = $request->userid;
         $header->save();
         if (count($request->sprid) > 0) {
             GudangKarantinaNoseri::whereIn('gk_detail_id', $request->sprid)->delete();
@@ -1167,6 +1205,8 @@ class SparepartController extends Controller
                 $sprr->qty_spr = $request->qty_spr[$k];
                 $sprr->is_draft = 1;
                 $sprr->is_keluar = 0;
+                $sprr->updated_at = Carbon::now();
+                $sprr->updated_by = $request->userid;
                 $sprr->save();
 
                 $x = $request->noseri;
@@ -1180,6 +1220,8 @@ class SparepartController extends Controller
                     $noseri->tk_kerusakan = $request->noseri[$vv][$i]['tingkat'];
                     $noseri->is_draft = 1;
                     $noseri->is_keluar = 0;
+                    $noseri->updated_at = Carbon::now();
+                    $noseri->updated_by = $request->userid;
                     $noseri->save();
                 }
             }
@@ -1196,6 +1238,8 @@ class SparepartController extends Controller
                 $unitt->qty_unit = $request->qty_unit[$j];
                 $unitt->is_draft = 1;
                 $unitt->is_keluar = 0;
+                $unitt->updated_at = Carbon::now();
+                $unitt->updated_by = $request->userid;
                 $unitt->save();
 
                 $idd = $unitt->id;
@@ -1209,6 +1253,8 @@ class SparepartController extends Controller
                     $noserii->tk_kerusakan = $request->seriunit[$uu][$m]['tingkat'];
                     $noserii->is_draft = 1;
                     $noserii->is_keluar = 0;
+                    $noserii->updated_at = Carbon::now();
+                    $noserii->updated_by = $request->userid;
                     $noserii->save();
                 }
             }
@@ -1223,6 +1269,8 @@ class SparepartController extends Controller
 
         $header->is_draft = 0;
         $header->is_keluar = 0;
+        $header->updated_at = Carbon::now();
+        $header->updated_by = $request->userid;
         $header->save();
         if (count($request->sprid) > 0) {
             GudangKarantinaNoseri::whereIn('gk_detail_id', $request->sprid)->delete();
@@ -1235,6 +1283,8 @@ class SparepartController extends Controller
                 $sprr->qty_spr = $request->qty_spr[$k];
                 $sprr->is_draft = 0;
                 $sprr->is_keluar = 0;
+                $sprr->updated_at = Carbon::now();
+                $sprr->updated_by = $request->userid;
                 $sprr->save();
 
                 $x = $request->noseri;
@@ -1248,6 +1298,8 @@ class SparepartController extends Controller
                     $noseri->tk_kerusakan = $request->noseri[$vv][$i]['tingkat'];
                     $noseri->is_draft = 0;
                     $noseri->is_keluar = 0;
+                    $noseri->updated_at = Carbon::now();
+                    $noseri->updated_by = $request->userid;
                     $noseri->save();
                 }
             }
@@ -1264,6 +1316,8 @@ class SparepartController extends Controller
                 $unitt->qty_unit = $request->qty_unit[$j];
                 $unitt->is_draft = 0;
                 $unitt->is_keluar = 0;
+                $unitt->updated_at = Carbon::now();
+                $unitt->updated_by = $request->userid;
                 $unitt->save();
 
                 $idd = $unitt->id;
@@ -1277,6 +1331,8 @@ class SparepartController extends Controller
                     $noserii->tk_kerusakan = $request->seriunit[$uu][$m]['tingkat'];
                     $noserii->is_draft = 0;
                     $noserii->is_keluar = 0;
+                    $noserii->updated_at = Carbon::now();
+                    $noserii->updated_by = $request->userid;
                     $noserii->save();
                 }
             }
@@ -1302,7 +1358,7 @@ class SparepartController extends Controller
         $cek = GudangKarantinaDetail::where('gbj_id', $request->gbj_id)->where('gk_id', $header->id)->get();
         if (count($cek) > 0) {
             foreach($cek as $c => $v) {
-                return GudangKarantinaNoseri::with('seri')->where('gk_detail_id', $v->id)->get();
+                return GudangKarantinaNoseri::where('gk_detail_id', $v->id)->get();
             }
         }
     }
@@ -1371,6 +1427,7 @@ class SparepartController extends Controller
         $data->tk_kerusakan = $request->tk_kerusakan;
         $data->status = 1;
         $data->updated_at = Carbon::now();
+        $data->updated_by = $request->userid;
         $data->save();
 
         return response()->json(['msg' => 'Data Berhasil diubah']);
@@ -1800,38 +1857,5 @@ class SparepartController extends Controller
             })
             ->rawColumns(['button'])
             ->make(true);
-    }
-
-    function testing()
-    {
-        $dataspr = GudangKarantinaDetail::select('*', DB::raw('sum(qty_spr) as jml'))
-            ->whereNotNull('t_gk_detail.sparepart_id')
-            ->where('is_draft', 0)
-            ->where('is_keluar', 0)
-            ->groupBy('t_gk_detail.sparepart_id')
-            ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
-            ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
-            ->get();
-        $dataunit = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
-            ->whereNotNull('t_gk_detail.gbj_id')
-            ->where('is_draft', 0)
-            ->where('is_keluar', 0)
-            ->groupBy('t_gk_detail.gbj_id')
-            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
-            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
-            ->get();
-        $data = $dataspr->merge($dataunit);
-        $arr = [];
-        foreach($data as $d) {
-            $arr[] = [
-                'kode' => $d->kode,
-                'nama' => $d->nama,
-                'jml' => $d->jml. ' Unit',
-                'jenis' => $d->sparepart_id == null ? 'Unit' : 'Sparepart',
-            ];
-        }
-        return response()->json([
-            'data' => $arr,
-        ]);
     }
 }

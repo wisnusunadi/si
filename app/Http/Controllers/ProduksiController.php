@@ -285,14 +285,11 @@ class ProduksiController extends Controller
             ->addColumn('button', function ($data) {
                 $x = $data->getTable();
 
-                return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                            <button class="btn btn-primary dropdown-item" type="button">
+                return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
+                            <button class="btn btn-warning btn-sm" type="button">
                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                             </button>
-                        </a>
-                        </div>';
+                        </a>';
             })
             ->addColumn('action', function ($data) {
                 $x = $data->getTable();

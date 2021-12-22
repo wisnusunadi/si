@@ -69,6 +69,7 @@
 
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -193,7 +194,7 @@
                     <div class="card-body">
                         <form action="" id="myForm" name="myForm">
                             <input type="hidden" name="id" id="kode">
-
+                            <input type="hidden" name="userid" id="user_id" value="{{ Auth::user()->id }}">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="">Layout</label>
@@ -301,6 +302,7 @@
             success: function(res) {
                 console.log(res);
                 $('#kode').val(res.id);
+                $('#user_id').val();
                 $('#layout_id').val(res.layout);
                 $('#layout_id').select2().trigger('change');
                 $('#tk_kerusakan').val(res.tingkat);

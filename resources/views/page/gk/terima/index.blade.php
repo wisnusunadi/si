@@ -48,6 +48,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <nav>
+                    <input type="hidden" name="" id="user_id" value="{{ Auth::user()->id }}">
                     <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                             aria-controls="home" aria-selected="true">Daftar Penerimaan</a>
@@ -909,6 +910,7 @@
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",
+                        userid: $('#user_id').val(),
                         date_in: out,
                         dari: to,
                         sparepart_id: spr1,
@@ -981,6 +983,7 @@
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",
+                        userid: $('#user_id').val(),
                         date_in: out,
                         dari: to,
                         sparepart_id: spr1,

@@ -45,6 +45,7 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="card">
+                <input type="hidden" name="" id="user_id" value="{{ Auth::user()->id }}">
                 <input type="hidden" name="" id="kode" value="{{ $did->id }}">
                 <div class="card-body">
                     <div class="form-row">
@@ -1018,6 +1019,7 @@
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",
+                        userid: $('#user_id').val(),
                         date_in: out,
                         id: kodee,
                         dari: to,
@@ -1103,6 +1105,7 @@
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",
+                        userid: $('#user_id').val(),
                         date_in: out,
                         id: kodee,
                         dari: to,

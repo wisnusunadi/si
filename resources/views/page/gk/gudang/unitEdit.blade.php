@@ -69,6 +69,7 @@
 
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
@@ -178,6 +179,7 @@
                     <div class="card-body">
                         <form action="" id="myForm" name="myForm">
                             <input type="hidden" name="id" id="kode">
+                            <input type="hidden" name="userid" id="user_id" value="{{ Auth::user()->id }}">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="">Layout</label>
