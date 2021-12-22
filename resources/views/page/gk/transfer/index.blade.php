@@ -363,7 +363,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="form-group">
-                            <label for="">Tujuan</label>
+                            <label for="">Keterangan</label>
                             <textarea name="tujuan" id="tujuan_draft" cols="10" rows="5"
                                 class="form-control"></textarea>
                         </div>
@@ -392,7 +392,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="form-group">
-                            <label for="">Tujuan</label>
+                            <label for="">Keterangan</label>
                             <textarea name="tujuan" id="tujuan_tf" cols="10" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
@@ -837,10 +837,8 @@
             type: 'POST',
             dataType: 'json',
             success: function (res) {
-                // ii++;
                 console.log(res);
                 $.each(res, function (key, value) {
-                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                     $(".produk").append('<option value="' + value.sparepart_id + '">' +
                         value
                         .nama + '</option');
@@ -868,10 +866,8 @@
             type: 'post',
             dataType: 'json',
             success: function (res) {
-                // ii++;
                 console.log(res);
                 $.each(res, function (key, value) {
-                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                     $(".produkk").append('<option value="' + value.gbj_id + '">' + value
                         .name + '</option');
                 });
@@ -919,10 +915,10 @@
                 type: "post",
             },
             columns: [{
-                    data: "in"
+                    data: "out"
                 },
                 {
-                    data: "from"
+                    data: "too"
                 },
                 {
                     data: "aksi"

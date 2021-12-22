@@ -316,10 +316,19 @@ Route::prefix('/gk')->group(function () {
 
     Route::post('/ubahunit', [SparepartController::class, 'updateUnit']);
     Route::post('/edit-in', [SparepartController::class, 'edit_draft_terima']);
+    Route::post('/edit-out', [SparepartController::class, 'edit_draft_transfer']);
 
     Route::post('/updateDraft', [SparepartController::class, 'updateTerima']);
+    Route::post('/updateFinal', [SparepartController::class, 'updateTerimaFinal']);
     Route::post('/deleteDraftTerima', [SparepartController::class, 'deleteDraftTerima']);
+    Route::post('/editseri', [SparepartController::class, 'getNoseriEdit']);
+    Route::post('/editseriunit', [SparepartController::class, 'getNoseriEditUnit']);
+    Route::post('/editseri-out', [SparepartController::class, 'getOutSeriEdit']);
+    Route::post('/editseriunit-out', [SparepartController::class, 'getOutSeriEditUnit']);
 
+    Route::prefix('/terima')->group(function() {
+        Route::get('/all', [SparepartController::class, 'getProdukgudang']);
+    });
 
     // history trx
     Route::prefix('/transaksi')->group(function () {

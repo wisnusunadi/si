@@ -18,10 +18,11 @@
     .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
-
 </style>
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('vendor/apexcharts/dist/apexcharts.css') }}">
+<script src="{{ asset('vendor/apexcharts/dist/apexcharts.min.js') }}"></script>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 
 <div class="content-header">
@@ -44,6 +45,8 @@
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                                 aria-controls="home" aria-selected="true">Kalender</a>
                             <a id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                                aria-selected="false">Tabel</a>
+                            <a id="produk-tab" data-toggle="tab" href="#produk" role="tab" aria-controls="produk"
                                 aria-selected="false">Produk</a>
                         </div>
                     </nav>
@@ -92,6 +95,18 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="produk" role="tabpanel" aria-labelledby="produk-tab">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-cog"></i> Perakitan Produk Bulan  {{ Carbon\Carbon::now()->isoFormat('MMMM') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart"></div>
                     </div>
                 </div>
             </div>
@@ -192,7 +207,32 @@
 
 @section('adminlte_js')
 <script>
-    $(function () {
+    // Charts
+        $(document).ready(function () {
+            var options = {
+            chart: {
+                type: 'bar',
+                height: 350,
+            },
+            plotOptions: {
+                bar: {
+                horizontal: true
+                }
+            },
+            series: [{
+                name: 'Jumlah',
+                data: [30,40,45,50,49,60,70,91,125]
+            }],
+            xaxis: {
+                categories: ['Produk 1', 'Produk 2', 'Produk 3', 'Produk 4', 'Produk 5', 'Produk 6', 'Produk 7', 'Produk 8', 'Produk 9'],
+            }
+            }
+
+            var charts = new ApexCharts(document.querySelector(".chart"), options);
+
+            charts.render();
+        });
+
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
@@ -402,7 +442,6 @@
                 }
             })
         })
-    })
 
 
     function modalRakit() {
@@ -424,5 +463,6 @@
         });
     };
 
+   
 </script>
 @stop

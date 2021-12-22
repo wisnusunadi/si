@@ -386,7 +386,7 @@
 
     function addSpare(a) {
         var b = $(".btn_plus" + a).parent().prev().children().val();
-        var c = $(".btn_plus" + a).parent().prev().prev().prev().children().val();
+        var c = $(".btn_plus" + a).parent().prev().prev().children().val();
         addSparepart(b, a, c);
     }
 
