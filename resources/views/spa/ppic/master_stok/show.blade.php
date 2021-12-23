@@ -36,12 +36,13 @@
                                                 <th class="nowrap" rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap" colspan="2">Stok</th>
-                                                <th class="nowrap" colspan="4">Penjualan</th>
+                                                <th class="nowrap" colspan="5">Penjualan</th>
                                                 <th rowspan="2">Aksi</th>
                                             </tr>
                                             <tr>
                                                 <th>GBJ</th>
-                                                <th>Penjualan</th>
+                                                <th>Sisa</th>
+                                                <th>Total</th>
                                                 <th>Sepakat</th>
                                                 <th>Nego</th>
                                                 <th>Batal</th>
@@ -94,7 +95,9 @@
                 },
                 {
                     data: 'penjualan',
-
+                },
+                {
+                    data: 'total',
                 },
                 {
                     data: 'sepakat',

@@ -11,7 +11,7 @@
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                @if(Auth::user()->divisi_id == "26")
+                @if(Auth::user()->divisi_id == "8")
                 <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
                 <li class="breadcrumb-item active">Penjualan</li>
                 @elseif(Auth::user()->divisi_id == "2")
@@ -323,6 +323,21 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header">
+                        <h4 id="modal-title">Detail</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="detail">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 @stop
@@ -461,6 +476,50 @@
             $('#spbtable').DataTable().ajax.url('/penjualan/penjualan/spb/data/' + x).load();
             return false;
 
+        });
+
+        $(document).on('click', '.detailmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            var label = $(this).data("target");
+
+            $.ajax({
+                url: href,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                success: function(result) {
+                    $('#detailmodal').modal("show");
+                    $('#detail').html(result).show();
+                    // if (label == 'ekatalog') {
+                    //     $('#detailmodal').find(".modal-header").attr('id', '');
+                    //     $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
+                    //     $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
+                    //     detailtabel_ekatalog(id);
+                    // } else if (label == 'spa') {
+                    //     $('#detailmodal').find(".modal-header").attr('id', '');
+                    //     $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+                    //     $('#detailmodal').find(".modal-header > h4").text('SPA');
+                    //     detailtabel_spa(id);
+                    // } else {
+                    $('#detailmodal').find(".modal-header").attr('id', '');
+                    $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
+                    $('#detailmodal').find(".modal-header > h4").text('SPB');
+                    detailtabel_spb(id);
+                    // }
+
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
         });
     })
 </script>

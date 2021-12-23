@@ -278,17 +278,14 @@ class PpicController extends Controller
         //     $q->whereIn('log', ['penjualan', 'po']);
         // })->count();
 
-        $Ekatalog = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) {
-            $q->whereIn('status', ['sepakat', 'nego', 'batal'])->whereIn('log', ['penjualan', 'po']);
+        $data = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+            $q->whereIn('log_id', ['7', '9']);
         })->get();
-        $Spa = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Spa', function ($q) {
-            $q->whereIn('log', ['penjualan', 'po']);
-        })->get();
-        $Spb = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Spb', function ($q) {
-            $q->whereIn('log', ['penjualan', 'po']);
-        })->get();
+        // $Nonekatalog = GudangBarangJadi::doesntHave('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+        //     $q->whereIn('log_id', ['7', '9']);
+        // })->get();
 
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        // $data = $Ekatalog;
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -307,6 +304,10 @@ class PpicController extends Controller
                 } else {
                     return '<div style="color:red;">' . $jumlah . '</div>';
                 }
+            })
+            ->addColumn('total', function ($data) {
+                $jumlah_stok_permintaan = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id, $data->produk->id);
+                return $jumlah_stok_permintaan;
             })
             ->addColumn('sepakat', function ($data) {
                 // $id = $data->id;

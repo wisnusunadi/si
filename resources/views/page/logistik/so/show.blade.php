@@ -279,18 +279,20 @@
             ]
 
         })
+
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {
                 values.push($(this).val());
             });
+
             if (values != 0) {
                 var x = values;
 
             } else {
                 var x = ['semua']
             }
-            console.log(x);
+
             $('#showtable').DataTable().ajax.url('/logistik/so/data/' + x).load();
             return false;
         });

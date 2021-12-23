@@ -3,7 +3,25 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Sales Order</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Sales Order</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                @endif
+                <li class="breadcrumb-item"><a href="{{route('logistik.so.show')}}">Sales Order</a></li>
+                <li class="breadcrumb-item active">Detail</li>
+
+            </ol>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_css')
@@ -13,7 +31,7 @@
         font-weight: 600;
     }
 
-    .nok {
+    .urgent {
         color: #dc3545;
         font-weight: 600;
     }
@@ -22,6 +40,11 @@
         color: #FFC700;
         font-weight: 600;
     }
+
+    .info {
+        color: #3a7bb0;
+    }
+
 
     .list-group-item {
         border: 0 none;
@@ -109,7 +132,10 @@
                                 </div>
                                 <div class="margin">
                                     <div><b id="no_akn">{{$data->satuan}}</b></div>
-                                    <small>({{$data->instansi}})</small>
+                                    <!-- <small>({{$data->instansi}})</small> -->
+                                </div>
+                                <div class="margin">
+                                    <b id="distributor">{{$data->alamat}}</b>
                                 </div>
                             </div>
                             <div class="col-2">
@@ -129,7 +155,7 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Batas Pengiriman</small></div>
-                                    <div class="urgent"><b></b></div>
+                                    <div><b>{!! $tgl_pengiriman !!}</b></div>
                                 </div>
                             </div>
 

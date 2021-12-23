@@ -12,12 +12,29 @@
             <ol class="breadcrumb float-sm-right">
                 @if(Auth::user()->divisi_id == "15")
                 <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
-                <li class="breadcrumb-item active">Detail Pengiriman</li>
+
                 @elseif(Auth::user()->divisi_id == "2")
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
 
-                <li class="breadcrumb-item active">Detail Pengiriman</li>
                 @endif
+                @if(!empty($l->ekspedisi_id))
+                @if($l->status_id == "10")
+                @if(!empty($l->noresi))
+                <li class="breadcrumb-item"><a href="{{route('logistik.riwayat.show')}}">Riwayat</a></li>
+                @else(empty($l->noresi))
+                <li class="breadcrumb-item"><a href="{{route('logistik.pengiriman.show')}}">Pengiriman</a></li>
+                @endif
+                @elseif($l->status_id == "11")
+                <li class="breadcrumb-item"><a href="{{route('logistik.pengiriman.show')}}">Pengiriman</a></li>
+                @endif
+                @elseif(!empty($l->nama_pengirim))
+                @if($l->status_id == "10")
+                <li class="breadcrumb-item"><a href="{{route('logistik.riwayat.show')}}">Riwayat</a></li>
+                @elseif($l->status_id == "11")
+                <li class="breadcrumb-item"><a href="{{route('logistik.pengiriman.show')}}">Pengiriman</a></li>
+                @endif
+                @endif
+                <li class="breadcrumb-item active">Detail</li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->

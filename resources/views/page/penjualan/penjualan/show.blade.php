@@ -3,7 +3,6 @@
 @section('title', 'ERP')
 
 @section('content_header')
-
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -22,7 +21,6 @@
         </div><!-- /.col -->
     </div><!-- /.row -->
 </div><!-- /.container-fluid -->
-
 @stop
 
 @section('adminlte_css')
@@ -1458,7 +1456,6 @@
             console.log(x);
             $('#spbtable').DataTable().ajax.url('/penjualan/penjualan/spb/data/' + x).load();
             return false;
-
         });
     })
 </script>

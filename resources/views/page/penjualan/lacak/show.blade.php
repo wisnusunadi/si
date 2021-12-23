@@ -13,6 +13,9 @@
                 @if(Auth::user()->divisi_id == "26" || Auth::user()->divisi_id == "8")
                 <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
                 <li class="breadcrumb-item active">Lacak</li>
+                @elseif(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Lacak</li>
                 @elseif(Auth::user()->divisi_id == "2")
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
                 <li class="breadcrumb-item active">Lacak</li>
