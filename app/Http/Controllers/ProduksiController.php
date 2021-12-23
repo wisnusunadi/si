@@ -276,41 +276,44 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('status1', function ($data) {
-                if (isset($data->Pesanan->status_cek)) {
+                $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml');
+                $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml_prd');
+                // return $sumcek.' '.$sumprd.' '.json_encode($sumcek, true).' '.gettype($sumprd);
+                if ($sumcek == $sumprd) {
                     return '<span class="badge badge-primary">Sudah Dicek</span>';
-                } else {
+                } elseif ($sumcek != $sumprd) {
                     return '<span class="badge badge-danger">Belum Dicek</span>';
                 }
             })
             ->addColumn('button', function ($data) {
                 $x = $data->getTable();
+                $cek = TFProduksi::where('pesanan_id', $data->Pesanan->id)->where('status_id', 1)->get()->count();
+                if ($cek == 0) {
+                    return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
+                                <button class="btn btn-outline-primary btn-sm" type="button">
+                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                </button>
+                            </a>';
+                } else {
+                    return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
+                                <button class="btn btn-outline-success btn-sm" type="button">
+                                    <i class="fas fa-pencil-alt"></i>&nbsp;Edit Produk
+                                </button>
+                            </a>';
+                }
 
-                return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                            <button class="btn btn-warning btn-sm" type="button">
-                                <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                            </button>
-                        </a>';
             })
             ->addColumn('action', function ($data) {
                 $x = $data->getTable();
-                if (isset($data->Pesanan->status_cek)) {
-                    return '<button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '" class="btn btn-success detailmodal"><i class="far fa-eye"></i> Detail</button>';
+                $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml');
+                $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml_prd');
+                if ($sumcek == $sumprd) {
+                    return '<button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>';
                 } else {
-                    // return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    //     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    //     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '" data-id="' . $data->pesanan_id . '">
-                    //         <button class="dropdown-item" type="button">
-                    //             <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                    //         </button>
-                    //     </a>
-                    //     <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                    //         <button class="dropdown-item" type="button">
-                    //             <i class="far fa-eye"></i>&nbsp;View
-                    //         </button>
-                    //     </a>
-                    //     </div>';
-                    return '<button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="' . $x . '" data-id="' . $data->pesanan_id . '" class="btn btn-primary editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
-                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '" class="btn btn-success detailmodal"><i class="far fa-eye"></i> Detail</button>';
+                    return '
+                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="' . $x . '" data-id="' . $data->pesanan_id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                    ';
                 }
             })
             ->addColumn('button_prd', function ($d) {
@@ -380,7 +383,12 @@ class ProduksiController extends Controller
                 return $data->gudangbarangjadi->produk->merk;
             })
             ->addColumn('ids', function ($d) {
-                return '<input type="checkbox" class="cb-child" value="' . $d->gudang_barang_jadi_id . '">';
+                if ($d->status_cek == 4) {
+                    return '<input type="checkbox" class="cb-child-so" value="' . $d->gudang_barang_jadi_id . '" disabled>';
+                } else {
+                    return '<input type="checkbox" class="cb-child-so" value="' . $d->gudang_barang_jadi_id . '">';
+                }
+
             })
             ->addColumn('action', function ($data) {
                 return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
@@ -403,7 +411,7 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('checkbox', function ($d) {
-                return '<input type="checkbox" class="cb-child" value="' . $d->gudang_barang_jadi_id . '">';
+                return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '">';
             })
             ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids'])
             ->make(true);
@@ -1256,7 +1264,7 @@ class ProduksiController extends Controller
     }
 
     function test(Request $request) {
-        $data = DetailPesananProduk::with('GudangBarangJadi.produk')->get();
+        $data = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',5)->get();
         return $data;
     }
 

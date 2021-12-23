@@ -92,25 +92,6 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tambah_data">
-                                        <td><select name="" id="" class="form-control">
-                                            <option value="Produk_1">Produk 1</option>
-                                            <option value="Produk_2">Produk 2</option>
-                                            <option value="Produk_3">Produk 3</option>
-                                        </select></td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <button type="button" class="btn btn-secondary"><i class="fas fa-plus"></i></button>&nbsp;
-                                                <input type="text" class="form-control" value="1" readonly>&nbsp;
-                                                <button type="button" class="btn btn-secondary"><i class="fas fa-minus"></i></button>
-                                                <input type="number" name="qty_spr[]" id="jml" class="form-control" value="1">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-primary btn_edit0" data-id="" data-jml="" id=""
-                                                onclick="editSpare(0)"><i class="fas fa-qrcode"></i> Tambah No
-                                                Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i
-                                                    class="fas fa-trash"></i> Delete</button>
-                                        </td>
                                     </tbody>
                                 </table>
                             </div>
@@ -308,6 +289,7 @@
                                 <table class="table table-striped scan-produk1-edit">
                                     <thead>
                                         <tr>
+                                            <th><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
                                             <th>No Seri</th>
                                             <th>Kerusakan</th>
                                             <th>Tingkat Kerusakan</th>
@@ -553,9 +535,26 @@
     let spr_arr = [];
     let unit_arr = [];
 
+    $(document).on('click', '.pluss', function (e) {
+        e.preventDefault();
+        var jumlah = parseInt($(this).next().val());
+        jumlah += 1;
+        $(this).parent().find('input.jumlah').val(jumlah);
+        $(this).next().val(jumlah);
+    });
+
+    $(document).on('click','.minuss', function (e) {
+        e.preventDefault();
+        var batas = parseInt($(this).parent().find('input.batas').val());
+        var jumlah = parseInt($(this).prev().val());
+        if (jumlah > batas) {
+            jumlah -= 1;
+            $(this).prev().val(jumlah);
+        }
+    });
     function addSpare(a) {
-        var b = $(".btn_plus" + a).parent().prev().children().val();
-        var c = $(".btn_plus" + a).parent().prev().prev().prev().children().val();
+        var b = $(".btn_plus" + a).parent().prev().children().find('input.jumlah').val();
+        var c = $(".btn_plus" + a).parent().prev().prev().children().val();
         addSparepart(b, a, c);
     }
 
@@ -725,7 +724,7 @@
 
     // Unit
     function addUn(l) {
-        var j = $(".btnPlus" + l).parent().prev().children().val();
+        var j = $(".btnPlus" + l).parent().prev().children().find('.jumlah').val();
         var k = $(".btnPlus" + l).parent().prev().prev().children().val();
         addUnit(j, k);
     }
@@ -920,15 +919,12 @@
         i++;
         let table_sparepart = '<tr id=' + nmrspr + '><td><select name="sparepart_id[]" id="sparepart_idd' +
             nmrspr +
-            '" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus' +
+            '" class="form-control produk"></select></td><td><div class="d-flex"><button type="button" class="btn btn-secondary pluss"><i class="fas fa-plus"></i></button>&nbsp;<input type="text" name="qty_spr[]" id="jml" class="form-control jumlah" value="1" readonly>&nbsp;<button type="button" class="btn btn-secondary minuss"><i class="fas fa-minus"></i></button><input type="text" name="" id="" class="batas" value="1" hidden></div></td><td><button class="btn btn-primary btn_plus' +
             nmrspr + '" data-id="" data-jml="" id="" onclick=addSpare(' + nmrspr +
             ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
 
         $('.add_sparepart_table tbody').append(table_sparepart);
         $('#sparepart_idd' + nmrspr).select2();
-        $(".number").inputFilter(function (value) {
-            return /^\d*$/.test(value); // Allow digits only, using a RegExp
-        });
         nmrspr++;
     });
 
@@ -948,14 +944,11 @@
         });
         i++;
         let table_unit = '<tr id=' + nmrunt + '><td><select name="gbj_id[]" id="gbj_idd' + nmrunt +
-            '" class="form-control produkk"></select></td><td><input type="text" name="qty_unit[]" id="jum" class="form-control number"></td><td><button class="btn btn-primary btnPlus' +
+            '" class="form-control produkk"></select></td><td><div class="d-flex"><button type="button" class="btn btn-secondary pluss"><i class="fas fa-plus"></i></button>&nbsp;<input type="text" name="qty_unit[]" id="jum" class="form-control jumlah" value="1" readonly>&nbsp;<button type="button" class="btn btn-secondary minuss"><i class="fas fa-minus"></i></button><input type="text" name="" id="" class="batas" value="1" hidden></div></td><td><button class="btn btn-primary btnPlus' +
             nmrunt + '" id="" onclick=addUn(' + nmrunt +
             ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('#gbj_idd' + nmrunt).select2();
-        $(".number").inputFilter(function (value) {
-            return /^\d*$/.test(value); // Allow digits only, using a RegExp
-        });
         nmrunt++;
     });
 
@@ -1230,9 +1223,7 @@
                         .kode +
                         '" class="kodespr"><td><select name="sparepart_id[]" id="sparepart_id' +
                         i +
-                        '" class="form-control produk"></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control" value="' +
-                        val.qty + '"></td><td><button class="btn btn-primary btn_edit' + i +
-                        '" data-id="" data-jml="" id="" onclick=editSpare(' + i +
+                        '" class="form-control produk"></select></td><td><div class="d-flex"><button type="button" class="btn btn-secondary pluss"><i class="fas fa-plus"></i></button>&nbsp;<input type="text" name="qty_spr[]" id="jml" class="form-control jumlah" value="'+val.qty+'" readonly="">&nbsp;<button type="button" class="btn btn-secondary minuss"><i class="fas fa-minus"></i></button><input type="text" name="" id="" class="batas" value="'+val.qty+'" hidden=""></div></td><td><button class="btn btn-primary btn_edit' + i +'" data-id="" data-jml="" id="" onclick=editSpare(' + i +
                         ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>'
                         );
                     $('#sparepart_id' + i).select2();
@@ -1257,8 +1248,7 @@
                     $('.add_unit_table tbody').append('<tr id=' + i +
                         '><input type="hidden" name="id" id="kodeunit" value="' + val.kode +
                         '" class="kodeunit"><td><select name="gbj_id[]" id="gbj_id' + i +
-                        '" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control" value="' +
-                        val.qty + '"></td><td><button class="btn btn-primary btnEdit' + i +
+                        '" class="form-control produkk"></select></td><td><div class="d-flex"><button type="button" class="btn btn-secondary pluss"><i class="fas fa-plus"></i></button>&nbsp;<input type="text" name="qty_unit[]" id="jum" class="form-control jumlah" value="'+val.qty+'" readonly="">&nbsp;<button type="button" class="btn btn-secondary minuss"><i class="fas fa-minus"></i></button><input type="text" name="" id="" class="batas" value="'+val.qty+'" hidden=""></div></td><td><button class="btn btn-primary btnEdit' + i +
                         '" id="" onclick=editUn(' + i +
                         ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>'
                         );
@@ -1269,7 +1259,7 @@
     }
 
     function editSpare(a) {
-        var b = $(".btn_edit" + a).parent().prev().children().val();
+        var b = $(".btn_edit" + a).parent().prev().children().find('input.jumlah').val();
         var c = $(".btn_edit" + a).parent().prev().prev().children().val();
         editSparepart(b, a, c);
     }
@@ -1414,48 +1404,37 @@
         $('.modalAddSparepartEdit').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
-        $.ajax({
-            url: "/api/gk/editseri-out",
-            type: "post",
-            data: {
-                id: $('#kode').val(),
-                sparepart_id: z
+        $('.scan-produk1-edit').DataTable({
+            destroy: true,
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            ajax: {
+                url: "/api/gk/editseri-out",
+                type: "post",
+                data: {
+                    id: $('#kode').val(),
+                    sparepart_id: z
+                },
             },
-            success: function (response) {
-                console.log(response);
-                // for (let seri = 0; seri < response.length; seri++) {
-                //     $('.scan-produk1-edit').DataTable().destroy();
-
-                //     $('.scan-produk1-edit tbody').empty();
-                //     $('.scan-produk1-edit tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].seri.noseri+'" name="noseri[][' + seri +
-                //                         ']" id="noseri' + seri +
-                //                         '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
-                //                             seri + ']" value="'+response[seri].seri.remark+'" id="remark' + seri +
-                //                         '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
-                //                             seri + ']" id="layout_id' + seri +
-                //                         '" class="form-control layout_id" value=""><option value="">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>')
-                //     $("#layout_id"+seri).val(response[seri].seri.tk_kerusakan).change();
-                //     $('.scan-produk1-edit').DataTable({
-                //         // destroy: true,
-                //         "ordering": false,
-                //         "autoWidth": false,
-                //         searching: false,
-                //         "lengthChange": false,
-                //         "language": {
-                //             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                //         },
-                //     });
-                // }
-
-            }
-        })
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+            columns: [
+                {data: 'kode'},
+                {data: 'seri'},
+                {data: 'note'},
+                {data: 'tingkat'},
+            ]
+        });
     }
 
     // Unit
     function editUn(l) {
-        var j = $(".btnEdit" + l).parent().prev().children().val();
+        var j = $(".btnEdit" + l).parent().prev().children().find('input.jumlah').val();
         var k = $(".btnEdit" + l).parent().prev().prev().children().val();
-        editUnit(j, k);
+        editUnit(j, k, l);
     }
 
     function clickUnitEdit(c, e) {
@@ -1587,6 +1566,7 @@
     }
 
     function editUnit(x, y, z) {
+        console.log("edit unit");
         console.log(x, y);
         $('.modalAddUnitEdit').modal('show');
         $('.modalAddUnitEdit').find('#btnEditUnit').attr('onclick', 'clickUnitEdit(' + y + ')');
@@ -1602,34 +1582,46 @@
             },
             success: function (response) {
                 console.log(response);
-                // for (let seri = 0; seri < response.length; seri++) {
-                //     $('.scan-produk-edit').DataTable().destroy();
+                for (let seri = 0; seri < response.length; seri++) {
+                    $('.scan-produk-edit').DataTable().destroy();
 
-                //     $('.scan-produk-edit tbody').empty();
-                //     $('.scan-produk-edit tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].noseri+'" name="noseri[][' + seri +
-                //                         ']" id="noseri' + seri +
-                //                         '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
-                //                             seri + ']" value="'+response[seri].remark+'" id="remark' + seri +
-                //                         '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
-                //                             seri + ']" id="tk_kerusakan' + seri +
-                //                         '" class="form-control tingkat"><option value="#">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
-                //                         );
-                //         $("#tk_kerusakan"+seri).val(response[seri].tk_kerusakan).change();
-                //     $('.scan-produk-edit').DataTable({
-                //         // destroy: true,
-                //         "ordering": false,
-                //         "autoWidth": false,
-                //         searching: false,
-                //         "lengthChange": false,
-                //         "language": {
-                //             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                //         },
-                //     });
-                // }
+                    $('.scan-produk-edit tbody').empty();
+                    $('.scan-produk-edit tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].seri.noseri+'" name="noseri[][' + seri +
+                                        ']" id="noseri' + seri +
+                                        '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
+                                            seri + ']" value="'+response[seri].seri.remark+'" id="remark' + seri +
+                                        '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><div class="row"><div class="col"><select name="layout_id[][' +
+                                            seri + ']" id="tk_kerusakan' + seri +
+                                        '" class="form-control tingkat"><option value="#">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></div><div class="col"><button type="button" class="removeunitdetail btn btn-danger"><i class="fas fa-trash"></i></button></div></div></td></tr>'
+                                        );
+                        $("#tk_kerusakan"+seri).val(response[seri].seri.tk_kerusakan).change();
+                }
+                if (x > response.length) {
+                    for (let index = response.length; index < x; index++) {
+                        $('.scan-produk-edit tbody').append('<tr id="u' + kk + '"><td><input type="text" name="noseri[][' + kk +
+                            ']" id="noseri' + kk +
+                            '" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
+                            kk + ']" id="remark' + kk +
+                            '" class="form-control kerusakan"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="tk_kerusakan[][' +
+                            kk +
+                            ']" id="tk_kerusakan' + kk +
+                            '" class="form-control tingkat"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
+                        );
+                    }
+                }
+                $('.scan-produk-edit').DataTable({
+                        // destroy: true,
+                        "ordering": false,
+                        "autoWidth": false,
+                        searching: false,
+                        "lengthChange": false,
+                        "language": {
+                            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                        },
 
+                    });
             }
         })
     }
-
 </script>
 @stop

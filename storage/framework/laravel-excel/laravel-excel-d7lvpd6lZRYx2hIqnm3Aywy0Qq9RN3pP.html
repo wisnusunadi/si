@@ -58,14 +58,13 @@
     }
 </style>
 <body>
-    @foreach ($spb as $s)
     <div class="box">
         <p class="judul"><strong><u>Surat Pengantar Barang</u></strong></p>
         <table class="table1">
             <tr>
                 <td>Ref / P.O</td>
                 <td>:</td>
-                <td><u>{{ $s->pesanan->so }}</u></td>
+                <td><u>nomor po</u></td>
             </tr>
             <tr>
                 <td>Distributor</td>
@@ -104,7 +103,7 @@
                 <td>Diterima oleh,</td>
             </tr>
             <tr class="table2-tr">
-                <td><img src="{{ asset('assets/image/accepted.png') }}" alt=""></td>
+                <td><img src="http://localhost:8000/assets/image/accepted.png" alt=""></td>
                 <td></td>
                 <td></td>
             </tr>
@@ -116,6 +115,5 @@
         </table>
     </div>
     <p class="text-right">Nomor Dokumen : SPA-FR/GUD-07(Nomor Dokumen) Tanggal Terbit : (Tanggal Cetak)</p>
-    @endforeach
 </body>
 </html>

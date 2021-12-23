@@ -200,7 +200,6 @@ class SparepartController extends Controller
                 } else {
                     return 'Level ' . $d->tk_kerusakan;
                 }
-
             })
             ->addColumn('status', function ($d) {
                 if($d->seri) {
@@ -1347,7 +1346,7 @@ class SparepartController extends Controller
         $cek = GudangKarantinaDetail::where('sparepart_id', $request->sparepart_id)->where('gk_id', $header->id)->get();
         if (count($cek) > 0) {
             foreach($cek as $c => $v) {
-                return GudangKarantinaNoseri::where('gk_detail_id', $v->id)->get();
+                return GudangKarantinaNoseri::whereIn('gk_detail_id', [$v->id])->get();
             }
         }
     }
@@ -1405,7 +1404,7 @@ class SparepartController extends Controller
         $cek = GudangKarantinaDetail::where('gbj_id', $request->sparepart_id)->where('gk_id', $header->id)->get();
         if (count($cek) > 0) {
             foreach($cek as $c => $v) {
-                return NoseriKeluarGK::where('gk_detail_id', $v->id)->get();
+                return NoseriKeluarGK::with('seri')->where('gk_detail_id', $v->id)->get();
             }
         }
     }

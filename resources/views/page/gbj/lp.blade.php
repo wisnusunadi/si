@@ -775,7 +775,6 @@
                 layout : layout,
             },
             success: function(res) {
-                // console.log(res);
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -790,7 +789,6 @@
     });
 
     $(document).on('click', '#seriBtn', function(e) {
-        // console.log('test');
         const ids = [];
         $('.cb-child-rancang').each(function() {
             if($(this).is(':checked')) {
@@ -801,8 +799,6 @@
         console.log(serir);
     })
     $(document).on('click', '#btnSave', function() {
-        // console.log(id);
-
         $.ajax({
             url: "/api/tfp/create-final",
             type: "post",
@@ -926,7 +922,6 @@
                         if ($(this).is(":checked")) {
                             ids.push($(this).parent().next().children().val());
                             lay.push($(this).parent().next().next().children().val());
-                            // console.log(ids, lay);
                             $.ajax({
                                 url: "/api/gbj/ceknoseri",
                                 type: "post",

@@ -90,7 +90,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="soo"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="aknn"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -106,7 +106,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="poo"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                                     <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansii"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@
                                 <table class="table table-striped add-produk">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" id="head-cb"></th>
+                                            <th><input type="checkbox" id="head-cb-so"></th>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             <th>Tipe</th>
@@ -132,20 +132,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
-                                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100 Unit</td>
-                                            <td>ABPM50</td>
-                                            <td>ELITECH</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100 Unit</td>
-                                            <td>RGB</td>
-                                            <td>ELITECH</td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -184,7 +170,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="so"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -192,7 +178,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -200,7 +186,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -208,7 +194,7 @@
                                     <div class="col"> <label for="">Instansi</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansi"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -226,20 +212,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>ABPM50</td>
-                                            <td>ELITECH</td>
-                                            <td><span class="badge badge-success">Sudah Diinput</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>RGB</td>
-                                            <td>ELITECH</td>
-                                            <td><span class="badge badge-danger">Belum Diinput</span></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -262,60 +234,39 @@
             $('#viewProdukModal').modal('show');
         });
 
-        $("#head-cb").on('click', function () {
-            var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+        $("#head-cb-so").on('click', function () {
+            var isChecked = $("#head-cb-so").prop('checked')
+            $('.cb-child-so').prop('checked', isChecked)
+        });
+
+        $('#gudang-barang').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/tfp/data-so',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                { data: 'batas_out', name: 'batas_out'},
+                { data: 'status1', name: 'status1'},
+                { data: 'action', name: 'action'},
+            ],
+            "oLanguage": {
+                "sSearch": "Cari:"
+            },
+            "columnDefs": [
+                {
+                    "targets": [5],
+                    "visible": document.getElementById('auth').value == '2' ? false : true,
+                    "width": "20%",
+                }
+            ]
         });
     });
 
-    $('.add-produk').DataTable({
-        'columnDefs': [{
-            'targets': 0,
-            'checkboxes': {
-                'selectRow': true
-            }
-        }],
-        'select': {
-            'style': 'multi'
-        },
-        'order': [
-            [1, 'asc']
-        ],
-        "oLanguage": {
-            "sSearch": "Cari:"
-        }
-    });
-    $('#view-produk').DataTable({
-        "oLanguage": {
-            "sSearch": "Cari:"
-        }
-    });
-    $('#gudang-barang').DataTable({
-        destroy: true,
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '/api/tfp/data-so',
-        },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            { data: 'so', name: 'so'},
-            { data: 'nama_customer', name: 'nama_customer'},
-            { data: 'batas_out', name: 'batas_out'},
-            { data: 'status1', name: 'status1'},
-            { data: 'action', name: 'action'},
-        ],
-        "oLanguage": {
-            "sSearch": "Cari:"
-        },
-                "columnDefs": [
-        {
-            "targets": [5],
-            "visible": document.getElementById('auth').value == '2' ? false : true,
-            "width": "20%",
-        }
-    ]
-    });
     var id = '';
     $(document).on('click', '.editmodal', function(e) {
         var x = $(this).data('value');
@@ -332,33 +283,25 @@
                 $('span#instansii').text(res.customer);
             }
         });
-        // $('.add-produk').DataTable().destroy();
         var tab = $('.add-produk').DataTable({
             destroy: true,
-            processing: true,
-            serverSide: true,
+            serverSide: false,
             autoWidth: false,
+            processing: true,
+            "ordering": false,
+            stateSave: true,
+            'bPaginate': true,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
             },
             columns: [
-                { data: 'ids', name: 'ids', ordering: 'false'},
+                { data: 'ids', name: 'ids'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
                 { data: 'merk', name: 'merk'},
                 { data: 'status', name: 'status'},
 
             ],
-            // 'columnDefs': [{
-            //     'targets': 0,
-            //     'checkboxes': {
-            //         'selectRow': true
-            //     },
-
-            // }],
             'select': {
                 'style': 'multi'
             },
@@ -372,16 +315,9 @@
 
         $(document).on('click', '#btnSave', function(e) {
             e.preventDefault();
-            // var idd = $('#ids').val(id);
             const ids = [];
 
-            // var rowsel = tab.column(0).checkboxes.selected();
-            // // console.log(rowsel);
-
-            // $.each(rowsel, function(i, val) {
-            //     ids.push(val);
-            // });
-            $('.cb-child').each(function() {
+            $('.cb-child-so').each(function() {
                 if ($(this).is(":checked")) {
                     ids.push($(this).val());
                 }
@@ -395,7 +331,6 @@
                     gbj_id: ids,
                 },
                 success: function(res) {
-                //    console.log('res ' + res);
                    Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -435,9 +370,6 @@
             autoWidth: false,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
             },
             columns: [
                 { data: 'produk', name: 'produk'},

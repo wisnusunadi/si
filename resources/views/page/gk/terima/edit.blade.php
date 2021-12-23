@@ -84,8 +84,8 @@
                                 <table class="table table-hover add_sparepart_table">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th style="width: 150px">Nama Produk</th>
-                                            <th style="width: 150px">Jumlah</th>
+                                            <th style="width: 220px">Nama Produk</th>
+                                            <th style="width: 220px">Jumlah</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -115,7 +115,7 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th style="width: 220px">Nama Produk</th>
-                                            <th style="width: 180px">Jumlah</th>
+                                            <th style="width: 220px">Jumlah</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -292,7 +292,7 @@
                                             <th>Tingkat Kerusakan</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="scan-produk1-edit-tbody">
                                     </tbody>
                                 </table>
                             </div>
@@ -369,7 +369,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -475,6 +474,23 @@
                 $(".dari").append('<option value="' + value.id + '">' + value.nama +
                     '</option');
             });
+        }
+    });
+    $(document).on('click', '.pluss', function (e) {
+        e.preventDefault();
+        var jumlah = parseInt($(this).next().val());
+        jumlah += 1;
+        $(this).parent().find('input.jumlah').val(jumlah);
+        $(this).next().val(jumlah);
+    });
+
+    $(document).on('click','.minuss', function (e) {
+        e.preventDefault();
+        var batas = parseInt($(this).parent().find('input.batas').val());
+        var jumlah = parseInt($(this).prev().val());
+        if (jumlah > batas) {
+            jumlah -= 1;
+            $(this).prev().val(jumlah);
         }
     });
     getSpr();
@@ -858,8 +874,7 @@
             }
         });
         i++;
-        let table_sparepart = '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_idd'+nmrspr+'" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
-
+        let table_sparepart = '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_idd'+nmrspr+'" class="form-control produk"></select></td><td><div class="d-flex"><button type="button" class="btn btn-secondary pluss"><i class="fas fa-plus"></i></button>&nbsp;<input type="text" name="qty_spr[]" id="jml" class="form-control jumlah" value="1" readonly>&nbsp;<button type="button" class="btn btn-secondary minuss"><i class="fas fa-minus"></i></button><input type="text" name="" id="" class="batas" value="1" hidden></div></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
         $('#sparepart_idd'+nmrspr).select2();
         $(".number").inputFilter(function(value) {
@@ -883,7 +898,7 @@
             }
         });
         i++;
-        let table_unit = '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_idd'+nmrunt+'" class="form-control produkk"></select></td><td><input type="text" name="qty_unit[]" id="jum" class="form-control number"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_idd'+nmrunt+'" class="form-control produkk"></select></td><td><div class="d-flex"><button type="button" class="btn btn-secondary pluss"><i class="fas fa-plus"></i></button>&nbsp;<input type="text" name="qty_unit[]" id="jml" class="form-control jumlah" value="1" readonly>&nbsp;<button type="button" class="btn btn-secondary minuss"><i class="fas fa-minus"></i></button><input type="text" name="" id="" class="batas" value="1" hidden></div></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('#gbj_idd'+nmrunt).select2();
         $(".number").inputFilter(function(value) {
@@ -1191,7 +1206,7 @@
                         }
                     });
 
-                    $('.add_sparepart_table tbody').append('<tr id='+i+'><input type="hidden" name="id" id="kodespr'+i+'" value="'+val.kode+'" class="kodespr"><td><select name="sparepart_id[]" id="sparepart_id'+i+'" class="form-control produk"></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btn_edit'+i+'" data-id="" data-jml="" id="" onclick=editSpare('+i+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>');
+                    $('.add_sparepart_table tbody').append('<tr id='+i+'><input type="hidden" name="id" id="kodespr'+i+'" value="'+val.kode+'" class="kodespr"><td><select name="sparepart_id[]" id="sparepart_id'+i+'" class="form-control produk"></select></td><td><div class="d-flex"><button type="button" class="btn btn-secondary pluss"><i class="fas fa-plus"></i></button>&nbsp;<input type="text" name="qty_spr[]" id="jml" class="form-control jumlah" value="'+val.qty+'" readonly="">&nbsp;<button type="button" class="btn btn-secondary minuss"><i class="fas fa-minus"></i></button><input type="text" name="" id="" class="batas" value="'+val.qty+'" hidden=""></div></td><td><button class="btn btn-primary btn_edit'+i+'" data-id="" data-jml="" id="" onclick=editSpare('+i+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>');
                     $('#sparepart_id'+i).select2();
                 })
 
@@ -1210,7 +1225,7 @@
                             });
                         }
                     });
-                    $('.add_unit_table tbody').append('<tr id='+i+'><input type="hidden" name="id" id="kodeunit" value="'+val.kode+'" class="kodeunit"><td><select name="gbj_id[]" id="gbj_id'+i+'" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control" value="'+val.qty+'"></td><td><button class="btn btn-primary btnEdit'+i+'" id="" onclick=editUn('+i+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>');
+                    $('.add_unit_table tbody').append('<tr id='+i+'><input type="hidden" name="id" id="kodeunit" value="'+val.kode+'" class="kodeunit"><td><select name="gbj_id[]" id="gbj_id'+i+'" class="form-control produkk"></select></td><td><div class="d-flex"><button type="button" class="btn btn-secondary pluss"><i class="fas fa-plus"></i></button>&nbsp;<input type="text" name="qty_unit[]" id="jml" class="form-control jumlah" value="'+val.qty+'" readonly="">&nbsp;<button type="button" class="btn btn-secondary minuss"><i class="fas fa-minus"></i></button><input type="text" name="" id="" class="batas" value="'+val.qty+'" hidden=""></div></td><td><button class="btn btn-primary btnEdit'+i+'" id="" onclick=editUn('+i+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete-edit"><i class="fas fa-trash"></i> Delete</button></td></tr>');
                     $('#gbj_id'+i).select2();
                 })
             }
@@ -1218,7 +1233,7 @@
     }
 
     function editSpare(a) {
-        var b = $(".btn_edit" + a).parent().prev().children().val();
+        var b = $(".btn_edit" + a).parent().prev().children().find('input.jumlah').val();
         var c = $(".btn_edit" + a).parent().prev().prev().children().val();
         editSparepart(b, a, c);
     }
@@ -1226,16 +1241,6 @@
     function clickSparepartEdit(c,d) {
         console.log(d);
         console.log(kode);
-        var tableScan = $('.scan-produk1-edit').dataTable({
-            "destroy": true,
-            "ordering": false,
-            "autoWidth": false,
-            searching: false,
-            "lengthChange": false,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            },
-        });
 
         var arrSparepart = []
         var seriSparepart = [];
@@ -1371,20 +1376,35 @@
                 sparepart_id: z
             },
             success: function(response) {
+                console.log(response);
+                $('.scan-produk1-edit').DataTable().destroy();
+                $('.scan-produk1-edit-tbody').empty();
                 for (let seri = 0; seri < response.length; seri++) {
-                    $('.scan-produk1-edit').DataTable().destroy();
-
-                    $('.scan-produk1-edit tbody').empty();
-                    $('.scan-produk1-edit tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].noseri+'" name="noseri[][' + seri +
+                    $('.scan-produk1-edit-tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].noseri+'" name="noseri[][' + seri +
                                         ']" id="noseri' + seri +
                                         '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
                                             seri + ']" value="'+response[seri].remark+'" id="remark' + seri +
-                                        '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
+                                        '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><div class="row"><div class="col"><select name="layout_id[][' +
                                             seri + ']" id="layout_id' + seri +
-                                        '" class="form-control layout_id" value=""><option value="">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>')
+                                        '" class="form-control layout_id" value=""><option value="">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></div><div class="col"><button type="button" class="removesparepartdetail btn btn-danger"><i class="fas fa-trash"></i></button></div></div></td></tr>')
                     $("#layout_id"+seri).val(response[seri].tk_kerusakan).change();
-                    $('.scan-produk1-edit').DataTable({
-                        // destroy: true,
+                }
+                if (x > response.length) {
+                    for (let seri = response.length; seri < x; seri++) {
+                        console.log('a');
+                        ii++;
+                        $('.scan-produk1-edit tbody').append('<tr id="row' + ii + '"><td><input type="text" name="noseri[][' + ii +
+                            ']" id="noseri' + ii +
+                            '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
+                            ii + ']" id="remark' + ii +
+                            '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
+                            ii + ']" id="layout_id' + ii +
+                            '" class="form-control layout_id"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
+                        );
+                    }
+                }
+                $('.scan-produk1-edit').DataTable({
+                        destroy: true,
                         "ordering": false,
                         "autoWidth": false,
                         searching: false,
@@ -1392,16 +1412,14 @@
                         "language": {
                             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                         },
-                    });
-                }
-
+                });
             }
         })
     }
 
     // Unit
     function editUn(l) {
-        var j = $(".btnEdit" + l).parent().prev().children().val();
+        var j = $(".btnEdit" + l).parent().prev().children().find('input.jumlah').val();
         var k = $(".btnEdit" + l).parent().prev().prev().children().val();
         editUnit(j, k);
     }
@@ -1548,31 +1566,32 @@
             },
             success: function(response) {
                 console.log(response);
+                $('.scan-produk-edit').DataTable().destroy();
+                $('.scan-produk-edit tbody').empty();
                 for (let seri = 0; seri < response.length; seri++) {
-                    $('.scan-produk-edit').DataTable().destroy();
-
-                    $('.scan-produk-edit tbody').empty();
                     $('.scan-produk-edit tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].noseri+'" name="noseri[][' + seri +
                                         ']" id="noseri' + seri +
                                         '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
                                             seri + ']" value="'+response[seri].remark+'" id="remark' + seri +
-                                        '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
+                                        '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><div class="row"><div class="col"><select name="layout_id[][' +
                                             seri + ']" id="tk_kerusakan' + seri +
-                                        '" class="form-control tingkat"><option value="#">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
+                                        '" class="form-control tingkat"><option value="#">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></div><div class="col"><button type="button" class="removeunitdetail btn btn-danger"><i class="fas fa-trash"></i></button></div></div></td></tr>'
                                         );
                         $("#tk_kerusakan"+seri).val(response[seri].tk_kerusakan).change();
-                    $('.scan-produk-edit').DataTable({
-                        // destroy: true,
-                        "ordering": false,
-                        "autoWidth": false,
-                        searching: false,
-                        "lengthChange": false,
-                        "language": {
-                            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                        },
-                    });
                 }
-
+                if (x > response.length) {
+                    for (let index = response.length; index < x; index++) {
+                        $('.scan-produk-edit tbody').append('<tr id="u' + kk + '"><td><input type="text" name="noseri[][' + kk +
+                            ']" id="noseri' + kk +
+                            '" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
+                            kk + ']" id="remark' + kk +
+                            '" class="form-control kerusakan"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="tk_kerusakan[][' +
+                            kk +
+                            ']" id="tk_kerusakan' + kk +
+                            '" class="form-control tingkat"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
+                        );
+                    }
+                }
             }
         })
     }

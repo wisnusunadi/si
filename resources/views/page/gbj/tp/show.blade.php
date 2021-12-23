@@ -188,7 +188,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Produk Ambulatory</h5>
+                <h5 class="modal-title">Produk {{ $header->produk->nama }} {{ $header->nama }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -259,7 +259,7 @@
         0]);
         return parsedDate;
     }
-    
+
     $('#nav-deskripsi-tab').click(function (e) {
         e.preventDefault();
         $('.is-active').addClass('font-weight-bold');
@@ -311,12 +311,8 @@
             autoWidth: false,
             ajax: {
                 url: "/api/transaksi/history-detail/" + id,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
             },
             columns: [
-                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 { data: 'so', name: 'so'},
                 { data: 'date_in', name: 'date_in'},
                 { data: 'date_out', name: 'date_out'},
@@ -375,6 +371,6 @@
             table.api().draw();
         });
     })
-    
+
 </script>
 @stop

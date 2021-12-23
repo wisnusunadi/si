@@ -52,42 +52,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- <tr>
-                                    <td>1</td>
-                                    <td>8457938475938475</td>
-                                    <td>Rumah Sakit Dr. Soetomo</td>
-                                    <td>10 Oktober 2021</td>
-                                    <td><span class="badge badge-info">Tersimpan ke rancangan</span></td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>8457938475938475</td>
-                                    <td>Rumah Sakit Dr. Soetomo</td>
-                                    <td>10 Oktober 2021</td>
-                                    <td><span class="badge badge-danger">Produk belum disiapkan</span></td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item addProduk" id="">
-                                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr> --}}
+
                             </tbody>
                         </table>
                     </div>
@@ -145,10 +110,9 @@
                                 <table class="table table-striped add-produk" id="addProduk">
                                     <thead>
                                         <tr>
-                                            {{-- <th></th> --}}
+                                            <th><input type="checkbox" id="head-cb-produk"></th>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
-                                            {{-- <th>Tipe</th> --}}
                                             <th>Merk</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -190,14 +154,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>36541654654654564</td>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                        </tr>
-                        <tr>
-                            <td>78656562646545646</td>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -220,6 +176,11 @@
             $('.cb-child').prop('checked', isChecked)
         });
 
+        $("#head-cb-produk").on('click', function () {
+            var isChecked = $("#head-cb-produk").prop('checked')
+            $('.cb-child-prd').prop('checked', isChecked)
+        });
+
         let a = $('#gudang-barang').DataTable({
             processing: true,
             serverSide: true,
@@ -240,9 +201,6 @@
                 "orderable": false,
                 "targets": 0
             }],
-            // "order": [
-            //     [3, 'desc']
-            // ],
             "oLanguage": {
             "sSearch": "Cari:"
             }
@@ -261,38 +219,35 @@
 
     var id = '';
     $(document).on('click', '.editmodal', function(e) {
-    var x = $(this).data('value');
-    console.log(x);
-    id = $(this).data('id');
-        console.log(id);
-        $.ajax({
-            url: "/api/tfp/header-so/" +id+"/"+x,
-            success: function(res) {
-                console.log(res);
-                $('span#so').text(res.so);
-                $('span#po').text(res.po);
-                $('span#akn').text(res.akn);
-                // $('span#instansi').text(res.customer);
-            }
-    });
-        // $('#addProduk').DataTable().destroy();
+        var x = $(this).data('value');
+        console.log(x);
+        id = $(this).data('id');
+            console.log(id);
+            $.ajax({
+                url: "/api/tfp/header-so/" +id+"/"+x,
+                success: function(res) {
+                    console.log(res);
+                    $('span#so').text(res.so);
+                    $('span#po').text(res.po);
+                    $('span#akn').text(res.akn);
+                    // $('span#instansi').text(res.customer);
+                }
+        });
+
         $('#addProduk').DataTable({
             // retrieve: true,
             destroy: true,
             autoWidth: false,
             processing: true,
             serverSide: true,
+            "ordering": false,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
             },
             columns: [
-                // { data: 'ids', name: 'ids'},
+                {data: 'checkbox'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
-                // { data: 'tipe', name: 'tipe'},
                 { data: 'merk', name: 'merk'},
                 { data: 'action', name: 'action'},
             ],
@@ -304,11 +259,11 @@
             }
         })
         $('#addProdukModal').modal('show');
-        });
+    });
 
     var prd = '';
     var jml = '';
-        $(document).on('click', '.detailmodal', function(e) {
+    $(document).on('click', '.detailmodal', function(e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
         jml = $(this).data('jml');
@@ -316,15 +271,16 @@
         console.log(prd);
         // $('.scan-produk').DataTable().destroy();
         mytable = $('.scan-produk').DataTable({
-            processing: true,
-            serverSide: true,
+            processing: false,
+            serverSide: false,
             autoWidth: false,
             destroy: true,
+            stateSave: true,
+            "ordering": false,
             ajax: {
                 url: "/api/tfp/seri-so",
                 data: {gdg_barang_jadi_id: prd},
                 type: "post",
-                // dataType: "json",
             },
             columns: [
                 { data: 'seri', name: 'seri'},
@@ -339,9 +295,9 @@
             "oLanguage": {
             "sSearch": "Masukkan Nomor Seri:"
             }
-        }); 
+        });
 
-        $('#viewProdukModal').modal('show');
+        $('.modal-scan').modal('show');
     });
 
     const prd1 = {};
@@ -351,7 +307,7 @@
         const ids = [];
         $('.cb-child').each(function() {
             if($(this).is(":checked")) {
-                if ($('input:checkbox:checked').length > jml) {
+                if ($('.cb-child').filter(':checked').length > jml) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -366,7 +322,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     })
-                    // $('#scan').modal('hide');
+                    $('.modal-scan').modal('hide');
                 }
             }
 
@@ -374,8 +330,7 @@
         prd1[prd] = ids;
 
         console.log(prd1);
-        // console.log($('input:checkbox:checked').length);
-        // t++;
+
     })
 
     $(document).on('click', '#rancang', function(e) {
@@ -383,7 +338,13 @@
 
         const prdd = [];
         const qtyy = [];
-        // const noseri = [];
+
+        $('.cb-child-prd').each(function() {
+            if($(this).is(":checked")) {
+                prdd.push($(this).val());
+            }
+        })
+        // console.log(prdd);
 
         $('input[name^="gdg_brg_jadi_id"]').each(function() {
             prdd.push($(this).val());
@@ -393,7 +354,6 @@
             qtyy.push($(this).val());
         });
 
-        // console.log(ids.length);
         $.ajax({
             url: "/api/tfp/byso",
             type: "post",
@@ -405,27 +365,25 @@
                 noseri_id: prd1,
             },
             success: function(res) {
-                // console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
+                console.log(res);
+                // Swal.fire({
+                //     position: 'center',
+                //     icon: 'success',
+                //     title: res.msg,
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // })
+                // location.reload();
             }
         })
     })
 
 
     $(document).on('click', '#okk', function(e) {
-        // console.log('test');
         e.preventDefault();
 
         const prdd = [];
         const qtyy = [];
-        // const noseri = [];
 
         $('input[name^="gdg_brg_jadi_id"]').each(function() {
             prdd.push($(this).val());
@@ -435,7 +393,6 @@
             qtyy.push($(this).val());
         });
 
-        // console.log(ids.length);
         $.ajax({
             url: "/api/tfp/byso-final",
             type: "post",
@@ -447,7 +404,6 @@
                 noseri_id: prd1,
             },
             success: function(res) {
-                // console.log(res);
                 Swal.fire({
                     position: 'center',
                     icon: 'success',

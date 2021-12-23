@@ -46,8 +46,8 @@
                                 aria-controls="home" aria-selected="true">Kalender</a>
                             <a id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                                 aria-selected="false">Tabel</a>
-                            <a id="produk-tab" data-toggle="tab" href="#produk" role="tab" aria-controls="produk"
-                                aria-selected="false">Produk</a>
+                            {{-- <a id="produk-tab" data-toggle="tab" href="#produk" role="tab" aria-controls="produk"
+                                aria-selected="false">Produk</a> --}}
                         </div>
                     </nav>
                 </div><!-- /.col -->
@@ -208,30 +208,30 @@
 @section('adminlte_js')
 <script>
     // Charts
-        $(document).ready(function () {
-            var options = {
-            chart: {
-                type: 'bar',
-                height: 350,
-            },
-            plotOptions: {
-                bar: {
-                horizontal: true
-                }
-            },
-            series: [{
-                name: 'Jumlah',
-                data: [30,40,45,50,49,60,70,91,125]
-            }],
-            xaxis: {
-                categories: ['Produk 1', 'Produk 2', 'Produk 3', 'Produk 4', 'Produk 5', 'Produk 6', 'Produk 7', 'Produk 8', 'Produk 9'],
-            }
-            }
+        // $(document).ready(function () {
+        //     var options = {
+        //     chart: {
+        //         type: 'bar',
+        //         height: 350,
+        //     },
+        //     plotOptions: {
+        //         bar: {
+        //         horizontal: true
+        //         }
+        //     },
+        //     series: [{
+        //         name: 'Jumlah',
+        //         data: [30,40,45,50,49,60,70,91,125]
+        //     }],
+        //     xaxis: {
+        //         categories: ['Produk 1', 'Produk 2', 'Produk 3', 'Produk 4', 'Produk 5', 'Produk 6', 'Produk 7', 'Produk 8', 'Produk 9'],
+        //     }
+        //     }
 
-            var charts = new ApexCharts(document.querySelector(".chart"), options);
+        //     var charts = new ApexCharts(document.querySelector(".chart"), options);
 
-            charts.render();
-        });
+        //     charts.render();
+        // });
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')

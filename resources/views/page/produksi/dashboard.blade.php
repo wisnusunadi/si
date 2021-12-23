@@ -54,7 +54,7 @@
 
 <section class="content">
     <div class="container-fluid">
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="row">
             <div class="col-6">
                 <div class="card">
@@ -234,7 +234,7 @@
                        </div>
                     </div>
                 </div>
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">
                             <i class="fas fa-cogs mr-1"></i>
@@ -264,7 +264,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -479,38 +479,38 @@
                 $('.allprd').select2({});
             }
         });
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [], // data diambil 5 hari sebelum hari ini dan sesudah hari ini, misalkan hari ini tanggal (15-12-2021) maka yang diambil data tanggal 5 hari sebelumnya dan data tanggal 5 hari setelahnya.
-                    datasets: [
-                        {
-                            label: [], // nama produk
-                            data: [], // jumlah produk
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                            ],
-                            borderWidth: 5
-                        },
-                    ]
-                },
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    tooltips: {
-                        callbacks: {
-                            label: function labelTools(tooltipItem) {
-                                return tooltipItem.yLabel;
-                            }
-                        }
-                    },
-                }
-            });
+            // var ctx = document.getElementById('myChart').getContext('2d');
+            // var myChart = new Chart(ctx, {
+            //     type: 'bar',
+            //     data: {
+            //         labels: [], // data diambil 5 hari sebelum hari ini dan sesudah hari ini, misalkan hari ini tanggal (15-12-2021) maka yang diambil data tanggal 5 hari sebelumnya dan data tanggal 5 hari setelahnya.
+            //         datasets: [
+            //             {
+            //                 label: [], // nama produk
+            //                 data: [], // jumlah produk
+            //                 backgroundColor: [
+            //                     'rgba(255, 99, 132, 0.2)',
+            //                 ],
+            //                 borderColor: [
+            //                     'rgba(255, 99, 132, 1)',
+            //                 ],
+            //                 borderWidth: 5
+            //             },
+            //         ]
+            //     },
+            //     options: {
+            //         legend: {
+            //             display: false
+            //         },
+            //         tooltips: {
+            //             callbacks: {
+            //                 label: function labelTools(tooltipItem) {
+            //                     return tooltipItem.yLabel;
+            //                 }
+            //             }
+            //         },
+            //     }
+            // });
 
             $(document).on('change', '#all-produk', function () {
                 $.ajax({

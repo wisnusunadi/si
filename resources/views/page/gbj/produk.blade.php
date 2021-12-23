@@ -323,7 +323,7 @@
                     <tbody>
 
                     </tbody>
-                    
+
                 </table>
             </div>
             <div class="modal-footer">
@@ -366,16 +366,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- <tr>
-                            <td scope="row">10-04-2022</td>
-                            <td>Divisi IT</td>
-                            <td>Uji Coba</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">10-04-2022</td>
-                            <td>Divisi IT</td>
-                            <td>Uji Coba</td>
-                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -397,8 +387,6 @@
                 <div class="form-group">
                     <label for="">Layout</label>
                     <select name="" id="change_layout" class="form-control">
-                      {{-- <option value="1">Layout 1</option>
-                      <option value="2">Layout 2</option> --}}
                   </select>
                 </div>
             </div>
@@ -594,8 +582,6 @@
                 $('#produk_idd').val(res.data[0].produk_id);
                 $('#produk_id').select2().trigger('change');
                 $('#produk_id').select2({disabled: 'readonly'});
-                // var newOption = $('<option selected="selected"></option>').val(res.data[0].produk_id).text(res.nama_produk[0].product.tipe + ' ' + res.nama_produk[0].nama);
-                // $('#produk_id').append(newOption).trigger('change');
                 $('#inputGroupFile02').val(res.data[0].gambar);
             }
         });
@@ -656,17 +642,14 @@
             }
         });
     });
-    // var ii = 0;
+
    function select_layout() {
     $.ajax({
         url: '/api/gbj/sel-layout',
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            // ii++;
-            console.log(res);
             $.each(res, function(key, value) {
-                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                 $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
             });
         }
@@ -728,7 +711,6 @@
             $("#change_layout").empty();
             $.each(res, function(key, value) {
                 $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                // $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
             });
         }
     });
@@ -740,8 +722,6 @@
 
     $(document).ready(function() {
         $('#ubahSeri').on('click', function() {
-            // console.log('ok');
-
             const cekid = [];
             const noseri = [];
             const layout = [];
@@ -759,7 +739,6 @@
             $('select[name^="layout_id"]').each(function() {
                 layout.push($(this).val());
             });
-            // console.log(cekid);
 
             $.ajax({
                 url: '/api/gbj/noseri/' + noseri,
@@ -767,7 +746,6 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     cekid : cekid,
-                    // noseri : noseri,
                     layout : layout,
                 },
                 success: function(res) {

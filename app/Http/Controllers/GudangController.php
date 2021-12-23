@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\GBJExportSPB;
 use App\Models\DetailEkatalog;
 use App\Models\DetailEkatalogProduk;
 use App\Models\DetailPesanan;
@@ -29,6 +30,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class GudangController extends Controller
 {
@@ -60,31 +63,24 @@ class GudangController extends Controller
                 return $data->produk->KelompokProduk->nama;
             })
             ->addColumn('action', function ($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button" >
-                        <i class="far fa-edit"></i>&nbsp;Edit
-                        </button>
-                    </a>
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
+                            <button class="btn btn-outline-success btn-sm" type="button" >
+                            <i class="far fa-edit"></i>&nbsp;Edit
+                            </button>
+                        </a>
 
-                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button" >
-                        <i class="far fa-eye"></i>&nbsp;Detail
-                        </button>
-                    </a>
-                    </div>';
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                            <button class="btn btn-outline-info btn-sm" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Detail
+                            </button>
+                        </a>';
             })
             ->addColumn('action_direksi', function($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button" >
-                        <i class="far fa-eye"></i>&nbsp;Detail
-                        </button>
-                    </a>
-
-                    </div>';
+                return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                            <button class="btn btn-outline-info btn-sm" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Detail
+                            </button>
+                        </a>';
             })
             ->rawColumns(['action', 'action_direksi'])
             ->make(true);
@@ -287,10 +283,10 @@ class GudangController extends Controller
 
     function getRakit()
     {
-        $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get()
-                ->sortByDesc(function($q) {
-                    return $q->header->tgl_masuk;
-                })->all();
+
+        $data = TFProduksiDetail::whereHas('header', function($q) {
+            $q->where('dari', 17);
+        })->with('produk', 'header')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
@@ -315,22 +311,24 @@ class GudangController extends Controller
                 $c = count($seri);
                 if($cc == $c) {
                     return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
-                                <button class="btn btn-info btn-sm" type="button" >
+                                <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
                                 </button>
                             </a>';
                 } else {
-                    return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
-                                <button class="btn btn-primary btn-sm" type="button" >
+                    return  '
+                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
+                                <button class="btn btn-outline-info btn-sm" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>
+                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
+                                <button class="btn btn-outline-primary btn-sm" type="button" >
                                 <i class="far fa-edit"></i>&nbsp;Terima
                                 </button>
                             </a>
 
-                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
-                                <button class="btn btn-info btn-sm" type="button" >
-                                <i class="far fa-eye"></i>&nbsp;Detail
-                                </button>
-                            </a>';
+                           ';
                 }
 
             })
@@ -481,6 +479,39 @@ class GudangController extends Controller
         } else {
             return response()->json(['msg' => 'Noseri tersimpan']);
         }
+    }
+
+    function allTp() {
+        $data1 = TFProduksi::with('pesanan')->where([
+            ['jenis', '=','keluar'],
+            ['status_id', '=', 2],
+        ])->whereNotNull('pesanan_id')->get();
+        return view('page.gbj.tp.tp', compact('data1'));
+    }
+
+    function exportSpb() {
+        $data1 = TFProduksi::with('pesanan')->where([
+            ['jenis', '=','keluar'],
+            ['status_id', '=', 2],
+        ])->whereNotNull('pesanan_id')->get();
+        $pdf = PDF::loadview('page.gbj.reports.spb', ['spb' => $data1])->setPaper('A4', 'landscape');
+        return $pdf->download('test.pdf');
+        // return view('page.gbj.reports.spb');
+    }
+
+    function getListSODone() {
+        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        return $data;
     }
 
     // store
@@ -746,8 +777,6 @@ class GudangController extends Controller
         $check_array = $request->gbj_id;
         $id = $request->pesanan_id;
         $h = Pesanan::find($request->pesanan_id);
-        $h->status_cek = 4;
-        $h->save();
         $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
         foreach($request->gbj_id as $key => $value) {
             if (in_array($request->gbj_id[$key], $check_array)) {
@@ -756,7 +785,14 @@ class GudangController extends Controller
             }
         }
 
-        return 'Successfully';
+        $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->where('status_cek',4)->get()->count();
+        $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->get()->count();
+        if ($cek == $cek_prd) {
+            $h->status_cek = 4;
+            $h->save();
+        }
+
+        return response()->json(['msg' => 'Successfully']);
     }
 
     // select
@@ -1454,8 +1490,25 @@ class GudangController extends Controller
 
     function test(Request $request)
     {
+        // list all so
+       $data1 = TFProduksi::with('pesanan')->where([
+           ['jenis', '=','keluar'],
+           ['status_id', '=', 2],
+       ])->whereNotNull('pesanan_id')->get();
 
-        $data = Ekatalog::where('tgl_kontrak', '>=', Carbon::now())->get();
-        return $data;
+       return datatables()->of($data1)
+            ->addIndexColumn()
+            ->addColumn('so', function($d) {
+                return $d->pesanan->so;
+            })
+            ->addColumn('customer', function($d) {
+                return $d->pesanan->ekatalog->customer->nama;
+            })
+            ->addColumn('bts_tf', function($d) {
+                return $d->pesanan->ekatalog->tgl_kontrak;
+            })
+            ->rawColumns(['button'])
+            ->make(true);
+
     }
 }

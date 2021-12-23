@@ -74,19 +74,7 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td scope="row">10-04-2021</td>
-                                <td>Divisi IT</td>
-                                <td><a href="{{ url('gk/terimaProduk/1') }}" class="btn btn-outline-info"><i
-                                            class="far fa-edit"></i>Edit Produk</a></td>
-                            </tr>
-                            <tr>
-                                <td scope="row"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -106,9 +94,6 @@
                                 <div class="form-group col">
                                     <label for="dari">Dari</label>
                                     <select class="form-control dari" name="dari">
-                                        {{-- <option value="Divisi IT">Divisi IT</option>
-                                        <option value="Divisi QC">Divisi QC</option>
-                                        <option value="Divisi Perakitan">Divisi Perakitan</option> --}}
                                     </select>
                                 </div>
                             </div>
@@ -261,7 +246,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
