@@ -215,15 +215,21 @@
                         <div class="row">
                             <div class="col-12">
                                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    @if($proses == 'proses')
                                     <li class="nav-item">
                                         <a class="nav-link active" id="pills-belum_kirim-tab" data-toggle="pill" href="#pills-belum_kirim" role="tab" aria-controls="pills-belum_kirim" aria-selected="true">Belum Kirim</a>
-                                    </li>
+                                    </li>@endif
                                     <li class="nav-item">
-                                        <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Kirim</a>
+                                        <a class="nav-link @if($proses == 'selesai') active @endif" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" @if($proses=='selesai' ) aria-selected="true" @else aria-selected="false" @endif>Sudah Kirim</a>
                                     </li>
+                                    @if($proses == 'selesai')
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-surat_jalan-tab" data-toggle="pill" href="#pills-surat_jalan" role="tab" aria-controls="pills-surat_jalan" aria-selected="false">Surat Jalan</a>
+                                    </li>@endif
                                 </ul>
                                 <div class="tab-content" id="pills-tabContent">
-                                    <div class="tab-pane fade show active" id="pills-belum_kirim" role="tabpanel" aria-labelledby="pills-belum_kirim-tab">
+
+                                    <div class="tab-pane fade  @if($proses == 'proses') show active @endif" id="pills-belum_kirim" role="tabpanel" aria-labelledby="pills-belum_kirim-tab">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
@@ -339,7 +345,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-selesai_kirim" role="tabpanel" aria-labelledby="pills-selesai_kirim-tab">
+                                    <div class="tab-pane fade @if($proses == 'selesai') show active @endif" id="pills-selesai_kirim" role="tabpanel" aria-labelledby="pills-selesai_kirim-tab">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
@@ -398,6 +404,31 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    @if($proses == 'selesai')
+                                    <div class="tab-pane fade" id="pills-surat_jalan" role="tabpanel" aria-labelledby="pills-surat_jalan-tab">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped align-center" id="sjtable" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Surat Jalan</th>
+                                                                <th>Tgl Kirim</th>
+                                                                <th>Resi</th>
+                                                                <th>Ekspedisi / Pengiriman</th>
+                                                                <th>Status</th>
+                                                                <th>Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
 
                             </div>
@@ -452,6 +483,42 @@
 
         y = [];
         y = <?php echo json_encode($detail_id); ?>;
+
+        var sjtable = $('#sjtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/so/data/sj/' + '{{$data->pesanan_id}}',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'align-center nowrap-text',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'nosurat',
+            }, {
+                data: 'tgl_kirim',
+            }, {
+                data: 'noresi',
+            }, {
+                data: 'ekspedisi_id',
+            }, {
+                data: 'status_id',
+            }, {
+                data: 'aksi',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }]
+
+        });
 
         var belumkirimtable = $('#belumkirimtable').DataTable({
             processing: true,

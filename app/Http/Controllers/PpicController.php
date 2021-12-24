@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Produk;
 use App\Models\JadwalPerakitan;
 use App\Models\GudangBarangJadi;
+use App\Models\Pesanan;
 
 // event
 use App\Events\TestEvent;
@@ -290,7 +291,11 @@ class PpicController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
-                return $data->Produk->nama . " " . $data->nama;
+                if (!empty($data->nama)) {
+                    return $data->Produk->nama . "- <b>" . $data->nama . "</b>";
+                } else {
+                    return $data->Produk->nama;
+                }
             })
             ->addColumn('gbj', function ($data) {
                 return $data->stok;
@@ -430,8 +435,24 @@ class PpicController extends Controller
             ->addColumn('aksi', function ($data) {
                 return '<i class="fas fa-search"></i>';
             })
-            ->rawColumns(['gbj', 'aksi', 'penjualan'])
+            ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
             ->make(true);
+    }
+
+    public function get_detail_master_stok($id)
+    {
+        $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->whereIn('log_id', ['7', '9'])->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->so;
+            })
+            ->addColumn('data', function ($data) {
+                return $data->stok;
+            })->make(true);
     }
 
     public function get_count_ekatalog($id, $produk_id, $status)

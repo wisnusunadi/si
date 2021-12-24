@@ -83,131 +83,118 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <form id="filter">
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Pengiriman</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="belum_kirim" id="defaultCheck1" />
-                                                        <label class="form-check-label" for="defaultCheck1">
-                                                            Belum Dikirim
-                                                        </label>
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Dalam Proses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Selesai Proses</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="float-right filter">
+                                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-filter"></i> Filter
+                                            </button>
+                                            <form id="filter">
+                                                <div class="dropdown-menu">
+                                                    <div class="px-3 py-3">
+                                                        <div class="form-group">
+                                                            <label for="jenis_penjualan">Pengiriman</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="belum_kirim" id="defaultCheck1" />
+                                                                <label class="form-check-label" for="defaultCheck1">
+                                                                    Belum Dikirim
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="sebagian_kirim" id="defaultCheck2" />
+                                                                <label class="form-check-label" for="defaultCheck2">
+                                                                    Sebagian Dikirim
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="sudah_kirim" id="defaultCheck2" />
+                                                                <label class="form-check-label" for="defaultCheck2">
+                                                                    Sudah Dikirim
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <span class="float-right">
+                                                                <button class="btn btn-primary">
+                                                                    Cari
+                                                                </button>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="sebagian_kirim" id="defaultCheck2" />
-                                                        <label class="form-check-label" for="defaultCheck2">
-                                                            Sebagian Dikirim
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="sudah_kirim" id="defaultCheck2" />
-                                                        <label class="form-check-label" for="defaultCheck2">
-                                                            Sudah Dikirim
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary">
-                                                            Cari
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            </form>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table" style="text-align:center;" id="showtable">
+                                                <thead>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>Batas Pengiriman</th>
+                                                    <th>Customer</th>
+                                                    <th>Alamat</th>
+                                                    <th>Telepon</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </form>
-                                </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-
-
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table" style="text-align:center;" id="showtable">
-                                        <thead>
-                                            <th>No</th>
-                                            <th>No SO</th>
-                                            <th>Batas Pengiriman</th>
-                                            <th>Customer</th>
-                                            <th>Alamat</th>
-                                            <th>Telepon</th>
-                                            <th>Keterangan</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
-                                        </thead>
-                                        <tbody>
-                                            <!-- <tr>
-                                                <td>1</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>
-                                                    <div>31-10-2021</div>
-                                                    <small><i class="fas fa-clock info"></i> Sisa 6 Hari</small>
-                                                </td>
-                                                <td>CV. Cipta Jaya Mandiri</td>
-                                                <td>Jl Dr Wahidin Sudirohusodo</td>
-                                                <td>0841641741979</td>
-                                                <td>-</td>
-                                                <td><span class="badge red-text">Belum dikirim</span></td>
-                                                <td>
-                                                    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="{{route('logistik.so.detail', ['id' => '1','value' => 'ekatalog'])}}">
-                                                            <button class="dropdown-item" type="button">
-                                                                <i class="fas fa-search"></i>
-                                                                Detail
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SO/SPA/X/02/75</td>
-                                                <td>
-                                                    <div>08-11-2021</div>
-                                                    <small><i class="fas fa-exclamation-circle warning"></i> Sisa 3 Hari</small>
-                                                </td>
-                                                <td>PT. Emiindo Jaya Bersama</td>
-                                                <td>Jl Jaksa Agung Suprapto</td>
-                                                <td>0841641741979</td>
-                                                <td>-</td>
-                                                <td><span class="badge yellow-text">Sebagian dikirim</span></td>
-                                                <td><a href=""></td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SO/SPB/X/21/75</td>
-                                                <td>
-                                                    <div>03-11-2021</div>
-                                                    <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
-                                                </td>
-                                                <td>Bapak Muhajir</td>
-                                                <td>Jl RA Kartini</td>
-                                                <td>0841641741979</td>
-                                                <td>-</td>
-                                                <td><span class="badge yellow-text">Sebagian dikirim</span></td>
-                                                <td><a href=""></td>
-                                            </tr> -->
-                                        </tbody>
-                                    </table>
+                            <div class="tab-pane fade show" id="pills-selesai_kirim" role="tabpanel" aria-labelledby="pills-selesai_kirim-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table" style="text-align:center; width:100%;" id="selesaitable">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2">No</th>
+                                                        <th rowspan="2">No SO</th>
+                                                        <th rowspan="2">Tanggal Delivery</th>
+                                                        <th colspan="2">Pengiriman</th>
+                                                        <th rowspan="2">Customer</th>
+                                                        <th rowspan="2">Alamat</th>
+                                                        <th rowspan="2">Telepon</th>
+                                                        <th rowspan="2">Keterangan</th>
+                                                        <th rowspan="2">Aksi</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Awal</th>
+                                                        <th>Akhir</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -219,7 +206,6 @@
 <script>
     $(function() {
         var showtable = $('#showtable').DataTable({
-
             processing: true,
             serverSide: true,
             ajax: {
@@ -245,8 +231,6 @@
                 {
                     data: 'batas',
                     className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
                 },
                 {
                     data: 'nama_customer',
@@ -268,6 +252,69 @@
                 }, {
                     data: 'status',
                     className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'button',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+
+        })
+
+        var selesaitable = $('#selesaitable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/so/data/selesai',
+
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'so',
+                    className: 'align-center nowrap-text'
+                },
+                {
+                    data: 'batas',
+                    className: 'align-center nowrap-text',
+                },
+                {
+                    data: 'tgl_awal',
+                    className: 'align-center nowrap-text',
+                },
+                {
+                    data: 'tgl_akhir',
+                    className: 'align-center nowrap-text',
+                },
+
+                {
+                    data: 'nama_customer',
+                    className: 'align-center minimizechar'
+                },
+                {
+                    data: 'alamat',
+                    className: 'align-center minimizechar'
+                }, {
+                    data: 'telp',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'ket',
+                    className: 'align-center minimizechar',
                     orderable: false,
                     searchable: false
                 }, {

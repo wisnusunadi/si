@@ -54,6 +54,7 @@ Route::prefix('/ppic')->group(function () {
     Route::get('update-confirmation', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
 
     Route::get('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data']);
+    Route::get('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok']);
 });
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
@@ -412,6 +413,8 @@ Route::prefix('/logistik')->group(function () {
         Route::get('data/detail/belum_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_belum_kirim_so']);
         Route::get('data/detail/selesai_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_selesai_kirim_so']);
         Route::get('detail/select/{id}/{pesanan_id}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
+        Route::get('data/selesai', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
+        Route::get('data/sj/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj']);
     });
     Route::group(['prefix' => '/ekspedisi'], function () {
         // Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
