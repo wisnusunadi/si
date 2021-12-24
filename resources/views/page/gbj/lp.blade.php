@@ -490,7 +490,10 @@
                 {data: 'nama_produk'},
                 {data: 'jml'},
                 {data: 'action'},
-            ]
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
         modalRancangan();
     });
@@ -520,7 +523,10 @@
                 {data: 'checkbox'},
                 {data: 'serii'},
                 {data: 'posisi'},
-            ]
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
 
         tambahanRancangan();
@@ -569,7 +575,9 @@
                 { data: 'tujuan'},
                 { data: 'action'}
             ],
-
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
 
         $('#datetimepicker1').on('change', function() {
@@ -875,6 +883,9 @@
             "autoWidth": false,
             searching: false,
             "lengthChange": false,
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
 
         $(document).on('click', '#btnSeri', function(e) {

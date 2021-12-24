@@ -63,7 +63,13 @@
     }
     .dropdown-menu {
     width: 500px !important;
-}
+    }
+    th.prev.available{
+        visibility: hidden;
+    }
+    th.next.available{
+        visibility: hidden;
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
@@ -295,7 +301,10 @@
                 {data: 'DT_RowIndex'},
                 {data: 'noser'},
                 {data: 'posisi'},
-            ]
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
         detailProduk();
     })
@@ -321,6 +330,9 @@
                 { data: 'jumlah', name: 'jumlah'},
                 { data: 'action', name: 'action'},
             ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
 
         $(document).on('keyup','#kt_datatable_search_query', function () {

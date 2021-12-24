@@ -67,7 +67,7 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
         Route::get('/{id}', [GudangController::class, 'getDetailHistory1']);
     });
     Route::get('/data', [GudangController::class, 'get_data_barang_jadi']);
-    Route::get('/export_spb', [GudangController::class, 'exportSpb'])->name('gbj.spb');
+    Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
 });
 
 Route::middleware('auth')->prefix('/produksi')->group(function () {

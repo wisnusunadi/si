@@ -11,7 +11,7 @@ class NoseriTGbj extends Model
 
     protected $table = "t_gbj_noseri";
 
-    protected $fillable = ['t_gbj_detail_id', 'noseri_id', 'status_id', 'layout_id', 'state_id'];
+    protected $fillable = ['created_at', 'updated_at','t_gbj_detail_id', 'noseri_id', 'status_id', 'layout_id', 'state_id', 'jenis'];
 
     function detail() {
         return $this->belongsTo(TFProduksiDetail::class, 't_gbj_detail_id');
@@ -25,11 +25,11 @@ class NoseriTGbj extends Model
         return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
     }
 
-    protected $casts = [
-        'noseri_id' => 'array',
-        't_gbj_detail_id' => 'array',
-        'layout_id' => 'array',
-   ];
+//     protected $casts = [
+//         'noseri_id' => 'array',
+//         't_gbj_detail_id' => 'array',
+//         'layout_id' => 'array',
+//    ];
     function NoseriBarangJadi()
     {
         return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');

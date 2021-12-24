@@ -1362,6 +1362,7 @@
 
     function editSparepart(x, y, z) {
         console.log('kode '+ z);
+        console.log(y);
         console.log($('#kode').val());
         $('.modalAddSparepartEdit').modal('show');
         $('.modalAddSparepartEdit').find('#btnSeriEdit').attr('onclick', 'clickSparepartEdit(' + y + ','+z+')');
@@ -1386,7 +1387,7 @@
                                             seri + ']" value="'+response[seri].remark+'" id="remark' + seri +
                                         '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><div class="row"><div class="col"><select name="layout_id[][' +
                                             seri + ']" id="layout_id' + seri +
-                                        '" class="form-control layout_id" value=""><option value="">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></div><div class="col"><button type="button" class="removesparepartdetail btn btn-danger"><i class="fas fa-trash"></i></button></div></div></td></tr>')
+                                        '" class="form-control layout_id" value=""><option value="">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></div><div class="col"><button type="button" class="removesparepartdetail btn btn-danger" id="'+y+'"><i class="fas fa-trash"></i></button></div></div></td></tr>')
                     $("#layout_id"+seri).val(response[seri].tk_kerusakan).change();
                 }
                 if (x > response.length) {
@@ -1416,12 +1417,37 @@
             }
         })
     }
+    $(document).on('click','.removesparepartdetail', function () {
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Hapus!'
+        }).then((result) => {
+            if (result.value) {
+                var a = $(this).attr('id');
+                deleteSparepart(a);
+                $(this).closest('tr').remove();
+            }
+        })
+    });
+    
+    function deleteSparepart(x) {
+        var jumlah = $('.btn_edit'+x).parent().prev().children().find('input.jumlah').val();
+        jumlah -= 1;
+        var a = $('.btn_edit'+x).parent().prev().children().find('input.jumlah').val(jumlah);
+        console.log(a);
+        $('.btn_edit'+x).parent().prev().children().find('input.batas').val(jumlah);
+    }
 
     // Unit
     function editUn(l) {
         var j = $(".btnEdit" + l).parent().prev().children().find('input.jumlah').val();
         var k = $(".btnEdit" + l).parent().prev().prev().children().val();
-        editUnit(j, k);
+        editUnit(j, k, l);
     }
 
     function clickUnitEdit(c, e) {
@@ -1575,7 +1601,7 @@
                                             seri + ']" value="'+response[seri].remark+'" id="remark' + seri +
                                         '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><div class="row"><div class="col"><select name="layout_id[][' +
                                             seri + ']" id="tk_kerusakan' + seri +
-                                        '" class="form-control tingkat"><option value="#">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></div><div class="col"><button type="button" class="removeunitdetail btn btn-danger"><i class="fas fa-trash"></i></button></div></div></td></tr>'
+                                        '" class="form-control tingkat"><option value="#">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></div><div class="col"><button type="button" class="removeunitdetail btn btn-danger" id="'+z+'"><i class="fas fa-trash"></i></button></div></div></td></tr>'
                                         );
                         $("#tk_kerusakan"+seri).val(response[seri].tk_kerusakan).change();
                 }
@@ -1595,5 +1621,30 @@
             }
         })
     }
+    $(document).on('click','.removeunitdetail', function () {
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Hapus!'
+        }).then((result) => {
+            if (result.value) {
+                var a = $(this).attr('id');
+                deleteUnit(a);
+                $(this).closest('tr').remove();
+            }
+        })
+    });
+    
+    function deleteUnit(x) {
+        var jumlah = $('.btnEdit'+x).parent().prev().children().find('input.jumlah').val();
+        jumlah -= 1;
+        var a = $('.btnEdit'+x).parent().prev().children().find('input.jumlah').val(jumlah);
+        $('.btnEdit'+x).parent().prev().children().find('input.batas').val(jumlah);
+    }
+
 </script>
 @stop

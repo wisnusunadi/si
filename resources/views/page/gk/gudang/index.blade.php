@@ -18,14 +18,15 @@
     .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
-
+    .dataTables_filter {
+        display: none;
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0">Produk Gudang Karantina
-                    <a href="{{ route('gk.export-produk') }}" class="btn btn-primary btn-sm">Export</a>
                 </h1>
 
             </div><!-- /.col -->
@@ -59,6 +60,18 @@
                             <h3 class="card-title"><i class="fab fa-whmcs"></i> Sparepart Karantina</h3>
                         </div>
                         <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <input type="text" class="form-control" placeholder="Cari..." id="search-sparepart">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex justify-content-end"><a href="{{ route('gk.export-produk') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a></div>
+                                </div>
+                            </div>
                             <table class="table tableSparepart">
                                 <thead class="thead-dark">
                                     <tr>
@@ -84,8 +97,20 @@
                             <h3 class="card-title"><i class="fas fa-tools"></i> Unit Karantina</h3>
                         </div>
                         <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <input type="text" class="form-control" placeholder="Cari..." id="search-unit">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex justify-content-end"><a href="{{ route('gk.export-produk') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a></div>
+                                </div>
+                            </div>
                             <table class="table tableUnit">
-                                <thead class="thead-light">
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>Kode Unit</th>
                                         <th>Nama</th>
@@ -105,19 +130,17 @@
 @stop
 @section('adminlte_js')
 <script>
-    $('.tableSparepart').dataTable({
+    var tableSparepart = $('.tableSparepart').dataTable({
         destroy: true,
         "paging": true,
-        "lengthChange": true,
-        "searching": true,
+        lengthChange: false,
         "ordering": true,
         "info": true,
         "autoWidth": false,
         "responsive": true,
-        bProcessing: true,
-        bServerSide: true,
         bSortClasses: true,
         bDeferRender: true,
+        processing: true,
         ajax: {
             url: "/api/spr/data",
         },
@@ -132,17 +155,19 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
-    $('.tableUnit').dataTable({
+    $('#search-sparepart').on('keyup', function () {
+        tableSparepart.api().search(this.value).draw();
+    });
+    var tableUnit = $('.tableUnit').dataTable({
         destroy: true,
         "paging": true,
-        "lengthChange": true,
+        lengthChange: false,
         "searching": true,
         "ordering": true,
         "info": true,
         "autoWidth": false,
         "responsive": true,
         processing: true,
-        serverSide: true,
         bSortClasses: true,
         bDeferRender: true,
         ajax: {
@@ -157,6 +182,9 @@
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
+    });
+    $('#search-unit').on('keyup', function () {
+        tableUnit.api().search(this.value).draw();
     });
 
     function sparepartDetail() {

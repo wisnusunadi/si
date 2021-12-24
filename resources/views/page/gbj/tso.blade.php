@@ -119,14 +119,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>36541654654654564</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>65654564646545455</td>
-                            <td></td>
-                        </tr>
+
                     </tbody>
                 </table>
 
@@ -265,7 +258,7 @@
         }
 
         i++;
-        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" ><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" ><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
 
 
@@ -318,9 +311,9 @@
                         'style': 'multi'
                     },
 
-                    "oLanguage": {
-                    "sSearch": "Scan Nomor Seri:"
-                    }
+                    "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
                 });
             }
         })
@@ -333,7 +326,24 @@
         const ids = [];
         $('.cb-child').each(function() {
             if ($(this).is(":checked")) {
-                ids.push($(this).val());
+                if ($('.cb-child').filter(':checked').length > jml) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Melebihi Batas Maksimal'
+                    })
+                } else {
+                    ids.push($(this).val());
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Noseri Berhasil Disimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('.modal-produk').modal('hide');
+                }
+
             }
         })
         seri[id] = ids;
@@ -384,15 +394,15 @@
                 noseri_id : seri,
             },
             success: function (res) {
-                // console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
+                console.log(res);
+                // Swal.fire({
+                //     position: 'center',
+                //     icon: 'success',
+                //     title: res.msg,
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // })
+                // location.reload();
             }
         });
     })

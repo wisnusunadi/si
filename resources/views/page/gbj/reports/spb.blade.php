@@ -58,14 +58,14 @@
     }
 </style>
 <body>
-    @foreach ($spb as $s)
+
     <div class="box">
         <p class="judul"><strong><u>Surat Pengantar Barang</u></strong></p>
         <table class="table1">
             <tr>
                 <td>Ref / P.O</td>
                 <td>:</td>
-                <td><u>{{ $s->pesanan->so }}</u></td>
+                <td><u>--</u></td>
             </tr>
             <tr>
                 <td>Distributor</td>
@@ -90,11 +90,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="td">1</td>
-                    <td class="td">SON-C</td>
-                    <td class="td">FD421AA00671</td>
-                </tr>
+                @foreach ($data as $s)
+                @php
+                    $no = 1;
+                @endphp
+                    @foreach ($s->seri as $ss)
+                    <tr>
+                        <td class="td">{{ $s->qty }}</td>
+                        <td class="td">{{ $s->produk->produk->nama }} {{ $s->produk->nama }}</td>
+                        <td class="td">{{ $ss->seri->noseri }}</td>
+                    </tr>
+                    @endforeach
+
+                @endforeach
             </tbody>
         </table>
         <table class="table2">
@@ -109,13 +117,15 @@
                 <td></td>
             </tr>
             <tr>
-                <td><u>Nama User GBJ</u><br>Gudang Barang Jadi</td>
-                <td><u>Nama User QC</u><br>Quality Control</td>
-                <td><u>Nama User Logistik</u><br>Logistik</td>
+                @foreach ($tfby as $t)
+                <td><u>{{ $t->transfer_by == null ? '-' : $t->transfer->nama }}</u><br>{{ $t->transfer->Divisi->nama }}</td>
+                <td><u>{{ $t->check_by == null ? '-' : $t->check->nama }}</u><br>{{ $t->check_by == null ? '-' : $t->check->Divisi->nama }}</td>
+                <td><u>{{ $t->terima_by == null ? '-' : $t->terima->nama }}</u><br>{{ $t->terima_by == null ? '-' : $t->terima->Divisi->nama }}</td>
+
             </tr>
         </table>
     </div>
-    <p class="text-right">Nomor Dokumen : SPA-FR/GUD-07(Nomor Dokumen) Tanggal Terbit : (Tanggal Cetak)</p>
+    <p class="text-right">Nomor Dokumen : SPA-FR/GUD-07(Nomor Dokumen) Tanggal Terbit : {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $t->created_at)->isoFormat('D MMMM Y') }}</p>
     @endforeach
 </body>
 </html>

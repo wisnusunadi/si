@@ -78,24 +78,23 @@ class ProduksiController extends Controller
                         $nn->noseri_id = json_decode($request->noseri_id[$value][$k], true);
                         $nn->layout_id = 1;
                         $nn->status_id = 2;
-                        // $nn->state_id = 2;
                         $nn->jenis = 'keluar';
                         $nn->created_at = Carbon::now();
                         $nn->save();
+
+                        NoseriBarangJadi::find(json_decode($request->noseri_id[$value][$k], true))->update(['is_ready' => 1]);
                     }
                 }
             }
 
-            // $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
-            // $i = 0;
-            // foreach ($gdg as $vv) {
-            //     $i++;
-
-            //     $vv['stok'] = $vv['stok'] - $request->qty[$i];
-            //     print_r($vv['stok'] - $request->qty[$i]);
-            //     // GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-            // }
-
+            $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
+            $i = 0;
+            foreach ($gdg as $vv) {
+                $vv['stok'] = $vv['stok'] - $request->qty[$i];
+                print_r($vv['stok']);
+                $i++;
+                GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+            }
 
             return response()->json(['msg' => 'Successfully',]);
         }
@@ -153,9 +152,56 @@ class ProduksiController extends Controller
 
     function TfbySOFinal(Request $request)
     {
-        $data = TFProduksi::where('pesanan_id', $request->pesanan_id)->where('status_id', 2)->where('state_id', 8)->get();
+        $data = TFProduksi::where('pesanan_id', $request->pesanan_id)->get();
         if (count($data) > 0) {
-            return response()->json(['msg' => 'Data Sudah Ada']);
+            $didd = TFProduksi::where('pesanan_id', $request->pesanan_id)->get()->pluck('id');
+            // return $d;
+            // $d = TFProduksi::find($did);
+            // return $d;
+            // $d->pesanan_id = $request->pesanan_id;
+            // $d->tgl_keluar = Carbon::now();
+            // $d->ke = 23;
+            // $d->jenis = 'keluar';
+            // $d->status_id = 2;
+            // $d->state_id = 8;
+            // $d->updated_at = Carbon::now();
+            // $d->save();
+
+            foreach ($request->data as $key => $value) {
+                $dd = new TFProduksiDetail();
+                $dd->t_gbj_id = $didd;
+                $dd->gdg_brg_jadi_id = $key;
+                $dd->qty = $value['jumlah'];
+                $dd->jenis = 'keluar';
+                $dd->status_id = 2;
+                $dd->state_id = 8;
+                $dd->created_at = Carbon::now();
+                $dd->save();
+
+                $did = $dd->id;
+                $checked = $request->noseri_id;
+                foreach ($value['noseri'] as $k => $v) {
+                    $nn = new NoseriTGbj();
+                    $nn->t_gbj_detail_id = $did;
+                    $nn->noseri_id = $v;
+                    $nn->status_id = 2;
+                    $nn->state_id = 8;
+                    $nn->jenis = 'keluar';
+                    $nn->created_at = Carbon::now();
+                    $nn->save();
+
+                    NoseriBarangJadi::find($v)->update(['is_ready' => 1]);
+                }
+
+                $gdg = GudangBarangJadi::whereIn('id', [$key])->get()->toArray();
+                $i = 0;
+                foreach ($gdg as $vv) {
+                    $vv['stok'] = $vv['stok'] - $value['jumlah'];
+                    print_r($vv['stok']);
+                    $i++;
+                    GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                }
+            }
         } else {
             $d = new TFProduksi();
             $d->pesanan_id = $request->pesanan_id;
@@ -167,11 +213,11 @@ class ProduksiController extends Controller
             $d->created_at = Carbon::now();
             $d->save();
 
-            foreach ($request->gdg_brg_jadi_id as $key => $value) {
+            foreach ($request->data as $key => $value) {
                 $dd = new TFProduksiDetail();
                 $dd->t_gbj_id = $d->id;
-                $dd->gdg_brg_jadi_id = $value;
-                $dd->qty = $request->qty[$key];
+                $dd->gdg_brg_jadi_id = $key;
+                $dd->qty = $value['jumlah'];
                 $dd->jenis = 'keluar';
                 $dd->status_id = 2;
                 $dd->state_id = 8;
@@ -180,34 +226,31 @@ class ProduksiController extends Controller
 
                 $did = $dd->id;
                 $checked = $request->noseri_id;
-                foreach ($request->noseri_id[$value] as $k => $v) {
-                    // if (in_array($request->noseri_id[$value], $checked)) {
+                foreach ($value['noseri'] as $k => $v) {
                     $nn = new NoseriTGbj();
                     $nn->t_gbj_detail_id = $did;
-                    $nn->noseri_id = json_decode($request->noseri_id[$value][$k], true);
-                    // $nn->layout_id = 1;
+                    $nn->noseri_id = $v;
                     $nn->status_id = 2;
                     $nn->state_id = 8;
                     $nn->jenis = 'keluar';
                     $nn->created_at = Carbon::now();
                     $nn->save();
-                    // }
 
-                    NoseriBarangJadi::find(json_decode($request->noseri_id[$value][$k], true))->update(['is_ready' => 1]);
+                    NoseriBarangJadi::find($v)->update(['is_ready' => 1]);
+                }
+
+                $gdg = GudangBarangJadi::whereIn('id', [$key])->get()->toArray();
+                $i = 0;
+                foreach ($gdg as $vv) {
+                    $vv['stok'] = $vv['stok'] - $value['jumlah'];
+                    print_r($vv['stok']);
+                    $i++;
+                    GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
                 }
             }
-
-            // // kurang stok ??
-            // $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
-            // $i = 0;
-            // foreach ($gdg as $vv) {
-            //     $i++;
-            //     $vv['stok'] = $vv['stok'] - $request->qty[$i];
-            //     GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-            // }
-
-            return response()->json(['msg' => 'Data Terkirim ke QC']);
         }
+
+        return response()->json(['msg' => 'Data Terkirim ke QC']);
     }
     // get
     function getNoseri(Request $request, $id)
@@ -391,10 +434,18 @@ class ProduksiController extends Controller
 
             })
             ->addColumn('action', function ($data) {
-                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
-                                <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
+                $cek = TFProduksiDetail::whereHas('header', function($q) use($data) {
+                    $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
+                })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->get();
+                if (count($cek) > 0) {
+                    // return '';
+                } else {
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
+                                <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
                                 class="fas fa-qrcode"></i> Scan Produk</button>
                                 </a>';
+                }
+
             })
             ->addColumn('status', function ($data) {
                 if (isset($data->status_cek)) {
@@ -411,7 +462,16 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('checkbox', function ($d) {
-                return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '">';
+                $cek = TFProduksiDetail::whereHas('header', function($q) use($d) {
+                    $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+                })->where('gdg_brg_jadi_id', $d->gudang_barang_jadi_id)->get();
+                if (count($cek) > 0) {
+                    # code...
+                    // return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '" disabled>';
+                } else {
+                    return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '">';
+                }
+
             })
             ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids'])
             ->make(true);
@@ -516,18 +576,6 @@ class ProduksiController extends Controller
 
     function getGrafikProduk(Request $request)
     {
-        // $data = Db::table('v_prd_dashboard')->where('produk_id', $id)->get();
-        // $data_arr = [];
-        // foreach($data as $d) {
-        //     $data_arr[] = [
-        //         'tgl' => Carbon::parse($d->tgl)->locale('id')->isoFormat('dddd, D MMMM Y'),
-        //         'produk_id' => $d->produk_id == null ? '-' : $d->produk_id,
-        //         'nama' => $d->produk == null ? '-' : $d->produk,
-        //         'jumlah' => $d->jml == null ? 0 : $d->jml
-        //     ];
-        // }
-        // return response()->json($data_arr);
-
         $data = DB::table('prd_dashboard_view')
                 ->where([
                     ['filter', '=', $request->filter],

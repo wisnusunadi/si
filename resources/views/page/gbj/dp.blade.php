@@ -133,8 +133,9 @@
             { data: 'jumlah'},
             { data: 'action'}
         ],
-        "oLanguage": {
-        "sSearch": "Cari:"},
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
     });
 
 
@@ -186,9 +187,9 @@
                 { data: 'noserii'},
                 { data: 'layout'},
             ],
-                "oLanguage": {
-            "sSearch": "Cari:"
-            }
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
 
         $.ajax({
@@ -235,8 +236,9 @@
                 { data: 'noserii'},
                 { data: 'layout'},
             ],
-            "oLanguage": {
-            "sSearch": "Cari:"}
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
 
         openModalView();

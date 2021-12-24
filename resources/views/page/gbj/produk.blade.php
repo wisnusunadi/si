@@ -415,7 +415,10 @@
             "lengthChange": false,
             "columnDefs": [
                 { "width": "5%", "targets": 0},
-            ]
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
     });
     $('#inputGroupFile02').on('change', function () {
         //get the file name
@@ -505,7 +508,10 @@
             { data: 'jumlah1'},
             { data: 'kelompok'},
             { data: 'action'}
-        ]
+        ],
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
     });
 
     // load produk

@@ -36,7 +36,13 @@
     }
     .dropdown-menu {
     width: 500px !important;
-}
+    }
+    th.prev.available{
+        visibility: hidden;
+    }
+    th.next.available{
+        visibility: hidden;
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
@@ -193,7 +199,7 @@
                                             <div class="col-md-6 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Batas Transfer</label>
-                                                    <input type="text" name="" id="" class="form-control daterange1">
+                                                    <input type="text" name="" id="daterange1" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -223,8 +229,8 @@
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $d->pesanan->so }}</td>
                                                 <td>{{ $d->pesanan->ekatalog->customer->nama }}</td>
-                                                <td>{{ $d->pesanan->ekatalog->tgl_kontrak }}</td>
-                                                <td><a href="{{ route('gbj.spb') }}">
+                                                <td>{{ Carbon\Carbon::parse($d->pesanan->ekatalog->tgl_kontrak)->isoFormat('D-MM-YYYY') }}</td>
+                                                <td><a href="{{ url('gbj/export_spb/'.$d->pesanan->id) }}">
                                                     <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
                                                     </a></td>
                                             </tr>
@@ -346,6 +352,30 @@
         return parsedDate;
     }
 
+    // Tanggal Sales Order
+    var start_date3;
+    var end_date3;
+    var DateFilterFunction3 = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue3(start_date3);
+        var dateEnd = parseDateValue3(end_date3);
+        var evalDate = parseDateValue3(aData[3]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue3(rawDate) {
+        // console.log(rawDate);
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
     var $dTable = $('#history').DataTable({
             destroy: true,
             processing: true,
@@ -411,6 +441,7 @@
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
             $dTable.draw();
         });
+        
 
         $("#divisi").on("change", function () {
             $dTable.columns(2).search($(this).val()).draw();
@@ -486,29 +517,6 @@
         detailtanggal();
     });
 
-     // Tanggal Keluar
-     var start_date3;
-    var end_date3;
-    var DateFilterFunction3 = (function (oSettings, aData, iDataIndex) {
-        var dateStart = parseDateValue3(start_date3);
-        var dateEnd = parseDateValue3(end_date3);
-
-        var evalDate = parseDateValue3(aData[3]);
-        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
-            (isNaN(dateStart) && evalDate <= dateEnd) ||
-            (dateStart <= evalDate && isNaN(dateEnd)) ||
-            (dateStart <= evalDate && evalDate <= dateEnd)) {
-            return true;
-        }
-        return false;
-    });
-
-    function parseDateValue3(rawDate) {
-        var dateArray = rawDate.split("-");
-        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
-        0]);
-        return parsedDate;
-    }
 
     var soTable = $('#gudang-salesorder').DataTable({
         processing: true,
@@ -524,25 +532,25 @@
     $('#gudang-salesorder-search').on('keyup', function() {
         soTable.search(this.value).draw();
     });
-    $('.daterange1').daterangepicker({
+    $('#daterange1').daterangepicker({
         autoUpdateInput: false
     });
 
-        $('.daterange1').on('apply.daterangepicker', function (ev, picker) {
+        $('#daterange1').on('apply.daterangepicker', function (ev, picker) {
             $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
                 'DD-MM-YYYY'));
-            start_date = picker.startDate.format('DD-MM-YYYY');
-            end_date = picker.endDate.format('DD-MM-YYYY');
+            start_date3 = picker.startDate.format('DD-MM-YYYY');
+            end_date3 = picker.endDate.format('DD-MM-YYYY');
             $.fn.dataTableExt.afnFiltering.push(DateFilterFunction3);
-            soTable.api().draw();
+            soTable.draw();
         });
 
-        $('.daterange1').on('cancel.daterangepicker', function (ev, picker) {
+        $('#daterange1').on('cancel.daterangepicker', function (ev, picker) {
             $(this).val('');
-            start_date = '';
-            end_date = '';
+            start_date3 = '';
+            end_date3 = '';
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction3, 1));
-            soTable.api().draw();
+            soTable.draw();
         });
 
 </script>

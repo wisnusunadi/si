@@ -254,9 +254,9 @@
                 { data: 'status1', name: 'status1'},
                 { data: 'action', name: 'action'},
             ],
-            "oLanguage": {
-                "sSearch": "Cari:"
-            },
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
             "columnDefs": [
                 {
                     "targets": [5],
@@ -308,9 +308,9 @@
             'order': [
                 [1, 'asc']
             ],
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
 
         $(document).on('click', '#btnSave', function(e) {
@@ -378,6 +378,9 @@
                 { data: 'merk', name: 'merk'},
                 { data: 'status', name: 'status'},
             ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         })
         $('#viewProdukModal').modal('show');
     })

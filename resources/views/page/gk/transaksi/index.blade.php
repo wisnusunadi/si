@@ -112,11 +112,6 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 my-2 my-md-0">
-                                                <div class="d-flex align-items-center">
-                                                    <a href="{{ route('gk.export') }}" class="btn btn-primary btn-sm">Export</a>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -136,8 +131,14 @@
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-end">
+                                            <a href="{{ route('gk.export') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
                                     {{-- Tanggal Masuk dan Tanggal Keluar --}}
                                     <table class="table table-bordered pertanggal" width="100%">

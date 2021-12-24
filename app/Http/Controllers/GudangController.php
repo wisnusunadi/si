@@ -15,6 +15,7 @@ use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\Layout;
+use App\Models\LogSurat;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
@@ -489,14 +490,18 @@ class GudangController extends Controller
         return view('page.gbj.tp.tp', compact('data1'));
     }
 
-    function exportSpb() {
-        $data1 = TFProduksi::with('pesanan')->where([
-            ['jenis', '=','keluar'],
-            ['status_id', '=', 2],
-        ])->whereNotNull('pesanan_id')->get();
-        $pdf = PDF::loadview('page.gbj.reports.spb', ['spb' => $data1])->setPaper('A4', 'landscape');
-        return $pdf->download('test.pdf');
-        // return view('page.gbj.reports.spb');
+    function exportSpb($id) {
+        if (!$id) {
+            LogSurat::create([
+                'pesanan_id' => $id,
+                'transfer_by' => Auth::user()->id
+            ]);
+        }
+        $tfby = LogSurat::where('pesanan_id', $id)->get();
+        $data = TFProduksiDetail::whereHas('header', function($q) use($id) {
+            $q->where('pesanan_id', $id);
+        })->with('seri.seri', 'produk.produk')->get();
+        return view('page.gbj.reports.spb',['data' => $data, 'tfby' => $tfby]);
     }
 
     function getListSODone() {
@@ -1491,24 +1496,9 @@ class GudangController extends Controller
     function test(Request $request)
     {
         // list all so
-       $data1 = TFProduksi::with('pesanan')->where([
-           ['jenis', '=','keluar'],
-           ['status_id', '=', 2],
-       ])->whereNotNull('pesanan_id')->get();
-
-       return datatables()->of($data1)
-            ->addIndexColumn()
-            ->addColumn('so', function($d) {
-                return $d->pesanan->so;
-            })
-            ->addColumn('customer', function($d) {
-                return $d->pesanan->ekatalog->customer->nama;
-            })
-            ->addColumn('bts_tf', function($d) {
-                return $d->pesanan->ekatalog->tgl_kontrak;
-            })
-            ->rawColumns(['button'])
-            ->make(true);
-
+        $data = TFProduksiDetail::whereHas('header', function($q) {
+            $q->where('pesanan_id', 8);
+        })->with('seri.seri', 'header.pesanan', 'produk.produk')->get();
+        return $data;
     }
 }
