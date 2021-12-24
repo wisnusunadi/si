@@ -140,7 +140,11 @@
         <section class="modal-card-body">
           <div class="field">
             <div class="control">
-              <textarea class="textarea" placeholder="Komentar"></textarea>
+              <textarea
+                class="textarea"
+                placeholder="Komentar"
+                v-model="komentar"
+              ></textarea>
             </div>
           </div>
         </section>
@@ -168,6 +172,9 @@ export default {
 
       showModal: false,
       handle_func: null,
+
+      hasil: false,
+      komentar: "",
     };
   },
 
@@ -232,6 +239,14 @@ export default {
           this.$store.commit("setJadwal", response.data);
           this.resetData();
         });
+
+      // await axios.post("/api/ppic/update/komentar", {
+      //   status: this.$store.state.status,
+      //   tanggal_hasil: new Date(),
+      //   hasil: this.hasil,
+      //   komentar: this.komentar,
+      // });
+
       this.$store.commit("setIsLoading", false);
       this.showModal = false;
     },
@@ -247,6 +262,14 @@ export default {
           this.$store.commit("setJadwal", response.data);
           this.resetData();
         });
+
+      // await axios.post("/api/ppic/update/komentar", {
+      //   status: this.$store.state.status,
+      //   tanggal_hasil: new Date(),
+      //   hasil: this.hasil,
+      //   komentar: this.komentar,
+      // });
+
       this.$store.commit("setIsLoading", false);
       this.showModal = false;
     },
@@ -262,6 +285,14 @@ export default {
           this.$store.commit("setJadwal", response.data);
           this.resetDate();
         });
+
+      // await axios.post("/api/ppic/update/komentar", {
+      //   status: this.$store.state.status,
+      //   tanggal_hasil: new Date(),
+      //   hasil: this.hasil,
+      //   komentar: this.komentar,
+      // });
+
       this.$store.commit("setIsLoading", false);
       this.showModal = false;
     },
@@ -270,10 +301,13 @@ export default {
       this.showModal = true;
       if (status === "kirim") {
         this.handle_func = this.handleKirim;
+        this.hasil = this.reject_jadwal.length > 0 ? false : true;
       } else if (status === "setuju") {
         this.handle_func = this.handleSetuju;
+        this.hasil = true;
       } else if (status === "tolak") {
         this.handle_func = this.handleTolak;
+        this.hasil = false;
       }
     },
   },

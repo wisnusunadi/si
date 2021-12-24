@@ -100,6 +100,7 @@ export default {
       await axios.get("/api/ppic/data/gk/unit").then((response) => {
         this.data_unit = response.data;
       });
+
       this.table_unit = $("#table-unit").DataTable();
       this.$store.commit("setIsLoading", false);
     },

@@ -58,45 +58,51 @@
         </div>
       </div>
       <div class="column is-3">
-        <div class="buttons">
-          <button
-            v-if="
-              this.$store.state.state_ppic === 'pembuatan' ||
-              this.$store.state.state_ppic === 'revisi'
-            "
-            class="button is-fullwidth"
-            :class="{
-              'is-loading': this.$store.state.isLoading,
-              'is-primary': this.$store.state.state_ppic === 'pembuatan',
-              'is-danger': this.$store.state.state_ppic === 'revisi',
-            }"
-            @click="sendEvent('persetujuan')"
-          >
-            Kirim
-          </button>
-          <button
-            v-if="this.$store.state.state_ppic === 'disetujui'"
-            class="button is-success is-fullwidth"
-            :class="{ 'is-loading': this.$store.state.isLoading }"
-            @click="sendEvent('perubahan')"
-          >
-            Minta Perubahan
-          </button>
-        </div>
-        <article class="message is-dark">
-          <div class="message-header">
-            <p>Pesan</p>
-            <button class="delete" aria-label="delete"></button>
+        <template v-if="this.$store.state.user.divisi_id == '24'">
+          <div class="buttons">
+            <button
+              v-if="
+                this.$store.state.state_ppic === 'pembuatan' ||
+                this.$store.state.state_ppic === 'revisi'
+              "
+              class="button is-fullwidth"
+              :class="{
+                'is-loading': this.$store.state.isLoading,
+                'is-primary': this.$store.state.state_ppic === 'pembuatan',
+                'is-danger': this.$store.state.state_ppic === 'revisi',
+              }"
+              @click="sendEvent('persetujuan')"
+            >
+              Kirim
+            </button>
+            <button
+              v-if="this.$store.state.state_ppic === 'disetujui'"
+              class="button is-success is-fullwidth"
+              :class="{ 'is-loading': this.$store.state.isLoading }"
+              @click="sendEvent('perubahan')"
+            >
+              Minta Perubahan
+            </button>
           </div>
-          <div class="message-body">
-            Keep fighting
-            <div class="is-flex is-justify-content-flex-end">
-              <button class="button is-circle">
-                <i class="fas fa-envelope"></i>
-              </button>
+          <article class="message is-dark">
+            <div class="message-header">
+              <p>Pesan</p>
+              <button class="delete" aria-label="delete"></button>
             </div>
-          </div>
-        </article>
+            <div class="message-body">
+              {{
+                this.data_komentar.length > 0
+                  ? this.data_komentar[0].komentar
+                  : ""
+              }}
+              <div class="is-flex is-justify-content-flex-end">
+                <button class="button is-circle">
+                  <i class="fas fa-envelope"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+        </template>
         <div class="box">
           <div class="table-container">
             <table class="table">
@@ -121,28 +127,60 @@
     </div>
     <template v-if="!isCalendar">
       <div class="box">
+        <h1 v-if="$store.state.status === 'pelaksanaan'">Pelaksanaan</h1>
         <div v-if="this.$store.state.jadwal.length == 0" class="p-3">
           Data Kosong
         </div>
         <apexchart
           v-else
           type="rangeBar"
-          height="200"
           :options="options"
+          :height="this.series[0].data.length * 25"
           :series="series"
         ></apexchart>
       </div>
       <template v-if="$store.state.status === 'pelaksanaan'">
         <div class="box">
+          <h1>Rencana</h1>
           <apexchart
             type="rangeBar"
-            height="200"
             :options="options"
+            :height="this.series_rencana[0].data.length * 25"
             :series="series_rencana"
           ></apexchart>
         </div>
       </template>
     </template>
+
+    <!-- modal -->
+    <div v-if="showModal" class="modal" :class="{ 'is-active': showModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Komentar</p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="showModal = !showModal"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <div class="control">
+              <textarea
+                class="textarea"
+                placeholder="Komentar"
+                v-model="komentar"
+              ></textarea>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="handle_func">Kirim</button>
+          <button class="button" @click="showModal = false">Batal</button>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -170,9 +208,15 @@ export default {
         xaxis: {
           type: "datetime",
         },
+        // chart: {
+        //   height: 1000,
+        //   width: 1000,
+        // },
       },
 
       jadwal_rencana: [],
+      showModal: false,
+      data_komentar: "",
     };
   },
 
@@ -181,8 +225,21 @@ export default {
       this.$store.commit("setIsLoading", true);
       await axios.get("/api/ppic/data/rencana_perakitan").then((response) => {
         this.jadwal_rencana = response.data;
-        console.log(this.jadwal_rencana);
       });
+
+      // await axios
+      //   .get("/api/ppic/data/komentar", {
+      //     params: {
+      //       status: this.$store.state.status,
+      //     },
+      //   })
+      //   .then((response) => {
+      //     this.data_komentar = response.data;
+      //   })
+      //   .catch((error) => {
+      //     console.log("error to get data komentar");
+      //     console.log(error);
+      //   });
       this.$store.commit("setIsLoading", false);
     },
 
@@ -195,7 +252,23 @@ export default {
         })
         .then((response) => {
           this.$store.commit("setJadwal", response.data);
+        })
+        .catch((error) => {
+          console.log("error update data perakitan");
+          console.log(error);
         });
+
+      // await axios
+      //   .post("/api/ppic/create/komentar", {
+      //     tanggal_permintaan: new Date(),
+      //     state: this.$store.state.state,
+      //     status: this.$store.state.status,
+      //   })
+      //   .catch((error) => {
+      //     console.log("error create komentar");
+      //     console.log(error);
+      //   });
+
       this.$store.commit("setIsLoading", false);
     },
   },

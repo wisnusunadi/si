@@ -60,7 +60,17 @@ const store = new Vuex.Store({
 
         setStatus(state, status) {
             state.status = status;
-        }
+        },
+
+        // deleteJadwal(state, id) {
+        //     console.log("delete jadwal")
+        //     let temp_id = state.jadwal.findIndex((element) => element.id == id)
+
+        //     console.log(temp_id)
+        //     // console.log(state.jadwal[temp_id])
+
+        //     delete state.jadwal[parseInt(temp_id)];
+        // }
     }
 })
 

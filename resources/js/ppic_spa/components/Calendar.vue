@@ -78,7 +78,6 @@ export default {
       this.$store.commit("setIsLoading", true);
       await axios.get("/api/ppic/data/gbj").then((response) => {
         this.data_gbj = response.data;
-        console.log(this.data_gbj);
       });
       this.$store.commit("setIsLoading", false);
       this.showModal = true;
@@ -124,6 +123,11 @@ export default {
         this.$store.commit("setIsLoading", true);
         await axios.post("/api/ppic/delete/perakitan/" + event.id).then(() => {
           event.remove();
+          axios
+            .get("/api/ppic/data/perakitan/" + this.$store.state.status)
+            .then((response) => {
+              this.$store.commit("setJadwal", response.data);
+            });
         });
         this.$store.commit("setIsLoading", false);
       }
@@ -246,7 +250,6 @@ export default {
 
   watch: {
     jadwal(newVal, oldVal) {
-      console.log("watch jadwal", this.status, this.$store.state.status);
       this.calendarOptions.events = this.convertJadwal(newVal);
       if (
         this.$store.state.state_ppic === "pembuatan" ||

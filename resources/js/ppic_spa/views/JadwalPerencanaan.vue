@@ -19,7 +19,6 @@ export default {
       await axios
         .get("/api/ppic/data/perakitan/penyusunan")
         .then((response) => {
-          console.log(response.data);
           this.$store.commit("setJadwal", response.data);
           if (response.data.length == 0)
             this.$store.commit("setStatus", "penyusunan");

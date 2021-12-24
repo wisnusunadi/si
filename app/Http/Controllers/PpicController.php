@@ -105,6 +105,12 @@ class PpicController extends Controller
         return $data;
     }
 
+    public function get_komentar_jadwal_perakitan(Request $request)
+    {
+        $data = KomentarJadwalPerakitan::where('status', $this->change_status($request->status))->orderBy('tanggal_permintaan')->get();
+        return $data;
+    }
+
     public function create_data_perakitan(Request $request)
     {
         $status = $this->change_status($request->status);
@@ -119,6 +125,7 @@ class PpicController extends Controller
             'state' => $state,
             'konfirmasi' => $request->konfirmasi,
             'warna' => $request->warna,
+            'status_tf' => 11,
         ];
         JadwalPerakitan::create($data);
 
@@ -127,19 +134,21 @@ class PpicController extends Controller
 
     public function create_komentar_jadwal_perakitan(Request $request)
     {
+        $state = $this->change_state($request->state);
+        $status = $this->change_status($request->status);
         KomentarJadwalPerakitan::create([
             'tanggal_permintaan' => $request->tanggal_permintaan,
             'tanggal_hasil' => $request->tanggal_hasil,
-            'state' => $request->state,
-            'status' => $request->status,
+            'state' => $state,
+            'status' => $status,
             'hasil' => $request->hasil,
-            'komentar' => $request->tanggal_permintaan,
+            'komentar' => $request->komentar,
         ]);
     }
 
     public function update_komentar_jadwal_perakitan(Request $request)
     {
-        $data = KomentarJadwalPerakitan::where("status", $request->status)->first();
+        $data = KomentarJadwalPerakitan::orderBy('tanggal_permintaan')->where("status", $this->change_status($request->status))->first();
         $data->tanggal_hasil = $request->tanggal_hasil;
         $data->hasil = $request->hasil;
         $data->komentar = $request->komentar;
@@ -294,10 +303,16 @@ class PpicController extends Controller
 
     public function test_query()
     {
-        $data = JadwalPerakitan::first();
-        $data = $data->tanggal_mulai;
-        $month = gettype(date('m', strtotime($data)));
-        $current_month = gettype(date('m'));
-        return [$month, $current_month];
+        $data = JadwalPerakitan::all();
+        foreach ($data as $d) {
+            if ($d->status == $this->change_status("penyusunan")) {
+                $d->state = $this->change_state("perencanaan");
+                $d->save();
+            } else {
+                $d->state = $this->change_state("persetujuan");
+                $d->konfirmasi = 1;
+                $d->save();
+            }
+        }
     }
 }

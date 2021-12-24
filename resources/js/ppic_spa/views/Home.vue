@@ -21,9 +21,9 @@
             <thead>
               <tr>
                 <th>No</th>
+                <th>Nama Produk</th>
+                <th>Jumlah</th>
                 <th>No SO</th>
-                <th>Nomor AKN</th>
-                <th>Nomor PO</th>
                 <th>Tanggal Order</th>
                 <th>Batas Kontrak</th>
                 <th>Customer</th>
@@ -31,7 +31,19 @@
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <tr v-for="(d, index) in format_data" :key="d.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ d.nama_produk }}</td>
+                <td>{{ d.jumlah }}</td>
+                <td>{{ d.no_so }}</td>
+                <td>{{ d.tanggal_order }}</td>
+                <td>{{ d.batas_kontrak }}</td>
+                <td>{{ d.customer }}</td>
+                <td>{{ d.jenis }}</td>
+                <td>{{ d.status }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -51,7 +63,7 @@
               <tr v-for="(d, index) in data_gbj" :key="d.id">
                 <td>{{ index + 1 }}</td>
                 <td>{{ d.produk.product.kode }}</td>
-                <td>{{ d.produk.nama }}</td>
+                <td>{{ d.produk.nama + " " + d.nama }}</td>
                 <td>{{ d.stok }}</td>
                 <td>{{ d.produk.kelompok_produk.nama }}</td>
               </tr>
@@ -63,7 +75,7 @@
         <div class="box">
           <div class="tabs is-centered">
             <ul>
-              <li :class="{ 'is-active': !tabs }" @click="tabs = !tabs">
+              <li :class="{ 'is-active': !tabs }" @click="tabs = false">
                 <a>
                   <span class="icon is-small"
                     ><i class="fab fa-whmcs" aria-hidden="true"></i
@@ -71,7 +83,7 @@
                   <span>Sparepart</span>
                 </a>
               </li>
-              <li :class="{ 'is-active': tabs }" @click="tabs = !tabs">
+              <li :class="{ 'is-active': tabs }" @click="tabs = true">
                 <a>
                   <span class="icon is-small"
                     ><i class="fas fa-tools" aria-hidden="true"></i
@@ -96,65 +108,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Sparepart 1</td>
-                  <td>Unit 1</td>
-                  <td>100 pcs</td>
+                <tr v-for="item in data_sparepart" :key="item.id">
+                  <td>{{ item.kode }}</td>
+                  <td>{{ item.nama }}</td>
+                  <td>{{ item.unit }}</td>
+                  <td>{{ item.jml }}</td>
                 </tr>
               </tbody>
             </table>
@@ -170,57 +128,11 @@
                   <th>Jumlah</th>
                 </tr>
               </thead>
-
               <tbody>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
-                </tr>
-                <tr>
-                  <td scope="row">Kode 1</td>
-                  <td>Unit 1</td>
-                  <td>100 Unit</td>
+                <tr v-for="item in data_unit" :key="item.id">
+                  <td>{{ item.kode }}</td>
+                  <td>{{ item.nama }}</td>
+                  <td>{{ item.jml }}</td>
                 </tr>
               </tbody>
             </table>
@@ -246,8 +158,9 @@ export default {
   data() {
     return {
       data_gbj: [],
-      // data_gk: [],
-      // data_so: [],
+      data_so: [],
+      data_unit: [],
+      data_sparepart: [],
 
       chartOptions: {
         subtitle: {
@@ -279,13 +192,14 @@ export default {
           },
         },
         xaxis: {
-          categories: ["rencana", "pelaksanaan", "selesai"],
+          categories: ["rencana", "pelaksanaan"],
         },
       },
+
       series: [
         {
           name: "data",
-          data: [30, 40, 45],
+          data: [30, 40],
         },
       ],
 
@@ -302,67 +216,99 @@ export default {
           this.series = [
             {
               name: "data",
-              data: response.data,
+              data: [response.data[0], response.data[1]],
             },
           ];
         });
+
+      await axios.get("/api/ppic/data/so").then((response) => {
+        this.data_so = response.data;
+        console.log(this.data_so);
+      });
+
       await axios.get("/api/ppic/data/gbj").then((response) => {
         this.data_gbj = response.data;
       });
+
+      await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
+        this.data_sparepart = response.data;
+      });
+
+      await axios.get("/api/ppic/data/gk/unit").then((response) => {
+        this.data_unit = response.data;
+      });
+
+      $("#table_so").DataTable();
       $("#table_gbj").DataTable();
+      $("#table-unit").DataTable();
+      $("#table-sparepart").DataTable();
+
       this.$store.commit("setIsLoading", false);
     },
   },
 
   mounted() {
     this.loadData();
+  },
 
-    let this_obj = this;
-    $("#table_so").DataTable({
-      ajax: {
-        url: "/api/penjualan/data",
-        method: "POST",
-        headers: {
-          "X-CSRF-TOKEN": this_obj.$store.state.csrf_token,
-        },
-      },
-      columns: [
-        {
-          data: "DT_RowIndex",
-          className: "nowrap-text align-center",
-          orderable: false,
-          searchable: false,
-        },
-        {
-          data: "so",
-          orderable: false,
-          searchable: false,
-        },
-        {
-          data: "no_paket",
-        },
-        {
-          data: "nopo",
-        },
-        {
-          data: "tgl_order",
-        },
-        {
-          data: "tgl_kontrak",
-        },
-        {
-          data: "nama_customer",
-        },
-        {
-          data: "jenis",
-        },
-        {
-          data: "status",
-        },
-      ],
-    });
-    $("#table-sparepart").DataTable();
-    $("#table-unit").DataTable();
+  computed: {
+    format_data() {
+      let data = Array.from(this.data_so, (item, index) => {
+        let nama_produk = `${item.gudang_barang_jadi.produk.nama} ${item.gudang_barang_jadi.nama}`;
+        let jumlah = item.detail_pesanan.jumlah;
+        let no_so = item.detail_pesanan.pesanan.so;
+        let tanggal_order = item.detail_pesanan.pesanan.ekatalog
+          ? item.detail_pesanan.pesanan.ekatalog.tgl_buat
+          : item.detail_pesanan.pesanan.tgl_po;
+        let batas_kontrak = item.detail_pesanan.pesanan.ekatalog
+          ? item.detail_pesanan.pesanan.ekatalog.tgl_buat
+          : "";
+
+        let customer;
+        let jenis;
+        let detail = {
+          no_akn: "",
+          no_po: "",
+          instansi: "",
+          alamat: "",
+        };
+        if (item.detail_pesanan.pesanan.ekatalog) {
+          customer = item.detail_pesanan.pesanan.ekatalog.customer.nama;
+          jenis = "Ekatalog";
+          detail.no_akn = item.detail_pesanan.pesanan.ekatalog.no_paket;
+          detail.instansi = item.detail_pesanan.pesanan.ekatalog.instansi;
+          detail.alamat = item.detail_pesanan.pesanan.ekatalog.customer.alamat;
+        } else if (item.detail_pesanan.pesanan.spa) {
+          customer = item.detail_pesanan.pesanan.spa.customer.nama;
+          jenis = "SPA";
+          detail.alamat = item.detail_pesanan.pesanan.spa.customer.alamat;
+        } else if (item.detail_pesanan.pesanan.spb) {
+          customer = item.detail_pesanan.pesanan.spb.customer.nama;
+          jenis = "SPB";
+          detail.alamat = item.detail_pesanan.pesanan.spb.customer.alamat;
+        }
+        detail.no_po = item.detail_pesanan.pesanan.no_po;
+
+        let status;
+        if (item.detail_pesanan.pesanan.log) {
+          status = item.detail_pesanan.pesanan.log.nama;
+        }
+
+        return {
+          id: item.id,
+          nama_produk: nama_produk,
+          jumlah: jumlah,
+          no_so: no_so,
+          tanggal_order: tanggal_order,
+          batas_kontrak: batas_kontrak,
+          customer: customer,
+          jenis: jenis,
+          status: status,
+          detail: detail,
+        };
+      });
+      return data;
+    },
   },
 };
 </script>
