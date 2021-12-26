@@ -106,7 +106,7 @@
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="d-flex justify-content-end"><a href="{{ route('gk.export-produk') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a></div>
+                                    <div class="d-flex justify-content-end"><a href="{{ route('gk.export-unit') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a></div>
                                 </div>
                             </div>
                             <table class="table tableUnit">

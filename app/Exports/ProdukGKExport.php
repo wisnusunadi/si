@@ -21,22 +21,23 @@ class ProdukGKExport implements FromView, ShouldAutoSize
             ->join('m_gs', 'm_gs.id', 't_gk_detail.sparepart_id')
             ->join('m_sparepart', 'm_sparepart.id', 'm_gs.sparepart_id')
             ->get();
-        $dataunit = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
-            ->whereNotNull('t_gk_detail.gbj_id')
-            ->where('is_draft', 0)
-            ->where('is_keluar', 0)
-            ->groupBy('t_gk_detail.gbj_id')
-            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
-            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
-            ->get();
-        $data = $dataspr->merge($dataunit);
+        // $dataunit = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
+        //     ->whereNotNull('t_gk_detail.gbj_id')
+        //     ->where('is_draft', 0)
+        //     ->where('is_keluar', 0)
+        //     ->groupBy('t_gk_detail.gbj_id')
+        //     ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
+        //     ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+        //     ->get();
+        $data = $dataspr;
         $arr = [];
         foreach($data as $d) {
             $arr[] = [
                 'kode' => $d->kode,
                 'nama' => $d->nama,
                 'jml' => $d->jml. ' Unit',
-                'jenis' => $d->sparepart_id == null ? 'Unit' : 'Sparepart',
+                // 'jenis' => $d->sparepart_id == null ? 'Unit' : 'Sparepart',
+                'jenis' => 'Sparepart',
             ];
         }
     return view('page.gk.gudang.report', [

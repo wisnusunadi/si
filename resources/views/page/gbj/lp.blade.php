@@ -455,6 +455,7 @@
     var gbj ;
     $(document).on('click', '.editmodal', function() {
         id = $(this).data('id');
+        // console.log();
         console.log(id);
 
         $.ajax({
@@ -501,6 +502,8 @@
     $(document).on('click', '.detail', function(e) {
         var id = $(this).data('id');
         gbj = $(this).data('gbj');
+        $('span#title').text($(this).data('nama') + $(this).data('var'));
+        // console.log();
         console.log(id);
         console.log(gbj);
 
@@ -625,7 +628,7 @@
         var tr = $(this).closest('tr');
         x = tr.find('#qty').val();
         y = tr.find('.productt').val();
-        console.log(x);
+        console.log($(this).parent().prev().prev().children().val());
         console.log(y);
         tambahanPerakitan(x);
     })
@@ -801,10 +804,18 @@
         $('.cb-child-rancang').each(function() {
             if($(this).is(':checked')) {
                 ids.push($(this).val());
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Noseri Berhasil disimpan',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             }
             serir[gbj] = ids;
         })
         console.log(serir);
+        $('.tambahan-rancangan').modal('hide');
     })
     $(document).on('click', '#btnSave', function() {
         $.ajax({

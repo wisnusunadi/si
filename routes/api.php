@@ -199,7 +199,7 @@ Route::prefix('/dashboard-gbj')->group(function () {
     Route::post('/list2', [GudangController::class, 'list_tf2']);
     Route::post('/list', [GudangController::class, 'list_tf3']);
     Route::post('/list-all', [GudangController::class, 'outSO']);
-    Route::get('/list-detail/{id}', [GudangController::class, 'detailsale']);
+    Route::get('/list-detail/{id}/{value}', [GudangController::class, 'detailsale']);
 });
 
 Route::prefix('/tfp')->group(function () {
@@ -261,7 +261,7 @@ Route::prefix('/prd')->group(function () {
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
-    Route::get('/historySeri/{id}/{value}', [ProduksiController::class, 'historySeri']);
+    Route::get('/historySeri/{id}/{value}/{value2}', [ProduksiController::class, 'historySeri']);
     Route::get('/detailSeri1/{id}', [ProduksiController::class, 'detailSeri1']);
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);

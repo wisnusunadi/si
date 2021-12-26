@@ -104,7 +104,34 @@ class ProduksiController extends Controller
     {
         $data = TFProduksi::where('pesanan_id', $request->pesanan_id)->get();
         if (count($data) > 0) {
-            return response()->json(['msg' => 'Data Sudah Ada']);
+            $didd = TFProduksi::select('id')->where('pesanan_id', $request->pesanan_id)->first();
+
+            foreach ($request->data as $key => $value) {
+                $dd = new TFProduksiDetail();
+                $dd->t_gbj_id = $didd->id;
+                $dd->gdg_brg_jadi_id = $key;
+                $dd->qty = $value['jumlah'];
+                $dd->jenis = 'keluar';
+                $dd->status_id = 1;
+                $dd->state_id = 2;
+                $dd->created_at = Carbon::now();
+                $dd->save();
+
+                $did = $dd->id;
+                $checked = $request->noseri_id;
+                foreach ($value['noseri'] as $k => $v) {
+                    $nn = new NoseriTGbj();
+                    $nn->t_gbj_detail_id = $did;
+                    $nn->noseri_id = $v;
+                    $nn->status_id = 1;
+                    $nn->state_id = 2;
+                    $nn->jenis = 'keluar';
+                    $nn->created_at = Carbon::now();
+                    $nn->save();
+
+                    NoseriBarangJadi::find($v)->update(['is_ready' => 1]);
+                }
+            }
         } else {
             $d = new TFProduksi();
             $d->pesanan_id = $request->pesanan_id;
@@ -116,11 +143,11 @@ class ProduksiController extends Controller
             $d->created_at = Carbon::now();
             $d->save();
 
-            foreach ($request->gdg_brg_jadi_id as $key => $value) {
+            foreach ($request->data as $key => $value) {
                 $dd = new TFProduksiDetail();
                 $dd->t_gbj_id = $d->id;
-                $dd->gdg_brg_jadi_id = $value;
-                $dd->qty = $request->qty[$key];
+                $dd->gdg_brg_jadi_id = $key;
+                $dd->qty = $value['jumlah'];
                 $dd->jenis = 'keluar';
                 $dd->status_id = 1;
                 $dd->state_id = 2;
@@ -129,47 +156,33 @@ class ProduksiController extends Controller
 
                 $did = $dd->id;
                 $checked = $request->noseri_id;
-                foreach ($request->noseri_id[$value] as $k => $v) {
-                    // if (in_array($request->noseri_id[$value], $checked)) {
+                foreach ($value['noseri'] as $k => $v) {
                     $nn = new NoseriTGbj();
                     $nn->t_gbj_detail_id = $did;
-                    $nn->noseri_id = json_decode($request->noseri_id[$value][$k], true);
-                    $nn->layout_id = 1;
+                    $nn->noseri_id = $v;
                     $nn->status_id = 1;
                     $nn->state_id = 2;
                     $nn->jenis = 'keluar';
                     $nn->created_at = Carbon::now();
                     $nn->save();
-                    // }
+
+                    NoseriBarangJadi::find($v)->update(['is_ready' => 1]);
                 }
             }
-
-            // kurang stok ??
-
-            return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
         }
+
+        return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
     }
 
     function TfbySOFinal(Request $request)
     {
         $data = TFProduksi::where('pesanan_id', $request->pesanan_id)->get();
         if (count($data) > 0) {
-            $didd = TFProduksi::where('pesanan_id', $request->pesanan_id)->get()->pluck('id');
-            // return $d;
-            // $d = TFProduksi::find($did);
-            // return $d;
-            // $d->pesanan_id = $request->pesanan_id;
-            // $d->tgl_keluar = Carbon::now();
-            // $d->ke = 23;
-            // $d->jenis = 'keluar';
-            // $d->status_id = 2;
-            // $d->state_id = 8;
-            // $d->updated_at = Carbon::now();
-            // $d->save();
+            $didd = TFProduksi::select('id')->where('pesanan_id', $request->pesanan_id)->first();
 
             foreach ($request->data as $key => $value) {
                 $dd = new TFProduksiDetail();
-                $dd->t_gbj_id = $didd;
+                $dd->t_gbj_id = $didd->id;
                 $dd->gdg_brg_jadi_id = $key;
                 $dd->qty = $value['jumlah'];
                 $dd->jenis = 'keluar';
@@ -321,7 +334,6 @@ class ProduksiController extends Controller
             ->addColumn('status1', function ($data) {
                 $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml');
                 $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml_prd');
-                // return $sumcek.' '.$sumprd.' '.json_encode($sumcek, true).' '.gettype($sumprd);
                 if ($sumcek == $sumprd) {
                     return '<span class="badge badge-primary">Sudah Dicek</span>';
                 } elseif ($sumcek != $sumprd) {
@@ -438,7 +450,7 @@ class ProduksiController extends Controller
                     $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
                 })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->get();
                 if (count($cek) > 0) {
-                    // return '';
+
                 } else {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
                                 <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
@@ -466,8 +478,6 @@ class ProduksiController extends Controller
                     $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
                 })->where('gdg_brg_jadi_id', $d->gudang_barang_jadi_id)->get();
                 if (count($cek) > 0) {
-                    # code...
-                    // return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '" disabled>';
                 } else {
                     return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '">';
                 }
@@ -492,6 +502,7 @@ class ProduksiController extends Controller
             return response()->json([
                 'so' => $data->so,
                 'po' => $data->no_po,
+                'akn' => '-',
                 'customer' => $data->spa->Customer->nama,
             ]);
         } else if ($value == "spb") {
@@ -499,6 +510,7 @@ class ProduksiController extends Controller
             return response()->json([
                 'so' => $data->so,
                 'po' => $data->no_po,
+                'akn' => '-',
                 'customer' => $data->spb->Customer->nama,
             ]);
         }
@@ -1107,11 +1119,11 @@ class ProduksiController extends Controller
         ]);
     }
 
-    function historySeri($id, $dd)
+    function historySeri($id, $dd, $rakit)
     {
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
-        })->where('waktu_tf', $dd)->get();
+        })->where('waktu_tf', $dd)->where('date_in', $rakit)->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -1186,7 +1198,7 @@ class ProduksiController extends Controller
         $rakitseri = JadwalPerakitan::find($request->jadwal_id);
         if ($rakitseri->jumlah == $jj) {
             $rakitseri->status_tf = 14;
-            $rakitseri->status = 'selesai';
+            $rakitseri->status = 8;
             $rakitseri->save();
         } else {
             $rakitseri->status_tf = 13;
@@ -1278,7 +1290,7 @@ class ProduksiController extends Controller
                 return $d->jml . ' Unit';
             })
             ->addColumn('action', function ($d) {
-                return '<button class="btn btn-outline-secondary detail" data-tf="' . $d->waktu_tf . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
+                return '<button class="btn btn-outline-secondary detail" data-rakit="'.$d->date_in.'" data-tf="' . $d->waktu_tf . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
             })->addColumn('day_rakit_filter', function ($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('D-MM-Y');
             })->addColumn('day_kirim_filter', function ($d) {
@@ -1312,7 +1324,7 @@ class ProduksiController extends Controller
     }
 
     function test(Request $request) {
-        $data = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',5)->get();
+        $data = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',5)->get();
         return $data;
     }
 

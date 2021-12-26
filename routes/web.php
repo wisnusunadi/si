@@ -276,6 +276,7 @@ Route::group(['prefix' => '/gk', 'middleware' => 'auth'],function () {
     Route::get('/transaksi/{id}', [SparepartController::class, 'detail_trx']);
     Route::get('/export', [SparepartController::class, 'exportTransaksi'])->name('gk.export');
     Route::get('/export-produk', [SparepartController::class, 'exportProduk'])->name('gk.export-produk');
+    Route::get('/export-unit', [SparepartController::class, 'exportUnit'])->name('gk.export-unit');
 });
 
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {

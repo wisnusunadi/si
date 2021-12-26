@@ -230,15 +230,16 @@
         type: "get",
         url: "/api/prd/product_his_rakit",
         success: function (response) {
-            $.each(response, function (a,b) { 
+            $.each(response, function (a,b) {
                  $('#produk_select').append('<option value="'+b+'">'+b+'</option>');
             });
         }
     });
     $(document).on('click', '.detail', function() {
-        // console.log('test');
         var id = $(this).data('id');
         var time = $(this).data('tf');
+        var rakit = $(this).data('rakit');
+        console.log(rakit);
         $.ajax({
             url: "/api/prd/history/header/" + id,
             type: "get",
@@ -263,7 +264,7 @@
             "pageLength": 10,
             processing: true,
             ajax: {
-                url: "/api/prd/historySeri/" + id + "/" + time,
+                url: "/api/prd/historySeri/" + id + "/" + time + "/" + rakit,
             },
             columns: [
                 {data: 'no_seri'}
@@ -332,7 +333,7 @@
     $('#produk_select').change(function() {
         var search = [];
 
-        $.each($('#produk_select option:selected'), function () { 
+        $.each($('#produk_select option:selected'), function () {
             search.push($(this).val());
         });
         search = search.join('|');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ProdukGKExport;
 use App\Exports\TransaksiGKExport;
+use App\Exports\UnitGKExport;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangKarantina;
 use App\Models\GudangKarantinaDetail;
@@ -14,6 +15,7 @@ use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use App\Models\SparepartHis;
 use App\Models\TFProduksi;
+use App\Models\TFProduksiDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -579,11 +581,15 @@ class SparepartController extends Controller
     }
 
     function exportTransaksi(Request $request) {
-        return Excel::download(new TransaksiGKExport(), 'transaksi.xlsx');
+        return Excel::download(new TransaksiGKExport(), 'transaksi-'.Carbon::now()->format('dmY').'.xlsx');
     }
 
     function exportProduk() {
-        return Excel::download(new ProdukGKExport(), 'produk.xlsx');
+        return Excel::download(new ProdukGKExport(), 'sparepart-'.Carbon::now()->format('dmY').'.xlsx');
+    }
+
+    function exportUnit() {
+        return Excel::download(new UnitGKExport(), 'unit-'.Carbon::now()->format('dmY').'.xlsx');
     }
 
     function history_by_produk(Request $request)
@@ -822,8 +828,27 @@ class SparepartController extends Controller
     // terima dari gudang
     function getProdukgudang()
     {
-        $data = TFProduksi::where('ke', 12)->where('status_id', 2)->get();
-        return $data;
+        $data = TFProduksiDetail::whereHas('header', function($q) {
+            $q->where('ke', 12);
+        })->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('in', function($d) {
+                return Carbon::createFromFormat('Y-m-d', $d->header->tgl_keluar)->isoFormat('dddd, D MMM Y');
+            })
+            ->addColumn('dari', function($d) {
+                return 'Gudang Barang Jadi';
+            })
+            ->addColumn('produk', function($d) {
+                return $d->produk->produk->nama.' '.$d->produk->nama;
+            })
+            ->addColumn('jumlah', function($d) {
+                return $d->qty.' '.$d->produk->satuan->nama;
+            })
+            ->addColumn('action', function($d) {
+                return 'action';
+            })
+            ->make(true);
     }
 
     // cek

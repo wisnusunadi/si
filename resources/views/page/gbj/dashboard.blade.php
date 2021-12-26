@@ -562,7 +562,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                <h5 class="modal-title"><b>Detail Produk <span id="prd">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -640,9 +640,7 @@
                                         <tr>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
-                                            <th>Tipe</th>
                                             <th>Merk</th>
-                                            {{-- <th>Status</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -659,15 +657,6 @@
 
 @section('adminlte_js')
 <script>
-
-    $('.jml-produk').DataTable({});
-    // $('.waktu-produk').DataTable({});
-
-    // $('.tableStokLayout').DataTable({
-    //     searching: false,
-    //     "lengthChange": false
-    // });
-
     $(document).ready(function () {
         // header
         $.ajax({
@@ -802,11 +791,8 @@
             }
         });
 
-
-
         // data
         // penjualan
-
         $('.table-produk-batas-transfer-one-day').DataTable({
             processing: true,
             serverSide: true,
@@ -926,30 +912,29 @@
                 {data: 'prd'},
                 {data: 'jml'},
                 {data: 'layout'},
-                // {data: 'action'},
             ],
+
             initComplete: function () {
-          this.api().columns([3]).every( function () {
-            var column = this;
-            var select = $('<select class="form-control"><option value="">All Layout</option></select>')
-                .appendTo( $(column.footer()).empty() )
-                .on( 'change', function () {
-                    var val = $.fn.dataTable.util.escapeRegex(
-                        $(this).val()
-                    );
+                this.api().columns([3]).every( function () {
+                    var column = this;
+                    var select = $('<select class="form-control"><option value="">All Layout</option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
 
-                    column
-                        .search( val ? '^'+val+'$' : '', true, false )
-                        .draw();
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
                 } );
-
-            column.data().unique().sort().each( function ( d, j ) {
-                select.append( '<option value="'+d+'">'+d+'</option>' )
-            } );
-          } );
-          $("#layout").select2();
-       }
-
+                $("#layout").select2();
+            }
         });
 
         $('#layout').on('change', function(){
@@ -1044,8 +1029,6 @@
                 {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-
-                // {data: 'action'},
             ]
         });
         $('.waktu-produk2').DataTable({
@@ -1061,8 +1044,6 @@
                 {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-
-                // {data: 'action'},
             ]
         });
         $('.waktu-produk3').DataTable({
@@ -1078,8 +1059,6 @@
                 {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-
-                // {data: 'action'},
             ]
         });
         $('.waktu-produk4').DataTable({
@@ -1095,18 +1074,17 @@
                 {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-
-                // {data: 'action'},
             ]
         });
 
         $(document).on('click', '.salemodal', function() {
-            // console.log('ok1');
             var id = $(this).data('id');
             console.log(id);
+            var x = $(this).data('value');
+            console.log(x);
 
             $.ajax({
-                url: "/api/tfp/header-so/" +id,
+                url: "/api/tfp/header-so/" +id+"/"+x,
                 success: function(res) {
                     console.log(res);
                     $('span#so').text(res.so);
@@ -1115,18 +1093,19 @@
                     $('span#instansi').text(res.customer);
                 }
             });
-            $('#view-produk').DataTable().destroy();
+            // $('#view-produk').DataTable().destroy();
             $('#view-produk').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: "/api/dashboard-gbj/list-detail/" + id,
+                    url: "/api/dashboard-gbj/list-detail/" + id+"/"+x,
                 },
                 columns: [
                     { data: "nama_produk" },
                     { data: "jumlah" },
-                    { data: "tipe" },
+                    // { data: "tipe" },
                     { data: "merk" },
                 ],
                 "language": {
@@ -1137,20 +1116,24 @@
         })
 
         $(document).on('click', '.editmodal', function() {
+            // console.log($(this).parent().prev().prev().children().val());
             // console.log('ok1');
             var id = $(this).data('id');
             console.log(id);
-            $('.table-seri').DataTable().destroy();
+            var brg = $(this).data('brg');
+            var tipe = $(this).data('var')
+            $('span#prd').text(brg + tipe);
+            
             $('.table-seri').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
                     url: "/api/dashboard-gbj/noseri/" + id,
-                    // type: "post",
-                    // data: { id: id},
+                    type: "get",
                 },
-                column: [
+                columns: [
                     {data: "noser"},
                     {data: "posisi"},
                 ],

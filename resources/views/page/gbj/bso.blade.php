@@ -337,12 +337,10 @@
                     $('span#so').text(res.so);
                     $('span#po').text(res.po);
                     $('span#akn').text(res.akn);
-                    // $('span#instansi').text(res.customer);
                 }
         });
 
         $('#addProduk').DataTable({
-            // retrieve: true,
             destroy: true,
             autoWidth: false,
             processing: true,
@@ -374,9 +372,7 @@
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
         jml = $(this).data('jml');
-        console.log(jml);
-        console.log(prd);
-        // $('.scan-produk').DataTable().destroy();
+
         mytable = $('.scan-produk').DataTable({
             processing: false,
             serverSide: false,
@@ -446,9 +442,6 @@
 
         })
         prd1[prd].noseri = ids;
-
-        console.log(prd1);
-
     })
 
     $(document).on('click', '#rancang', function(e) {
@@ -459,13 +452,10 @@
 
         $('.cb-child-prd').each(function() {
             if($(this).is(":checked")) {
-                prdd.push($(this).val());
+            } else {
+                delete prd1[$(this).val()]
             }
         })
-
-        $('input[name^="qty"]').each(function() {
-            qtyy.push($(this).val());
-        });
 
         $.ajax({
             url: "/api/tfp/byso",
@@ -473,9 +463,7 @@
             data: {
                 "_token": "{{ csrf_token() }}",
                 pesanan_id: id,
-                gdg_brg_jadi_id: prdd,
-                qty: qtyy,
-                noseri_id: prd1,
+                data: prd1,
             },
             success: function(res) {
                 console.log(res);
@@ -513,16 +501,14 @@
                 data: prd1,
             },
             success: function(res) {
-                console.log(res);
-                // console.log('.cb-child-prd');
-                // Swal.fire({
-                //     position: 'center',
-                //     icon: 'success',
-                //     title: res.msg,
-                //     showConfirmButton: false,
-                //     timer: 1500
-                // })
-                // location.reload();
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
             }
         })
     });
@@ -534,7 +520,6 @@
             $(this).parent().next().next().next().next().children().find('button').addClass('disabled').attr('disabled', true);
         }
     })
-
 
 </script>
 @stop

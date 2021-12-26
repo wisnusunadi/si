@@ -8,9 +8,6 @@ use App\Models\DetailEkatalogProduk;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
 use App\Models\Divisi;
-use App\Models\DraftGBJ;
-use App\Models\DraftGbjDetail;
-use App\Models\DraftGbjNoSeri;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
@@ -401,7 +398,7 @@ class GudangController extends Controller
                     return $d->gdg_brg_jadi_id;
                 })
                 ->addColumn('action', function ($d) {
-                    return '<a data-toggle="modal" data-target="#detail" class="detail" data-attr="" data-gbj='.$d->gdg_brg_jadi_id.' data-id="' . $d->id . '">
+                    return '<a data-toggle="modal" data-target="#detail" class="detail" data-attr="" data-var="'.$d->produk->nama.'" data-nama="'.$d->produk->produk->nama.'" data-gbj='.$d->gdg_brg_jadi_id.' data-id="' . $d->id . '">
                                 <button class="btn btn-info"><i
                                 class="far fa-eye"></i> Detail</button>
                             </a>';
@@ -841,14 +838,19 @@ class GudangController extends Controller
 
     function getNoseriTerima(Request $request, $id) {
         $data = NoseriTGbj::whereHas('detail', function($q) use($id) {
-            $q->where('gdg_brg_jadi_id', $id);
+            $q->where('t_gbj_detail_id', $id);
         })->get();
         return datatables()->of($data)
             ->addColumn('noser', function($d) {
                 return $d->seri->noseri;
             })
             ->addColumn('posisi', function($d) {
-                return $d->layout->ruang;
+                if(isset($d->layout->ruang)) {
+                    return $d->layout->ruang;
+                } else {
+                    return '-';
+                }
+
             })
             ->make(true);
     }
@@ -1086,8 +1088,7 @@ class GudangController extends Controller
     function hh1()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 1')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
+            $q->whereBetween('tgl_masuk', [Carbon::yesterday(), Carbon::now()]);
         })->get();
         return count($data);
     }
@@ -1095,8 +1096,7 @@ class GudangController extends Controller
     function hh2()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 2')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
+            $q->whereDate('tgl_masuk', '=', Carbon::now()->subDays(2));
         })->get();
         return count($data);
     }
@@ -1104,8 +1104,7 @@ class GudangController extends Controller
     function hh3()
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 3')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
+            $q->whereDate('tgl_masuk', '<=', Carbon::now()->subDays(3));
         })->get();
         return count($data);
     }
@@ -1113,8 +1112,7 @@ class GudangController extends Controller
     function getPenerimaanProduk1(Request $request)
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 1')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
+            $q->whereBetween('tgl_masuk', [Carbon::yesterday(), Carbon::now()]);
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1132,7 +1130,7 @@ class GudangController extends Controller
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal1" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-brg="'.$d->produk->produk->nama .'" data-var="'.$d->produk->nama.'" data-id="' . $d->id . '">
                             <button class="btn btn-outline-primary" type="button" >
                             <i class="fas fa-paper-plane"></i>
                             </button>
@@ -1145,8 +1143,7 @@ class GudangController extends Controller
     function getPenerimaanProduk2(Request $request)
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 2')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
+            $q->whereDate('tgl_masuk', '=', Carbon::now()->subDays(2));
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1164,7 +1161,7 @@ class GudangController extends Controller
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal2" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-brg="'.$d->produk->produk->nama .'" data-var="'.$d->produk->nama.'" data-attr=""  data-id="' . $d->id . '">
                             <button class="btn btn-outline-primary" type="button" >
                             <i class="fas fa-paper-plane"></i>
                             </button>
@@ -1177,8 +1174,7 @@ class GudangController extends Controller
     function getPenerimaanProduk3(Request $request)
     {
         $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->whereRaw('DATEDIFF(tgl_masuk, now()) <= 3')
-            ->whereRaw('DATEDIFF(tgl_masuk, now()) > 0');
+            $q->whereDate('tgl_masuk', '<=', Carbon::now()->subDays(3));
         })->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1197,7 +1193,7 @@ class GudangController extends Controller
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal3" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-brg="'.$d->produk->produk->nama .'" data-var="'.$d->produk->nama.'" data-attr=""  data-id="' . $d->id . '">
                             <button class="btn btn-outline-primary" type="button" >
                             <i class="fas fa-paper-plane"></i>
                             </button>
@@ -1209,11 +1205,11 @@ class GudangController extends Controller
 
     function getPenerimaanAll()
     {
-        $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->where('state_id', 16)->get();
+        $data = TFProduksiDetail::with('produk', 'header')->where('jenis', 'masuk')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
-                if (isset($d->header->tgl_masuk)) {
+                if ($d->header->tgl_masuk) {
 
                     $a = Carbon::now()->diffInDays($d->header->tgl_masuk);
 
@@ -1235,7 +1231,7 @@ class GudangController extends Controller
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
             ->addColumn('action', function ($d) {
-                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->gdg_brg_jadi_id . '">
+                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-brg="'.$d->produk->produk->nama .'" data-var="'.$d->produk->nama.'"  data-id="' . $d->id . '">
                             <button class="btn btn-outline-primary" type="button" >
                             <i class="fas fa-paper-plane"></i>
                             </button>
@@ -1251,8 +1247,7 @@ class GudangController extends Controller
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })
-        ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 1')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        ->whereBetween('tgl_kontrak', [Carbon::yesterday(), Carbon::now()])
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1270,8 +1265,7 @@ class GudangController extends Controller
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })
-        ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 2')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        ->whereDate('tgl_kontrak', '=', Carbon::now()->subDays(2))
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1289,8 +1283,7 @@ class GudangController extends Controller
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })
-        ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 3')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        ->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(3))
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1307,8 +1300,7 @@ class GudangController extends Controller
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })
-        ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 1')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        ->whereBetween('tgl_kontrak', [Carbon::yesterday(), Carbon::now()])
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1341,7 +1333,8 @@ class GudangController extends Controller
                 return '<span class="badge yellow-text">Sedang Berlangsung</span>';
             })
             ->addColumn('action', function ($d) {
-                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr=""  data-id="' . $d->pesanan_id . '">
+                $x = $d->getTable();
+                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr="" data-value='.$x.'  data-id="' . $d->pesanan_id . '">
                              <button class="btn btn-outline-primary" type="button" >
                                 <i class="fas fa-paper-plane"></i>
                              </button>
@@ -1355,8 +1348,7 @@ class GudangController extends Controller
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })
-        ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 2')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        ->whereDate('tgl_kontrak', '=', Carbon::now()->subDays(2))
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1389,7 +1381,8 @@ class GudangController extends Controller
                 return '<span class="badge yellow-text">Sedang Berlangsung</span>';
             })
             ->addColumn('action', function ($d) {
-                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr=""  data-id="' . $d->pesanan_id . '">
+                $x = $d->getTable();
+                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr="" data-value='.$x.' data-id="' . $d->pesanan_id . '">
                              <button class="btn btn-outline-primary" type="button" >
                                 <i class="fas fa-paper-plane"></i>
                              </button>
@@ -1404,8 +1397,7 @@ class GudangController extends Controller
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })
-        ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 3')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        ->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(3))
         ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -1438,7 +1430,8 @@ class GudangController extends Controller
                 return '<span class="badge yellow-text">Sedang Berlangsung</span>';
             })
             ->addColumn('action', function ($d) {
-                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr=""  data-id="' . $d->pesanan_id . '">
+                $x = $d->getTable();
+                return '<a data-toggle="modal" data-target="#salemodal" class="salemodal" data-attr="" data-value='.$x.'  data-id="' . $d->pesanan_id . '">
                              <button class="btn btn-outline-primary" type="button" >
                                 <i class="fas fa-paper-plane"></i>
                              </button>
@@ -1448,47 +1441,77 @@ class GudangController extends Controller
             ->make(true);
     }
 
-    function detailsale($id) {
-        $data = DetailPesananProduk::with('noseridetailpesanan')->where('detail_pesanan_id', $id)->get();
-        return datatables()->of($data)
-        ->addIndexColumn()
-        ->addColumn('nama_produk', function ($data) {
-            if (empty($data->gudangbarangjadi->nama)) {
-                return $data->gudangbarangjadi->produk->nama;
-            } else {
-                return $data->gudangbarangjadi->nama;
+    function detailsale($id, $value) {
+        if ($value == "ekatalog") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
             }
-        })
-        ->addColumn('jumlah', function ($data) {
-            return $data->detailpesanan->jumlah;
-        })
-        ->addColumn('tipe', function ($data) {
-            return $data->gudangbarangjadi->produk->nama;
-        })
-        ->addColumn('merk', function ($data) {
-            return $data->gudangbarangjadi->produk->merk;
-        })
-        ->addColumn('button', function ($data) {
-            return '<a type="button" class="noserishow" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
-        })
-        ->rawColumns(['button'])
-        ->make(true);
+
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+        } else if ($value == "spa") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
+
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+        } else if ($value == "spb") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
+
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+        }
+
+        return datatables()->of($g)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                if (empty($data->gudangbarangjadi->nama)) {
+                    return $data->gudangbarangjadi->produk->nama;
+                } else {
+                    return $data->gudangbarangjadi->produk->nama.' '.$data->gudangbarangjadi->nama;
+                }
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->detailpesanan->jumlah. ' '.$data->gudangbarangjadi->satuan->nama;
+            })
+            ->addColumn('tipe', function ($data) {
+                return $data->gudangbarangjadi->produk->nama;
+            })
+            ->addColumn('merk', function ($data) {
+                return $data->gudangbarangjadi->produk->merk;
+            })
+            ->addColumn('button', function ($data) {
+                return '<a type="button" class="noserishow" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
+            })
+            ->rawColumns(['button'])
+            ->make(true);
     }
 
     function outSO()
     {
-        $data = DetailPesananProduk::with('GudangBarangJadi', 'detailpesanan')
-                ->get();
+        $data = DB::table('view_dashboard_produk_tdk_so')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('produk', function($d) {
-                return $d->GudangBarangJadi->produk->nama;
+                return $d->prd;
             })
             ->addColumn('permintaan', function($d) {
-                return $d->detailpesanan->jumlah.' '.$d->GudangBarangJadi->Satuan->nama;
+                return $d->jumlah;
             })
             ->addColumn('current_stok', function($d) {
-                return $d->GudangBarangJadi->stok.' '.$d->GudangBarangJadi->Satuan->nama;
+                return $d->stok;
             })
             ->make(true);
     }
