@@ -238,7 +238,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Batas Kontrak</label>
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Delivery</label>
                                             <div class="col-4">
                                                 <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
                                                 <div class="invalid-feedback" id="msgbatas_kontrak">
@@ -664,7 +664,7 @@
                 // }
                 checkvalidasi();
             } else if ($(this).val() == "") {
-                $("#msgbatas_kontrak").text("Batas Kontrak Harus diisi");
+                $("#msgbatas_kontrak").text("Tanggal Delivery Harus diisi");
                 $("#batas_kontrak").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }

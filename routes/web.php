@@ -169,7 +169,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
         Route::get('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
-        Route::get('/detail/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
+        Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
         Route::get('/create/{detail_pesanan_id}/{pesanan_id}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
         Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
@@ -186,6 +186,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_ekspedisi'])->name('logistik.ekspedisi.detail');
         Route::view('/create', 'page.logistik.ekspedisi.create')->name('logistik.ekspedisi.create');
+        Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_ekspedisi'])->name('logistik.ekspedisi.store');
         Route::get('/edit/{id}', [App\Http\Controllers\MasterController::class, 'update_ekspedisi_modal'])->name('logistik.ekspedisi.edit');
     });
 
@@ -240,8 +241,13 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
     Route::view('/dashboard', 'page.as.dashboard')->name('as.dashboard');
 
+    Route::group(['prefix' => '/penjualan'], function () {
+        Route::view('/show', 'page.as.penjualan.show')->name('as.penjualan.show');
+    });
+
     Route::group(['prefix' => '/so'], function () {
         Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so'])->name('as.so.show');
+        Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so'])->name('as.so.detail');
         Route::view('/show', 'page.as.so.show')->name('as.so.show');
         Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
     });

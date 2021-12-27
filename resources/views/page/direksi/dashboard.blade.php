@@ -165,8 +165,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="card removeshadow">
-                    <div class="card-body blue-bg">
-                        <h3 class="link">Penjualan</h3>
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-search-dollar"></i> Penjualan</h5>
+                    </div>
+                    <div class="card-body">
+
                         <div class="row">
                             <div class="col-lg-6 col-12">
                                 <div class="card h-100">

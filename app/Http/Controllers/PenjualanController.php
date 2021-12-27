@@ -487,9 +487,34 @@ class PenjualanController extends Controller
                         return '-';
                     }
                 })
+                ->addColumn('nama_customer', function ($data) {
+                    if (isset($data->NoseriDetailPesanan)) {
+                        $name = explode('/', $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                        if ($name[1] == 'EKAT') {
+                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
+                        } else if ($name[1] == 'SPA') {
+                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                        } else if ($name[1] == 'SPB') {
+                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                        }
+                    } else {
+                        return '-';
+                    }
+                })
                 ->addColumn('tgl_uji', function ($data) {
                     if (isset($data->NoseriDetailPesanan)) {
                         return Carbon::createFromFormat('Y-m-d', $data->NoseriDetailPesanan->tgl_uji)->format('d-m-Y');
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('no_sj', function ($data) {
+                    if (isset($data->NoseriDetailPesanan)) {
+                        if (isset($data->NoseriDetailPesanan->NoseriDetailLogistik)) {
+                            return $data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik->Logistik->nosurat;
+                        } else {
+                            return '-';
+                        }
                     } else {
                         return '-';
                     }
@@ -1188,7 +1213,7 @@ class PenjualanController extends Controller
                       Details
                     </button>
                 </a>';
-                if ($divisi_id == "26") {
+                if ($divisi_id == "26" || $divisi_id == "8") {
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan" || $data->Pesanan->State->nama == "PO") {
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">

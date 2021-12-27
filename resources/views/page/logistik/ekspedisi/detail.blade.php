@@ -26,6 +26,10 @@
         max-width: 25ch;
     }
 
+    .wb {
+        word-break: break-all;
+    }
+
     .fa-search:hover {
         color: #4682B4;
     }
@@ -61,7 +65,25 @@
 @stop
 
 @section('content_header')
-<h1 class="m-0 text-dark">Detail Ekspedisi</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Ekspedisi</h1>
+        </div>
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                @endif
+                <li class="breadcrumb-item"><a href="{{route('logistik.ekspedisi.show')}}">Ekspedisi</a></li>
+                <li class="breadcrumb-item active">Detail</li>
+
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
 
 @section('content')
@@ -133,6 +155,7 @@
                                         <th>No SO</th>
                                         <th>No SJ</th>
                                         <th>Tanggal Kirim</th>
+                                        <th>No Resi</th>
                                         <th>Nama Customer</th>
                                         <th>Alamat</th>
                                         <th>Telepon</th>
@@ -220,12 +243,16 @@
 
                 },
                 {
-                    data: 'nama_customer',
+                    data: 'noresi',
 
                 },
                 {
+                    data: 'nama_customer',
+                    className: 'wb',
+                },
+                {
                     data: 'alamat',
-
+                    className: 'wb',
                 },
                 {
                     data: 'telp',

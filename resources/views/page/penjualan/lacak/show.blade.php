@@ -13,6 +13,9 @@
                 @if(Auth::user()->divisi_id == "26" || Auth::user()->divisi_id == "8")
                 <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
                 <li class="breadcrumb-item active">Lacak</li>
+                @elseif(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Lacak</li>
                 @elseif(Auth::user()->divisi_id == "2")
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
                 <li class="breadcrumb-item active">Lacak</li>
@@ -141,8 +144,10 @@
                                         <th>No</th>
                                         <th>No Seri</th>
                                         <th>No SO</th>
+                                        <th>Customer</th>
                                         <th>Nama Produk</th>
                                         <th>Tanggal Uji</th>
+                                        <th>No SJ</th>
                                         <th>Tanggal Kirim</th>
                                         <th>Status</th>
                                     </tr>
@@ -370,11 +375,19 @@
                     className: 'nowraps'
                 },
                 {
+                    data: 'nama_customer',
+                    className: 'nowraps'
+                },
+                {
                     data: 'nama_produk',
                     className: 'nowraps'
                 },
                 {
                     data: 'tgl_uji',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_sj',
                     className: 'nowraps'
                 },
                 {

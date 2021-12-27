@@ -50,6 +50,13 @@ class MasterController extends Controller
             ->addColumn('sj', function ($data) {
                 return $data->nosurat;
             })
+            ->addColumn('no_resi', function ($data) {
+                if (!empty($data->no_resi)) {
+                    return $data->no_resi;
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('tgl', function ($data) {
                 return $data->tgl_kirim;
             })
@@ -87,6 +94,11 @@ class MasterController extends Controller
                 return;
             })
             ->addColumn('status', function ($data) {
+                if ($data->status_id == "10") {
+                    return '<span class="badge blue-text">Selesai</span>';
+                } else {
+                    return '<span class="badge red-text">Belum Kirim</span>';
+                }
                 // $y = array();
                 // $count = 0;
                 // $x = DetailPesananProduk::where('pesanan_id', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->id)->get();
@@ -453,6 +465,7 @@ class MasterController extends Controller
         //         'tipe.required' => 'Tipe Produk harus di isi',
         //     ]
         // );
+        $bool = true;
         $ekspedisi =  Ekspedisi::create([
             'nama' => $request->nama_ekspedisi,
             'alamat' => $request->alamat,
@@ -460,12 +473,23 @@ class MasterController extends Controller
             'telp' => $request->telepon,
             'ket' => $request->keterangan,
         ]);
-        $ekspedisi->JalurEkspedisi()->attach($request->jalur);
+        if ($ekspedisi) {
+            $ekspedisi->JalurEkspedisi()->attach($request->jalur);
 
-        if ($request->jurusan == 'provinsi') {
-            $ekspedisi->Provinsi()->attach($request->provinsi);
+            if ($request->jurusan == 'provinsi') {
+                $ekspedisi->Provinsi()->attach($request->provinsi);
+            } else {
+                $ekspedisi->Provinsi()->attach(35);
+            }
         } else {
-            $ekspedisi->Provinsi()->attach(35);
+            $bool = false;
+        }
+
+        if ($bool == true) {
+            // Alert::success('Berhasil', 'Berhasil menambahkan data');
+            return redirect()->back()->with('success', 'success');
+        } else {
+            return redirect()->back()->with('error', 'error');
         }
     }
     public function create_produk(Request $request)

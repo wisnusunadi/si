@@ -14,6 +14,10 @@
                 <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
                 <li class="breadcrumb-item"><a href="{{route('penjualan.penjualan.show')}}">Penjualan</a></li>
                 <li class="breadcrumb-item active">Edit SPB</li>
+                @elseif(Auth::user()->divisi_id == "8")
+                <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="{{route('as.penjualan.show')}}">Penjualan</a></li>
+                <li class="breadcrumb-item active">Edit SPB</li>
                 @endif
             </ol>
         </div><!-- /.col -->

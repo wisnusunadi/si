@@ -1171,16 +1171,22 @@ return [
             'url' => '/logistik/pengiriman/show',
             'auth' => [15],
         ],
-        [
-            'text' => 'Riwayat Pengiriman',
-            'icon' => 'far fa-circle',
-            'url' => '/logistik/pengiriman/riwayat/show',
-            'auth' => [15],
-        ],
+        // [
+        //     'text' => 'Riwayat Pengiriman',
+        //     'icon' => 'far fa-circle',
+        //     'url' => '/logistik/pengiriman/riwayat/show',
+        //     'auth' => [15],
+        // ],
         [
             'text' => 'Laporan',
             'icon' => 'far fa-circle',
             'url' => '/logistik/laporan/show',
+            'auth' => [15],
+        ],
+        [
+            'text' => 'Lacak',
+            'icon' => 'far fa-circle',
+            'url' => '/penjualan/lacak/show',
             'auth' => [15],
         ],
 
@@ -1217,6 +1223,12 @@ return [
             'text' => 'Customer',
             'icon' => 'far fa-circle',
             'url' => '/penjualan/customer/show',
+            'auth' => [8],
+        ],
+        [
+            'text' => 'Penjualan',
+            'icon' => 'far fa-circle',
+            'url' => '/as/penjualan/show',
             'auth' => [8],
         ],
         [

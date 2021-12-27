@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Produk;
 use App\Models\JadwalPerakitan;
 use App\Models\GudangBarangJadi;
+use App\Models\Pesanan;
 
 // event
 use App\Events\TestEvent;
@@ -278,22 +279,23 @@ class PpicController extends Controller
         //     $q->whereIn('log', ['penjualan', 'po']);
         // })->count();
 
-        $Ekatalog = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) {
-            $q->whereIn('status', ['sepakat', 'nego', 'batal'])->whereIn('log', ['penjualan', 'po']);
+        $data = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+            $q->whereIn('log_id', ['7', '9']);
         })->get();
-        $Spa = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Spa', function ($q) {
-            $q->whereIn('log', ['penjualan', 'po']);
-        })->get();
-        $Spb = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Spb', function ($q) {
-            $q->whereIn('log', ['penjualan', 'po']);
-        })->get();
+        // $Nonekatalog = GudangBarangJadi::doesntHave('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+        //     $q->whereIn('log_id', ['7', '9']);
+        // })->get();
 
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        // $data = $Ekatalog;
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
-                return $data->Produk->nama . " " . $data->nama;
+                if (!empty($data->nama)) {
+                    return $data->Produk->nama . "- <b>" . $data->nama . "</b>";
+                } else {
+                    return $data->Produk->nama;
+                }
             })
             ->addColumn('gbj', function ($data) {
                 return $data->stok;
@@ -307,6 +309,10 @@ class PpicController extends Controller
                 } else {
                     return '<div style="color:red;">' . $jumlah . '</div>';
                 }
+            })
+            ->addColumn('total', function ($data) {
+                $jumlah_stok_permintaan = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id, $data->produk->id);
+                return $jumlah_stok_permintaan;
             })
             ->addColumn('sepakat', function ($data) {
                 // $id = $data->id;
@@ -429,8 +435,24 @@ class PpicController extends Controller
             ->addColumn('aksi', function ($data) {
                 return '<i class="fas fa-search"></i>';
             })
-            ->rawColumns(['gbj', 'aksi', 'penjualan'])
+            ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
             ->make(true);
+    }
+
+    public function get_detail_master_stok($id)
+    {
+        $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->whereIn('log_id', ['7', '9'])->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->so;
+            })
+            ->addColumn('data', function ($data) {
+                return $data->stok;
+            })->make(true);
     }
 
     public function get_count_ekatalog($id, $produk_id, $status)

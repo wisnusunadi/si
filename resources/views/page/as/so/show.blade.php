@@ -3,7 +3,26 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Sales Order</h1>
+
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Sales Order</h1>
+        </div>
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "8")
+                <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Sales Order</li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Penjualan</li>
+                @endif
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+
 @stop
 
 @section('adminlte_css')
@@ -30,26 +49,31 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 25ch;
+        max-width: 30ch;
     }
+
+    .nowraptxt {
+        white-space: nowrap;
+    }
+
 
     @media screen and (min-width: 1440px) {
         section {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .dropdown-item {
-            font-size: 14px;
+            font-size: 12px;
         }
     }
 
     @media screen and (max-width: 1439px) {
         section {
-            font-size: 12px;
+            font-size: 10px;
         }
 
         .dropdown-item {
-            font-size: 12px;
+            font-size: 10px;
         }
     }
 </style>
@@ -62,73 +86,83 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Pengiriman</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
-                                                    <label class="form-check-label" for="defaultCheck1">
-                                                        Belum Dikirim
-                                                    </label>
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-per_produk-tab" data-toggle="pill" href="#pills-per_produk" role="tab" aria-controls="pills-per_produk" aria-selected="true">Per Produk</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-per_sj-tab" data-toggle="pill" href="#pills-per_sj" role="tab" aria-controls="pills-per_sj" aria-selected="false">Per Surat Jalan</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-per_produk" role="tabpanel" aria-labelledby="pills-per_produk-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="float-right filter">
+                                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-filter"></i> Filter
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <div class="px-3 py-3">
+                                                    <div class="form-group">
+                                                        <label for="jenis_penjualan">Pengiriman</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                                Belum Dikirim
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
+                                                            <label class="form-check-label" for="defaultCheck2">
+                                                                Sebagian Dikirim
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
+                                                            <label class="form-check-label" for="defaultCheck2">
+                                                                Sudah Dikirim
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <span class="float-right">
+                                                            <button class="btn btn-primary">
+                                                                Cari
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                        Sebagian Dikirim
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                        Sudah Dikirim
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </div>
+                                        </span>
                                     </div>
-                                </span>
-                            </div>
-                        </div>
+                                </div>
 
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table" style="text-align:center;" id="showtable">
-                                        <thead>
-                                            <th>No</th>
-                                            <th>No SO</th>
-                                            <th>Tanggal Pengiriman</th>
-                                            <th>Customer</th>
-                                            <th>Alamat</th>
-                                            <th>Provinsi</th>
-                                            <th>Telepon</th>
-
-                                            <th>Status</th>
-                                            <th>Keterangan</th>
-                                            <th>Aksi</th>
-                                        </thead>
-                                        <tbody>
-                                            <!-- <tr>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table" style="text-align:center;" id="showtable">
+                                                <thead>
+                                                    <th>No</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>No SO</th>
+                                                    <th>Tanggal Kirim</th>
+                                                    <th>Customer</th>
+                                                    <th>Alamat</th>
+                                                    <th>Provinsi</th>
+                                                    <th>Telepon</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- <tr>
                                                 <td>1</td>
                                                 <td>SO/EKAT/X/02/98</td>
                                                 <td>
@@ -172,8 +206,124 @@
                                                 <td>-</td>
                                                 <td><a href=""></td>
                                             </tr> -->
-                                        </tbody>
-                                    </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="pills-per_sj" role="tabpanel" aria-labelledby="pills-per_sj-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="float-right filter">
+                                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-filter"></i> Filter
+                                            </button>
+                                            <form id="filter_riwayat">
+                                                <div class="dropdown-menu">
+                                                    <div class="px-3 py-3">
+                                                        <div class="form-group">
+                                                            <label for="pengiriman_riwayat">Pengiriman</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="ekspedisi" name="pengiriman_riwayat[]" id="pengiriman_riwayat1" />
+                                                                <label class="form-check-label" for="pengiriman_riwayat1">
+                                                                    Ekspedisi
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="nonekspedisi" name="pengiriman_riwayat[]" id="pengiriman_riwayat2" />
+                                                                <label class="form-check-label" for="pengiriman_riwayat2">
+                                                                    Non Ekspedisi
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="provinsi_riwayat">Provinsi</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="2" name="provinsi_riwayat[]" id="provinsi_riwayat1" />
+                                                                <label class="form-check-label" for="provinsi_riwayat1">
+                                                                    Jawa
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="provinsi_riwayat[]" id="provinsi_riwayat2" />
+                                                                <label class="form-check-label" for="provinsi_riwayat2">
+                                                                    Luar Jawa
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="jenis_penjualan_riwayat">Jenis Penjualan</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="ekat" name="jenis_penjualan_riwayat[]" id="jenis_penjualan_riwayat1" />
+                                                                <label class="form-check-label" for="jenis_penjualan_riwayat1">
+                                                                    Ekatalog
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="spa" name="jenis_penjualan_riwayat[]" id="jenis_penjualan_riwayat2" />
+                                                                <label class="form-check-label" for="jenis_penjualan_riwayat2">
+                                                                    SPA
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="spb" name="jenis_penjualan_riwayat[]" id="jenis_penjualan_riwayat3" />
+                                                                <label class="form-check-label" for="jenis_penjualan_riwayat3">
+                                                                    SPB
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <span class="float-right">
+                                                                <button class="btn btn-primary" id="filter_riwayat" type="submit">
+                                                                    Cari
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table" id="riwayattable" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No SO</th>
+                                                        <th>No SJ</th>
+                                                        <th>Ekspedisi</th>
+                                                        <th>No Resi</th>
+                                                        <th>Tanggal Kirim</th>
+                                                        <th>Nama Customer</th>
+                                                        <th>Provinsi</th>
+                                                        <th>Status</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -181,11 +331,12 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
+
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
-                    <div class="modal-header bg-info">
-                        <h4 class="modal-title">Info</h4>
+                    <div class="modal-header">
+                        <h4 id="modal-title">Detail</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -199,61 +350,147 @@
     </div>
 </section>
 @stop
+
 @section('adminlte_js')
 <script>
     $(function() {
-        $(function() {
-            $('#showtable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/as/so/data',
-                    'type': 'GET',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    }
+
+        $('#riwayattable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/pengiriman/riwayat/data/semua/semua/semua',
+                'type': 'GET',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
                 },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                {
+                    data: 'so'
                 },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    }, {
-                        data: 'so'
+                {
+                    data: 'sj',
 
-                    }, {
-                        data: 'tgl_kirim',
+                },
+                {
+                    data: 'ekspedisi',
 
-                    }, {
-                        data: 'nama_customer',
-                        className: 'minimizechar',
-                    }, {
-                        data: 'alamat',
-                        className: 'minimizechar',
+                },
+                {
+                    data: 'no_resi',
 
-                    }, {
-                        data: 'provinsi',
+                }, {
+                    data: 'tgl_kirim',
 
-                    },
-                    {
-                        data: 'telepon',
+                }, {
+                    data: 'nama_customer',
 
-                    }, {
-                        data: 'status',
-                    },
-                    {
-                        data: 'keterangan',
+                }, {
+                    data: 'provinsi',
 
-                    }, {
-                        data: 'button',
+                }, {
+                    data: 'status',
 
-                    }
-                ]
+                }, {
+                    data: 'button',
+
+                }
+            ]
+        });
+
+        $('#filter_riwayat').submit(function() {
+            var values_pengiriman = [];
+            $('input[name="pengiriman_riwayat[]"]:checked').each(function() {
+                values_pengiriman.push($(this).val());
             });
 
-        })
+            var values_provinsi = [];
+            $('input[name="provinsi_riwayat[]"]:checked').each(function() {
+                values_provinsi.push($(this).val());
+            });
+
+            var values_jenis_penjualan = [];
+            $('input[name="jenis_penjualan_riwayat[]"]:checked').each(function() {
+                values_jenis_penjualan.push($(this).val());
+            });
+
+            if (values_pengiriman != 0) {
+                var x = values_pengiriman;
+            } else {
+                var x = ['semua'];
+            }
+
+            if (values_provinsi != 0) {
+                var y = values_provinsi;
+            } else {
+                var y = ['semua'];
+            }
+
+            if (values_jenis_penjualan != 0) {
+                var z = values_jenis_penjualan;
+            } else {
+                var z = ['semua'];
+            }
+
+            $('#riwayattable').DataTable().ajax.url('/api/logistik/pengiriman/riwayat/data/' + x + '/' + y + '/' + z).load();
+            return false;
+        });
+
+        $('#showtable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/as/so/data',
+                'type': 'GET',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'nama_produk',
+                    className: 'nowraptxt'
+                }, {
+                    data: 'so',
+                    className: 'nowraptxt'
+                }, {
+                    data: 'tgl_kirim',
+                }, {
+                    data: 'nama_customer',
+                    className: 'minimizechar',
+                }, {
+                    data: 'alamat',
+                    className: 'minimizechar',
+                }, {
+                    data: 'provinsi',
+                },
+                {
+                    data: 'telepon',
+                }, {
+                    data: 'keterangan',
+                    className: 'minimizechar',
+                }, {
+                    data: 'status',
+                }, {
+                    data: 'button',
+
+                }
+            ]
+        });
 
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
