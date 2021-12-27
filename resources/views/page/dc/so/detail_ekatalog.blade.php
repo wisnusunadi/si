@@ -238,9 +238,9 @@
                                             </label>
                                         </div>
                                     </th>
-                                    <th>No COO</th>
                                     <th>No Seri</th>
-                                    <th>Diketahui Oleh</th>
+                                    <th>Tgl Kirim</th>
+                                    <th>Ket</th>
                                     <th>Laporan</th>
                                 </tr>
                             </thead>
@@ -352,8 +352,6 @@
                 }
             ]
         });
-
-
         $('#noseritable').DataTable({
             destroy: true,
             processing: true,
@@ -364,7 +362,6 @@
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
-
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -375,13 +372,13 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'nocoo',
-
-            }, {
                 data: 'noseri',
 
             }, {
-                data: 'diket',
+                data: 'tgl',
+
+            }, {
+                data: 'ket',
 
             }, {
                 data: 'laporan',

@@ -126,6 +126,31 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <label for="pic" class="col-4 col-form-label" style="text-align:right;">PIC</label>
+                                        <div class="col-5">
+                                            <input type="text" class="form-control @error('pic') is-invalid @enderror" value="" placeholder="Nama PIC" id="pic" name="pic" />
+                                            <div class="invalid-feedback" id="msgpic">
+                                                @if($errors->has('pic'))
+                                                {{ $errors->first('pic')}}
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="batas" class="col-form-label col-4" style="text-align: right">Batas Pembayaran</label>
+                                        <div class="col-2 input-group">
+                                            <input type="text" class="form-control col-form-label @error('batas') is-invalid @enderror" name="batas" id="batas" aria-label="batas" placeholder="Batas hari pembayaran" />
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="ket_no_paket">Hari</span>
+                                            </div>
+                                            <div class="invalid-feedback" id="msgno_paket">
+                                                @if($errors->has('batas'))
+                                                {{ $errors->first('batas')}}
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="telepon" class="col-4 col-form-label" style="text-align:right;">Keterangan</label>
                                         <div class="col-5">
                                             <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
