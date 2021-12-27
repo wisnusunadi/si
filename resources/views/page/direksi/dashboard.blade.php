@@ -795,7 +795,7 @@
             },
             weekends: false,
             locale: 'id',
-            stickyFooterScrollbar : false,
+            contentHeight: 'auto',
             events: function( fetchInfo, successCallback, failureCallback ) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",

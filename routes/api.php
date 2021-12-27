@@ -324,6 +324,10 @@ Route::prefix('/gk')->group(function () {
     Route::post('/editseri-out', [SparepartController::class, 'getOutSeriEdit']);
     Route::post('/editseriunit-out', [SparepartController::class, 'getOutSeriEditUnit']);
 
+    // edit transfer
+    Route::post('/updateTransfer', [SparepartController::class, 'updateTransfer']);
+    Route::post('/updateTransferDraft', [SparepartController::class, 'updateTransferDraft']);
+
     Route::prefix('/terima')->group(function() {
         Route::get('/all', [SparepartController::class, 'getProdukgudang']);
     });

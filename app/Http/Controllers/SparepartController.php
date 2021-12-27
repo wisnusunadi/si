@@ -780,6 +780,10 @@ class SparepartController extends Controller
                 $i++;
                 return '<input type="checkbox" class="cb-child" name="noseri_id[][' . $i . ']" value="' . $d->id . '">';
             })
+            ->addColumn('kodenew', function ($d) use ($i) {
+                $i++;
+                return '<input type="checkbox" class="cb-child-new" name="noseri_id[][' . $i . ']" value="' . $d->id . '">';
+            })
             ->addColumn('seri', function ($d) {
                 return $d->noseri;
             })
@@ -789,7 +793,7 @@ class SparepartController extends Controller
             ->addColumn('tingkat', function ($d) {
                 return 'Level ' . $d->tk_kerusakan;
             })
-            ->rawColumns(['kode'])
+            ->rawColumns(['kode', 'kodenew'])
             ->make(true);
     }
 
@@ -1319,7 +1323,7 @@ class SparepartController extends Controller
                     $noseri->gk_detail_id = $id;
                     $noseri->noseri = $request->noseri[$vv][$i]["noseri"];
                     $noseri->remark = $request->noseri[$vv][$i]['kerusakan'];
-                    $noseri->tk_kerusakan = $request->noseri[$vv][$i]['tingkat'];
+                    // $noseri->tk_kerusakan = $request->noseri[$vv][$i]['tingkat'];
                     $noseri->is_draft = 0;
                     $noseri->is_keluar = 0;
                     $noseri->updated_at = Carbon::now();
@@ -1352,7 +1356,7 @@ class SparepartController extends Controller
                     $noserii->gk_detail_id = $idd;
                     $noserii->noseri = $request->seriunit[$uu][$m]["noseri"];
                     $noserii->remark = $request->seriunit[$uu][$m]['kerusakan'];
-                    $noserii->tk_kerusakan = $request->seriunit[$uu][$m]['tingkat'];
+                    // $noserii->tk_kerusakan = $request->seriunit[$uu][$m]['tingkat'];
                     $noserii->is_draft = 0;
                     $noserii->is_keluar = 0;
                     $noserii->updated_at = Carbon::now();
@@ -1363,6 +1367,141 @@ class SparepartController extends Controller
         }
 
         return response()->json(['msg' => 'Data berhasil diterima']);
+    }
+
+    function updateTransfer(Request $request) {
+        $header = GudangKarantina::find($request->id);
+        $header->deskripsi = $request->tujuan;
+        $header->is_draft = 0;
+        $header->is_keluar = 1;
+        $header->updated_at = Carbon::now();
+        $header->updated_by = $request->userid;
+        // $header->save();
+        if (count($request->data) > 0) {
+            NoseriKeluarGK::whereIn('gk_detail_id', [$request->kodespr])->delete();
+            GudangKarantinaDetail::whereIn('id', [$request->kodespr])->delete();
+            foreach($request->data as $ks => $vs) {
+                $spr = new GudangKarantinaDetail();
+                $spr->gk_id = $header->id;
+                $spr->sparepart_id = $ks;
+                $spr->qty_spr = $vs['jumlah'];
+                $spr->is_draft = 0;
+                $spr->is_keluar = 1;
+                $spr->created_at = Carbon::now();
+                $spr->created_by = $request->userid;
+                $spr->save();
+
+                $did = $spr->id;
+
+                foreach($vs['noseri'] as $k => $v) {
+                    $nspr = new NoseriKeluarGK();
+                    $nspr->gk_detail_id = $did;
+                    $nspr->noseri_id = $v;
+                    $nspr->created_at = Carbon::now();
+                    $nspr->created_by = $request->userid;
+                    $nspr->save();
+
+                    // GudangKarantinaNoseri::find($v)->update(['is_ready' => 1]);
+                }
+            }
+        }
+
+        if (count($request->dataunit) > 0) {
+            NoseriKeluarGK::whereIn('gk_detail_id', [$request->kodeunit])->delete();
+            GudangKarantinaDetail::whereIn('id', [$request->kodeunit])->delete();
+            foreach($request->dataunit as $ku => $vu) {
+                $unit = new GudangKarantinaDetail();
+                $unit->gk_id = $header->id;
+                $unit->gbj_id = $ku;
+                $unit->qty_unit = $vu['jumlah'];
+                $unit->is_draft = 0;
+                $unit->is_keluar = 1;
+                $unit->created_at = Carbon::now();
+                $unit->created_by = $request->userid;
+                $unit->save();
+
+                $didd = $unit->id;
+
+                foreach($vu['noseri'] as $kk => $vv) {
+                    $uspr = new NoseriKeluarGK();
+                    $uspr->gk_detail_id = $didd;
+                    $uspr->noseri_id = $vv;
+                    $uspr->created_at = Carbon::now();
+                    $uspr->created_by = $request->userid;
+                    $uspr->save();
+
+                    // GudangKarantinaNoseri::find($vv)->update(['is_ready' => 1]);
+                }
+            }
+        }
+
+        return response()->json(['msg' => 'Data berhasil di Transfer']);
+    }
+
+    function updateTransferDraft(Request $request) {
+
+        $header = GudangKarantina::find($request->id);
+
+        $header->is_draft = 1;
+        $header->is_keluar = 1;
+        $header->updated_at = Carbon::now();
+        $header->updated_by = $request->userid;
+        $header->save();
+        if (count($request->data) > 0) {
+            NoseriKeluarGK::whereIn('gk_detail_id', [$request->kodespr])->delete();
+            GudangKarantinaDetail::whereIn('id', [$request->kodespr])->delete();
+            foreach($request->data as $ks => $vs) {
+                $spr = new GudangKarantinaDetail();
+                $spr->gk_id = $header->id;
+                $spr->sparepart_id = $ks;
+                $spr->qty_spr = $vs['jumlah'];
+                $spr->is_draft = 1;
+                $spr->is_keluar = 1;
+                $spr->created_at = Carbon::now();
+                $spr->created_by = $request->userid;
+                $spr->save();
+
+                $did = $spr->id;
+
+                foreach($vs['noseri'] as $k => $v) {
+                    $nspr = new NoseriKeluarGK();
+                    $nspr->gk_detail_id = $did;
+                    $nspr->noseri_id = $v;
+                    $nspr->created_at = Carbon::now();
+                    $nspr->created_by = $request->userid;
+                    $nspr->save();
+                }
+            }
+        }
+
+        if (count($request->dataunit) > 0) {
+            NoseriKeluarGK::whereIn('gk_detail_id', [$request->kodeunit])->delete();
+            GudangKarantinaDetail::whereIn('id', [$request->kodeunit])->delete();
+            foreach($request->dataunit as $ku => $vu) {
+                $unit = new GudangKarantinaDetail();
+                $unit->gk_id = $header->id;
+                $unit->gbj_id = $ku;
+                $unit->qty_unit = $vu['jumlah'];
+                $unit->is_draft = 1;
+                $unit->is_keluar = 1;
+                $unit->created_at = Carbon::now();
+                $unit->created_by = $request->userid;
+                $unit->save();
+
+                $didd = $unit->id;
+
+                foreach($vu['noseri'] as $kk => $vv) {
+                    $uspr = new NoseriKeluarGK();
+                    $uspr->gk_detail_id = $didd;
+                    $uspr->noseri_id = $vv;
+                    $uspr->created_at = Carbon::now();
+                    $uspr->created_by = $request->userid;
+                    $uspr->save();
+                }
+            }
+        }
+
+        return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
     }
 
     function getNoseriEdit(Request $request) {
@@ -1388,14 +1527,6 @@ class SparepartController extends Controller
     }
 
     function getOutSeriEdit(Request $request){
-        // $header = GudangKarantina::find($request->id);
-
-        // $cek = GudangKarantinaDetail::where('sparepart_id', $request->sparepart_id)->where('gk_id', $header->id)->get();
-        // if (count($cek) > 0) {
-        //     foreach($cek as $c => $v) {
-        //         return NoseriKeluarGK::with('seri')->where('gk_detail_id', $v->id)->get();
-        //     }
-        // }
         $data = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($request) {
             $q->where('sparepart_id', $request->sparepart_id);
         })->where('status', 1)->where('is_draft', 0)->get();
@@ -1424,14 +1555,31 @@ class SparepartController extends Controller
     }
 
     function getOutSeriEditUnit(Request $request){
-        $header = GudangKarantina::find($request->id);
+        $data = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($request) {
+            $q->where('gbj_id', $request->gbj_id);
+        })->where('status', 1)->where('is_draft', 0)->get();
+        $i = 0;
+        return datatables()->of($data)
+            ->addColumn('kode', function ($d) use ($i) {
+                $i++;
+                if ($d->is_ready == 1) {
+                    return '<input type="checkbox" checked class="cb-unit" name="noseri_id[][' . $i . ']" value="' . $d->id . '">';
+                } else {
+                    return '<input type="checkbox" class="cb-unit" name="noseri_id[][' . $i . ']" value="' . $d->id . '">';
+                }
 
-        $cek = GudangKarantinaDetail::where('gbj_id', $request->sparepart_id)->where('gk_id', $header->id)->get();
-        if (count($cek) > 0) {
-            foreach($cek as $c => $v) {
-                return NoseriKeluarGK::with('seri')->where('gk_detail_id', $v->id)->get();
-            }
-        }
+            })
+            ->addColumn('seri', function ($d) {
+                return $d->noseri;
+            })
+            ->addColumn('note', function ($d) {
+                return Str::limit($d->remark, 30, '...');
+            })
+            ->addColumn('tingkat', function ($d) {
+                return 'Level ' . $d->tk_kerusakan;
+            })
+            ->rawColumns(['kode'])
+            ->make(true);
     }
 
     function deleteDraftTerima(Request $request)

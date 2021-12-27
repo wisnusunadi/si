@@ -1241,7 +1241,16 @@
     function clickSparepartEdit(c,d) {
         console.log(d);
         console.log(kode);
-
+        var tableScan = $('.scan-produk1-edit').DataTable({
+                        destroy: true,
+                        "ordering": false,
+                        "autoWidth": false,
+                        searching: false,
+                        "lengthChange": false,
+                        "language": {
+                            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                },
+        });
         var arrSparepart = []
         var seriSparepart = [];
         var kerusakanSparepart = [];
@@ -1348,7 +1357,7 @@
                     const obj = {
                         noseri: value.childNodes[0].firstChild.value,
                         kerusakan: value.childNodes[1].firstChild.value,
-                        tingkat: value.childNodes[2].firstChild.value,
+                        // tingkat: value.childNodes[2].firstChild.value,
                     }
 
                     spr_arr.push(obj);
@@ -1434,7 +1443,7 @@
             }
         })
     });
-    
+
     function deleteSparepart(x) {
         var jumlah = $('.btn_edit'+x).parent().prev().children().find('input.jumlah').val();
         jumlah -= 1;
@@ -1638,7 +1647,7 @@
             }
         })
     });
-    
+
     function deleteUnit(x) {
         var jumlah = $('.btnEdit'+x).parent().prev().children().find('input.jumlah').val();
         jumlah -= 1;

@@ -107,7 +107,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transferoneday" class="card active otg" style="background-color: #E6EFFA">
                                         <div class="card-body text-center">
-                                            <h4 id="he1">10</h4>
+                                            <h4 id="he1">0</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 1 Hari</p>
                                         </div>
                                     </div>
@@ -115,7 +115,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transfertwoday" class="card otg" style="background-color: #FEF7EA">
                                         <div class="card-body text-center">
-                                            <h4 id="he2">50</h4>
+                                            <h4 id="he2">0</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 2 Hari</p>
                                         </div>
                                     </div>
@@ -123,7 +123,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transferthreeday" class="card otg" style="background-color: #FCEDE9">
                                         <div class="card-body text-center">
-                                            <h4 id="he3">60</h4>
+                                            <h4 id="he3">0</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 3 Hari</p>
                                         </div>
                                     </div>
@@ -222,7 +222,7 @@
                                         <div class="col">
                                             <div id="jml-produk-20" class="card active otg" style="background-color: #FEF7EA">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd1">10</h4>
+                                                    <h4 id="prd1">0</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 10 sampai 20</p>
                                                 </div>
                                             </div>
@@ -230,7 +230,7 @@
                                         <div class="col">
                                             <div id="jml-produk-5" class="card otg" style="background-color: #FFBD67">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd2">10</h4>
+                                                    <h4 id="prd2">0</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 5 sampai 9</p>
                                                 </div>
                                             </div>
@@ -238,7 +238,7 @@
                                         <div class="col">
                                             <div id="jml-produk-4" class="card otg" style="background-color: #FF6464">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd3">10</h4>
+                                                    <h4 id="prd3">0</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 1 sampai 4</p>
                                                 </div>
                                             </div>
@@ -312,7 +312,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-3-bulan" class="card otg active" style="background-color: #FEF7EA">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd4">10</h4>
+                                                    <h4 id="prd4">0</h4>
                                                     <p class="card-text font-weight">Produk masuk 3 bulan sampai 6 bulan</p>
                                                 </div>
                                             </div>
@@ -320,7 +320,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-6-bulan" class="card otg" style="background-color: #FFBD67">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd5">10</h4>
+                                                    <h4 id="prd5">0</h4>
                                                     <p class="card-text font-weight">Produk masuk 6 bulan sampai 1 tahun</p>
                                                 </div>
                                             </div>
@@ -328,7 +328,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-1-tahun" class="card otg" style="background-color: #FA8282">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd6">10</h4>
+                                                    <h4 id="prd6">0</h4>
                                                     <p class="card-text font-weight">Produk masuk 1 tahun sampai 3 tahun</p>
                                                 </div>
                                             </div>
@@ -336,7 +336,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-3-tahun" class="card otg" style="background-color: #FF6464">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd7">10</h4>
+                                                    <h4 id="prd7">0</h4>
                                                     <p class="card-text font-weight">Produk masuk lebih dari 3 tahun</p>
                                                 </div>
                                             </div>
@@ -450,7 +450,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receiptoneday" class="card active otg" style="background-color: #FEF7EA">
                                         <div class="card-body text-center">
-                                            <h4 id="r1">10</h4>
+                                            <h4 id="r1">0</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 1 Hari</p>
                                         </div>
                                     </div>
@@ -458,7 +458,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receipttwoday" class="card otg" style="background-color: #FFBD67">
                                         <div class="card-body text-center">
-                                            <h4 id="r2">50</h4>
+                                            <h4 id="r2">0</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 2 Hari</p>
                                         </div>
                                     </div>
@@ -466,7 +466,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receiptthreeday" class="card otg" style="background-color: #FF6464">
                                         <div class="card-body text-center">
-                                            <h4 id="r3">60</h4>
+                                            <h4 id="r3">0</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 3 Hari</p>
                                         </div>
                                     </div>

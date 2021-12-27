@@ -469,9 +469,9 @@
                 { data: 'kelompok', name: 'kelompok'},
                 { data: 'action', name: 'action'},
             ],
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
         });
         $(document).on("click", "#semua-produk-tab", function () {
             $('.produk-show').addClass('hidden-product');

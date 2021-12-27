@@ -47,6 +47,7 @@
     <div class="row">
         <div class="col-xl-12">
             <input type="hidden" name="" id="user_id" value="{{ Auth::user()->id }}">
+            {{-- <input type="hidden" name="" id="kode" value="{{ $did->id }}"> --}}
             <div class="card">
                 <div class="card-body">
                     <div class="form-row">
@@ -205,6 +206,7 @@
                                 <table class="table table-striped scan-produk1">
                                     <thead>
                                         <tr>
+                                            <th><input type="checkbox" name="select_all" id="head-all"></th>
                                             <th>No Seri</th>
                                             <th>Kerusakan</th>
                                             <th>Tingkat Kerusakan</th>
@@ -289,7 +291,7 @@
                                 <table class="table table-striped scan-produk1-edit">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
+                                            <th><input type="checkbox" name="select_all" id="example-select-all"></th>
                                             <th>No Seri</th>
                                             <th>Kerusakan</th>
                                             <th>Tingkat Kerusakan</th>
@@ -442,6 +444,7 @@
                                 <table class="table table-striped scan-produk-edit">
                                     <thead>
                                         <tr>
+                                            <th><input type="checkbox" name="select_all" id="unit-all"></th>
                                             <th>No Seri</th>
                                             <th>Kerusakan</th>
                                             <th>Tingkat Kerusakan</th>
@@ -480,7 +483,7 @@
                     <div class="col-xl-12">
                         <div class="form-group">
                             <label for="">Keterangan</label>
-                            <textarea name="" id="" cols="10" rows="5" class="form-control"></textarea>
+                            <textarea name="deskripsi" id="tujuan" cols="10" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
                 </div>
@@ -492,11 +495,40 @@
         </div>
     </div>
 </div>
-@stop
 
+<div class="modal fade modal_transfer1" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title judul_modal">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="form-group">
+                            <label for="">Keterangan</label>
+                            <textarea name="deskripsi" id="tujuan" cols="10" rows="5" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary simpan1">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+@stop
 
 @section('adminlte_js')
 <script>
+    var kodee = $('#kode').val();
+    // console.log(kodee);
     $.ajax({
         url: '/api/gbj/sel-divisi',
         type: 'GET',
@@ -558,7 +590,7 @@
         addSparepart(b, a, c);
     }
 
-    function clickSparepart(c, d) {
+    function clickSparepart(c, d, e) {
         console.log(d);
         var tableScan = $('.scan-produk1').dataTable({
             "destroy": true,
@@ -668,48 +700,53 @@
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk1 tbody tr').each((index, value) => {
-                    const obj = {
-                        noseri: value.childNodes[0].firstChild.value,
-                        kerusakan: value.childNodes[1].firstChild.value,
-                        tingkat: value.childNodes[2].firstChild.value,
+            seri[d] = {"jumlah" : e, "noseri": []};
+            const ids = [];
+            $('.cb-child-new').each(function() {
+                if ($(this).is(':checked')) {
+                    if ($('.cb-child-new').filter(':checked').length > e) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ubah Terlebih Dahulu Jumlah yang Ditransfer'
+                        })
+                    } else {
+                        ids.push($(this).val());
+                        seri[d].noseri = ids;
+                        console.log(seri);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $('.modalAddSparepart').modal('hide');
                     }
-
-                    spr_arr.push(obj);
-                })
-                seri[d] = spr_arr;
-                spr_arr = [];
-                $('.modalAddSparepart').modal('hide');
+                }
             })
         }
     }
 
     function addSparepart(x, y, z) {
         $('.modalAddSparepart').modal('show');
-        $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ',' + z + ')');
+        $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ',' + z + ',' + x + ')');
         $('.modalAddSparepart').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
         $('.scan-produk1').DataTable().destroy();
-        $('.scan-produk1 tbody').empty();
-        for (let index = 0; index < x; index++) {
-            ii++;
-            $('.scan-produk1 tbody').append('<tr id="row' + ii + '"><td><input type="text" name="noseri[][' + ii +
-                ']" id="noseri' + ii +
-                '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
-                ii + ']" id="remark' + ii +
-                '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
-                ii + ']" id="layout_id' + ii +
-                '" class="form-control layout_id"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
-            );
-        }
+        // $('.scan-produk1 tbody').empty();
+        // for (let index = 0; index < x; index++) {
+        //     ii++;
+        //     $('.scan-produk1 tbody').append('<tr id="row' + ii + '"><td><input type="text" name="noseri[][' + ii +
+        //         ']" id="noseri' + ii +
+        //         '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
+        //         ii + ']" id="remark' + ii +
+        //         '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
+        //         ii + ']" id="layout_id' + ii +
+        //         '" class="form-control layout_id"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
+        //     );
+        // }
         $('.scan-produk1').DataTable({
             "destroy": true,
             "ordering": false,
@@ -719,6 +756,19 @@
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
+            ajax: {
+                url: "/api/gk/getseri/spr",
+                data: {
+                    sparepart_id: z,
+                },
+                type: "post",
+            },
+            columns: [
+                {data: 'kodenew'},
+                {data: 'seri'},
+                {data: 'note'},
+                {data: 'tingkat'},
+            ],
         });
     }
 
@@ -865,19 +915,19 @@
             $(this).find('tbody input.seri').first().focus();
         })
         $('.scan-produk').DataTable().destroy();
-        $('.scan-produk tbody').empty();
-        for (let index = 0; index < x; index++) {
-            kk++;
-            $('.scan-produk tbody').append('<tr id="u' + kk + '"><td><input type="text" name="noseri[][' + kk +
-                ']" id="noseri' + kk +
-                '" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
-                kk + ']" id="remark' + kk +
-                '" class="form-control kerusakan"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="tk_kerusakan[][' +
-                kk +
-                ']" id="tk_kerusakan' + kk +
-                '" class="form-control tingkat"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
-            );
-        }
+        // $('.scan-produk tbody').empty();
+        // for (let index = 0; index < x; index++) {
+        //     kk++;
+        //     $('.scan-produk tbody').append('<tr id="u' + kk + '"><td><input type="text" name="noseri[][' + kk +
+        //         ']" id="noseri' + kk +
+        //         '" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
+        //         kk + ']" id="remark' + kk +
+        //         '" class="form-control kerusakan"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="tk_kerusakan[][' +
+        //         kk +
+        //         ']" id="tk_kerusakan' + kk +
+        //         '" class="form-control tingkat"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
+        //     );
+        // }
         $('.scan-produk').DataTable({
             "ordering": false,
             "autoWidth": false,
@@ -955,6 +1005,7 @@
     $(document).on('click', '.btn-delete', function (e) {
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
+        delete seri[$(this).val()].noseri
     });
 
     $(document).ready(function () {
@@ -985,6 +1036,21 @@
             }
         });
         $('.dari').select2({});
+
+        $("#example-select-all").on('click', function () {
+            var isChecked = $("#example-select-all").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
+        });
+
+        $("#head-all").on('click', function () {
+            var isChecked = $("#head-all").prop('checked')
+            $('.cb-child-new').prop('checked', isChecked)
+        });
+
+        $("#unit-all").on('click', function () {
+            var isChecked = $("#unit-all").prop('checked')
+            $('.cb-unit').prop('checked', isChecked)
+        });
     });
 
     function modalTerima() {
@@ -998,7 +1064,7 @@
         $(document).on('click', '.simpan1', function () {
             let out = $('#datePicker').val();
             let to = $('.dari').val();
-            let tujuan = $('#tujuan_tf').val();
+            let tujuan = $('#tujuan').val();
             console.log(out);
             console.log(to);
             console.log(tujuan);
@@ -1006,21 +1072,6 @@
             const jml = [];
             const unit1 = [];
             const jum = [];
-            $('select[name^="sparepart_id"]').each(function () {
-                spr1.push($(this).val());
-            });
-            $('input[name^="qty_spr"]').each(function () {
-                jml.push($(this).val());
-            });
-            // $('input[name^="noseri"]').each(function() {
-            //     spr.push(seri_spr.push(seri1));
-            // });
-            $('select[name^="gbj_id"]').each(function () {
-                unit1.push($(this).val());
-            });
-            $('input[name^="qty_unit"]').each(function () {
-                jum.push($(this).val());
-            });
             Swal.fire({
                 title: "Apakah anda yakin?",
                 text: "Data yang sudah di transfer tidak dapat diubah!",
@@ -1036,19 +1087,19 @@
                         'success'
                     );
                     $.ajax({
-                        url: "/api/gk/out-final",
+                        url: "/api/gk/updateTransfer",
                         type: "post",
                         data: {
                             "_token": "{{ csrf_token() }}",
+                            userid : $('#user_id').val(),
+                            id: kodee,
                             date_out: out,
                             ke: to,
                             deskripsi: tujuan,
-                            sparepart_id: spr1,
-                            qty_spr: jml,
-                            noseri: seri,
-                            gbj_id: unit1,
-                            qty_unit: jum,
-                            seriunit: seri_unit,
+                            kodespr: $('#kodespr').val(),
+                            data: seri,
+                            kodeunit: $('#kodeunit').val(),
+                            dataunit: seri_unit,
                         },
                         success: function (res) {
                             console.log(res);
@@ -1070,33 +1121,22 @@
             });
         });
     }
-    $(document).on('click', '.simpan', function () {
+
+    function modalRancang() {
+        $('.modal_transfer').modal('show');
+        $('.list-group').children().remove();
+        $('.judul_modal').text('Silahkan isi tujuan rancangan produk');
+        $(document).on('click', '.remove', function () {
+            $(this).parent().parent().remove();
+        });
+        $(document).on('click', '.simpan', function () {
         let out = $('#datePicker').val();
         let to = $('.dari').val();
-        let tujuan = $('#tujuan_draft').val();
+        let tujuan = $('#tujuan').val();
         // let seri1 = $('.seri_spr').val();
         console.log(out);
         console.log(to);
         console.log(tujuan);
-        const spr1 = [];
-        const jml = [];
-        const unit1 = [];
-        const jum = [];
-        $('select[name^="sparepart_id"]').each(function () {
-            spr1.push($(this).val());
-        });
-        $('input[name^="qty_spr"]').each(function () {
-            jml.push($(this).val());
-        });
-        // $('input[name^="noseri"]').each(function() {
-        //     spr.push(seri_spr.push(seri1));
-        // });
-        $('select[name^="gbj_id"]').each(function () {
-            unit1.push($(this).val());
-        });
-        $('input[name^="qty_unit"]').each(function () {
-            jum.push($(this).val());
-        });
         Swal.fire({
             title: "Apakah anda yakin?",
             text: "Data yang sudah di rancangan tidak dapat diubah!",
@@ -1112,19 +1152,19 @@
                     'success'
                 );
                 $.ajax({
-                    url: "/api/gk/out-draft",
+                    url: "/api/gk/updateTransferDraft",
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",
+                        userid : $('#user_id').val(),
+                        id: kodee,
                         date_out: out,
                         ke: to,
                         deskripsi: tujuan,
-                        sparepart_id: spr1,
-                        qty_spr: jml,
-                        noseri: seri,
-                        gbj_id: unit1,
-                        qty_unit: jum,
-                        seriunit: seri_unit,
+                        kodespr: $('#kodespr').val(),
+                        data: seri,
+                        kodeunit: $('#kodeunit').val(),
+                        dataunit: seri_unit,
                     },
                     success: function (res) {
                         console.log(res);
@@ -1145,14 +1185,6 @@
             }
         });
     });
-
-    function modalRancang() {
-        $('.modal_transfer').modal('show');
-        $('.list-group').children().remove();
-        $('.judul_modal').text('Silahkan isi tujuan rancangan produk');
-        $(document).on('click', '.remove', function () {
-            $(this).parent().parent().remove();
-        });
     }
 
     function batal() {
@@ -1202,6 +1234,7 @@
                 $('.dari').val(res.header.ke).change();
                 var o = 0;
                 $.each(res.spr, function (i, val) {
+                    console.log(val.kode);
                     $.ajax({
                         url: '/api/gk/gkspr',
                         type: 'POST',
@@ -1219,7 +1252,7 @@
                     });
 
                     $('.add_sparepart_table tbody').append('<tr id=' + i +
-                        '><input type="hidden" name="id" id="kodespr' + i + '" value="' + val
+                        '><input type="hidden" name="id" id="kodespr" value="' + val
                         .kode +
                         '" class="kodespr"><td><select name="sparepart_id[]" id="sparepart_id' +
                         i +
@@ -1264,8 +1297,8 @@
         editSparepart(b, a, c);
     }
 
-    function clickSparepartEdit(c, d) {
-        console.log(d);
+    function clickSparepartEdit(c, d, e) {
+        // console.log(e);
         console.log(kode);
         var tableScan = $('.scan-produk1-edit').dataTable({
             "destroy": true,
@@ -1373,34 +1406,40 @@
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk1-edit tbody tr').each((index, value) => {
-                    const obj = {
-                        noseri: value.childNodes[0].firstChild.value,
-                        kerusakan: value.childNodes[1].firstChild.value,
-                        tingkat: value.childNodes[2].firstChild.value,
+            seri[d] = {"jumlah" : e, "noseri": []};
+            const ids = [];
+            $('.cb-child').each(function() {
+                if ($(this).is(':checked')) {
+                    if ($('.cb-child').filter(':checked').length > e) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ubah Terlebih Dahulu Jumlah yang Ditransfer'
+                        })
+                    } else {
+                        ids.push($(this).val());
+                        seri[d].noseri = ids;
+                        console.log(seri);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $('.modalAddSparepartEdit').modal('hide');
                     }
-
-                    spr_arr.push(obj);
-                })
-                seri[d] = spr_arr;
-                spr_arr = [];
-                $('.modalAddSparepartEdit').modal('hide');
+                }
             })
         }
     }
 
     function editSparepart(x, y, z) {
-        console.log('kode ' + z);
+        console.log('jumlah ' + x);
         console.log($('#kode').val());
+        console.log(z);
         $('.modalAddSparepartEdit').modal('show');
-        $('.modalAddSparepartEdit').find('#btnSeriEdit').attr('onclick', 'clickSparepartEdit(' + y + ',' + z + ')');
+        $('.modalAddSparepartEdit').find('#btnSeriEdit').attr('onclick', 'clickSparepartEdit(' + y + ',' + z + ',' + x + ')');
         $('.modalAddSparepartEdit').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
@@ -1438,6 +1477,7 @@
     }
 
     function clickUnitEdit(c, e) {
+        console.log('jumlah ' +e);
         var tableUnit = $('.scan-produk-edit').DataTable({
             "destroy": true,
             "ordering": false,
@@ -1541,27 +1581,52 @@
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                console.log('ok');
-                $('.scan-produk-edit tbody tr').each((index, value) => {
-                    const obj1 = {
-                        noseri: value.childNodes[0].firstChild.value,
-                        kerusakan: value.childNodes[1].firstChild.value,
-                        tingkat: value.childNodes[2].firstChild.value,
+            seri_unit[c] = {"jumlah" : e, "noseri": []};
+            const ids = [];
+            $('.cb-unit').each(function() {
+                if ($(this).is(':checked')) {
+                    if ($('.cb-unit').filter(':checked').length > e) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ubah Terlebih Dahulu Jumlah yang Ditransfer'
+                        })
+                    } else {
+                        ids.push($(this).val());
+                        seri_unit[c].noseri = ids;
+                        console.log(seri_unit);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $('.modalAddUnitEdit').modal('hide');
                     }
-                    unit_arr.push(obj1);
-                })
-                seri_unit[c] = unit_arr;
-                unit_arr = [];
-                console.log(seri_unit)
-                $('.modalAddUnitEdit').modal('hide');
+                }
             })
+            // Swal.fire({
+            //     position: 'center',
+            //     icon: 'success',
+            //     title: 'Nomor seri tersimpan',
+            //     showConfirmButton: false,
+            //     timer: 1500
+            // }).then(function () {
+            //     console.log('ok');
+            //     $('.scan-produk-edit tbody tr').each((index, value) => {
+            //         const obj1 = {
+            //             noseri: value.childNodes[0].firstChild.value,
+            //             kerusakan: value.childNodes[1].firstChild.value,
+            //             tingkat: value.childNodes[2].firstChild.value,
+            //         }
+            //         unit_arr.push(obj1);
+            //     })
+            //     seri_unit[c] = unit_arr;
+            //     unit_arr = [];
+            //     console.log(seri_unit)
+            //     $('.modalAddUnitEdit').modal('hide');
+            // })
         }
     }
 
@@ -1569,58 +1634,34 @@
         console.log("edit unit");
         console.log(x, y);
         $('.modalAddUnitEdit').modal('show');
-        $('.modalAddUnitEdit').find('#btnEditUnit').attr('onclick', 'clickUnitEdit(' + y + ')');
+        $('.modalAddUnitEdit').find('#btnEditUnit').attr('onclick', 'clickUnitEdit(' + y + ',' + x + ')');
         $('.modalAddUnitEdit').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
-        $.ajax({
-            url: "/api/gk/editseriunit-out",
-            type: "post",
-            data: {
-                id: $('#kode').val(),
-                gbj_id: y
+        $('.scan-produk-edit').DataTable({
+            destroy: true,
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
-            success: function (response) {
-                console.log(response);
-                for (let seri = 0; seri < response.length; seri++) {
-                    $('.scan-produk-edit').DataTable().destroy();
-
-                    $('.scan-produk-edit tbody').empty();
-                    $('.scan-produk-edit tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].seri.noseri+'" name="noseri[][' + seri +
-                                        ']" id="noseri' + seri +
-                                        '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
-                                            seri + ']" value="'+response[seri].seri.remark+'" id="remark' + seri +
-                                        '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><div class="row"><div class="col"><select name="layout_id[][' +
-                                            seri + ']" id="tk_kerusakan' + seri +
-                                        '" class="form-control tingkat"><option value="#">Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></div><div class="col"><button type="button" class="removeunitdetail btn btn-danger"><i class="fas fa-trash"></i></button></div></div></td></tr>'
-                                        );
-                        $("#tk_kerusakan"+seri).val(response[seri].seri.tk_kerusakan).change();
-                }
-                if (x > response.length) {
-                    for (let index = response.length; index < x; index++) {
-                        $('.scan-produk-edit tbody').append('<tr id="u' + kk + '"><td><input type="text" name="noseri[][' + kk +
-                            ']" id="noseri' + kk +
-                            '" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
-                            kk + ']" id="remark' + kk +
-                            '" class="form-control kerusakan"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="tk_kerusakan[][' +
-                            kk +
-                            ']" id="tk_kerusakan' + kk +
-                            '" class="form-control tingkat"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
-                        );
-                    }
-                }
-                $('.scan-produk-edit').DataTable({
-                        // destroy: true,
-                        "ordering": false,
-                        "autoWidth": false,
-                        searching: false,
-                        "lengthChange": false,
-                        "language": {
-                            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                        },
-                    });
-            }
-        })
+            ajax: {
+                url: "/api/gk/editseriunit-out",
+                type: "post",
+                data: {
+                    id: $('#kode').val(),
+                    gbj_id: y
+                },
+            },
+            columns: [
+                {data: 'kode'},
+                {data: 'seri'},
+                {data: 'note'},
+                {data: 'tingkat'},
+            ]
+        });
     }
 </script>
 @stop
