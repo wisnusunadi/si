@@ -1,15 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '../views/Home.vue'
-import Perakitan from "../views/Perakitan.vue"
-import SalesOrder from "../views/SalesOrder.vue"
-import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
-import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
+import Home from '../../ppic_spa/views/Home.vue'
+import Perakitan from "../../ppic_spa/views/Perakitan.vue"
+import SalesOrder from "../../ppic_spa/views/SalesOrder.vue"
+import JadwalPerencanaan from "../../ppic_spa/views/JadwalPerencanaan.vue"
+import JadwalPelaksanaan from "../../ppic_spa/views/JadwalPelaksanaan.vue"
 import PersetujuanPerencanaan from "../views/PersetujuanPerencanaan.vue"
 import PersetujuanPelaksanaan from "../views/PersetujuanPelaksanaan.vue"
-
-import Calendar from "../components/Calendar.vue"
 
 Vue.use(VueRouter)
 

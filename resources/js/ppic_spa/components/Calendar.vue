@@ -76,9 +76,8 @@ export default {
 
     async handleSelect(selectInfo) {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/gbj/data").then((response) => {
+      await axios.get("/api/ppic/data/gbj").then((response) => {
         this.data_gbj = response.data;
-        console.log(this.data_gbj);
       });
       this.$store.commit("setIsLoading", false);
       this.showModal = true;
@@ -122,8 +121,13 @@ export default {
         jsEvent.pageY <= y2
       ) {
         this.$store.commit("setIsLoading", true);
-        await axios.post("/api/ppic/delete-event/" + event.id).then(() => {
+        await axios.post("/api/ppic/delete/perakitan/" + event.id).then(() => {
           event.remove();
+          axios
+            .get("/api/ppic/data/perakitan/" + this.$store.state.status)
+            .then((response) => {
+              this.$store.commit("setJadwal", response.data);
+            });
         });
         this.$store.commit("setIsLoading", false);
       }
@@ -147,7 +151,7 @@ export default {
     async handleEventDrop(info) {
       this.$store.commit("setIsLoading", true);
       await axios
-        .post("/api/ppic/update-event/" + info.event.id, {
+        .post("/api/ppic/update/perakitan/" + info.event.id, {
           tanggal_mulai: this.convert_date(info.event.start),
           tanggal_selesai: this.convert_date(info.event.end),
           status: this.$store.state.status,
@@ -160,9 +164,14 @@ export default {
 
     async handleEventResize(info) {
       this.$store.commit("setIsLoading", true);
-      await axios.post("/api/ppic/update-event/" + info.event.id, {
-        tanggal_selesai: this.convert_date(info.event.end),
-      });
+      await axios
+        .post("/api/ppic/update/perakitan/" + info.event.id, {
+          tanggal_selesai: this.convert_date(info.event.end),
+          status: this.$store.state.status,
+        })
+        .then((response) => {
+          this.$store.commit("setJadwal", response.data);
+        });
       this.$store.commit("setIsLoading", false);
     },
 
@@ -194,7 +203,7 @@ export default {
         konfirmasi: this.$store.state.konfirmasi,
         warna: this.color,
       };
-      await axios.post("/api/ppic/add-event", data).then((response) => {
+      await axios.post("/api/ppic/create/perakitan", data).then((response) => {
         this.$store.commit("setJadwal", response.data);
       });
       this.$store.commit("setIsLoading", false);
@@ -214,11 +223,27 @@ export default {
       this.tanggal_selesai;
     },
 
-    changeProduk: function () {
+    changeProduk: async function () {
       // axios.get("/api/ppic/product/" + this.produkValue).then((response) => {
       //   this.gbj_stok = response.data.gbj_stok;
       //   this.gk_stok = response.data.gk_stok;
       // });
+      console.log(this.produk);
+      this.$store.commit("setIsLoading", true);
+      await axios
+        .get("/api/ppic/data/gbj", {
+          params: {
+            id: this.produk.id,
+          },
+        })
+        .then((response) => {
+          this.gbj_stok = response.data.stok;
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.$store.commit("setIsLoading", false);
     },
   },
 
@@ -242,12 +267,17 @@ export default {
   watch: {
     jadwal(newVal, oldVal) {
       this.calendarOptions.events = this.convertJadwal(newVal);
-      if (
-        this.$store.state.state_ppic === "pembuatan" ||
-        this.$store.state.state_ppic === "revisi"
-      ) {
-        this.calendarOptions.selectable = true;
-        this.calendarOptions.editable = true;
+      if (this.$store.state.user.divisi_id == 24) {
+        if (
+          this.$store.state.state_ppic === "pembuatan" ||
+          this.$store.state.state_ppic === "revisi"
+        ) {
+          this.calendarOptions.selectable = true;
+          this.calendarOptions.editable = true;
+        } else {
+          this.calendarOptions.selectable = false;
+          this.calendarOptions.editable = false;
+        }
       } else {
         this.calendarOptions.selectable = false;
         this.calendarOptions.editable = false;

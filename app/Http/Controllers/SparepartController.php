@@ -1369,14 +1369,14 @@ class SparepartController extends Controller
         return response()->json(['msg' => 'Data berhasil diterima']);
     }
 
-    function updateTransfer(Request $request) {
+    function updateTransfer(Request $request) { 
         $header = GudangKarantina::find($request->id);
         $header->deskripsi = $request->tujuan;
         $header->is_draft = 0;
         $header->is_keluar = 1;
         $header->updated_at = Carbon::now();
         $header->updated_by = $request->userid;
-        // $header->save();
+        $header->save();
         if (count($request->data) > 0) {
             NoseriKeluarGK::whereIn('gk_detail_id', [$request->kodespr])->delete();
             GudangKarantinaDetail::whereIn('id', [$request->kodespr])->delete();

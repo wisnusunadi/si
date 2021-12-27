@@ -4,9 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-// models
-use App\Models\Produk;
-
 class JadwalPerakitan extends Model
 {
     protected $table = 'jadwal_perakitan';

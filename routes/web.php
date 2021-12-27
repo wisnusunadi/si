@@ -31,23 +31,12 @@ Route::get('/home', function () {
 
 Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/{any?}', 'spa.ppic.spa');
-    // Route::get('/data/{status}', function ($status) {
-    //     return view('spa.ppic.data', ['status' => $status]);
-    // });
-    // Route::get('/jadwal/{status}', function ($status) {
-    //     return view('spa.ppic.jadwal', ['status' => $status]);
-    // });
-
-    // //test
-    // Route::view('/bppb/{any}', 'spa.ppic.bppb');
-    // Route::view('/test', 'spa.ppic');
-    Route::view('/master_stok/show', 'spa.ppic.master_stok.show');
 });
-
+Route::middleware('auth')->prefix('/ppic_direksi')->group(function () {
+    Route::view('/{any?}', 'page.direksi.perencanaan');
+});
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
     Route::view('/{any?}', 'spa.manager_teknik.spa');
-    // Route::view('/dashboard', 'spa.manager_teknik.dashboard');
-    // Route::view('/persetujuan_jadwal', 'spa.manager_teknik.persetujuan_jadwal');
 });
 
 Route::middleware('auth')->prefix('/gbj')->group(function () {

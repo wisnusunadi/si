@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import mixins from '../mixins'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,7 @@ const store = new Vuex.Store({
 
         jadwal: [],
 
-        status: 'penyusunan', // [penyusunan, pelaksanaan, selesai]
+        status: '', // [penyusunan, pelaksanaan, selesai]
         state: 'perencanaan', // [perencanaan, persetujuan, perubahan]
         konfirmasi: 0, // [0 => inisial, 1 => setuju, 2 => tolak]
 
@@ -45,8 +46,10 @@ const store = new Vuex.Store({
             }
 
             if (jadwal.length > 0) {
-                state.state = jadwal[0].state
-                state.status = jadwal[0].status
+                state.state = mixins.methods.change_state(jadwal[0].state)
+                state.status = mixins.methods.change_status(jadwal[0].status)
+            } else {
+                state.status = 'penyusunan'
             }
 
             // set ppic state
@@ -59,7 +62,17 @@ const store = new Vuex.Store({
 
         setStatus(state, status) {
             state.status = status;
-        }
+        },
+
+        // deleteJadwal(state, id) {
+        //     console.log("delete jadwal")
+        //     let temp_id = state.jadwal.findIndex((element) => element.id == id)
+
+        //     console.log(temp_id)
+        //     // console.log(state.jadwal[temp_id])
+
+        //     delete state.jadwal[parseInt(temp_id)];
+        // }
     }
 })
 

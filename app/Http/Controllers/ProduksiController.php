@@ -284,39 +284,51 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        // matching
-        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
-        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
-        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $x = [];
+        foreach($data as $k) {
+            if ($k->getJumlahPesanan() != $k->getJumlahKirim()) {
+                $x[] = $k->id;
+            }
+        }
 
-        return datatables()->of($data)
+        $datax = Pesanan::whereIn('id', $x)->get();
+
+        return datatables()->of($datax)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->Pesanan->so;
+                return $data->so;
             })
             ->addColumn('no_po', function ($data) {
-                return $data->Pesanan->no_po;
+                return $data->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
+                $name = explode('/', $data->so);
+                for ($i=1; $i < count($name); $i++) {
+                    // return $name[1];
+                    if ($name[1] == 'EKAT') {
+                        return $data->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } elseif ($name[1] == 'SPB') {
+                        return $data->Spb->Customer->nama;
+                    }
+                }
+
             })
             ->addColumn('batas_out', function ($d) {
-                if (isset($d->tgl_kontrak)) {
-                    return $d->tgl_kontrak;
+                if (isset($d->Ekatalog->tgl_kontrak)) {
+                    return $d->Ekatalog->tgl_kontrak;
                 } else {
                     return '-';
                 }
             })
             ->addColumn('status', function ($data) {
-                $cek = TFProduksi::where('pesanan_id', $data->Pesanan->id)->where('status_id', 1)->get()->count();
+                $cek = TFProduksi::where('pesanan_id', $data->id)->where('status_id', 1)->get()->count();
                 if ($cek == 0) {
                     return '<span class="badge badge-danger">Produk belum disiapkan</span>';
                 } else {
@@ -324,16 +336,16 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('status_prd', function ($data) {
-                if ($data->pesanan->log_id) {
+                if ($data->log_id) {
                     # code...
-                    return '<span class="badge badge-warning">' . $data->pesanan->log->nama . '</span>';
+                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
                 } else {
                     return '-';
                 }
             })
             ->addColumn('status1', function ($data) {
-                $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml');
-                $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml_prd');
+                $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->id)->get()->pluck('jml');
+                $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->id)->get()->pluck('jml_prd');
                 if ($sumcek == $sumprd) {
                     return '<span class="badge badge-primary">Sudah Dicek</span>';
                 } elseif ($sumcek != $sumprd) {
@@ -341,41 +353,114 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('button', function ($data) {
-                $x = $data->getTable();
-                $cek = TFProduksi::where('pesanan_id', $data->Pesanan->id)->where('status_id', 1)->get()->count();
+                $x = explode('/', $data->so);
+                $cek = TFProduksi::where('pesanan_id', $data->id)->where('status_id', 1)->get()->count();
                 if ($cek == 0) {
-                    return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                                <button class="btn btn-outline-primary btn-sm" type="button">
-                                    <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
-                                </button>
-                            </a>';
+                    for ($i=1; $i < count($x); $i++) {
+                        if ($x[1] == 'EKAT') {
+                            return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                    <button class="btn btn-outline-primary btn-sm" type="button">
+                                        <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                    </button>
+                                </a>';
+                        } elseif ($x[1] == 'SPA') {
+                            return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                        <button class="btn btn-outline-primary btn-sm" type="button">
+                                            <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                        </button>
+                                    </a>';
+                        } elseif ($x[1] == 'SPB') {
+                            return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                        <button class="btn btn-outline-primary btn-sm" type="button">
+                                            <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                        </button>
+                                    </a>';
+                        }
+                    }
                 } else {
-                    return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                                <button class="btn btn-outline-success btn-sm" type="button">
-                                    <i class="fas fa-pencil-alt"></i>&nbsp;Edit Produk
-                                </button>
-                            </a>';
-                }
-
+                    for ($i=1; $i < count($x); $i++) {
+                        if ($x[1] == 'EKAT') {
+                            return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                    <button class="btn btn-outline-primary btn-sm" type="button">
+                                        <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                    </button>
+                                </a>';
+                        } elseif ($x[1] == 'SPA') {
+                            return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                        <button class="btn btn-outline-primary btn-sm" type="button">
+                                            <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                        </button>
+                                    </a>';
+                        } elseif ($x[1] == 'SPB') {
+                            return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                        <button class="btn btn-outline-primary btn-sm" type="button">
+                                            <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
+                                        </button>
+                                    </a>';
+                        }
+                    }
+            }
             })
             ->addColumn('action', function ($data) {
-                $x = $data->getTable();
-                $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml');
-                $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->pesanan_id)->get()->pluck('jml_prd');
+                $x = explode('/', $data->so);
+                $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->id)->get()->pluck('jml');
+                $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',$data->id)->get()->pluck('jml_prd');
                 if ($sumcek == $sumprd) {
-                    return '<button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>';
+                    for ($i=1; $i < count($x); $i++) {
+                        if ($x[1] == 'EKAT') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    ';
+                        } elseif ($x[1] == 'SPA') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    ';
+                        } elseif ($x[1] == 'SPB') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    ';
+                        }
+                    }
                 } else {
-                    return '
-                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="' . $x . '" data-id="' . $data->pesanan_id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
-                    ';
+                    for ($i=1; $i < count($x); $i++) {
+                        if ($x[1] == 'EKAT') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
+                        } elseif ($x[1] == 'SPA') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
+                        } elseif ($x[1] == 'SPB') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
+                        }
+                    }
+
                 }
             })
             ->addColumn('button_prd', function ($d) {
-                $x = $d->getTable();
-                return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="' . $x . '"  data-id="' . $d->pesanan_id . '">
+                $x = explode('/', $d->so);
+                for ($i=1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
                             <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
                         </a>';
+                    } elseif ($x[1] == 'SPA') {
+                        return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spa"  data-id="' . $d->id . '">
+                            <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                        </a>';
+                    } elseif ($x[1] == 'SPB') {
+                        return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spb"  data-id="' . $d->id . '">
+                            <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                        </a>';
+                    }
+                }
+
             })
             ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
             ->make(true);
@@ -1324,8 +1409,27 @@ class ProduksiController extends Controller
     }
 
     function test(Request $request) {
-        $data = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid',5)->get();
-        return $data;
+
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spa = collect(Pesanan::whereHas('Spa', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+        $Spb = collect(Pesanan::whereHas('Spb', function ($q) {
+            $q->whereNotNull('no_po');
+        })->get());
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $x = [];
+        foreach($data as $k) {
+            if ($k->getJumlahPesanan() != $k->getJumlahKirim()) {
+                $x[] = $k->id;
+            }
+        }
+
+        $datax = Pesanan::has('ekatalog')->whereIn('id', $x)->get();
+        return $datax;
     }
 
     // gbj

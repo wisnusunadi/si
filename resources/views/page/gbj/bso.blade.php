@@ -329,15 +329,15 @@
         console.log(x);
 
         id = $(this).data('id');
-            console.log(id);
-            $.ajax({
-                url: "/api/tfp/header-so/" +id+"/"+x,
-                success: function(res) {
-                    console.log(res);
-                    $('span#so').text(res.so);
-                    $('span#po').text(res.po);
-                    $('span#akn').text(res.akn);
-                }
+        console.log(id);
+        $.ajax({
+            url: "/api/tfp/header-so/" +id+"/"+x,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.po);
+                $('span#akn').text(res.akn);
+            }
         });
 
         $('#addProduk').DataTable({

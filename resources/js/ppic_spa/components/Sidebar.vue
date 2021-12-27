@@ -66,7 +66,7 @@
         <li>
           <router-link to="/ppic/so" class="has-icon">
             <span class="icon"><i class="fas fa-database"></i></span>
-            <span class="menu-item-label">Seles Order</span>
+            <span class="menu-item-label">Sales Order</span>
           </router-link>
         </li>
       </ul>

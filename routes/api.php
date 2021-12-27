@@ -23,39 +23,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/ppic')->group(function () {
-    Route::get('/part', [App\Http\Controllers\PpicController::class, 'getPart']);
-    Route::get('/product', [App\Http\Controllers\PpicController::class, 'getProduk']);
-    Route::get('/version/{id}', [App\Http\Controllers\PpicController::class, 'getVersionDetailProduk']);
-    Route::get('/max-quantity/{id}', [App\Http\Controllers\PpicController::class, 'getMaxQuantity']);
-    Route::post('/delete-event', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
-    Route::post('/update-event', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
-    Route::get('/bppb/{status}', [App\Http\Controllers\PpicController::class, 'getBppb']);
+    Route::get('/data/perakitan/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan']);
+    Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana']);
+    Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
+    Route::get('/data/so', [App\Http\Controllers\PpicController::class, 'get_data_so']);
+    Route::get('/data/gk/sparepart', [App\Http\Controllers\PpicController::class, 'get_data_sparepart_gk']);
+    Route::get('/data/gk/unit', [App\Http\Controllers\PpicController::class, 'get_data_unit_gk']);
+    Route::get('/data/komentar', [App\Http\Controllers\PpicController::class, 'get_komentar_jadwal_perakitan']);
+    Route::post('/create/perakitan', [App\Http\Controllers\PpicController::class, 'create_data_perakitan']);
+    Route::post('/update/perakitan/{id}', [App\Http\Controllers\PpicController::class, 'update_data_perakitan']);
+    Route::post('/update/perakitans/{status}', [App\Http\Controllers\PpicController::class, 'update_many_data_perakitan']);
+    Route::post('/delete/perakitan/{id}', [App\Http\Controllers\PpicController::class, 'delete_data_perakitan']);
+    Route::get('/counting/status/perakitan', [App\Http\Controllers\PpicController::class, 'counting_status_data_perakitan']);
+    Route::post('/create/komentar', [App\Http\Controllers\PpicController::class, 'create_komentar_jadwal_perakitan']);
+    Route::post('/update/komentar', [App\Http\Controllers\PpicController::class, 'update_komentar_jadwal_perakitan']);
 
-    Route::get('/bppb/{id}', [App\Http\Controllers\PpicController::class, 'findSeriesBppb']);
-    Route::get('/reset', [App\Http\Controllers\PpicController::class, 'resetConfirmation']);
-    Route::get('/part-schedule/{id}', [App\Http\Controllers\PpicController::class, 'getPartFromSchedule']);
-
-    // new
-    Route::get('/gbj/data', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
-    Route::get('/perakitan/data/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan']);
-    Route::get('/so/data', [App\Http\Controllers\PpicController::class, 'get_data_so']);
-    Route::get('/schedule/{status?}', [App\Http\Controllers\PpicController::class, 'getEvent']);
-    Route::post('/add-event', [App\Http\Controllers\PpicController::class, 'addEvent']);
-    Route::post('/update-event/{id}', [App\Http\Controllers\PpicController::class, 'updateEvent']);
-    Route::post('/update-many-event/{status}', [App\Http\Controllers\PpicController::class, 'updateManyEvent']);
-    Route::post('/delete-event/{id}', [App\Http\Controllers\PpicController::class, 'deleteEvent']);
-    // new
-
-    // Route::prefix('/ppic')->group(function () {
-    //     Route::get('part', [App\Http\Controllers\PpicController::class, 'getPart']);
-    Route::get('/get-gbj-query', [App\Http\Controllers\PpicController::class, 'getGbjQuery']);
-    Route::get('/get-gbj-datatable', [App\Http\Controllers\PpicController::class, 'getGbjDatatable']);
-    Route::get('/jadwal', [App\Http\Controllers\PpicController::class, 'getJadwalPerakitan']);
-    Route::get('test-event', [App\Http\Controllers\PpicController::class, 'testBroadcast']);
-    Route::get('update-confirmation', [App\Http\Controllers\PpicController::class, 'updateConfirmation']);
-
-    Route::get('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data']);
+    Route::get('/test/query', [App\Http\Controllers\PpicController::class, 'test_query']);
 });
+
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);
     Route::get('select_edit', [App\Http\Controllers\MasterController::class, 'select_provinsi_edit']);
@@ -251,6 +236,7 @@ Route::prefix('/prd')->group(function () {
     // on
     Route::post('/ongoing', [ProduksiController::class, 'on_rakit']);
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
+    Route::get('/ongoing-cal-direksi', [ProduksiController::class, 'calender_current']);
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
