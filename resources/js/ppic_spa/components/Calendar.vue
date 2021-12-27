@@ -223,11 +223,27 @@ export default {
       this.tanggal_selesai;
     },
 
-    changeProduk: function () {
+    changeProduk: async function () {
       // axios.get("/api/ppic/product/" + this.produkValue).then((response) => {
       //   this.gbj_stok = response.data.gbj_stok;
       //   this.gk_stok = response.data.gk_stok;
       // });
+      console.log(this.produk);
+      this.$store.commit("setIsLoading", true);
+      await axios
+        .get("/api/ppic/data/gbj", {
+          params: {
+            id: this.produk.id,
+          },
+        })
+        .then((response) => {
+          this.gbj_stok = response.data.stok;
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.$store.commit("setIsLoading", false);
     },
   },
 
@@ -251,12 +267,17 @@ export default {
   watch: {
     jadwal(newVal, oldVal) {
       this.calendarOptions.events = this.convertJadwal(newVal);
-      if (
-        this.$store.state.state_ppic === "pembuatan" ||
-        this.$store.state.state_ppic === "revisi"
-      ) {
-        this.calendarOptions.selectable = true;
-        this.calendarOptions.editable = true;
+      if (this.$store.state.user.divisi_id == 24) {
+        if (
+          this.$store.state.state_ppic === "pembuatan" ||
+          this.$store.state.state_ppic === "revisi"
+        ) {
+          this.calendarOptions.selectable = true;
+          this.calendarOptions.editable = true;
+        } else {
+          this.calendarOptions.selectable = false;
+          this.calendarOptions.editable = false;
+        }
       } else {
         this.calendarOptions.selectable = false;
         this.calendarOptions.editable = false;

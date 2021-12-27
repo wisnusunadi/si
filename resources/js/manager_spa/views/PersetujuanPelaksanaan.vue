@@ -1,5 +1,8 @@
 <template>
-  <Persetujuan />
+  <div>
+    <h1 class="title">Persetujuan Pelaksanaan Jadwal</h1>
+    <Persetujuan />
+  </div>
 </template>
 
 <script>

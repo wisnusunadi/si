@@ -12,7 +12,7 @@ const store = new Vuex.Store({
 
         jadwal: [],
 
-        status: 'penyusunan', // [penyusunan, pelaksanaan, selesai]
+        status: '', // [penyusunan, pelaksanaan, selesai]
         state: 'perencanaan', // [perencanaan, persetujuan, perubahan]
         konfirmasi: 0, // [0 => inisial, 1 => setuju, 2 => tolak]
 
@@ -48,6 +48,8 @@ const store = new Vuex.Store({
             if (jadwal.length > 0) {
                 state.state = mixins.methods.change_state(jadwal[0].state)
                 state.status = mixins.methods.change_status(jadwal[0].status)
+            } else {
+                state.status = 'penyusunan'
             }
 
             // set ppic state

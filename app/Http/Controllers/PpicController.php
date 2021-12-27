@@ -60,9 +60,13 @@ class PpicController extends Controller
         return $data;
     }
 
-    public function get_data_barang_jadi()
+    public function get_data_barang_jadi(Request $request)
     {
-        $data = GudangBarangJadi::with('produk.KelompokProduk', 'produk.product', 'satuan')->get();
+        $data = GudangBarangJadi::with('produk.KelompokProduk', 'produk.product', 'satuan');
+        if (isset($request->id)) {
+            $data->where('id', $request->id);
+        }
+        $data = $data->get();
         return $data;
     }
 
@@ -92,7 +96,7 @@ class PpicController extends Controller
         return $data;
     }
 
-    public function get_data_unit_gk()
+    public function get_data_unit_gk(Request $request)
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
             ->whereNotNull('t_gk_detail.gbj_id')
@@ -100,8 +104,12 @@ class PpicController extends Controller
             ->where('is_keluar', 0)
             ->groupBy('t_gk_detail.gbj_id')
             ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
-            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
-            ->get();
+            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id');
+        // if (isset($request->id)) {
+        //     $data->find($request->id);
+        // }
+
+        $data = $data->get();
         return $data;
     }
 
@@ -148,7 +156,7 @@ class PpicController extends Controller
 
     public function update_komentar_jadwal_perakitan(Request $request)
     {
-        $data = KomentarJadwalPerakitan::orderBy('tanggal_permintaan')->where("status", $this->change_status($request->status))->first();
+        $data = KomentarJadwalPerakitan::orderBy('tanggal_permintaan', 'desc')->where("status", $this->change_status($request->status))->first();
         $data->tanggal_hasil = $request->tanggal_hasil;
         $data->hasil = $request->hasil;
         $data->komentar = $request->komentar;

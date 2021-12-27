@@ -96,7 +96,7 @@
                   : ""
               }}
               <div class="is-flex is-justify-content-flex-end">
-                <button class="button is-circle">
+                <button class="button is-circle" @click="detailMessage">
                   <i class="fas fa-envelope"></i>
                 </button>
               </div>
@@ -165,20 +165,22 @@
           ></button>
         </header>
         <section class="modal-card-body">
-          <div class="field">
-            <div class="control">
-              <textarea
-                class="textarea"
-                placeholder="Komentar"
-                v-model="komentar"
-              ></textarea>
-            </div>
-          </div>
+          <table class="table is-fullwidth has-text-centered">
+            <thead>
+              <tr>
+                <th>hasil</th>
+                <th>komentar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in data_komentar" :key="item.id">
+                <td>{{ item.hasil ? "disetujui" : "ditolak" }}</td>
+                <td>{{ item.komentar }}</td>
+              </tr>
+            </tbody>
+          </table>
         </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" @click="handle_func">Kirim</button>
-          <button class="button" @click="showModal = false">Batal</button>
-        </footer>
+        <footer class="modal-card-foot"></footer>
       </div>
     </div>
   </div>
@@ -227,19 +229,20 @@ export default {
         this.jadwal_rencana = response.data;
       });
 
-      // await axios
-      //   .get("/api/ppic/data/komentar", {
-      //     params: {
-      //       status: this.$store.state.status,
-      //     },
-      //   })
-      //   .then((response) => {
-      //     this.data_komentar = response.data;
-      //   })
-      //   .catch((error) => {
-      //     console.log("error to get data komentar");
-      //     console.log(error);
-      //   });
+      await axios
+        .get("/api/ppic/data/komentar", {
+          params: {
+            status: this.$store.state.status,
+          },
+        })
+        .then((response) => {
+          this.data_komentar = response.data;
+        })
+        .catch((error) => {
+          console.log("error to get data komentar");
+          console.log(error);
+        });
+
       this.$store.commit("setIsLoading", false);
     },
 
@@ -258,18 +261,22 @@ export default {
           console.log(error);
         });
 
-      // await axios
-      //   .post("/api/ppic/create/komentar", {
-      //     tanggal_permintaan: new Date(),
-      //     state: this.$store.state.state,
-      //     status: this.$store.state.status,
-      //   })
-      //   .catch((error) => {
-      //     console.log("error create komentar");
-      //     console.log(error);
-      //   });
+      await axios
+        .post("/api/ppic/create/komentar", {
+          tanggal_permintaan: new Date(),
+          state: this.$store.state.state,
+          status: this.$store.state.status,
+        })
+        .catch((error) => {
+          console.log("error create komentar");
+          console.log(error);
+        });
 
       this.$store.commit("setIsLoading", false);
+    },
+
+    detailMessage() {
+      this.showModal = true;
     },
   },
 
@@ -309,6 +316,28 @@ export default {
           })),
         },
       ];
+    },
+
+    state: function () {
+      return this.$store.state.status;
+    },
+  },
+
+  watch: {
+    state(newVal, oldVal) {
+      axios
+        .get("/api/ppic/data/komentar", {
+          params: {
+            status: newVal,
+          },
+        })
+        .then((response) => {
+          this.data_komentar = response.data;
+        })
+        .catch((error) => {
+          console.log("error to get data komentar");
+          console.log(error);
+        });
     },
   },
 };
