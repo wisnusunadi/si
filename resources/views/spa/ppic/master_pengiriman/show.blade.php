@@ -91,18 +91,12 @@
                                             <tr>
                                                 <th class="nowrap" rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
-                                                <th class="nowrap borderright" colspan="2">Stok</th>
-                                                <th class="nowrap borderright" colspan="5">Penjualan</th>
-                                                <th rowspan="2">Aksi</th>
+                                                <th class="nowrap" rowspan="2">Jumlah Pesanan</th>
+                                                <th class="nowrap" colspan="2">Pengiriman</th>
                                             </tr>
                                             <tr>
-                                                <th>GBJ</th>
-                                                <th>Sisa</th>
-                                                <th>Permintaan</th>
-                                                <th>Sepakat</th>
-                                                <th>Nego</th>
-                                                <th>Batal</th>
-                                                <th>PO</th>
+                                                <th>Jumlah Selesai</th>
+                                                <th>Jumlah Sisa</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -168,7 +162,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/ppic/master_stok/data',
+                'url': '/api/ppic/master_pengiriman/data',
                 'type': 'GET',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -188,33 +182,15 @@
                     className: 'borderright',
                 },
                 {
-                    data: 'gbj',
-                },
-                {
-                    data: 'penjualan',
+                    data: 'jumlah',
                     className: 'borderright',
                 },
                 {
-                    data: 'total',
+                    data: 'jumlah_pengiriman',
                 },
                 {
-                    data: 'sepakat',
-                },
-                {
-                    data: 'nego',
-                },
-                {
-                    data: 'batal',
-                },
-                {
-                    data: 'po',
-                    className: 'borderright',
-                },
-                {
-                    data: 'aksi',
-                    orderable: false,
-                    searchable: false
-                },
+                    data: 'belum_pengiriman',
+                }
             ]
         });
 
