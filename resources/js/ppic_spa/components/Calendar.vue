@@ -224,10 +224,6 @@ export default {
     },
 
     changeProduk: async function () {
-      // axios.get("/api/ppic/product/" + this.produkValue).then((response) => {
-      //   this.gbj_stok = response.data.gbj_stok;
-      //   this.gk_stok = response.data.gk_stok;
-      // });
       console.log(this.produk);
       this.$store.commit("setIsLoading", true);
       await axios
@@ -237,12 +233,28 @@ export default {
           },
         })
         .then((response) => {
-          this.gbj_stok = response.data.stok;
+          if (response.data.length > 0) this.gbj_stok = response.data[0].stok;
+          else this.gk_stok = 0;
           console.log(response.data);
         })
         .catch((error) => {
           console.log(error);
         });
+
+      await axios
+        .get("/api/ppic/data/gk/unit", {
+          params: {
+            id: this.produk.id,
+          },
+        })
+        .then((response) => {
+          if (response.data.length > 0) this.gk_stok = response.data[0].jml;
+          else this.gk_stok = 0;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
       this.$store.commit("setIsLoading", false);
     },
   },
@@ -382,8 +394,8 @@ export default {
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <div>GBJ: {{ 0 }}</div>
-                  <div>GK : {{ 0 }}</div>
+                  <div>GBJ: {{ gbj_stok }}</div>
+                  <div>GK : {{ gk_stok }}</div>
                 </div>
               </div>
             </div>

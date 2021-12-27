@@ -126,6 +126,17 @@
       </div>
     </div>
     <template v-if="!isCalendar">
+      <template v-if="$store.state.status === 'pelaksanaan'">
+        <div class="box">
+          <h1>Rencana</h1>
+          <apexchart
+            type="rangeBar"
+            :options="options"
+            :height="this.series_rencana[0].data.length * 25"
+            :series="series_rencana"
+          ></apexchart>
+        </div>
+      </template>
       <div class="box">
         <h1 v-if="$store.state.status === 'pelaksanaan'">Pelaksanaan</h1>
         <div v-if="this.$store.state.jadwal.length == 0" class="p-3">
@@ -139,17 +150,6 @@
           :series="series"
         ></apexchart>
       </div>
-      <template v-if="$store.state.status === 'pelaksanaan'">
-        <div class="box">
-          <h1>Rencana</h1>
-          <apexchart
-            type="rangeBar"
-            :options="options"
-            :height="this.series_rencana[0].data.length * 25"
-            :series="series_rencana"
-          ></apexchart>
-        </div>
-      </template>
     </template>
 
     <!-- modal -->

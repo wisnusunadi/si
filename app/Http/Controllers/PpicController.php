@@ -105,9 +105,10 @@ class PpicController extends Controller
             ->groupBy('t_gk_detail.gbj_id')
             ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
             ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id');
-        // if (isset($request->id)) {
-        //     $data->find($request->id);
-        // }
+
+        if (isset($request->id)) {
+            $data->where('gbj_id', $request->id);
+        }
 
         $data = $data->get();
         return $data;
