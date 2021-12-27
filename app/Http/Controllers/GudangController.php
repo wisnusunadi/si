@@ -284,7 +284,7 @@ class GudangController extends Controller
 
         $data = TFProduksiDetail::whereHas('header', function($q) {
             $q->where('dari', 17);
-        })->with('produk', 'header')->get();
+        })->with('produk', 'header')->get()->sortByDesc('header.tgl_masuk');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {

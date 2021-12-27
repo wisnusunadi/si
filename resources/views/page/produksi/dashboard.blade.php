@@ -441,29 +441,16 @@
 
         $('.monthpicker').val(newdate);
         // Tanggal
-        var month_date = $('.monthpicker').datepicker({
-            format: "mm-yyyy",
-            viewMode: "months",
-            minViewMode: "months",
-            autoclose: true,
-        }).on('changeDate', function(e) {
-            var month = e.date.getMonth() + 1;
-            var year = e.date.getFullYear();
-            var date = month + '-' + year;
-            $.ajax({
-                url: "/api/prd/grafikproduk",
-                type: "post",
-                data: { filter: date},
-                success: function(res) {
-                    console.log("data grafik");
-                    console.log(res);
-                    $.each(res, function(index, element) {
-                        myChart.data.labels.push(element.tgl_rakit);
-                    })
-                    myChart.update();
-                } 
-            })
-        });
+        // var month_date = $('.monthpicker').datepicker({
+        //     format: "mm-yyyy",
+        //     viewMode: "months",
+        //     minViewMode: "months",
+        //     autoclose: true,
+        // }).on('changeDate', function(e) {
+        //     var month = e.date.getMonth() + 1;
+        //     var year = e.date.getFullYear();
+        //     var date = month + '-' + year;
+        // });
 
         $(document).ready(function () {
             // alert(newdate);

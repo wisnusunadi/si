@@ -83,7 +83,6 @@
                                             <th colspan="2" class="text-center">Tanggal</th>
                                             <th rowspan="2">Produk</th>
                                             <th rowspan="2">Jumlah Rakit</th>
-                                            <th rowspan="2">Aksi</th>
                                         </tr>
                                         <tr>
                                             <th>Tgl Mulai</th>
@@ -124,7 +123,7 @@
             },
             events: function( fetchInfo, successCallback, failureCallback ) {
                 $.ajax({
-                    url: "/api/prd/ongoing-cal",
+                    url: "/api/prd/plan-cal",
                     type: "post",
                     dataType: "json",
                     success: function(res) {

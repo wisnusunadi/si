@@ -700,9 +700,7 @@ class ProduksiController extends Controller
     {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
-        })
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 10')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        })->whereBetween('tgl_kontrak', [Carbon::now()->subDays(10), Carbon::now()])
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -720,9 +718,7 @@ class ProduksiController extends Controller
     {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
-        })
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 5')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        })->whereBetween('tgl_kontrak', [Carbon::now()->subDays(5), Carbon::now()])
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -741,7 +737,7 @@ class ProduksiController extends Controller
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })
-            ->where('tgl_kontrak', '<', Carbon::now()->format('Y-m-d'))
+            ->whereDate('tgl_kontrak', '<', Carbon::now()->format('Y-m-d'))
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -759,9 +755,7 @@ class ProduksiController extends Controller
     {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
-        })
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 5')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        })->whereBetween('tgl_kontrak', [Carbon::now()->subDays(5), Carbon::now()])
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -804,9 +798,7 @@ class ProduksiController extends Controller
     {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
-        })
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) <= 10')
-            ->whereRaw('DATEDIFF(tgl_kontrak, now()) > 0')
+        })->whereBetween('tgl_kontrak', [Carbon::now()->subDays(10), Carbon::now()])
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
@@ -850,7 +842,7 @@ class ProduksiController extends Controller
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })
-            ->where('tgl_kontrak', '<', Carbon::now()->format('Y-m-d'))
+            ->whereDate('tgl_kontrak', '<', Carbon::now()->format('Y-m-d'))
             ->get());
         $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
