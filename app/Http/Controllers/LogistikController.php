@@ -321,8 +321,6 @@ class LogistikController extends Controller
             ->make(true);
     }
 
-
-
     public function get_data_no_seri($id)
     {
         // $data = NoseriDetailPesanan::where('detail_pesanan_produk', $id)->doesntHave('DetailLogistik')->get();

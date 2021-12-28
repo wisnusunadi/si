@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0  text-dark">Master Stok</h1>
+            <h1 class="m-0  text-dark">Master Pengiriman</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -92,7 +92,8 @@
                                                 <th class="nowrap" rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap" rowspan="2">Jumlah Pesanan</th>
-                                                <th class="nowrap" colspan="2">Pengiriman</th>
+                                                <th class="nowrap borderright" colspan="2">Pengiriman</th>
+                                                <th class="nowrap" rowspan="2">Aksi</th>
                                             </tr>
                                             <tr>
                                                 <th>Jumlah Selesai</th>
@@ -100,7 +101,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -136,7 +136,7 @@
             event.preventDefault();
             var id = $(this).data('id');
             $.ajax({
-                url: "/ppic/master_stok/detail/" + id,
+                url: "/ppic/master_pengiriman/detail/" + id,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -190,6 +190,10 @@
                 },
                 {
                     data: 'belum_pengiriman',
+                    className: 'borderright',
+                },
+                {
+                    data: 'aksi',
                 }
             ]
         });
@@ -200,7 +204,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/ppic/master_stok/detail/' + id,
+                    'url': '/api/ppic/master_pengiriman/detail/' + id,
                     'type': 'GET',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -218,13 +222,16 @@
                         data: 'so',
                     },
                     {
-                        data: 'tgl_order',
-                    },
-                    {
                         data: 'tgl_delivery',
                     },
                     {
-                        data: 'jumlah',
+                        data: 'jumlah_pesanan',
+                    },
+                    {
+                        data: 'jumlah_selesai_kirim',
+                    },
+                    {
+                        data: 'jumlah_belum_kirim',
                     },
                 ]
             });
