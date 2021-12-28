@@ -1037,6 +1037,12 @@ return [
             'url' => '/qc/so/laporan/show',
             'auth' => [23],
         ],
+        [
+            'text' => 'Lacak',
+            'url'  => '/penjualan/lacak/show',
+            'icon' => 'far fa-circle',
+            'auth' => [23]
+        ],
 
         [
             'text'    => 'Permintaan',
