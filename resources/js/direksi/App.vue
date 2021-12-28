@@ -22,7 +22,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <Calendar></Calendar>
+                            <Calendar/>
                         </div>
                     </div>
                 </div>
@@ -30,47 +30,7 @@
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="fas fa-layer-group"></i> Perakitan Bulan
-                            Januari
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <table class="table table-bordered" id="table_produk_perakitan">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th colspan="2" class="text-center">Tanggal</th>
-                                            <th rowspan="2">Produk</th>
-                                            <th rowspan="2">Jumlah Rakit</th>
-                                            <th rowspan="2">Aksi</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Tgl Mulai</th>
-                                            <th>Tgl Selesai</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="produk" role="tabpanel" aria-labelledby="produk-tab">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title"><i class="fas fa-cog"></i> Perakitan Produk Bulan Januari</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart"></div>
-                    </div>
-                </div>
+                <Table/>
             </div>
         </div>
     </div>
@@ -79,9 +39,11 @@
 
 <script>
     import Calendar from './Components/Calendar.vue'
+    import Table from './Components/Table.vue';
     export default {
         components: {
-            Calendar
+            Calendar,
+            Table
         },
     }
 </script>

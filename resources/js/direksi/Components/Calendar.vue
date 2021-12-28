@@ -3,17 +3,18 @@
     import FullCalendar from '@fullcalendar/vue'
     import dayGridPlugin from '@fullcalendar/daygrid'
     import interactionPlugin from '@fullcalendar/interaction'
-    import $ from "jquery";
+    import axios from 'axios'
 
     export default {
         name: 'Calendar',
         components: {
             FullCalendar
         },
-        data() {
+        
+        data: function() {
             return {
                 calendarOptions: {
-                    plugins: [ dayGridPlugin, interactionPlugin ],
+                    plugins: [dayGridPlugin, interactionPlugin],
                     initialView: 'dayGridMonth',
                     weekends: false,
                     header: {
@@ -21,19 +22,42 @@
                         center: 'title',
                         right: 'dayGridMonth,timeGridWeek,timeGridDay'
                     },
-                    locale: 'id',                    
-                    events: []
+                    locale: 'id',
+                    events: [],
                 }
             }
         },
-        methods:{
-            
+
+        methods: {
+            convertJadwal(jadwal) {
+                return jadwal.length == 0
+                    ? []
+                    : jadwal.map((item) => ({
+                        id: item.id,
+                        title: `${item.produk.produk.nama} ${item.produk.nama}`,
+                        start: item.tanggal_mulai,
+                        end: item.tanggal_selesai,
+                        backgroundColor: item.warna,
+                        borderColor: item.warna,
+                    }));
+                },
+            event() {
+                axios.post("/api/prd/plan-cal").then(response => {
+                    this.calendarOptions.events = this.convertJadwal(response.data);
+                })
+            },
+        },
+
+        mounted() {
+            this.event();
+            this.$refs.calendar.getApi().next();
         }
     }
+
 </script>
 
 <template>
-    <FullCalendar :options="calendarOptions" />
+    <FullCalendar ref="calendar" :options="calendarOptions" />
 </template>
 
 <style>
@@ -51,4 +75,5 @@
     .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+
 </style>

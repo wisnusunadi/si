@@ -368,7 +368,6 @@ class GudangController extends Controller
                         </select>';
 
             })
-
             ->addColumn('noserii', function ($d) {
                 return $d->seri->noseri.'<input type="hidden" name="noseri[]" id="noseri[]" value="'.$d->seri->noseri.'">';
             })

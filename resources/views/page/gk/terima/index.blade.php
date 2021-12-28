@@ -212,7 +212,7 @@
                                 <label for="">Unit</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body spru">
-                                        Unit 1
+                                        -
                                     </div>
                                 </div>
                             </div>
@@ -527,7 +527,7 @@
 
     function addSparepart(x, y, z) {
         // header
-        console.log(document.getElementsByClassName("produk"));
+        // console.log($('select[name="sparepart_id"] option:selected').text());
         $('.jml_spr').text(x + ' Pcs')
         $('.in_spr').text(document.getElementsByName("date_in")[0].value)
         $('.divisi_spr').text(document.getElementsByName("dari")[0].selectedOptions[0].label)

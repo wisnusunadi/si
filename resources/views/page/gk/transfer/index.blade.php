@@ -579,9 +579,12 @@
             })
         }
     }
-
+    var xx = 0;
     function addSparepart(x, y, z) {
-        // console.log($('#sparepart_id :selected').text());
+
+        console.log('#sparepart_id'+(nmrspr-1));
+        alert($('#sparepart_id'+(nmrspr-1)).find(":selected").text());
+        xx++;
         $('.jumlah_spr').text(x + ' Unit')
         $('.date_out').text(document.getElementsByName("date_in")[0].value)
         $('.divisi').text(document.getElementsByName("dari")[0].selectedOptions[0].dataset.name)
@@ -591,12 +594,6 @@
             $(this).find('tbody input.seri').first().focus();
         })
         $('.scan-produk1').DataTable().destroy();
-        // $('.scan-produk1 tbody').empty();
-        // for (let index = 0; index < x; index++) {
-        //     ii++;
-        //     $('.scan-produk1 tbody').append('<tr><td>' + ii +
-        //         '</td><td>noseri1</td><td>srgrgrg</td><td>Level 1</td></tr>');
-        // }
         $('.scan-produk1').DataTable({
             "ordering": false,
             "autoWidth": false,
@@ -620,7 +617,10 @@
             ],
 
         });
+
     }
+
+
 
     // Unit
     function addUn(l) {
@@ -849,7 +849,7 @@
         i++;
         let table_sparepart =
             '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_id'+nmrspr+'" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus' +
-            nmrspr + '" data-id="" data-jml="" id="" onclick=addSpare(' + nmrspr +
+            nmrspr + '" data-id="" data-kode="" data-jml="" id="" onclick=addSpare(' + nmrspr +
             ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
 
         $('.add_sparepart_table tbody').append(table_sparepart);

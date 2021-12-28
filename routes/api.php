@@ -194,19 +194,26 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/create-noseri', [GudangController::class, 'storeNoseri']);
     Route::post('/create-final', [GudangController::class, 'finalDraftRakit']);
 
+    Route::post('/updateRancangSO', [ProduksiController::class, 'updateRancangSO']);
+    Route::post('/updateFinalSO', [ProduksiController::class, 'updateFinalSO']);
+
     // get
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
     Route::get('noseri/{id}', [\App\Http\Controllers\ProduksiController::class, 'getNoseri']);
     Route::get('data-so', [\App\Http\Controllers\ProduksiController::class, 'getOutSO']);
     Route::get('detail-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
+    Route::get('edit-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);
     Route::get('rakit', [GudangController::class, 'getRakit']);
     Route::get('rakit-noseri/{id}', [GudangController::class, 'getRakitNoseri']);
     Route::get('rakit-terima/{id}', [GudangController::class, 'getTerimaRakit']);
     Route::post('/seri-so', [\App\Http\Controllers\ProduksiController::class, 'getNoseriSO']);
+    Route::post('/seri-edit-so', [\App\Http\Controllers\ProduksiController::class, 'getNoseriSOEdit']);
 
     // check
     Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
+    Route::post('/updateCheck', [ProduksiController::class, 'UncheckedNoseri']);
+    Route::post('/updateChecked', [ProduksiController::class, 'checkedNoseri']);
 });
 
 Route::prefix('/prd')->group(function () {
@@ -236,7 +243,6 @@ Route::prefix('/prd')->group(function () {
     // on
     Route::post('/ongoing', [ProduksiController::class, 'on_rakit']);
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
-    Route::get('/ongoing-cal-direksi', [ProduksiController::class, 'calender_current']);
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);

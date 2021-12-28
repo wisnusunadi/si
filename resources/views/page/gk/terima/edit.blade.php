@@ -520,12 +520,12 @@
     let unit_arr = [];
 
     function addSpare(a) {
-        var b = $(".btn_plus" + a).parent().prev().children().val();
+        var b = $(".btn_plus" + a).parent().prev().children().find('input.jumlah').val();
         var c = $(".btn_plus" + a).parent().prev().prev().children().val();
         addSparepart(b, a, c);
     }
 
-    function clickSparepart(c,d) {
+    function clickSparepart(c,d, e) {
         console.log(d);
         var tableScan = $('.scan-produk1').dataTable({
             "destroy": true,
@@ -656,8 +656,9 @@
     }
 
     function addSparepart(x, y, z) {
+        console.log('jumlah '+ x);
         $('.modalAddSparepart').modal('show');
-        $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ','+z+')');
+        $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ','+z+','+x+')');
         $('.modalAddSparepart').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
@@ -688,7 +689,7 @@
 
     // Unit
     function addUn(l) {
-        var j = $(".btnPlus" + l).parent().prev().children().val();
+        var j = $(".btnPlus" + l).parent().prev().children().find('input.jumlah').val();
         var k = $(".btnPlus" + l).parent().prev().prev().children().val();
         addUnit(j, k);
     }

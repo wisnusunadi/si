@@ -24,6 +24,7 @@
     }
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+<input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -323,6 +324,7 @@
 
     });
 
+    // add
     var id = '';
     $(document).on('click', '.editmodal', function(e) {
         var x = $(this).data('value');
@@ -447,9 +449,6 @@
     $(document).on('click', '#rancang', function(e) {
         e.preventDefault();
 
-        const prdd = [];
-        const qtyy = [];
-
         $('.cb-child-prd').each(function() {
             if($(this).is(":checked")) {
             } else {
@@ -478,7 +477,6 @@
             }
         })
     })
-
 
     $(document).on('click', '#okk', function(e) {
         e.preventDefault();
@@ -519,6 +517,195 @@
         } else {
             $(this).parent().next().next().next().next().children().find('button').addClass('disabled').attr('disabled', true);
         }
+    })
+
+    // edit
+    $(document).on('click', '.ubahmodal', function(e) {
+        var x = $(this).data('value');
+        console.log(x);
+
+        id = $(this).data('id');
+        console.log(id);
+        $.ajax({
+            url: "/api/tfp/header-so/" +id+"/"+x,
+            success: function(res) {
+                console.log(res);
+                $('span#so-edit').text(res.so);
+                $('span#po-edit').text(res.po);
+                $('span#akn-edit').text(res.akn);
+            }
+        });
+
+        $('#editProduk').DataTable({
+            destroy: true,
+            autoWidth: false,
+            processing: true,
+            serverSide: true,
+            "ordering": false,
+            ajax: {
+                url: "/api/tfp/edit-so/" +id+"/"+x,
+            },
+            columns: [
+                {data: 'checkbox'},
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'merk', name: 'merk'},
+                { data: 'action', name: 'action'},
+            ],
+            "order": [
+                [1, 'asc']
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
+        })
+        $('#editProdukModal').modal('show');
+    })
+
+    $(document).on('click', '.serimodal', function(e) {
+        var tr = $(this).closest('tr');
+        prd = tr.find('#gdg_brg_jadi_id').val();
+        jml = $(this).data('jml');
+
+        $('.scan-produk-edit').DataTable({
+            processing: false,
+            serverSide: false,
+            autoWidth: false,
+            destroy: true,
+            stateSave: true,
+            "ordering": false,
+            ajax: {
+                url: "/api/tfp/seri-edit-so",
+                data: {gdg_barang_jadi_id: prd},
+                type: "post",
+            },
+            columns: [
+                { data: 'seri', name: 'seri'},
+                { data: 'checkbox', name: 'checkbox'},
+            ],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [
+                [0, 'asc']
+            ],
+                "oLanguage": {
+                "sSearch": "Masukkan Nomor Seri:"
+            },
+                "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $('.modal-scan-edit').modal('show');
+    })
+
+    $(document).on('click', '.cb-child-edit', function() {
+        if ($(this).is(':checked')) {
+            console.log($(this).val());
+            $.ajax({
+                url: "/api/tfp/updateChecked",
+                type: "post",
+                data: {id: $(this).val()},
+                success: function(res) {
+                    console.log('Checked');
+                }
+            })
+        } else {
+            console.log('uncheck');
+            $.ajax({
+                url: "/api/tfp/updateCheck",
+                type: "post",
+                data: {id: $(this).val()},
+                success: function(res) {
+                    console.log('Unchecked');
+                }
+            })
+        }
+    })
+    var editPrd = {};
+    $(document).on('click', '#simpan-edit', function() {
+        $('.cb-prd-edit').each(function() {
+            if($(this).is(":checked")) {
+                if (!editPrd[$(this).val()])
+                editPrd[$(this).val()] = {"jumlah": $(this).parent().next().next().children().val(), "noseri": []};
+            } else {
+                delete editPrd[$(this).val()]
+            }
+        })
+
+        const ids = [];
+        $('.cb-child-edit').each(function() {
+            if($(this).is(":checked")) {
+                if ($('.cb-child-edit').filter(':checked').length > jml) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Melebihi Batas Maksimal'
+                    })
+                } else {
+                    ids.push($(this).val());
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Noseri Berhasil Disimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('.modal-scan-edit').modal('hide');
+                }
+            }
+
+        })
+        editPrd[prd].noseri = ids;
+        console.log(editPrd);
+    })
+
+    $(document).on('click', '#rancang-edit', function(e) {
+        e.preventDefault();
+        $('.cb-prd-edit').each(function() {
+            if($(this).is(":checked")) {
+            } else {
+                delete editPrd[$(this).val()]
+            }
+        })
+        console.log(editPrd);
+        $.ajax({
+            url: "/api/tfp/updateRancangSO",
+            type: "post",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                pesanan_id: id,
+                userid: $('#userid').val(),
+                data: editPrd,
+            },
+            success: function(res) {
+                console.log(res);
+            }
+        })
+    })
+
+    $(document).on('click', '#okk-edit', function(e) {
+        e.preventDefault();
+        $('.cb-prd-edit').each(function() {
+            if($(this).is(":checked")) {
+            } else {
+                delete editPrd[$(this).val()]
+            }
+        })
+        console.log(editPrd);
+        $.ajax({
+            url: "/api/tfp/updateFinalSO",
+            type: "post",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                pesanan_id: id,
+                userid: $('#userid').val(),
+                data: editPrd,
+            },
+            success: function(res) {
+                console.log(res);
+            }
+        })
     })
 
 </script>

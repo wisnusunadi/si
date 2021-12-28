@@ -11,6 +11,7 @@ use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
 use App\Models\Layout;
 use App\Models\NoseriKeluarGK;
+use App\Models\NoseriTGbj;
 use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use App\Models\SparepartHis;
@@ -834,14 +835,14 @@ class SparepartController extends Controller
     {
         $data = TFProduksiDetail::whereHas('header', function($q) {
             $q->where('ke', 12);
-        })->get();
+        })->get()->sortByDesc('header.tgl_masuk');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('in', function($d) {
                 return Carbon::createFromFormat('Y-m-d', $d->header->tgl_keluar)->isoFormat('dddd, D MMM Y');
             })
             ->addColumn('dari', function($d) {
-                return 'Gudang Barang Jadi';
+                return $d->header->bagian->divisi->nama;
             })
             ->addColumn('produk', function($d) {
                 return $d->produk->produk->nama.' '.$d->produk->nama;
@@ -850,9 +851,74 @@ class SparepartController extends Controller
                 return $d->qty.' '.$d->produk->satuan->nama;
             })
             ->addColumn('action', function($d) {
-                return 'action';
+                $seri = NoseriTGbj::where('t_gbj_detail_id', $d->id)->where('status_id', 2)->get();
+                $seri_final = NoseriTGbj::where('t_gbj_detail_id', $d->id)->where('status_id', 9)->get();
+                $cc = count(($seri_final));
+                $c = count($seri);
+                if ($c == $cc) {
+                    return '<a data-toggle="modal" data-target="#detailModal" class="detailModal" data-attr="" data-produk="' . $d->produk->produk->nama . '" data-variasi="'.$d->produk->nama.'"  data-id="' . $d->id . '">
+                            <button class="btn btn-outline-info"><i class="far fa-eye"></i> Detail</button>
+                        </a>';
+                }
+                return '<a data-toggle="modal" data-target="#detailModal" class="detailModal" data-attr="" data-produk="' . $d->produk->produk->nama . '" data-variasi="'.$d->produk->nama.'"  data-id="' . $d->id . '">
+                            <button class="btn btn-outline-info"><i class="far fa-eye"></i> Detail</button>
+                        </a>
+                        <a data-toggle="modal" data-target="#detailModal" class="terimamodal" data-attr="" data-produk="' . $d->produk->produk->nama . '" data-variasi="'.$d->produk->nama.'"  data-id="' . $d->id . '">
+                            <button class="btn btn-outline-primary"><i class="far fa-check"></i> Terima</button>
+                        </a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    function getSeriProduk($id)
+    {
+        $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->where('status_id', 9)->get();
+        return datatables()->of($data)
+            ->addColumn('layout', function ($d) {
+                return $d->layout->ruang;
+            })
+            ->addColumn('noserii', function ($d) {
+                return $d->seri->noseri;
+            })
+            ->addColumn('title', function ($d) {
+                return $d->detail->produk->produk->nama . ' ' . $d->detail->produk->nama;
             })
             ->make(true);
+    }
+
+    function getSeriRakit($id) {
+        $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->where('status_id', 2)->get();
+        $layout = Layout::where('jenis_id', 3)->get();
+        $a = 0;
+        return datatables()->of($data)
+            ->addColumn('layout', function ($d) use($layout, $a) {
+                $opt = '';
+
+                foreach($layout as $l) {
+                    $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
+                }
+                $a++;
+                return '<select name="layout_id[]" id="layout_id" class="form-control layout">
+                        ' . $opt . '
+                        </select>';
+
+            })
+            ->addColumn('noserii', function ($d) {
+                return $d->seri->noseri.'<input type="hidden" name="noseri[]" id="noseri[]" value="'.$d->seri->noseri.'">';
+            })
+            ->addColumn('checkbox', function ($d) {
+                return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
+            })
+            ->addColumn('title', function ($d) {
+                return $d->detail->produk->produk->nama . ' ' . $d->detail->produk->nama;
+            })
+            ->rawColumns(['checkbox', 'layout', 'noserii'])
+            ->make(true);
+    }
+
+    function terimaSeri(Request $request) {
+
     }
 
     // cek
@@ -1369,7 +1435,7 @@ class SparepartController extends Controller
         return response()->json(['msg' => 'Data berhasil diterima']);
     }
 
-    function updateTransfer(Request $request) { 
+    function updateTransfer(Request $request) {
         $header = GudangKarantina::find($request->id);
         $header->deskripsi = $request->tujuan;
         $header->is_draft = 0;
