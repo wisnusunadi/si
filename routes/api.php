@@ -55,6 +55,7 @@ Route::prefix('/ppic')->group(function () {
 
     Route::get('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data']);
     Route::get('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok']);
+    Route::get('/master_pengiriman/data', [App\Http\Controllers\PpicController::class, 'get_master_pengiriman_data']);
 });
 Route::prefix('/provinsi')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_provinsi']);

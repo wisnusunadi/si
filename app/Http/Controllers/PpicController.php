@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 // model
 use App\Models\Produk;
@@ -292,7 +293,7 @@ class PpicController extends Controller
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
                 if (!empty($data->nama)) {
-                    return $data->Produk->nama . "- <b>" . $data->nama . "</b>";
+                    return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
                 } else {
                     return $data->Produk->nama;
                 }
@@ -433,10 +434,19 @@ class PpicController extends Controller
                 return $this->get_count_spa_spb_po($data->id, $data->produk->id);
             })
             ->addColumn('aksi', function ($data) {
-                return '<i class="fas fa-search"></i>';
+                return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '" id="detmodal">
+                <div><i class="fas fa-search"></i></div>
+            </a>';
             })
             ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
             ->make(true);
+    }
+
+    public function master_stok_detail_show($id)
+    {
+        $data = GudangBarangJadi::find($id);
+        $jumlah = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id, $data->produk->id);
+        return view('spa.ppic.master_stok.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah]);
     }
 
     public function get_detail_master_stok($id)
@@ -445,14 +455,106 @@ class PpicController extends Controller
             $q->where('id', $id);
         })->whereIn('log_id', ['7', '9'])->get();
 
+        $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->first();
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
-            ->addColumn('data', function ($data) {
-                return $data->stok;
-            })->make(true);
+            ->addColumn('tgl_order', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->Ekatalog->tgl_buat)->format('d-m-Y');
+                } else {
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+                }
+            })
+            ->addColumn('tgl_delivery', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                    $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+                    $param = "";
+
+                    if ($tgl_sekarang < $tgl_parameter) {
+                        $to = Carbon::now();
+                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                        $hari = $to->diffInDays($from);
+
+                        if ($hari > 7) {
+                            $param = ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                        } else if ($hari > 0 && $hari <= 7) {
+                            $param = ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                        } else {
+                            $param = '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                        }
+                    } elseif ($tgl_sekarang == $tgl_parameter) {
+                        $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                    } else {
+                        $to = Carbon::now();
+                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                        $hari = $to->diffInDays($from);
+                        $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                    }
+                    return $param;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('jumlah', function ($data) use ($prd) {
+                $id = $data->id;
+                $res = DetailPesanan::where('pesanan_id', $id)->get();
+                $jumlah = 0;
+                foreach ($res as $a) {
+                    foreach ($a->PenjualanProduk->Produk as $b) {
+                        if ($b->id == $prd->id) {
+                            $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                        }
+                    }
+                }
+                return $jumlah;
+            })
+            ->rawColumns(['tgl_delivery'])
+            ->make(true);
+    }
+
+    public function get_master_pengiriman_data()
+    {
+        $data = GudangBarangJadi::has('DetailPesananProduk.NoseriDetailPesanan')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                if (!empty($data->nama)) {
+                    return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
+                } else {
+                    return $data->Produk->nama;
+                }
+            })
+            ->addColumn('jumlah', function ($data) {
+                $jumlah = $this->get_count_pesanan_produk($data->id, $data->produk->id);
+                return $jumlah;
+            })
+            ->addColumn('jumlah_pengiriman', function ($data) {
+                $jumlah = 0;
+                foreach ($data->DetailPesananProduk as $o) {
+                    $jumlah = $jumlah + $o->DetailPesanan->Pesanan->getJumlahCek();
+                }
+                return $jumlah;
+            })
+
+            ->addColumn('belum_pengiriman', function ($data) {
+                $jumlahpesanan = $this->get_count_pesanan_produk($data->id, $data->produk->id);
+                $jumlahkirim = 0;
+                foreach ($data->DetailPesananProduk as $o) {
+                    $jumlahkirim = $jumlahkirim + $o->DetailPesanan->Pesanan->getJumlahCek();
+                }
+
+                $jumlah = $jumlahpesanan - $jumlahkirim;
+                return $jumlah;
+            })
+            ->rawColumns(['nama_produk'])
+            ->make(true);
     }
 
     public function get_count_ekatalog($id, $produk_id, $status)
@@ -460,7 +562,9 @@ class PpicController extends Controller
         $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
             $q->where('gudang_barang_jadi_id', $id);
         })->whereHas('Pesanan.Ekatalog', function ($q) use ($status) {
-            $q->where('status', '=', $status)->whereIn('log', ['penjualan', 'po']);
+            $q->where('status', '=', $status);
+        })->whereHas('Pesanan', function ($q) {
+            $q->whereIn('log_id', ['7', '9']);
         })->get();
         $jumlah = 0;
         foreach ($res as $a) {
@@ -491,5 +595,53 @@ class PpicController extends Controller
             }
         }
         return $jumlah;
+    }
+
+    public function get_count_pesanan_produk($id, $produk_id)
+    {
+        $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('gudang_barang_jadi_id', $id);
+        })->whereHas('Pesanan', function ($q) {
+            $q->whereNotIn('log_id', ['7', '9']);
+        })->get();
+        $jumlah = 0;
+        foreach ($res as $a) {
+            $a->jumlah;
+            foreach ($a->PenjualanProduk->Produk as $b) {
+                if ($b->id == $produk_id) {
+                    $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                }
+            }
+        }
+        return $jumlah;
+    }
+
+    // public function get_count_spa_spb_po($id, $produk_id)
+    // {
+    //     $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+    //         $q->where('gudang_barang_jadi_id', $id);
+    //     })->whereHas('Pesanan', function ($q) {
+    //         $q->whereIn('log_id', ['7', '9']);
+    //     })->doesntHave('Pesanan.Ekatalog')->get();
+    //     $jumlah = 0;
+    //     foreach ($res as $a) {
+    //         $a->jumlah;
+    //         foreach ($a->PenjualanProduk->Produk as $b) {
+    //             if ($b->id == $produk_id) {
+    //                 $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+    //             }
+    //         }
+    //     }
+    //     return $jumlah;
+    // }
+
+    public function getHariBatasKontrak($value, $limit)
+    {
+        if ($limit == 2) {
+            $days = '28';
+        } else {
+            $days = '35';
+        }
+        return Carbon::parse($value)->subDays($days);
     }
 }
