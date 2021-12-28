@@ -89,7 +89,7 @@
                             </table>
                         </div>
                         <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-primary btn-simpan" type="submit" data-toggle="modal"
+                            <button class="btn btn-primary btn-simpan" type="button" data-toggle="modal"
                                 data-target="#modalNotes" hidden>Simpan</button>
                         </div>
                     </div>
@@ -368,7 +368,6 @@
         $('input[name^="ke"]').each(function() {
             ke.push($(this).val());
         });
-        // console.log(ke);
 
         $('input[name^="deskripsi"]').each(function() {
             desk.push($(this).val());
@@ -381,7 +380,6 @@
         $('input[name^="qty"]').each(function() {
             stok_push.push($(this).val());
         });
-        console.log(stok_push);
 
         $.ajax({
             url: "/api/tfp/create",
@@ -396,14 +394,13 @@
                 noseri_id : seri,
             },
             success: function (res) {
-                // console.log(res);
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: 'Sukses',
+                    title: res.msg,
                     showConfirmButton: false,
                     timer: 1500
-                })
+                });
                 location.reload();
             }
         });

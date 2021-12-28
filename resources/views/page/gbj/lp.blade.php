@@ -62,6 +62,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <ul class="nav nav-tabs" id="myTab" role="tabList">
+                            <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
                             <li class="nav-item" role="presentation">
                                 <a href="#produk" class="nav-link active" id="produk-tab" data-toggle="tab" role="tab"
                                     aria-controls="produk" aria-selected="true">Rancangan Perakitan</a>
@@ -276,7 +277,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -418,23 +419,17 @@
             type: 'GET',
             dataType: 'json',
             success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $(".productt").empty();
-                    $(".productt").append('<option value="">Pilih Item</option>');
-                    $.each(res, function(key, value) {
-                        $(".productt").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
-                    });
-                } else {
-                    $(".productt").empty();
-                }
+                $(".productt").append('<option value="">Pilih Item</option>');
+                $.each(res, function(key, value) {
+                    $(".productt").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
+                });
             }
         });
 
 
-        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg'+i+'" class="form-control productt"><option value="">Option 1</option><option value="">Option 2</option><option value="">Option 3</option></select></td><td><input type="text" class="form-control number" id="qty" name="qty['+i+']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
+        let tambah_data = '<tr id="row'+i+'"><td><select name="gdg_brg_jadi_id['+i+']" id="gdg'+i+'" class="form-control productt"></select></td><td><input type="text" class="form-control number" id="qty" name="qty['+i+']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
         $('tbody.tambah_data').append(tambah_data);
-        $('.productt').select2();
+        $('#gdg'+i+'').select2();
         $(".number").inputFilter(function(value) {
             return /^\d*$/.test(value);    // Allow digits only, using a RegExp
         });
@@ -623,14 +618,15 @@
     const serir = {};
     var nose;
     var lay;
-
+    var i = 0;
     $(document).on('click', '#btnPlus', function() {
         var tr = $(this).closest('tr');
         x = tr.find('#qty').val();
         y = tr.find('.productt').val();
-        console.log($(this).parent().prev().prev().children().val());
-        console.log(y);
+        yText = tr.find('.productt option:selected').text();
+        $('span#titlee').text(yText);
         tambahanPerakitan(x);
+        i++;
     })
 
 
@@ -704,6 +700,7 @@
                         tgl_masuk : $('#tgl_masuk').val(),
                         dari: $('#divisi').val(),
                         deskripsi: $('#deskripsi').val(),
+                        userid: $('#userid').val(),
                         gdg_brg_jadi_id: prd1,
                         qty: jml1,
                         noseri : seri,
@@ -780,6 +777,7 @@
                 tgl_masuk : $('#tgl_masuk').val(),
                 dari: $('#divisi').val(),
                 deskripsi: $('#deskripsi').val(),
+                userid: $('#userid').val(),
                 gdg_brg_jadi_id: prd,
                 qty: jml,
                 noseri : seri,
@@ -959,6 +957,7 @@
                                             showConfirmButton: false,
                                             timer: 1500
                                         })
+                                        $('.tambahan-perakitan').modal('hide');
                                     } else {
                                         Swal.fire({
                                             icon: 'error',

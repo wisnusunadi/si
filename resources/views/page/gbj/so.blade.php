@@ -83,6 +83,7 @@
                     <div class="col-lg-12">
                     <form action="" method="post">
                         <input type="hidden" name="pesanan_id" id="ids">
+                        <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
                         <div class="card">
                             <div class="card-header">
                                 <div class="row row-cols-2">
@@ -328,6 +329,7 @@
                 type: "post",
                 data: {
                     pesanan_id : id,
+                    userid: $('#userid').val(),
                     gbj_id: ids,
                 },
                 success: function(res) {

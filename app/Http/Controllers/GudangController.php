@@ -109,11 +109,20 @@ class GudangController extends Controller
 
     function getHistorybyProduk()
     {
-        $data = GudangBarangJadi::with('produk', 'satuan')->get();
+        $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('stock', function ($d) {
                 return $d->stok . ' ' . $d->satuan->nama;
+            })
+            ->addColumn('stok_jual', function ($data) {
+                if ($data->id) {
+                    $ss = DetailPesananProduk::with('detailpesanan')->where('gudang_barang_jadi_id', $data->id)->get();
+                    return $data->stok - $ss->sum('detailpesanan.jumlah') . ' ' . $data->satuan->nama;
+                } else {
+                    return '-';
+                }
+
             })
             ->addColumn('kelompok', function ($d) {
                 return $d->produk->kelompokproduk->nama;
@@ -193,7 +202,12 @@ class GudangController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('layout', function ($d) {
-                return $d->layout->ruang;
+                if(isset($d->layout->ruang)) {
+                    return $d->layout->ruang;
+                } else {
+                    return '-';
+                }
+
             })
             ->addColumn('seri', function ($d) {
                 return $d->seri->noseri;
@@ -593,6 +607,7 @@ class GudangController extends Controller
                 $brg_jadi->dim_t = $request->dim_t;
                 $brg_jadi->status = $request->status;
                 $brg_jadi->updated_at = Carbon::now();
+                $brg_jadi->created_by = $request->userid;
                 $brg_jadi->save();
 
                 $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
@@ -602,6 +617,7 @@ class GudangController extends Controller
                 $brg_his->deskripsi = $request->deskripsi;
                 $brg_his->status = $request->status;
                 $brg_his->created_at = Carbon::now();
+                $brg_his->created_by = $request->userid;
                 $brg_his->save();
             } else {
                 $brg_jadi = new GudangBarangJadi();
@@ -622,6 +638,7 @@ class GudangController extends Controller
                 $brg_jadi->dim_t = $request->dim_t;
                 $brg_jadi->status = $request->status;
                 $brg_jadi->created_at = Carbon::now();
+                $brg_jadi->created_by = $request->userid;
                 $brg_jadi->save();
 
                 $brg_his = new GudangBarangJadiHis();
@@ -633,6 +650,7 @@ class GudangController extends Controller
                 $brg_his->deskripsi = $request->deskripsi;
                 $brg_his->status = $request->status;
                 $brg_his->created_at = Carbon::now();
+                $brg_his->created_by = $request->userid;
                 $brg_his->save();
             }
             return response()->json(['msg' => 'Successfully']);
@@ -648,6 +666,7 @@ class GudangController extends Controller
         $h->status_id = 1;
         $h->jenis = 'masuk';
         $h->created_at = Carbon::now();
+        $h->created_by = $request->userid;
         $h->save();
 
         foreach ($request->gdg_brg_jadi_id as $key => $value) {
@@ -658,6 +677,7 @@ class GudangController extends Controller
             $d->status_id = 1;
             $d->jenis = 'masuk';
             $d->created_at = Carbon::now();
+            $d->created_by = $request->userid;
             $d->save();
 
             foreach($request->noseri[$value] as $k => $v) {
@@ -667,6 +687,7 @@ class GudangController extends Controller
                 $nn->noseri = $request->noseri[$value][$k];
                 $nn->jenis = 'MASUK';
                 $nn->is_aktif = 0;
+                $nn->created_by = $request->userid;
                 $nn->save();
 
                 $n = new NoseriTGbj();
@@ -676,6 +697,7 @@ class GudangController extends Controller
                 $n->jenis = 'keluar';
                 $n->status_id = 1;
                 $n->state_id = 2;
+                $n->created_by = $request->userid;
                 $n->save();
             }
         }
@@ -693,6 +715,7 @@ class GudangController extends Controller
         $h->status_id = 2;
         $h->jenis = 'masuk';
         $h->created_at = Carbon::now();
+        $h->created_by = $request->userid;
         $h->save();
 
         foreach ($request->gdg_brg_jadi_id as $key => $value) {
@@ -703,6 +726,7 @@ class GudangController extends Controller
             $d->status_id = 2;
             $d->jenis = 'masuk';
             $d->created_at = Carbon::now();
+            $d->created_by = $request->userid;
             $d->save();
 
             foreach($request->noseri[$value] as $k => $v) {
@@ -712,6 +736,7 @@ class GudangController extends Controller
                 $nn->noseri = $request->noseri[$value][$k];
                 $nn->jenis = 'MASUK';
                 $nn->is_aktif = 1;
+                $nn->created_by = $request->userid;
                 $nn->save();
 
                 $n = new NoseriTGbj();
@@ -721,18 +746,21 @@ class GudangController extends Controller
                 $n->jenis = 'masuk';
                 $n->status_id = 2;
                 $n->state_id = 3;
+                $n->created_by = $request->userid;
                 $n->save();
             }
+
+            // $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
+            // $i = 0;
+            // foreach ($gdg as $vv) {
+            //     $vv['stok'] = $vv['stok'] + $request->qty[$key];
+            //     $i++;
+            //     GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok'], 'updated_by' => $request->userid]);
+            // }
         }
 
         // update stok
-        $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
-        $i = 0;
-        foreach ($gdg as $vv) {
-            $vv['stok'] = $vv['stok'] + $request->qty[$i];
-            $i++;
-            GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-        }
+
 
         return response()->json(['msg' => 'Successfully']);
     }
@@ -782,7 +810,7 @@ class GudangController extends Controller
         foreach($request->gbj_id as $key => $value) {
             if (in_array($request->gbj_id[$key], $check_array)) {
                 DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)
-                    ->update(['status_cek' => 4]);
+                    ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
             }
         }
 
@@ -790,6 +818,7 @@ class GudangController extends Controller
         $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->get()->count();
         if ($cek == $cek_prd) {
             $h->status_cek = 4;
+            $h->checked_by = $request->userid;
             $h->save();
         }
 

@@ -33,6 +33,7 @@
   </div>
   <!-- Modal Detail-->
   <div class="modal fade terima-produk" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+      <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
       <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
               <div class="modal-header">
@@ -109,7 +110,7 @@
                           </tr>
                       </thead>
                       <tbody>
-                          
+
                       </tbody>
                   </table>
               </div>
@@ -267,6 +268,7 @@
             type: "post",
             data: {
                 "_token" : "{{ csrf_token() }}",
+                userid: $('#userid').val(),
                 seri: ids,
                 layout: lay,
             },

@@ -170,7 +170,7 @@
                                         <th>Kode Produk</th>
                                         <th>Produk</th>
                                         <th>Stok Gudang</th>
-                                        <th>Stok</th>
+                                        <th>Stok Penjualan</th>
                                         <th>Kelompok</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -441,7 +441,7 @@
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
             $dTable.draw();
         });
-        
+
 
         $("#divisi").on("change", function () {
             $dTable.columns(2).search($(this).val()).draw();
@@ -465,7 +465,7 @@
                 { data: 'kode_produk', name: 'kode_produk'},
                 { data: 'product', name: 'product'},
                 { data: 'stock', name: 'stock'},
-                { data: 'stock', name: 'stock'},
+                { data: 'stok_jual', name: 'stok_jual'},
                 { data: 'kelompok', name: 'kelompok'},
                 { data: 'action', name: 'action'},
             ],

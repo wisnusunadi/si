@@ -103,6 +103,7 @@
             <div class="modal-body">
             <form action="" id="produkForm" name="produkForm" enctype="multipart/form-data">
                 <input type="hidden" name="id" id="id">
+                <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
                 <div class="row">
                     <div class="col">
                         <div class="form-group">

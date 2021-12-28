@@ -77,7 +77,7 @@ class ProduksiController extends Controller
                     if (in_array($request->noseri_id[$value], $checked)) {
                         $nn = new NoseriTGbj();
                         $nn->t_gbj_detail_id = $did;
-                        $nn->noseri_id = json_decode($request->noseri_id[$value][$k], true);
+                        $nn->noseri_id = $v;
                         $nn->layout_id = 1;
                         $nn->status_id = 2;
                         $nn->jenis = 'keluar';
@@ -85,7 +85,7 @@ class ProduksiController extends Controller
                         $nn->created_by = $request->userid;
                         $nn->save();
 
-                        NoseriBarangJadi::find(json_decode($request->noseri_id[$value][$k], true))->update(['is_ready' => 1]);
+                        NoseriBarangJadi::find($v)->update(['is_ready' => 1]);
                     }
                 }
             }
@@ -363,7 +363,7 @@ class ProduksiController extends Controller
     // get
     function getNoseri(Request $request, $id)
     {
-        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $id)->get();
+        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $id)->where('is_ready', 0)->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('checkbox', function ($data) use ($i) {
@@ -1656,7 +1656,7 @@ class ProduksiController extends Controller
                 foreach ($gdg as $vv) {
                     $i++;
                     $vv['stok'] = $vv['stok'] + count($gid);
-                    GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                    GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok'], 'updated_by' => $request->userid]);
                 }
             }
         }
