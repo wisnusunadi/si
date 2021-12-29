@@ -218,7 +218,6 @@
     }
 </style>
 @stop
-
 @section('content')
 <div class="content">
     <div class="row">
@@ -234,7 +233,6 @@
                                         <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -432,7 +430,6 @@
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
-
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -464,7 +461,6 @@
                 {
                     data: 'batas_kontrak',
                     className: 'nowrap-text align-center',
-
                 },
                 {
                     data: 'button',
@@ -479,12 +475,10 @@
 <script>
     $(function() {
         $(document).on('click', '.detailmodal', function(event) {
-
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data("id");
             var label = $(this).data("target");
-
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -501,7 +495,6 @@
                     } else {
                         detailtabel_spb(id);
                     }
-
                 },
                 complete: function() {
                     $('#loader').hide();

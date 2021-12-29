@@ -28,7 +28,21 @@ class DetailPesananProduk extends Model
         return $this->hasMany(DetailLogistik::class, 'detail_pesanan_produk_id');
     }
 
-    function status() {
+
+    public function getJumlahPesanan()
+    {
+        $id = 1;
+        $jumlah = 0;
+        $data = DetailPesananProduk::where('detail_pesanan_id', $id)->get();
+        foreach ($data as $d) {
+            $jumlah += $d->jumlah;
+        }
+        return $jumlah;
+    }
+
+
+    function status()
+    {
         return $this->belongsTo(Status::class, 'status_cek');
     }
 }

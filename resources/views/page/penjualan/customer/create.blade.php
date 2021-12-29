@@ -128,7 +128,7 @@
                                     <div class="form-group row">
                                         <label for="pic" class="col-4 col-form-label" style="text-align:right;">PIC</label>
                                         <div class="col-5">
-                                            <input type="text" class="form-control @error('pic') is-invalid @enderror" value="" placeholder="Nama PIC" id="pic" name="pic" />
+                                            <input type="text" class="form-control @error('pic') is-invalid @enderror" placeholder="Nama PIC" id="pic" name="pic" />
                                             <div class="invalid-feedback" id="msgpic">
                                                 @if($errors->has('pic'))
                                                 {{ $errors->first('pic')}}
@@ -143,7 +143,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="ket_no_paket">Hari</span>
                                             </div>
-                                            <div class="invalid-feedback" id="msgno_paket">
+                                            <div class="invalid-feedback" id="msgno_batas">
                                                 @if($errors->has('batas'))
                                                 {{ $errors->first('batas')}}
                                                 @endif
@@ -184,8 +184,11 @@
 @stop
 
 @section('adminlte_js')
+<script type="text/javascript" src="{{ asset('vendor/masking/masking.js') }}"></script>
 <script>
     $(function() {
+        $('#npwp').mask('00.000.000.0-000.000');
+
         function check_nama_cust(val) {
             var hasil = 0;
             $.ajax({

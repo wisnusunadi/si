@@ -94,9 +94,10 @@
                                             <div><b>@currency($e->harga)</b></div>
                                         </div>
                                         <div class="col-4">
-                                            <div class="text-muted">Jumlah</div>
+                                            <div class="text-muted">Jumlah Paket</div>
                                             <div><b>{{$e->jumlah}}</b></div>
                                         </div>
+
                                         <div class="col-4">
                                             <div class="text-muted">Subtotal</div>
                                             <div><b>@currency($e->harga * $e->jumlah)</b></div>
@@ -110,12 +111,24 @@
                                                 @isset($e->DetailPesananProduk)
                                                 @foreach($e->DetailPesananProduk as $l)
                                                 <li class="list-group-item">
-
-                                                    @if(!empty($l->GudangBarangJadi->nama))
-                                                    {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
-                                                    @else
-                                                    {{$l->GudangBarangJadi->Produk->nama}}
-                                                    @endif
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            @if(!empty($l->GudangBarangJadi->nama))
+                                                            {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
+                                                            @else
+                                                            {{$l->GudangBarangJadi->Produk->nama}}
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-4">
+                                                        </div>
+                                                        <div class="col-4 ">
+                                                            <h5> <span class="badge badge-light"><i class="fas fa-shopping-cart"></i> :
+                                                                    @foreach($l->DetailPesanan->PenjualanProduk->produk as $p)
+                                                                    {{$p->pivot->jumlah}}
+                                                                    @endforeach
+                                                                </span> <span class="badge badge-dark"> <i class="fas fa-truck"></i> : 10</span></h5>
+                                                        </div>
+                                                    </div>
                                                 </li>
                                                 @endforeach
                                                 @endif
@@ -125,7 +138,6 @@
                                 </div>
                             </div>
                             @endforeach
-
                             <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
                             @else
                             <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
@@ -143,7 +155,6 @@
                                     </tr>
                                 </thead> -->
                             <!-- <tbody> -->
-
                             <!-- <tr>
                                     <td>1</td>
                                     <td>FOX-BABY Yellow</td>

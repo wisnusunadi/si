@@ -439,11 +439,9 @@
             } else {
                 var z = ['semua'];
             }
-
             $('#riwayattable').DataTable().ajax.url('/api/logistik/pengiriman/riwayat/data/' + x + '/' + y + '/' + z).load();
             return false;
         });
-
         $('#showtable').DataTable({
             processing: true,
             serverSide: true,

@@ -1195,7 +1195,6 @@ return [
             'url' => '/penjualan/lacak/show',
             'auth' => [15],
         ],
-
         //DOCUMENT CONTROL
         [
             'text' => 'Beranda',
@@ -1249,7 +1248,6 @@ return [
             'url' => '/penjualan/lacak/show',
             'auth' => [8],
         ],
-
         [
             'text' => 'test',
             'isNavbarRightItem' => true,

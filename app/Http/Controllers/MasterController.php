@@ -538,6 +538,8 @@ class MasterController extends Controller
             'email' => $request->email,
             'id_provinsi' => $request->provinsi,
             'npwp' => $request->npwp,
+            'batas' => $request->batas,
+            'pic' => $request->pic,
             'ket' => $request->keterangan,
         ]);
 
@@ -613,6 +615,8 @@ class MasterController extends Controller
         $customer->id_provinsi = $request->provinsi;
         $customer->nama = $request->nama_customer;
         $customer->npwp = $request->npwp;
+        $customer->pic = $request->pic;
+        $customer->batas = $request->batas;
         $customer->email = $request->email;
         $customer->telp = $request->telepon;
         $customer->alamat = $request->alamat;
@@ -624,7 +628,6 @@ class MasterController extends Controller
             return response()->json(['data' => 'error']);
         }
     }
-
     public function update_produk(Request $request)
     {
         $id = $request->id;

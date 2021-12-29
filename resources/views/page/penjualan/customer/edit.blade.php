@@ -36,7 +36,7 @@
                                 <label for="npwp" class="col-4 col-form-label" style="text-align:right;">NPWP</label>
                                 <div class="col-5">
                                     <input type="text" class="form-control" placeholder="Masukkan NPWP" id="npwp" name="npwp" value="{{old('npwp', $customer->npwp)}}" />
-                                    <div class="invalid-feedback" id="msgnpwp">
+                                    <div class="invalid-feedback" id="msg_npwp">
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                                     <input type="text" class="form-control" placeholder="Masukkan Email" id="email" name="email" value="{{old('email', $customer->email)}}" />
                                     <div class="invalid-feedback" id="msgemail">
                                     </div>
-                                </div>0
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <label for="telepon" class="col-4 col-form-label" style="text-align:right;">No Telp</label>
@@ -77,15 +77,15 @@
                             <div class="form-group row">
                                 <label for="telepon" class="col-4 col-form-label" style="text-align:right;">PIC</label>
                                 <div class="col-5">
-                                    <input type="text" class="form-control" placeholder="Masukkan Nama PIC" id="pic" name="pic" />
-                                    <div class="invalid-feedback" id="msgtelepon">
+                                    <input type="text" class="form-control" placeholder="Masukkan Nama PIC" id="pic" name="pic" value="{{old('pic', $customer->pic)}}" />
+                                    <div class="invalid-feedback" id="msgbatas">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="batas" class="col-form-label col-4" style="text-align: right">Batas Pembayaran</label>
                                 <div class="col-4 input-group">
-                                    <input type="text" class="form-control" name="batas" id="batas" aria-label="batas" placeholder="Batas hari pembayaran" />
+                                    <input type="text" class="form-control" name="batas" id="batas" aria-label="batas" placeholder="Batas hari pembayaran" value="{{old('batas', $customer->batas)}}" />
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="ket_no_paket">Hari</span>
                                     </div>
