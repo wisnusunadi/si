@@ -1656,6 +1656,14 @@ class SparepartController extends Controller
         return response()->json(['msg' => 'Data Berhasil Dihapus']);
     }
 
+    function uncheckNoseri(Request $request) {
+        GudangKarantinaNoseri::find($request->id)->update(['is_ready' => 0]);
+    }
+
+    function checkNoseri(Request $request) {
+        GudangKarantinaNoseri::find($request->id)->update(['is_ready' => 1]);
+    }
+
     // transaksi noseri
     function updateUnit(Request $request)
     {

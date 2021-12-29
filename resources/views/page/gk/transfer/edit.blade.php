@@ -1146,11 +1146,11 @@
             showCancelButton: true,
         }).then((success) => {
             if (success) {
-                Swal.fire(
-                    'Data berhasil di rancangan!',
-                    '',
-                    'success'
-                );
+                // Swal.fire(
+                //     'Data berhasil di rancangan!',
+                //     '',
+                //     'success'
+                // );
                 $.ajax({
                     url: "/api/gk/updateTransferDraft",
                     type: "post",
@@ -1170,18 +1170,18 @@
                         console.log(res);
                     },
                 })
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
+                // setTimeout(() => {
+                //     location.reload();
+                // }, 1000);
             } else {
                 Swal.fire(
                     'Data gagal di rancangan!',
                     '',
                     'error'
                 );
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
+                // setTimeout(() => {
+                //     location.reload();
+                // }, 1000);
             }
         });
     });
@@ -1663,5 +1663,49 @@
             ]
         });
     }
+
+    $(document).on('click', '.cb-child', function() {
+        if ($(this).is(':checked')) {
+            $.ajax({
+                url: "/api/gk/check",
+                type: "post",
+                data: { id: $(this).val() },
+                success: function(res) {
+
+                }
+            })
+        } else {
+            $.ajax({
+                url: "/api/gk/uncheck",
+                type: "post",
+                data: { id: $(this).val() },
+                success: function(res) {
+
+                }
+            })
+        }
+    })
+
+    $(document).on('click', '.cb-unit', function() {
+        if ($(this).is(':checked')) {
+            $.ajax({
+                url: "/api/gk/check",
+                type: "post",
+                data: { id: $(this).val() },
+                success: function(res) {
+
+                }
+            })
+        } else {
+            $.ajax({
+                url: "/api/gk/uncheck",
+                type: "post",
+                data: { id: $(this).val() },
+                success: function(res) {
+
+                }
+            })
+        }
+    })
 </script>
 @stop

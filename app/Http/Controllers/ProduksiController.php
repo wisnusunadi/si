@@ -1616,21 +1616,8 @@ class ProduksiController extends Controller
 
     function test(Request $request)
     {
-        // $detail = NoseriTGbj::whereIn('t_gbj_detail_id', [26,27,28])->get()->count();
-        // return $detail;
-        // // $jumlah = 0;
-        // // foreach($detail as $d) {
-        // //     $jumlah += $d->qty;
-        // // }
-        // // return $jumlah;
         $id = TFProduksi::select('id')->where('pesanan_id', 4)->first();
         return $id->id;
-        // $detail = TFProduksiDetail::where('t_gbj_id', $id)->get();
-        // $jumlah = 0;
-        // foreach($detail as $d) {
-        //     $jumlah += $d->qty;
-        // }
-        // return $jumlah;
     }
 
     // gbj

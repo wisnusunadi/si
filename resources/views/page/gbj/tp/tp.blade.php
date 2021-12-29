@@ -221,10 +221,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($data1 as $d)
                                             @php
                                                 $no = 1;
                                             @endphp
+                                            @foreach ($data1 as $d)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $d->pesanan->so }}</td>
@@ -266,7 +266,6 @@
                         </tr>
                     </thead>
                     <tbody>
-
                     </tbody>
                 </table>
             </div>
@@ -454,7 +453,6 @@
 
         var gudangbarang = $('#gudang-barang').dataTable({
             processing: true,
-            serverSide: true,
             responsive: true,
             autoWidth: false,
             ajax: {

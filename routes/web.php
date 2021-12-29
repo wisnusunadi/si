@@ -268,6 +268,8 @@ Route::group(['prefix' => '/gk', 'middleware' => 'auth'],function () {
     Route::get('/export-unit', [SparepartController::class, 'exportUnit'])->name('gk.export-unit');
 });
 
+Route::view('/uit', 'page.login_page.index');
+
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
 //     Route::view('/stok', 'page.gbj.stok_show');
 // });

@@ -387,6 +387,7 @@
 
 @section('adminlte_js')
 <script>
+    var function_layout = [];
     (function ($) {
         $.fn.inputFilter = function (inputFilter) {
             return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
@@ -543,6 +544,7 @@
                 $.each(res, function(key, value) {
                     $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                 });
+                function_layout.push(res);
             }
         });
 
@@ -866,32 +868,20 @@
     function tambahanRancangan(x) {
         $('.tambahan-rancangan').modal('show');
     }
-
     function tambahanPerakitan(x) {
-        $.ajax({
-            url: '/api/gbj/sel-layout',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                console.log(res);
-                $.each(res, function(key, value) {
-                    $(".layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                });
-            }
-        });
         $('.tambahan-perakitan').modal('show');
         $('.scan-produk1').DataTable().destroy();
         $('.scan-produk1 tbody').empty();
-        let a = 0;
+
+        let a = 1;
         for (let index = 0; index < x; index++) {
-            a++;
            $('.scan-produk1 tbody').append('<tr id="row'+a+'"><td><input type="checkbox" class="cb-child"  value="'+y+'"></td><td><input type="text" name="noseri_id[]['+a+']" id="noseri_id['+a+']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id['+a+']" id="layout_id'+a+'" class="form-control layout"></select></td></tr>');
+           $.each(function_layout[0], function (indexInArray, valueOfElement) { 
+                $('#layout_id'+a).append('<option value="'+valueOfElement.id+'">'+valueOfElement.ruang+'</option>');
+           });
+        a++;
         }
         var tableScan = $('.scan-produk1').DataTable({
-            "ordering": false,
-            "autoWidth": false,
-            searching: false,
-            "lengthChange": false,
             "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
