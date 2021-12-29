@@ -1098,34 +1098,52 @@ class PenjualanController extends Controller
                 </a>';
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "Penjualan" || $data->Pesanan->State->nama == "PO") {
+                        if ($data->Pesanan->State->nama == "Penjualan" || $data->Pesanan->State->nama == "PO" || empty($data->Pesanan->log_id)) {
+
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button" >
-                        <i class="fas fa-pencil-alt"></i>
-                        Edit
-                        </button>
-                    </a>';
+                                <button class="dropdown-item" type="button" >
+                                <i class="fas fa-pencil-alt"></i>
+                                Edit
+                                </button>
+                            </a>
+                            ';
 
                             if ($data->status == 'sepakat') {
                                 if ($data->Pesanan == '') {
                                     $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="fas fa-plus"></i>
-                            Tambah PO
-                            </button>
-                        </a>';
+                                        <button class="dropdown-item" type="button" >
+                                        <i class="fas fa-plus"></i>
+                                        Tambah PO
+                                        </button>
+                                    </a>';
                                 } else {
                                     if ($data->Pesanan->so == '') {
                                         $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
-                                    <button class="dropdown-item" type="button" >
-                                    <i class="fas fa-plus"></i>
-                                    Tambah PO
-                                    </button>
-                                </a>';
+                                            <button class="dropdown-item" type="button" >
+                                            <i class="fas fa-plus"></i>
+                                            Tambah PO
+                                            </button>
+                                        </a>';
                                     }
                                 }
                             }
+
+                            $return .= '<a data-toggle="modal" data-target="ekatalog" class="deletemodal" data-id="' . $data->id . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="far fa-trash-alt"></i>
+                                Hapus
+                                </button>
+                            </a>
+                            ';
                         }
+                    } else if (empty($data->Pesanan->log_id)) {
+                        $return .= '<a data-toggle="modal" data-target="ekatalog" class="deletemodal" data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="far fa-trash-alt"></i>
+                            Hapus
+                            </button>
+                        </a>
+                        ';
                     }
                 }
                 $return .= '</div>';
@@ -1217,6 +1235,13 @@ class PenjualanController extends Controller
                           Edit
                         </button>
                     </a>';
+                            $return .= '<a data-toggle="modal" data-target="spa" class="deletemodal" data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="far fa-trash-alt"></i>
+                            Hapus
+                            </button>
+                        </a>
+                        ';
                         }
                     } else {
 
@@ -1226,6 +1251,13 @@ class PenjualanController extends Controller
                           Edit
                         </button>
                     </a>';
+                        $return .= '<a data-toggle="modal" data-target="spa" class="deletemodal" data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="far fa-trash-alt"></i>
+                            Hapus
+                            </button>
+                        </a>
+                        ';
                     }
                 }
                 $return .= '</div>';
@@ -1316,6 +1348,13 @@ class PenjualanController extends Controller
                           Edit
                         </button>
                     </a>';
+                            $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="far fa-trash-alt"></i>
+                            Hapus
+                            </button>
+                        </a>
+                        ';
                         }
                     } else {
 
@@ -1325,6 +1364,13 @@ class PenjualanController extends Controller
                           Edit
                         </button>
                     </a>';
+                        $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="far fa-trash-alt"></i>
+                            Hapus
+                            </button>
+                        </a>
+                        ';
                     }
                 }
                 $return .= '</div>';
@@ -1854,6 +1900,76 @@ class PenjualanController extends Controller
     }
 
     //Delete
+    public function delete_ekatalog($id)
+    {
+        $e = Ekatalog::find($id);
+        $poid = $e->pesanan_id;
+
+
+        $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
+        if ($dp) {
+            $d = $e->delete();
+            if ($d) {
+                $p = Pesanan::where('id', $poid)->delete();
+                if ($p) {
+                    return response()->json(['data' => 'success']);
+                } else if (!$p) {
+                    return response()->json(['data' => 'error']);
+                }
+            } else {
+                return response()->json(['data' => 'error']);
+            }
+        } else {
+            return response()->json(['data' => 'error']);
+        }
+    }
+
+    public function delete_spa($id)
+    {
+        $e = Spa::find($id);
+        $poid = $e->pesanan_id;
+        $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
+
+        if ($dp) {
+            $d = $e->delete();
+            if ($d) {
+                $p = Pesanan::where('id', $poid)->delete();
+                if ($p) {
+                    return response()->json(['data' => 'success']);
+                } else if (!$p) {
+                    return response()->json(['data' => 'error']);
+                }
+            } else {
+                return response()->json(['data' => 'error']);
+            }
+        } else {
+            return response()->json(['data' => 'error']);
+        }
+    }
+
+    public function delete_spb($id)
+    {
+        $e = Spb::find($id);
+        $poid = $e->pesanan_id;
+
+        $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
+        if ($dp) {
+            $d = $e->delete();
+            if ($d) {
+                $p = Pesanan::where('id', $poid)->delete();
+                if ($p) {
+                    return response()->json(['data' => 'success']);
+                } else if (!$p) {
+                    return response()->json(['data' => 'error']);
+                }
+            } else {
+                return response()->json(['data' => 'error']);
+            }
+        } else {
+            return response()->json(['data' => 'error']);
+        }
+    }
+
     public function delete_detail_ekatalog($id)
     {
         $detail_ekatalog = DetailEkatalog::findOrFail($id);
@@ -1869,21 +1985,21 @@ class PenjualanController extends Controller
         $detail_spb = DetailSpb::findOrFail($id);
         $detail_spb->delete();
     }
-    public function delete_ekatalog($id)
-    {
-        $ekatalog = Ekatalog::findOrFail($id);
-        $ekatalog->delete();
-    }
-    public function delete_spa($id)
-    {
-        $ekatalog = Spa::findOrFail($id);
-        $ekatalog->delete();
-    }
-    public function delete_spb($id)
-    {
-        $ekatalog = Spb::findOrFail($id);
-        $ekatalog->delete();
-    }
+    // public function delete_ekatalog($id)
+    // {
+    //     $ekatalog = Ekatalog::findOrFail($id);
+    //     $ekatalog->delete();
+    // }
+    // public function delete_spa($id)
+    // {
+    //     $ekatalog = Spa::findOrFail($id);
+    //     $ekatalog->delete();
+    // }
+    // public function delete_spb($id)
+    // {
+    //     $ekatalog = Spb::findOrFail($id);
+    //     $ekatalog->delete();
+    // }
 
 
     //Laporan

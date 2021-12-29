@@ -241,12 +241,13 @@
                                                             <div class="card-body">
                                                                 <div class="row">
                                                                     <div class="col-12">
-
+                                                                        @if(Auth::user()->divisi->id == "15")
                                                                         <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
                                                                             <span class="float-right filter">
                                                                                 <button class="btn btn-primary" type="button" id="kirim_produk" disabled><i class="fas fa-plus"></i> Pengiriman</button>
                                                                             </span>
                                                                         </a>
+                                                                        @endif
                                                                         <!-- <span class="float-right filter">
                                                             <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="fas fa-filter"></i> Filter
@@ -474,6 +475,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var divisi_id = "{{Auth::user()->divisi->id}}";
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -536,7 +538,8 @@
                 data: 'checkbox',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: divisi_id == 15 ? true : false
             }, {
                 data: 'DT_RowIndex',
                 className: 'align-center nowrap-text',

@@ -29,7 +29,7 @@ class DetailPesananProduk extends Model
     }
 
 
-    public function getJumlahPesanan()
+    public function getJumlahPesanans()
     {
         $id = 1;
         $jumlah = 0;
@@ -40,6 +40,21 @@ class DetailPesananProduk extends Model
         return $jumlah;
     }
 
+    public function getJumlahPesanan()
+    {
+        $id = $this->detail_pesanan_id;
+        $produk_id = $this->GudangBarangJadi->produk_id;
+        $s = DetailPesanan::where('id', $id)->Has('DetailPesananProduk.NoSeriDetailPesanan')->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                if ($j->id == $produk_id) {
+                    $jumlah = $i->jumlah * $j->pivot->jumlah;
+                }
+            }
+        }
+        return $jumlah;
+    }
 
     function status()
     {

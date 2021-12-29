@@ -650,6 +650,12 @@ class LogistikController extends Controller
                 } else if ($data->status_id == "11") {
                     return '<span class="badge red-text">Belum Kirim</span>';
                 }
+            })->editColumn('ekspedisi_id', function ($data) {
+                if (!empty($data->ekspedisi_id)) {
+                    return $data->Ekspedisi->nama;
+                } else {
+                    return $data->nama_pengirim;
+                }
             })->addColumn('aksi', function ($data) {
                 return '<a href="' . route('logistik.pengiriman.print', ['id' => $data->id]) . '" target="_blank">
                     <i class="fas fa-file"></i>

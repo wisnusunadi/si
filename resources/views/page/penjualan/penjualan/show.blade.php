@@ -885,7 +885,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header">
@@ -893,6 +893,37 @@
                     </div>
                     <div class="modal-body" id="detail">
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header">
+                        <h4 id="modal-title">Delete</h4>
+                    </div>
+                    <div class="modal-body" id="delete">
+                        <div class="row">
+                            <div class="col-12">
+                                <form method="post" action="" id="form-delete" data-target="">
+                                    @method('DELETE')
+                                    @csrf
+                                    <div class="card">
+                                        <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
+                                        <div class="card-footer">
+                                            <span class="float-left">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                            </span>
+                                            <span class="float-right">
+                                                <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1112,6 +1143,86 @@
                 },
                 timeout: 8000
             })
+        });
+
+        $(document).on('click', '.deletemodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            var label = $(this).data("target");
+            if (label == 'ekatalog') {
+                $('#deletemodal').find('form').attr('action', '/api/ekatalog/delete/' + id);
+                $('#deletemodal').find('form').attr('data-target', 'ekatalog');
+            } else if (label == 'spa') {
+                $('#deletemodal').find('form').attr('action', '/api/spa/delete/' + id);
+                $('#deletemodal').find('form').attr('data-target', 'spa');
+            } else {
+                $('#deletemodal').find('form').attr('action', '/api/spb/delete/' + id);
+                $('#deletemodal').find('form').attr('data-target', 'spb');
+            }
+            // $.ajax({
+            //     url: href,
+            //     beforeSend: function() {
+            //         $('#loader').show();
+            //     },
+            //     // return the result
+            //     success: function(result) {
+            $('#deletemodal').modal("show");
+            // $('#detail').html(result).show();
+
+            //     },
+            //     complete: function() {
+            //         $('#loader').hide();
+            //     },
+            //     error: function(jqXHR, testStatus, error) {
+            //         console.log(error);
+            //         alert("Page " + href + " cannot open. Error:" + error);
+            //         $('#loader').hide();
+            //     },
+            //     timeout: 8000
+            // })
+        });
+
+
+        $(document).on('submit', '#form-delete', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            var label = $(this).data("target");
+            $.ajax({
+                url: action,
+                type: 'delete',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Hapus Data',
+                            'success'
+                        );
+                        $('#penjualantable').DataTable().ajax.reload();
+                        if (label == 'ekatalog') {
+                            $('#ekatalogtable').DataTable().ajax.reload();
+                        } else if (label == 'spa') {
+                            $('#spatable').DataTable().ajax.reload();
+                        } else if (label == 'spb') {
+                            $('#spbtable').DataTable().ajax.reload();
+                        }
+                        $("#deletemodal").modal('hide');
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Penambahan Data Pengujian',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-delete').serialize());
+                }
+            });
+            return false;
         });
 
         // var detailRows = [];

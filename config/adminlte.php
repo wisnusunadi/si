@@ -1430,15 +1430,15 @@ return [
             'auth' => [2],
             'submenu' => [
                 [
-                    'text' => 'Pengiriman',
+                    'text' => 'Sales Order',
                     'icon' => 'far fa-circle',
-                    'url' => '/logistik/pengiriman/show',
+                    'url' => '/logistik/so/show',
                     'auth' => [2],
                 ],
                 [
-                    'text' => 'Riwayat Pengiriman',
+                    'text' => 'Pengiriman',
                     'icon' => 'far fa-circle',
-                    'url' => '/logistik/pengiriman/riwayat/show',
+                    'url' => '/logistik/pengiriman/show',
                     'auth' => [2],
                 ],
                 [
