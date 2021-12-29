@@ -237,7 +237,7 @@
     </div>
 </div>
 
-<div class="modal fade modal-scan-edit" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modal-scan-edit" id="modal-scan-edit" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -462,18 +462,18 @@
             data: {
                 "_token": "{{ csrf_token() }}",
                 pesanan_id: id,
+                userid: $('#userid').val(),
                 data: prd1,
             },
             success: function(res) {
-                console.log(res);
-                // Swal.fire({
-                //     position: 'center',
-                //     icon: 'success',
-                //     title: res.msg,
-                //     showConfirmButton: false,
-                //     timer: 1500
-                // })
-                // location.reload();
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                location.reload();
             }
         })
     })
@@ -496,6 +496,7 @@
             data: {
                 "_token": "{{ csrf_token() }}",
                 pesanan_id: id,
+                userid: $('#userid').val(),
                 data: prd1,
             },
             success: function(res) {
@@ -565,6 +566,7 @@
     $(document).on('click', '.serimodal', function(e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
+        so = $(this).data('so');
         jml = $(this).data('jml');
 
         $('.scan-produk-edit').DataTable({
@@ -596,7 +598,7 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $('.modal-scan-edit').modal('show');
+        $('#modal-scan-edit').modal('show');
     })
 
     $(document).on('click', '.cb-child-edit', function() {
@@ -651,7 +653,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     })
-                    $('.modal-scan-edit').modal('hide');
+                    $('#modal-scan-edit').modal('hide');
                 }
             }
 

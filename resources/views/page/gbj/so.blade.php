@@ -245,7 +245,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/api/tfp/data-so',
+                url: '/api/tfp/cek-so',
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},

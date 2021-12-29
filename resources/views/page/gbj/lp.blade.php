@@ -451,7 +451,6 @@
     var gbj ;
     $(document).on('click', '.editmodal', function() {
         id = $(this).data('id');
-        // console.log();
         console.log(id);
 
         $.ajax({
@@ -499,9 +498,6 @@
         var id = $(this).data('id');
         gbj = $(this).data('gbj');
         $('span#title').text($(this).data('nama') + $(this).data('var'));
-        // console.log();
-        console.log(id);
-        console.log(gbj);
 
         $('.scan-produk').DataTable({
             destroy: true,
@@ -681,18 +677,6 @@
                     })
             }else{
                 e.preventDefault();
-                console.log('test');
-
-                const prd1 = [];
-                const jml1 = [];
-
-                $('select[name^="gdg_brg_jadi_id"]').each(function() {
-                    prd1.push($(this).val());
-                });
-
-                $('input[name^="qty"]').each(function() {
-                    jml1.push($(this).val());
-                });
 
                 $.ajax({
                     url: "/api/draft/final",
@@ -703,10 +687,7 @@
                         dari: $('#divisi').val(),
                         deskripsi: $('#deskripsi').val(),
                         userid: $('#userid').val(),
-                        gdg_brg_jadi_id: prd1,
-                        qty: jml1,
-                        noseri : seri,
-                        layout : layout,
+                        data: seri,
                     },
                     success: function(res) {
                         console.log(res);
@@ -780,10 +761,7 @@
                 dari: $('#divisi').val(),
                 deskripsi: $('#deskripsi').val(),
                 userid: $('#userid').val(),
-                gdg_brg_jadi_id: prd,
-                qty: jml,
-                noseri : seri,
-                layout : layout,
+                data: seri,
             },
             success: function(res) {
                 Swal.fire({
@@ -827,7 +805,6 @@
                 seri: serir,
             },
             success: function(res) {
-                console.log(res);
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -876,7 +853,7 @@
         let a = 1;
         for (let index = 0; index < x; index++) {
            $('.scan-produk1 tbody').append('<tr id="row'+a+'"><td><input type="checkbox" class="cb-child"  value="'+y+'"></td><td><input type="text" name="noseri_id[]['+a+']" id="noseri_id['+a+']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id['+a+']" id="layout_id'+a+'" class="form-control layout"></select></td></tr>');
-           $.each(function_layout[0], function (indexInArray, valueOfElement) { 
+           $.each(function_layout[0], function (indexInArray, valueOfElement) {
                 $('#layout_id'+a).append('<option value="'+valueOfElement.id+'">'+valueOfElement.ruang+'</option>');
            });
         a++;
@@ -928,6 +905,8 @@
                     const ids = [];
                     const noserii = [];
                     const lay = [];
+                    seri[y] = {"jumlah": x, "noseri": [], "layout": [] };
+                    console.log(seri);
                     $('.cb-child').each(function() {
                         if ($(this).is(":checked")) {
                             ids.push($(this).parent().next().children().val());
@@ -938,15 +917,8 @@
                                 data: {noseri: ids},
                                 success: function(res) {
                                     if(res.msg) {
-                                        seri[y] = ids;
-                                        layout[y] = lay;
-                                        Swal.fire({
-                                            position: 'center',
-                                            icon: 'success',
-                                            title: 'Nomor seri tersimpan',
-                                            showConfirmButton: false,
-                                            timer: 1500
-                                        })
+                                        seri[y].noseri = ids;
+                                        seri[y].layout = lay;
                                         $('.tambahan-perakitan').modal('hide');
                                     } else {
                                         Swal.fire({

@@ -201,6 +201,7 @@ Route::prefix('/tfp')->group(function () {
     Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
     Route::get('noseri/{id}', [\App\Http\Controllers\ProduksiController::class, 'getNoseri']);
     Route::get('data-so', [\App\Http\Controllers\ProduksiController::class, 'getOutSO']);
+    Route::get('cek-so', [\App\Http\Controllers\ProduksiController::class, 'getSOCek']);
     Route::get('detail-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);

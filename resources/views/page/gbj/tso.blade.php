@@ -89,8 +89,7 @@
                             </table>
                         </div>
                         <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-primary btn-simpan" type="button" data-toggle="modal"
-                                data-target="#modalNotes" hidden>Simpan</button>
+                            <button class="btn btn-primary btn-simpan" type="button" hidden>Simpan</button>
                         </div>
                     </div>
                     </form>

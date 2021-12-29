@@ -68,6 +68,7 @@
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <div class="col-md-12">
+                <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">
@@ -414,6 +415,7 @@
                         data: {
                             "_token": "{{ csrf_token() }}",
                             noseri: arr,
+                            userid: $('#userid').val(),
                             jadwal_id: id,
                         },
                         success: function (res) {
@@ -463,6 +465,6 @@
         });
     };
 
-   
+
 </script>
 @stop

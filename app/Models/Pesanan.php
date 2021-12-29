@@ -61,6 +61,25 @@ class Pesanan extends Model
         return $jumlah;
     }
 
+    function cekJumlahkirim()
+    {
+        $id = $this->id;
+        $jumlah = NoseriTGbj::whereHas('detail.header.pesanan', function($q) use($id) {
+            $q->where('pesanan_id', $id);
+        })->count();
+        return $jumlah;
+    }
+
+    function getJumlahKirim1() {
+        $id = $this->id;
+        $detail = TFProduksiDetail::where('t_gbj_id', $id)->get();
+        $jumlah = 0;
+        foreach($detail as $d) {
+            $jumlah += $d->qty;
+        }
+        return $jumlah;
+    }
+
     function log()
     {
         return $this->belongsTo(State::class, 'log_id');

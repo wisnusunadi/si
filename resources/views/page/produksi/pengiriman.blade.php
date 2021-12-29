@@ -44,6 +44,7 @@
 </div>
 <div class="row ml-2">
     <div class="col-sm-2">
+        <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
         <div class="form-group">
             <label for="">Tanggal Masuk</label>
             <input type="text" name="" id="kt_datepicker_1" class="form-control">
@@ -64,18 +65,7 @@
                     <div class="col-lg-12">
                         <table class="table table-bordered table_produk_perakitan ">
                             <thead class="thead-dark">
-                                {{-- <tr>
-                                    <th colspan="2" class="text-center">Tanggal</th>
-                                    <th rowspan="2">Nomor BPPB</th>
-                                    <th rowspan="2">Produk</th>
-                                    <th rowspan="2">Jumlah</th>
-                                    <th rowspan="2">Status</th>
-                                    <th rowspan="2">Aksi</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Tgl Mulai</th>
-                                    <th class="text-center">Tgl Selesai</th>
-                                </tr> --}}
+
                                 <tr>
                                     <th class="text-center">Tanggal Masuk</th>
                                     <th class="text-center">Tanggal Keluar</th>
@@ -400,6 +390,7 @@
             type: "post",
             data: {
                 "_token" : "{{csrf_token() }}",
+                userid : $('#userid').val(),
                 qty: jumlah,
                 gbj_id : prd,
                 jadwal_id : id,

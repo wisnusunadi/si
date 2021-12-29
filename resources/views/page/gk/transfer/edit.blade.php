@@ -1133,7 +1133,6 @@
         let out = $('#datePicker').val();
         let to = $('.dari').val();
         let tujuan = $('#tujuan').val();
-        // let seri1 = $('.seri_spr').val();
         console.log(out);
         console.log(to);
         console.log(tujuan);
@@ -1146,11 +1145,11 @@
             showCancelButton: true,
         }).then((success) => {
             if (success) {
-                // Swal.fire(
-                //     'Data berhasil di rancangan!',
-                //     '',
-                //     'success'
-                // );
+                Swal.fire(
+                    'Data berhasil di rancangan!',
+                    '',
+                    'success'
+                );
                 $.ajax({
                     url: "/api/gk/updateTransferDraft",
                     type: "post",
@@ -1170,18 +1169,18 @@
                         console.log(res);
                     },
                 })
-                // setTimeout(() => {
-                //     location.reload();
-                // }, 1000);
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             } else {
                 Swal.fire(
                     'Data gagal di rancangan!',
                     '',
                     'error'
                 );
-                // setTimeout(() => {
-                //     location.reload();
-                // }, 1000);
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             }
         });
     });
