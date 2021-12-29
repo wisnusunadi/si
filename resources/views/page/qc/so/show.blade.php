@@ -277,8 +277,6 @@
                 searchable: false
             }]
         })
-
-
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {

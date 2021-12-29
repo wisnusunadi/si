@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class NoseriCoo extends Model
 {
     protected $table = 'noseri_coo';
-    protected $fillable = ['nama', 'jabatan', 'noseri_logistik_id'];
+    protected $fillable = ['nama', 'jabatan', 'noseri_logistik_id', 'ket', 'tgl_kirim', 'catatan'];
 
     public function NoseriDetailLogistik()
     {

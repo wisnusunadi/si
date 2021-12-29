@@ -27,7 +27,17 @@ class AfterSalesController extends Controller
                 return $data->Pesanan->so;
             })
             ->addColumn('nama_produk', function ($data) {
-                return $data->PenjualanProduk->nama;
+                $id = array();
+                $detail_produk = DetailPesananProduk::where('detail_pesanan_id', $data->id)->get();
+                foreach ($detail_produk as $d) {
+
+                    if ($d->gudangbarangjadi->nama == '') {
+                        $id[] = $d->gudangbarangjadi->produk->nama;
+                    } else {
+                        $id[]  = $d->gudangbarangjadi->nama;
+                    }
+                }
+                return implode(',', $id);
             })
             ->addColumn('tgl_kirim', function ($data) {
                 $id = $data->id;
@@ -56,7 +66,7 @@ class AfterSalesController extends Controller
             ->addColumn('alamat', function ($data) {
                 $name = explode('/', $data->Pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Customer->alamat;
+                    return $data->Pesanan->Ekatalog->alamat;
                 } elseif ($name[1] == 'SPA') {
                     return $data->Pesanan->Spa->Customer->alamat;
                 } else {

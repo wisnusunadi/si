@@ -205,8 +205,10 @@
 @stop
 
 @section('adminlte_js')
+<script type="text/javascript" src="{{ asset('vendor/masking/masking.js') }}"></script>
 <script>
     $(function() {
+
         var divisi_id = "{{Auth::user()->divisi_id}}";
         $(document).on('submit', '#form-customer-update', function(e) {
             e.preventDefault();
@@ -321,6 +323,7 @@
 
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
+                    $('#npwp').mask('00.000.000.0-000.000');
                     console.log(id);
                     // $("#editform").attr("action", href);
                     select_data();
@@ -516,7 +519,6 @@
                 }
             })
         }
-
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {

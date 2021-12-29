@@ -514,7 +514,7 @@
                             </span>
                             <span class="float-right">
                                 <button type="submit" class="btn btn-info" id="btntambah" disabled="true">
-                                    Tambah
+                                    Simpan
                                 </button>
                             </span>
                         </div>

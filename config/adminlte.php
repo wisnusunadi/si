@@ -1037,6 +1037,12 @@ return [
             'url' => '/qc/so/laporan/show',
             'auth' => [23],
         ],
+        [
+            'text' => 'Lacak',
+            'url'  => '/penjualan/lacak/show',
+            'icon' => 'far fa-circle',
+            'auth' => [23]
+        ],
 
         [
             'text'    => 'Permintaan',
@@ -1189,7 +1195,6 @@ return [
             'url' => '/penjualan/lacak/show',
             'auth' => [15],
         ],
-
         //DOCUMENT CONTROL
         [
             'text' => 'Beranda',
@@ -1243,7 +1248,6 @@ return [
             'url' => '/penjualan/lacak/show',
             'auth' => [8],
         ],
-
         [
             'text' => 'test',
             'isNavbarRightItem' => true,
