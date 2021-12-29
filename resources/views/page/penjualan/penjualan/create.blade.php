@@ -996,7 +996,6 @@
             return hasil;
         }
 
-
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
                 sisa = number_string.length % 3,
@@ -1104,7 +1103,6 @@
                                     return $span;
                                 }
                             });
-
                             $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
                             tes.append(`</div>`)
                         }
@@ -1114,7 +1112,6 @@
                 });
             });
         }
-
 
         function totalhargaprd() {
             var totalharga = 0;

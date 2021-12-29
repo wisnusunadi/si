@@ -39,6 +39,14 @@ class DetailPesananProduk extends Model
         }
         return $jumlah;
     }
+    public function getJumlahKirim()
+    {
+        $id = $this->id;
+        $jumlah = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->count();
+        return $jumlah;
+    }
 
 
     function status()
