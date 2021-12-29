@@ -21,12 +21,10 @@ class NoseriTGbj extends Model
     {
         return $this->belongsTo(Layout::class, 'layout_id');
     }
-
     function seri()
     {
         return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
     }
-
     protected $casts = [
         'noseri_id' => 'array',
         't_gbj_detail_id' => 'array',

@@ -561,6 +561,101 @@ class PenjualanController extends Controller
                 })
                 ->rawColumns(['divisi_id', 'status'])
                 ->make(true);
+        } else if ($parameter == 'produk') {
+            $ekatalog = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+                $q->where('nama', 'LIKE', '%' . $value . '%');
+            })->get();
+            $spa = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+                $q->where('nama', 'LIKE', '%' . $value . '%');
+            })->get();
+            $spb = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+                $q->where('nama', 'LIKE', '%' . $value . '%');
+            })->get();
+            $data = $ekatalog->merge($spa)->merge($spb);
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('noseri', function ($data) {
+                    return $data->NoseriBarangJadi->noseri;
+                })
+                ->addColumn('nama_produk', function ($data) {
+                    return $data->NoseriBarangJadi->Gudang->Produk->nama;
+                })
+                ->addColumn('no_so', function ($data) {
+                    if ($data->detail->header->pesanan_id) {
+                        return $data->detail->header->pesanan->so;
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('nama_customer', function ($data) {
+                    if (isset($data->NoseriDetailPesanan)) {
+                        $name = explode('/', $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                        if ($name[1] == 'EKAT') {
+                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                        } else if ($name[1] == 'SPA') {
+                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                        } else if ($name[1] == 'SPB') {
+                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                        }
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('tgl_uji', function ($data) {
+                    if (isset($data->NoseriDetailPesanan)) {
+                        return Carbon::createFromFormat('Y-m-d', $data->NoseriDetailPesanan->tgl_uji)->format('d-m-Y');
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('no_sj', function ($data) {
+                    if (isset($data->NoseriDetailPesanan)) {
+                        if (isset($data->NoseriDetailPesanan->NoseriDetailLogistik)) {
+                            return $data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik->Logistik->nosurat;
+                        } else {
+                            return '-';
+                        }
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('tgl_kirim', function ($data) {
+                    if (isset($data->NoseriDetailPesanan)) {
+                        if (isset($data->NoseriDetailPesanan->NoseriDetailLogistik)) {
+                            return Carbon::createFromFormat('Y-m-d', $data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik->Logistik->tgl_kirim)->format('d-m-Y');
+                        } else {
+                            return '-';
+                        }
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('status', function ($data) {
+                    $datas = "";
+                    if (isset($data->NoseriDetailPesanan)) {
+                        if (isset($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->log_id)) {
+                            if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Penjualan") {
+                                $datas .= '<span class="red-text badge">';
+                            } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "PO") {
+                                $datas .= '<span class="purple-text badge">';
+                            } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Gudang") {
+                                $datas .= '<span class="orange-text badge">';
+                            } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "QC") {
+                                $datas .= '<span class="yellow-text badge">';
+                            } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Terkirim Sebagian") {
+                                $datas .= '<span class="blue-text badge">';
+                            } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Kirim") {
+                                $datas .= '<span class="green-text badge">';
+                            }
+                            $datas .= ucfirst($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama) . '</span>';
+                        }
+                    } else {
+                        $datas = '-';
+                    }
+                    return $datas;
+                })
+                ->rawColumns(['divisi_id', 'status'])
+                ->make(true);
         } else if ($parameter == 'no_seri') {
             $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
                 $q->where('noseri', 'LIKE', '%' . $value . '%');

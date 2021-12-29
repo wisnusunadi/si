@@ -130,25 +130,25 @@ class MasterController extends Controller
         $divisi_id = auth()->user()->divisi->id;
 
         if ($value1 == 'semua' && $value2 == 'semua' || $value1 == 'kosong' && $value2 == 'semua') {
-            $data = Ekspedisi::select();
+            $data = Ekspedisi::orderby('nama', 'ASC')->get();
         } else if ($value1 == 'kosong' && $value2 == '1') {
             $data = Ekspedisi::Has('JalurEkspedisi')->whereHas('Provinsi', function ($q) {
                 $q->where('status', 1);
-            })->get();
+            })->orderby('nama', 'ASC')->get();
         } else if ($value1 == 'kosong' && $value2 == '2') {
             $data = Ekspedisi::Has('JalurEkspedisi')->whereHas('Provinsi', function ($q) {
                 $q->where('status', 2);
-            })->get();
+            })->orderby('nama', 'ASC')->get();
         } else if ($value1 != 'kosong' && $value2 == 'kosong' ||  $value2 == 'semua') {
             $data = Ekspedisi::whereHas('JalurEkspedisi', function ($q) use ($x) {
                 $q->whereIN('nama', $x);
-            })->get();
+            })->orderby('nama', 'ASC')->get();
         } else if ($value1 != 'kosong' && $value2 != 'kosong') {
             $data = Ekspedisi::whereHas('JalurEkspedisi', function ($q) use ($x) {
                 $q->whereIN('nama', $x);
             })->whereHas('Provinsi', function ($q) use ($value2) {
                 $q->where('status', $value2);
-            })->get();
+            })->orderby('nama', 'ASC')->get();
         }
         return datatables()->of($data)
             ->addIndexColumn()
@@ -211,7 +211,7 @@ class MasterController extends Controller
         $divisi = $divisi_id;
         $x = explode(',', $value);
         if ($value == 0 || $value == 'kosong') {
-            $data = Customer::select();
+            $data = Customer::orderby('nama', 'ASC')->get();
         } else {
             $data = Customer::whereHas('Provinsi', function ($q) use ($x) {
                 $q->whereIN('status', $x);
@@ -238,6 +238,12 @@ class MasterController extends Controller
                         <button class="dropdown-item" type="button" >
                         <i class="fas fa-pencil-alt"></i>
                         Edit
+                        </button>
+                    </a>';
+                    $datas .= '<a data-toggle="modal" data-target="#hapusmodal" class="hapusmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-trash-alt"></i>
+                        Hapus
                         </button>
                     </a>';
                 }
@@ -708,6 +714,11 @@ class MasterController extends Controller
     }
 
     //Show Modal
+    public function hapus_customer_modal($id)
+    {
+        // $customer = Customer::find($id);
+        return view("page.penjualan.customer.hapus");
+    }
     public function update_customer_modal($id)
     {
         $customer = Customer::find($id);
