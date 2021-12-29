@@ -44,6 +44,7 @@ Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/master_stok/show', 'spa.ppic.master_stok.show');
     Route::get('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'master_stok_detail_show'])->name('ppic.master_stok.detail');
     Route::view('/master_pengiriman/show', 'spa.ppic.master_pengiriman.show');
+    Route::get('/master_pengiriman/detail/{id}', [App\Http\Controllers\PpicController::class, 'master_pengiriman_detail_show'])->name('ppic.master_pengiriman.detail');
 });
 
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
