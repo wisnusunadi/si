@@ -25,29 +25,34 @@
               <td>
                 <progress
                   class="progress"
-                  :value="countVal(change_status(d.status))"
+                  :value="countVal(mixins.change_status(d.status))"
                   :class="{
-                    'is-danger': change_status(d.status) === 'penyusunan',
-                    'is-warning': change_status(d.status) === 'pelaksanaan',
-                    'is-success': change_status(d.status) === 'selesai',
+                    'is-danger':
+                      mixins.change_status(d.status) === 'penyusunan',
+                    'is-warning':
+                      mixins.change_status(d.status) === 'pelaksanaan',
+                    'is-success': mixins.change_status(d.status) === 'selesai',
                   }"
                   max="100"
                 >
-                  {{ countVal(change_status(d.status)) }}%
+                  {{ countVal(mixins.change_status(d.status)) }}%
                 </progress>
                 <small>
-                  {{ countVal(change_status(d.status)) }}% Complete
+                  {{ countVal(mixins.change_status(d.status)) }}% Complete
                 </small>
               </td>
               <td>
                 <span
                   :class="{
                     'badge badge-pill': true,
-                    'badge-warning': change_status(d.status) === 'penyusunan',
-                    'badge-info': change_status(d.status) === 'pelaksanaan',
-                    'badge-success': change_status(d.status) === 'selesai',
+                    'badge-warning':
+                      mixins.change_status(d.status) === 'penyusunan',
+                    'badge-info':
+                      mixins.change_status(d.status) === 'pelaksanaan',
+                    'badge-success':
+                      mixins.change_status(d.status) === 'selesai',
                   }"
-                  >{{ change_status(d.status) }}</span
+                  >{{ mixins.change_status(d.status) }}</span
                 >
               </td>
             </tr>
@@ -61,15 +66,15 @@
 <script>
 import $ from "jquery";
 import axios from "axios";
-import global_mixins from "../mixins";
+import mixins from "../mixins";
 
 export default {
   name: "Perakitan",
-  mixins: [global_mixins],
 
   data() {
     return {
       data: [],
+      mixins: mixins,
     };
   },
 

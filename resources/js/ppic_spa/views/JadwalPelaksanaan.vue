@@ -1,5 +1,5 @@
 <template>
-  <Jadwal />
+  <Jadwal :status="'pelaksanaan'" :jadwal_rencana="jadwal_rencana" />
 </template>
 
 <script>
@@ -13,22 +13,24 @@ export default {
     Jadwal,
   },
 
-  methods: {
-    async loadData() {
-      this.$store.commit("setIsLoading", true);
-      await axios
-        .get("/api/ppic/data/perakitan/pelaksanaan")
-        .then((response) => {
-          this.$store.commit("setJadwal", response.data);
-          if (response.data.length == 0)
-            this.$store.commit("setStatus", "pelaksanaan");
-        });
-      this.$store.commit("setIsLoading", false);
-    },
+  data() {
+    return {
+      jadwal_rencana: [],
+    };
   },
 
-  mounted() {
-    this.loadData();
+  async created() {
+    this.$store.commit("setIsLoading", true);
+
+    await axios.get("/api/ppic/data/perakitan/pelaksanaan").then((response) => {
+      this.$store.commit("setJadwal", response.data);
+    });
+
+    await axios.get("/api/ppic/data/rencana_perakitan").then((response) => {
+      this.jadwal_rencana = response.data;
+    });
+
+    this.$store.commit("setIsLoading", false);
   },
 };
 </script>

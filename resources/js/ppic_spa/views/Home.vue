@@ -3,19 +3,6 @@
     <h1 class="title">DashBoard</h1>
     <div class="columns is-multiline">
       <div class="column is-12">
-        <template v-if="!$store.state.isLoading">
-          <div class="box">
-            <apexcharts
-              width="100%"
-              height="350"
-              type="bar"
-              :options="chartOptions"
-              :series="series"
-            ></apexcharts>
-          </div>
-        </template>
-      </div>
-      <div class="column is-12">
         <div class="box">
           <table class="table is-fullwidth has-text-centered" id="table_so">
             <thead>
@@ -162,47 +149,6 @@ export default {
       data_unit: [],
       data_sparepart: [],
 
-      chartOptions: {
-        subtitle: {
-          text: "Data Perakitan",
-          align: "center",
-          margin: 10,
-          offsetX: 0,
-          offsetY: 0,
-          floating: false,
-          style: {
-            fontSize: "12px",
-            fontWeight: "normal",
-            fontFamily: undefined,
-            color: "#9699a2",
-          },
-        },
-        chart: {
-          id: "basic-bar",
-          animations: {
-            speed: 200,
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        plotOptions: {
-          bar: {
-            distributed: true,
-          },
-        },
-        xaxis: {
-          categories: ["rencana", "pelaksanaan"],
-        },
-      },
-
-      series: [
-        {
-          name: "data",
-          data: [30, 40],
-        },
-      ],
-
       tabs: false,
     };
   },
@@ -210,20 +156,9 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios
-        .get("/api/ppic/counting/status/perakitan")
-        .then((response) => {
-          this.series = [
-            {
-              name: "data",
-              data: [response.data[0], response.data[1]],
-            },
-          ];
-        });
 
       await axios.get("/api/ppic/data/so").then((response) => {
         this.data_so = response.data;
-        console.log(this.data_so);
       });
 
       await axios.get("/api/ppic/data/gbj").then((response) => {
