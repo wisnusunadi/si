@@ -2000,16 +2000,38 @@ class PenjualanController extends Controller
         $e = Ekatalog::find($id);
         $poid = $e->pesanan_id;
 
+        $bool = true;
+        $cdpp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+            $q->where('pesanan_id', $poid);
+        })->get();
+        if (count($cdpp) > 0) {
+            $dpp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                $q->where('pesanan_id', $poid);
+            })->delete();
+            if (!$dpp) {
+                $bool = false;
+            }
+        }
 
-        $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
-        if ($dp) {
+        $cdp = DetailPesanan::where('pesanan_id', $poid)->get();
+        if (count($cdp) > 0) {
+            $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
+            if (!$dp) {
+                $bool = false;
+            }
+        }
+        if ($bool == true) {
             $d = $e->delete();
             if ($d) {
-                $p = Pesanan::where('id', $poid)->delete();
-                if ($p) {
+                if (!empty($poid)) {
+                    $p = Pesanan::where('id', $poid)->delete();
+                    if ($p) {
+                        return response()->json(['data' => 'success']);
+                    } else if (!$p) {
+                        return response()->json(['data' => 'error']);
+                    }
+                } else {
                     return response()->json(['data' => 'success']);
-                } else if (!$p) {
-                    return response()->json(['data' => 'error']);
                 }
             } else {
                 return response()->json(['data' => 'error']);
@@ -2023,16 +2045,39 @@ class PenjualanController extends Controller
     {
         $e = Spa::find($id);
         $poid = $e->pesanan_id;
-        $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
 
-        if ($dp) {
+        $bool = true;
+        $cdpp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+            $q->where('pesanan_id', $poid);
+        })->get();
+        if (count($cdpp) > 0) {
+            $dpp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                $q->where('pesanan_id', $poid);
+            })->delete();
+            if (!$dpp) {
+                $bool = false;
+            }
+        }
+
+        $cdp = DetailPesanan::where('pesanan_id', $poid)->get();
+        if (count($cdp) > 0) {
+            $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
+            if (!$dp) {
+                $bool = false;
+            }
+        }
+        if ($bool == true) {
             $d = $e->delete();
             if ($d) {
-                $p = Pesanan::where('id', $poid)->delete();
-                if ($p) {
+                if (!empty($poid)) {
+                    $p = Pesanan::where('id', $poid)->delete();
+                    if ($p) {
+                        return response()->json(['data' => 'success']);
+                    } else if (!$p) {
+                        return response()->json(['data' => 'error']);
+                    }
+                } else {
                     return response()->json(['data' => 'success']);
-                } else if (!$p) {
-                    return response()->json(['data' => 'error']);
                 }
             } else {
                 return response()->json(['data' => 'error']);
@@ -2047,15 +2092,38 @@ class PenjualanController extends Controller
         $e = Spb::find($id);
         $poid = $e->pesanan_id;
 
-        $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
-        if ($dp) {
+        $bool = true;
+        $cdpp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+            $q->where('pesanan_id', $poid);
+        })->get();
+        if (count($cdpp) > 0) {
+            $dpp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                $q->where('pesanan_id', $poid);
+            })->delete();
+            if (!$dpp) {
+                $bool = false;
+            }
+        }
+
+        $cdp = DetailPesanan::where('pesanan_id', $poid)->get();
+        if (count($cdp) > 0) {
+            $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
+            if (!$dp) {
+                $bool = false;
+            }
+        }
+        if ($bool == true) {
             $d = $e->delete();
             if ($d) {
-                $p = Pesanan::where('id', $poid)->delete();
-                if ($p) {
+                if (!empty($poid)) {
+                    $p = Pesanan::where('id', $poid)->delete();
+                    if ($p) {
+                        return response()->json(['data' => 'success']);
+                    } else if (!$p) {
+                        return response()->json(['data' => 'error']);
+                    }
+                } else {
                     return response()->json(['data' => 'success']);
-                } else if (!$p) {
-                    return response()->json(['data' => 'error']);
                 }
             } else {
                 return response()->json(['data' => 'error']);

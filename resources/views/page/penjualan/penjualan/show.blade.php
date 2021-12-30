@@ -902,29 +902,26 @@
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header">
-                        <h4 id="modal-title">Delete</h4>
+                        <h4 id="modal-title">Hapus</h4>
                     </div>
-                    <div class="modal-body" id="delete">
-                        <div class="row">
-                            <div class="col-12">
-                                <form method="post" action="" id="form-delete" data-target="">
-                                    @method('DELETE')
-                                    @csrf
-                                    <div class="card">
-                                        <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
-                                        <div class="card-footer">
-                                            <span class="float-left">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                            </span>
-                                            <span class="float-right">
-                                                <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </form>
+                    <form method="post" action="" id="form-delete" data-target="">
+                        @method('DELETE')
+                        @csrf
+                        <div class="modal-body" id="delete">
+                            <div class="row">
+                                <div class="col-12">Apakah Anda yakin ingin menghapus data ini?
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="modal-footer">
+                            <span class="float-left">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            </span>
+                            <span class="float-right">
+                                <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1213,13 +1210,18 @@
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
-                            'Gagal melakukan Penambahan Data Pengujian',
+                            'Gagal melakukan Hapus Data',
                             'error'
                         );
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert($('#form-delete').serialize());
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                    // console.log(action);
                 }
             });
             return false;

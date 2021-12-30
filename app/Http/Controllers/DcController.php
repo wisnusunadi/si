@@ -154,7 +154,7 @@ class DcController extends Controller
     {
         $array_id = array();
         $x = explode(',', $value);
-        $datas = Pesanan::Has('DetailPesanan.DetailPesananProduk.Noseridetailpesanan.NoseriDetailLogistik')->get();
+        $datas = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->get();
 
         foreach ($datas as $d) {
             if ($value == 'semua') {
@@ -1248,15 +1248,9 @@ class DcController extends Controller
                     } else {
                         $y = $data->spb->id;
                     }
-                    return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a href="' . route('logistik.so.detail', [$y, $x]) . '">
-                            <button class="dropdown-item" type="button">
-                                <i class="fas fa-search"></i>
-                                Detail
-                            </button>
-                        </a>
-                    </div>';
+                    return '<a href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
+                    <i class="fas fa-search"></i>
+                    </a>';
                 })
                 ->rawColumns(['batas_kontrak', 'status', 'button'])
                 ->make(true);
