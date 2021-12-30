@@ -417,7 +417,7 @@ class GudangController extends Controller
                             </a>';
                 })
                 ->addColumn('in', function ($d) {
-                    return date('d F Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMMM Y');
                 })
                 ->addColumn('from', function ($d) {
                     return $d->header->darii->nama;
@@ -479,7 +479,6 @@ class GudangController extends Controller
     }
 
     function ceknoseri(Request $request) {
-        $cek = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get()->count();
         $data = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get();
         $arr_seri = [];
 
@@ -688,7 +687,6 @@ class GudangController extends Controller
 
     function storeFinalRancang(Request $request)
     {
-        // dd($request->all());
         $h = new TFProduksi();
         $h->tgl_masuk = $request->tgl_masuk;
         $h->dari = $request->dari;

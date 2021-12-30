@@ -221,7 +221,6 @@ class ProduksiController extends Controller
             $dd->created_at = Carbon::now();
             $dd->created_by = $request->userid;
             $dd->save();
-            // return $dd;
 
             $did = $dd->id;
             $checked = $request->noseri_id;
@@ -267,7 +266,6 @@ class ProduksiController extends Controller
             $dd->created_at = Carbon::now();
             $dd->created_by = $request->userid;
             $dd->save();
-            // return $dd;
 
             $did = $dd->id;
             $checked = $request->noseri_id;
@@ -856,7 +854,6 @@ class ProduksiController extends Controller
             ->addColumn('checkbox', function ($d) use ($i) {
                 $i++;
                 if ($d->is_ready == 1) {
-                    # code...
                     return '<input type="checkbox" class="cb-child-edit" name="noseri_id[][' . $i . ']"  value="' . $d->id . '" checked>';
                 } else {
                     return '<input type="checkbox" class="cb-child-edit" name="noseri_id[][' . $i . ']"  value="' . $d->id . '">';
@@ -881,50 +878,6 @@ class ProduksiController extends Controller
     {
         $gdg = GudangBarangJadi::where('id', $request->gdg_brg_jadi_id)->first();
         return $gdg;
-    }
-
-    // dashboard produksi
-    public function dashboard(Request $request)
-    {
-        $dateCurrent = Carbon::now()->subDays(5);
-        $dateFuture = Carbon::now()->addDays(5);
-        $period = CarbonPeriod::create($dateCurrent, $dateFuture);
-        $data = [];
-        foreach ($period as $date) {
-            array_push($data, $date->format('d-m-Y'));
-        }
-
-        return response()->json($data);
-    }
-
-    public function getAllProduk()
-    {
-        $produk = JadwalPerakitan::with('Produk.produk')->get()->pluck('Produk.produk.nama', 'produk_id');
-        return response()->json($produk);
-    }
-
-    function getGrafikProduk(Request $request)
-    {
-        $data = DB::table('prd_dashboard_view')
-            ->where([
-                ['filter', '=', $request->filter],
-                ['filter', '<>', null],
-            ])
-            ->get();
-        $arr = [];
-        foreach ($data as $d) {
-            $arr[] = [
-                'tgl_rakit' => $d->tgl_rakit == null ? '-' : $d->tgl_rakit,
-                'kode' => $d->produk_id == null ? '-' : $d->produk_id,
-                'nama' => $d->prd_nm == null ? '-' : $d->prd_nm,
-                'total' => $d->jml == 0 ? 0 : $d->jml,
-                'filter' => $d->filter == null ? '-' : $d->filter,
-            ];
-        }
-
-        return response()->json([
-            'data' => $arr,
-        ]);
     }
 
     // sale
@@ -1690,5 +1643,122 @@ class ProduksiController extends Controller
             }
         }
         return response()->json(['msg' => 'Successfully']);
+    }
+
+    // versi 2
+    function getCountProdukBySO() {
+        $data = GudangBarangJadi::Has('DetailPesananProduk.DetailPesanan.Pesanan')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('produk', function($data) {
+                if (!empty($data->nama)) {
+                    return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
+                } else {
+                    return $data->Produk->nama;
+                }
+            })
+            ->addColumn('jumlah', function($d) {
+                // get jumlah produk semua so
+                $dd = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($d) {
+                    $q->whereIn('gudang_barang_jadi_id', [$d->id]);
+                })->select(DB::raw('sum(jumlah) as jumlah'))->get();
+                // get jumlah yang sudah dirakit
+                $rakit = JadwalRakitNoseri::whereHas('header', function($q) use($d) {
+                    $q->whereIn('produk_id', [$d->id]);
+                })->select(DB::raw('count(jadwal_id) as jumlah'))->get();
+                return 'Jumlah '.$dd.' Rakit '.$rakit;
+
+            })
+            ->addColumn('aksi', function($d) {
+                return 'Aksi';
+            })
+            ->rawColumns(['aksi', 'jumlah'])
+            ->make(true);
+    }
+
+    function detailCountProdukBySO($id) {
+        $Ekatalog = collect(Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->has('Ekatalog')->whereNotNull('no_po')->get());
+        $Spa = collect(Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->has('Spa')->whereNotNull('no_po')->get());
+        $Spb = collect(Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->has('Spb')->whereNotNull('no_po')->get());
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function($d) {
+                if (empty($d->so)) {
+                    return '-';
+                } else {
+                    return $d->so;
+                }
+            })
+            ->addColumn('batas_max', function($d) {
+                if (isset($d->Ekatalog->tgl_kontrak)) {
+                    return $d->Ekatalog->tgl_kontrak;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('nama_customer', function ($data) {
+                $name = explode('/', $data->so);
+                for ($i = 1; $i < count($name); $i++) {
+                    if ($name[1] == 'EKAT') {
+                        return $data->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } elseif ($name[1] == 'SPB') {
+                        return $data->Spb->Customer->nama;
+                    }
+                }
+            })
+            ->make(true);
+    }
+
+    // dashboard produksi
+    public function dashboard(Request $request)
+    {
+        $dateCurrent = Carbon::now()->subDays(5);
+        $dateFuture = Carbon::now()->addDays(5);
+        $period = CarbonPeriod::create($dateCurrent, $dateFuture);
+        $data = [];
+        foreach ($period as $date) {
+            array_push($data, $date->format('d-m-Y'));
+        }
+
+        return response()->json($data);
+    }
+
+    public function getAllProduk()
+    {
+        $produk = JadwalPerakitan::with('Produk.produk')->get()->pluck('Produk.produk.nama', 'produk_id');
+        return response()->json($produk);
+    }
+
+    function getGrafikProduk(Request $request)
+    {
+        $data = DB::table('prd_dashboard_view')
+            ->where([
+                ['filter', '=', $request->filter],
+                ['filter', '<>', null],
+            ])
+            ->get();
+        $arr = [];
+        foreach ($data as $d) {
+            $arr[] = [
+                'tgl_rakit' => $d->tgl_rakit == null ? '-' : $d->tgl_rakit,
+                'kode' => $d->produk_id == null ? '-' : $d->produk_id,
+                'nama' => $d->prd_nm == null ? '-' : $d->prd_nm,
+                'total' => $d->jml == 0 ? 0 : $d->jml,
+                'filter' => $d->filter == null ? '-' : $d->filter,
+            ];
+        }
+
+        return response()->json([
+            'data' => $arr,
+        ]);
     }
 }

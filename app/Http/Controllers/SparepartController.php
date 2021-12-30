@@ -31,7 +31,6 @@ use Illuminate\Support\Facades\Auth;
 class SparepartController extends Controller
 {
     // get
-    // produk spr
     function get()
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_spr) as jml'))
@@ -62,7 +61,7 @@ class SparepartController extends Controller
             ->rawColumns(['button'])
             ->make(true);
     }
-    // produk unit
+    
     function get_unit()
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))

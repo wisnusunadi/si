@@ -277,6 +277,11 @@
             $('.cb-child').prop('checked', isChecked)
         });
 
+        $("#head-cb-edit").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child-edit').prop('checked', isChecked)
+        });
+
         $("#head-cb-produk").on('click', function () {
            if ($(this).is(':checked')) {
                 var isChecked = $("#head-cb-produk").prop('checked')
@@ -290,7 +295,6 @@
 
         let a = $('#gudang-barang').DataTable({
             processing: true,
-            serverSide: true,
             destroy: true,
             ajax: {
                 url: '/api/tfp/data-so',
@@ -373,6 +377,7 @@
     $(document).on('click', '.detailmodal', function(e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
+        console.log(prd);
         jml = $(this).data('jml');
 
         mytable = $('.scan-produk').DataTable({
@@ -444,6 +449,7 @@
 
         })
         prd1[prd].noseri = ids;
+        console.log(prd1);
     })
 
     $(document).on('click', '#rancang', function(e) {
@@ -481,15 +487,7 @@
     $(document).on('click', '#okk', function(e) {
         e.preventDefault();
 
-        const prdd = [];
-        const qtyy = [];
-
-        $('.cb-child-prd').each(function() {
-            if($(this).is(":checked")) {
-            } else {
-                delete prd1[$(this).val()]
-            }
-        })
+        console.log(prd1);
         $.ajax({
             url: "/api/tfp/byso-final",
             type: "post",
@@ -508,6 +506,13 @@
                     timer: 1500
                 })
                 location.reload();
+            }
+        })
+
+        $('.cb-child-prd').each(function() {
+            if($(this).is(":checked")) {
+            } else {
+                delete prd1[$(this).val()]
             }
         })
     });
@@ -703,6 +708,7 @@
             }
         })
         console.log(editPrd);
+        console.log("testing");
         $.ajax({
             url: "/api/tfp/updateFinalSO",
             type: "post",
@@ -713,15 +719,6 @@
                 data: editPrd,
             },
             success: function(res) {
-                console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
             }
         })
     })

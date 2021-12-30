@@ -368,7 +368,6 @@
     });
 
     function parseDateValue3(rawDate) {
-        // console.log(rawDate);
         var dateArray = rawDate.split("-");
         var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
         0]);
