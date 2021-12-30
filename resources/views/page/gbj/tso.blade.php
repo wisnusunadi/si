@@ -41,9 +41,6 @@
                                             <label for="" class="col-12 font-weight-bold col-form-label">Produk</label>
                                             <div class="col-12">
                                                 <select class="form-control product" name="gdg_brg_jadi_id" id="gdg_brg_jadi_id">
-                                                    <option value="AMBULATORY BLOOD PRESSURE MONITOR">AMBULATORY BLOOD PRESSURE MONITOR</option>
-                                                    <option value="AIR STERILIZER AND PURIFIER">AIR STERILIZER AND PURIFIER</option>
-                                                    <option value="BACKUP POWER">BACKUP POWER</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -231,8 +228,8 @@
                         position: 'center',
                         icon: 'error',
                         title: 'Stok Tidak Mencukupi',
-                        showConfirmButton: false,
-                        timer: 1500
+                        text: 'Stok gudang produk saat ini '+res.stok,
+                        confirmButtonText: 'Oke',
                     })
                 } else {
                     Swal.fire({
