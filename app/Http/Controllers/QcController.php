@@ -194,27 +194,27 @@ class QcController extends Controller
     {
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekat = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
-            $Spa = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
             $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekat = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
-            $Spb = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
             $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
-            $Spb = collect(Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get();
         } else {
-            $data = Pesanan::Has('TFProduksi')->whereIN('id', $this->check_input())->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->get();
         }
 
         return datatables()->of($data)
@@ -232,29 +232,7 @@ class QcController extends Controller
             ->addColumn('batas_uji', function ($data) {
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
-                    $z = array();
-                    $x = array();
-
-                    $jumlah = 0;
-                    foreach ($data->detailpesanan as $d) {
-                        $x[] = $d->id;
-                        $z[] = $d->jumlah;
-                        foreach ($d->penjualanproduk->produk as $l) {
-                            $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
-                        }
-                    }
-                    $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
-
-                    $y = array();
-
-                    foreach ($detail_pesanan_produk as $d) {
-                        $y[] = $d->id;
-                    }
-
-                    $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
-
-
-                    if ($jumlah == $jumlah_seri) {
+                    if ($data->getJumlahPesanan() == $data->getJumlahCekSeri()) {
                         return  '-';
                     } else {
 
@@ -887,7 +865,6 @@ class QcController extends Controller
     {
         return Excel::download(new LaporanQcOutgoing($request->produk_id ?? '', $request->no_so ?? '', $request->hasil_uji  ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_qc_outgoing.xlsx');
     }
-
     public function get_data_laporan_qc($produk, $no_so, $hasil, $tgl_awal, $tgl_akhir)
     {
         $res = "";
@@ -953,7 +930,6 @@ class QcController extends Controller
                 $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_produk_id', 'ASC')->get();
             }
         }
-
         return datatables()->of($res)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -991,37 +967,17 @@ class QcController extends Controller
 
     public function check_input()
     {
-        $data = Pesanan::Has('TFProduksi')->get();
-        $z = array();
-        $x = array();
-
-        $y = array();
-        $c = 0;
-        $a = array();
+        $id =  array();
+        $data = Pesanan::WhereHas('TFProduksi.detail.seri', function ($q) {
+            $q->where('status_id', 2);
+        })->get();
         foreach ($data as $d) {
-            $jumlah = 0;
-            foreach ($d->detailpesanan as $e) {
-
-                $x[$c] = $e->id;
-                $z[$c] = $e->jumlah;
-                foreach ($e->penjualanproduk->produk as $l) {
-                    $jumlah = $jumlah + ($e->jumlah * $l->pivot->jumlah);
-                }
-                $c++;
-            }
-            $id = $d->id;
-            $jumlah_seri = NoseriDetailPesanan::whereHas('Detailpesananproduk.detailPEsanan', function ($q) use ($id) {
-                $q->where('pesanan_id', $id);
-            })->count();
-            $y[] = $jumlah;
-
-            if ($jumlah != $jumlah_seri) {
-                $a[] = $d->id;
+            if ($d->getJumlahPesanan() != $d->getJumlahCekSeri()) {
+                $id[] = $d->id;
             }
         }
-        return $a;
+        return $id;
     }
-
     //Select
     public function getProdukPesananSelect($id)
     {

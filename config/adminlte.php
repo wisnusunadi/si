@@ -411,34 +411,35 @@ return [
             'icon' => 'fas fa-home',
             'auth' => [26, 8]
         ],
-        // [
-        //     'header' => 'DATA',
-        //     'auth' => [14, 17, 26, 23]
-        // ],
+
+        [
+            'header' => 'DATA',
+            'auth' => [26]
+        ],
         // penjualan (26)
         [
             'text' => 'Produk Penjualan',
             'url'  => '/penjualan/produk/show',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-box-open',
             'auth' => [26]
         ],
 
         [
             'text' => 'Customer',
             'url'  => '/penjualan/customer/show',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-users',
             'auth' => [26]
         ],
         [
             'text' => 'Laporan',
             'url'  => '/penjualan/laporan/show',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-book-open',
             'auth' => [26]
         ],
         [
             'text' => 'Lacak',
             'url'  => '/penjualan/lacak/show',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-search',
             'auth' => [26]
         ],
         // [
@@ -460,7 +461,7 @@ return [
         [
             'text' => 'Penjualan',
             'url'  => '/penjualan/penjualan/show',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-mail-bulk',
             'auth' => [26]
         ],
         // [
@@ -1021,26 +1022,26 @@ return [
         ],
         [
             'text' => 'Sales Order',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-clipboard-check',
             'url' => '/qc/so/show',
             'auth' => [23],
         ],
         [
             'text' => 'Riwayat Pengujian',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-history',
             'url' => '/qc/so/riwayat/show',
             'auth' => [23],
         ],
         [
             'text' => 'Laporan',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-book-open',
             'url' => '/qc/so/laporan/show',
             'auth' => [23],
         ],
         [
             'text' => 'Lacak',
             'url'  => '/penjualan/lacak/show',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-search',
             'auth' => [23]
         ],
 
@@ -1157,7 +1158,7 @@ return [
         ],
         [
             'text' => 'Jasa Ekspedisi',
-            'icon' => 'far fa-circle',
+            'icon' => 'far fa-file-alt',
             'url' => '/logistik/ekspedisi/show',
             'auth' => [15],
         ],
@@ -1167,13 +1168,13 @@ return [
         ],
         [
             'text' => 'Sales Order',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-dolly',
             'url' => '/logistik/so/show',
             'auth' => [15],
         ],
         [
             'text' => 'Pengiriman',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-shipping-fast',
             'url' => '/logistik/pengiriman/show',
             'auth' => [15],
         ],
@@ -1185,13 +1186,13 @@ return [
         // ],
         [
             'text' => 'Laporan',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-book-open',
             'url' => '/logistik/laporan/show',
             'auth' => [15],
         ],
         [
             'text' => 'Lacak',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-search',
             'url' => '/penjualan/lacak/show',
             'auth' => [15],
         ],
@@ -1208,13 +1209,13 @@ return [
         ],
         [
             'text' => 'Sales Order',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-clipboard-list',
             'url' => '/dc/so/show',
             'auth' => [9],
         ],
         [
             'text' => 'COO',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-certificate',
             'url' => '/dc/coo/show',
             'auth' => [9],
         ],
@@ -1226,26 +1227,30 @@ return [
         ],
         [
             'text' => 'Customer',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-users',
             'url' => '/penjualan/customer/show',
             'auth' => [8],
         ],
         [
-            'text' => 'Penjualan',
-            'icon' => 'far fa-circle',
-            'url' => '/as/penjualan/show',
-            'auth' => [8],
-        ],
-        [
             'text' => 'Sales Order',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-history',
             'url' => '/as/so/show',
             'auth' => [8],
         ],
         [
             'text' => 'Lacak',
-            'icon' => 'far fa-circle',
+            'icon' => 'fas fa-search',
             'url' => '/penjualan/lacak/show',
+            'auth' => [8],
+        ],
+        [
+            'header' => 'TRANSAKSI',
+            'auth' => [8]
+        ],
+        [
+            'text' => 'Penjualan',
+            'icon' => 'fas fa-mail-bulk',
+            'url' => '/as/penjualan/show',
             'auth' => [8],
         ],
         [
@@ -1364,13 +1369,13 @@ return [
         [
             'text'    => 'PPIC',
             'icon'    => 'fas fa-database',
-            'auth' => [2],
+            'auth' => [2, 26],
             'submenu' => [
                 [
                     'text' => 'Master Stok',
                     'icon' => 'far fa-circle',
                     'url' => '/ppic/master_stok/show',
-                    'auth' => [2],
+                    'auth' => [2, 26],
                 ],
                 [
                     'text' => 'Master Pengiriman',
@@ -1456,7 +1461,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'COO',
-                    'icon' => 'far fa-circle',
+                    'icon' => 'fas fa-circle',
                     'url' => '/dc/coo/show',
                     'auth' => [2],
                 ],

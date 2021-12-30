@@ -89,6 +89,7 @@
                                         <div class="col-4">
                                             <select name="pilih_data" id="pilih_data" class="select2 select-info form-control custom-select col-form-label pilih_data" placeholder="Pilih Data" disabled>
                                                 <option value=""></option>
+                                                <option value="produk">Produk</option>
                                                 <option value="customer">Customer / Satuan Kerja</option>
                                                 <option value="no_po">No Purchase Order</option>
                                                 <option value="no_akn">No AKN</option>
@@ -140,6 +141,30 @@
                         <h4>Hasil Pencarian No Seri</h4>
                         <div class="table-responsive">
                             <table class="table table-hover" id="customertable" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>No Seri</th>
+                                        <th>No SO</th>
+                                        <th>Customer</th>
+                                        <th>Nama Produk</th>
+                                        <th>Tanggal Uji</th>
+                                        <th>No SJ</th>
+                                        <th>Tanggal Kirim</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card hide" id="produk">
+                    <div class="card-body">
+                        <h4>Hasil Pencarian No Seri</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="produktable" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -473,6 +498,54 @@
                 }
             ]
         });
+        $('#produktable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/customer/0',
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'noseri',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_so',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nama_customer',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nama_produk',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_uji',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_sj',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_kirim',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'status',
+                    className: 'nowraps'
+                }
+            ]
+        });
         $('#nosjtable').DataTable({
             processing: true,
             serverSide: true,
@@ -544,6 +617,18 @@
                 $('#noakn').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
+            } else if ($('.pilih_data').val() == "produk") {
+                var data = $('#data').val();
+                $('#produktable').DataTable().ajax.url('/api/penjualan/lacak/data/produk/' + data).load();
+                $('#produk').removeClass('hide');
+                $('#nopo').addClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noakn').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+                $('#customer').addClass('hide');
+
             } else if ($('.pilih_data').val() == "customer") {
                 var data = $('#data').val();
                 $('#customertable').DataTable().ajax.url('/api/penjualan/lacak/data/customer/' + data).load();
@@ -553,6 +638,7 @@
                 $('#noakn').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
 
             } else if ($('.pilih_data').val() == "no_po") {
                 var data = $('#data').val();
@@ -563,6 +649,7 @@
                 $('#customer').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
             } else if ($('.pilih_data').val() == "no_akn") {
                 var data = $('#data').val();
                 $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
@@ -572,6 +659,7 @@
                 $('#nopo').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
             } else if ($('.pilih_data').val() == "no_so") {
                 var data = $('#data').val();
                 $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
@@ -581,6 +669,7 @@
                 $('#nopo').addClass('hide');
                 $('#noso').removeClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
             } else if ($('.pilih_data').val() == "no_sj") {
                 var data = $('#data').val();
                 $('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
@@ -590,6 +679,7 @@
                 $('#nopo').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#noakn').addClass('hide');
+                $('#produk').addClass('hide');
             }
             // $('#btncari').attr("disabled", true);
             // $('.pilih_data').attr("disabled", true);

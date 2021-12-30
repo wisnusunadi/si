@@ -13,7 +13,7 @@ class TFProduksi extends Model
 
     protected $table = 't_gbj';
 
-    protected $fillable = ['ke', 'deskripsi'];
+    protected $fillable = ['ke', 'deskripsi', 'status_id'];
 
     function detail()
     {

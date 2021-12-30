@@ -122,9 +122,9 @@
                                                         <div class="col-4">
                                                         </div>
                                                         <div class="col-4 ">
-                                                            <h5><span class="badge badge-light"><i class="fas fa-shopping-cart"></i> : {{$l->getJumlahPesanan()}}</span>
-                                                                <span class="badge badge-dark"> <i class="fas fa-truck"></i> : 10</span>
-                                                            </h5>
+                                                            <h5> <span class="badge badge-light"><i class="fas fa-shopping-cart"></i> :
+                                                                    {{ $l->DetailPesanan->PenjualanProduk->produk->first()->pivot->jumlah * $l->DetailPesanan->jumlah}}
+                                                                </span> <span class="badge badge-dark"> <i class="fas fa-truck"></i> : {{$l->getJumlahKirim()}}</span></h5>
                                                         </div>
                                                     </div>
                                                 </li>

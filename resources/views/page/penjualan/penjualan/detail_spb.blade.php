@@ -110,12 +110,22 @@
                                                 @isset($e->DetailPesananProduk)
                                                 @foreach($e->DetailPesananProduk as $l)
                                                 <li class="list-group-item">
-
-                                                    @if(!empty($l->GudangBarangJadi->nama))
-                                                    {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
-                                                    @else
-                                                    {{$l->GudangBarangJadi->Produk->nama}}
-                                                    @endif
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            @if(!empty($l->GudangBarangJadi->nama))
+                                                            {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
+                                                            @else
+                                                            {{$l->GudangBarangJadi->Produk->nama}}
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-4">
+                                                        </div>
+                                                        <div class="col-4 ">
+                                                            <h5> <span class="badge badge-light"><i class="fas fa-shopping-cart"></i> :
+                                                                    {{ $l->DetailPesanan->PenjualanProduk->produk->first()->pivot->jumlah * $l->DetailPesanan->jumlah}}
+                                                                </span> <span class="badge badge-dark"> <i class="fas fa-truck"></i> : {{$l->getJumlahKirim()}}</span></h5>
+                                                        </div>
+                                                    </div>
                                                 </li>
                                                 @endforeach
                                                 @endif

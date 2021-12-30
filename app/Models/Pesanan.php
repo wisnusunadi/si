@@ -67,6 +67,15 @@ class Pesanan extends Model
         return $jumlah;
     }
 
+    public function getJumlahCekSeri()
+    {
+        $id = $this->id;
+        $jumlah = NoseriDetailPesanan::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->count();
+        return $jumlah;
+    }
+
     public function getJumlahCek()
     {
         $id = $this->id;

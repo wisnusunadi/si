@@ -996,7 +996,6 @@
             return hasil;
         }
 
-
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
                 sisa = number_string.length % 3,
@@ -1115,7 +1114,6 @@
             //     });
             // });
         }
-
 
         function totalhargaprd() {
             var totalharga = 0;

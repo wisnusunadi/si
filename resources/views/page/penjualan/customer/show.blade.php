@@ -197,6 +197,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content" style="margin: 10px">
+                                <div class="modal-header yellow-bg">
+                                    <h4 class="modal-title"><b>Hapus</b></h4>
+                                </div>
+                                <div class="modal-body" id="hapus">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -323,6 +335,36 @@
 
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
+                    $('#npwp').mask('00.000.000.0-000.000');
+                    console.log(id);
+                    // $("#editform").attr("action", href);
+                    select_data();
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+        $(document).on('click', '.hapusmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data('id');
+            $.ajax({
+                url: "/api/customer/hapus_modal/" + id,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+
+                    $('#hapusmodal').modal("show");
+                    $('#hapus').html(result).show();
                     $('#npwp').mask('00.000.000.0-000.000');
                     console.log(id);
                     // $("#editform").attr("action", href);
