@@ -482,10 +482,4 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard']);
 });
 
-Route::prefix('/v2')->group(function() {
-    // produksi
-    Route::prefix('/prd')->group(function() {
-        Route::get('/produk-so', [ProduksiController::class, 'getCountProdukBySO']);
-        Route::get('/data-so/{id}', [ProduksiController::class, 'detailCountProdukBySO']);
-    });
-});
+Route::namespace('v2')->group(__DIR__. '/yogi/api.php');
