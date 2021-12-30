@@ -289,6 +289,24 @@
         "info": false,
         "responsive": true,
         "order": [[ 0, 'asc' ]],
+        ajax: {
+            url: "/api/prd/ajax_his_rakit",
+            headers: {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+        },
+        columns: [
+            {data: 'day_rakit'},
+            {data: 'time_rakit'},
+            {data: 'day_kirim'},
+            {data: 'time_kirim'},
+            {data: 'bppb'},
+            {data: 'produk'},
+            {data: 'jml'},
+            {data: 'action'},
+            {data: 'day_rakit_filter'},
+            {data: 'day_kirim_filter'},
+        ],
         "drawCallback": function ( settings ) {
             var api = this.api();
             var rows = api.rows( {page:'current'} ).nodes();
@@ -308,24 +326,6 @@
         },
         autoWidth: false,
         processing: true,
-        ajax: {
-            url: "/api/prd/ajax_his_rakit",
-            headers: {
-                'X-CSRF-TOKEN': '{{csrf_token()}}'
-            }
-        },
-        columns: [
-            {data: 'day_rakit'},
-            {data: 'time_rakit'},
-            {data: 'day_kirim'},
-            {data: 'time_kirim'},
-            {data: 'bppb'},
-            {data: 'produk'},
-            {data: 'jml'},
-            {data: 'action'},
-            {data: 'day_rakit_filter'},
-            {data: 'day_kirim_filter'},
-        ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         },
