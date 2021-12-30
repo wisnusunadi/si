@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-use Barryvdh\DomPDF\Facade as PDF;
+use PDF;
 
 class GudangController extends Controller
 {
@@ -501,17 +501,22 @@ class GudangController extends Controller
     }
 
     function exportSpb($id) {
-        if (!$id) {
+        if (isset($id)) {
+            LogSurat::where('pesanan_id', $id)->update(['transfer_by' => Auth::user()->id]);
+        } else {
             LogSurat::create([
                 'pesanan_id' => $id,
-                'transfer_by' => Auth::user()->id
+                'transfer_by' => Auth::user()->id,
             ]);
         }
         $tfby = LogSurat::where('pesanan_id', $id)->get();
         $data = TFProduksiDetail::whereHas('header', function($q) use($id) {
             $q->where('pesanan_id', $id);
         })->with('seri.seri', 'produk.produk')->get();
-        return view('page.gbj.reports.spb',['data' => $data, 'tfby' => $tfby]);
+        $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get();
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->loadView('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
+        return $pdf->stream();
+        // return view('page.gbj.reports.spb',['data' => $data, 'tfby' => $tfby, 'header' => $header]);
     }
 
     function getListSODone() {

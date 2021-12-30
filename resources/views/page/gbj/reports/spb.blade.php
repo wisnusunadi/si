@@ -62,15 +62,27 @@
     <div class="box">
         <p class="judul"><strong><u>Surat Pengantar Barang</u></strong></p>
         <table class="table1">
+            @foreach ($header as $h)
             <tr>
                 <td>Ref / P.O</td>
                 <td>:</td>
-                <td><u>--</u></td>
+                <td><u>{{ $h->pesanan->so }}</u></td>
             </tr>
+
             <tr>
                 <td>Distributor</td>
                 <td>:</td>
-                <td><u>nama distributor</u></td>
+                @php
+                    $name = explode('/', $h->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        echo '<td><u>'.$h->pesanan->Ekatalog->Customer->nama.'</u></td>';
+                    } elseif ($name[1] == 'SPA') {
+                        echo '<td><u>'.$h->pesanan->Spa->Customer->nama.'</u></td>';
+                    } elseif ($name[1] == 'SPB') {
+                        echo '<td><u>'.$h->pesanan->Spb->Customer->nama.'</u></td>';
+                    }
+                @endphp
+
             </tr>
             <tr>
                 <td colspan="3">Harap barang-barang yang tertulis di bawah ini diserahkan</td>
@@ -78,8 +90,9 @@
             <tr>
                 <td>Kepada</td>
                 <td>:</td>
-                <td class="margin_bottom"><span class="kepada"></span><span class="di">di</span></td>
+                <td class="margin_bottom"><span class="kepada"></span><span class="di"> {{ $h->divisi->nama }}</span></td>
             </tr>
+            @endforeach
         </table>
         <table class="table">
             <thead>

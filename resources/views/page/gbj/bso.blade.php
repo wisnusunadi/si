@@ -462,52 +462,77 @@
             }
         })
 
-        $.ajax({
-            url: "/api/tfp/byso",
-            type: "post",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                pesanan_id: id,
-                userid: $('#userid').val(),
-                data: prd1,
-            },
-            success: function(res) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
-            }
-        })
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Draft it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Success!',
+                        'Data Tersimpan ke Rancangan',
+                        'success'
+                    )
+                    $.ajax({
+                        url: "/api/tfp/byso",
+                        type: "post",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            pesanan_id: id,
+                            userid: $('#userid').val(),
+                            data: prd1,
+                        },
+                        success: function(res) {
+                           console.log(res);
+                        }
+                    })
+                    location.reload();
+                }
+            })
+
     })
 
     $(document).on('click', '#okk', function(e) {
         e.preventDefault();
 
         console.log(prd1);
-        $.ajax({
-            url: "/api/tfp/byso-final",
-            type: "post",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                pesanan_id: id,
-                userid: $('#userid').val(),
-                data: prd1,
-            },
-            success: function(res) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
-            }
-        })
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Transfer it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Success!',
+                        'Data Terkirim ke QC',
+                        'success'
+                    )
+                    $.ajax({
+                        url: "/api/tfp/byso-final",
+                        type: "post",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            pesanan_id: id,
+                            userid: $('#userid').val(),
+                            data: prd1,
+                        },
+                        success: function(res) {
+                            console.log(res);
+                        }
+                    })
+                    location.reload();
+                }
+            })
+
 
         $('.cb-child-prd').each(function() {
             if($(this).is(":checked")) {
@@ -708,19 +733,37 @@
             }
         })
         console.log(editPrd);
-        console.log("testing");
-        $.ajax({
-            url: "/api/tfp/updateFinalSO",
-            type: "post",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                pesanan_id: id,
-                userid: $('#userid').val(),
-                data: editPrd,
-            },
-            success: function(res) {
-            }
-        })
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Draft it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Success!',
+                        'Data Rancangan Terkirim ke QC',
+                        'success'
+                    )
+                    $.ajax({
+                        url: "/api/tfp/updateFinalSO",
+                        type: "post",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            pesanan_id: id,
+                            userid: $('#userid').val(),
+                            data: editPrd,
+                        },
+                        success: function(res) {
+                        }
+                    })
+                    location.reload();
+                }
+            })
+
     })
 
 </script>
