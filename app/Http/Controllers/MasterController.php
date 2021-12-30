@@ -293,12 +293,17 @@ class MasterController extends Controller
                         Edit
                     </button>
                     </a>
+                    <a data-toggle="modal" data-target="#hapusmodal" class="hapusmodal" data-attr=""  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button" >
+                        <i class="fas fa-trash-alt"></i>
+                        Hapus
+                        </button>
+                    </a>
                 </div>';
             })
             ->rawColumns(['nama', 'button'])
             ->make(true);
     }
-
     public function get_nama_customer($id, $val)
     {
         if ($id != "0") {
@@ -659,10 +664,50 @@ class MasterController extends Controller
         $produk = Produk::findOrFail($id);
         $produk->delete();
     }
+    public function delete_customer($id)
+    {
+        $customer = Customer::find($id);
+        $customer->delete();
+
+        if ($customer) {
+            return response()->json(['data' => 'success']);
+        } else {
+            return response()->json(['data' => 'error']);
+        }
+    }
     public function delete_penjualan_produk($id)
     {
-        $produk = PenjualanProduk::findOrFail($id);
-        $produk->delete();
+        $penjualanproduk = PenjualanProduk::find($id);
+
+
+        $detail_pesanan = DetailPesanan::where('penjualan_produk_id', $penjualanproduk->id)->get();
+        $bool = '';
+        if (count($detail_pesanan) <= 0) {
+            $bool = 1;
+            $produk_id = [];
+            foreach ($penjualanproduk->produk as $p) {
+                $produk_id[] = $p->id;
+            }
+
+            $x =  $penjualanproduk->produk()->detach($produk_id);
+            $y = $penjualanproduk->delete();
+
+            if ($x && $y) {
+                $bool = 1;
+            } else {
+                $bool = 2;
+            }
+        } else {
+            $bool = 0;
+        }
+
+        if ($bool == 1) {
+            return response()->json(['data' => 'success']);
+        } else if ($bool == 2) {
+            return response()->json(['data' => 'error']);
+        } else {
+            return response()->json(['data' => 'warning']);
+        }
     }
     public function delete_detail_penjualan_produk($id)
     {
@@ -714,11 +759,7 @@ class MasterController extends Controller
     }
 
     //Show Modal
-    public function hapus_customer_modal($id)
-    {
-        // $customer = Customer::find($id);
-        return view("page.penjualan.customer.hapus");
-    }
+
     public function update_customer_modal($id)
     {
         $customer = Customer::find($id);

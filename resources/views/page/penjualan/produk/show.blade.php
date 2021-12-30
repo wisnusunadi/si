@@ -274,7 +274,36 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin: 10px">
+                            <div class="modal-header yellow-bg">
+                                <h4 class="modal-title"><b>Hapus</b></h4>
+                            </div>
+                            <div class="modal-body" id="hapus">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <form method="post" action="" id="form-hapus" data-target="">
+                                            @method('delete')
+                                            @csrf
+                                            <div class="card">
+                                                <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
+                                                <div class="card-footer">
+                                                    <span class="float-left">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                    </span>
+                                                    <span class="float-right">
+                                                        <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -432,6 +461,59 @@
                 },
                 timeout: 8000
             })
+        });
+        $(document).on('click', '.hapusmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            $('#hapusmodal').modal("show");
+            $('#hapusmodal').find('form').attr('action', '/api/penjualan_produk/delete/' + id);
+        });
+
+
+
+        $(document).on('submit', '#form-hapus', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            console.log(action);
+            $.ajax({
+                url: action,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Hapus Data',
+                            'success'
+                        );
+                        $('#showtable').DataTable().ajax.reload();
+                        $("#hapusmodal").modal('hide');
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Penambahan Data Pengujian',
+                            'error'
+                        );
+                    } else {
+                        swal.fire(
+                            'Error',
+                            'Data telah digunakan dalam Transaksi Lain',
+                            'warning'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                }
+            });
+            return false;
         });
 
         function numberRows($t) {
