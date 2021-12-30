@@ -204,7 +204,25 @@
                                     <h4 class="modal-title"><b>Hapus</b></h4>
                                 </div>
                                 <div class="modal-body" id="hapus">
-
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <form method="post" action="" id="form-hapus" data-target="">
+                                                @method('DELETE')
+                                                @csrf
+                                                <div class="card">
+                                                    <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
+                                                    <div class="card-footer">
+                                                        <span class="float-left">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                        </span>
+                                                        <span class="float-right">
+                                                            <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -351,35 +369,52 @@
                 timeout: 8000
             })
         });
+
         $(document).on('click', '.hapusmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
-            var id = $(this).data('id');
-            $.ajax({
-                url: "/api/customer/hapus_modal/" + id,
-                beforeSend: function() {
-                    $('#loader').show();
-                },
-                // return the result
-                success: function(result) {
+            var id = $(this).data("id");
+            $('#hapusmodal').modal("show");
+            $('#hapusmodal').find('form').attr('action', '/api/customer/delete/' + id);
+        });
 
-                    $('#hapusmodal').modal("show");
-                    $('#hapus').html(result).show();
-                    $('#npwp').mask('00.000.000.0-000.000');
-                    console.log(id);
-                    // $("#editform").attr("action", href);
-                    select_data();
+        $(document).on('submit', '#form-hapus', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            console.log(action);
+            $.ajax({
+                url: action,
+                type: 'delete',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                complete: function() {
-                    $('#loader').hide();
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Hapus Data',
+                            'success'
+                        );
+                        $('#showtable').DataTable().ajax.reload();
+
+                        $("#hapusmodal").modal('hide');
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Penambahan Data Pengujian',
+                            'error'
+                        );
+                    }
                 },
-                error: function(jqXHR, testStatus, error) {
-                    console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
-                    $('#loader').hide();
-                },
-                timeout: 8000
-            })
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                }
+            });
+            return false;
         });
 
         function check_nama_cust(id, val) {
