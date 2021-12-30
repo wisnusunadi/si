@@ -2,8 +2,38 @@
   <div>
     <h1 class="subtitle">{{ getMonthYear() }}</h1>
     <div class="buttons">
-      <button class="button is-success" @click="showAddProdukModal">
+      <button
+        v-if="
+          this.$store.state.state_ppic === 'pembuatan' ||
+          this.$store.state.state_ppic === 'revisi'
+        "
+        class="button is-success"
+        @click="showAddProdukModal"
+      >
         <span>Tambah <i class="fas fa-plus"></i></span>
+      </button>
+      <button
+        v-if="
+          this.$store.state.state_ppic === 'pembuatan' ||
+          this.$store.state.state_ppic === 'revisi'
+        "
+        class="button"
+        :class="{
+          'is-loading': this.$store.state.isLoading,
+          'is-primary': this.$store.state.state_ppic === 'pembuatan',
+          'is-danger': this.$store.state.state_ppic === 'revisi',
+        }"
+        @click="sendEvent('persetujuan')"
+      >
+        Kirim
+      </button>
+      <button
+        v-if="this.$store.state.state_ppic === 'disetujui'"
+        class="button is-success"
+        :class="{ 'is-loading': this.$store.state.isLoading }"
+        @click="sendEvent('perubahan')"
+      >
+        Minta Perubahan
       </button>
     </div>
     <div class="table-container">
@@ -15,7 +45,15 @@
           <tr>
             <th rowspan="2">Nama Produk</th>
             <th rowspan="2">Jumlah</th>
-            <th rowspan="2">Aksi</th>
+            <th
+              v-if="
+                this.$store.state.state_ppic === 'pembuatan' ||
+                this.$store.state.state_ppic === 'revisi'
+              "
+              rowspan="2"
+            >
+              Aksi
+            </th>
             <th :colspan="last_date">Tanggal</th>
           </tr>
           <tr>
@@ -28,7 +66,12 @@
           <tr v-for="item in events" :key="item.id">
             <td>{{ item.title }}</td>
             <td>{{ item.jumlah }}</td>
-            <td>
+            <td
+              v-if="
+                $store.state.state_ppic === 'pembuatan' ||
+                $store.state.state_ppic === 'revisi'
+              "
+            >
               <div>
                 <span class="is-clickable" @click="updateEvent(item.id)">
                   <i class="fas fa-edit"></i>
@@ -412,6 +455,35 @@ export default {
       this.jadwal_id = id;
 
       this.deleteProdukModal = true;
+    },
+
+    async sendEvent(state) {
+      this.$store.commit("setIsLoading", true);
+      await axios
+        .post("/api/ppic/update/perakitans/" + this.status, {
+          state: state,
+          konfirmasi: 0,
+        })
+        .then((response) => {
+          this.$store.commit("setJadwal", response.data);
+        })
+        .catch((error) => {
+          console.log("error update data perakitan");
+          console.log(error);
+        });
+
+      await axios
+        .post("/api/ppic/create/komentar", {
+          tanggal_permintaan: new Date(),
+          state: this.$store.state.state,
+          status: this.status,
+        })
+        .catch((error) => {
+          console.log("error create komentar");
+          console.log(error);
+        });
+
+      this.$store.commit("setIsLoading", false);
     },
 
     // helper

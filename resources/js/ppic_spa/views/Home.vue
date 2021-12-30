@@ -2,6 +2,26 @@
   <div>
     <h1 class="title">DashBoard</h1>
     <div class="columns is-multiline">
+      <div class="column is-6">
+        <article class="message is-primary">
+          <div class="message-header">
+            <p>Permintaan</p>
+          </div>
+          <div class="message-body has-text-centered">
+            <p class="subtitle is-1">{{ jumlah_permintaan }}</p>
+          </div>
+        </article>
+      </div>
+      <div class="column is-6">
+        <article class="message is-warning">
+          <div class="message-header">
+            <p>Proses</p>
+          </div>
+          <div class="message-body has-text-centered">
+            <p class="subtitle is-1">{{ jumlah_proses }}</p>
+          </div>
+        </article>
+      </div>
       <div class="column is-12">
         <div class="box">
           <table class="table is-fullwidth has-text-centered" id="table_so">
@@ -149,41 +169,43 @@ export default {
       data_unit: [],
       data_sparepart: [],
 
+      jumlah_permintaan: 0,
+      jumlah_proses: 0,
+
       tabs: false,
     };
   },
 
-  methods: {
-    async loadData() {
-      this.$store.commit("setIsLoading", true);
+  async created() {
+    this.$store.commit("setIsLoading", true);
 
-      await axios.get("/api/ppic/data/so").then((response) => {
-        this.data_so = response.data;
-      });
+    await axios.get("/api/ppic/data/so").then((response) => {
+      this.data_so = response.data;
+    });
 
-      await axios.get("/api/ppic/data/gbj").then((response) => {
-        this.data_gbj = response.data;
-      });
+    await axios.get("/api/ppic/data/gbj").then((response) => {
+      this.data_gbj = response.data;
+    });
 
-      await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
-        this.data_sparepart = response.data;
-      });
+    await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
+      this.data_sparepart = response.data;
+    });
 
-      await axios.get("/api/ppic/data/gk/unit").then((response) => {
-        this.data_unit = response.data;
-      });
+    await axios.get("/api/ppic/data/gk/unit").then((response) => {
+      this.data_unit = response.data;
+    });
 
-      $("#table_so").DataTable();
-      $("#table_gbj").DataTable();
-      $("#table-unit").DataTable();
-      $("#table-sparepart").DataTable();
+    await axios.get("/api/ppic/counting/komentar").then((response) => {
+      this.jumlah_permintaan = response.data[0];
+      this.jumlah_proses = response.data[1];
+    });
 
-      this.$store.commit("setIsLoading", false);
-    },
-  },
+    $("#table_so").DataTable();
+    $("#table_gbj").DataTable();
+    $("#table-unit").DataTable();
+    $("#table-sparepart").DataTable();
 
-  mounted() {
-    this.loadData();
+    this.$store.commit("setIsLoading", false);
   },
 
   computed: {

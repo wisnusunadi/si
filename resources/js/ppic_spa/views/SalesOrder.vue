@@ -134,25 +134,21 @@ export default {
   },
 
   methods: {
-    async loadData() {
-      this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/so").then((response) => {
-        this.data = response.data;
-      });
-      this.$store.commit("setIsLoading", false);
-
-      this.table = $("#table").DataTable();
-      console.log(this.table);
-    },
-
     getDetail(id) {
       this.detail = this.format_data.find((item) => item.id == id).detail;
       this.showModal = true;
     },
   },
 
-  mounted() {
-    this.loadData();
+  async created() {
+    this.$store.commit("setIsLoading", true);
+    await axios.get("/api/ppic/data/so").then((response) => {
+      this.data = response.data;
+      console.log(this.data);
+    });
+    this.$store.commit("setIsLoading", false);
+
+    this.table = $("#table").DataTable();
   },
 
   computed: {
