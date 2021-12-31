@@ -63,7 +63,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in events" :key="item.id">
+          <tr v-for="item in format_events" :key="item.id">
             <td>{{ item.title }}</td>
             <td>{{ item.jumlah }}</td>
             <td
@@ -86,7 +86,7 @@
               v-for="i in Array.from(Array(last_date).keys())"
               :key="i"
               :class="{
-                background_yellow: isDate(item.start, item.end, i + 1),
+                background_yellow: isDate(item.tanggal, i + 1),
                 background_black: weekend_date.indexOf(i + 1) !== -1,
               }"
             ></td>
@@ -305,20 +305,27 @@ export default {
       date.setDate(i);
       if (date.getDay() == 6 || date.getDay() == 0) this.weekend_date.push(i);
     }
+
+    console.log("created table");
+    console.log(this.events);
+    console.log(this.format_events);
   },
 
   methods: {
-    isDate(start_date, end_date, i) {
-      let start = new Date(start_date);
-      let end = new Date(end_date);
+    isDate(tanggal, i) {
+      for (const id in tanggal) {
+        let start = new Date(tanggal[id][0]);
+        let end = new Date(tanggal[id][1]);
 
-      let start_number = start.getDate();
-      let end_number = end.getDate();
+        let start_number = start.getDate();
+        let end_number = end.getDate();
 
-      // handle end equal to last date
-      if (start.getMonth() !== end.getMonth()) end_number = this.last_date;
+        // handle end equal to last date
+        if (start.getMonth() !== end.getMonth()) end_number = this.last_date;
 
-      if (i >= start_number && i <= end_number) return true;
+        if (i >= start_number && i <= end_number) return true;
+      }
+
       return false;
     },
 
@@ -563,6 +570,34 @@ export default {
         label: `${data.produk.nama} ${data.nama}`,
         value: data.id,
       }));
+
+      return data;
+    },
+
+    format_events() {
+      let data = [];
+      let exists = {};
+      for (let i = 0; i < this.events.length; i++) {
+        exists = data.find(
+          (item) => item.produk_id === this.events[i].produk_id
+        );
+        if (data.length === 0 || exists === undefined) {
+          data.push({
+            produk_id: this.events[i].produk_id,
+            title: this.events[i].title,
+            jumlah: this.events[i].jumlah,
+            tanggal: {
+              [this.events[i].id]: [this.events[i].start, this.events[i].end],
+            },
+          });
+        } else {
+          exists.tanggal[this.events[i].id] = [
+            this.events[i].start,
+            this.events[i].end,
+          ];
+          exists.jumlah += this.events[i].jumlah;
+        }
+      }
 
       return data;
     },

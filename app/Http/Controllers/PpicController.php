@@ -179,6 +179,7 @@ class PpicController extends Controller
         } else {
             $object->tanggal_mulai_baru = $data->tanggal_mulai;
         }
+
         if (isset($request->tanggal_selesai)) {
             $data->tanggal_selesai = $request->tanggal_selesai;
             $object->tanggal_selesai_baru = $request->tanggal_selesai;
