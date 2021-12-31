@@ -44,11 +44,11 @@ class PpicController extends Controller
         $this->update_perakitan_status();
         $status = $this->change_status($status);
         if ($status == $this->change_status('penyusunan')) {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'desc')->get();
+            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else if ($status == $this->change_status("pelaksanaan")) {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'desc')->get();
+            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else {
-            $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'desc')->get();
+            $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         }
 
         return $data;
@@ -105,9 +105,10 @@ class PpicController extends Controller
             ->groupBy('t_gk_detail.gbj_id')
             ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
             ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id');
-        // if (isset($request->id)) {
-        //     $data->find($request->id);
-        // }
+
+        if (isset($request->id)) {
+            $data->where('gbj_id', $request->id);
+        }
 
         $data = $data->get();
         return $data;
@@ -115,7 +116,7 @@ class PpicController extends Controller
 
     public function get_komentar_jadwal_perakitan(Request $request)
     {
-        $data = KomentarJadwalPerakitan::where('status', $this->change_status($request->status))->orderBy('tanggal_permintaan')->get();
+        $data = KomentarJadwalPerakitan::where('status', $this->change_status($request->status))->orderBy('tanggal_permintaan', 'desc')->get();
         return $data;
     }
 
@@ -307,6 +308,25 @@ class PpicController extends Controller
             $data->status = $this->change_status('selesai');
             $data->save();
         }
+    }
+
+    public function count_proses_jadwal()
+    {
+        $data = KomentarJadwalPerakitan::all();
+        $permintaan = 0;
+        $proses = 0;
+
+        foreach ($data as $item) {
+            if (!$item->tanggal_hasil) {
+                $permintaan += 1;
+            } else {
+                if ((time() - (60 * 60 * 24)) < strtotime($item->tanggal_hasil)) {
+                    $proses += 1;
+                }
+            }
+        }
+
+        return [$permintaan, $proses];
     }
 
     public function test_query()

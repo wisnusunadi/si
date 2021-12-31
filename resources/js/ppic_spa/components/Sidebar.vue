@@ -8,17 +8,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 5px;
           "
           to="/ppic"
           class=""
         >
-          <img
-            class="image"
-            style="width: 50%"
-            src="/assets/image/logo/sinko.png"
-            alt=""
-          />
+          <strong class="has-text-centered">Sinko Prima Alloy</strong>
         </router-link>
       </div>
     </div>

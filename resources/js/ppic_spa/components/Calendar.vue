@@ -1,3 +1,139 @@
+<template>
+  <div id="calendar-component">
+    <div class="icon-text" style="justify-content: flex-end">
+      <span id="trash-icon"><i class="fas fa-trash-alt"></i></span>
+    </div>
+    <FullCalendar ref="calendar" :options="calendarOptions" />
+
+    <!-- modal -->
+    <div v-if="selectModal" class="modal" :class="{ 'is-active': selectModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Pilih Produk</p>
+          <button class="delete" @click="selectModal = !selectModal"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Warna Label</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <button
+                    v-for="item in warna"
+                    :key="item"
+                    class="button"
+                    @click="handleClick"
+                    :style="{
+                      padding: '20px',
+                      margin: '8px',
+                      backgroundColor: item,
+                      borderColor: item,
+                    }"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Produk</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <vSelect
+                    :options="options"
+                    :reduce="(nama) => nama.value"
+                    v-model="produk"
+                    @input="changeProduk"
+                  />
+                </div>
+                <p
+                  class="help is-danger"
+                  :class="{ 'is-hidden': !error_produk_modal }"
+                >
+                  produk harus dipilih
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Jumlah</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input class="input" type="number" min="1" v-model="jumlah" />
+                </div>
+                <p
+                  class="help is-danger"
+                  :class="{ 'is-hidden': !error_jumlah_modal }"
+                >
+                  jumlah harus diisi
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Stok</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <div>GBJ: {{ gbj_stok }}</div>
+                  <div>GK : {{ gk_stok }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button
+            class="button"
+            :class="{ 'is-loading': this.$store.state.isLoading }"
+            :style="{ backgroundColor: color, borderColor: color }"
+            @click="handleSubmit"
+          >
+            Tambah
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <div class="modal" :class="{ 'is-active': detailModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Daftar Produk</p>
+          <button class="delete"></button>
+        </header>
+        <section>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Produk</th>
+                <th>Jumlah</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="produk in selectedEvents" :key="produk.id">
+                <td>{{ produk.nama }}</td>
+                <td>{{ produk.jumlah }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <footer class="modal-card-foot"></footer>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -11,6 +147,20 @@ import $ from "jquery";
 import axios from "axios";
 
 export default {
+  name: "CalendarComponent",
+
+  props: {
+    events: {
+      type: Array,
+      required: true,
+    },
+
+    status: {
+      type: String,
+      required: true,
+    },
+  },
+
   components: {
     FullCalendar,
     vSelect,
@@ -29,29 +179,31 @@ export default {
         weekends: false,
         showNonCurrentDates: false,
 
-        events: [],
+        events: this.events,
 
         select: this.handleSelect,
-        // eventClick: this.handleEventClick,
-        // eventMouseEnter: this.handleEventMouseEnter,
-        // eventMouseLeave: this.handleEventMouseLeave,
         eventDragStop: this.handleEventDragStop,
         eventDrop: this.handleEventDrop,
         eventResize: this.handleEventResize,
+
+        // dateClick: () => alert("date click"),
+        // eventClick: this.handleEventClick,
+        // eventMouseEnter: this.handleEventMouseEnter,
+        // eventMouseLeave: this.handleEventMouseLeave,
       },
 
-      calendar: null,
-      showModal: false,
+      selectModal: false,
+      detailModal: false,
       warna: ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"],
+
+      selectedEvents: [],
+
       tanggal_mulai: "",
       tanggal_selesai: "",
-      data_gbj: [],
-
-      status: "",
-
       produk: {},
       jumlah: 1,
       color: "#007bff",
+
       gbj_stok: 0,
       gk_stok: 0,
 
@@ -60,51 +212,25 @@ export default {
     };
   },
 
-  methods: {
-    convertJadwal: function (jadwal) {
-      return jadwal.length == 0
-        ? []
-        : jadwal.map((item) => ({
-            id: item.id,
-            title: `${item.produk.produk.nama} ${item.produk.nama}`,
-            start: item.tanggal_mulai,
-            end: item.tanggal_selesai,
-            backgroundColor: item.warna,
-            borderColor: item.warna,
-          }));
-    },
+  mounted() {
+    if (this.status === "penyusunan") this.$refs.calendar.getApi().next();
+  },
 
+  methods: {
     async handleSelect(selectInfo) {
-      this.$store.commit("setIsLoading", true);
+      let start = selectInfo.start.getDate();
+      let end = selectInfo.end.getDate();
+      console.log(end - start);
+      // this.$store.commit("setIsLoading", true);
+
       await axios.get("/api/ppic/data/gbj").then((response) => {
         this.data_gbj = response.data;
       });
-      this.$store.commit("setIsLoading", false);
-      this.showModal = true;
-      this.tanggal_mulai = selectInfo.startStr;
-      this.tanggal_selesai = selectInfo.endStr;
-    },
 
-    handleEventClick: function (clickEventInfo) {
-      //   if (this.editable) {
-      //     let obj = clickEventInfo.event._def;
-      //     this.$store.state.message = this.messageArray[obj.publicId];
-      //     this.event_ref = clickEventInfo;
-      //     this.$store.state.emit = "delete-event";
-      //     this.$root.$emit("confirm_modal_show");
-      //   }
-    },
-
-    handleEventMouseEnter: function (eventInfo) {
-      //   const id = eventInfo.event._def.publicId;
-      //   this.$root.$emit("hover_event", id, "yellow");
-      //   // eventInfo.event.setProp("borderColor", "yellow");
-    },
-
-    handleEventMouseLeave: function (eventInfo) {
-      //   const id = eventInfo.event._def.publicId;
-      //   this.$root.$emit("hover_event", id, "");
-      //   eventInfo.event.setProp("borderColor", eventInfo.event.backgroundColor);
+      // this.$store.commit("setIsLoading", false);
+      this.selectModal = true;
+      // this.tanggal_mulai = selectInfo.startStr;
+      // this.tanggal_selesai = selectInfo.endStr;
     },
 
     async handleEventDragStop({ event, jsEvent }) {
@@ -179,6 +305,29 @@ export default {
       this.color = event.target.style.backgroundColor;
     },
 
+    handleEventClick: function (clickEventInfo) {
+      //   if (this.editable) {
+      //     let obj = clickEventInfo.event._def;
+      //     this.$store.state.message = this.messageArray[obj.publicId];
+      //     this.event_ref = clickEventInfo;
+      //     this.$store.state.emit = "delete-event";
+      //     this.$root.$emit("confirm_modal_show");
+      //   }
+    },
+
+    handleEventMouseEnter: function (eventInfo) {
+      //   const id = eventInfo.event._def.publicId;
+      //   this.$root.$emit("hover_event", id, "yellow");
+      //   // eventInfo.event.setProp("borderColor", "yellow");
+    },
+
+    handleEventMouseLeave: function (eventInfo) {
+      //   const id = eventInfo.event._def.publicId;
+      //   this.$root.$emit("hover_event", id, "");
+      //   eventInfo.event.setProp("borderColor", eventInfo.event.backgroundColor);
+    },
+
+    // modal
     async handleSubmit() {
       let err = 0;
       if (!this.produk) {
@@ -208,7 +357,7 @@ export default {
       });
       this.$store.commit("setIsLoading", false);
 
-      this.showModal = false;
+      this.selectModal = false;
 
       this.produk = {};
       this.jumlah = 1;
@@ -223,11 +372,7 @@ export default {
       this.tanggal_selesai;
     },
 
-    changeProduk: async function () {
-      // axios.get("/api/ppic/product/" + this.produkValue).then((response) => {
-      //   this.gbj_stok = response.data.gbj_stok;
-      //   this.gk_stok = response.data.gk_stok;
-      // });
+    async changeProduk() {
       console.log(this.produk);
       this.$store.commit("setIsLoading", true);
       await axios
@@ -237,25 +382,46 @@ export default {
           },
         })
         .then((response) => {
-          this.gbj_stok = response.data.stok;
+          if (response.data.length > 0) this.gbj_stok = response.data[0].stok;
+          else this.gk_stok = 0;
           console.log(response.data);
         })
         .catch((error) => {
           console.log(error);
         });
+
+      await axios
+        .get("/api/ppic/data/gk/unit", {
+          params: {
+            id: this.produk.id,
+          },
+        })
+        .then((response) => {
+          if (response.data.length > 0) this.gk_stok = response.data[0].jml;
+          else this.gk_stok = 0;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
       this.$store.commit("setIsLoading", false);
     },
-  },
 
-  mounted() {
-    this.calendar = this.$refs.calendar.getApi();
+    // helper
+    filterEvent(date) {
+      let current = new Date(date);
+      this.selectedEvents = [];
+
+      this.events.forEach((event) => {
+        let start = new Date(event.start);
+        let end = new Date(event.end);
+
+        if (current >= start && current < end) this.selectedEvents.push(event);
+      });
+    },
   },
 
   computed: {
-    jadwal() {
-      return this.$store.state.jadwal;
-    },
-
     options: function () {
       return this.data_gbj.map((data) => ({
         label: `${data.produk.nama} ${data.nama}`,
@@ -265,8 +431,7 @@ export default {
   },
 
   watch: {
-    jadwal(newVal, oldVal) {
-      this.calendarOptions.events = this.convertJadwal(newVal);
+    events(newVal, oldVal) {
       if (this.$store.state.user.divisi_id == 24) {
         if (
           this.$store.state.state_ppic === "pembuatan" ||
@@ -282,127 +447,11 @@ export default {
         this.calendarOptions.selectable = false;
         this.calendarOptions.editable = false;
       }
-      if (!this.status && this.$store.state.status === "penyusunan") {
-        this.calendar.next();
-        this.status = this.$store.state.status;
-      }
     },
   },
 };
 </script>
 
-<template>
-  <div id="calendar-component">
-    <div class="icon-text" style="justify-content: flex-end">
-      <span id="trash-icon"><i class="fas fa-trash-alt"></i></span>
-    </div>
-    <FullCalendar ref="calendar" :options="calendarOptions" />
-
-    <!-- modal -->
-    <div v-if="showModal" class="modal" :class="{ 'is-active': showModal }">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Pilih Produk</p>
-          <button
-            class="delete"
-            aria-label="close"
-            @click="showModal = !showModal"
-          ></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Warna Label</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <div class="control">
-                  <button
-                    v-for="item in warna"
-                    :key="item"
-                    class="button"
-                    @click="handleClick"
-                    :style="{
-                      padding: '20px',
-                      margin: '8px',
-                      backgroundColor: item,
-                      borderColor: item,
-                    }"
-                  ></button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Produk</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <div class="control">
-                  <vSelect
-                    :options="options"
-                    :reduce="(nama) => nama.value"
-                    v-model="produk"
-                    @input="changeProduk"
-                  />
-                </div>
-                <p
-                  class="help is-danger"
-                  :class="{ 'is-hidden': !error_produk_modal }"
-                >
-                  produk harus dipilih
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Jumlah</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <div class="control">
-                  <input class="input" type="number" min="1" v-model="jumlah" />
-                </div>
-                <p
-                  class="help is-danger"
-                  :class="{ 'is-hidden': !error_jumlah_modal }"
-                >
-                  jumlah harus diisi
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Stok</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <div class="control">
-                  <div>GBJ: {{ 0 }}</div>
-                  <div>GK : {{ 0 }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button
-            class="button"
-            :class="{ 'is-loading': this.$store.state.isLoading }"
-            :style="{ backgroundColor: color, borderColor: color }"
-            @click="handleSubmit"
-          >
-            Tambah
-          </button>
-        </footer>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 #trash-icon {

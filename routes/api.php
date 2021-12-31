@@ -35,6 +35,7 @@ Route::prefix('/ppic')->group(function () {
     Route::post('/update/perakitans/{status}', [App\Http\Controllers\PpicController::class, 'update_many_data_perakitan']);
     Route::post('/delete/perakitan/{id}', [App\Http\Controllers\PpicController::class, 'delete_data_perakitan']);
     Route::get('/counting/status/perakitan', [App\Http\Controllers\PpicController::class, 'counting_status_data_perakitan']);
+    Route::get('/counting/komentar', [App\Http\Controllers\PpicController::class, 'count_proses_jadwal']);
     Route::post('/create/komentar', [App\Http\Controllers\PpicController::class, 'create_komentar_jadwal_perakitan']);
     Route::post('/update/komentar', [App\Http\Controllers\PpicController::class, 'update_komentar_jadwal_perakitan']);
 

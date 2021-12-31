@@ -25,6 +25,7 @@
 <script>
 import Navbar from "./components/Navbar.vue";
 import Sidebar from "./components/Sidebar.vue";
+import Table from "./components/Table.vue";
 
 import axios from "axios";
 
@@ -32,6 +33,7 @@ export default {
   components: {
     Navbar,
     Sidebar,
+    Table,
   },
 
   beforeCreate() {
