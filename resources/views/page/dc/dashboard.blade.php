@@ -79,7 +79,15 @@
     }
 
     @media screen and (max-width: 1440px) {
-        #pengirimantable {
+        #pengirimansotable {
+            font-size: 12px;
+        }
+
+        #sotanpacootable {
+            font-size: 12px;
+        }
+
+        #lewatbataskontraktable {
             font-size: 12px;
         }
 
@@ -89,6 +97,36 @@
 
         #detailmodal {
             font-size: 12px;
+        }
+
+        .so-title {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (min-width: 1440px) {
+        #pengirimansotable {
+            font-size: 14px;
+        }
+
+        #sotanpacootable {
+            font-size: 14px;
+        }
+
+        #lewatbataskontraktable {
+            font-size: 14px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        section {
+            font-size: 14px;
         }
     }
 </style>
