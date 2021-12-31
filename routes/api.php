@@ -358,7 +358,7 @@ Route::prefix('/ekatalog')->group(function () {
 
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_ekatalog']);
     Route::get('detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog']);
-    Route::get('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_ekatalog']);
+    Route::post('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_ekatalog']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_ekatalog']);
     Route::delete('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_ekatalog']);
 });
@@ -368,7 +368,7 @@ Route::prefix('/spa')->group(function () {
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spa']);
     Route::delete('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_spa']);
-    Route::get('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_spa']);
+    Route::post('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_spa']);
 });
 Route::prefix('/spb')->group(function () {
     // Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
@@ -376,7 +376,7 @@ Route::prefix('/spb')->group(function () {
     Route::get('detail/{$id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb']);
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_spb']);
     Route::delete('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_spb']);
-    Route::get('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_spb']);
+    Route::post('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_spb']);
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spb']);
 });
 Route::prefix('/qc')->group(function () {
