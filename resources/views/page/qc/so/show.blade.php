@@ -232,7 +232,8 @@
             serverSide: true,
             ajax: {
                 'url': '/api/qc/so/data/semua',
-
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

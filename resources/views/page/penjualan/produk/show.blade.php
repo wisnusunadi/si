@@ -359,7 +359,6 @@
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
-
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'

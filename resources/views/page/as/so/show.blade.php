@@ -356,11 +356,13 @@
     $(function() {
 
         $('#riwayattable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/pengiriman/riwayat/data/semua/semua/semua',
-                'type': 'GET',
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -378,18 +380,14 @@
                 },
                 {
                     data: 'sj',
-
                 },
                 {
                     data: 'ekspedisi',
-
                 },
                 {
                     data: 'no_resi',
-
                 }, {
                     data: 'tgl_kirim',
-
                 }, {
                     data: 'nama_customer',
 
@@ -443,11 +441,13 @@
             return false;
         });
         $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/as/so/data',
-                'type': 'GET',
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

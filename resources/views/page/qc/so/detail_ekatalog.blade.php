@@ -380,10 +380,13 @@
         y = <?php echo json_encode($detail_id); ?>;
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/qc/so/detail/' + y,
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -478,12 +481,15 @@
         });
 
         var noseritable = $('#noseritable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/qc/so/seri/0/0',
                 'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    'X-CSRF-TOKEN': '{{csrf_token()}}',
                 }
             },
             language: {
@@ -519,9 +525,12 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + tfgbj_id,
                     'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                        'X-CSRF-TOKEN': '{{csrf_token()}}',
+
                     }
                 },
                 language: {

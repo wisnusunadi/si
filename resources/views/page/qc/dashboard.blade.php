@@ -416,7 +416,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/qc/dashboard/data/belum_uji',
-
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -463,7 +464,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/qc/dashboard/data/terbaru',
-
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -516,7 +518,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/qc/dashboard/data/lewat_uji',
-
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }

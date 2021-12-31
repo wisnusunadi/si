@@ -346,10 +346,13 @@
 <script>
     $(function() {
         var spbtable = $('#spbtable').DataTable({
+            destroy = true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/penjualan/penjualan/spb/data/semua',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -386,10 +389,16 @@
 
         function detailtabel_spb(id) {
             $('#detailtabel_spb').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/spb/paket/detail/' + id,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
