@@ -61,7 +61,7 @@ class SparepartController extends Controller
             ->rawColumns(['button'])
             ->make(true);
     }
-    
+
     function get_unit()
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
@@ -141,14 +141,14 @@ class SparepartController extends Controller
                 if (empty($d->detail->header->date_in)) {
                     return '-';
                 } else {
-                    return date('d-m-Y', strtotime($d->detail->header->date_in));
+                    return Carbon::parse($d->detail->header->date_in)->isoFormat('D MMM YYYY');
                 }
             })
             ->addColumn('out', function ($d) {
                 if (empty($d->detail->header->date_out)) {
                     return '-';
                 } else {
-                    return date('d-m-Y', strtotime($d->detail->header->date_out));
+                    return Carbon::parse($d->detail->header->date_out)->isoFormat('D MMM YYYY');
                 }
             })
             ->addColumn('from', function ($d) {
@@ -234,8 +234,8 @@ class SparepartController extends Controller
         $d = GudangKarantinaNoseri::find($id);
         return response()->json([
             'noser' => $d->noseri,
-            'in' => $d->detail->header->date_in ? date('d-m-Y', strtotime($d->detail->header->date_in)) : '-',
-            'out' => $d->detail->header->date_out ? date('d-m-Y', strtotime($d->detail->header->date_out)) : '-'
+            'in' => $d->detail->header->date_in ? Carbon::parse($d->detail->header->date_in)->isoFormat('D MMM YYYY') : '-',
+            'out' => $d->detail->header->date_out ? Carbon::parse($d->detail->header->date_out)->isoFormat('D MMM YYYY') : '-'
         ]);
     }
 
@@ -253,14 +253,15 @@ class SparepartController extends Controller
                 if (empty($d->detail->header->date_in)) {
                     return '-';
                 } else {
-                    return date('d-m-Y', strtotime($d->detail->header->date_in));
+
+                    return Carbon::parse($d->detail->header->date_in)->isoFormat('D MMM YYYY');
                 }
             })
             ->addColumn('out', function ($d) {
                 if (empty($d->detail->header->date_out)) {
                     return '-';
                 } else {
-                    return date('d-m-Y', strtotime($d->detail->header->date_out));
+                    return Carbon::parse($d->detail->header->date_out)->isoFormat('D MMM YYYY');
                 }
             })
             ->addColumn('from', function ($d) {
@@ -349,14 +350,14 @@ class SparepartController extends Controller
         return datatables()->of($data)
             ->addColumn('out', function ($d) {
                 if (isset($d->date_out)) {
-                    return date('d-m-Y', strtotime($d->date_out));
+                    return Carbon::parse($d->date_out)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('in', function ($d) {
                 if (isset($d->date_in)) {
-                    return date('d-m-Y', strtotime($d->date_in));
+                    return Carbon::parse($d->date_in)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -435,14 +436,14 @@ class SparepartController extends Controller
         return datatables()->of($data)
             ->addColumn('out', function ($d) {
                 if (isset($d->date_out)) {
-                    return date('d-m-Y', strtotime($d->date_out));
+                    return Carbon::parse($d->date_out)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('in', function ($d) {
                 if (isset($d->date_in)) {
-                    return date('d-m-Y', strtotime($d->date_in));
+                    return Carbon::parse($d->date_in)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -496,9 +497,9 @@ class SparepartController extends Controller
             })
             ->addColumn('tanggal', function ($d) {
                 if ($d->is_keluar == 1) {
-                    return '<span class="badge badge-info">' . date('d-m-Y', strtotime($d->header->date_out)) . '</span>';
+                    return '<span class="badge badge-info">' . Carbon::parse($d->header->date_out)->isoFormat('D MMMM Y') . '</span>';
                 } else {
-                    return '<span class="badge badge-success">' . date('d-m-Y', strtotime($d->header->date_in)) . '</span>';
+                    return '<span class="badge badge-success">' . Carbon::parse($d->header->date_in)->isoFormat('D MMMM Y') . '</span>';
                 }
             })
             ->addColumn('divisi', function ($d) {
@@ -685,9 +686,9 @@ class SparepartController extends Controller
         return datatables()->of($cek)
             ->addColumn('tanggal', function ($d) {
                 if (empty($d->header->date_in)) {
-                    return date('d-m-Y', strtotime($d->header->date_out));
+                    return Carbon::parse($d->header->date_out)->isoFormat('D MMM YYYY');
                 } else {
-                    return date('d-m-Y', strtotime($d->header->date_in));
+                    return Carbon::parse($d->header->date_in)->isoFormat('D MMM YYYY');
                 }
             })
             ->addColumn('divisi', function ($d) {

@@ -441,7 +441,7 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('d MMMM YYYY');
+                    return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
                 } else {
                     return '-';
                 }
@@ -564,7 +564,7 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('d MMMM YYYY');
+                    return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1088,7 +1088,7 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->tgl_kontrak)) {
-                    return $d->tgl_kontrak;
+                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1131,7 +1131,7 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->tgl_kontrak)) {
-                    return $d->tgl_kontrak;
+                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1179,7 +1179,7 @@ class ProduksiController extends Controller
                 $s = $a - $m;
                 $x = abs(floor($s / (60 * 60 * 24)));
                 if (isset($d->tgl_kontrak)) {
-                    return $d->tgl_kontrak . '<br> <span class="badge badge-danger">Lewat ' . $x . ' Hari</span>';
+                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-danger">Lewat ' . $x . ' Hari</span>';
                 } else {
                     return '-';
                 }
@@ -1205,7 +1205,7 @@ class ProduksiController extends Controller
             ->get();
         return datatables()->of($data)
             ->addColumn('start', function ($d) {
-                return date('Y-m-d', strtotime($d->tanggal_mulai));
+                return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
             })
             ->addColumn('end', function ($d) {
                 $m = strtotime($d->tanggal_selesai);
@@ -1214,11 +1214,11 @@ class ProduksiController extends Controller
                 $x = abs(floor($s / (60 * 60 * 24)));
 
                 if ($x <= 10 && $x > 5) {
-                    return date('Y-m-d', strtotime($d->tanggal_selesai)) . '<br> <span class="badge badge-info">Kurang ' . $x . ' Hari</span>';
+                    return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-info">Kurang ' . $x . ' Hari</span>';
                 } elseif ($x <= 5 && $x >= 2) {
-                    return date('Y-m-d', strtotime($d->tanggal_selesai)) . '<br> <span class="badge badge-warning">Kurang ' . $x . ' Hari</span>';
+                    return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-warning">Kurang ' . $x . ' Hari</span>';
                 } elseif ($x < 2 && $x >= 0) {
-                    return date('Y-m-d', strtotime($d->tanggal_selesai)) . '<br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
+                    return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
                 }
             })
             ->addColumn('no_bppb', function ($d) {
@@ -1262,10 +1262,10 @@ class ProduksiController extends Controller
         $data = JadwalPerakitan::where('state', 'perubahan')->whereNotIn('status_tf', [14])->get();
         return datatables()->of($data)
             ->addColumn('start', function ($d) {
-                return date('Y-m-d', strtotime($d->tanggal_mulai));
+                return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
             })
             ->addColumn('end', function ($d) {
-                return date('Y-m-d', strtotime($d->tanggal_selesai));
+                return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY');
             })
             ->addColumn('no_bppb', function ($d) {
                 return '-';
@@ -1297,14 +1297,14 @@ class ProduksiController extends Controller
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
-                    return date('d-m-Y', strtotime($d->tanggal_mulai));
+                    return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('end', function ($d) {
                 if (isset($d->tanggal_selesai)) {
-                    return date('d-m-Y', strtotime($d->tanggal_selesai));
+                    return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1338,7 +1338,7 @@ class ProduksiController extends Controller
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
-                    return date('d-m-Y', strtotime($d->tanggal_mulai));
+                    return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1351,17 +1351,17 @@ class ProduksiController extends Controller
 
                 if (isset($d->tanggal_selesai)) {
                     if ($x >= -10 && $x < -5) {
-                        return date('Y-m-d', strtotime($d->tanggal_selesai)) . '<br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } elseif ($x >= -5 && $x <= -2) {
-                        return date('Y-m-d', strtotime($d->tanggal_selesai)) . '<br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } elseif ($x > -2 && $x <= 0) {
-                        return date('Y-m-d', strtotime($d->tanggal_selesai)) . '<br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
+                        return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
                     } elseif ($x > 0) {
-                        return date('Y-m-d', strtotime($d->tanggal_selesai)) . '<br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
+                        return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
                     } elseif ($x < -10) {
-                        return date('Y-m-d', strtotime($d->tanggal_selesai)) . '<br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } else {
-                        return date('Y-m-d', strtotime($d->tanggal_selesai)) . ' ' . $x;
+                        return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . ' ' . $x;
                     }
                     // return date('d-m-Y', strtotime($d->tanggal_selesai)).' '.$x;
                 } else {
@@ -1400,14 +1400,14 @@ class ProduksiController extends Controller
         return datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
-                    return date('d-m-Y', strtotime($d->tanggal_mulai));
+                    return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('end', function ($d) {
                 if (isset($d->tanggal_selesai)) {
-                    return date('d-m-Y', strtotime($d->tanggal_selesai));
+                    return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }

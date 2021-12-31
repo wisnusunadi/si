@@ -155,14 +155,14 @@ class GudangController extends Controller
             })
             ->addColumn('date_in', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMMM Y');
                 } else {
                     return "-";
                 }
             })
             ->addColumn('date_out', function ($d) {
                 if (isset($d->header->tgl_keluar)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_keluar));
+                    return Carbon::parse($d->header->tgl_keluar)->isoFormat('D MMMM Y');
                 } else {
                     return "-";
                 }
@@ -237,7 +237,7 @@ class GudangController extends Controller
             })
             ->addColumn('date_in', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
                 } else {
                     return "-";
                 }
@@ -303,7 +303,7 @@ class GudangController extends Controller
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMMM Y');
                 } else {
                     return '-';
                 }
@@ -322,19 +322,19 @@ class GudangController extends Controller
                 $cc = count(($seri_final));
                 $c = count($seri);
                 if($cc == $c) {
-                    return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
+                    return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="'.$d->produk->produk->nama.'" data-var="'.$d->produk->nama.'" data-attr=""  data-id="' . $d->id . '">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
                                 </button>
                             </a>';
                 } else {
                     return  '
-                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '">
+                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="'.$d->produk->produk->nama.'" data-var="'.$d->produk->nama.'" data-attr=""  data-id="' . $d->id . '">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
                                 </button>
                             </a>
-                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
+                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-produk="'.$d->produk->produk->nama.'" data-var="'.$d->produk->nama.'" data-attr=""  data-id="' . $d->id . '">
                                 <button class="btn btn-outline-primary btn-sm" type="button" >
                                 <i class="far fa-edit"></i>&nbsp;Terima
                                 </button>
@@ -431,7 +431,7 @@ class GudangController extends Controller
             $data = TFProduksi::with('detail', 'darii')->where(['jenis' => 'masuk', 'status_id' => 1])->get();
             return datatables()->of($data)
                 ->addColumn('in', function ($d) {
-                    return date('d-m-Y', strtotime($d->tgl_masuk));
+                    return Carbon::parse($d->tgl_masuk)->isoFormat('D MMMM Y');
                 })
                 ->addColumn('from', function ($d) {
                     return $d->darii->nama;
@@ -1000,11 +1000,11 @@ class GudangController extends Controller
                     $a = Carbon::now()->diffInDays($d->header->tgl_masuk);
 
                     if ($a == 1) {
-                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-info">Lewat ' . $a . ' Hari</span>';
+                        return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY') . '<br><span class="badge badge-info">Lewat ' . $a . ' Hari</span>';
                     } else if ($a == 2) {
-                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-warning">Lewat ' . $a . ' Hari</span>';
+                        return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY') . '<br><span class="badge badge-warning">Lewat ' . $a . ' Hari</span>';
                     } else if ($a >= 3) {
-                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                        return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                     }
                 } else {
                     return '-';
@@ -1028,7 +1028,7 @@ class GudangController extends Controller
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1051,7 +1051,7 @@ class GudangController extends Controller
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1074,7 +1074,7 @@ class GudangController extends Controller
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1143,7 +1143,7 @@ class GudangController extends Controller
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1174,7 +1174,7 @@ class GudangController extends Controller
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -1206,7 +1206,7 @@ class GudangController extends Controller
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
                     $c = Carbon::now()->diffInDays($d->header->tgl_masuk);
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $c . ' Hari</span>';
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $c . ' Hari</span>';
                 } else {
                     return '-';
                 }
@@ -1239,14 +1239,14 @@ class GudangController extends Controller
                     $a = Carbon::now()->diffInDays($d->header->tgl_masuk);
 
                     if ($a == 1) {
-                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-info">Lewat ' . $a . ' Hari</span>';
+                        return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY') . '<br><span class="badge badge-info">Lewat ' . $a . ' Hari</span>';
                     } else if ($a == 2) {
-                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-warning">Lewat ' . $a . ' Hari</span>';
+                        return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY') . '<br><span class="badge badge-warning">Lewat ' . $a . ' Hari</span>';
                     } else if ($a >= 3) {
-                        return date('d-m-Y', strtotime($d->header->tgl_masuk)) . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                        return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                     }
                 } else {
-                    return date('d-m-Y', strtotime($d->header->tgl_masuk));
+                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
                 }
             })
             ->addColumn('product', function ($d) {
@@ -1349,7 +1349,8 @@ class GudangController extends Controller
             ->addColumn('tgl_batas', function($d) {
                 if(isset($d->tgl_kontrak)) {
                     $a = Carbon::now()->diffInDays($d->tgl_kontrak);
-                    return $d->tgl_kontrak.'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+
+                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                 } else {
                     return '-';
                 }
@@ -1397,7 +1398,7 @@ class GudangController extends Controller
             ->addColumn('tgl_batas', function($d) {
                 if(isset($d->tgl_kontrak)) {
                     $a = Carbon::now()->diffInDays($d->tgl_kontrak);
-                    return $d->tgl_kontrak.'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                 } else {
                     return '-';
                 }
@@ -1446,7 +1447,7 @@ class GudangController extends Controller
             ->addColumn('tgl_batas', function($d) {
                 if(isset($d->tgl_kontrak)) {
                     $a = Carbon::now()->diffInDays($d->tgl_kontrak);
-                    return $d->tgl_kontrak.'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                 } else {
                     return '-';
                 }

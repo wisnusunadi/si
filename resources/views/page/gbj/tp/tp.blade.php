@@ -229,7 +229,7 @@
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $d->pesanan->so }}</td>
                                                 <td>{{ $d->pesanan->ekatalog->customer->nama }}</td>
-                                                <td>{{ Carbon\Carbon::parse($d->pesanan->ekatalog->tgl_kontrak)->isoFormat('D-MM-YYYY') }}</td>
+                                                <td>{{ Carbon\Carbon::parse($d->pesanan->ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY') }}</td>
                                                 <td><a href="{{ url('gbj/export_spb/'.$d->pesanan->id) }}">
                                                     <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
                                                     </a></td>

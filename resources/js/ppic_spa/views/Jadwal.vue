@@ -151,7 +151,7 @@
         </div>
       </div>
     </template>
-    <template v-if="view === 'chart'">
+    <template v-if="view === 'chart'"> 
       <template
         v-if="
           $store.state.status === 'pelaksanaan' &&

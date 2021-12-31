@@ -10,6 +10,8 @@
                                 aria-controls="home" aria-selected="true">Kalender</a>
                             <a id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                                 aria-selected="false">Tabel</a>
+                            <a id="grafik-tab" data-toggle="tab" href="#grafik" role="tab" aria-controls="grafik"
+                                aria-selected="false">Grafik</a>
                         </div>
                     </nav>
                 </div><!-- /.col -->
@@ -33,6 +35,11 @@
                 <Table/>
             </div>
         </div>
+        <div class="tab-pane fade" id="grafik" role="tabpanel" aria-labelledby="grafik-tab">
+            <div class="col-md-12">
+                <Grafik/>
+            </div>
+        </div>
     </div>
 </div>
 </template>
@@ -40,10 +47,12 @@
 <script>
     import Calendar from './Components/Calendar.vue'
     import Table from './Components/Table.vue';
+    import Grafik from './Components/Grafik.vue';
     export default {
         components: {
             Calendar,
-            Table
+            Table,
+            Grafik
         },
     }
 </script>

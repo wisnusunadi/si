@@ -377,29 +377,42 @@
             stok_push.push($(this).val());
         });
 
-        $.ajax({
-            url: "/api/tfp/create",
-            type:"POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                userid: $('#userid').val(),
-                ke: ke,
-                deskripsi: desk,
-                gdg_brg_jadi_id: gdg,
-                qty: stok_push,
-                noseri_id : seri,
-            },
-            success: function (res) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, transfer it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                'Sukses!',
+                'Data Berhasil Ditransfer',
+                'success'
+                )
+                $.ajax({
+                    url: "/api/tfp/create",
+                    type:"POST",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#userid').val(),
+                        ke: ke,
+                        deskripsi: desk,
+                        gdg_brg_jadi_id: gdg,
+                        qty: stok_push,
+                        noseri_id : seri,
+                    },
+                    success: function (res) {
+
+                    }
                 });
                 location.reload();
             }
-        });
+        })
+
+
     })
 
 

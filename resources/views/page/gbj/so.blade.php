@@ -324,25 +324,38 @@
                 }
             })
 
-            $.ajax({
-                url: "/api/so/cek",
-                type: "post",
-                data: {
-                    pesanan_id : id,
-                    userid: $('#userid').val(),
-                    gbj_id: ids,
-                },
-                success: function(res) {
-                   Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: res.msg,
-                        showConfirmButton: false,
-                        timer: 1500
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                    'Sukses!',
+                    'Data Berhasil Disimpan',
+                    'success'
+                    )
+                    $.ajax({
+                        url: "/api/so/cek",
+                        type: "post",
+                        data: {
+                            pesanan_id : id,
+                            userid: $('#userid').val(),
+                            gbj_id: ids,
+                        },
+                        success: function(res) {
+
+                        }
                     })
                     location.reload();
                 }
             })
+
+
 
             console.log(ids);
         })

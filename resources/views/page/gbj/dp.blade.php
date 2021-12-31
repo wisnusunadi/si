@@ -174,15 +174,10 @@
 
     $(document).on('click', '.editmodal', function () {
         var id = $(this).data('id');
+        var nama = $(this).data('produk');
+        var tipe = $(this).data('var');
         console.log(id);
-
-        $.ajax({
-            url: '/api/tfp/rakit-terima/' + id,
-            success: function (res) {
-                console.log(res);
-                $('span#title').text(res.data[0].title);
-            }
-        })
+        $('span#title').text(nama.concat(' ', tipe));
 
         $('.scan-produk').DataTable().destroy();
         $('.scan-produk').DataTable({
@@ -233,15 +228,10 @@
 
     $(document).on('click', '.detailmodal', function () {
         var id = $(this).data('id');
+        var nama = $(this).data('produk');
+        var tipe = $(this).data('var');
         console.log(id);
-
-        $.ajax({
-            url: '/api/tfp/rakit-noseri/' + id,
-            success: function (res) {
-                console.log(res.data[0].title);
-                $('span#titlee').text(res.data[0].title);
-            }
-        })
+        $('span#titlee').text(nama.concat(' ', tipe));
 
         $('.table-seri').DataTable().destroy();
         $('.table-seri').DataTable({

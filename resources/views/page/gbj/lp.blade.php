@@ -197,7 +197,7 @@
                                                         id="btnSubmit">Terima</button>&nbsp;
                                                     <button class="btn btn-info" type="button"
                                                         id="btnDraft">Rancang</button>&nbsp;
-                                                    <button class="btn btn-secondary " type="button">Batal</button>
+                                                    <button id="btnCancel" class="btn btn-secondary " type="button">Batal</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -697,6 +697,10 @@
         i++;
     })
 
+    $(document).on('click', '#btnCancel', function() {
+        location.reload();
+    })
+
 
     $(document).on('click', '#btnSubmit', function (e) {
 
@@ -748,32 +752,44 @@
             } else {
                 e.preventDefault();
 
-                $.ajax({
-                    url: "/api/draft/final",
-                    type: "post",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        tgl_masuk: $('#tgl_masuk').val(),
-                        dari: $('#divisi').val(),
-                        deskripsi: $('#deskripsi').val(),
-                        userid: $('#userid').val(),
-                        data: seri,
-                    },
-                    success: function (res) {
-                        console.log(res);
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: res.msg,
-                            showConfirmButton: false,
-                            timer: 1500
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                        'Sukses!',
+                        'Data Berhasil Disimpan',
+                        'success'
+                        )
+                        $.ajax({
+                            url: "/api/draft/final",
+                            type: "post",
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                tgl_masuk: $('#tgl_masuk').val(),
+                                dari: $('#divisi').val(),
+                                deskripsi: $('#deskripsi').val(),
+                                userid: $('#userid').val(),
+                                data: seri,
+                            },
+                            success: function (res) {
+
+                            }
                         })
                         location.reload();
                     }
                 })
+
             }
         }
     });
+
     $(document).on('click', '#btnDraft', function (e) {
         e.preventDefault();
 
@@ -822,28 +838,41 @@
                 jml.push($(this).val());
             });
 
-            $.ajax({
-                url: "/api/draft/rancang",
-                type: "post",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    tgl_masuk: $('#tgl_masuk').val(),
-                    dari: $('#divisi').val(),
-                    deskripsi: $('#deskripsi').val(),
-                    userid: $('#userid').val(),
-                    data: seri,
-                },
-                success: function (res) {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: res.msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    location.reload();
-                }
-            })
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, draft it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                        'Sukses!',
+                        'Data Berhasil Disimpan',
+                        'success'
+                        )
+                        $.ajax({
+                            url: "/api/draft/rancang",
+                            type: "post",
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                tgl_masuk: $('#tgl_masuk').val(),
+                                dari: $('#divisi').val(),
+                                deskripsi: $('#deskripsi').val(),
+                                userid: $('#userid').val(),
+                                data: seri,
+                            },
+                            success: function (res) {
+
+                            }
+                        })
+                        location.reload();
+                    }
+                })
+
+
         }
     });
 
@@ -866,25 +895,37 @@
         $('.tambahan-rancangan').modal('hide');
     })
     $(document).on('click', '#btnSave', function () {
-        $.ajax({
-            url: "/api/tfp/create-final",
-            type: "post",
-            data: {
-                "_token": "{{csrf_token()}}",
-                id: id,
-                seri: serir,
-            },
-            success: function (res) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Data Berhasil diterima',
-                    showConfirmButton: false,
-                    timer: 1500
+        Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, save it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                'Sukses!',
+                'Data Berhasil Diterima',
+                'success'
+                )
+                $.ajax({
+                    url: "/api/tfp/create-final",
+                    type: "post",
+                    data: {
+                        "_token": "{{csrf_token()}}",
+                        id: id,
+                        seri: serir,
+                    },
+                    success: function (res) {
+
+                    }
                 })
                 location.reload();
             }
         })
+
     })
 
     // load modal
