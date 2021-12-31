@@ -57,6 +57,8 @@
         "vue-apexcharts": "^1.6.2",
         "vue-bulma-table": "^1.6.3",
         "vue-select": "^3.15.1",
-        "vue-sweetalert2": "^5.0.2"
+        "vue-sweetalert2": "^5.0.2",
+        "xlsx": "^0.17.4",
+        "xlsx-color": "^0.14.30"
     }
 }

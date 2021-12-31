@@ -35,11 +35,13 @@
       >
         Minta Perubahan
       </button>
+      <button class="button is-info" @click="convertToExcel">Export</button>
     </div>
     <div class="table-container">
       <table
         class="table has-text-centered is-bordered"
         style="white-space: nowrap"
+        ref="export_table"
       >
         <thead>
           <tr>
@@ -47,8 +49,9 @@
             <th rowspan="2">Jumlah</th>
             <th
               v-if="
-                this.$store.state.state_ppic === 'pembuatan' ||
-                this.$store.state.state_ppic === 'revisi'
+                ($store.state.state_ppic === 'pembuatan' ||
+                  $store.state.state_ppic === 'revisi') &&
+                !hiddenAction
               "
               rowspan="2"
             >
@@ -68,16 +71,17 @@
             <td>{{ item.jumlah }}</td>
             <td
               v-if="
-                $store.state.state_ppic === 'pembuatan' ||
-                $store.state.state_ppic === 'revisi'
+                ($store.state.state_ppic === 'pembuatan' ||
+                  $store.state.state_ppic === 'revisi') &&
+                !hiddenAction
               "
             >
               <div>
-                <span class="is-clickable" @click="updateEvent(item.id)">
+                <!-- <span class="is-clickable" @click="updateEvent(item.id)">
                   <i class="fas fa-edit"></i>
                 </span>
-                &nbsp;&nbsp;&nbsp;
-                <span class="is-clickable" @click="deleteEvent(item.id)">
+                &nbsp;&nbsp;&nbsp; -->
+                <span class="is-clickable" @click="deleteEvent(item.tanggal)">
                   <i class="fas fa-trash"></i>
                 </span>
               </div>
@@ -234,6 +238,8 @@ import axios from "axios";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
+import xlsx from "xlsx-color";
+
 export default {
   name: "table-component",
 
@@ -261,6 +267,8 @@ export default {
 
       addProdukModal: false,
       deleteProdukModal: false,
+
+      hiddenAction: false,
 
       jadwal_id: 0,
       start_date: "",
@@ -305,10 +313,6 @@ export default {
       date.setDate(i);
       if (date.getDay() == 6 || date.getDay() == 0) this.weekend_date.push(i);
     }
-
-    console.log("created table");
-    console.log(this.events);
-    console.log(this.format_events);
   },
 
   methods: {
@@ -399,15 +403,15 @@ export default {
             this.$store.commit("setJadwal", response.data);
           });
       } else if (this.action === "delete") {
-        await axios
-          .post("/api/ppic/delete/perakitan/" + this.jadwal_id)
-          .then(() => {
+        for (const id in this.jadwal_id) {
+          await axios.post("/api/ppic/delete/perakitan/" + id).then(() => {
             axios
               .get("/api/ppic/data/perakitan/" + this.status)
               .then((response) => {
                 this.$store.commit("setJadwal", response.data);
               });
           });
+        }
       }
       this.$store.commit("setIsLoading", false);
       this.addProdukModal = false;
@@ -491,6 +495,30 @@ export default {
         });
 
       this.$store.commit("setIsLoading", false);
+    },
+
+    convertToExcel() {
+      let element = this.$refs.export_table;
+      let wb = xlsx.utils.table_to_book(element, { sheet: "Sheet JS" });
+      console.log(wb);
+
+      // for (const item in this.getWeekendCell()) {
+      //   wb.Sheets["Sheet JS"][item].s = {
+      //     fill: {
+      //       patternType: "solid",
+      //       fgColor: { rgb: "111111" },
+      //     },
+      //   };
+      // }
+
+      wb.Sheets["Sheet JS"]["F5"].s = {
+        fill: {
+          patternType: "solid",
+          fgColor: { rgb: "111111" },
+        },
+      };
+
+      return xlsx.writeFile(wb, "test.xlsx");
     },
 
     // helper
