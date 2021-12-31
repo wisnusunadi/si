@@ -176,9 +176,9 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
-                                                <h4></h4>
+                                                <h4><b>Grafik</b></h4>
                                                 <div class="chart h-100">
-                                                    <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 100%; max-width: 100%;"></canvas>
+                                                    <canvas id="myChart" style="position: relative; height:91vh; width:80vw;"></canvas>
                                                 </div>
                                             </div>
                                         </div>
@@ -190,9 +190,9 @@
                                     <div class="card-body">
                                         <h4><b>Sales Order</b></h4>
                                         <div class="row">
-                                            <div class="col-8">
+                                            <div class="col-12 col-lg-8">
                                                 <div class="row">
-                                                    <div class="col-lg-6 col-6 py-2">
+                                                    <div class="col-lg-6 col-12 py-2">
                                                         <div class="card h-100 purple">
                                                             <div class="card-body">
                                                                 <h3 id="so_gudang">{{$gudang}}</h3>
@@ -201,7 +201,7 @@
                                                             <div class="card-footer align-center"><a href="#" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6 col-6 py-2">
+                                                    <div class="col-lg-6 col-12 py-2">
                                                         <div class="card h-100 yellow">
                                                             <div class="card-body ">
                                                                 <h3 id="so_qc">{{$qc}}</h3>
@@ -212,7 +212,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-lg-6 col-6 py-2">
+                                                    <div class="col-lg-6 col-12 py-2">
                                                         <div class="card h-100 green">
                                                             <div class="card-body">
                                                                 <h3 id="so_logistik">{{$log}}</h3>
@@ -221,10 +221,10 @@
                                                             <div class="card-footer align-center"><a href="/logistik/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6 col-6 py-2">
+                                                    <div class="col-lg-6 col-12 py-2">
                                                         <div class="card h-100 midnightblue">
                                                             <div class="card-body">
-                                                                <h3 id="so_dc">3</h3>
+                                                                <h3 id="so_dc">{{$dc}}</h3>
                                                                 <p class="so-title">SO Belum Diproses DC</p>
                                                             </div>
                                                             <div class="card-footer align-center"><a href="/dc/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
@@ -232,7 +232,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-12 col-lg-4">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-12 py-2">
                                                         <div class="card h-100 red">

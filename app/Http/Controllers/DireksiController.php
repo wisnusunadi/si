@@ -36,6 +36,8 @@ class DireksiController extends Controller
 
         $log = Pesanan::has('DetailPesanan.DetailPesananProduk.NoSeriDetailPesanan')->doesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik')->count();
 
-        return view('page.direksi.dashboard', ['penj' => $penj, 'gudang' => $gudang, 'qc' => $qc, 'log' => $log]);
+        $dc = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->doesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik.NoseriDetailLogistik.NoseriCoo')->count();
+
+        return view('page.direksi.dashboard', ['penj' => $penj, 'gudang' => $gudang, 'qc' => $qc, 'log' => $log, 'dc' => $dc]);
     }
 }

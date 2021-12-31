@@ -346,7 +346,7 @@
 <script>
     $(function() {
         var spbtable = $('#spbtable').DataTable({
-            destroy = true,
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
