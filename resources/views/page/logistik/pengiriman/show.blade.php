@@ -403,11 +403,13 @@
 <script>
     $(function() {
         $('#riwayattable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/pengiriman/riwayat/data/semua/semua/semua',
-                'type': 'GET',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -733,11 +735,13 @@
 
         function barang_detail(id) {
             $('#barangtable').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/pengiriman/data/' + id,
-                    'type': 'GET',
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -760,11 +764,13 @@
             });
         }
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/logistik/pengiriman/data/semua/semua/semua',
-                'type': 'GET',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

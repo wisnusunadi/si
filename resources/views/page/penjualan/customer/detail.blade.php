@@ -232,11 +232,13 @@
 <script>
     $(function() {
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/customer/detail/' + '{{$customer->id}}',
                 'type': 'POST',
+                'dataType': 'json',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

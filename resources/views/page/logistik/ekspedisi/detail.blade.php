@@ -213,11 +213,13 @@
     $(function() {
         console.log("{{$e->id}}");
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/ekspedisi/detail/{{$e->id}}',
-                'type': 'GET',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

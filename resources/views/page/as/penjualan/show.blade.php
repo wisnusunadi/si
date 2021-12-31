@@ -350,9 +350,9 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'type': 'POST',
-                'datatype': 'JSON',
                 'url': '/penjualan/penjualan/spb/data/semua',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

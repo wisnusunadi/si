@@ -17,23 +17,9 @@
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
 
                 @endif
-                @if(!empty($l->ekspedisi_id))
-                @if($l->status_id == "10")
-                @if(!empty($l->noresi))
-                <li class="breadcrumb-item"><a href="{{route('logistik.riwayat.show')}}">Riwayat</a></li>
-                @else(empty($l->noresi))
+
                 <li class="breadcrumb-item"><a href="{{route('logistik.pengiriman.show')}}">Pengiriman</a></li>
-                @endif
-                @elseif($l->status_id == "11")
-                <li class="breadcrumb-item"><a href="{{route('logistik.pengiriman.show')}}">Pengiriman</a></li>
-                @endif
-                @elseif(!empty($l->nama_pengirim))
-                @if($l->status_id == "10")
-                <li class="breadcrumb-item"><a href="{{route('logistik.riwayat.show')}}">Riwayat</a></li>
-                @elseif($l->status_id == "11")
-                <li class="breadcrumb-item"><a href="{{route('logistik.pengiriman.show')}}">Pengiriman</a></li>
-                @endif
-                @endif
+
                 <li class="breadcrumb-item active">Detail</li>
             </ol>
         </div><!-- /.col -->
@@ -454,11 +440,13 @@
     $(function() {
         var role = "{{Auth::user()->divisi->id}}";
         var showtable = $('#detailtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/pengiriman/data/' + "{{$id}}",
-                'type': 'GET',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -497,6 +485,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/noseri/detail/selesai_kirim/data/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }

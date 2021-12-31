@@ -265,6 +265,7 @@
         $("#tanggal_akhir").attr("max", today);
 
         $('#semuatable').DataTable({
+            destroy: true,
             processing: true,
             dom: 'Bfrtip',
             serverSide: false,
@@ -273,6 +274,8 @@
             },
             ajax: {
                 'url': '/api/laporan/penjualan/ekatalog,spa,spb/semua/0/0/',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
