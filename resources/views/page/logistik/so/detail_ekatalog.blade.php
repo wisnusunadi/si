@@ -487,10 +487,13 @@
         y = <?php echo json_encode($detail_id); ?>;
 
         var sjtable = $('#sjtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/so/data/sj/' + '{{$data->pesanan_id}}',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -523,10 +526,13 @@
         });
 
         var belumkirimtable = $('#belumkirimtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$data->pesanan_id}}',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -563,10 +569,13 @@
         });
 
         var selesaikirimtable = $('#selesaikirimtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/so/data/detail/selesai_kirim/' + '{{$data->pesanan_id}}',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -693,6 +702,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -726,6 +737,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/noseri/detail/belum_kirim/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -746,6 +759,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/noseri/detail/selesai_kirim/data/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }

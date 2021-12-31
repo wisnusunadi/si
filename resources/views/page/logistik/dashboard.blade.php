@@ -286,11 +286,11 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/dashboard/data/terbaru',
-
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
-
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -328,11 +328,11 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/dashboard/data/belum_dikirim',
-
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
-
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -364,11 +364,11 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/dashboard/data/lewat_batas',
-
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
-
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'

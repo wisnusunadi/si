@@ -113,9 +113,9 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/create_new', 'page.penjualan.penjualan.create_new')->name('penjualan.penjualan.create_new');
 
         // Route::get('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data'])->name('penjualan.penjualan.penjualan.data');
-        Route::get('/ekatalog/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
-        Route::get('/spa/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
-        Route::get('/spb/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
+        Route::post('/ekatalog/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
+        Route::post('/spa/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
+        Route::post('/spb/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
 
         Route::post('/store', [App\Http\Controllers\PenjualanController::class, 'create_penjualan'])->name('penjualan.penjualan.store');
         Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
@@ -170,7 +170,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
-        Route::get('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
+        Route::post('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
         Route::get('/create/{detail_pesanan_id}/{pesanan_id}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
         Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
@@ -183,9 +183,9 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/ekspedisi'], function () {
-        Route::get('/data/{value_1}/{value_2}', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
+        Route::post('/data/{value_1}/{value_2}', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::view('/show', 'page.logistik.ekspedisi.show')->name('logistik.ekspedisi.show');
-        Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
+        Route::post('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_ekspedisi'])->name('logistik.ekspedisi.detail');
         Route::view('/create', 'page.logistik.ekspedisi.create')->name('logistik.ekspedisi.create');
         Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_ekspedisi'])->name('logistik.ekspedisi.store');
@@ -194,7 +194,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/pengiriman'], function () {
         Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
-        Route::get('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
+        Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
         Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_data'])->name('logistik.pengiriman.detail');
         Route::view('/noseri/{id}', 'page.logistik.pengiriman.noseri')->name('logistik.pengiriman.noseri');
         Route::view('/create', 'page.logistik.pengiriman.create')->name('logistik.pengiriman.create');

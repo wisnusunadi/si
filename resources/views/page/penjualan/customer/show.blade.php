@@ -275,10 +275,13 @@
         });
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/customer/data/' + divisi_id + '/' + 0,
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

@@ -349,10 +349,13 @@
         });
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -404,7 +407,14 @@
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
-                ajax: '/api/penjualan_produk/detail/' + rows[0].id,
+                ajax: {
+                    'url': '/api/penjualan_produk/detail/' + rows[0].id,
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
                 columns: [{
                         className: 'nowrap-text align-center',
                         data: 'DT_RowIndex',

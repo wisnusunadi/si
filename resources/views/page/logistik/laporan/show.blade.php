@@ -192,6 +192,8 @@
                 },
                 ajax: {
                     'url': '/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }

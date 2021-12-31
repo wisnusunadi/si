@@ -933,13 +933,19 @@
     $(function() {
         var divisi_id = "{{Auth::user()->divisi->id}}";
         var penjualantable = $('#penjualantable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': "/api/penjualan/penjualan/data/semua/semua",
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                "dataType": "json",
+                'type': 'POST',
+                "headers": {
+                    'X-CSRF-TOKEN': "{{csrf_token()}}"
                 }
+                // 'headers': {
+                //     'X-CSRF-TOKEN': '{{csrf_token()}}'
+                // },
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -971,11 +977,16 @@
                 searchable: false
             }, ]
         });
+
+
         var ekatalogtable = $('#ekatalogtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/penjualan/penjualan/ekatalog/data/semua',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -1016,10 +1027,13 @@
             ]
         });
         var spatable = $('#spatable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/penjualan/penjualan/spa/data/semua',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -1054,10 +1068,13 @@
             ]
         })
         var spbtable = $('#spbtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/penjualan/penjualan/spb/data/semua',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
