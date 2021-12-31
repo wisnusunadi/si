@@ -254,11 +254,13 @@
         //     })
         // });
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/dc/so/data/semua',
-
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

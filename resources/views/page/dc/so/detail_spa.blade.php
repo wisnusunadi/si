@@ -304,9 +304,12 @@
 <script>
     $(function() {
         $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/dc/so/detail/{{$data->id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -347,6 +350,8 @@
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/dc/so/detail/seri/' + 0,
 
                 'headers': {
@@ -380,9 +385,12 @@
         function listnoseri(seri_id, data) {
 
             $('#listnoseri').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/dc/so/detail/seri/select/' + seri_id + '/' + data,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'

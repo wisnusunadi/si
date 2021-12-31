@@ -378,18 +378,14 @@
                 },
                 {
                     data: 'sj',
-
                 },
                 {
                     data: 'ekspedisi',
-
                 },
                 {
                     data: 'no_resi',
-
                 }, {
                     data: 'tgl_kirim',
-
                 }, {
                     data: 'nama_customer',
 

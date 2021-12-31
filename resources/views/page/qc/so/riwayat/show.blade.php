@@ -261,9 +261,12 @@
 <script>
     $(function() {
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/qc/so/riwayat/data',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -305,6 +308,8 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/qc/so/riwayat/detail/' + id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
