@@ -384,30 +384,42 @@
 
         $.each(rows_selected, function (index, rowId) {
             seri.push(rowId);
-       });
-       $.ajax({
-            url: "/api/prd/send",
-            type: "post",
-            data: {
-                "_token" : "{{csrf_token() }}",
-                userid : $('#userid').val(),
-                qty: jumlah,
-                gbj_id : prd,
-                jadwal_id : id,
-                noseri: seri,
-            },
-            success: function(res) {
-                // console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
-            }
-        })
+        });
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Transfer it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Success!',
+                        'Data Terkirim ke Gudang Barang Jadi',
+                        'success'
+                    )
+                    $.ajax({
+                        url: "/api/prd/send",
+                        type: "post",
+                        data: {
+                            "_token" : "{{csrf_token() }}",
+                            userid : $('#userid').val(),
+                            qty: jumlah,
+                            gbj_id : prd,
+                            jadwal_id : id,
+                            noseri: seri,
+                        },
+                        success: function(res) {
+                           
+                        }
+                    })
+                    location.reload();
+                }
+            })
+       
     });
         modalRakit();
     });

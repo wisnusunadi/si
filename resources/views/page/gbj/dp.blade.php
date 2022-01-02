@@ -302,7 +302,8 @@
                                 'success'
                             )
                             $('.terima-produk').modal('hide');
-                            $('.scan-produk').DataTable().ajax.reload();
+                            // $('.scan-produk').DataTable().ajax.reload();
+                            location.reload();
                         } else {
                             Swal.fire(
                                 'Gagal!',

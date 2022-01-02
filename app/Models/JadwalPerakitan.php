@@ -18,4 +18,8 @@ class JadwalPerakitan extends Model
     {
         return $this->hasMany(JadwalRakitNoseri::class, 'jadwal_id');
     }
+
+    function log() {
+        return $this->hasMany(JadwalPerakitanLog::class, 'jadwal_perakitan_id');
+    }
 }

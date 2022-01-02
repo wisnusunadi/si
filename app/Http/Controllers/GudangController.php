@@ -501,7 +501,8 @@ class GudangController extends Controller
     }
 
     function exportSpb($id) {
-        if (isset($id)) {
+        $tfbyid = LogSurat::where('pesanan_id', $id)->get();
+        if (count($tfbyid) > 0) {
             LogSurat::where('pesanan_id', $id)->update(['transfer_by' => Auth::user()->id]);
         } else {
             LogSurat::create([

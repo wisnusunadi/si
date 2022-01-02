@@ -338,7 +338,7 @@
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout-rancang">Ubah Layout</button>
-                <button type="button" class="btn btn-primary" id="seriBtn">Simpan</button>
+                <button type="button" class="btn btn-primary float-right" id="seriBtn">Simpan</button>
             </div>
         </div>
     </div>
@@ -363,7 +363,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary" onclick="ubahData()">Simpan</button>
+                <button type="button" class="btn btn-primary " onclick="ubahData()">Simpan</button>
             </div>
         </div>
     </div>

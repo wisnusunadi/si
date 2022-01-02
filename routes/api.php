@@ -189,9 +189,9 @@ Route::prefix('/dashboard-gbj')->group(function () {
 });
 
 Route::prefix('/tfp')->group(function () {
-    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
-    Route::post('/byso', [\App\Http\Controllers\ProduksiController::class, 'TfbySO']);
-    Route::post('/byso-final', [\App\Http\Controllers\ProduksiController::class, 'TfbySOFinal']);
+    Route::post('/create', [ProduksiController::class, 'CreateTFItem']);
+    Route::post('/byso', [ProduksiController::class, 'TfbySO']);
+    Route::post('/byso-final', [ProduksiController::class, 'TfbySOFinal']);
     Route::post('/create-noseri', [GudangController::class, 'storeNoseri']);
     Route::post('/create-final', [GudangController::class, 'finalDraftRakit']);
 
@@ -199,21 +199,21 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/updateFinalSO', [ProduksiController::class, 'updateFinalSO']);
 
     // get
-    Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
-    Route::get('noseri/{id}', [\App\Http\Controllers\ProduksiController::class, 'getNoseri']);
-    Route::get('data-so', [\App\Http\Controllers\ProduksiController::class, 'getOutSO']);
-    Route::get('cek-so', [\App\Http\Controllers\ProduksiController::class, 'getSOCek']);
-    Route::get('detail-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
-    Route::get('edit-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'getEditSO']);
-    Route::get('header-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);
+    Route::get('data', [ProduksiController::class, 'getTFnon']);
+    Route::get('noseri/{id}', [ProduksiController::class, 'getNoseri']);
+    Route::get('data-so', [ProduksiController::class, 'getOutSO']);
+    Route::get('cek-so', [ProduksiController::class, 'getSOCek']);
+    Route::get('detail-so/{id}/{value}', [ProduksiController::class, 'getDetailSO']);
+    Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
+    Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
     Route::get('rakit', [GudangController::class, 'getRakit']);
     Route::get('rakit-noseri/{id}', [GudangController::class, 'getRakitNoseri']);
     Route::get('rakit-terima/{id}', [GudangController::class, 'getTerimaRakit']);
-    Route::post('/seri-so', [\App\Http\Controllers\ProduksiController::class, 'getNoseriSO']);
-    Route::post('/seri-edit-so', [\App\Http\Controllers\ProduksiController::class, 'getNoseriSOEdit']);
+    Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
+    Route::post('/seri-edit-so', [ProduksiController::class, 'getNoseriSOEdit']);
 
     // check
-    Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
+    Route::post('/cekStok', [ProduksiController::class, 'checkStok']);
     Route::post('/updateCheck', [ProduksiController::class, 'UncheckedNoseri']);
     Route::post('/updateChecked', [ProduksiController::class, 'checkedNoseri']);
 });
@@ -235,7 +235,7 @@ Route::prefix('/prd')->group(function () {
     Route::post('/exp_rakit', [ProduksiController::class, 'exp_rakit']);
 
     Route::post('/exp_jadwal/h', [ProduksiController::class, 'exp_jadwal_h']);
-    Route::post('/exp_jadwal', [ProduksiController::class, 'exp_jadwal']);
+    Route::post('/exp_jadwal', [ProduksiController::class, 'change_jadwal']);
 
     // jadwal
     // plan

@@ -9,6 +9,7 @@ use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
+use App\Models\JadwalPerakitanLog;
 use App\Models\JadwalRakitNoseri;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriTGbj;
@@ -288,6 +289,8 @@ class ProduksiController extends Controller
                     ]);
                 }
             }
+
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);
         }
 
         // return response()->json(['msg' => 'Data Terkirim ke QC']);
@@ -416,9 +419,9 @@ class ProduksiController extends Controller
 
     function getSOCek()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotNull('no_po')->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotNull('no_po')->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotNull('no_po')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -455,8 +458,8 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('status1', function ($data) {
-                $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-                $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
+                $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
+                $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
                 if ($sumcek == $sumprd) {
                     return '<span class="badge badge-primary">Sudah Dicek</span>';
                 } elseif ($sumcek != $sumprd) {
@@ -465,8 +468,8 @@ class ProduksiController extends Controller
             })
             ->addColumn('action', function ($data) {
                 $x = explode('/', $data->so);
-                $sumcek = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-                $sumprd = DB::table('view_cek_produkSO')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
+                $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
+                $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
                 if ($sumcek == $sumprd) {
                     for ($i = 1; $i < count($x); $i++) {
                         if ($x[1] == 'EKAT') {
@@ -528,9 +531,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotNull('no_po')->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotNull('no_po')->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotNull('no_po')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -904,7 +907,7 @@ class ProduksiController extends Controller
             $data = Pesanan::with('Ekatalog')->find($id);
             return response()->json([
                 'so' => $data->so,
-                'po' => $data->no_po,
+                'po' => $data->no_po == null ? '-' : $data->no_po,
                 'akn' => $data->Ekatalog->no_paket,
                 'customer' => $data->Ekatalog->Customer->nama,
             ]);
@@ -912,7 +915,7 @@ class ProduksiController extends Controller
             $data = Pesanan::with('spa')->find($id);
             return response()->json([
                 'so' => $data->so,
-                'po' => $data->no_po,
+                'po' => $data->no_po == null ? '-' : $data->no_po,
                 'akn' => '-',
                 'customer' => $data->spa->Customer->nama,
             ]);
@@ -920,7 +923,7 @@ class ProduksiController extends Controller
             $data = Pesanan::with('spb')->find($id);
             return response()->json([
                 'so' => $data->so,
-                'po' => $data->no_po,
+                'po' => $data->no_po == null ? '-' : $data->no_po,
                 'akn' => '-',
                 'customer' => $data->spb->Customer->nama,
             ]);
@@ -1290,6 +1293,15 @@ class ProduksiController extends Controller
         return count($data);
     }
 
+    function change_jadwal()
+    {
+        $data = JadwalPerakitan::Has('log', function($q) {
+            // $q->orderBy('created_at');
+        })->get()->sortByDesc('log.created_at');
+
+        return $data;
+    }
+
     // perakitan
     function plan_rakit()
     {
@@ -1334,7 +1346,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->whereIn('status_tf', [11, 12])->get();
+        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->where('status_tf', 12)->OrwhereNull('status_tf')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1370,7 +1382,7 @@ class ProduksiController extends Controller
             })
             ->addColumn('produk', function ($d) {
                 if (isset($d->produk_id)) {
-                    return $d->produk->produk->nama . '-' . $d->produk->nama;
+                    return $d->produk->produk->nama . ' ' . $d->produk->nama;
                 }
             })
             ->addColumn('jml', function ($d) {
@@ -1414,7 +1426,7 @@ class ProduksiController extends Controller
             })
             ->addColumn('produk', function ($d) {
                 if (isset($d->produk_id)) {
-                    return $d->produk->produk->nama . '-' . $d->produk->nama;
+                    return $d->produk->produk->nama . ' ' . $d->produk->nama;
                 }
             })
             ->addColumn('jml', function ($d) {
@@ -1505,8 +1517,8 @@ class ProduksiController extends Controller
             'produk' => $gdg->produk->nama . ' ' . $gdg->nama,
             'kategori' => $gdg->produk->KelompokProduk->nama,
             'jumlah' => $jadwal->jumlah . ' ' . $gdg->satuan->nama,
-            'start' => date('d-m-Y', strtotime($jadwal->tanggal_mulai)),
-            'end' => date('d-m-Y', strtotime($jadwal->tanggal_selesai)),
+            'start' => Carbon::parse($jadwal->tanggal_mulai)->isoFormat('D MMM YYYY'), 
+            'end' => Carbon::parse($jadwal->tanggal_selesai)->isoFormat('D MMM YYYY'), 
         ]);
     }
 

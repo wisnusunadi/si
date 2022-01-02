@@ -49,7 +49,7 @@
                                             <div class="col-12">
                                                 <input type="text" id="qtyy"
                                                     class="form-control number-input input-notzero qtyy">
-                                                {{-- <span class="form-text text-muted">Stok Input Maks. 20</span> --}}
+                                                <span class="form-text text-muted">Stok Input Maks : <span id="stock"><b></b></span> </span>
                                                 <input type="text" class="stok-gudang" value="20" hidden>
                                             </div>
                                         </div>
@@ -179,6 +179,18 @@
                 }
             }
         });
+
+        $('#gdg_brg_jadi_id').on('change', function() {
+            // console.log($(this).val());
+            $.ajax({
+                url : "{{ URL('/api/tfp/cekStok')}}",
+                type: "post", 
+                data: {gdg_brg_jadi_id: $(this).val()},
+                success: function(res) {
+                    $('span#stock').text(res.stok);
+                }
+            })
+        })
 
         // load divisi
         $.ajax({
