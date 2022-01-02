@@ -35,13 +35,18 @@
       >
         Minta Perubahan
       </button>
-      <button class="button is-info" @click="convertToExcel">Export</button>
+      <button
+        class="button is-info"
+        @click="convertToExcel('export_table', 'W3C Example Table')"
+      >
+        Export
+      </button>
     </div>
     <div class="table-container">
       <table
         class="table has-text-centered is-bordered"
         style="white-space: nowrap"
-        ref="export_table"
+        id="export_table"
       >
         <thead>
           <tr>
@@ -89,9 +94,13 @@
             <td
               v-for="i in Array.from(Array(last_date).keys())"
               :key="i"
-              :class="{
-                background_yellow: isDate(item.tanggal, i + 1),
-                background_black: weekend_date.indexOf(i + 1) !== -1,
+              :style="{
+                backgroundColor:
+                  weekend_date.indexOf(i + 1) !== -1
+                    ? 'black'
+                    : isDate(item.tanggal, i + 1)
+                    ? 'yellow'
+                    : '',
               }"
             ></td>
           </tr>
@@ -497,10 +506,10 @@ export default {
       this.$store.commit("setIsLoading", false);
     },
 
-    convertToExcel() {
-      let element = this.$refs.export_table;
-      let wb = xlsx.utils.table_to_book(element, { sheet: "Sheet JS" });
-      console.log(wb);
+    convertToExcel(table, name) {
+      // let element = this.$refs.export_table;
+      // let wb = xlsx.utils.table_to_book(element, { sheet: "Sheet JS" });
+      // console.log(wb);
 
       // for (const item in this.getWeekendCell()) {
       //   wb.Sheets["Sheet JS"][item].s = {
@@ -511,14 +520,30 @@ export default {
       //   };
       // }
 
-      wb.Sheets["Sheet JS"]["F5"].s = {
-        fill: {
-          patternType: "solid",
-          fgColor: { rgb: "111111" },
-        },
-      };
+      // wb.Sheets["Sheet JS"]["F5"].s = {
+      //   fill: {
+      //     patternType: "solid",
+      //     fgColor: { rgb: "111111" },
+      //   },
+      // };
 
-      return xlsx.writeFile(wb, "test.xlsx");
+      // return xlsx.writeFile(wb, "test.xlsx");
+
+      let uri = "data:application/vnd.ms-excel;base64,",
+        template =
+          '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+        base64 = function (s) {
+          return window.btoa(unescape(encodeURIComponent(s)));
+        },
+        format = function (s, c) {
+          return s.replace(/{(\w+)}/g, function (m, p) {
+            return c[p];
+          });
+        };
+
+      if (!table.nodeType) table = document.getElementById(table);
+      let ctx = { worksheet: name || "Worksheet", table: table.innerHTML };
+      window.location.href = uri + base64(format(template, ctx));
     },
 
     // helper
