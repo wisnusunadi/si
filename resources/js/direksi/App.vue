@@ -32,12 +32,20 @@
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <div class="col-md-12">
-                <Table/>
+                <div class="card">
+                    <div class="card-body">
+                        <Table/>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-pane fade" id="grafik" role="tabpanel" aria-labelledby="grafik-tab">
             <div class="col-md-12" v-if="isGrafik">
-                <Grafik/>
+                <div class="card">
+                    <div class="card-body">
+                        <Grafik/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -46,8 +54,10 @@
 
 <script>
     import Calendar from './Components/Calendar.vue'
-    import Table from './Components/Table.vue';
+    import Table from './Components/Table2.vue';
     import Grafik from './Components/Grafik.vue';
+    import axios from 'axios';
+
     export default {
         components: {
             Calendar,
@@ -57,6 +67,7 @@
         data() {
             return {
                 isGrafik: false,
+                dataApi: null,
             }
         },
     }
