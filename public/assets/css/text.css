@@ -1,0 +1,99 @@
+.danger-text {
+    background-color: #ffe6e6;
+    color: #cc0000;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+.info-text {
+    background-color: #e6f9ff;
+    color: #00bfff;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+.info-text-sm {
+    background-color: #e6f9ff;
+    color: #00bfff;
+    height: 50px;
+    width: 50px;
+    padding: 10px;
+    border-radius: 0.3rem;
+}
+.success-text {
+    background-color: #e6ffe6;
+    color: #009900;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+.warning-text {
+    background-color: #fffae6;
+    color: #ffcc00;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+.secondary-text {
+    background-color: #dcdcdc;
+    color: #696969;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+.light-green-text {
+    background-color: #f9ffe6;
+    color: #ace600;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+.tablular-num {
+    font-variant-numeric: tabular-nums;
+}
+
+hgroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+hgroup .card-subheading {
+    /* Visually, put on top, without affecting source order */
+    order: -1;
+}
+
+.blue-text{
+    background-color: #E1EBF2;
+    color: #5F7A90;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+
+.red-text{
+    background-color: #FFDADA;
+    color: #dc3545;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+
+.orange-text{
+    background-color: #FFE6C9;
+    color: #EA8B1B;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+
+.yellow-text{
+    background-color: #FFF6D4;
+    color: #FFC700;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+
+.green-text{
+    background-color: rgba(69, 102, 0, 0.2);
+    color: #456600;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
+
+.purple-text{
+    background-color: #E9DDE5;
+    color: #7D6378;
+    padding: 6px;
+    border-radius: 0.3rem;
+}
