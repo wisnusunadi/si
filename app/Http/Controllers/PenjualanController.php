@@ -189,7 +189,7 @@ class PenjualanController extends Controller
                     return "E-Catalogue";
                 } else if ($name == 'spa') {
                     return "SPA";
-                } else if ($name[1] == 'spb') {
+                } else if ($name == 'spb') {
                     return "SPB";
                 }
             })
@@ -200,7 +200,7 @@ class PenjualanController extends Controller
                 if (isset($data->no_paket)) {
                     return $data->no_paket;
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('tgl_order', function ($data) {
@@ -211,7 +211,7 @@ class PenjualanController extends Controller
                     if (isset($data->tgl_po)) {
                         return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
                     } else {
-                        return "";
+                        return "-";
                     }
                 }
             })
@@ -276,21 +276,29 @@ class PenjualanController extends Controller
                         }
                     }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
-                    return $data->Pesanan->so;
+                    if (!empty($data->Pesanan->so)) {
+                        return $data->Pesanan->so;
+                    } else {
+                        return '-';
+                    }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {
-                    return $data->Pesanan->no_po;
+                    if (!empty($data->Pesanan->no_po)) {
+                        return $data->Pesanan->no_po;
+                    } else {
+                        return '-';
+                    }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('status', function ($data) {
@@ -310,6 +318,8 @@ class PenjualanController extends Controller
                         $datas .= '<span class="green-text badge">';
                     }
                     $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                } else {
+                    $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                 }
                 return $datas;
             })
@@ -890,7 +900,7 @@ class PenjualanController extends Controller
             ->addColumn('button', function ($data) {
                 return '<i class="fas fa-search"></i>';
             })
-            ->rawColumns(['button',])
+            ->rawColumns(['button'])
             ->make(true);
     }
     public function get_data_detail_paket_spb($id)
@@ -1079,9 +1089,13 @@ class PenjualanController extends Controller
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
-                    return $data->Pesanan->so;
+                    if (!empty($data->Pesanan->so)) {
+                        return $data->Pesanan->so;
+                    } else {
+                        return '-';
+                    }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('status', function ($data) {
@@ -1102,7 +1116,11 @@ class PenjualanController extends Controller
             })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {
-                    return $data->Pesanan->no_po;
+                    if (!empty($data->Pesanan->no_po)) {
+                        return $data->Pesanan->no_po;
+                    } else {
+                        return '-';
+                    }
                 } else {
                     return '-';
                 }
@@ -1264,14 +1282,22 @@ class PenjualanController extends Controller
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
-                    return $data->Pesanan->so;
+                    if (!empty($data->Pesanan->so)) {
+                        return $data->Pesanan->so;
+                    } else {
+                        return '-';
+                    }
                 } else {
                     return '-';
                 }
             })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {
-                    return $data->Pesanan->no_po;
+                    if (!empty($data->Pesanan->no_po)) {
+                        return $data->Pesanan->no_po;
+                    } else {
+                        return '-';
+                    }
                 } else {
                     return '-';
                 }
@@ -1293,6 +1319,8 @@ class PenjualanController extends Controller
                         $datas .= '<span class="green-text badge">';
                     }
                     $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                } else {
+                    $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                 }
                 return $datas;
             })
@@ -1377,7 +1405,11 @@ class PenjualanController extends Controller
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
-                    return $data->Pesanan->so;
+                    if (!empty($data->Pesanan->so)) {
+                        return $data->Pesanan->so;
+                    } else {
+                        return '-';
+                    }
                 } else {
                     return '-';
                 }
@@ -1398,7 +1430,10 @@ class PenjualanController extends Controller
                     } else if ($data->Pesanan->State->nama == "Kirim") {
                         $datas .= '<span class="green-text badge">';
                     }
+
                     $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                } else {
+                    $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                 }
                 return $datas;
             })
@@ -1443,13 +1478,15 @@ class PenjualanController extends Controller
                           Edit
                         </button>
                     </a>';
-                            $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
+                            if ($divisi_id == "26") {
+                                $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
                             <button class="dropdown-item" type="button" >
                             <i class="far fa-trash-alt"></i>
                             Hapus
                             </button>
                         </a>
                         ';
+                            }
                         }
                     } else {
 
@@ -1459,13 +1496,15 @@ class PenjualanController extends Controller
                           Edit
                         </button>
                     </a>';
-                        $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
+                        if ($divisi_id == "26") {
+                            $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
                             <button class="dropdown-item" type="button" >
                             <i class="far fa-trash-alt"></i>
                             Hapus
                             </button>
                         </a>
                         ';
+                        }
                     }
                 }
                 $return .= '</div>';

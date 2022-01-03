@@ -311,7 +311,7 @@
                                                     <th>No SO</th>
                                                     <th>No PO</th>
                                                     <th>Status</th>
-                                                    <th>Batas Pengiriman</th>
+                                                    <th>Tanggal Delivery</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
