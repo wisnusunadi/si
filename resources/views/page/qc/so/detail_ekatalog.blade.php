@@ -107,10 +107,9 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4>Info Penjualan </h4>
+                        <h4>Info Penjualan Ekatalog</h4>
                         <?php $item = array(); ?>
                         @foreach($data as $d)
-                        <h4>Info Ekatalog</h4>
                         <div class="row">
                             <div class="col-5">
                                 <div class="margin">
@@ -121,7 +120,12 @@
                                 </div>
                                 <div class="margin">
                                     <div><b id="no_akn">{{$d->satuan}}</b></div>
-                                    <small>({{$d->instansi}})</small>
+                                </div>
+                                <div class="margin">
+                                    <div><b id="no_akn">@if($d->alamat) {{$d->alamat}} @else - @endif</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><b id="no_akn">@if($d->provinsi_id) {{$d->Provinsi->nama}} @else - @endif</b></div>
                                 </div>
                             </div>
                             <div class="col-2">
@@ -161,53 +165,55 @@
             <div class="col-7">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-filter"></i> Filter
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <div class="px-3 py-3">
-                                            <div class="form-group">
-                                                <label for="jenis_penjualan">Status</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                                    <label class="form-check-label" for="status1">
-                                                        Selesai Diperiksa
-                                                    </label>
+                                    <form id="filter">
+                                        <div class="dropdown-menu">
+                                            <div class="px-3 py-3">
+                                                <div class="form-group">
+                                                    <label for="jenis_penjualan">Status</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                                    <label class="form-check-label" for="status2">
-                                                        Sebagian Diperiksa
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
+                                                        <label class="form-check-label" for="status1">
+                                                            Selesai Diperiksa
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                                    <label class="form-check-label" for="status3">
-                                                        Belum Diperiksa
-                                                    </label>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
+                                                        <label class="form-check-label" for="status2">
+                                                            Sebagian Diperiksa
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <span class="float-right">
-                                                    <button class="btn btn-primary">
-                                                        Cari
-                                                    </button>
-                                                </span>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
+                                                        <label class="form-check-label" for="status3">
+                                                            Belum Diperiksa
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="float-right">
+                                                        <button class="btn btn-primary">
+                                                            Cari
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row">
                             <div class="col-12">
@@ -374,10 +380,13 @@
         y = <?php echo json_encode($detail_id); ?>;
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/qc/so/detail/' + y,
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -443,15 +452,19 @@
                 url: action,
                 data: $('#form-pengujian-update').serialize(),
                 success: function(response) {
-                    if (response['data'] == "success") {
+                    if (response['data'] != "error") {
+                        // alert(response);
+                        // console.log(response);
                         swal.fire(
                             'Berhasil',
                             'Berhasil melakukan Penambahan Data Pengujian',
                             'success'
                         );
                         $("#editmodal").modal('hide');
-                        //$('#noseritable').DataTable().ajax.reload();
+                        $('#noseritable').DataTable().ajax.reload();
+                        $('#showtable').DataTable().ajax.reload();
                         location.reload();
+
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
@@ -461,19 +474,22 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert($('#form-customer-update').serialize());
+                    alert($('#form-pengujian-update').serialize());
                 }
             });
             return false;
         });
 
         var noseritable = $('#noseritable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/qc/so/seri/0/0',
                 'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    'X-CSRF-TOKEN': '{{csrf_token()}}',
                 }
             },
             language: {
@@ -509,9 +525,12 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + tfgbj_id,
                     'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                        'X-CSRF-TOKEN': '{{csrf_token()}}',
+
                     }
                 },
                 language: {
@@ -631,6 +650,23 @@
         //     return false;
         // });
 
+        $('#filter').submit(function() {
+            var values_spa = [];
+            $("input:checked").each(function() {
+                values_spa.push($(this).val());
+            });
+            if (values_spa != 0) {
+                var x = values_spa;
+
+            } else {
+                var x = ['semua'];
+            }
+
+            console.log(x);
+            //      $('#ekatalogtable').DataTable().ajax.url('/penjualan/penjualan/ekatalog/data/' + x).load();
+            return false;
+
+        });
     })
 </script>
 @stop

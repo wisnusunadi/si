@@ -1,63 +1,78 @@
 <div class="row filter">
     <div class="col-12">
-        <h4><b>E-Catalogue</b></h4>
         <div class="row">
             <div class="col-5">
                 <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Info Customer</h5>
+                    </div>
                     <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item bordertopnone">
-                                <h5>Info</h5>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>No PO</a>
-                                <b class="float-right" id="no_po"> @if ($data->Pesanan)
-                                    {{ $data->Pesanan->no_po}}
+                        <div class="row">
+                            <div class="col-12 align-center">
+                                <!-- <div id="profileImage" class="center margin-all"></div> -->
+                                <div>
+                                    <h6><b>{{$data->Customer->nama}}</b></h6>
+                                </div>
+                                <div><b>{{$data->satuan}}</b></div>
+                                <div><b>{{$data->alamat}}</b></div>
+                                <div><b>{{$data->Provinsi->nama}}</b></div>
 
-                                    @endif</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>No AKN</a>
-                                <b class="float-right" id="no_akn">{{$data->no_paket}}</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Tanggal Pemesanan</a>
-                                <b class="float-right" id="tanggal_pemesanan">{{$data->tgl_buat}}</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Tanggal Batas Kontrak</a>
-                                <b class="float-right" id="batas_kontrak">{{$data->tgl_kontrak}}</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Nama Customer</a>
-                                <b class="float-right" id="nama_customer">{{$data->customer->nama}}</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Instansi</a>
-                                <b class="float-right" id="instansi">{{$data->instansi}}</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Satuan</a>
-                                <b class="float-right" id="satuan">{{$data->satuan}}</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Status</a>
-                                <b class="float-right" id="status">
-                                    @if($data->status == "sepakat")
-                                    <span class="badge green-text">{{ucfirst($data->status)}}</span>
-                                    @elseif($data->status == "negosiasi")
-                                    <span class="badge yellow-text">{{ucfirst($data->status)}}</span>
-                                    @elseif($data->status == "batal")
-                                    <span class="badge red-text">{{ucfirst($data->status)}}</span>
-                                    @elseif($data->status == "draft")
-                                    <span class="badge blue-text">{{ucfirst($data->status)}}</span>
-                                    @endif
-                                </b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a class="text-muted" id="keterangan">{{$data->ket}}</a>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Info Penjualan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="margin">
+                            <a class="text-muted">No SO</a>
+                            <b class="float-right">@if ($data->Pesanan->so) {{ $data->pesanan->so}} @else - @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">No AKN</a>
+                            <b class="float-right">{{ $data->no_paket}}</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Tgl Order</a>
+                            <b class="float-right">{{ date('d-m-Y', strtotime($data->tgl_buat)) }}</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Tgl Kontrak</a>
+                            <b class="float-right">{{ date('d-m-Y', strtotime($data->tgl_kontrak)) }}</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">No PO</a>
+                            <b class="float-right">
+                                @if ($data->Pesanan->no_po)
+                                {{ $data->Pesanan->no_po}}
+                                @else
+                                -
+                                @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Tanggal PO</a>
+                            <b class="float-right">@if ($data->Pesanan->tgl_po)
+                                {{ $data->Pesanan->tgl_po}}
+                                @else
+                                -
+                                @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Status</a>
+                            <b class="float-right" id="status">
+                                @if($data->status == "sepakat")
+                                <span class="badge green-text">{{ucfirst($data->status)}}</span>
+                                @elseif($data->status == "negosiasi")
+                                <span class="badge yellow-text">{{ucfirst($data->status)}}</span>
+                                @elseif($data->status == "batal")
+                                <span class="badge red-text">{{ucfirst($data->status)}}</span>
+                                @elseif($data->status == "draft")
+                                <span class="badge blue-text">{{ucfirst($data->status)}}</span>
+                                @endif
+                            </b>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,9 +94,10 @@
                                             <div><b>@currency($e->harga)</b></div>
                                         </div>
                                         <div class="col-4">
-                                            <div class="text-muted">Jumlah</div>
+                                            <div class="text-muted">Jumlah Paket</div>
                                             <div><b>{{$e->jumlah}}</b></div>
                                         </div>
+
                                         <div class="col-4">
                                             <div class="text-muted">Subtotal</div>
                                             <div><b>@currency($e->harga * $e->jumlah)</b></div>
@@ -95,12 +111,22 @@
                                                 @isset($e->DetailPesananProduk)
                                                 @foreach($e->DetailPesananProduk as $l)
                                                 <li class="list-group-item">
-
-                                                    @if(!empty($l->GudangBarangJadi->nama))
-                                                    {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
-                                                    @else
-                                                    {{$l->GudangBarangJadi->Produk->nama}}
-                                                    @endif
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            @if(!empty($l->GudangBarangJadi->nama))
+                                                            {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
+                                                            @else
+                                                            {{$l->GudangBarangJadi->Produk->nama}}
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-4">
+                                                        </div>
+                                                        <div class="col-4 ">
+                                                            <h5> <span class="badge badge-light"><i class="fas fa-shopping-cart"></i> :
+                                                                    {{ $l->DetailPesanan->PenjualanProduk->produk->first()->pivot->jumlah * $l->DetailPesanan->jumlah}}
+                                                                </span> <span class="badge badge-dark"> <i class="fas fa-truck"></i> : {{$l->getJumlahKirim()}}</span></h5>
+                                                        </div>
+                                                    </div>
                                                 </li>
                                                 @endforeach
                                                 @endif
@@ -110,7 +136,6 @@
                                 </div>
                             </div>
                             @endforeach
-
                             <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
                             @else
                             <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
@@ -128,7 +153,6 @@
                                     </tr>
                                 </thead> -->
                             <!-- <tbody> -->
-
                             <!-- <tr>
                                     <td>1</td>
                                     <td>FOX-BABY Yellow</td>

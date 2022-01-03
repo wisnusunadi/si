@@ -158,7 +158,7 @@
             <div class="col-7">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
                                     <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -204,7 +204,7 @@
                                     </div>
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row">
                             <div class="col-12">
@@ -367,9 +367,12 @@
         y = <?php echo json_encode($detail_id); ?>;
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/qc/so/detail/' + y,
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -443,8 +446,8 @@
                             'success'
                         );
                         $("#editmodal").modal('hide');
-                        // $('#noseritable').DataTable().ajax.reload();
-                        // $('#showtable').DataTable().ajax.reload();
+                        $('#noseritable').DataTable().ajax.reload();
+                        $('#showtable').DataTable().ajax.reload();
 
                         location.reload();
                     } else if (response['data'] == "error") {
@@ -462,9 +465,12 @@
             return false;
         });
         var noseritable = $('#noseritable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/qc/so/seri/0/0',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -498,9 +504,12 @@
 
         function listnoseri(seri_id, produk_id, tfgbj_id) {
             $('#listnoseri').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + tfgbj_id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'

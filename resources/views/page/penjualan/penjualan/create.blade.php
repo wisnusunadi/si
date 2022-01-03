@@ -84,7 +84,7 @@
                 <form method="post" action="{{route('penjualan.penjualan.store')}}">
                     {{csrf_field()}}
                     <div class="row d-flex justify-content-center">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Info Customer</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -136,7 +136,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center hide" id="akn">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Info AKN</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -200,10 +200,10 @@
                                         <div class="form-group row">
                                             <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
                                             <div class="col-5 col-form-label">
-                                                <div class="form-check form-check-inline">
+                                                <!-- <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
                                                     <label class="form-check-label" for="satuan4">Draft</label>
-                                                </div>
+                                                </div> -->
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
                                                     <label class="form-check-label" for="satuan1">Sepakat</label>
@@ -238,7 +238,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Batas Kontrak</label>
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Delivery</label>
                                             <div class="col-4">
                                                 <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
                                                 <div class="invalid-feedback" id="msgbatas_kontrak">
@@ -271,7 +271,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center hide" id="nonakn">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Info Penjualan</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -344,7 +344,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center hide" id="dataproduk">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Data Produk</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -386,7 +386,7 @@
                                                             <td>
                                                                 <div class="form-group d-flex justify-content-center">
                                                                     <div class="input-group">
-                                                                        <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
+                                                                        <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah0" style="width:100%;">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text" id="produk_satuan">pcs</span>
                                                                         </div>
@@ -407,7 +407,7 @@
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text">Rp</span>
                                                                     </div>
-                                                                    <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
+                                                                    <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -430,7 +430,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center hide" id="datapart">
-                        <div class="col-10">
+                        <div class="col-11">
                             <h4>Data Part</h4>
                             <div class="card">
                                 <div class="card-body">
@@ -506,7 +506,7 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center">
-                        <div class="col-10">
+                        <div class="col-11">
                             <span>
                                 <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
                                     Batal
@@ -514,7 +514,7 @@
                             </span>
                             <span class="float-right">
                                 <button type="submit" class="btn btn-info" id="btntambah" disabled="true">
-                                    Tambah
+                                    Simpan
                                 </button>
                             </span>
                         </div>
@@ -576,7 +576,7 @@
         }
 
         function checkvalidasi() {
-            if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+            if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && check_no_paket($("#no_paket").val()) <= 0) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
                 $('#btntambah').removeAttr("disabled");
             } else {
                 $('#btntambah').attr("disabled", true);
@@ -617,11 +617,14 @@
         $('input[type="radio"][name="jenis_penjualan"]').on('change', function() {
             reset_akn();
             reset_penjualan();
+
             if ($(this).val() == "ekatalog") {
+
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").addClass("hide");
                 $("#akn").removeClass("hide");
+                $(".os-content-arrange").text("hail");
             } else if ($(this).val() == "spa") {
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
@@ -661,7 +664,7 @@
                 // }
                 checkvalidasi();
             } else if ($(this).val() == "") {
-                $("#msgbatas_kontrak").text("Batas Kontrak Harus diisi");
+                $("#msgbatas_kontrak").text("Tanggal Delivery Harus diisi");
                 $("#batas_kontrak").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
@@ -760,52 +763,40 @@
             }
         });
 
-        function check_no_paket(values) {
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: '/api/penjualan/check_no_paket/' + '0/' + values,
-                success: function(data) {
-                    return data.data;
-                },
-                error: function(data) {
-                    return values;
-                }
-            });
-        }
 
 
         $('#no_paket').on('keyup change', function() {
             if ($(this).val() != "") {
                 var values = $(this).val();
-                // if (check_no_paket(values) > 0) {
-                //     $("#msgno_paket").text("No Paket tidak boleh sama");
-                //     $("#no_paket").addClass('is-invalid');
-                //     $('#btntambah').attr("disabled", true);
-                // } else {
-                //     $("#msgno_paket").text("");
-                //     $("#no_paket").removeClass('is-invalid');
-                //     checkvalidasi();
-                // }
-                $.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    url: '/api/penjualan/check_no_paket/' + '0/' + values,
-                    success: function(data) {
-                        if (data.data > 0) {
-                            $("#msgno_paket").text("No Paket telah digunakan");
-                            $("#no_paket").addClass('is-invalid');
-                            $('#btntambah').attr("disabled", true);
-                        } else {
-                            $("#msgno_paket").text("");
-                            $("#no_paket").removeClass('is-invalid');
-                            checkvalidasi();
-                        }
-                    },
-                    error: function(data) {
-                        return values;
-                    }
-                });
+                console.log(check_no_paket(values));
+                if (check_no_paket(values) > 0) {
+                    $("#msgno_paket").text("No Paket tidak boleh sama");
+                    $("#no_paket").addClass('is-invalid');
+                    $('#btntambah').attr("disabled", true);
+                } else {
+                    $("#msgno_paket").text("");
+                    $("#no_paket").removeClass('is-invalid');
+                    checkvalidasi();
+                }
+                // $.ajax({
+                //     type: 'GET',
+                //     dataType: 'json',
+                //     url: '/api/penjualan/check_no_paket/' + '0/' + values,
+                //     success: function(data) {
+                //         if (data.data > 0) {
+                //             $("#msgno_paket").text("No Paket telah digunakan");
+                //             $("#no_paket").addClass('is-invalid');
+                //             $('#btntambah').attr("disabled", true);
+                //         } else {
+                //             $("#msgno_paket").text("");
+                //             $("#no_paket").removeClass('is-invalid');
+                //             checkvalidasi();
+                //         }
+                //     },
+                //     error: function(data) {
+                //         return values;
+                //     }
+                // });
 
                 // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
                 //     $('#btntambah').removeAttr("disabled");
@@ -956,14 +947,54 @@
             id = $('select[name="' + name + '"]').attr('data-id');
             vals = $('select[name="' + name + '"]').select2('data')[0];
             var kebutuhan = jumlah * vals.jumlah;
-            if (vals.qt < kebutuhan) {
+            if (cek_stok(vals.id) < kebutuhan) {
+                var jumlah_kekurangan = 0;
+                if (cek_stok(vals.id) < 0) {
+                    jumlah_kekurangan = kebutuhan;
+                } else {
+                    jumlah_kekurangan = Math.abs(cek_stok(vals.id) - kebutuhan);
+                }
                 $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
-                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang dari Permintaan');
-            } else if (vals.qt >= kebutuhan) {
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' + jumlah_kekurangan + ' dari Permintaan');
+            } else if (cek_stok(vals.id) >= kebutuhan) {
                 $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                 $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
             }
         })
+
+        function cek_stok(id) {
+            var jumlah = 0;
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                async: false,
+                url: '/api/produk/variasi_stok/' + id,
+                success: function(data) {
+                    jumlah = data;
+                },
+                error: function(data) {
+                    jumlah = data;
+                }
+            });
+            return jumlah;
+        }
+
+        function check_no_paket(values) {
+            var hasil = "";
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                async: false,
+                url: '/api/penjualan/check_no_paket/' + '0/' + values,
+                success: function(data) {
+                    hasil = data;
+                },
+                error: function(data) {
+                    hasil = data;
+                }
+            });
+            return hasil;
+        }
 
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
@@ -1016,67 +1047,73 @@
                         };
                     },
                 }
-            }).change(function(i) {
-                var index = $(this).attr('id');
-                var id = $(this).val();
-                $.ajax({
-                    url: '/api/penjualan_produk/select/' + id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(res) {
-                        $('#produk_harga' + index).val(formatmoney(res[0].harga));
-                        var tes = $('#detail_produk' + index);
-                        tes.empty();
-                        var datas = "";
-                        tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
-                        for (var x = 0; x < res[0].produk.length; x++) {
-                            var data = [];
-                            tes.append(`<div>`);
-                            tes.append(`<div class="card-body blue-bg">
-                                        <h6>` + res[0].produk[x].nama + `</h6>
-                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
-                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
-                                      </div>`);
-                            if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                                data.push({
-                                    id: res[0].produk[x].gudang_barang_jadi[0].id,
-                                    text: res[0].produk[x].nama,
-                                    jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
-                                });
-                            } else {
-                                for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
-                                    data.push({
-                                        id: res[0].produk[x].gudang_barang_jadi[y].id,
-                                        text: res[0].produk[x].gudang_barang_jadi[y].nama,
-                                        jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
-                                    });
-                                }
-                            }
-                            $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
-                                placeholder: 'Pilih Variasi',
-                                data: data,
-                                templateResult: function(data) {
-                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
-                                    return $span;
-                                },
-                                templateSelection: function(data) {
-                                    var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
-                                    return $span;
-                                }
-                            });
-
-                            $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
-                            tes.append(`</div>`)
-                        }
-                        tes.append(`</fieldset>`);
-                        // tes.html(datas);
-                    }
-                });
             });
-        }
+            // .change(function() {
+            //     var index = $(this).attr('id');
+            //     var id = $(this).val();
+            //     $.ajax({
+            //         url: '/api/penjualan_produk/select/' + id,
+            //         type: 'GET',
+            //         dataType: 'json',
+            //         success: function(res) {
+            //             $('#produk_harga' + index).val(formatmoney(res[0].harga));
+            //             var jumlah_pesan = $('#produk_jumlah' + index).val();
+            //             if (jumlah_pesan == "") {
+            //                 jumlah_pesan = 0;
+            //             }
+            //             console.log('subtotal' + formatmoney((res[0].harga) * jumlah_pesan));
+            //             $('#produk_subtotal' + index).val(formatmoney((res[0].harga) * jumlah_pesan));
+            //             var tes = $('#detail_produk' + index);
+            //             tes.empty();
+            //             var datas = "";
+            //             tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+            //             for (var x = 0; x < res[0].produk.length; x++) {
+            //                 var data = [];
+            //                 tes.append(`<div>`);
+            //                 tes.append(`<div class="card-body blue-bg">
+            //                             <h6>` + res[0].produk[x].nama + `</h6>
+            //                             <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
+            //                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
+            //                           </div>`);
+            //                 if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+            //                     data.push({
+            //                         id: res[0].produk[x].gudang_barang_jadi[0].id,
+            //                         text: res[0].produk[x].nama,
+            //                         jumlah: res[0].produk[x].pivot.jumlah,
+            //                         qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
+            //                     });
+            //                 } else {
+            //                     for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+            //                         data.push({
+            //                             id: res[0].produk[x].gudang_barang_jadi[y].id,
+            //                             text: res[0].produk[x].gudang_barang_jadi[y].nama,
+            //                             jumlah: res[0].produk[x].pivot.jumlah,
+            //                             qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+            //                         });
+            //                     }
+            //                 }
+            //                 $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
+            //                     placeholder: 'Pilih Variasi',
+            //                     data: data,
+            //                     templateResult: function(data) {
+            //                         var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+            //                         return $span;
+            //                     },
+            //                     templateSelection: function(data) {
+            //                         var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+            //                         return $span;
+            //                     }
+            //                 });
 
+            //                 $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
+            //                 tes.append(`</div>`)
+            //             }
+            //             tes.append(`</fieldset>`);
+            //             // tes.html(datas);
+            //         }
+            //     });
+            // });
+        }
 
         function totalhargaprd() {
             var totalharga = 0;
@@ -1098,18 +1135,84 @@
         }
 
         $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
-            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-            var harga = $(this).closest('tr').find('.produk_harga').val();
-            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+            // var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            // var harga = $(this).closest('tr').find('.produk_harga').val();
+            // var subtotal = $(this).closest('tr').find('.produk_subtotal');
+            // if (jumlah != "" && harga != "") {
+            //     var hargacvrt = replaceAll(harga, '.', '');
+            //     subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+            //     totalhargaprd();
+            // } else {
+            //     subtotal.val(formatmoney("0"));
+            //     totalhargaprd();
+            // }
 
-            if (jumlah != "" && harga != "") {
-                var hargacvrt = replaceAll(harga, '.', '');
-                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
-                totalhargaprd();
-            } else {
-                subtotal.val(formatmoney("0"));
-                totalhargaprd();
-            }
+
+
+            var index = $(this).attr('id');
+            var id = $(this).val();
+            $.ajax({
+                url: '/api/penjualan_produk/select/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $('#produk_harga' + index).val(formatmoney(res[0].harga));
+                    var jumlah_pesan = $('#produk_jumlah' + index).val();
+                    if (jumlah_pesan == "") {
+                        jumlah_pesan = 0;
+                    }
+                    console.log('subtotal' + formatmoney((res[0].harga) * jumlah_pesan));
+                    $('#produk_subtotal' + index).val(formatmoney((res[0].harga) * jumlah_pesan));
+                    var tes = $('#detail_produk' + index);
+                    tes.empty();
+                    var datas = "";
+                    tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+                    for (var x = 0; x < res[0].produk.length; x++) {
+                        var data = [];
+                        tes.append(`<div>`);
+                        tes.append(`<div class="card-body blue-bg">
+                                        <h6>` + res[0].produk[x].nama + `</h6>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
+                                      </div>`);
+                        if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                            data.push({
+                                id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                text: res[0].produk[x].nama,
+                                jumlah: res[0].produk[x].pivot.jumlah,
+                                qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
+                            });
+                        } else {
+                            for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                data.push({
+                                    id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                    text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                    jumlah: res[0].produk[x].pivot.jumlah,
+                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                });
+                            }
+                        }
+                        $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
+                            placeholder: 'Pilih Variasi',
+                            data: data,
+                            templateResult: function(data) {
+                                var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                return $span;
+                            },
+                            templateSelection: function(data) {
+                                var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                return $span;
+                            }
+                        });
+
+                        $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
+                        tes.append(`</div>`)
+                    }
+                    tes.append(`</fieldset>`);
+                    // tes.html(datas);
+                }
+            });
+
         });
         $("#produktable").on('keyup change', '.produk_jumlah', function() {
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
@@ -1125,10 +1228,17 @@
                 for (var i = 0; i < variasi.length; i++) {
                     var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
                     var kebutuhan = jumlah * variasires.jumlah;
-                    if (variasires.qt < kebutuhan) {
+
+                    if (cek_stok(variasires.id) < kebutuhan) {
+                        var jumlah_kekurangan = 0;
+                        if (cek_stok(variasires.id) < 0) {
+                            jumlah_kekurangan = kebutuhan;
+                        } else {
+                            jumlah_kekurangan = Math.abs(cek_stok(variasires.id) - kebutuhan);
+                        }
                         $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
-                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang dari Permintaan');
-                    } else if (variasires.qt >= kebutuhan) {
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang ' + jumlah_kekurangan + ' dari Permintaan');
+                    } else if (cek_stok(variasires.id) >= kebutuhan) {
                         $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
                         $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
                     }
@@ -1168,17 +1278,16 @@
                 for (var k = 0; k < variasi.length; k++) {
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
-                    // var idk = $(el).find('.ketstok').attr('data-attr');
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
-                    // $(el).find('.variasi').attr('name', 'variasi[' + j + '][' + k + ']');
-                    // $(el).find('.variasi').attr('id', 'variasi' + j + '' + k);
-                    // $(el).find('.ketstok').attr('name', 'ketstok[' + j + '][' + k + ']');
-                    // $(el).find('.ketstok').attr('id', 'ketstok' + j + '' + k);
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
-                $(el).find('input[id="produk_jumlah"]').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
+                $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
+                $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
+                $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                 $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                 select_data();
             });
@@ -1221,7 +1330,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Rp</span>
                         </div>
-                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
+                        <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
                 <td>

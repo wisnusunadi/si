@@ -60,6 +60,10 @@
                                     <label class="form-check-label" for="diketahui1">PT Sinko Prima Alloy</label>
                                 </div>
                                 <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="emiindo" />
+                                    <label class="form-check-label" for="diketahui1">PT. EMIINDO Jaya Bersama</label>
+                                </div>
+                                <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="diketahui" id="diketahui2" value="custom" />
                                     <label class="form-check-label" for="diketahui2">Custom</label>
                                 </div>
@@ -75,6 +79,18 @@
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Jabatan</label>
                             <div class="col-5">
                                 <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
+                            </div>
+                        </div>
+                        <div class="form-group row" id="tgl_kirim">
+                            <label for="" class="col-5 col-form-label" style="text-align:right;">Tgl Kirim</label>
+                            <div class="col-5">
+                                <input type="date" class="form-control col-form-label" name="tgl_kirim">
+                            </div>
+                        </div>
+                        <div class="form-group row" id="tgl_kirim">
+                            <label for="" class="col-5 col-form-label" style="text-align:right;">Keterangan</label>
+                            <div class="col-5">
+                                <textarea class="form-control col-form-label" name="keterangan"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">

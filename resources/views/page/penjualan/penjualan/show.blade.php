@@ -3,7 +3,6 @@
 @section('title', 'ERP')
 
 @section('content_header')
-
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -22,7 +21,6 @@
         </div><!-- /.col -->
     </div><!-- /.row -->
 </div><!-- /.container-fluid -->
-
 @stop
 
 @section('adminlte_css')
@@ -102,12 +100,7 @@
 
     }
 
-    .overflowy {
-        max-height: 450px;
-        width: auto;
-        overflow-y: scroll;
-        box-shadow: none;
-    }
+
 
     .removeshadow {
         box-shadow: none;
@@ -125,6 +118,13 @@
         vertical-align: top;
     }
 
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
     @media screen and (min-width: 1440px) {
 
         section {
@@ -132,11 +132,18 @@
         }
 
         #detailmodal {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .btn {
             font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 550px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
     }
 
@@ -157,6 +164,13 @@
 
         .btn {
             font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 450px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
     }
 </style>
@@ -188,7 +202,6 @@
                             <div class="row">
                                 <div class="col-12">
                                     @if(Auth::user()->divisi->id == "26")
-
                                     <span class="float-right filter">
                                         <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
                                                 <i class="fas fa-plus"></i> Tambah
@@ -200,111 +213,97 @@
                                         <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-filter"></i> Filter
                                         </button>
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Jenis Penjualan</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
-                                                        <label class="form-check-label" for="jenis1">
-                                                            E-Catalogue
-                                                        </label>
+                                        <form id="filter_penjualan">
+                                            <div class="dropdown-menu">
+                                                <div class="px-3 py-3">
+                                                    <div class="form-group">
+                                                        <label for="jenis_penjualan">Jenis Penjualan</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
-                                                        <label class="form-check-label" for="jenis2">
-                                                            SPA
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="ekatalog" name="jenis_penjualan[]" id="jenis1" />
+                                                            <label class="form-check-label" for="jenis1">
+                                                                E-Catalogue
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="spa" id="jenis3" />
-                                                        <label class="form-check-label" for="jenis3">
-                                                            SPB
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="spa" name="jenis_penjualan[]" id="jenis2" />
+                                                            <label class="form-check-label" for="jenis2">
+                                                                SPA
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Status</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="sepakat" id="status1" />
-                                                        <label class="form-check-label" for="status1">
-                                                            Sepakat
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="spb" name="jenis_penjualan[]" id="jenis3" />
+                                                            <label class="form-check-label" for="jenis3">
+                                                                SPB
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="spa" id="status2" />
-                                                        <label class="form-check-label" for="status2">
-                                                            Negosiasi
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <label for="jenis_penjualan">Status</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="batal" id="status3" />
-                                                        <label class="form-check-label" for="status3">
-                                                            Batal
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="7" name="status_penjualan[]" id="status3" />
+                                                            <label class="form-check-label" for="status3">
+                                                                Penjualan
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                        <label class="form-check-label" for="status4">
-                                                            PO
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="9" name="status_penjualan[]" id="status4" />
+                                                            <label class="form-check-label" for="status4">
+                                                                PO
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                        <label class="form-check-label" for="status5">
-                                                            Gudang
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="6" name="status_penjualan[]" id="status5" />
+                                                            <label class="form-check-label" for="status5">
+                                                                Gudang
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                        <label class="form-check-label" for="status6">
-                                                            QC
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="8" name="status_penjualan[]" id="status6" />
+                                                            <label class="form-check-label" for="status6">
+                                                                QC
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                        <label class="form-check-label" for="status7">
-                                                            Logistik
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="13" name="status_penjualan[]" id="status7" />
+                                                            <label class="form-check-label" for="status7">
+                                                                Terkirim Sebagian
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                        <label class="form-check-label" for="status8">
-                                                            Pengiriman
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="11" name="status_penjualan[]" id="status8" />
+                                                            <label class="form-check-label" for="status8">
+                                                                Kirim
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary">
-                                                            Cari
-                                                        </button>
-                                                    </span>
+                                                    <div class="form-group">
+                                                        <span class="float-right">
+                                                            <button class="btn btn-primary" id="filter_penjualan" type="submit">
+                                                                Cari
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </span>
                                 </div>
                             </div>
@@ -319,7 +318,7 @@
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal Order</th>
-                                                    <th>Batas Kontrak</th>
+                                                    <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Jenis</th>
                                                     <th>Status</th>
@@ -449,7 +448,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="sepakat" id="status1" />
+                                                            <input class="form-check-input" type="checkbox" value="sepakat" id="status1" name="status_ekatalog[]" />
                                                             <label class="form-check-label" for="status1">
                                                                 Sepakat
                                                             </label>
@@ -457,7 +456,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="negosiasi" id="status2" />
+                                                            <input class="form-check-input" type="checkbox" value="negosiasi" id="status2" name="status_ekatalog[]" />
                                                             <label class="form-check-label" for="status2">
                                                                 Negosiasi
                                                             </label>
@@ -465,7 +464,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="batal" id="status3" />
+                                                            <input class="form-check-input" type="checkbox" value="batal" id="status3" name="status_ekatalog[]" />
                                                             <label class="form-check-label" for="status3">
                                                                 Batal
                                                             </label>
@@ -513,7 +512,7 @@
                                                 </div> -->
                                                     <div class="form-group">
                                                         <span class="float-right">
-                                                            <button class="btn btn-primary" type="submit">
+                                                            <button class="btn btn-primary" type="submit" id="filter_ekatalog">
                                                                 Cari
                                                             </button>
                                                         </span>
@@ -535,7 +534,7 @@
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal Order</th>
-                                                    <th>Batas Kontrak</th>
+                                                    <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -605,60 +604,70 @@
                                         <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-filter"></i> Filter
                                         </button>
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Status</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                        <label class="form-check-label" for="status4">
-                                                            PO
-                                                        </label>
+                                        <form id="filter_spa">
+                                            <div class="dropdown-menu">
+                                                <div class="px-3 py-3">
+                                                    <div class="form-group">
+                                                        <label for="jenis_penjualan">Status</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                        <label class="form-check-label" for="status5">
-                                                            Gudang
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="7" id="status1" name="status_spa[]" />
+                                                            <label class="form-check-label" for="status1">
+                                                                Penjualan
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                        <label class="form-check-label" for="status6">
-                                                            QC
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="9" id="status4" name="status_spa[]" />
+                                                            <label class="form-check-label" for="status4">
+                                                                PO
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                        <label class="form-check-label" for="status7">
-                                                            Logistik
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="6" id="status5" name="status_spa[]" />
+                                                            <label class="form-check-label" for="status5">
+                                                                Gudang
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                        <label class="form-check-label" for="status8">
-                                                            Pengiriman
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="8" id="status6" name="status_spa[]" />
+                                                            <label class="form-check-label" for="status6">
+                                                                QC
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary">
-                                                            Cari
-                                                        </button>
-                                                    </span>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="13" id="status7" name="status_spa[]" />
+                                                            <label class="form-check-label" for="status7">
+                                                                Terkirim Sebagian
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="11" id="status8" name="status_spa[]" />
+                                                            <label class="form-check-label" for="status8">
+                                                                Kirim
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <span class="float-right">
+                                                            <button class="btn btn-primary" id="filter_spa" type="submit">
+                                                                Cari
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </span>
                                 </div>
                             </div>
@@ -737,60 +746,70 @@
                                         <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-filter"></i> Filter
                                         </button>
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Status</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                        <label class="form-check-label" for="status4">
-                                                            PO
-                                                        </label>
+                                        <form id="filter_spb">
+                                            <div class="dropdown-menu">
+                                                <div class="px-3 py-3">
+                                                    <div class="form-group">
+                                                        <label for="jenis_penjualan">Status</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                        <label class="form-check-label" for="status5">
-                                                            Gudang
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="7" id="status_spb1" name="status_spb[]" />
+                                                            <label class="form-check-label" for="status_spb1">
+                                                                Penjualan
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                        <label class="form-check-label" for="status6">
-                                                            QC
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="9" id="status_spb2" name="status_spb[]" />
+                                                            <label class="form-check-label" for="status_spb2">
+                                                                PO
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                        <label class="form-check-label" for="status7">
-                                                            Logistik
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="6" id="status_spb3" name="status_spb[]" />
+                                                            <label class="form-check-label" for="status_spb3">
+                                                                Gudang
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                        <label class="form-check-label" for="status8">
-                                                            Pengiriman
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="8" id="status_spb4" name="status_spb[]" />
+                                                            <label class="form-check-label" for="status_spb4">
+                                                                QC
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary">
-                                                            Cari
-                                                        </button>
-                                                    </span>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="13" id="status_spb5" name="status_spb[]" />
+                                                            <label class="form-check-label" for="status_spb5">
+                                                                Terkirim Sebagian
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="11" id="status_spb6" name="status_spb[]" />
+                                                            <label class="form-check-label" for="status_spb6">
+                                                                Kirim
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <span class="float-right">
+                                                            <button class="btn btn-primary" id="filter_spb" type="submit">
+                                                                Cari
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </span>
                                 </div>
                             </div>
@@ -866,13 +885,11 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header">
-                        <div id="modal-title">
-                            <h4>Detail</h4>
-                        </div>
+                        <h4 id="modal-title">Detail</h4>
                     </div>
                     <div class="modal-body" id="detail">
 
@@ -880,22 +897,55 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header">
+                        <h4 id="modal-title">Hapus</h4>
+                    </div>
+                    <form method="post" action="" id="form-delete" data-target="">
+                        @method('DELETE')
+                        @csrf
+                        <div class="modal-body" id="delete">
+                            <div class="row">
+                                <div class="col-12">Apakah Anda yakin ingin menghapus data ini?
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <span class="float-left">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            </span>
+                            <span class="float-right">
+                                <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 @stop
-
 @section('adminlte_js')
 <script>
     $(function() {
+        var divisi_id = "{{Auth::user()->divisi->id}}";
         var penjualantable = $('#penjualantable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/penjualan/data',
-                'method': 'POST',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                'url': "/api/penjualan/penjualan/data/semua/semua",
+                "dataType": "json",
+                'type': 'POST',
+                "headers": {
+                    'X-CSRF-TOKEN': "{{csrf_token()}}"
                 }
+                // 'headers': {
+                //     'X-CSRF-TOKEN': '{{csrf_token()}}'
+                // },
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -907,8 +957,6 @@
                 searchable: false
             }, {
                 data: 'so',
-                orderable: false,
-                searchable: false
             }, {
                 data: 'no_paket',
             }, {
@@ -929,11 +977,16 @@
                 searchable: false
             }, ]
         });
+
+
         var ekatalogtable = $('#ekatalogtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/penjualan/penjualan/ekatalog/data/' + 0,
+                'url': '/penjualan/penjualan/ekatalog/data/semua',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -949,45 +1002,38 @@
                 },
                 {
                     data: 'so',
-                    orderable: false,
-                    searchable: false
                 },
                 {
                     data: 'no_paket',
-
                 },
                 {
                     data: 'nopo',
-
                 },
                 {
                     data: 'tgl_buat',
-
                 },
                 {
                     data: 'tgl_kontrak',
-
                 },
                 {
                     data: 'nama_customer',
                 },
-
                 {
                     data: 'status',
-
                 },
                 {
                     data: 'button',
-                    orderable: false,
-                    searchable: false
                 },
             ]
         });
         var spatable = $('#spatable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/penjualan/penjualan/spa/data/',
+                'url': '/penjualan/penjualan/spa/data/semua',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -1003,8 +1049,6 @@
                 },
                 {
                     data: 'so',
-                    orderable: false,
-                    searchable: false
                 },
                 {
                     data: 'nopo'
@@ -1024,10 +1068,13 @@
             ]
         })
         var spbtable = $('#spbtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/penjualan/penjualan/spb/data/',
+                'url': '/penjualan/penjualan/spb/data/semua',
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -1043,8 +1090,6 @@
                 },
                 {
                     data: 'so',
-                    orderable: false,
-                    searchable: false
                 },
                 {
                     data: 'nopo'
@@ -1063,10 +1108,6 @@
                 }
             ]
         })
-
-
-
-
     })
 </script>
 
@@ -1116,6 +1157,91 @@
                 },
                 timeout: 8000
             })
+        });
+
+        $(document).on('click', '.deletemodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            var label = $(this).data("target");
+            if (label == 'ekatalog') {
+                $('#deletemodal').find('form').attr('action', '/api/ekatalog/delete/' + id);
+                $('#deletemodal').find('form').attr('data-target', 'ekatalog');
+            } else if (label == 'spa') {
+                $('#deletemodal').find('form').attr('action', '/api/spa/delete/' + id);
+                $('#deletemodal').find('form').attr('data-target', 'spa');
+            } else {
+                $('#deletemodal').find('form').attr('action', '/api/spb/delete/' + id);
+                $('#deletemodal').find('form').attr('data-target', 'spb');
+            }
+            // $.ajax({
+            //     url: href,
+            //     beforeSend: function() {
+            //         $('#loader').show();
+            //     },
+            //     // return the result
+            //     success: function(result) {
+            $('#deletemodal').modal("show");
+            // $('#detail').html(result).show();
+
+            //     },
+            //     complete: function() {
+            //         $('#loader').hide();
+            //     },
+            //     error: function(jqXHR, testStatus, error) {
+            //         console.log(error);
+            //         alert("Page " + href + " cannot open. Error:" + error);
+            //         $('#loader').hide();
+            //     },
+            //     timeout: 8000
+            // })
+        });
+
+
+        $(document).on('submit', '#form-delete', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            var label = $(this).data("target");
+            $.ajax({
+                url: action,
+                type: 'delete',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Hapus Data',
+                            'success'
+                        );
+                        $('#penjualantable').DataTable().ajax.reload();
+                        if (label == 'ekatalog') {
+                            $('#ekatalogtable').DataTable().ajax.reload();
+                        } else if (label == 'spa') {
+                            $('#spatable').DataTable().ajax.reload();
+                        } else if (label == 'spb') {
+                            $('#spbtable').DataTable().ajax.reload();
+                        }
+                        $("#deletemodal").modal('hide');
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Hapus Data',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                    // console.log(action);
+                }
+            });
+            return false;
         });
 
         // var detailRows = [];
@@ -1386,23 +1512,80 @@
                 },
             })
         }
+        $('#filter_penjualan').submit(function() {
+            var jenis_penjualan = [];
+            var status_penjualan = [];
 
-        $('#filter_ekat').submit(function() {
-            var values = [];
-            $("input:checked").each(function() {
-                values.push($(this).val());
+            $('input[name="jenis_penjualan[]"]:checked').each(function() {
+                jenis_penjualan.push($(this).val());
             });
-            if (values != 0) {
-                var x = values;
+            $('input[name="status_penjualan[]"]:checked').each(function() {
+                status_penjualan.push($(this).val());
+            });
+
+            if (jenis_penjualan != 0 && status_penjualan != 0) {
+                var x = jenis_penjualan;
+                var y = status_penjualan;
+            } else if (jenis_penjualan != 0 && status_penjualan == 0) {
+                var x = jenis_penjualan;
+                var y = ['semua'];
+            } else if (jenis_penjualan == 0 && status_penjualan != 0) {
+                var x = ['semua'];
+                var y = status_penjualan;
+            } else {
+                var x = ['semua'];
+                var y = ['semua'];
+            }
+            $('#penjualantable').DataTable().ajax.url('/api/penjualan/penjualan/data/' + x + '/' + y).load();
+            return false;
+        });
+        $('#filter_ekat').submit(function() {
+            var values_ekat = [];
+            $('input[name="status_ekatalog[]"]:checked').each(function() {
+                values_ekat.push($(this).val());
+            });
+            if (values_ekat != 0) {
+                var x = values_ekat;
 
             } else {
-                var x = ['kosong']
+                var x = ['semua'];
             }
-
             console.log(x);
-            $('#ekatalogtable').DataTable().ajax.url('/api/ekatalog/data/' + x).load();
+            $('#ekatalogtable').DataTable().ajax.url('/penjualan/penjualan/ekatalog/data/' + x).load();
+            return false;
+        });
+        $('#filter_spa').submit(function() {
+            var values_spa = [];
+            $('input[name="status_spa[]"]:checked').each(function() {
+                values_spa.push($(this).val());
+            });
+            if (values_spa != 0) {
+                var x = values_spa;
+
+            } else {
+                var x = ['semua'];
+            }
+            console.log(x);
+            $('#spatable').DataTable().ajax.url('/penjualan/penjualan/spa/data/' + x).load();
             return false;
 
+        });
+
+        $('#filter_spb').submit(function() {
+            var values_spb = [];
+            $('input[name="status_spb[]"]:checked').each(function() {
+                values_spb.push($(this).val());
+            });
+            // alert(values_spb);
+            if (values_spb != 0) {
+                var x = values_spb;
+
+            } else {
+                var x = ['semua'];
+            }
+            console.log(x);
+            $('#spbtable').DataTable().ajax.url('/penjualan/penjualan/spb/data/' + x).load();
+            return false;
         });
     })
 </script>

@@ -17,12 +17,10 @@ class NoseriBarangJadi extends Model
     {
         return $this->belongsTo(Divisi::class, 'dari');
     }
-
     function to()
     {
         return $this->belongsTo(Divisi::class, 'ke');
     }
-
     function gudang()
     {
         return $this->belongsTo(GudangBarangJadi::class, 'gdg_barang_jadi_id');

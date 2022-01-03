@@ -7,16 +7,16 @@
     <div class="row mb-2">
         <div class="col-sm-6">
             <h1 class="m-0  text-dark">Ekspedisi</h1>
-        </div><!-- /.col -->
+        </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 @if(Auth::user()->divisi_id == "15")
                 <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
-                <li class="breadcrumb-item active">Ekspedisi</li>
                 @elseif(Auth::user()->divisi_id == "2")
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
-                <li class="breadcrumb-item active">Ekspedisi</li>
                 @endif
+                <li class="breadcrumb-item active">Ekspedisi</li>
+
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -133,7 +133,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="darat" id="status1" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="darat" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status1">
                                                         Darat
                                                     </label>
@@ -141,7 +141,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="laut" id="status2" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="laut" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status2">
                                                         Laut
                                                     </label>
@@ -149,7 +149,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="udara" id="status3" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="udara" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status3">
                                                         Udara
                                                     </label>
@@ -157,7 +157,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="lain" id="status4" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="lain" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status4">
                                                         Lain
                                                     </label>
@@ -184,7 +184,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="0" name='jurusan' />
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="semua" name='jurusan' />
                                                     <label class="form-check-label" for="dropdownStatus3">
                                                         Semua
                                                     </label>
@@ -250,11 +250,13 @@
     $(function() {
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/logistik/ekspedisi/data/',
-
+                'url': '/logistik/ekspedisi/data/semua/semua',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -319,7 +321,6 @@
             if (k != 35) {
                 $('#provinsi_select').removeClass('hide');
                 $("input[name=jurusan][value='provinsi']").prop("checked", true);
-
             } else {
                 $("input[name=jurusan][value='indonesia']").prop("checked", true);
                 $('#provinsi_select').addClass('hide');
@@ -354,8 +355,8 @@
                     // $("#editform").attr("action", href);
                     checkvalue(jurusan_arr);
                     checkvalueprovinsi(prov_arr);
-
                     provinsi();
+
                     // $('.provinsi').val(['1']).trigger('change');
                     // $(".provinsi").select2().select2('1');
                     // provinsi_selected(prov_arr);
@@ -521,15 +522,14 @@
                         };
                     },
                 }
-            }).val([1, 2]).trigger('change');
-            // $('select[name="provinsi[]"]').val(['1', '2']);
-            // $('select[name="provinsi[]"]').trigger("change");
+            });
+            $('.provinsi').val('1').trigger("change");
         }
-
 
         $('#filter').submit(function() {
             var jalur = [];
             var jurusan = [];
+
             $("input[name=jalur]:checked").each(function() {
                 jalur.push($(this).val());
             });
@@ -548,7 +548,9 @@
             } else {
                 var x = ['kosong']
             }
+            console.log(x);
             console.log(y);
+            $('#showtable').DataTable().ajax.url('/logistik/ekspedisi/data/' + x + '/' + y).load();
 
             return false;
         });

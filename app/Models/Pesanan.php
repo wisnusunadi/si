@@ -22,14 +22,29 @@ class Pesanan extends Model
     {
         return $this->hasOne(Spb::class);
     }
+
     public function DetailPesanan()
     {
         return $this->hasMany(DetailPesanan::class);
     }
+
     function TFProduksi()
     {
         return $this->hasOne(TFProduksi::class);
     }
+
+    public function getJumlahPaketPesanan()
+    {
+        $id = $this->id;
+        $jumlah = 0;
+        $data = DetailPesanan::where('pesanan_id', $id)->get();
+        foreach ($data as $d) {
+            $jumlah += $d->jumlah;
+        }
+        return $jumlah;
+    }
+
+
     public function getJumlahPesanan()
     {
         $id = $this->id;
@@ -40,6 +55,24 @@ class Pesanan extends Model
                 $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
             }
         }
+        return $jumlah;
+    }
+
+    public function getJumlahSeri()
+    {
+        $id = $this->id;
+        $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->count();
+        return $jumlah;
+    }
+
+    public function getJumlahCekSeri()
+    {
+        $id = $this->id;
+        $jumlah = NoseriDetailPesanan::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->count();
         return $jumlah;
     }
 
@@ -64,17 +97,27 @@ class Pesanan extends Model
     function cekJumlahkirim()
     {
         $id = $this->id;
-        $jumlah = NoseriTGbj::whereHas('detail.header.pesanan', function($q) use($id) {
-            $q->where('id', $id)->where('status_id',2);
+        $jumlah = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($id) {
+            $q->where('id', $id)->where('status_id', 2);
+        });
+        return $jumlah;
+    }
+
+    public function getJumlahCoo()
+    {
+        $id = $this->id;
+        $jumlah = NoseriCoo::whereHas('NoseriDetailLogistik.DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
         })->count();
         return $jumlah;
     }
 
-    function getJumlahKirim1() {
+    function getJumlahKirim1()
+    {
         $id = $this->id;
         $detail = TFProduksiDetail::where('t_gbj_id', $id)->get();
         $jumlah = 0;
-        foreach($detail as $d) {
+        foreach ($detail as $d) {
             $jumlah += $d->qty;
         }
         return $jumlah;

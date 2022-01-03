@@ -18,10 +18,12 @@ class DetailPesanan extends Model
     {
         return $this->belongsTo(PenjualanProduk::class, 'penjualan_produk_id');
     }
+
     public function DetailPesananProduk()
     {
         return $this->hasMany(DetailPesananProduk::class);
     }
+
     public function countNoSeri()
     {
         $id = $this->id;
@@ -30,6 +32,7 @@ class DetailPesanan extends Model
         })->count();
         return $c;
     }
+
     public function getTanggalUji()
     {
         $id = $this->id;
@@ -38,6 +41,7 @@ class DetailPesanan extends Model
         })->first();
         return $date;
     }
+
     public function getJumlahPesanan()
     {
         $id = $this->id;

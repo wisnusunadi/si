@@ -321,6 +321,8 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/laporan/qc/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'

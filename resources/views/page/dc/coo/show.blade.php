@@ -74,6 +74,8 @@
                                             <th>No AKD</th>
                                             <th>Bulan</th>
                                             <th>Tgl Surat Jalan</th>
+                                            <th>Tgl Kirim</th>
+                                            <th>Ket</th>
                                             <th>Laporan</th>
                                         </thead>
                                         <tbody>
@@ -172,11 +174,11 @@
             serverSide: true,
             ajax: {
                 'url': '/api/dc/data/',
-                'type': 'GET',
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
-
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -186,7 +188,7 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'kosong'
+                data: 'id'
             }, {
                 data: 'seri'
             }, {
@@ -201,6 +203,10 @@
                 data: 'bulan'
             }, {
                 data: 'tgl_sj'
+            }, {
+                data: 'tgl_kirim'
+            }, {
+                data: 'catatan'
             }, {
                 data: 'laporan'
             }]

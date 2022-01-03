@@ -3,7 +3,25 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Sales Order</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Sales Order</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                @endif
+                <li class="breadcrumb-item"><a href="{{route('logistik.so.show')}}">Sales Order</a></li>
+                <li class="breadcrumb-item active">Detail</li>
+
+            </ol>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_css')
@@ -13,7 +31,7 @@
         font-weight: 600;
     }
 
-    .nok {
+    .urgent {
         color: #dc3545;
         font-weight: 600;
     }
@@ -22,6 +40,11 @@
         color: #FFC700;
         font-weight: 600;
     }
+
+    .info {
+        color: #3a7bb0;
+    }
+
 
     .list-group-item {
         border: 0 none;
@@ -109,7 +132,10 @@
                                 </div>
                                 <div class="margin">
                                     <div><b id="no_akn">{{$data->satuan}}</b></div>
-                                    <small>({{$data->instansi}})</small>
+                                    <!-- <small>({{$data->instansi}})</small> -->
+                                </div>
+                                <div class="margin">
+                                    <b id="distributor">{{$data->alamat}}</b>
                                 </div>
                             </div>
                             <div class="col-2">
@@ -129,7 +155,7 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Batas Pengiriman</small></div>
-                                    <div class="urgent"><b></b></div>
+                                    <div><b>{!! $tgl_pengiriman !!}</b></div>
                                 </div>
                             </div>
 
@@ -189,15 +215,21 @@
                         <div class="row">
                             <div class="col-12">
                                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    @if($proses == 'proses')
                                     <li class="nav-item">
                                         <a class="nav-link active" id="pills-belum_kirim-tab" data-toggle="pill" href="#pills-belum_kirim" role="tab" aria-controls="pills-belum_kirim" aria-selected="true">Belum Kirim</a>
-                                    </li>
+                                    </li>@endif
                                     <li class="nav-item">
-                                        <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Kirim</a>
+                                        <a class="nav-link @if($proses == 'selesai') active @endif" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" @if($proses=='selesai' ) aria-selected="true" @else aria-selected="false" @endif>Sudah Kirim</a>
                                     </li>
+                                    @if($proses == 'selesai')
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-surat_jalan-tab" data-toggle="pill" href="#pills-surat_jalan" role="tab" aria-controls="pills-surat_jalan" aria-selected="false">Surat Jalan</a>
+                                    </li>@endif
                                 </ul>
                                 <div class="tab-content" id="pills-tabContent">
-                                    <div class="tab-pane fade show active" id="pills-belum_kirim" role="tabpanel" aria-labelledby="pills-belum_kirim-tab">
+
+                                    <div class="tab-pane fade  @if($proses == 'proses') show active @endif" id="pills-belum_kirim" role="tabpanel" aria-labelledby="pills-belum_kirim-tab">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
@@ -209,12 +241,13 @@
                                                             <div class="card-body">
                                                                 <div class="row">
                                                                     <div class="col-12">
-
+                                                                        @if(Auth::user()->divisi->id == "15")
                                                                         <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
                                                                             <span class="float-right filter">
                                                                                 <button class="btn btn-primary" type="button" id="kirim_produk" disabled><i class="fas fa-plus"></i> Pengiriman</button>
                                                                             </span>
                                                                         </a>
+                                                                        @endif
                                                                         <!-- <span class="float-right filter">
                                                             <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="fas fa-filter"></i> Filter
@@ -313,7 +346,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-selesai_kirim" role="tabpanel" aria-labelledby="pills-selesai_kirim-tab">
+                                    <div class="tab-pane fade @if($proses == 'selesai') show active @endif" id="pills-selesai_kirim" role="tabpanel" aria-labelledby="pills-selesai_kirim-tab">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
@@ -372,6 +405,31 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    @if($proses == 'selesai')
+                                    <div class="tab-pane fade" id="pills-surat_jalan" role="tabpanel" aria-labelledby="pills-surat_jalan-tab">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped align-center" id="sjtable" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Surat Jalan</th>
+                                                                <th>Tgl Kirim</th>
+                                                                <th>Resi</th>
+                                                                <th>Ekspedisi / Pengiriman</th>
+                                                                <th>Status</th>
+                                                                <th>Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
 
                             </div>
@@ -417,6 +475,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var divisi_id = "{{Auth::user()->divisi->id}}";
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -427,11 +486,53 @@
         y = [];
         y = <?php echo json_encode($detail_id); ?>;
 
+        var sjtable = $('#sjtable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/so/data/sj/' + '{{$data->pesanan_id}}',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'DT_RowIndex',
+                className: 'align-center nowrap-text',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'nosurat',
+            }, {
+                data: 'tgl_kirim',
+            }, {
+                data: 'noresi',
+            }, {
+                data: 'ekspedisi_id',
+            }, {
+                data: 'status_id',
+            }, {
+                data: 'aksi',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false
+            }]
+
+        });
+
         var belumkirimtable = $('#belumkirimtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$data->pesanan_id}}',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -443,7 +544,8 @@
                 data: 'checkbox',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: divisi_id == 15 ? true : false
             }, {
                 data: 'DT_RowIndex',
                 className: 'align-center nowrap-text',
@@ -467,10 +569,13 @@
         });
 
         var selesaikirimtable = $('#selesaikirimtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/so/data/detail/selesai_kirim/' + '{{$data->pesanan_id}}',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -565,7 +670,6 @@
                 url: action,
                 data: $('#form-logistik-create').serialize(),
                 success: function(response) {
-                    // console.log(response);
                     if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',
@@ -598,6 +702,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -631,6 +737,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/noseri/detail/belum_kirim/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -651,6 +759,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/noseri/detail/selesai_kirim/data/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -747,7 +857,6 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -762,7 +871,7 @@
                 if ($(this).val() != "") {
                     $('#ekspedisi_id').removeClass('is-invalid');
                     $('#msgekspedisi_id').text("");
-                    if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                    if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                         $('#btnsimpan').removeAttr('disabled');
                     } else {
                         $('#btnsimpan').attr('disabled', true);
@@ -773,7 +882,6 @@
                     $('#btnsimpan').attr('disabled', true);
                 }
                 var value = $(this).val();
-                console.log(value);
             });
         }
 
@@ -789,7 +897,6 @@
 
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
-            console.log(checkedAry);
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
             var pesanan_id = '{{$data->id}}';
@@ -830,7 +937,7 @@
                 $('#ekspedisi').removeClass('hide');
                 $('#nonekspedisi').addClass('hide');
                 $('#nama_pengirim').val("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -840,7 +947,7 @@
                 $('#ekspedisi').addClass('hide');
                 $('#nonekspedisi').removeClass('hide');
                 $('.ekspedisi_id').val("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -848,32 +955,39 @@
             }
         });
 
+        function check_no_sj(val) {
+            var hasil = "";
+            $.ajax({
+                type: "GET",
+                url: '/api/logistik/cek/no_sj/' + val,
+                async: false,
+                dataType: 'json',
+                success: function(data) {
+                    hasil = data;
+                },
+                error: function() {
+                    alert('Error occured');
+                }
+            });
+            return hasil;
+        }
         $(document).on('change keyup', '#no_invoice', function(event) {
             if ($(this).val() != "") {
                 var val = $(this).val();
-                $.ajax({
-                    type: "GET",
-                    url: '/api/logistik/cek/no_sj/' + val,
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.data > 0) {
-                            $('#no_invoice').addClass('is-invalid');
-                            $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
-                            $('#btnsimpan').attr('disabled', true);
-                        } else {
-                            $('#no_invoice').removeClass('is-invalid');
-                            $('#msgnoinvoice').text("");
-                            if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
-                                $('#btnsimpan').removeAttr('disabled');
-                            } else {
-                                $('#btnsimpan').attr('disabled', true);
-                            }
-                        }
-                    },
-                    error: function() {
-                        alert('Error occured');
+
+                if (check_no_sj(val) > 0) {
+                    $('#no_invoice').addClass('is-invalid');
+                    $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
+                    $('#btnsimpan').attr('disabled', true);
+                } else {
+                    $('#no_invoice').removeClass('is-invalid');
+                    $('#msgnoinvoice').text("");
+                    if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                        $('#btnsimpan').removeAttr('disabled');
+                    } else {
+                        $('#btnsimpan').attr('disabled', true);
                     }
-                });
+                }
             } else if ($(this).val() == "") {
                 $('#no_invoice').addClass('is-invalid');
                 $('#msgnoinvoice').text("No Surat Jalan tidak boleh kosong");
@@ -885,7 +999,7 @@
             if ($(this).val() != "") {
                 $('#tgl_kirim').removeClass('is-invalid');
                 $('#msgtgl_kirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -901,7 +1015,7 @@
             if ($(this).val() != "") {
                 $('#nama_pengirim').removeClass('is-invalid');
                 $('#msgnama_pengirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);

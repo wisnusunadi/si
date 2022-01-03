@@ -25,7 +25,6 @@
     }
 </style>
 @stop
-
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -37,65 +36,61 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <!-- <form method="POST" action="/api/laporan/create"> -->
-                            <div class="form-horizontal">
-                                <div class="form-group row">
-                                    <label for="" class="col-form-label col-5" style="text-align: right">Distributor / Customer</label>
-                                    <div class="col-4">
-                                        <select class="select2 select-info form-control customer_id" name="customer_id" id="customer_id">
-                                            <option value="semua">Semua Distributor</option>
-                                        </select>
-                                        <div class="feedback" id="msgcustomer_id">
-                                            <small class="text-muted">Distributor / Customer boleh dikosongi</small>
+                            <form id="filter">
+                                <div class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Distributor / Customer</label>
+                                        <div class="col-4">
+                                            <select class="select2 select-info form-control customer_id" name="customer_id" id="customer_id">
+                                                <option value="semua">Semua Distributor</option>
+                                            </select>
+                                            <div class="feedback" id="msgcustomer_id">
+                                                <small class="text-muted">Distributor / Customer boleh dikosongi</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="penjualan" class="col-form-label col-5" style="text-align: right">Penjualan</label>
+                                        <div class="col-5 col-form-label">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="penjualan" value="ekatalog" name="penjualan">
+                                                <label class="form-check-label" for="inlineCheckbox1">E-katalog</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="penjualan" value="spa" name="penjualan">
+                                                <label class="form-check-label" for="inlineCheckbox1">SPA</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="penjualan" value="spb" name="penjualan">
+                                                <label class="form-check-label" for="inlineCheckbox1">SPB</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="tanggal_mulai" class="col-form-label col-5" style="text-align: right">Tanggal Awal</label>
+                                        <div class="col-2">
+                                            <input type="date" class="form-control col-form-label @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" readonly />
+                                            <div class="invalid-feedback" id="msgtanggal_mulai">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="tanggal_akhir" class="col-form-label col-5" style="text-align: right">Tanggal Akhir</label>
+                                        <div class="col-2">
+                                            <input type="date" class="form-control col-form-label @error('tanggal_akhir') is-invalid @enderror" id="tanggal_akhir" name="tanggal_akhir" readonly />
+                                            <div class="invalid-feedback" id="msgtanggal_akhir">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-5"></div>
+                                        <div class="col-4">
+                                            <span class="float-right filter"><button type="submit" class="btn btn-success" id="btncetak" disabled>Cetak</button></span>
+                                            <span class="float-right filter"><button type="button" class="btn btn-outline-danger" id="btnbatal">Batal</button></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="penjualan" class="col-form-label col-5" style="text-align: right">Penjualan</label>
-                                    <div class="col-5 col-form-label">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="penjualan" id="penjualan1" value="semua" />
-                                            <label class="form-check-label" for="penjualan1">Semua</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="penjualan" id="penjualan2" value="ekatalog" />
-                                            <label class="form-check-label" for="penjualan2">E-Catalogue</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="penjualan" id="penjualan3" value="spa" />
-                                            <label class="form-check-label" for="penjualan3">SPA</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="penjualan" id="penjualan4" value="spb" />
-                                            <label class="form-check-label" for="penjualan4">SPB</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="tanggal_mulai" class="col-form-label col-5" style="text-align: right">Tanggal Awal</label>
-                                    <div class="col-2">
-                                        <input type="date" class="form-control col-form-label @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" readonly />
-                                        <div class="invalid-feedback" id="msgtanggal_mulai">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="tanggal_akhir" class="col-form-label col-5" style="text-align: right">Tanggal Akhir</label>
-                                    <div class="col-2">
-                                        <input type="date" class="form-control col-form-label @error('tanggal_akhir') is-invalid @enderror" id="tanggal_akhir" name="tanggal_akhir" readonly />
-                                        <div class="invalid-feedback" id="msgtanggal_akhir">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-5"></div>
-                                    <div class="col-4">
-                                        <span class="float-right filter"><button type="button" class="btn btn-success" id="btncetak" disabled>Cetak</button></span>
-                                        <span class="float-right filter"><button type="button" class="btn btn-outline-danger" id="btnbatal">Batal</button></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- </form> -->
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -125,6 +120,7 @@
                                     <th>Harga</th>
                                     <th>Subtotal</th>
                                     <th>Status</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -162,6 +158,7 @@
                                     <th>Harga</th>
                                     <th>Subtotal</th>
                                     <th>Status</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -193,6 +190,7 @@
                                     <th>Harga</th>
                                     <th>Subtotal</th>
                                     <th>Status</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -225,6 +223,7 @@
                                     <th>Harga</th>
                                     <th>Subtotal</th>
                                     <th>Status</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -266,6 +265,7 @@
         $("#tanggal_akhir").attr("max", today);
 
         $('#semuatable').DataTable({
+            destroy: true,
             processing: true,
             dom: 'Bfrtip',
             serverSide: false,
@@ -273,7 +273,9 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             ajax: {
-                'url': '/api/laporan/penjualan/semua/0/0/0/',
+                'url': '/api/laporan/penjualan/ekatalog,spa,spb/semua/0/0/',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -335,6 +337,9 @@
                 {
                     data: 'log'
                 },
+                {
+                    data: 'ket'
+                }
             ],
             rowGroup: {
                 startRender: function(rows, group) {
@@ -361,266 +366,10 @@
             }
 
         });
-        var e = $('#ekatalogtable').DataTable({
-            processing: true,
-            dom: 'Bfrtip',
-            serverSide: false,
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            ajax: {
-                'url': '/api/laporan/penjualan/ekatalog/0/0/0/',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            orderFixed: [
-                [1, 'asc']
-            ],
-            buttons: [{
-                    extend: 'excel',
-                    title: 'Laporan Penjualan Ekatalog',
-                    text: '<i class="far fa-file-excel"></i> Export',
-                    className: "btn btn-info"
-                },
-                {
-                    extend: 'print',
-                    title: 'Laporan Penjualan Ekatalog',
-                    text: '<i class="fas fa-print"></i> Cetak',
-                    className: "btn btn-primary"
-                },
-            ],
-            columns: [{
-                    data: 'kosong'
-                },
-                {
-                    data: 'so'
-                },
-                {
-                    data: 'no_po'
-                },
-                {
-                    data: 'no_sj'
-                },
-                {
-                    data: 'nama_customer'
-                },
-                {
-                    data: 'tgl_kontrak'
-                },
-                {
-                    data: 'tgl_kirim'
-                },
-                {
-                    data: 'tgl_po'
-                },
-                {
-                    data: 'instansi'
-                },
-                {
-                    data: 'satuan'
-                },
-                {
-                    data: 'nama_produk'
-                },
-                {
-                    data: 'no_seri'
-                },
-                {
-                    data: 'jumlah'
-                },
-                {
-                    data: 'harga',
-                    render: $.fn.dataTable.render.number(',', '.', 2),
-                },
-                {
-                    data: 'subtotal',
-                    render: $.fn.dataTable.render.number(',', '.', 2),
-                },
-                {
-                    data: 'log'
-                }
-            ],
-            rowGroup: {
-                startRender: function(rows, group) {
-                    var i = 0;
-                    console.log(group);
-                    return $('<tr/>')
-                        .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
-                },
-                endRender: function(rows, group) {
-                    var totalPenjualan = rows
-                        .data()
-                        .pluck('subtotal')
-                        .reduce(function(a, b) {
-                            return a + b * 1;
-                        }, 0);
-                    totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
-                    return $('<tr/>')
-                        .append('<td colspan="14">Total Penjualan Produk: ' + rows.count() + '</td>')
-                        .append('<td colspan="2">' + totalPenjualan + '</td>');
-                },
-                dataSrc: function(row) {
-                    return row.no_paket;
-                },
-            }
-        });
-
-        $('#spatable').DataTable({
-            processing: true,
-            dom: 'Bfrtip',
-            serverSide: false,
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            ajax: {
-                'url': '/api/laporan/penjualan/spa/0/0/0/',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            buttons: [{
-                    extend: 'excel',
-                    title: 'Laporan Penjualan SPA',
-                    text: '<i class="far fa-file-excel"></i> Export',
-                    className: "btn btn-info"
-                },
-                {
-                    extend: 'print',
-                    title: 'Laporan Penjualan SPA',
-                    text: '<i class="fas fa-print"></i> Cetak',
-                    className: "btn btn-primary"
-                },
-            ],
-            columns: [{
-                data: 'kosong'
-            }, {
-                data: 'so'
-            }, {
-                data: 'nama_customer'
-            }, {
-                data: 'tgl_kirim'
-            }, {
-                data: 'tgl_po'
-            }, {
-                data: 'nama_produk'
-            }, {
-                data: 'no_seri'
-            }, {
-                data: 'jumlah'
-            }, {
-                data: 'harga',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'subtotal',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'log'
-            }],
-            rowGroup: {
-                startRender: function(rows, group) {
-                    var i = 0;
-                    console.log(group);
-                    return $('<tr/>')
-                        .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
-                },
-                endRender: function(rows, group) {
-                    var totalPenjualan = rows
-                        .data()
-                        .pluck('subtotal')
-                        .reduce(function(a, b) {
-                            return a + b * 1;
-                        }, 0);
-                    totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
-                    return $('<tr/>')
-                        .append('<td colspan="9">Total Penjualan Produk: ' + rows.count() + '</td>')
-                        .append('<td colspan="2">' + totalPenjualan + '</td>');
-                },
-                dataSrc: function(row) {
-                    return row.no_po;
-                },
-            }
-        });
-        $('#spbtable').DataTable({
-            processing: true,
-            dom: 'Bfrtip',
-            serverSide: false,
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            ajax: {
-                'url': '/api/laporan/penjualan/spb/0/0/0/',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            buttons: [{
-                    extend: 'excel',
-                    title: 'Laporan Penjualan SPB',
-                    text: '<i class="far fa-file-excel"></i> Export',
-                    className: "btn btn-info"
-                },
-                {
-                    extend: 'print',
-                    title: 'Laporan Penjualan SPB',
-                    text: '<i class="fas fa-print"></i> Cetak',
-                    className: "btn btn-primary"
-                },
-            ],
-            columns: [{
-                data: 'kosong'
-            }, {
-                data: 'so'
-            }, {
-                data: 'nama_customer'
-            }, {
-                data: 'tgl_kirim'
-            }, {
-                data: 'tgl_po'
-            }, {
-                data: 'nama_produk'
-            }, {
-                data: 'no_seri'
-            }, {
-                data: 'jumlah'
-            }, {
-                data: 'harga',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'subtotal',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'log'
-            }],
-            rowGroup: {
-                startRender: function(rows, group) {
-                    var i = 0;
-                    console.log(group);
-                    return $('<tr/>')
-                        .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
-                },
-                endRender: function(rows, group) {
-                    var totalPenjualan = rows
-                        .data()
-                        .pluck('subtotal')
-                        .reduce(function(a, b) {
-                            return a + b * 1;
-                        }, 0);
-                    totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
-                    return $('<tr/>')
-                        .append('<td colspan="9">Total Penjualan Produk: ' + rows.count() + '</td>')
-                        .append('<td colspan="2">' + totalPenjualan + '</td>');
-                },
-                dataSrc: function(row) {
-                    return row.no_po;
-                },
-            }
-        });
-
         $('.customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
-                $('input[type="radio"][name="penjualan"]').removeAttr('disabled');
-                if ($('input[type="radio"][name="penjualan"]').val() != undefined && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
+                $('input[type="checkbox"][name="penjualan"]').removeAttr('disabled');
+                if ($('input[type="checkbox"][name="penjualan"]').val() != undefined && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -630,7 +379,7 @@
             }
         });
 
-        $('input[type="radio"][name="penjualan"]').on('change', function() {
+        $('input[type="checkbox"][name="penjualan"]').on('change', function() {
             if ($(this).val() != "") {
                 $('#tanggal_mulai').removeAttr('readonly');
                 if ($('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
@@ -649,10 +398,9 @@
             if ($(this).val() != "") {
                 $('#tanggal_akhir').removeAttr('readonly');
                 $("#tanggal_akhir").attr("min", $(this).val())
-                if ($('input[type="radio"][name="penjualan"]').val() != undefined && $('#tanggal_akhir').val() != "") {
+                if ($('input[type="checkbox"][name="penjualan"]').val() != undefined && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
-
                     $("#btncetak").attr('disabled', true);
                 }
             } else {
@@ -663,7 +411,7 @@
 
         $('#tanggal_akhir').on('keyup change', function() {
             if ($(this).val() != "") {
-                if ($('#tanggal_mulai').val() != "" && $('input[type="radio"][name="penjualan"]').val() != undefined) {
+                if ($('#tanggal_mulai').val() != "" && $('input[type="checkbox"][name="penjualan"]').val() != undefined) {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -699,56 +447,79 @@
         $("#btnbatal").on('click', function() {
             $("#btncetak").attr('disabled', true);
             $(".customer_id").val('semua').trigger("change");
-            $('input[type="radio"][name="penjualan"]').prop('checked', false);
+            $('input[type="checkbox"][name="penjualan"]').prop('checked', false);
             $('#tanggal_mulai').val('');
             $('#tanggal_mulai').attr('readonly', true);
             $('#tanggal_akhir').val('');
             $('#tanggal_akhir').attr('readonly', true);
             $('#semuaform').addClass('hide');
-            $('#ekatalogform').addClass('hide');
-            $('#spaform').addClass('hide');
-            $('#spbform').addClass('hide');
+
         });
 
-        $('#btncetak').on('click', function() {
-            if ($('input[type="radio"][name="penjualan"]:checked').val() == "semua") {
-                var customer_id = $('#customer_id').val();
-                var tanggal_mulai = $('#tanggal_mulai').val();
-                var tanggal_akhir = $('#tanggal_akhir').val();
-                $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/semua/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '').load();
-                $('#semuaform').removeClass('hide');
-                $('#ekatalogform').addClass('hide');
-                $('#spaform').addClass('hide');
-                $('#spbform').addClass('hide');
-            } else if ($('input[type="radio"][name="penjualan"]:checked').val() == "ekatalog") {
-                var customer_id = $('#customer_id').val();
-                var tanggal_mulai = $('#tanggal_mulai').val();
-                var tanggal_akhir = $('#tanggal_akhir').val();
-                $('#ekatalogtable').DataTable().ajax.url('/api/laporan/penjualan/ekatalog/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '').load();
-                $('#semuaform').addClass('hide');
-                $('#ekatalogform').removeClass('hide');
-                $('#spaform').addClass('hide');
-                $('#spbform').addClass('hide');
-            } else if ($('input[type="radio"][name="penjualan"]:checked').val() == "spa") {
-                var customer_id = $('#customer_id').val();
-                var tanggal_mulai = $('#tanggal_mulai').val();
-                var tanggal_akhir = $('#tanggal_akhir').val();
-                $('#spatable').DataTable().ajax.url('/api/laporan/penjualan/spa/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '').load();
-                $('#semuaform').addClass('hide');
-                $('#ekatalogform').addClass('hide');
-                $('#spaform').removeClass('hide');
-                $('#spbform').addClass('hide');
-            } else if ($('input[type="radio"][name="penjualan"]:checked').val() == "spb") {
-                var customer_id = $('#customer_id').val();
-                var tanggal_mulai = $('#tanggal_mulai').val();
-                var tanggal_akhir = $('#tanggal_akhir').val();
-                $('#spbtable').DataTable().ajax.url('/api/laporan/penjualan/spb/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '').load();
-                $('#semuaform').addClass('hide');
-                $('#ekatalogform').addClass('hide');
-                $('#spaform').addClass('hide');
-                $('#spbform').removeClass('hide');
+        // $('#btncetak').on('click', function() {
+        //     if ($('input[type="checkbox"][name="penjualan"]:checked').val() == "semua") {
+        //         var customer_id = $('#customer_id').val();
+        //         var tanggal_mulai = $('#tanggal_mulai').val();
+        //         var tanggal_akhir = $('#tanggal_akhir').val();
+        //         $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/semua/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '').load();
+        //         $('#semuaform').removeClass('hide');
+        //         $('#ekatalogform').addClass('hide');
+        //         $('#spaform').addClass('hide');
+        //         $('#spbform').addClass('hide');
+        //     } else if ($('input[type="checkbox"][name="penjualan"]:checked').val() == "ekatalog") {
+        //         var customer_id = $('#customer_id').val();
+        //         var tanggal_mulai = $('#tanggal_mulai').val();
+        //         var tanggal_akhir = $('#tanggal_akhir').val();
+        //         $('#ekatalogtable').DataTable().ajax.url('/api/laporan/penjualan/ekatalog/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '').load();
+        //         $('#semuaform').addClass('hide');
+        //         $('#ekatalogform').removeClass('hide');
+        //         $('#spaform').addClass('hide');
+        //         $('#spbform').addClass('hide');
+        //     } else if ($('input[type="checkbox"][name="penjualan"]:checked').val() == "spa") {
+        //         var customer_id = $('#customer_id').val();
+        //         var tanggal_mulai = $('#tanggal_mulai').val();
+        //         var tanggal_akhir = $('#tanggal_akhir').val();
+        //         $('#spatable').DataTable().ajax.url('/api/laporan/penjualan/spa/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '').load();
+        //         $('#semuaform').addClass('hide');
+        //         $('#ekatalogform').addClass('hide');
+        //         $('#spaform').removeClass('hide');
+        //         $('#spbform').addClass('hide');
+        //     } else if ($('input[type="checkbox"][name="penjualan"]:checked').val() == "spb") {
+        //         var customer_id = $('#customer_id').val();
+        //         var tanggal_mulai = $('#tanggal_mulai').val();
+        //         var tanggal_akhir = $('#tanggal_akhir').val();
+        //         $('#spbtable').DataTable().ajax.url('/api/laporan/penjualan/spb/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '').load();
+        //         $('#semuaform').addClass('hide');
+        //         $('#ekatalogform').addClass('hide');
+        //         $('#spaform').addClass('hide');
+        //         $('#spbform').removeClass('hide');
+        //     }
+        // })
+        $('#filter').submit(function() {
+            var penjualan = [];
+            var tanggal_mulai = $('#tanggal_mulai').val();
+            var tanggal_akhir = $('#tanggal_akhir').val();
+            var customer_id = $('#customer_id').val();
+            $("input[name=penjualan]:checked").each(function() {
+                penjualan.push($(this).val());
+            });
+
+
+            if (penjualan != 0) {
+                var x = penjualan;
+
+            } else {
+                var x = ['kosong']
             }
-        })
+            console.log(x);
+            console.log(customer_id);
+            console.log(tanggal_mulai);
+            console.log(tanggal_akhir);
+            $('#semuaform').removeClass('hide');
+            $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir).load();
+
+            return false;
+        });
     });
 </script>
 @endsection

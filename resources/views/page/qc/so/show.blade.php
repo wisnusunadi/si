@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0  text-dark">Sales Order QC</h1>
+            <h1 class="m-0  text-dark">Sales Order</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -232,7 +232,8 @@
             serverSide: true,
             ajax: {
                 'url': '/api/qc/so/data/semua',
-
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -277,8 +278,6 @@
                 searchable: false
             }]
         })
-
-
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {
@@ -291,7 +290,7 @@
                 var x = ['semua']
             }
             console.log(x);
-            $('#showtable').DataTable().ajax.url(' /api/qc/so/data/' + x).load();
+            $('#showtable').DataTable().ajax.url('/api/qc/so/data/' + x).load();
             return false;
         });
     })

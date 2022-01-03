@@ -167,36 +167,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA102100001</td>
-                                                    <td>
-                                                        <div class="urgent">12-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum dikirim</span></td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA102100002</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum dikirim</span></td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>SOSPA102100003</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum dikirim</span></td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr> -->
                                             </tbody>
                                         </table>
 
@@ -216,42 +186,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA092100093</td>
-                                                    <td>
-                                                        <div class="urgent">31-10-2021</div>
-                                                        <small><i class="fas fa-exclamation-circle" id="warning"></i> 2 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA092100121</td>
-                                                    <td>
-                                                        <div class="urgent">01-11-2021</div>
-                                                        <small><i class="fas fa-exclamation-circle" id="warning"></i> 3 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>SOSPA102100001</td>
-                                                    <td>
-                                                        <div class="urgent">12-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>SOSPA102100002</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr> -->
+
                                             </tbody>
                                         </table>
 
@@ -271,26 +206,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA092100093</td>
-                                                    <td>
-                                                        <div class="urgent">31-10-2021</div>
-                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
-                                                    </td>
-                                                    <td><span class="badge yellow-text">Sebagian dikirim</span></td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA092100121</td>
-                                                    <td>
-                                                        <div class="urgent">01-11-2021</div>
-                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
-                                                    </td>
-                                                    <td><span class="badge yellow-text">Sebagian dikirim</span></td>
-                                                    <td><a href="{{route('logistik.so.detail', ['id' => '1','sd'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr> -->
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -370,11 +286,11 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/dashboard/data/terbaru',
-
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
-
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -412,11 +328,11 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/dashboard/data/belum_dikirim',
-
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
-
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -448,11 +364,11 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/dashboard/data/lewat_batas',
-
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
-
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
