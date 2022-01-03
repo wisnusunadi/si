@@ -165,11 +165,13 @@
 
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/ppic/master_stok/data',
-                'type': 'GET',
+                'type': 'POST',
+                'dataType': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -221,11 +223,13 @@
 
         function detailtable(id) {
             $('#detailtable').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
                     'url': '/api/ppic/master_stok/detail/' + id,
-                    'type': 'GET',
+                    'type': 'POST',
+                    'dataType': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }

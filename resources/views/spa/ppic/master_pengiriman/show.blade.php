@@ -159,11 +159,13 @@
 
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/ppic/master_pengiriman/data',
-                'type': 'GET',
+                'type': 'POST',
+                'dataType': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -201,11 +203,13 @@
 
         function detailtable(id) {
             $('#detailtable').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
                     'url': '/api/ppic/master_pengiriman/detail/' + id,
-                    'type': 'GET',
+                    'type': 'POST',
+                    'dataType': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }

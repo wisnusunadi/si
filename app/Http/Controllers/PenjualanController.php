@@ -2383,8 +2383,12 @@ class PenjualanController extends Controller
     //Chart
     public function chart_penjualan()
     {
+        $now = Carbon::now();
+        $tgl_awal = $now->year . "-01-01";
+        $tgl_akhir = $now->year . "-12-31";
         //EKAT
         $ekatalog = Pesanan::Has('Ekatalog')
+            ->whereBetween('tgl_po', [$tgl_awal, $tgl_akhir])
             ->select('Pesanan.tgl_po')
             ->get()
             ->groupBy(function ($date) {
@@ -2410,6 +2414,7 @@ class PenjualanController extends Controller
 
         //SPA
         $spa = Pesanan::Has('Spa')
+            ->whereBetween('tgl_po', [$tgl_awal, $tgl_akhir])
             ->select('Pesanan.tgl_po')
             ->get()
             ->groupBy(function ($date) {
@@ -2436,6 +2441,7 @@ class PenjualanController extends Controller
 
         //SPB
         $spb = Pesanan::Has('Spb')
+            ->whereBetween('tgl_po', [$tgl_awal, $tgl_akhir])
             ->select('Pesanan.tgl_po')
             ->get()
             ->groupBy(function ($date) {
