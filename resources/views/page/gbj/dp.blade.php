@@ -3,74 +3,47 @@
 @section('title', 'ERP')
 
 @section('content')
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Produk dari Perakitan</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
 <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">Produk dari Perakitan </h3>
-    </div>
     <!-- /.card-header -->
     <div class="card-body">
-      <table class="table table-bordered dalam-perakitan">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Tanggal Masuk</th>
-            <th>Produk</th>
-            <th>Jumlah</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>10-11-2021</td>
-                <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                <td>100 Unit</td>
-                <td><div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
-                    <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
-                            <i class="far fa-edit"></i>&nbsp;Terima
-                          </button>
-                          <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                          </button>
-                    </div>
-                </div></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>11-11-2021</td>
-                <td>AMBULATORY BLOOD PRESSURE TESTING</td>
-                <td>100</td>
-                <td><div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
-                    <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
-                            <i class="far fa-edit"></i>&nbsp;Terima
-                          </button>
-                          <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                          </button>
-                    </div>
-                </div></td>
-            </tr>
-        </tbody>
-      </table>
+        <table class="table table-bordered dalam-perakitan">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Tanggal Masuk</th>
+                    <th>Produk</th>
+                    <th>Jumlah</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
     </div>
-  </div>
-  <!-- Modal Detail-->
-  <div class="modal fade terima-produk" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-      <div class="modal-dialog modal-xl" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk <span id="title">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-              </div>
-              <div class="modal-body">
+</div>
+<!-- Modal Detail-->
+<div class="modal fade terima-produk" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Detail Produk <span id="title">AMBULATORY BLOOD PRESSURE MONITOR</span></b>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
                 <table class="table table-striped scan-produk">
                     <thead>
                         <tr>
@@ -80,100 +53,72 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
+
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                  <button type="button" class="btn btn-primary" id="simpanseri">Simpan</button>
-              </div>
-          </div>
-      </div>
-  </div>
-  <!-- Modal Ubah Layout-->
-  <div class="modal fade" id="ubah-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Ubah Layout</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-              </div>
-              <div class="modal-body">
-                  <div class="form-group">
-                      <label for="">Layout</label>
-                      <select name="" id="change-layout" class="form-control">
-                        <option value="1">Layout 1</option>
-                        <option value="2">Layout 2</option>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="simpanseri">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Ubah Layout-->
+<div class="modal fade" id="ubah-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Layout</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Layout</label>
+                    <select name="" id="change-layout" class="form-control">
+                        @foreach ($layout as $l)
+                        <option value="{{ $l->id }}">{{ $l->ruang }}</option>
+                        @endforeach
                     </select>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                  <button type="button" class="btn btn-primary" onclick="ubahData()">Simpan</button>
-              </div>
-          </div>
-      </div>
-  </div>
-  <!-- Modal -->
-  <div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-      <div class="modal-dialog modal-xl" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-              </div>
-              <div class="modal-body">
-                  <table class="table table-seri">
-                      <thead>
-                          <tr>
-                              <th>No Seri</th>
-                              <th>Layout</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr>
-                              <td>654165654</td>
-                              <td>Layout 1</td>
-                          </tr>
-                          <tr>
-                            <td>654165654</td>
-                            <td>Layout 1</td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-  </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary" onclick="ubahData()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-seri">
+                    <thead>
+                        <tr>
+                            <th>No Seri</th>
+                            <th>Layout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_js')
@@ -184,15 +129,26 @@
         ajax: {
             url: '/api/tfp/rakit',
         },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            { data: 'tgl_masuk'},
-            { data: 'product'},
-            { data: 'jumlah'},
-            { data: 'action'}
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex'
+            },
+            {
+                data: 'tgl_masuk'
+            },
+            {
+                data: 'product'
+            },
+            {
+                data: 'jumlah'
+            },
+            {
+                data: 'action'
+            }
         ],
-        "oLanguage": {
-        "sSearch": "Cari:"},
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
     });
 
 
@@ -205,24 +161,6 @@
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
-
-        $.ajax({
-            url: '/api/gbj/sel-layout',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $("#change-layout").empty();
-                    // $("#divisi").append('<option value="">All</option>');
-                    $.each(res, function(key, value) {
-                        $("#change-layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                    });
-                } else {
-                    $("#change-layout").empty();
-                }
-            }
-        });
     });
 
     function ubahData() {
@@ -234,33 +172,36 @@
         $('#ubah-layout').modal('hide');
     }
 
-    $(document).on('click', '.editmodal', function() {
+    $(document).on('click', '.editmodal', function () {
         var id = $(this).data('id');
+        var nama = $(this).data('produk');
+        var tipe = $(this).data('var');
         console.log(id);
-
-        $.ajax({
-            url: '/api/tfp/rakit-terima/' + id,
-            success: function(res) {
-                console.log(res);
-                // $('span#title').text(res.data[0].title);
-            }
-        })
+        $('span#title').text(nama.concat(' ', tipe));
 
         $('.scan-produk').DataTable().destroy();
         $('.scan-produk').DataTable({
-            serverSide: true,
+            serverSide: false,
             autoWidth: false,
             processing: true,
+            "ordering": false,
+            stateSave: true,
+            'bPaginate': true,
             ajax: {
                 url: '/api/tfp/rakit-terima/' + id,
             },
-            columns: [
-                { data: 'checkbox', orderable: 'false'},
-                { data: 'noserii'},
-                { data: 'layout'},
+            columns: [{
+                    data: 'checkbox'
+                },
+                {
+                    data: 'noserii'
+                },
+                {
+                    data: 'layout'
+                },
             ],
-                "oLanguage": {
-            "sSearch": "Cari:"
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
 
@@ -268,13 +209,13 @@
             url: '/api/gbj/sel-layout',
             type: 'GET',
             dataType: 'json',
-            success: function(res) {
-                if(res) {
+            success: function (res) {
+                if (res) {
                     console.log(res);
                     $("#layout_id").empty();
-                    // $("#divisi").append('<option value="">All</option>');
-                    $.each(res, function(key, value) {
-                        $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    $.each(res, function (key, value) {
+                        $("#layout_id").append('<option value="' + value.id + '">' + value
+                            .ruang + '</option');
                     });
                 } else {
                     $("#layout_id").empty();
@@ -285,17 +226,12 @@
         openModalTerima();
     });
 
-    $(document).on('click', '.detailmodal', function() {
+    $(document).on('click', '.detailmodal', function () {
         var id = $(this).data('id');
+        var nama = $(this).data('produk');
+        var tipe = $(this).data('var');
         console.log(id);
-
-        $.ajax({
-            url: '/api/tfp/rakit-noseri/' + id,
-            success: function(res) {
-                console.log(res.data[0].title);
-                $('span#titlee').text(res.data[0].title);
-            }
-        })
+        $('span#titlee').text(nama.concat(' ', tipe));
 
         $('.table-seri').DataTable().destroy();
         $('.table-seri').DataTable({
@@ -305,12 +241,16 @@
             ajax: {
                 url: '/api/tfp/rakit-noseri/' + id,
             },
-            columns: [
-                { data: 'noserii'},
-                { data: 'layout'},
+            columns: [{
+                    data: 'noserii'
+                },
+                {
+                    data: 'layout'
+                },
             ],
-            "oLanguage": {
-            "sSearch": "Cari:"}
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         });
 
         openModalView();
@@ -319,39 +259,63 @@
     function openModalTerima() {
         $('.terima-produk').modal('show');
     }
+
     function openModalView() {
         $('.detail-layout').modal('show');
     }
 
     // submit
-    $(document).on('click', '#simpanseri', function() {
-        console.log('test');
+    $(document).on('click', '#simpanseri', function () {
         const ids = [];
-        $('.cb-child').each(function() {
+        const lay = [];
+        $('.cb-child').each(function () {
             if ($(this).is(":checked")) {
                 ids.push($(this).val());
+                lay.push($(this).parent().next().next().children().val());
             }
         })
-
-        $.ajax({
-            url: "/api/prd/terimaseri",
-            type: "post",
-            data: {
-                "_token" : "{{ csrf_token() }}",
-                seri: ids,
-            },
-            success: function(res) {
-                // console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Produk yang anda terima akan diubah layoutnya",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Terima!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "/api/prd/terimaseri",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#userid').val(),
+                        seri: ids,
+                        layout: lay,
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        if (res.msg == 'Successfully') {
+                            Swal.fire(
+                                'Terima!',
+                                'Produk berhasil diterima',
+                                'success'
+                            )
+                            $('.terima-produk').modal('hide');
+                            // $('.scan-produk').DataTable().ajax.reload();
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Gagal!',
+                                'Produk gagal diterima',
+                                'error'
+                            )
+                        }
+                    }
                 })
-                location.reload();
             }
         })
     })
+
 </script>
 @stop

@@ -1385,7 +1385,7 @@ return [
                 ],
                 [
                     'text' => 'Perencanaan',
-                    'url'  => '/ppic/jadwal/penyusunan',
+                    'url'  => '/ppic_direksi',
                     'icon' => 'far fa-circle',
                     'auth' => [2]
                 ],

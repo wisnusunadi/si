@@ -58,7 +58,28 @@
         /* Jika Gambar Diatas */
         /* width: 100px; */
     }
+    #DataTables_Table_0_filter{
+        display: none;
+    }
+    .dropdown-menu {
+    width: 500px !important;
+    }
+    th.prev.available{
+        visibility: hidden;
+    }
+    th.next.available{
+        visibility: hidden;
+    }
 </style>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h4 class="m-0">Detail Riwayat Transaksi {{ $header->produk->nama }} {{ $header->nama }}</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -104,12 +125,28 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="d-flex align-items-center">
-                                                <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
-                                                <input type="text" name="" id="tanggalmasuk" class="form-control">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                                                      Filter Tanggal
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <div class="row m-0">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="kt_datepicker_1">Tanggal Masuk</label>
+                                                                    <input type="text" class="form-control" id="kt_datepicker_1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="kt_datepicker_2">Tanggal Keluar</label>
+                                                                    <input type="text" class="form-control" id="kt_datepicker_2">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                  </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a href="#" class="btn btn-outline-primary">Search</a>
                                         </div>
                                     </div>
                                 </div>
@@ -143,108 +180,7 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-success">Divisi IT</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>652146416541654</td>
-                                        <td scope="row">10-04-2021</td>
-                                        <td>23-09-2021</td>
-                                        <td><span class="badge badge-info">Divisi QC</span></td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -258,7 +194,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Produk Ambulatory</h5>
+                <h5 class="modal-title">Produk {{ $header->produk->nama }} {{ $header->nama }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -272,18 +208,7 @@
                             <th>Layout</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td scope="row">1</td>
-                            <td>54131313151</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">2</td>
-                            <td>54131313151</td>
-                            <td>Layout 1</td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -293,10 +218,54 @@
 @section('adminlte_js')
 <script>
 
-    // $('.tableProdukView').DataTable({
-    //     searching: false,
-    //     "lengthChange": false
-    // });
+    // Tanggal Masuk
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+
+        var evalDate = parseDateValue(aData[1]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    // Tanggal Keluar
+    var start_date2;
+    var end_date2;
+    var DateFilterFunction2 = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue2(start_date2);
+        var dateEnd = parseDateValue2(end_date2);
+
+        var evalDate = parseDateValue2(aData[2]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue2(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
     $('#nav-deskripsi-tab').click(function (e) {
         e.preventDefault();
         $('.is-active').addClass('font-weight-bold');
@@ -332,7 +301,10 @@
                 {data: 'DT_RowIndex'},
                 {data: 'noser'},
                 {data: 'posisi'},
-            ]
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
         detailProduk();
     })
@@ -340,22 +312,16 @@
     $(document).ready(function () {
         var id = $('#ids').val();
         console.log(id);
-        $('.tableProdukView').DataTable().destroy();
-        $('.tableProdukView').dataTable({
+        var table = $('.tableProdukView').dataTable({
+            destroy: true,
             processing: true,
-            serverSide: true,
             responsive: true,
-            searching: false,
             "lengthChange": false,
             autoWidth: false,
             ajax: {
                 url: "/api/transaksi/history-detail/" + id,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
             },
             columns: [
-                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 { data: 'so', name: 'so'},
                 { data: 'date_in', name: 'date_in'},
                 { data: 'date_out', name: 'date_out'},
@@ -364,11 +330,58 @@
                 { data: 'jumlah', name: 'jumlah'},
                 { data: 'action', name: 'action'},
             ],
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
         });
 
+        $(document).on('keyup','#kt_datatable_search_query', function () {
+            table.api().search(this.value).draw();
+    });
+
+     // Tanggal Masuk
+     $('#kt_datepicker_1').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#kt_datepicker_1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            table.api().draw();
+        });
+
+        $('#kt_datepicker_1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            table.api().draw();
+        });
+
+    // Tanggal Keluar
+    $('#kt_datepicker_2').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#kt_datepicker_2').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date2 = picker.startDate.format('DD-MM-YYYY');
+            end_date2 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
+            table.api().draw();
+        });
+
+        $('#kt_datepicker_2').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date2 = '';
+            end_date2 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
+            table.api().draw();
+        });
     })
 
 </script>

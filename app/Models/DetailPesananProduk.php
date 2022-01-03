@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DetailPesananProduk extends Model
 {
     protected $table = 'detail_pesanan_produk';
-    protected $fillable = ['detail_pesanan_id', 'gudang_barang_jadi_id'];
+    protected $fillable = ['detail_pesanan_id', 'gudang_barang_jadi_id', 'checked_by'];
     public $timestamps = false;
 
     public function GudangBarangJadi()

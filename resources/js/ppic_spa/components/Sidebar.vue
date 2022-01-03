@@ -8,17 +8,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 5px;
           "
           to="/ppic"
           class=""
         >
-          <img
-            class="image"
-            style="width: 50%"
-            src="/assets/image/logo/sinko.png"
-            alt=""
-          />
+          <strong class="has-text-centered">Sinko Prima Alloy</strong>
         </router-link>
       </div>
     </div>
@@ -66,7 +60,7 @@
         <li>
           <router-link to="/ppic/so" class="has-icon">
             <span class="icon"><i class="fas fa-database"></i></span>
-            <span class="menu-item-label">Seles Order</span>
+            <span class="menu-item-label">Sales Order</span>
           </router-link>
         </li>
       </ul>

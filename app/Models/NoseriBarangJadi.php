@@ -11,7 +11,7 @@ class NoseriBarangJadi extends Model
 
     protected $table = "noseri_barang_jadi";
 
-    protected $fillable = ['is_aktif'];
+    protected $fillable = ['is_aktif', 'is_ready', 'used_by'];
 
     function from()
     {

@@ -10,7 +10,7 @@ class GudangBarangJadiHis extends Model
     use HasFactory;
 
     protected $table = 'gdg_barang_jadi_his';
-    protected $fillable = ['stok', 'jenis'];
+    protected $fillable = ['gdg_brg_jadi_id','stok', 'jenis', 'created_by', 'tgl_masuk', 'created_at', 'dari', 'ke', 'tujuan'];
 
     public function produk()
     {

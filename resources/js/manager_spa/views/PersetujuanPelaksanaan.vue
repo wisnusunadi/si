@@ -1,5 +1,8 @@
 <template>
-  <Persetujuan />
+  <div>
+    <h1 class="title">Persetujuan Pelaksanaan Jadwal</h1>
+    <Persetujuan />
+  </div>
 </template>
 
 <script>
@@ -15,7 +18,7 @@ export default {
     async loadData() {
       this.$store.commit("setIsLoading", true);
       await axios
-        .get("/api/ppic/perakitan/data/pelaksanaan", {
+        .get("/api/ppic/data/perakitan/pelaksanaan", {
           params: {
             konfirmasi: "0",
           },

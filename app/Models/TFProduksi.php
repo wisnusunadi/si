@@ -39,4 +39,19 @@ class TFProduksi extends Model
     {
         return $this->belongsTo(Pesanan::class, 'pesanan_id');
     }
+
+    function bagian()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    function getJumlahKirim() {
+        $id = $this->id;
+        $detail = TFProduksiDetail::where('t_gbj_id', $id)->get();
+        $jumlah = 0;
+        foreach($detail as $d) {
+            $jumlah += $d->qty;
+        }
+        return $jumlah;
+    }
 }

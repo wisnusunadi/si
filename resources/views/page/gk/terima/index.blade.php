@@ -48,9 +48,10 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <nav>
+                    <input type="hidden" name="" id="user_id" value="{{ Auth::user()->id }}">
                     <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                            aria-controls="home" aria-selected="true">Daftar Penerimaan</a>
+                            aria-controls="home" aria-selected="true">Draft Penerimaan</a>
                         <a id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                             aria-selected="false">Pembuatan Penerimaan</a>
                     </div>
@@ -73,19 +74,7 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td scope="row">10-04-2021</td>
-                                <td>Divisi IT</td>
-                                <td><a href="{{ url('gk/terimaProduk/1') }}" class="btn btn-outline-info"><i
-                                            class="far fa-edit"></i>Edit Produk</a></td>
-                            </tr>
-                            <tr>
-                                <td scope="row"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -100,14 +89,11 @@
                             <div class="form-row">
                                 <div class="form-group col">
                                     <label for="tanggal">Tanggal Masuk</label>
-                                    <input type="date" name="" id="datePicker" class="form-control" placeholder="">
+                                    <input type="date" name="date_in" id="datePicker" class="form-control" placeholder="">
                                 </div>
                                 <div class="form-group col">
                                     <label for="dari">Dari</label>
                                     <select class="form-control dari" name="dari">
-                                        {{-- <option value="Divisi IT">Divisi IT</option>
-                                        <option value="Divisi QC">Divisi QC</option>
-                                        <option value="Divisi Perakitan">Divisi Perakitan</option> --}}
                                     </select>
                                 </div>
                             </div>
@@ -135,7 +121,7 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th style="width: 150px">Nama Produk</th>
-                                                    <th style="width: 150px">Unit</th>
+                                                    {{-- <th style="width: 150px">Unit</th> --}}
                                                     <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -207,7 +193,7 @@
                             <div class="col-sm">
                                 <label for="">Tanggal Masuk</label>
                                 <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body">
+                                    <div class="card-body in_spr">
                                         23-09-2021
                                     </div>
                                 </div>
@@ -215,7 +201,7 @@
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
-                                    <div class="card-body">
+                                    <div class="card-body spr">
                                         Produk 1
                                     </div>
                                 </div>
@@ -225,15 +211,15 @@
                             <div class="col-sm">
                                 <label for="">Unit</label>
                                 <div class="card" style="background-color: #FFCC83">
-                                    <div class="card-body">
-                                        Unit 1
+                                    <div class="card-body spru">
+                                        -
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Dari</label>
                                 <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body">
+                                    <div class="card-body divisi_spr">
                                         Divisi IT
                                     </div>
                                 </div>
@@ -241,7 +227,7 @@
                             <div class="col-sm">
                                 <label for="">Jumlah</label>
                                 <div class="card" style="background-color: #FFECB2">
-                                    <div class="card-body">
+                                    <div class="card-body jml_spr">
                                         100 pcs
                                     </div>
                                 </div>
@@ -260,17 +246,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
-                                                <td><input type="text" class="form-control"></td>
-                                                <td><input type="text" class="form-control"></td>
-                                                <td>
-                                                    <select name="" id="" class="form-control">
-                                                        <option value="">Level 1</option>
-                                                        <option value="">Level 1</option>
-                                                        <option value="">Level 1</option>
-                                                    </select>
-                                                </td>
-                                            </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -347,17 +322,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
-                                                <td><input type="text" class="form-control"></td>
-                                                <td><input type="text" class="form-control"></td>
-                                                <td>
-                                                    <select name="" id="" class="form-control">
-                                                        <option value="">Level 1</option>
-                                                        <option value="">Level 1</option>
-                                                        <option value="">Level 1</option>
-                                                    </select>
-                                                </td>
-                                            </tr> --}}
+
                                     </tbody>
                                 </table>
                             </div>
@@ -375,6 +340,9 @@
 @stop
 @section('adminlte_js')
 <script>
+    $(document).ready(function () {
+
+    });
     // Date
     var today = new Date();
     var dd = today.getDate();
@@ -403,12 +371,12 @@
 
     function addSpare(a) {
         var b = $(".btn_plus" + a).parent().prev().children().val();
-        var c = $(".btn_plus" + a).parent().prev().prev().prev().children().val();
+        var c = $(".btn_plus" + a).parent().prev().prev().children().val();
         addSparepart(b, a, c);
     }
 
     function clickSparepart(c,d) {
-        console.log(d);
+        // console.log(c);
         var tableScan = $('.scan-produk1').dataTable({
             "destroy": true,
             "ordering": false,
@@ -517,30 +485,53 @@
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk1 tbody tr').each((index, value) => {
-                    const obj = {
-                        noseri: value.childNodes[0].firstChild.value,
-                        kerusakan: value.childNodes[1].firstChild.value,
-                        tingkat: value.childNodes[2].firstChild.value,
-                    }
+            $.ajax({
+                url: "/api/gk/cekseri",
+                type: "post",
+                data: {noseri:data},
+                success: function(res) {
+                    if(res.msg) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: res.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            $('.scan-produk1 tbody tr').each((index, value) => {
+                                const obj = {
+                                    noseri: value.childNodes[0].firstChild.value,
+                                    kerusakan: value.childNodes[1].firstChild.value,
+                                    tingkat: value.childNodes[2].firstChild.value,
+                                }
 
-                    spr_arr.push(obj);
-                })
-                seri[d] = spr_arr;
-                spr_arr = [];
-                $('.modalAddSparepart').modal('hide');
+                                spr_arr.push(obj);
+                            })
+                            seri[d] = spr_arr;
+                            spr_arr = [];
+                            $('.modalAddSparepart').modal('hide');
+                        })
+                    } else {
+                        // console.log(res);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: res.error,
+                        })
+                    }
+                },
             })
+
         }
     }
 
     function addSparepart(x, y, z) {
+        // header
+        // console.log($('select[name="sparepart_id"] option:selected').text());
+        $('.jml_spr').text(x + ' Pcs')
+        $('.in_spr').text(document.getElementsByName("date_in")[0].value)
+        $('.divisi_spr').text(document.getElementsByName("dari")[0].selectedOptions[0].label)
+
         $('.modalAddSparepart').modal('show');
         $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ','+z+')');
         $('.modalAddSparepart').on('shown.bs.modal', function () {
@@ -579,7 +570,7 @@
     }
 
     function clickUnit(c) {
-        console.log(c);
+        // console.log(c);
         var tableUnit = $('.scan-produk').DataTable({
             "destroy": true,
             "ordering": false,
@@ -683,26 +674,42 @@
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk tbody tr').each((index, value) => {
-                                const obj1 = {
-                                    noseri: value.childNodes[0].firstChild.value,
-                                    kerusakan: value.childNodes[1].firstChild.value,
-                                    tingkat: value.childNodes[2].firstChild.value,
-                                }
-                                unit_arr.push(obj1);
-                            })
-                            seri_unit[c] = unit_arr;
-                            unit_arr = [];
-                            console.log(seri_unit)
-                            $('.modalAddUnit').modal('hide');
+            $.ajax({
+                url: "/api/gk/cekseri",
+                type: "post",
+                data: {noseri: dataUnit},
+                success: function(res) {
+                    if(res.msg) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: res.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            $('.scan-produk tbody tr').each((index, value) => {
+                                            const obj1 = {
+                                                noseri: value.childNodes[0].firstChild.value,
+                                                kerusakan: value.childNodes[1].firstChild.value,
+                                                tingkat: value.childNodes[2].firstChild.value,
+                                            }
+                                            unit_arr.push(obj1);
+                                        })
+                                        seri_unit[c] = unit_arr;
+                                        unit_arr = [];
+                                        console.log(seri_unit)
+                                        $('.modalAddUnit').modal('hide');
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: res.error,
+                        })
+                    }
+                }
             })
+
         }
     }
 
@@ -725,291 +732,296 @@
                 );
         }
         $('.scan-produk').DataTable({
-                    "ordering": false,
-                    "autoWidth": false,
-                    searching: false,
-                    "lengthChange": false,
-                    "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                    }
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         });
     }
 
-                // function select_divisi() {
+    $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            // ii++;
+            console.log(res);
+            $.each(res, function (key, value) {
+                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                $(".dari").append('<option value="' + value.id + '">' + value.nama +
+                    '</option');
+            });
+        }
+    });
+
+    function transfer() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di transfer tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        });
+    };
+
+    var nmrspr = 1;
+    $(document).on('click', '.add_sparepart', function () {
+        $.ajax({
+            url: '/api/gk/sel-spare',
+            type: 'POST',
+            dataType: 'json',
+            success: function (res) {
+            $.each(res, function (key, value) {
+                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                $('.produk').append('<option value="' + value.id + '">' + value.nama + '</option');
+            });
+
+            }
+        });
+        i++;
+        let table_sparepart = '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_id'+nmrspr+'" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        $('.add_sparepart_table tbody').append(table_sparepart);
+        $('#sparepart_id'+nmrspr+'').select2();
+        $(".number").inputFilter(function(value) {
+            return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+        });
+    nmrspr++;
+    });
+
+    var nmrunt = 1;
+    $(document).on('click', '.add_unit', function () {
+        $.ajax({
+            url: '/api/gbj/sel-gbj',
+            type: 'get',
+            dataType: 'json',
+            success: function (res) {
+                // ii++;
+                console.log(res);
+                $.each(res, function (key, value) {
+                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                    $(".produkk").append('<option value="' + value.id + '">' + value
+                        .produk.nama + ' ' + value.nama + '</option');
+                });
+            }
+        });
+        i++;
+        let table_unit = '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_id'+nmrunt+'" class="form-control produkk"></select></td><td><input type="text" name="qty_unit[]" id="jum" class="form-control number"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        $('.add_unit_table tbody').append(table_unit);
+        $('#gbj_id'+nmrunt+'').select2();
+        $(".number").inputFilter(function(value) {
+            return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+        });
+    nmrunt++;
+    });
+
+    $(document).on('click', '.btn-delete', function (e) {
+        $(this).parent().parent().remove();
+        var check = $('tbody.tambah_data tr').length;
+    });
+
+    $(document).ready(function () {
+        $('.table-rancangan').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {
+                url: "/api/gk/draft-terima",
+                type: "post",
+            },
+            columns: [{
+                    data: "in"
+                },
+                {
+                    data: "from"
+                },
+                {
+                    data: "aksi"
+                },
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $('.dari').select2({});
+    });
+
+    function terima() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di terima tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                let out = $('#datePicker').val();
+                let to = $('.dari').val();
+
+                console.log(out);
+                console.log(to);
+
+                const spr1 = [];
+                const jml = [];
+                const unit1 = [];
+                const jum = [];
+
+                $('select[name^="sparepart_id"]').each(function () {
+                    spr1.push($(this).val());
+                });
+
+                $('input[name^="qty_spr"]').each(function () {
+                    jml.push($(this).val());
+                });
+
+                $('select[name^="gbj_id"]').each(function () {
+                    unit1.push($(this).val());
+                });
+
+                $('input[name^="qty_unit"]').each(function () {
+                    jum.push($(this).val());
+                });
+
                 $.ajax({
-                    url: '/api/gbj/sel-divisi',
-                    type: 'GET',
-                    dataType: 'json',
+                    url: "/api/gk/in-final",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#user_id').val(),
+                        date_in: out,
+                        dari: to,
+                        sparepart_id: spr1,
+                        qty_spr: jml,
+                        noseri: seri,
+                        gbj_id: unit1,
+                        qty_unit: jum,
+                        seriunit: seri_unit,
+                    },
                     success: function (res) {
-                        // ii++;
                         console.log(res);
-                        $.each(res, function (key, value) {
-                            // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                            $(".dari").append('<option value="' + value.id + '">' + value.nama +
-                                '</option');
-                        });
-                    }
-                });
-                // }
+                        Swal.fire(
+                            'Terima!',
+                            'Data berhasil diterima!',
+                            'success'
+                        )
+                        location.reload();
+                    },
+                })
 
-                function transfer() {
-                    Swal.fire({
-                        title: "Apakah anda yakin?",
-                        text: "Data yang sudah di transfer tidak dapat diubah!",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                    });
-                };
+            } else {
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil diterima!',
+                    'error'
+                )
+            }
+        });
+    }
 
+    function rancang() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di rancang tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                let out = $('#datePicker').val();
+                let to = $('.dari').val();
 
-                var nmrspr = 1;
-                $(document).on('click', '.add_sparepart', function () {
-                    $.ajax({
-                        url: '/api/gk/sel-spare',
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function (res) {
-                            // ii++;
-                            console.log(res);
-                            $.each(res, function (key, value) {
-                                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                                $(".produk").append('<option value="' + value.id + '">' + value
-                                    .nama + '</option');
-                            });
-                        }
-                    });
-                    i++;
-                    let table_sparepart = '<tr><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+                console.log(out);
+                console.log(to);
 
-                    $('.add_sparepart_table tbody').append(table_sparepart);
-                    $('.produk').select2();
-                nmrspr++;
-                });
-                var nmrunt = 1;
-                $(document).on('click', '.add_unit', function () {
-                    $.ajax({
-                        url: '/api/gbj/sel-gbj',
-                        type: 'get',
-                        dataType: 'json',
-                        success: function (res) {
-                            // ii++;
-                            console.log(res);
-                            $.each(res, function (key, value) {
-                                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                                $(".produkk").append('<option value="' + value.id + '">' + value
-                                    .produk.nama + ' ' + value.nama + '</option');
-                            });
-                        }
-                    });
-                    i++;
-                    let table_unit = '<tr><td><select name="gbj_id[]" id="gbj_id" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
-                    $('.add_unit_table tbody').append(table_unit);
-                    $('.produkk').select2();
-                nmrunt++;
-                }); $(document).on('click', '.btn-delete', function (e) {
-                    $(this).parent().parent().remove();
-                    var check = $('tbody.tambah_data tr').length;
+                const spr1 = [];
+                const jml = [];
+                const unit1 = [];
+                const jum = [];
+
+                $('select[name^="sparepart_id"]').each(function () {
+                    spr1.push($(this).val());
                 });
 
-                $(document).ready(function () {
-                    $('.table-rancangan').DataTable({
-                        "ordering": false,
-                        "autoWidth": false,
-                        searching: false,
-                        "lengthChange": false,
-                        processing: true,
-                        serverSide: true,
-                        destroy: true,
-                        ajax: {
-                            url: "/api/gk/draft-terima",
-                            type: "post",
-                        },
-                        columns: [{
-                                data: "in"
-                            },
-                            {
-                                data: "from"
-                            },
-                            {
-                                data: "aksi"
-                            },
-                        ],
-                        "language": {
-                            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                        }
-                    });
-                    $('.dari').select2({});
+                $('input[name^="qty_spr"]').each(function () {
+                    jml.push($(this).val());
                 });
 
-                function terima() {
-                    Swal.fire({
-                        title: "Apakah anda yakin?",
-                        text: "Data yang sudah di terima tidak dapat diubah!",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                        showCancelButton: true,
-                    }).then((result) => {
-                        if (result.value) {
-                            let out = $('#datePicker').val();
-                            let to = $('.dari').val();
+                $('select[name^="gbj_id"]').each(function () {
+                    unit1.push($(this).val());
+                });
 
-                            console.log(out);
-                            console.log(to);
+                $('input[name^="qty_unit"]').each(function () {
+                    jum.push($(this).val());
+                });
 
-                            const spr1 = [];
-                            const jml = [];
-                            const unit1 = [];
-                            const jum = [];
+                $.ajax({
+                    url: "/api/gk/in-draft",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#user_id').val(),
+                        date_in: out,
+                        dari: to,
+                        sparepart_id: spr1,
+                        qty_spr: jml,
+                        noseri: seri,
+                        gbj_id: unit1,
+                        qty_unit: jum,
+                        seriunit: seri_unit,
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        Swal.fire(
+                            'Rancang!',
+                            'Data berhasil diterima!',
+                            'success'
+                        );
+                        location.reload();
+                    },
+                })
 
-                            $('select[name^="sparepart_id"]').each(function () {
-                                spr1.push($(this).val());
-                            });
+            } else {
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil diterima!',
+                    'error'
+                );
+            }
+        });
+    }
 
-                            $('input[name^="qty_spr"]').each(function () {
-                                jml.push($(this).val());
-                            });
-
-                            $('select[name^="gbj_id"]').each(function () {
-                                unit1.push($(this).val());
-                            });
-
-                            $('input[name^="qty_unit"]').each(function () {
-                                jum.push($(this).val());
-                            });
-
-                            $.ajax({
-                                url: "/api/gk/in-final",
-                                type: "post",
-                                data: {
-                                    "_token": "{{ csrf_token() }}",
-                                    date_in: out,
-                                    dari: to,
-                                    sparepart_id: spr1,
-                                    qty_spr: jml,
-                                    noseri: seri,
-                                    gbj_id: unit1,
-                                    qty_unit: jum,
-                                    seriunit: seri_unit,
-                                },
-                                success: function (res) {
-                                    console.log(res);
-                                    Swal.fire(
-                                        'Terima!',
-                                        'Data berhasil diterima!',
-                                        'success'
-                                    )
-                                    location.reload();
-                                },
-                            })
-
-                        } else {
-                            Swal.fire(
-                                'Batal!',
-                                'Data tidak berhasil diterima!',
-                                'error'
-                            )
-                        }
-                    });
-                }
-
-                function rancang() {
-                    Swal.fire({
-                        title: "Apakah anda yakin?",
-                        text: "Data yang sudah di rancang tidak dapat diubah!",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                        showCancelButton: true,
-                    }).then((result) => {
-                        if (result.value) {
-                            let out = $('#datePicker').val();
-                            let to = $('.dari').val();
-
-                            console.log(out);
-                            console.log(to);
-
-                            const spr1 = [];
-                            const jml = [];
-                            const unit1 = [];
-                            const jum = [];
-
-                            $('select[name^="sparepart_id"]').each(function () {
-                                spr1.push($(this).val());
-                            });
-
-                            $('input[name^="qty_spr"]').each(function () {
-                                jml.push($(this).val());
-                            });
-
-                            $('select[name^="gbj_id"]').each(function () {
-                                unit1.push($(this).val());
-                            });
-
-                            $('input[name^="qty_unit"]').each(function () {
-                                jum.push($(this).val());
-                            });
-
-                            $.ajax({
-                                url: "/api/gk/in-draft",
-                                type: "post",
-                                data: {
-                                    "_token": "{{ csrf_token() }}",
-                                    date_in: out,
-                                    dari: to,
-                                    sparepart_id: spr1,
-                                    qty_spr: jml,
-                                    noseri: seri,
-                                    gbj_id: unit1,
-                                    qty_unit: jum,
-                                    seriunit: seri_unit,
-                                },
-                                success: function (res) {
-                                    console.log(res);
-                                    Swal.fire(
-                                        'Rancang!',
-                                        'Data berhasil diterima!',
-                                        'success'
-                                    );
-                                    location.reload();
-                                },
-                            })
-
-                        } else {
-                            Swal.fire(
-                                'Batal!',
-                                'Data tidak berhasil diterima!',
-                                'error'
-                            );
-                        }
-                    });
-                }
-
-                function batal() {
-                    Swal.fire({
-                        title: "Apakah anda yakin?",
-                        text: "Data yang sudah di batalkan tidak dapat dikembalikan!",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                        showCancelButton: true,
-                    }).then((result) => {
-                        if (result.value) {
-                            Swal.fire(
-                                'Batal!',
-                                'Data berhasil dibatalkan!',
-                                'success'
-                            );
-                        } else {
-                            Swal.fire(
-                                'Batal!',
-                                'Data tidak berhasil dibatalkan!',
-                                'error'
-                            );
-                        }
-                    });
-                }
+    function batal() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di batalkan tidak dapat dikembalikan!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Batal!',
+                    'Data berhasil dibatalkan!',
+                    'success'
+                );
+            } else {
+                Swal.fire(
+                    'Batal!',
+                    'Data tidak berhasil dibatalkan!',
+                    'error'
+                );
+            }
+        });
+    }
 
 
 </script>

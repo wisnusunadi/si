@@ -1,5 +1,5 @@
 <template>
-  <Jadwal />
+  <Jadwal :status="'penyusunan'" />
 </template>
 
 <script>
@@ -13,22 +13,14 @@ export default {
     Jadwal,
   },
 
-  methods: {
-    async loadData() {
-      this.$store.commit("setIsLoading", true);
-      await axios
-        .get("/api/ppic/perakitan/data/penyusunan")
-        .then((response) => {
-          this.$store.commit("setJadwal", response.data);
-          if (response.data.length == 0)
-            this.$store.commit("setStatus", "penyusunan");
-        });
-      this.$store.commit("setIsLoading", false);
-    },
-  },
+  async created() {
+    this.$store.commit("setIsLoading", true);
 
-  mounted() {
-    this.loadData();
+    await axios.get("/api/ppic/data/perakitan/penyusunan").then((response) => {
+      this.$store.commit("setJadwal", response.data);
+    });
+
+    this.$store.commit("setIsLoading", false);
   },
 };
 </script>

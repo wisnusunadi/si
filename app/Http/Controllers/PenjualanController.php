@@ -835,19 +835,25 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('no_so', function ($data) {
-                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                    if (isset($data->DetailLogistik->DetailPesananProduk)) {
+                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                    }
                 })
                 ->addColumn('nosurat', function ($data) {
                     return $data->nosurat;
                 })
                 ->addColumn('customer', function ($data) {
-                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
-                    if ($name[1] == 'EKAT') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
-                    } else if ($name[1] == 'SPA') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
-                    } else if ($name[1] == 'SPB') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                    if (isset($data->DetailLogistik->DetailPesananProduk)) {
+                        $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                        if ($name[1] == 'EKAT') {
+                            return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
+                        } else if ($name[1] == 'SPA') {
+                            return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                        } else if ($name[1] == 'SPB') {
+                            return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                        }
+                    } else {
+                        return '-';
                     }
                 })
                 ->addColumn('tgl_kirim', function ($data) {

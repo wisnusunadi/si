@@ -4,9 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-// models
-use App\Models\Produk;
-
 class JadwalPerakitan extends Model
 {
     protected $table = 'jadwal_perakitan';
@@ -20,5 +17,9 @@ class JadwalPerakitan extends Model
     function noseri()
     {
         return $this->hasMany(JadwalRakitNoseri::class, 'jadwal_id');
+    }
+
+    function log() {
+        return $this->hasMany(JadwalPerakitanLog::class, 'jadwal_perakitan_id');
     }
 }

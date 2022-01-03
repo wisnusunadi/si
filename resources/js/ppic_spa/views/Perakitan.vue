@@ -25,22 +25,34 @@
               <td>
                 <progress
                   class="progress"
-                  :value="countVal(d.status)"
+                  :value="countVal(mixins.change_status(d.status))"
+                  :class="{
+                    'is-danger':
+                      mixins.change_status(d.status) === 'penyusunan',
+                    'is-warning':
+                      mixins.change_status(d.status) === 'pelaksanaan',
+                    'is-success': mixins.change_status(d.status) === 'selesai',
+                  }"
                   max="100"
                 >
-                  {{ countVal(d.status) }}%
+                  {{ countVal(mixins.change_status(d.status)) }}%
                 </progress>
-                <small> {{ countVal(d.status) }}% Complete </small>
+                <small>
+                  {{ countVal(mixins.change_status(d.status)) }}% Complete
+                </small>
               </td>
               <td>
                 <span
                   :class="{
                     'badge badge-pill': true,
-                    'badge-warning': d.status === 'penyusunan',
-                    'badge-info': d.status === 'pelaksanaan',
-                    'badge-success': d.status === 'selesai',
+                    'badge-warning':
+                      mixins.change_status(d.status) === 'penyusunan',
+                    'badge-info':
+                      mixins.change_status(d.status) === 'pelaksanaan',
+                    'badge-success':
+                      mixins.change_status(d.status) === 'selesai',
                   }"
-                  >{{ d.status }}</span
+                  >{{ mixins.change_status(d.status) }}</span
                 >
               </td>
             </tr>
@@ -54,20 +66,22 @@
 <script>
 import $ from "jquery";
 import axios from "axios";
+import mixins from "../mixins";
 
 export default {
-  name: "GudangBarangJadi",
+  name: "Perakitan",
 
   data() {
     return {
       data: [],
+      mixins: mixins,
     };
   },
 
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/perakitan/data").then((response) => {
+      await axios.get("/api/ppic/data/perakitan").then((response) => {
         this.data = response.data;
       });
       this.$store.commit("setIsLoading", false);

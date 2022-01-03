@@ -32,6 +32,17 @@
         font-size: 18px
     }
 
+    .sudah_ditransfer {
+        float: left;
+        width: auto;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #AEE1FC;
+        background-color: #AEE1FC;
+        color: #5170FD;
+        font-size: 14px;
+        border-radius: 6px;
+    }
     .belum_diterima {
         float: left;
         width: auto;
@@ -58,6 +69,16 @@
 
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Daftar Detail Kerusakan Sparepart</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
@@ -114,7 +135,6 @@
                             <th rowspan="2">Layout</th>
                             <th rowspan="2">Kerusakan</th>
                             <th rowspan="2">Tingkat Kerusakan</th>
-                            {{-- Status Akan Berubah secara otomatis Jika dia sudah mengubah data kerusakan atau tingkat kerusakan --}}
                             <th rowspan="2">Status</th>
                             <th rowspan="2">Aksi</th>
                         </tr>
@@ -126,32 +146,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- <tr>
-                            <td>10-04-2021</td>
-                            <td>23-04-2021</td>
-                            <td><span class="badge badge-success">Divisi IT</span></td>
-                            <td><span class="badge badge-info">Divisi QC</span></td>
-                            <td>65846464586</td>
-                            <td>Layout 1</td>
-                            <td>Kerusakan Sparepart</td>
-                            <td>Level 1</td>
-                            <td><span class="sudah_diterima">Sudah Diperbaiki</span></td>
-                            <td><button class="btn btn-outline-info" onclick="changeStatus()"><i
-                                        class="far fa-edit"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td>10-04-2021</td>
-                            <td>23-04-2021</td>
-                            <td><span class="badge badge-success">Divisi IT</span></td>
-                            <td><span class="badge badge-info">Divisi QC</span></td>
-                            <td>65846464586</td>
-                            <td>Layout 1</td>
-                            <td>Kerusakan Sparepart</td>
-                            <td>Level 1</td>
-                            <td><span class="belum_diterima">Belum Diperbaiki</span></td>
-                            <td><button class="btn btn-outline-info" onclick="changeStatus()"><i
-                                        class="far fa-edit"></i></button></td>
-                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -200,7 +194,7 @@
                     <div class="card-body">
                         <form action="" id="myForm" name="myForm">
                             <input type="hidden" name="id" id="kode">
-
+                            <input type="hidden" name="userid" id="user_id" value="{{ Auth::user()->id }}">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="">Layout</label>
@@ -308,6 +302,7 @@
             success: function(res) {
                 console.log(res);
                 $('#kode').val(res.id);
+                $('#user_id').val();
                 $('#layout_id').val(res.layout);
                 $('#layout_id').select2().trigger('change');
                 $('#tk_kerusakan').val(res.tingkat);

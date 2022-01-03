@@ -5,10 +5,7 @@
       <div class="column is-12">
         <div class="tabs is-centered">
           <ul>
-            <li
-              :class="{ 'is-active': !tabs }"
-              @click="changeView('sparepart')"
-            >
+            <li :class="{ 'is-active': !tabs }" @click="tabs = false">
               <a>
                 <span class="icon is-small"
                   ><i class="fab fa-whmcs" aria-hidden="true"></i
@@ -16,7 +13,7 @@
                 <span>Sparepart</span>
               </a>
             </li>
-            <li :class="{ 'is-active': tabs }" @click="changeView('unit')">
+            <li :class="{ 'is-active': tabs }" @click="tabs = true">
               <a>
                 <span class="icon is-small"
                   ><i class="fas fa-tools" aria-hidden="true"></i
@@ -41,65 +38,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Sparepart 1</td>
-                <td>Unit 1</td>
-                <td>100 pcs</td>
+              <tr v-for="item in data_sparepart" :key="item.id">
+                <td>{{ item.kode }}</td>
+                <td>{{ item.nama }}</td>
+                <td>{{ item.unit }}</td>
+                <td>{{ item.jml }}</td>
               </tr>
             </tbody>
           </table>
@@ -115,57 +58,11 @@
                 <th>Jumlah</th>
               </tr>
             </thead>
-
             <tbody>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
-              </tr>
-              <tr>
-                <td scope="row">Kode 1</td>
-                <td>Unit 1</td>
-                <td>100 Unit</td>
+              <tr v-for="item in data_unit" :key="item.id">
+                <td>{{ item.kode }}</td>
+                <td>{{ item.nama }}</td>
+                <td>{{ item.jml }}</td>
               </tr>
             </tbody>
           </table>
@@ -177,6 +74,7 @@
 
 <script>
 import $ from "jquery";
+import axios from "axios";
 
 export default {
   name: "GudangKarantina",
@@ -184,32 +82,32 @@ export default {
   data() {
     return {
       tabs: false,
+      data_sparepart: [],
+      data_unit: [],
       table_sparepart: null,
       table_unit: null,
     };
   },
 
   methods: {
-    changeView(view) {
-      if (view === "sparepart") {
-        this.tabs = false;
-        // if (this.table_sparepart) {
-        //   this.table_sparepart.destroy();
-        // }
-        // // this.table_sparepart = $("#table-sparepart").DataTable();
-      } else if (view === "unit") {
-        this.tabs = true;
-        // if (this.table_unit) {
-        //   this.table_unit.destroy();
-        // }
-        // // this.table_unit = $("#table-unit").DataTable();
-      }
+    async loadData() {
+      this.$store.commit("setIsLoading", true);
+      await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
+        this.data_sparepart = response.data;
+      });
+      this.table_sparepart = $("#table-sparepart").DataTable();
+
+      await axios.get("/api/ppic/data/gk/unit").then((response) => {
+        this.data_unit = response.data;
+      });
+
+      this.table_unit = $("#table-unit").DataTable();
+      this.$store.commit("setIsLoading", false);
     },
   },
 
   mounted() {
-    this.table_sparepart = $("#table-sparepart").DataTable();
-    this.table_unit = $("#table-unit").DataTable();
+    this.loadData();
   },
 };
 </script>

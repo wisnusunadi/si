@@ -362,7 +362,10 @@
                         }, {
                             data: 'barcode',
                             name: 'barcode'
-                        }]
+                        }],
+                        "language": {
+                                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                            }
                     });
                 },
                 complete: function() {
@@ -492,7 +495,10 @@
                             orderable: false,
                             searchable: false
                         },
-                    ]
+                    ],
+                    "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
                 });
             }
         });
@@ -552,6 +558,9 @@
                             searchable: false
                         },
                     ],
+                    "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
                 });
             }
         })
