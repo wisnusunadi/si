@@ -3,6 +3,15 @@
 @section('title', 'ERP')
 
 @section('content')
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Produk Gudang Barang Jadi</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -11,7 +20,6 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
-                                <h3 class="card-title">Produk Gudang Barang Jadi</h3>
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -24,7 +32,7 @@
                                             </button>
                                         </span>
                                         @endif
-                                        <span class="float-right">
+                                        <span class="float-right mr-1">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
                                                 id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
                                                 Filter
@@ -68,7 +76,7 @@
                                     <th>Stok Gudang</th>
                                     <th>Stok Penjualan</th>
                                     <th>Kelompok</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                         </table>
@@ -95,6 +103,7 @@
             <div class="modal-body">
             <form action="" id="produkForm" name="produkForm" enctype="multipart/form-data">
                 <input type="hidden" name="id" id="id">
+                <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
@@ -315,30 +324,7 @@
                     <tbody>
 
                     </tbody>
-                    {{-- <tr>
-                        <td><input type="checkbox" class="cb-child" value="1"></td>
-                        <td>5474598674958698645</td>
-                        <td>
-                            <select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                            </select>
-                            </td> <td>
-                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="cb-child" value="2"></td>
-                        <td>5474598674958698645</td>
-                        <td>
-                            <select name="" id="" class="form-control">
-                                <option value="1">Layout 1</option>
-                                <option value="2">Layout 2</option>
-                            </select>
-                            </td> <td>
-                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                        </td>
-                    </tr> --}}
+
                 </table>
             </div>
             <div class="modal-footer">
@@ -381,16 +367,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- <tr>
-                            <td scope="row">10-04-2022</td>
-                            <td>Divisi IT</td>
-                            <td>Uji Coba</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">10-04-2022</td>
-                            <td>Divisi IT</td>
-                            <td>Uji Coba</td>
-                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -412,8 +388,6 @@
                 <div class="form-group">
                     <label for="">Layout</label>
                     <select name="" id="change_layout" class="form-control">
-                      {{-- <option value="1">Layout 1</option>
-                      <option value="2">Layout 2</option> --}}
                   </select>
                 </div>
             </div>
@@ -442,7 +416,10 @@
             "lengthChange": false,
             "columnDefs": [
                 { "width": "5%", "targets": 0},
-            ]
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
     });
     $('#inputGroupFile02').on('change', function () {
         //get the file name
@@ -532,7 +509,10 @@
             { data: 'jumlah1'},
             { data: 'kelompok'},
             { data: 'action'}
-        ]
+        ],
+        language: {
+            search : "Cari:"
+        }
     });
 
     // load produk
@@ -609,8 +589,6 @@
                 $('#produk_idd').val(res.data[0].produk_id);
                 $('#produk_id').select2().trigger('change');
                 $('#produk_id').select2({disabled: 'readonly'});
-                // var newOption = $('<option selected="selected"></option>').val(res.data[0].produk_id).text(res.nama_produk[0].product.tipe + ' ' + res.nama_produk[0].nama);
-                // $('#produk_id').append(newOption).trigger('change');
                 $('#inputGroupFile02').val(res.data[0].gambar);
             }
         });
@@ -671,17 +649,14 @@
             }
         });
     });
-    // var ii = 0;
+
    function select_layout() {
     $.ajax({
         url: '/api/gbj/sel-layout',
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            // ii++;
-            console.log(res);
             $.each(res, function(key, value) {
-                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                 $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
             });
         }
@@ -743,7 +718,6 @@
             $("#change_layout").empty();
             $.each(res, function(key, value) {
                 $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                // $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
             });
         }
     });
@@ -755,8 +729,6 @@
 
     $(document).ready(function() {
         $('#ubahSeri').on('click', function() {
-            // console.log('ok');
-
             const cekid = [];
             const noseri = [];
             const layout = [];
@@ -774,7 +746,6 @@
             $('select[name^="layout_id"]').each(function() {
                 layout.push($(this).val());
             });
-            // console.log(cekid);
 
             $.ajax({
                 url: '/api/gbj/noseri/' + noseri,
@@ -782,7 +753,6 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     cekid : cekid,
-                    // noseri : noseri,
                     layout : layout,
                 },
                 success: function(res) {

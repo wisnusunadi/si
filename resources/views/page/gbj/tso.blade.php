@@ -12,6 +12,7 @@
 
 <section class="content">
     <div class="row">
+        <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
         <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
             <div class="row">
                 <div class="col-12">
@@ -40,9 +41,6 @@
                                             <label for="" class="col-12 font-weight-bold col-form-label">Produk</label>
                                             <div class="col-12">
                                                 <select class="form-control product" name="gdg_brg_jadi_id" id="gdg_brg_jadi_id">
-                                                    <option value="AMBULATORY BLOOD PRESSURE MONITOR">AMBULATORY BLOOD PRESSURE MONITOR</option>
-                                                    <option value="AIR STERILIZER AND PURIFIER">AIR STERILIZER AND PURIFIER</option>
-                                                    <option value="BACKUP POWER">BACKUP POWER</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -51,7 +49,7 @@
                                             <div class="col-12">
                                                 <input type="text" id="qtyy"
                                                     class="form-control number-input input-notzero qtyy">
-                                                {{-- <span class="form-text text-muted">Stok Input Maks. 20</span> --}}
+                                                <span class="form-text text-muted">Stok Input Maks : <span id="stock"><b></b></span> </span>
                                                 <input type="text" class="stok-gudang" value="20" hidden>
                                             </div>
                                         </div>
@@ -88,8 +86,7 @@
                             </table>
                         </div>
                         <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-primary btn-simpan" type="submit" data-toggle="modal"
-                                data-target="#modalNotes" hidden>Simpan</button>
+                            <button class="btn btn-primary btn-simpan" type="button" hidden>Simpan</button>
                         </div>
                     </div>
                     </form>
@@ -119,14 +116,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>36541654654654564</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>65654564646545455</td>
-                            <td></td>
-                        </tr>
+
                     </tbody>
                 </table>
 
@@ -141,8 +131,6 @@
 
 @section('adminlte_js')
 <script>
-    // import swal from 'sweetalert2/src/sweetalert2.js'
-    // Restricts input for each element in the set of matched elements to the given inputFilter.
     (function ($) {
         $.fn.inputFilter = function (inputFilter) {
             return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
@@ -192,6 +180,18 @@
             }
         });
 
+        $('#gdg_brg_jadi_id').on('change', function() {
+            // console.log($(this).val());
+            $.ajax({
+                url : "{{ URL('/api/tfp/cekStok')}}",
+                type: "post", 
+                data: {gdg_brg_jadi_id: $(this).val()},
+                success: function(res) {
+                    $('span#stock').text(res.stok);
+                }
+            })
+        })
+
         // load divisi
         $.ajax({
             url: '/api/gbj/sel-divisi',
@@ -240,12 +240,10 @@
                         position: 'center',
                         icon: 'error',
                         title: 'Stok Tidak Mencukupi',
-                        showConfirmButton: false,
-                        timer: 1500
+                        text: 'Stok gudang produk saat ini '+res.stok,
+                        confirmButtonText: 'Oke',
                     })
-                    // console.log('tidak');
                 } else {
-                    // console.log('ok');
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -254,10 +252,6 @@
                         timer: 1500
                     })
                     addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
-                    // $('#post_ke').val(divisi);
-                    // $('#post_deskripsi').val(deskripsi);
-                    // $('#post_produk').val(produk);
-                    // $('#post_qty').val(stok);
                 }
             $('.btn-simpan').prop('hidden', false);
             }
@@ -273,8 +267,7 @@
         }
 
         i++;
-        // console.log(deskripsi.length);
-        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" ><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" ><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
 
 
@@ -314,6 +307,7 @@
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
+                    ordering: false,
                     ajax: {
                         url: '/api/tfp/noseri/' + id,
                     },
@@ -321,21 +315,14 @@
                         { data: 'noseri', name: 'noseri'},
                         { data: 'checkbox', name: 'checkbox', orderable: 'false'},
                     ],
-                    // 'columnDefs': [{
-                    //     'targets': 1,
-                    //     'checkboxes': {
-                    //         'selectRow': true
-                    //     },
-                    // }],
+
                     'select': {
                         'style': 'multi'
                     },
-                    // 'order': [
-                    //     [0, 'asc']
-                    // ],
-                    "oLanguage": {
-                    "sSearch": "Scan Nomor Seri:"
-                    }
+
+                    "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
                 });
             }
         })
@@ -343,11 +330,29 @@
     })
     const seri = {};
     $(document).on('click', '#btnSave', function() {
-        console.log('ok');
+        console.log('jum '+jml);
+
         const ids = [];
         $('.cb-child').each(function() {
             if ($(this).is(":checked")) {
-                ids.push($(this).val());
+                if ($('.cb-child').filter(':checked').length > jml) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Melebihi Batas Maksimal'
+                    })
+                } else {
+                    ids.push($(this).val());
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Noseri Berhasil Disimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('.modal-produk').modal('hide');
+                }
+
             }
         })
         seri[id] = ids;
@@ -371,7 +376,6 @@
         $('input[name^="ke"]').each(function() {
             ke.push($(this).val());
         });
-        // console.log(ke);
 
         $('input[name^="deskripsi"]').each(function() {
             desk.push($(this).val());
@@ -384,31 +388,43 @@
         $('input[name^="qty"]').each(function() {
             stok_push.push($(this).val());
         });
-        console.log(stok_push);
 
-        $.ajax({
-            url: "/api/tfp/create",
-            type:"POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                ke: ke,
-                deskripsi: desk,
-                gdg_brg_jadi_id: gdg,
-                qty: stok_push,
-                noseri_id : seri,
-            },
-            success: function (res) {
-                // console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, transfer it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                'Sukses!',
+                'Data Berhasil Ditransfer',
+                'success'
+                )
+                $.ajax({
+                    url: "/api/tfp/create",
+                    type:"POST",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#userid').val(),
+                        ke: ke,
+                        deskripsi: desk,
+                        gdg_brg_jadi_id: gdg,
+                        qty: stok_push,
+                        noseri_id : seri,
+                    },
+                    success: function (res) {
+
+                    }
+                });
                 location.reload();
             }
-        });
+        })
+
+
     })
 
 

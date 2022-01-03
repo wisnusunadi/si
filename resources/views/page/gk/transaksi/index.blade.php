@@ -87,14 +87,14 @@
                                 <div class="row align-items-center">
                                     <div class="col-lg-9 col-xl-8">
                                         <div class="row align-items-center">
-                                            <div class="col-md-4 my-2 my-md-0">
+                                            <div class="col-md-3 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
                                                     <input type="text" name="" id="datetimepicker1"
                                                         class="form-control">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 my-2 my-md-0">
+                                            <div class="col-md-3 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Dari / Ke</label>
                                                     <select name="" id="divisi" class="form-control">
@@ -102,7 +102,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 my-2 my-md-0">
+                                            <div class="col-md-3 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Jenis Produk</label>
                                                     <select name="" id="jenis" class="form-control">
@@ -132,6 +132,13 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-end">
+                                            <a href="{{ route('gk.export') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
                                     {{-- Tanggal Masuk dan Tanggal Keluar --}}
                                     <table class="table table-bordered pertanggal" width="100%">
@@ -143,7 +150,7 @@
                                                 <th>Produk</th>
                                                 <th>Unit</th>
                                                 <th>Jumlah</th>
-                                                <th>Tujuan</th>
+                                                <th>Keterangan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -228,20 +235,7 @@
                             <th>Layout</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td scope="row">65465465465</td>
-                            <td>Kerusakan Komponen</td>
-                            <td>Level 1</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">65465465465</td>
-                            <td>Kerusakan Komponen</td>
-                            <td>Level 1</td>
-                            <td>Layout 1</td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -299,6 +293,12 @@
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
+            columnDefs: [
+                {
+                    targets: [4],
+                    visible: false,
+                },
+            ],
         });
 
         $('#datetimepicker1').daterangepicker({

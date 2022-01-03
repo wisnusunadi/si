@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pesanan extends Model
 {
     protected $table = 'pesanan';
-    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id'];
+    protected $fillable = ['no_po', 'so', 'tgl_po', 'no_do', 'tgl_do', 'ket', 'log_id', 'checked_by'];
 
     public function Ekatalog()
     {
@@ -58,6 +58,25 @@ class Pesanan extends Model
         $jumlah = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
             $q->where('pesanan_id', $id);
         })->count();
+        return $jumlah;
+    }
+
+    function cekJumlahkirim()
+    {
+        $id = $this->id;
+        $jumlah = NoseriTGbj::whereHas('detail.header.pesanan', function($q) use($id) {
+            $q->where('id', $id)->where('status_id',2);
+        })->count();
+        return $jumlah;
+    }
+
+    function getJumlahKirim1() {
+        $id = $this->id;
+        $detail = TFProduksiDetail::where('t_gbj_id', $id)->get();
+        $jumlah = 0;
+        foreach($detail as $d) {
+            $jumlah += $d->qty;
+        }
         return $jumlah;
     }
 

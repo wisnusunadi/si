@@ -32,7 +32,9 @@ Route::get('/home', function () {
 Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/{any?}', 'spa.ppic.spa');
 });
-
+Route::middleware('auth')->prefix('/ppic_direksi')->group(function () {
+    Route::view('/{any?}', 'page.direksi.perencanaan');
+});
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
     Route::view('/{any?}', 'spa.manager_teknik.spa');
 });
@@ -46,14 +48,15 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/transferproduk', 'page.gbj.transferproduk');
     Route::view('/bso', 'page.gbj.bso');
     Route::view('/tso', 'page.gbj.tso');
-    Route::view('/dp', 'page.gbj.dp');
+    Route::get('/dp', [GudangController::class, 'terimaRakit']);
     Route::view('/lp', 'page.gbj.lp');
     Route::view('/dashboard', 'page.gbj.dashboard');
     Route::group(['prefix' => '/tp'], function () {
-        Route::view('/', 'page.gbj.tp.tp');
+        Route::get('/', [GudangController::class, 'allTp']);
         Route::get('/{id}', [GudangController::class, 'getDetailHistory1']);
     });
     Route::get('/data', [GudangController::class, 'get_data_barang_jadi']);
+    Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
 });
 
 Route::middleware('auth')->prefix('/produksi')->group(function () {
@@ -249,7 +252,7 @@ Route::get('/test/{name?}', function ($name = null) {
     return $name;
 });
 
-Route::middleware('auth')->prefix('/gk')->group(function () {
+Route::group(['prefix' => '/gk', 'middleware' => 'auth'],function () {
     Route::view('/dashboard', 'page.gk.dashboard');
     Route::view('/gudang', 'page.gk.gudang.index');
     Route::get('/gudang/sparepart/{id}', [SparepartController::class, 'detail_spr']);
@@ -260,7 +263,12 @@ Route::middleware('auth')->prefix('/gk')->group(function () {
     Route::get('/transfer/{id}', [SparepartController::class, 'edit_tf']);
     Route::view('/transaksi', 'page.gk.transaksi.index');
     Route::get('/transaksi/{id}', [SparepartController::class, 'detail_trx']);
+    Route::get('/export', [SparepartController::class, 'exportTransaksi'])->name('gk.export');
+    Route::get('/export-produk', [SparepartController::class, 'exportProduk'])->name('gk.export-produk');
+    Route::get('/export-unit', [SparepartController::class, 'exportUnit'])->name('gk.export-unit');
 });
+
+Route::view('/uit', 'page.login_page.index');
 
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
 //     Route::view('/stok', 'page.gbj.stok_show');

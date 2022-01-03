@@ -3,6 +3,11 @@
 @section('title', 'ERP')
 
 @section('content')
+<style>
+    #DataTables_Table_0_filter{
+        display: none;
+    }
+</style>
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -18,13 +23,8 @@
             <div class="col-sm-3">
                 <div class="form-group">
                     <label for="">Pilih Produk</label>
-                    <select name="" id="" class="form-control produk" multiple>
-                        <option value="" selected>All Produk</option>
-                        <option value="">Produk 1</option>
-                        <option value="">Produk 2</option>
-                        <option value="">Produk 3</option>
-                        <option value="">Produk 4</option>
-                        <option value="">Produk 5</option>
+                    <select name="" id="produk_select" class="form-control produk_select" multiple>
+                        <option value="" selected="selected">All Produk</option>
                     </select>
                 </div>
             </div>
@@ -37,7 +37,7 @@
             <div class="col-sm-3">
                 <div class="form-group">
                     <label for="">Tanggal Pengiriman</label>
-                    <input type="text" name="" id="" class="form-control daterange">
+                    <input type="text" name="" id="" class="form-control daterange2">
                 </div>
             </div>
             <div class="col-sm-3"></div>
@@ -69,34 +69,11 @@
                                     <th>Produk</th>
                                     <th>Jumlah</th>
                                     <th>Aksi</th>
+                                    <th>filter_rakit</th>
+                                    <th>filter_kirim</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                    <tr class="table-dark text-bold">
-                                        <td scope="row">Selasa 23-09-2021</td>
-                                        <td>Rabu 24-09-2021</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>13.00</td>
-                                        <td>14.00</td>
-                                        <td>564564641654</td>
-                                        <td>Produk 3</td>
-                                        <td>100 Unit</td>
-                                        <td><button class="btn btn-outline-secondary" data-toggle="modal" data-target=".modal_id"><i class="far fa-eye"></i> Detail</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>15.00</td>
-                                        <td>16.00</td>
-                                        <td>564564641654</td>
-                                        <td>Produk 4</td>
-                                        <td>100 Unit</td>
-                                        <td><button class="btn btn-outline-secondary" data-toggle="modal" data-target=".modal_id"><i class="far fa-eye"></i> Detail</button></td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                         </table>
                         </div>
                     </div>
@@ -185,49 +162,9 @@
                                     <thead>
                                         <tr>
                                             <th>Nomor Seri</th>
-                                            {{-- <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th>
-                                            <th>Nomor Seri</th> --}}
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {{-- <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>984654654565</td>
-                                            <td>652656666544</td>
-                                        </tr>
-                                        <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>656645644654</td>
-                                            <td>656886451212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>656645644654</td>
-                                            <td>656886451212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>656645644654</td>
-                                            <td>656886451212</td>
-                                        </tr>
-                                        <tr>
-                                            <td>846464654654</td>
-                                            <td>654654654654</td>
-                                            <td>957489688845</td>
-                                            <td>656645644654</td>
-                                            <td>656886451212</td>
-                                        </tr> --}}
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
@@ -241,17 +178,72 @@
 
 @section('adminlte_js')
 <script>
+        // Tanggal Perakitan
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
 
+        var evalDate = parseDateValue(aData[8]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    // Tanggal Pengiriman
+    var start_date2;
+    var end_date2;
+    var DateFilterFunction2 = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue2(start_date2);
+        var dateEnd = parseDateValue2(end_date2);
+
+        var evalDate = parseDateValue2(aData[9]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue2(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+    $('.produk_select').select2();
+    $.ajax({
+        type: "get",
+        url: "/api/prd/product_his_rakit",
+        success: function (response) {
+            $.each(response, function (a,b) {
+                 $('#produk_select').append('<option value="'+b+'">'+b+'</option>');
+            });
+        }
+    });
     $(document).on('click', '.detail', function() {
-        // console.log('test');
         var id = $(this).data('id');
         var time = $(this).data('tf');
-
+        var rakit = $(this).data('rakit');
+        console.log(rakit);
         $.ajax({
             url: "/api/prd/history/header/" + id,
             type: "get",
             success: function(res) {
-                console.log(res);
                 $('p#d_rakit').text(res[0].day_rakit);
                 $('p#t_rakit').text(res[0].time_rakit);
                 $('p#d_kirim').text(res[0].day_kirim);
@@ -271,9 +263,8 @@
             "lengthChange": false,
             "pageLength": 10,
             processing: true,
-            serverSide: true,
             ajax: {
-                url: "/api/prd/historySeri/" + id + "/" + time,
+                url: "/api/prd/historySeri/" + id + "/" + time + "/" + rakit,
             },
             columns: [
                 {data: 'no_seri'}
@@ -282,48 +273,22 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-    })
-    $('.produk').select2({});
-    $('.daterange').daterangepicker({
-        locale: {
-            format: 'DD/MM/YYYY'
-        }
     });
-    var groupColumn = 0;
-    var groupColumn1 = 2;
-    $('.table-history').DataTable({
+
+    var table = $('.table-history').DataTable({
         "columnDefs": [
-            { "visible": false, "targets": groupColumn },
-            { "visible": false, "targets": groupColumn1 }
+            { "visible": false, "targets": 0 },
+            { "visible": false, "targets": 2 },
+            { "visible": false, "targets": 8 },
+            { "visible": false, "targets": 9 }
         ],
         destroy: true,
         "lengthChange": false,
-        "searching": false,
         "ordering": false,
+        "displayLength": 25,
         "info": false,
         "responsive": true,
-        "order": [[ groupColumn, 'asc' ]],
-        "drawCallback": function ( settings ) {
-            var api = this.api();
-            var rows = api.rows( {page:'current'} ).nodes();
-            var last=null;
-
-            api.column(0, {page:'current'} ).data().each( function ( group, i ) {
-
-                if (last !== group) {
-                    var rowData = api.row(i).data();
-
-                    $(rows).eq(i).before(
-                    '<tr class="table-dark text-bold"   ><td colspan="1">' + group + '</td><td colspan="5">'+rowData.day_kirim+'</td></tr>'
-                );
-                    last = group;
-                }
-                console.log(rowData);
-            });
-        },
-        autoWidth: false,
-        processing: true,
-        serverSide: true,
+        "order": [[ 0, 'asc' ]],
         ajax: {
             url: "/api/prd/ajax_his_rakit",
             headers: {
@@ -339,10 +304,85 @@
             {data: 'produk'},
             {data: 'jml'},
             {data: 'action'},
+            {data: 'day_rakit_filter'},
+            {data: 'day_kirim_filter'},
         ],
+        "drawCallback": function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+
+            api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                if (last !== group) {
+                    var rowData = api.row(i).data();
+
+                    $(rows).eq(i).before(
+                    '<tr class="table-dark text-bold"><td colspan="1">' + group + '</td><td colspan="5">'+rowData.day_kirim+'</td></tr>'
+                );
+                    last = group;
+                }
+            });
+        },
+        autoWidth: false,
+        processing: true,
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
+        },
     });
+
+    $('#produk_select').change(function() {
+        var search = [];
+
+        $.each($('#produk_select option:selected'), function () {
+            search.push($(this).val());
+        });
+        search = search.join('|');
+        table.column(5).search(search, true, false).draw();
+    });
+
+    // Tanggal Perakitan
+    $('.daterange').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('.daterange').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            table.draw();
+        });
+
+        $('.daterange').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            table.draw();
+        });
+
+    // Tanggal Pengiriman
+    $('.daterange2').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('.daterange2').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date2 = picker.startDate.format('DD-MM-YYYY');
+            end_date2 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
+            table.draw();
+        });
+
+        $('.daterange2').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date2 = '';
+            end_date2 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
+            table.draw();
+        });
 </script>
 @stop

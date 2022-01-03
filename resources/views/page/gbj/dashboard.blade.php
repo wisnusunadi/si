@@ -72,6 +72,15 @@
 </style>
 <div class="content-header">
     <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Dashboard</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+<div class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <nav>
@@ -98,7 +107,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transferoneday" class="card active otg" style="background-color: #E6EFFA">
                                         <div class="card-body text-center">
-                                            <h4 id="he1">10</h4>
+                                            <h4 id="he1">0</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 1 Hari</p>
                                         </div>
                                     </div>
@@ -106,7 +115,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transfertwoday" class="card otg" style="background-color: #FEF7EA">
                                         <div class="card-body text-center">
-                                            <h4 id="he2">50</h4>
+                                            <h4 id="he2">0</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 2 Hari</p>
                                         </div>
                                     </div>
@@ -114,7 +123,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="transferthreeday" class="card otg" style="background-color: #FCEDE9">
                                         <div class="card-body text-center">
-                                            <h4 id="he3">60</h4>
+                                            <h4 id="he3">0</h4>
                                             <p class="card-text">Produk Melewati Batas Transfer Lebih Dari 3 Hari</p>
                                         </div>
                                     </div>
@@ -213,7 +222,7 @@
                                         <div class="col">
                                             <div id="jml-produk-20" class="card active otg" style="background-color: #FEF7EA">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd1">10</h4>
+                                                    <h4 id="prd1">0</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 10 sampai 20</p>
                                                 </div>
                                             </div>
@@ -221,7 +230,7 @@
                                         <div class="col">
                                             <div id="jml-produk-5" class="card otg" style="background-color: #FFBD67">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd2">10</h4>
+                                                    <h4 id="prd2">0</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 5 sampai 9</p>
                                                 </div>
                                             </div>
@@ -229,7 +238,7 @@
                                         <div class="col">
                                             <div id="jml-produk-4" class="card otg" style="background-color: #FF6464">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd3">10</h4>
+                                                    <h4 id="prd3">0</h4>
                                                     <p class="card-text">Produk dengan jumlah stok 1 sampai 4</p>
                                                 </div>
                                             </div>
@@ -303,7 +312,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-3-bulan" class="card otg active" style="background-color: #FEF7EA">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd4">10</h4>
+                                                    <h4 id="prd4">0</h4>
                                                     <p class="card-text font-weight">Produk masuk 3 bulan sampai 6 bulan</p>
                                                 </div>
                                             </div>
@@ -311,7 +320,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-6-bulan" class="card otg" style="background-color: #FFBD67">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd5">10</h4>
+                                                    <h4 id="prd5">0</h4>
                                                     <p class="card-text font-weight">Produk masuk 6 bulan sampai 1 tahun</p>
                                                 </div>
                                             </div>
@@ -319,7 +328,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-1-tahun" class="card otg" style="background-color: #FA8282">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd6">10</h4>
+                                                    <h4 id="prd6">0</h4>
                                                     <p class="card-text font-weight">Produk masuk 1 tahun sampai 3 tahun</p>
                                                 </div>
                                             </div>
@@ -327,7 +336,7 @@
                                         <div class="col">
                                             <div id="produk-masuk-3-tahun" class="card otg" style="background-color: #FF6464">
                                                 <div class="card-body text-center">
-                                                    <h4 id="prd7">10</h4>
+                                                    <h4 id="prd7">0</h4>
                                                     <p class="card-text font-weight">Produk masuk lebih dari 3 tahun</p>
                                                 </div>
                                             </div>
@@ -441,7 +450,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receiptoneday" class="card active otg" style="background-color: #FEF7EA">
                                         <div class="card-body text-center">
-                                            <h4 id="r1">10</h4>
+                                            <h4 id="r1">0</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 1 Hari</p>
                                         </div>
                                     </div>
@@ -449,7 +458,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receipttwoday" class="card otg" style="background-color: #FFBD67">
                                         <div class="card-body text-center">
-                                            <h4 id="r2">50</h4>
+                                            <h4 id="r2">0</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 2 Hari</p>
                                         </div>
                                     </div>
@@ -457,7 +466,7 @@
                                 <div class="col-6 col-md-4">
                                     <div id="receiptthreeday" class="card otg" style="background-color: #FF6464">
                                         <div class="card-body text-center">
-                                            <h4 id="r3">60</h4>
+                                            <h4 id="r3">0</h4>
                                             <p class="card-text font-weight-transfer">Produk Melewati Batas Penerimaan Lebih Dari 3 Hari</p>
                                         </div>
                                     </div>
@@ -523,7 +532,7 @@
                                 <div class="card-header">
                                     <h5 class="card-title">
                                         <i class="fas fa-chart-pie mr-1"></i>
-                                        Daftar Permintaan Transfer Produk
+                                        Daftar Penerimaan Transfer Produk
                                     </h5>
                                 </div>
                                 <div class="card-body">
@@ -553,7 +562,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk AMBULATORY BLOOD PRESSURE MONITOR</b></h5>
+                <h5 class="modal-title"><b>Detail Produk <span id="prd">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -631,9 +640,7 @@
                                         <tr>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
-                                            <th>Tipe</th>
                                             <th>Merk</th>
-                                            {{-- <th>Status</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -650,15 +657,6 @@
 
 @section('adminlte_js')
 <script>
-
-    $('.jml-produk').DataTable({});
-    // $('.waktu-produk').DataTable({});
-
-    // $('.tableStokLayout').DataTable({
-    //     searching: false,
-    //     "lengthChange": false
-    // });
-
     $(document).ready(function () {
         // header
         $.ajax({
@@ -793,11 +791,8 @@
             }
         });
 
-
-
         // data
         // penjualan
-
         $('.table-produk-batas-transfer-one-day').DataTable({
             processing: true,
             serverSide: true,
@@ -917,30 +912,29 @@
                 {data: 'prd'},
                 {data: 'jml'},
                 {data: 'layout'},
-                // {data: 'action'},
             ],
+
             initComplete: function () {
-          this.api().columns([3]).every( function () {
-            var column = this;
-            var select = $('<select class="form-control"><option value="">All Layout</option></select>')
-                .appendTo( $(column.footer()).empty() )
-                .on( 'change', function () {
-                    var val = $.fn.dataTable.util.escapeRegex(
-                        $(this).val()
-                    );
+                this.api().columns([3]).every( function () {
+                    var column = this;
+                    var select = $('<select class="form-control"><option value="">All Layout</option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
 
-                    column
-                        .search( val ? '^'+val+'$' : '', true, false )
-                        .draw();
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
                 } );
-
-            column.data().unique().sort().each( function ( d, j ) {
-                select.append( '<option value="'+d+'">'+d+'</option>' )
-            } );
-          } );
-          $("#layout").select2();
-       }
-
+                $("#layout").select2();
+            }
         });
 
         $('#layout').on('change', function(){
@@ -1035,8 +1029,6 @@
                 {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-
-                // {data: 'action'},
             ]
         });
         $('.waktu-produk2').DataTable({
@@ -1052,8 +1044,6 @@
                 {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-
-                // {data: 'action'},
             ]
         });
         $('.waktu-produk3').DataTable({
@@ -1069,8 +1059,6 @@
                 {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-
-                // {data: 'action'},
             ]
         });
         $('.waktu-produk4').DataTable({
@@ -1086,18 +1074,17 @@
                 {data: 'tgl_masuk'},
                 {data: 'product'},
                 {data: 'jumlah'},
-
-                // {data: 'action'},
             ]
         });
 
         $(document).on('click', '.salemodal', function() {
-            // console.log('ok1');
             var id = $(this).data('id');
             console.log(id);
+            var x = $(this).data('value');
+            console.log(x);
 
             $.ajax({
-                url: "/api/tfp/header-so/" +id,
+                url: "/api/tfp/header-so/" +id+"/"+x,
                 success: function(res) {
                     console.log(res);
                     $('span#so').text(res.so);
@@ -1106,18 +1093,19 @@
                     $('span#instansi').text(res.customer);
                 }
             });
-            $('#view-produk').DataTable().destroy();
+            // $('#view-produk').DataTable().destroy();
             $('#view-produk').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: "/api/dashboard-gbj/list-detail/" + id,
+                    url: "/api/dashboard-gbj/list-detail/" + id+"/"+x,
                 },
                 columns: [
                     { data: "nama_produk" },
                     { data: "jumlah" },
-                    { data: "tipe" },
+                    // { data: "tipe" },
                     { data: "merk" },
                 ],
                 "language": {
@@ -1128,20 +1116,24 @@
         })
 
         $(document).on('click', '.editmodal', function() {
+            // console.log($(this).parent().prev().prev().children().val());
             // console.log('ok1');
             var id = $(this).data('id');
             console.log(id);
-            $('.table-seri').DataTable().destroy();
+            var brg = $(this).data('brg');
+            var tipe = $(this).data('var')
+            $('span#prd').text(brg + tipe);
+            
             $('.table-seri').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
                     url: "/api/dashboard-gbj/noseri/" + id,
-                    // type: "post",
-                    // data: { id: id},
+                    type: "get",
                 },
-                column: [
+                columns: [
                     {data: "noser"},
                     {data: "posisi"},
                 ],

@@ -44,18 +44,16 @@
 </div>
 <div class="row ml-2">
     <div class="col-sm-2">
+        <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
         <div class="form-group">
-            <label for="">Filter Tanggal</label>
-            <select name="" id="filter_tgl" class="form-control">
-                <option value="tgl_mulai">Tanggal Mulai</option>
-                <option value="tgl_selesai">Tanggal Selesai</option>
-            </select>
+            <label for="">Tanggal Masuk</label>
+            <input type="text" name="" id="kt_datepicker_1" class="form-control">
         </div>
     </div>
     <div class="col-sm-2">
         <div class="form-group">
-            <label for="">Tanggal</label>
-            <input type="text" name="" id="datetimepicker1" class="form-control">
+            <label for="">Tanggal Keluar</label>
+            <input type="text" name="" id="kt_datepicker_2" class="form-control">
         </div>
     </div>
 </div>
@@ -67,18 +65,7 @@
                     <div class="col-lg-12">
                         <table class="table table-bordered table_produk_perakitan ">
                             <thead class="thead-dark">
-                                {{-- <tr>
-                                    <th colspan="2" class="text-center">Tanggal</th>
-                                    <th rowspan="2">Nomor BPPB</th>
-                                    <th rowspan="2">Produk</th>
-                                    <th rowspan="2">Jumlah</th>
-                                    <th rowspan="2">Status</th>
-                                    <th rowspan="2">Aksi</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Tgl Mulai</th>
-                                    <th class="text-center">Tgl Selesai</th>
-                                </tr> --}}
+
                                 <tr>
                                     <th class="text-center">Tanggal Masuk</th>
                                     <th class="text-center">Tanggal Keluar</th>
@@ -193,6 +180,7 @@
 
 @section('adminlte_js')
 <script>
+    // Tanggal Masuk
     var start_date;
     var end_date;
     var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
@@ -215,10 +203,33 @@
         0]);
         return parsedDate;
     }
+
+    // Tanggal Keluar
+    var start_date2;
+    var end_date2;
+    var DateFilterFunction2 = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue2(start_date2);
+        var dateEnd = parseDateValue2(end_date2);
+
+        var evalDate = parseDateValue2(aData[1]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue2(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
    $(document).ready(function () {
-    var $dTable = $('.table_produk_perakitan').DataTable({
+    var table = $('.table_produk_perakitan').DataTable({
         processing: true,
-        serverSide: true,
         ajax: "/api/prd/kirim",
         columns: [
             {data: "start"},
@@ -240,26 +251,49 @@
         }]
     });
 
-    $('#datetimepicker1').daterangepicker({
+    $('#kt_datepicker_1').daterangepicker({
             autoUpdateInput: false
         });
 
-        $('#datetimepicker1').on('apply.daterangepicker', function (ev, picker) {
+        $('#kt_datepicker_1').on('apply.daterangepicker', function (ev, picker) {
             $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
                 'DD-MM-YYYY'));
             start_date = picker.startDate.format('DD-MM-YYYY');
             end_date = picker.endDate.format('DD-MM-YYYY');
             $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
-            $dTable.draw();
+            table.draw();
         });
 
-        $('#datetimepicker1').on('cancel.daterangepicker', function (ev, picker) {
+        $('#kt_datepicker_1').on('cancel.daterangepicker', function (ev, picker) {
             $(this).val('');
             start_date = '';
             end_date = '';
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
-            $dTable.draw();
+            table.draw();
         });
+
+    // Tanggal Keluar
+    $('#kt_datepicker_2').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#kt_datepicker_2').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date2 = picker.startDate.format('DD-MM-YYYY');
+            end_date2 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
+            table.draw();
+        });
+
+        $('#kt_datepicker_2').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date2 = '';
+            end_date2 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
+            table.draw();
+        });
+    })
 
 
     function modalRakit() {
@@ -350,33 +384,44 @@
 
         $.each(rows_selected, function (index, rowId) {
             seri.push(rowId);
-       });
-       $.ajax({
-            url: "/api/prd/send",
-            type: "post",
-            data: {
-                "_token" : "{{csrf_token() }}",
-                qty: jumlah,
-                gbj_id : prd,
-                jadwal_id : id,
-                noseri: seri,
-            },
-            success: function(res) {
-                // console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
-            }
-        })
+        });
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Transfer it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Success!',
+                        'Data Terkirim ke Gudang Barang Jadi',
+                        'success'
+                    )
+                    $.ajax({
+                        url: "/api/prd/send",
+                        type: "post",
+                        data: {
+                            "_token" : "{{csrf_token() }}",
+                            userid : $('#userid').val(),
+                            qty: jumlah,
+                            gbj_id : prd,
+                            jadwal_id : id,
+                            noseri: seri,
+                        },
+                        success: function(res) {
+                           
+                        }
+                    })
+                    location.reload();
+                }
+            })
+       
     });
         modalRakit();
     });
-
-   });
 </script>
 @stop

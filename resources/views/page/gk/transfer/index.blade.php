@@ -4,7 +4,6 @@
 
 @section('content')
 <style>
-
     .topnav a {
         float: left;
         display: block;
@@ -19,20 +18,24 @@
     .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+
     .my-custom-scrollbar {
         position: relative;
         height: 450px;
         overflow: auto;
     }
+
     .table-wrapper-scroll-y {
-    display: block;
+        display: block;
     }
+
     table thead th {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    z-index: 30;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 30;
     }
+
 </style>
 <section class="content-header">
     <div class="container-fluid">
@@ -45,6 +48,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <nav>
+                    <input type="hidden" name="" id="user_id" value="{{ Auth::user()->id }}">
                     <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                             aria-controls="home" aria-selected="true">Daftar Transfer</a>
@@ -71,11 +75,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {{-- <tr>
                                 <td scope="row">10-04-2021</td>
                                 <td>Divisi IT</td>
-                                <td><a href="{{ url('gk/transfer/1') }}" class="btn btn-outline-info"><i class="far fa-edit"></i>Edit Produk</a></td>
-                            </tr>
+                                <td><a href="{{ url('gk/transfer/1') }}" class="btn btn-outline-info"><i
+                                            class="far fa-edit"></i>Edit Produk</a></td>
+                            </tr> --}}
                         </tbody>
                     </table>
                 </div>
@@ -90,15 +95,13 @@
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col">
-                                    <label for="tanggal">Tanggal Masuk</label>
-                                    <input type="date" name="date_in" id="datePicker" class="form-control" placeholder="">
+                                    <label for="tanggal">Tanggal Keluar</label>
+                                    <input type="date" name="date_in" id="datePicker" class="form-control"
+                                        placeholder="">
                                 </div>
                                 <div class="form-group col">
                                     <label for="dari">Ke</label>
                                     <select class="form-control dari" name="dari">
-                                        {{-- <option value="Divisi IT">Divisi IT</option>
-                                        <option value="Divisi QC">Divisi QC</option>
-                                        <option value="Divisi Perakitan">Divisi Perakitan</option> --}}
                                     </select>
                                 </div>
                             </div>
@@ -126,7 +129,7 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th style="width: 150px">Nama Produk</th>
-                                                    <th style="width: 150px">Unit</th>
+                                                    {{-- <th style="width: 150px">Unit</th> --}}
                                                     <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -178,11 +181,10 @@
                     <button class="btn btn-secondary " type="button" onclick="batal()">Batal</button>
                 </div>
             </div>
-             </div>
-        </section>
     </div>
+    </section>
 </div>
-
+</div>
 
 <div class="modal fade modalAddSparepart" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
     aria-hidden="true">
@@ -198,9 +200,9 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-sm">
-                                <label for="">Tanggal Masuk</label>
+                                <label for="">Tanggal Keluar</label>
                                 <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body">
+                                    <div class="card-body date_out">
                                         23-09-2021
                                     </div>
                                 </div>
@@ -208,7 +210,7 @@
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
-                                    <div class="card-body">
+                                    <div class="card-body prd">
                                         Produk 1
                                     </div>
                                 </div>
@@ -218,7 +220,7 @@
                             <div class="col-sm">
                                 <label for="">Unit</label>
                                 <div class="card" style="background-color: #FFCC83">
-                                    <div class="card-body">
+                                    <div class="card-body unit">
                                         Unit 1
                                     </div>
                                 </div>
@@ -226,7 +228,7 @@
                             <div class="col-sm">
                                 <label for="">Dari</label>
                                 <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body">
+                                    <div class="card-body divisi">
                                         Divisi IT
                                     </div>
                                 </div>
@@ -234,7 +236,7 @@
                             <div class="col-sm">
                                 <label for="">Jumlah</label>
                                 <div class="card" style="background-color: #FFECB2">
-                                    <div class="card-body">
+                                    <div class="card-body jumlah_spr">
                                         100 pcs
                                     </div>
                                 </div>
@@ -247,23 +249,13 @@
                                 <table class="table table-striped scan-produk1">
                                     <thead>
                                         <tr>
+                                            <th><input type="checkbox" id="head-cb"></th>
                                             <th>No Seri</th>
                                             <th>Kerusakan</th>
                                             <th>Tingkat Kerusakan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td>
-                                                <select name="" id="" class="form-control">
-                                                    <option value="1">Level 1</option>
-                                                    <option value="2">Level 2</option>
-                                                    <option value="3">Level 3</option>
-                                                </select>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -294,9 +286,9 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-sm">
-                                <label for="">Tanggal Masuk</label>
+                                <label for="">Tanggal Keluar</label>
                                 <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body">
+                                    <div class="card-body out_unit">
                                         23-09-2021
                                     </div>
                                 </div>
@@ -304,7 +296,7 @@
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
-                                    <div class="card-body">
+                                    <div class="card-body prd_unit">
                                         Produk 1
                                     </div>
                                 </div>
@@ -314,7 +306,7 @@
                             <div class="col-sm">
                                 <label for="">Dari</label>
                                 <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body">
+                                    <div class="card-body unit_divisi">
                                         Divisi IT
                                     </div>
                                 </div>
@@ -322,7 +314,7 @@
                             <div class="col-sm">
                                 <label for="">Jumlah</label>
                                 <div class="card" style="background-color: #FFECB2">
-                                    <div class="card-body">
+                                    <div class="card-body jml1">
                                         100 pcs
                                     </div>
                                 </div>
@@ -335,23 +327,13 @@
                                 <table class="table table-striped scan-produk">
                                     <thead>
                                         <tr>
+                                            <th><input type="checkbox" id="head-cb1"></th>
                                             <th>No Seri</th>
                                             <th>Kerusakan</th>
                                             <th>Tingkat Kerusakan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td>
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">Level 1</option>
-                                                    <option value="">Level 1</option>
-                                                    <option value="">Level 1</option>
-                                                </select>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -368,21 +350,23 @@
 </div>
 
 {{-- Modal Index --}}
-<div class="modal fade modal_transfer" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modal_transfer" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title judul_modal">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="form-group">
-                            <label for="">Tujuan</label>
-                            <textarea name="tujuan" id="tujuan_draft" cols="10" rows="5" class="form-control"></textarea>
+                            <label for="">Keterangan</label>
+                            <textarea name="tujuan" id="tujuan_draft" cols="10" rows="5"
+                                class="form-control"></textarea>
                         </div>
                     </div>
                 </div>
@@ -395,20 +379,21 @@
     </div>
 </div>
 
-<div class="modal fade modal_transfer1" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modal_transfer1" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title judul_modal">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="form-group">
-                            <label for="">Tujuan</label>
+                            <label for="">Keterangan</label>
                             <textarea name="tujuan" id="tujuan_tf" cols="10" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
@@ -452,12 +437,13 @@
 
     function addSpare(a) {
         var b = $(".btn_plus" + a).parent().prev().children().val();
-        var c = $(".btn_plus" + a).parent().prev().prev().prev().children().val();
+        var c = $(".btn_plus" + a).parent().prev().prev().children().val();
         addSparepart(b, a, c);
     }
 
-    function clickSparepart(c,d) {
-        console.log(d);
+    function clickSparepart(c, d, e) {
+        // alert(e);
+        console.log('spr '+d);
         var tableScan = $('.scan-produk1').dataTable({
             "destroy": true,
             "ordering": false,
@@ -466,7 +452,7 @@
             "lengthChange": false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            },
+            }
         });
 
         var arrSparepart = []
@@ -542,12 +528,12 @@
             $('.seri').removeClass('is-invalid');
             $('.seri').filter(function () {
                 $('.seri').filter(function () {
-                for (let index = 0; index < duplicates(count(arrSparepart)).length; index++) {
-                    if ($(this).val() == duplicates(count(arrSparepart))[index]) {
-                        return true;
+                    for (let index = 0; index < duplicates(count(arrSparepart)).length; index++) {
+                        if ($(this).val() == duplicates(count(arrSparepart))[index]) {
+                            return true;
+                        }
                     }
-                }
-            }).addClass('is-invalid');
+                }).addClass('is-invalid');
             }).addClass('is-invalid');
             $('.seri').filter(function () {
                 return $(this).val() == '';
@@ -566,50 +552,49 @@
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk1 tbody tr').each((index, value) => {
-                    const obj = {
-                        noseri: value.childNodes[0].firstChild.value,
-                        kerusakan: value.childNodes[1].firstChild.value,
-                        tingkat: value.childNodes[2].firstChild.value,
-                    }
-
-                    spr_arr.push(obj);
-                })
-                seri[d] = spr_arr;
-                spr_arr = [];
-                $('.modalAddSparepart').modal('hide');
+            const ids = [];
+            $('.cb-child').each(function() {
+            if($(this).is(":checked")) {
+                // cek validasi
+                if ($('.cb-child').filter(':checked').length > e) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Melebihi Batas Maksimal'
+                    })
+                } else {
+                    ids.push($(this).val());
+                    seri[d] = ids;
+                    console.log(seri);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Nomor seri tersimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('.modalAddSparepart').modal('hide');
+                }
+                }
             })
         }
     }
-
+    var xx = 0;
     function addSparepart(x, y, z) {
+
+        console.log('#sparepart_id'+(nmrspr-1));
+        alert($('#sparepart_id'+(nmrspr-1)).find(":selected").text());
+        xx++;
+        $('.jumlah_spr').text(x + ' Unit')
+        $('.date_out').text(document.getElementsByName("date_in")[0].value)
+        $('.divisi').text(document.getElementsByName("dari")[0].selectedOptions[0].dataset.name)
         $('.modalAddSparepart').modal('show');
-        $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ','+z+')');
+        $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ',' + z + ',' + x + ')');
         $('.modalAddSparepart').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
         $('.scan-produk1').DataTable().destroy();
-        $('.scan-produk1 tbody').empty();
-        for (let index = 0; index < x; index++) {
-            ii++;
-            $('.scan-produk1 tbody').append('<tr id="row' + ii + '"><td><input type="text" name="noseri[][' + ii +
-                ']" id="noseri' + ii +
-                '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
-                ii + ']" id="remark' + ii +
-                '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
-                ii + ']" id="layout_id' + ii +
-                '" class="form-control layout_id"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
-                );
-        }
         $('.scan-produk1').DataTable({
-            "destroy": true,
             "ordering": false,
             "autoWidth": false,
             searching: false,
@@ -617,8 +602,25 @@
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
+            ajax: {
+                url: "/api/gk/getseri/spr",
+                data: {
+                    sparepart_id: z,
+                },
+                type: "post",
+            },
+            columns: [
+                {data: 'kode'},
+                {data: 'seri'},
+                {data: 'note'},
+                {data: 'tingkat'},
+            ],
+
         });
+
     }
+
+
 
     // Unit
     function addUn(l) {
@@ -627,8 +629,8 @@
         addUnit(j, k);
     }
 
-    function clickUnit(c) {
-        console.log(c);
+    function clickUnit(c, p) {
+        console.log('unit '+c);
         var tableUnit = $('.scan-produk').DataTable({
             "destroy": true,
             "ordering": false,
@@ -690,7 +692,8 @@
         const duplicates = dict =>
             Object.keys(dict).filter((a) => dict[a] > 1)
 
-        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0 || duplicates(count(kerusakanUnit)).length > 0 || duplicates(count(tingkatUnit)).length > 0) {
+        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0 || duplicates(count(
+                kerusakanUnit)).length > 0 || duplicates(count(tingkatUnit)).length > 0) {
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
@@ -727,169 +730,209 @@
             }
         }
 
-        if ((duplicates(count(kerusakanUnit)).length == 0 && duplicates(count(seriUnit)).length == 0 && duplicates(count(tingkatUnit)).length == 0 && duplicates(count(arrUnit)).length == 0) == true) {
+        if ((duplicates(count(kerusakanUnit)).length == 0 && duplicates(count(seriUnit)).length == 0 && duplicates(
+                count(tingkatUnit)).length == 0 && duplicates(count(arrUnit)).length == 0) == true) {
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Nomor seri tersimpan',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function () {
-                $('.scan-produk tbody tr').each((index, value) => {
-                                const obj1 = {
-                                    noseri: value.childNodes[0].firstChild.value,
-                                    kerusakan: value.childNodes[1].firstChild.value,
-                                    tingkat: value.childNodes[2].firstChild.value,
-                                }
-                                unit_arr.push(obj1);
-                            })
-                            seri_unit[c] = unit_arr;
-                            unit_arr = [];
-                            console.log(seri_unit)
-                            $('.modalAddUnit').modal('hide');
+            const uids = [];
+            $('.cb-unit').each(function() {
+            if($(this).is(":checked")) {
+                // cek validasi
+                if ($('.cb-unit').filter(':checked').length > p) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Melebihi Batas Maksimal'
+                    })
+                } else {
+                    uids.push($(this).val());
+                    seri_unit[c] = uids;
+                    console.log(seri_unit);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Nomor seri tersimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('.modalAddUnit').modal('hide');
+                }
+            }
+
             })
+
         }
     }
 
-    function addUnit(x,y,z) {
+    function addUnit(x, y, z) {
+        // alert(x);
+        console.log(y);
         $('.modalAddUnit').modal('show');
-        $('.modalAddUnit').find('#btnAddUnit').attr('onclick', 'clickUnit(' + y + ')');
+        $('.modalAddUnit').find('#btnAddUnit').attr('onclick', 'clickUnit(' + y + ', '+ x +')');
         $('.modalAddUnit').on('shown.bs.modal', function () {
             $(this).find('tbody input.seri').first().focus();
         })
         $('.scan-produk').DataTable().destroy();
-        $('.scan-produk tbody').empty();
-        for (let index = 0; index < x; index++) {
-            kk++;
-            $('.scan-produk tbody').append('<tr id="u' + kk + '"><td><input type="text" name="noseri[][' + kk +
-                ']" id="noseri' + kk +
-                '" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
-                kk + ']" id="remark' + kk + '" class="form-control kerusakan"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="tk_kerusakan[][' + kk +
-                ']" id="tk_kerusakan' + kk +
-                '" class="form-control tingkat"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
-                );
-        }
+        // $('.scan-produk tbody').empty();
+        // for (let index = 0; index < x; index++) {
+        //     kk++;
+        //     $('.scan-produk tbody').append('<tr><td>' + ii +
+        //         '</td><td>noseri1</td><td>srgrgrg</td><td>Level 1</td></tr>');
+        // }
         $('.scan-produk').DataTable({
-                    "ordering": false,
-                    "autoWidth": false,
-                    searching: false,
-                    "lengthChange": false,
-                    "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                    }
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+            ajax: {
+                url: "/api/gk/getseri/unit",
+                data: {
+                    gbj_id: y,
+                },
+                type: "post",
+            },
+            columns: [
+                {data: 'kode'},
+                {data: 'seri'},
+                {data: 'note'},
+                {data: 'tingkat'},
+            ],
+
         });
     }
 
-                // function select_divisi() {
-                $.ajax({
-                    url: '/api/gbj/sel-divisi',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (res) {
-                        // ii++;
-                        console.log(res);
-                        $.each(res, function (key, value) {
-                            // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                            $(".dari").append('<option value="' + value.id + '">' + value.nama +
-                                '</option');
-                        });
-                    }
+    $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            // ii++;
+            console.log(res);
+            $.each(res, function (key, value) {
+                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                $(".dari").append('<option value="' + value.id + '" data-name="'+ value.nama +'">' + value.nama +
+                    '</option');
+            });
+        }
+    });
+
+    function transfer() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di transfer tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        });
+    };
+
+
+    var nmrspr = 1;
+    $(document).on('click', '.add_sparepart', function () {
+        $.ajax({
+            url: '/api/gk/gkspr',
+            type: 'POST',
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                $.each(res, function (key, value) {
+                    $(".produk").append('<option value="' + value.sparepart_id + '">' +
+                        value
+                        .nama + '</option');
                 });
-                // }
+            }
+        });
+        i++;
+        let table_sparepart =
+            '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_id'+nmrspr+'" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus' +
+            nmrspr + '" data-id="" data-kode="" data-jml="" id="" onclick=addSpare(' + nmrspr +
+            ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
 
-                function transfer() {
-                    Swal.fire({
-                        title: "Apakah anda yakin?",
-                        text: "Data yang sudah di transfer tidak dapat diubah!",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                    });
-                };
+        $('.add_sparepart_table tbody').append(table_sparepart);
+        $('#sparepart_id'+nmrspr+'').select2();
+        $(".number").inputFilter(function(value) {
+            return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+        });
+        nmrspr++;
+    });
 
-
-                var nmrspr = 1;
-                $(document).on('click', '.add_sparepart', function () {
-                    $.ajax({
-                        url: '/api/gk/gkspr',
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function (res) {
-                            // ii++;
-                            console.log(res);
-                            $.each(res, function (key, value) {
-                                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                                $(".produk").append('<option value="' + value.sparepart_id + '">' + value
-                                    .nama + '</option');
-                            });
-                        }
-                    });
-                    i++;
-                    let table_sparepart = '<tr><td><select name="sparepart_id[]" id="sparepart_id" class="form-control produk"></select></td><td><select name="" id="" class="form-control unit"><option value="">Unit 1</option><option value="">Unit 2</option><option value="">Unit 3</option></select></td><td><input type="number" name="qty_spr[]" id="jml" class="form-control"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
-
-                    $('.add_sparepart_table tbody').append(table_sparepart);
-                    $('.produk').select2();
-                nmrspr++;
+    var nmrunt = 1;
+    $(document).on('click', '.add_unit', function () {
+        $.ajax({
+            url: '/api/gk/gkunit',
+            type: 'post',
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                $.each(res, function (key, value) {
+                    $(".produkk").append('<option value="' + value.gbj_id + '">' + value
+                        .name + '</option');
                 });
-                var nmrunt = 1;
-                $(document).on('click', '.add_unit', function () {
-                    $.ajax({
-                        url: '/api/gk/gkunit',
-                        type: 'post',
-                        dataType: 'json',
-                        success: function (res) {
-                            // ii++;
-                            console.log(res);
-                            $.each(res, function (key, value) {
-                                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                                    $(".produkk").append('<option value="'+value.gbj_id+'">'+value.name+'</option');
-                            });
-                        }
-                    });
-                    i++;
-                    let table_unit = '<tr><td><select name="gbj_id[]" id="gbj_id" class="form-control produkk"></select></td><td><input type="number" name="qty_unit[]" id="jum" class="form-control"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
-                    $('.add_unit_table tbody').append(table_unit);
-                    $('.produkk').select2();
-                nmrunt++;
-                }); $(document).on('click', '.btn-delete', function (e) {
-                    $(this).parent().parent().remove();
-                    var check = $('tbody.tambah_data tr').length;
-                });
+            }
+        });
+        i++;
+        let table_unit =
+            '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_id'+nmrunt+'" class="form-control produkk"></select></td><td><input type="text" name="qty_unit[]" id="jum" class="form-control number"></td><td><button class="btn btn-primary btnPlus' +
+            nmrunt + '" id="" onclick=addUn(' + nmrunt +
+            ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        $('.add_unit_table tbody').append(table_unit);
+        $('#gbj_id'+nmrunt+'').select2();
+        $(".number").inputFilter(function(value) {
+            return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+        });
+        nmrunt++;
+    });
 
-                $(document).ready(function () {
-                    $('.table-rancangan').DataTable({
-                        "ordering": false,
-                        "autoWidth": false,
-                        searching: false,
-                        "lengthChange": false,
-                        processing: true,
-                        serverSide: true,
-                        destroy: true,
-                        ajax: {
-                            url: "/api/gk/draft-terima",
-                            type: "post",
-                        },
-                        columns: [{
-                                data: "in"
-                            },
-                            {
-                                data: "from"
-                            },
-                            {
-                                data: "aksi"
-                            },
-                        ],
-                        "language": {
-                            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                        }
-                    });
-                    $('.dari').select2({});
-                });
+    $(document).on('click', '.btn-delete', function (e) {
+        $(this).parent().parent().remove();
+        var check = $('tbody.tambah_data tr').length;
+    });
 
-                function modalTerima() {
+    $(document).ready(function () {
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
+        });
+
+        $("#head-cb1").on('click', function () {
+            var isChecked1 = $("#head-cb1").prop('checked')
+            $('.cb-unit').prop('checked', isChecked1)
+        });
+
+        $('.table-rancangan').DataTable({
+            "ordering": false,
+            "autoWidth": false,
+            searching: false,
+            "lengthChange": false,
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {
+                url: "/api/gk/draft-tf",
+                type: "post",
+            },
+            columns: [{
+                    data: "out"
+                },
+                {
+                    data: "too"
+                },
+                {
+                    data: "aksi"
+                },
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        $('.dari').select2({});
+    });
+
+    function modalTerima() {
         $('.modal_transfer1').modal('show');
         $('.catatan').val('');
         $('.list-group').children().remove();
@@ -897,7 +940,7 @@
         $(document).on('click', '.remove', function () {
             $(this).parent().parent().remove();
         });
-        $(document).on('click','.simpan1', function () {
+        $(document).on('click', '.simpan1', function () {
             let out = $('#datePicker').val();
             let to = $('.dari').val();
             let tujuan = $('#tujuan_tf').val();
@@ -908,19 +951,19 @@
             const jml = [];
             const unit1 = [];
             const jum = [];
-            $('select[name^="sparepart_id"]').each(function() {
+            $('select[name^="sparepart_id"]').each(function () {
                 spr1.push($(this).val());
             });
-            $('input[name^="qty_spr"]').each(function() {
+            $('input[name^="qty_spr"]').each(function () {
                 jml.push($(this).val());
             });
             // $('input[name^="noseri"]').each(function() {
             //     spr.push(seri_spr.push(seri1));
             // });
-            $('select[name^="gbj_id"]').each(function() {
+            $('select[name^="gbj_id"]').each(function () {
                 unit1.push($(this).val());
             });
-            $('input[name^="qty_unit"]').each(function() {
+            $('input[name^="qty_unit"]').each(function () {
                 jum.push($(this).val());
             });
             Swal.fire({
@@ -942,24 +985,25 @@
                         type: "post",
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            date_out : out,
+                            userid: $('#user_id').val(),
+                            date_out: out,
                             ke: to,
-                            deskripsi : tujuan,
-                            sparepart_id : spr1,
+                            deskripsi: tujuan,
+                            sparepart_id: spr1,
                             qty_spr: jml,
-                            noseri : seri,
-                            gbj_id : unit1,
+                            noseri: seri,
+                            gbj_id: unit1,
                             qty_unit: jum,
-                            seriunit : seri_unit,
+                            seriunit: seri_unit,
                         },
-                        success: function(res) {
+                        success: function (res) {
                             console.log(res);
                         },
                     })
                     setTimeout(() => {
                         location.reload();
                     }, 1000);
-                }else{
+                } else {
                     Swal.fire(
                         'Data gagal di transfer!',
                         '',
@@ -972,11 +1016,12 @@
             });
         });
     }
+
+    // submit draft
     $(document).on('click', '.simpan', function () {
         let out = $('#datePicker').val();
         let to = $('.dari').val();
         let tujuan = $('#tujuan_draft').val();
-        // let seri1 = $('.seri_spr').val();
         console.log(out);
         console.log(to);
         console.log(tujuan);
@@ -984,19 +1029,16 @@
         const jml = [];
         const unit1 = [];
         const jum = [];
-        $('select[name^="sparepart_id"]').each(function() {
+        $('select[name^="sparepart_id"]').each(function () {
             spr1.push($(this).val());
         });
-        $('input[name^="qty_spr"]').each(function() {
+        $('input[name^="qty_spr"]').each(function () {
             jml.push($(this).val());
         });
-        // $('input[name^="noseri"]').each(function() {
-        //     spr.push(seri_spr.push(seri1));
-        // });
-        $('select[name^="gbj_id"]').each(function() {
+        $('select[name^="gbj_id"]').each(function () {
             unit1.push($(this).val());
         });
-        $('input[name^="qty_unit"]').each(function() {
+        $('input[name^="qty_unit"]').each(function () {
             jum.push($(this).val());
         });
         Swal.fire({
@@ -1018,24 +1060,25 @@
                     type: "post",
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        date_out : out,
+                        userid: $('#user_id').val(),
+                        date_out: out,
                         ke: to,
-                        deskripsi : tujuan,
-                        sparepart_id : spr1,
+                        deskripsi: tujuan,
+                        sparepart_id: spr1,
                         qty_spr: jml,
-                        noseri : seri,
-                        gbj_id : unit1,
+                        noseri: seri,
+                        gbj_id: unit1,
                         qty_unit: jum,
-                        seriunit : seri_unit,
+                        seriunit: seri_unit,
                     },
-                    success: function(res) {
+                    success: function (res) {
                         console.log(res);
                     },
                 })
                 setTimeout(() => {
                     location.reload();
                 }, 1000);
-            }else{
+            } else {
                 Swal.fire(
                     'Data gagal di rancangan!',
                     '',
@@ -1047,6 +1090,7 @@
             }
         });
     });
+
     function modalRancang() {
         $('.modal_transfer').modal('show');
         $('.list-group').children().remove();
@@ -1055,6 +1099,7 @@
             $(this).parent().parent().remove();
         });
     }
+
     function batal() {
         Swal.fire({
             title: "Apakah anda yakin?",
@@ -1069,21 +1114,22 @@
                     'Batal!',
                     'Data berhasil dibatalkan!',
                     'success'
-                    );
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-            }else{
+                );
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
                 Swal.fire(
                     'Batal!',
                     'Data tidak berhasil dibatalkan!',
                     'error'
-                    );
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
+                );
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             }
         });
     }
+
 </script>
 @stop

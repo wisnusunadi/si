@@ -59,7 +59,9 @@
         /* Jika Gambar Diatas */
         /* width: 100px; */
     }
-
+    #DataTables_Table_0_filter{
+        display: none;
+    }
 </style>
 <section class="content">
     <div class="container-fluid">
@@ -106,17 +108,14 @@
                             Per Tahun
                         </h3>
                         <div class="card-tools">
-                            <div class="form-group row">
-                                <label for="years" class="col-md-5 col-form-label">Tahun</label>
-                                <div class="col-md-7">
                                     <select name="tahun" id="tahun" class="form-control">
-                                        <option value="#" selected>Pilih Tahun</option>
+                                        <option value="" selected>Pilih Tahun</option>
                                         @foreach ($data as $d)
-                                            <option value="{{ $d->tahun }}">{{ $d->tahun }}</option>
+                                            @if ($d->tahun != null)
+                                                <option value="{{ $d->tahun }}">{{ $d->tahun }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -143,11 +142,8 @@
                                         <div class="col-md-4">
                                             <div class="d-flex align-items-center">
                                                 <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
-                                                <input type="text" name="" id="tanggalmasuk" class="form-control">
+                                                <input type="text" name="" id="datetimepicker1" class="form-control">
                                             </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a href="#" class="btn btn-outline-primary">Search</a>
                                         </div>
                                     </div>
                                 </div>
@@ -179,88 +175,7 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -332,15 +247,36 @@
             $('span#lebar').text(res.lebar);
             $('span#tinggi').text(res.tinggi);
         }
-    })
+    });
 
-    $('.tableProdukView').DataTable({
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+
+        var evalDate = parseDateValue(aData[0]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    let table = $('.tableProdukView').DataTable({
         destroy: true,
-        searching: false,
         "lengthChange": false,
         destroy: true,
         processing: true,
-        serverSide: true,
         ajax: {
             url: "/api/gk/transaksi/history/" + id,
         },
@@ -353,8 +289,37 @@
         ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
+        },
+        columnDefs:[{
+            targets: [4],
+            searching: false,
+        }]
     });
+
+    $('#kt_datatable_search_query').on('keyup', function() {
+        table.search($(this).val()).draw();
+    });
+
+    $('#datetimepicker1').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#datetimepicker1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            table.draw();
+        });
+
+        $('#datetimepicker1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            table.draw();
+        });
     $('#nav-deskripsi-tab').click(function (e) {
         e.preventDefault();
         $('.is-active').addClass('font-weight-bold');
@@ -383,7 +348,6 @@
             autoWidth: false,
             destroy: true,
             processing: true,
-            serverSide: true,
             ajax: {
                 url: "/api/gk/transaksi/noseri/" + idd,
             },
@@ -402,13 +366,15 @@
     })
 
     const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
+    const myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-        datasets: [{
+        // labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+        labels: [],
+        datasets: [
+            {
             label: 'Terima',
-            data: [15, 20, 30, 15, 29, 38, 35, 15, 18, 34, 10, 45],
+            data: [],
             backgroundColor: [
                 'rgba(255, 159, 64, 0.2)',
             ],
@@ -416,7 +382,7 @@ const myChart = new Chart(ctx, {
         },
         {
             label: 'Transfer',
-            data: [11, 15, 20, 10, 25, 30, 20, 15, 20, 30, 13, 25],
+            data: [],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
             ],
@@ -427,10 +393,38 @@ const myChart = new Chart(ctx, {
     options: {
         scales: {
             y: {
-                beginAtZero: false
+                beginAtZero: true
             }
         }
     }
+});
+$('#tahun').change(function (e) {
+    $.ajax({
+        type: "post",
+        url: "/api/gk/transaksi/grafik-trf",
+        data: {
+            id: id,
+            tahun: this.value,
+        },
+        success: function (res) {
+            console.log(res);
+            if (res.masuk && res.data != null) {
+                myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
+                myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
+                myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
+                myChart.update();
+            }
+            else if (res.masuk != null) {
+                myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
+                myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
+                myChart.update();
+            }else if (res.data != null) {
+                myChart.data.labels = res.data.map(r => res.data[0].bulan);
+                myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
+                myChart.update();
+            }
+        }
+    });
 });
 
 </script>

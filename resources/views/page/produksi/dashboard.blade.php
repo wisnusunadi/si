@@ -3,6 +3,7 @@
 @section('title', 'ERP')
 
 @section('content')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
 <style>
         .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -53,6 +54,21 @@
 
 <section class="content">
     <div class="container-fluid">
+        {{-- <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-chart-line"></i> Grafik Perakitan Produk</h5>
+                        <div class="card-tools">
+                            <input type="text" class="form-control monthpicker" name="" id="" placeholder="Pilih Bulan">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="myChart" width="400" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
         <div class="row">
             <div class="col-6">
                 <div class="card">
@@ -67,7 +83,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="transferoneday" class="card active otg" style="background-color: #E6EFFA">
                                     <div class="card-body text-center">
-                                        <h4 id="m1">10</h4>
+                                        <h4 id="m1">0</h4>
                                         <p class="card-text">Produk Mendekati Batas Pengiriman Kurang Dari 10 Hari</p>
                                     </div>
                                 </div>
@@ -75,7 +91,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="transfertwoday" class="card otg" style="background-color: #FEF7EA">
                                     <div class="card-body text-center">
-                                        <h4 id="m2">50</h4>
+                                        <h4 id="m2">0</h4>
                                         <p class="card-text">Produk Mendekati Batas Pengiriman Kurang Dari 5 Hari</p>
                                     </div>
                                 </div>
@@ -83,7 +99,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="transferthreeday" class="card otg" style="background-color: #FCEDE9">
                                     <div class="card-body text-center">
-                                        <h4 id="m3">60</h4>
+                                        <h4 id="m3">0</h4>
                                         <p class="card-text">Produk Melewati Batas Pengiriman</p>
                                     </div>
                                 </div>
@@ -101,16 +117,6 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {{-- <tr>
-                                    <td scope="row">1</td>
-                                    <td>654654654654</td>
-                                    <td>Rumkital Dr. Ramelan</td>
-                                    <td>18-06-2021 </td>
-                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                        class="fas fa-paper-plane"></i></button></td>
-                                </tr> --}}
-                            </tbody>
                         </table>
                     </div>
 
@@ -125,16 +131,7 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>654654654654</td>
-                                    <td>Rumkital Dr. Ramelan</td>
-                                    <td>18-06-2021 </td>
-                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                        class="fas fa-paper-plane"></i></button></td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
 
@@ -149,16 +146,7 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>654654654654</td>
-                                    <td>Rumkital Dr. Ramelan</td>
-                                    <td>18-06-2021 <br> <span class="badge badge-danger">Lebih dari 5 hari</span></td>
-                                    <td><button onclick="modalSO()" class="btn btn-outline-primary"><i
-                                                class="fas fa-paper-plane"></i></button></td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                     </div>
@@ -177,7 +165,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="bataswaktupenyerahan" class="card active otg" style="background-color: #E6EFFA">
                                     <div class="card-body text-center">
-                                        <h4 id="m4">10</h4>
+                                        <h4 id="m4">0</h4>
                                         <p class="card-text">Produk Mendekati Batas Waktu Penyerahan ke GBJ</p>
                                     </div>
                                 </div>
@@ -185,7 +173,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="bataswaktuperakitan" class="card otg" style="background-color: #FEF7EA">
                                     <div class="card-body text-center">
-                                        <h4 id="m5">50</h4>
+                                        <h4 id="m5">0</h4>
                                         <p class="card-text">Produk Mendekati Batas Waktu Perakitan</p>
                                     </div>
                                 </div>
@@ -193,7 +181,7 @@
                             <div class="col-6 col-md-4">
                                 <div id="perubahanperakitan" class="card otg" style="background-color: #FCEDE9">
                                     <div class="card-body text-center">
-                                        <h4 id="m6">60</h4>
+                                        <h4 id="m6">0</h4>
                                         <p class="card-text">Produk Mengalami Perubahan Jadwal Perakitan</p>
                                     </div>
                                 </div>
@@ -211,35 +199,7 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">10-05-2021</td>
-                                    <td>10-06-2021 <br> <span class="badge badge-info">Kurang 10 Hari</span></td>
-                                    <td>3513654365456</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
-                                     class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">10-05-2021</td>
-                                    <td>10-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
-                                    <td>3513654365456</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/pengiriman') }}" class="btn btn-outline-primary"><i
-                                     class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">10-05-2021</td>
-                                    <td>10-06-2021 <br> <span class="badge badge-danger">Kurang 1 Hari</span></td>
-                                    <td>3513654365456</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
-                                     class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                        </div>
                        <div class="produkPerakitan hidden">
@@ -254,35 +214,7 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">10-05-2021</td>
-                                    <td>10-06-2021 <br> <span class="badge badge-info">Kurang 10 Hari</span></td>
-                                    <td>3513654365456</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
-                                     class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">10-05-2021</td>
-                                    <td>10-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
-                                    <td>64586545464654</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
-                                     class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">10-05-2021</td>
-                                    <td>10-06-2021 <br> <span class="badge badge-danger">Kurang 1 Hari</span></td>
-                                    <td>985654564654654</td>
-                                    <td>Produk 2</td>
-                                    <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
-                                     class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                            </table>
                        </div>
                        <div class="perubahanPerakitan hidden">
@@ -297,30 +229,42 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">10-05-2021</td>
-                                    <td>10-06-2021 <br> <span class="badge badge-info">09-06-2021</span></td>
-                                    <td>654351351553541354</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
-                                     class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">10-05-2021 <br> <span class="badge badge-info">11-06-2021</span></td>
-                                    <td>10-06-2021</td>
-                                    <td>354354354321564</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit</td>
-                                    <td><a href="{{ url('produksi/jadwal_perakitan') }}" class="btn btn-outline-primary"><i
-                                     class="fas fa-paper-plane"></i></a></td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                            </table>
                        </div>
                     </div>
                 </div>
+                {{-- <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-cogs mr-1"></i>
+                            Produk Perakitan
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>Ambulatory</td>
+                                    <td>100 unit <br><span class="badge badge-dark">Dirakit 80 unit</span></td>
+                                    <td>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target=".modal-perakitan-produk">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -368,23 +312,7 @@
                                     <th>Nomor Seri</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>846464654654</td>
-                                    <td>654654654654</td>
-                                    <td>957489688845</td>
-                                </tr>
-                                <tr>
-                                    <td>846464654654</td>
-                                    <td>654654654654</td>
-                                    <td>957489688845</td>
-                                </tr>
-                                <tr>
-                                    <td>846464654654</td>
-                                    <td>654654654654</td>
-                                    <td>957489688845</td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -414,7 +342,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                <span id="so">89798797856456</span>
+                                                <span id="so"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -422,7 +350,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                <span id="akn">89798797856456</span>
+                                                <span id="akn"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -430,7 +358,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                <span id="po">89798797856456</span>
+                                                <span id="po"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -438,7 +366,7 @@
                                     <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                <span id="instansi">RS. Dr. Soetomo</span>
+                                                <span id="instansi"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -466,10 +394,135 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Perakitan Produk -->
+<div class="modal fade modal-perakitan-produk" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Produk Ambulatory</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nomor SO</th>
+                            <th>Customer</th>
+                            <th>Batas Pengiriman</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row">1</td>
+                            <td>654654654</td>
+                            <td>RS Dr. Soetomo</td>
+                            <td>11-12-2021</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 <script>
+        var dateObj = new Date();
+        var month = dateObj.getUTCMonth() + 1; //months from 1-12
+        var year = dateObj.getUTCFullYear();
+
+        newdate = month + "-" + year;
+
+        $('.monthpicker').val(newdate);
+        // Tanggal
+        // var month_date = $('.monthpicker').datepicker({
+        //     format: "mm-yyyy",
+        //     viewMode: "months",
+        //     minViewMode: "months",
+        //     autoclose: true,
+        // }).on('changeDate', function(e) {
+        //     var month = e.date.getMonth() + 1;
+        //     var year = e.date.getFullYear();
+        //     var date = month + '-' + year;
+        // });
+
+        $(document).ready(function () {
+            // alert(newdate);
+
+        });
+        $.ajax({
+            type: "get",
+            url: "/api/prd/allproduk",
+            success: function (response) {
+                $.each(response, function (index, value) {
+                    $('#all-produk').append('<option value="' + index + '">' + value +'</option')
+                });
+                $('.allprd').select2({});
+            }
+        });
+            // var ctx = document.getElementById('myChart').getContext('2d');
+            // var myChart = new Chart(ctx, {
+            //     type: 'bar',
+            //     data: {
+            //         labels: [], // data diambil 5 hari sebelum hari ini dan sesudah hari ini, misalkan hari ini tanggal (15-12-2021) maka yang diambil data tanggal 5 hari sebelumnya dan data tanggal 5 hari setelahnya.
+            //         datasets: [
+            //             {
+            //                 label: [], // nama produk
+            //                 data: [], // jumlah produk
+            //                 backgroundColor: [
+            //                     'rgba(255, 99, 132, 0.2)',
+            //                 ],
+            //                 borderColor: [
+            //                     'rgba(255, 99, 132, 1)',
+            //                 ],
+            //                 borderWidth: 5
+            //             },
+            //         ]
+            //     },
+            //     options: {
+            //         legend: {
+            //             display: false
+            //         },
+            //         tooltips: {
+            //             callbacks: {
+            //                 label: function labelTools(tooltipItem) {
+            //                     return tooltipItem.yLabel;
+            //                 }
+            //             }
+            //         },
+            //     }
+            // });
+
+            $(document).on('change', '#all-produk', function () {
+                $.ajax({
+                    url: "/api/prd/grafikproduk/" +this.value,
+                    type: "get",
+                    success: function(res) {
+                        if (myChart.data.labels.length > 0) {
+                            myChart.data.labels = [];
+                            myChart.data.datasets[0].label = [];
+                            myChart.data.datasets[0].data = [];
+                        }
+                        let elementNama = [];
+                        $.each(res, function(index, element) {
+                            myChart.data.labels.push(element.tgl);
+                            elementNama.push(element.nama);
+                            myChart.data.datasets[0].data.push(element.jumlah);
+                        });
+                        let uniqueNama = [...new Set(elementNama)];
+                        uniqueNama.forEach(element => {
+                            myChart.data.datasets[0].label.push(element);
+                        });
+                        myChart.update();
+                    }
+                });
+            });
     // sale
     $.ajax({
         url: "/api/prd/minus5/h",
@@ -713,7 +766,6 @@
     $('.table-produk-gbj').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
             dom: "Bfrtip",
             ajax: {
                 url: "/api/prd/exp_rakit",
@@ -730,9 +782,10 @@
             "ordering":false,
             "autoWidth": false,
             "lengthChange": false,
+            pageLength: 5,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
+            },
     });
 
     $.ajax({
@@ -764,6 +817,7 @@
             "ordering":false,
             "autoWidth": false,
             "lengthChange": false,
+            pageLength: 5,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
@@ -798,6 +852,7 @@
             "ordering":false,
             "autoWidth": false,
             "lengthChange": false,
+            pageLength: 5,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GudangController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
@@ -88,8 +89,6 @@ Route::prefix('/penjualan')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
 
-
-
     Route::prefix('/lacak')->group(function () {
         Route::get('data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);
     });
@@ -114,102 +113,116 @@ Route::prefix('/gbj')->group(function () {
     Route::get('/test', [App\Http\Controllers\GudangController::class, 'test']);
 
     // select
-    Route::get('sel-product', [\App\Http\Controllers\GudangController::class, 'select_product']);
-    Route::get('sel-product/{id}', [\App\Http\Controllers\GudangController::class, 'select_product_by_id']);
-    Route::get('sel-satuan', [\App\Http\Controllers\GudangController::class, 'select_satuan']);
-    Route::get('sel-layout', [\App\Http\Controllers\GudangController::class, 'select_layout']);
-    Route::get('sel-divisi', [\App\Http\Controllers\GudangController::class, 'select_divisi']);
-    Route::get('sel-gbj', [\App\Http\Controllers\GudangController::class, 'select_gbj']);
+    Route::get('sel-product', [GudangController::class, 'select_product']);
+    Route::get('sel-product/{id}', [GudangController::class, 'select_product_by_id']);
+    Route::get('sel-satuan', [GudangController::class, 'select_satuan']);
+    Route::get('sel-layout', [GudangController::class, 'select_layout']);
+    Route::get('sel-divisi', [GudangController::class, 'select_divisi']);
+    Route::get('sel-gbj', [GudangController::class, 'select_gbj']);
 
     // so
     Route::post('/createNon', [App\Http\Controllers\GudangController::class, 'tanpaSo']);
 
     // noseri
-    Route::get('noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getNoseri']);
-    Route::get('history/{id}', [\App\Http\Controllers\GudangController::class, 'getHistory']);
-    Route::post('noseri/{id}', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
+    Route::get('noseri/{id}', [GudangController::class, 'getNoseri']);
+    Route::get('history/{id}', [GudangController::class, 'getHistory']);
+    Route::post('noseri/{id}', [GudangController::class, 'storeNoseri']);
+    Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
 });
 
 Route::prefix('/draft')->group(function () {
-    Route::post('/rancang', [\App\Http\Controllers\GudangController::class, 'storeDraftRancang']);
-    Route::post('/final', [\App\Http\Controllers\GudangController::class, 'storeFinalRancang']);
+    Route::post('/rancang', [GudangController::class, 'storeDraftRancang']);
+    Route::post('/final', [GudangController::class, 'storeFinalRancang']);
 
     // get
-    Route::post('/data', [\App\Http\Controllers\GudangController::class, 'getDraftPerakitan']);
-    Route::post('/data-seri', [\App\Http\Controllers\GudangController::class, 'getNoseriDraftRakit']);
+    Route::post('/data', [GudangController::class, 'getDraftPerakitan']);
+    Route::post('/data-seri', [GudangController::class, 'getNoseriDraftRakit']);
 });
 
 Route::prefix('/transaksi')->group(function () {
-    Route::get('/all', [\App\Http\Controllers\GudangController::class, 'getAllTransaksi']);
-    Route::get('/history', [\App\Http\Controllers\GudangController::class, 'getHistorybyProduk']);
-    Route::get('/history-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailHistory']);
-    Route::get('/history-detail-seri/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailHistorySeri']);
-    Route::get('/all-detail/{id}', [\App\Http\Controllers\GudangController::class, 'getDetailAll']);
+    Route::get('/all', [GudangController::class, 'getAllTransaksi']);
+    Route::get('/history', [GudangController::class, 'getHistorybyProduk']);
+    Route::get('/history-detail/{id}', [GudangController::class, 'getDetailHistory']);
+    Route::get('/history-detail-seri/{id}', [GudangController::class, 'getDetailHistorySeri']);
+    Route::get('/all-detail/{id}', [GudangController::class, 'getDetailAll']);
 });
 
 Route::prefix('/dashboard-gbj')->group(function () {
-    Route::get('/noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getNoseriTerima']);
+    Route::get('/noseri/{id}', [GudangController::class, 'getNoseriTerima']);
     // produk
-    Route::get('/stok/1020/h', [\App\Http\Controllers\GudangController::class, 'h1']);
-    Route::get('/stok/59/h', [\App\Http\Controllers\GudangController::class, 'h2']);
-    Route::get('/stok/14/h', [\App\Http\Controllers\GudangController::class, 'h3']);
-    Route::get('/stok/1020', [\App\Http\Controllers\GudangController::class, 'getProdukstok1020']);
-    Route::get('/stok/59', [\App\Http\Controllers\GudangController::class, 'getProdukstok59']);
-    Route::get('/stok/14', [\App\Http\Controllers\GudangController::class, 'getProdukstok14']);
+    Route::get('/stok/1020/h', [GudangController::class, 'h1']);
+    Route::get('/stok/59/h', [GudangController::class, 'h2']);
+    Route::get('/stok/14/h', [GudangController::class, 'h3']);
+    Route::get('/stok/1020', [GudangController::class, 'getProdukstok1020']);
+    Route::get('/stok/59', [GudangController::class, 'getProdukstok59']);
+    Route::get('/stok/14', [GudangController::class, 'getProdukstok14']);
 
-    Route::post('/in/36/h', [\App\Http\Controllers\GudangController::class, 'h4']);
-    Route::post('/in/612/h', [\App\Http\Controllers\GudangController::class, 'h5']);
-    Route::post('/in/1236/h', [\App\Http\Controllers\GudangController::class, 'h6']);
-    Route::post('/in/36plus/h', [\App\Http\Controllers\GudangController::class, 'h7']);
-    Route::post('/in/36', [\App\Http\Controllers\GudangController::class, 'getProdukIn36']);
-    Route::post('/in/612', [\App\Http\Controllers\GudangController::class, 'getProdukIn612']);
-    Route::post('/in/1236', [\App\Http\Controllers\GudangController::class, 'getProduk1236']);
-    Route::post('/in/36plus', [\App\Http\Controllers\GudangController::class, 'getProduk36Plus']);
-    Route::get('/byproduct', [\App\Http\Controllers\GudangController::class, 'getProdukByLayout']);
-    Route::get('/test', [\App\Http\Controllers\GudangController::class, 'test']);
+    Route::post('/in/36/h', [GudangController::class, 'h4']);
+    Route::post('/in/612/h', [GudangController::class, 'h5']);
+    Route::post('/in/1236/h', [GudangController::class, 'h6']);
+    Route::post('/in/36plus/h', [GudangController::class, 'h7']);
+    Route::post('/in/36', [GudangController::class, 'getProdukIn36']);
+    Route::post('/in/612', [GudangController::class, 'getProdukIn612']);
+    Route::post('/in/1236', [GudangController::class, 'getProduk1236']);
+    Route::post('/in/36plus', [GudangController::class, 'getProduk36Plus']);
+    Route::get('/byproduct', [GudangController::class, 'getProdukByLayout']);
+    Route::get('/test', [GudangController::class, 'test']);
 
     // terima
-    Route::post('/terimaproduk1/h', [\App\Http\Controllers\GudangController::class, 'hh1']);
-    Route::post('/terimaproduk2/h', [\App\Http\Controllers\GudangController::class, 'hh2']);
-    Route::post('/terimaproduk3/h', [\App\Http\Controllers\GudangController::class, 'hh3']);
-    Route::post('/terimaproduk1', [\App\Http\Controllers\GudangController::class, 'getPenerimaanProduk1']);
-    Route::post('/terimaproduk2', [\App\Http\Controllers\GudangController::class, 'getPenerimaanProduk2']);
-    Route::post('/terimaproduk3', [\App\Http\Controllers\GudangController::class, 'getPenerimaanProduk3']);
-    Route::post('/terimaall', [\App\Http\Controllers\GudangController::class, 'getPenerimaanAll']);
+    Route::post('/terimaproduk1/h', [GudangController::class, 'hh1']);
+    Route::post('/terimaproduk2/h', [GudangController::class, 'hh2']);
+    Route::post('/terimaproduk3/h', [GudangController::class, 'hh3']);
+    Route::post('/terimaproduk1', [GudangController::class, 'getPenerimaanProduk1']);
+    Route::post('/terimaproduk2', [GudangController::class, 'getPenerimaanProduk2']);
+    Route::post('/terimaproduk3', [GudangController::class, 'getPenerimaanProduk3']);
+    Route::post('/terimaall', [GudangController::class, 'getPenerimaanAll']);
 
     // penjualan
-    Route::post('/list1/h', [\App\Http\Controllers\GudangController::class, 'he1']);
-    Route::post('/list2/h', [\App\Http\Controllers\GudangController::class, 'he2']);
-    Route::post('/list/h', [\App\Http\Controllers\GudangController::class, 'he3']);
-    Route::post('/list1', [\App\Http\Controllers\GudangController::class, 'list_tf1']);
-    Route::post('/list2', [\App\Http\Controllers\GudangController::class, 'list_tf2']);
-    Route::post('/list', [\App\Http\Controllers\GudangController::class, 'list_tf3']);
-    Route::post('/list-all', [\App\Http\Controllers\GudangController::class, 'outSO']);
-    Route::get('/list-detail/{id}', [\App\Http\Controllers\GudangController::class, 'detailsale']);
+    Route::post('/list1/h', [GudangController::class, 'he1']);
+    Route::post('/list2/h', [GudangController::class, 'he2']);
+    Route::post('/list/h', [GudangController::class, 'he3']);
+    Route::post('/list1', [GudangController::class, 'list_tf1']);
+    Route::post('/list2', [GudangController::class, 'list_tf2']);
+    Route::post('/list', [GudangController::class, 'list_tf3']);
+    Route::post('/list-all', [GudangController::class, 'outSO']);
+    Route::get('/list-detail/{id}/{value}', [GudangController::class, 'detailsale']);
 });
 
 Route::prefix('/tfp')->group(function () {
-    Route::post('/create', [\App\Http\Controllers\ProduksiController::class, 'CreateTFItem']);
-    Route::post('/byso', [\App\Http\Controllers\ProduksiController::class, 'TfbySO']);
-    Route::post('/create-noseri', [\App\Http\Controllers\GudangController::class, 'storeNoseri']);
-    Route::post('/create-final', [\App\Http\Controllers\GudangController::class, 'finalDraftRakit']);
+    Route::post('/create', [ProduksiController::class, 'CreateTFItem']);
+    Route::post('/byso', [ProduksiController::class, 'TfbySO']);
+    Route::post('/byso-final', [ProduksiController::class, 'TfbySOFinal']);
+    Route::post('/create-noseri', [GudangController::class, 'storeNoseri']);
+    Route::post('/create-final', [GudangController::class, 'finalDraftRakit']);
+
+    Route::post('/updateRancangSO', [ProduksiController::class, 'updateRancangSO']);
+    Route::post('/updateFinalSO', [ProduksiController::class, 'updateFinalSO']);
 
     // get
-    Route::get('data', [\App\Http\Controllers\ProduksiController::class, 'getTFnon']);
-    Route::get('noseri/{id}', [\App\Http\Controllers\ProduksiController::class, 'getNoseri']);
-    Route::get('data-so', [\App\Http\Controllers\ProduksiController::class, 'getOutSO']);
-    Route::get('detail-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'getDetailSO']);
-    Route::get('header-so/{id}/{value}', [\App\Http\Controllers\ProduksiController::class, 'headerSo']);
-    Route::get('rakit', [\App\Http\Controllers\GudangController::class, 'getRakit']);
-    Route::get('rakit-noseri/{id}', [\App\Http\Controllers\GudangController::class, 'getRakitNoseri']);
-    Route::get('rakit-terima/{id}', [\App\Http\Controllers\GudangController::class, 'getTerimaRakit']);
-    Route::post('/seri-so', [\App\Http\Controllers\ProduksiController::class, 'getNoseriSO']);
+    Route::get('data', [ProduksiController::class, 'getTFnon']);
+    Route::get('noseri/{id}', [ProduksiController::class, 'getNoseri']);
+    Route::get('data-so', [ProduksiController::class, 'getOutSO']);
+    Route::get('cek-so', [ProduksiController::class, 'getSOCek']);
+    Route::get('detail-so/{id}/{value}', [ProduksiController::class, 'getDetailSO']);
+    Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
+    Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
+    Route::get('rakit', [GudangController::class, 'getRakit']);
+    Route::get('rakit-noseri/{id}', [GudangController::class, 'getRakitNoseri']);
+    Route::get('rakit-terima/{id}', [GudangController::class, 'getTerimaRakit']);
+    Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
+    Route::post('/seri-edit-so', [ProduksiController::class, 'getNoseriSOEdit']);
 
     // check
-    Route::post('/cekStok', [\App\Http\Controllers\ProduksiController::class, 'checkStok']);
+    Route::post('/cekStok', [ProduksiController::class, 'checkStok']);
+    Route::post('/updateCheck', [ProduksiController::class, 'UncheckedNoseri']);
+    Route::post('/updateChecked', [ProduksiController::class, 'checkedNoseri']);
 });
 
 Route::prefix('/prd')->group(function () {
+    Route::get('/dashboard', [ProduksiController::class, 'dashboard']);
+    Route::get('/allproduk', [ProduksiController::class, 'getAllProduk']);
+    Route::post('/grafikproduk', [ProduksiController::class, 'getGrafikProduk']);
+
     Route::post('/minus10/h', [ProduksiController::class, 'h_minus10']);
     Route::post('/minus5/h', [ProduksiController::class, 'h_minus5']);
     Route::post('/exp/h', [ProduksiController::class, 'h_exp']);
@@ -222,7 +235,7 @@ Route::prefix('/prd')->group(function () {
     Route::post('/exp_rakit', [ProduksiController::class, 'exp_rakit']);
 
     Route::post('/exp_jadwal/h', [ProduksiController::class, 'exp_jadwal_h']);
-    Route::post('/exp_jadwal', [ProduksiController::class, 'exp_jadwal']);
+    Route::post('/exp_jadwal', [ProduksiController::class, 'change_jadwal']);
 
     // jadwal
     // plan
@@ -234,14 +247,15 @@ Route::prefix('/prd')->group(function () {
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
+    Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
 
-    Route::get('/testing', [ProduksiController::class, 'testing']);
+    Route::get('/testing', [ProduksiController::class, 'test']);
 
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
-    Route::get('/historySeri/{id}/{value}', [ProduksiController::class, 'historySeri']);
+    Route::get('/historySeri/{id}/{value}/{value2}', [ProduksiController::class, 'historySeri']);
     Route::get('/detailSeri1/{id}', [ProduksiController::class, 'detailSeri1']);
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
@@ -269,12 +283,17 @@ Route::prefix('/gk')->group(function () {
     Route::post('/draft-tf', [SparepartController::class, 'get_draft_tf']);
     Route::post('/draft-terima', [SparepartController::class, 'get_draft_terima']);
     Route::get('/noseri/{id}', [SparepartController::class, 'headerSeri']);
-    Route::get('/coba', [SparepartController::class, 'coba']);
+    Route::get('/coba', [SparepartController::class, 'testing']);
     Route::post('/detailseri', [SparepartController::class, 'get_detail_id1']);
+
+    // cek
+    Route::post('/cekseri', [SparepartController::class, 'cekNoseriTerima']);
+    Route::post('/getseri/spr', [SparepartController::class, 'getSeriDoneSpr']);
+    Route::post('/getseri/unit', [SparepartController::class, 'getSeriDoneUnit']);
+    Route::post('/header/spr', [SparepartController::class, 'headerNoseriSpr']);
 
     // select
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
-
     Route::post('/gkspr', [MasterController::class, 'select_gk_spr']);
     Route::post('/gkunit', [MasterController::class, 'select_gk_unit']);
     Route::post('/gklayout', [MasterController::class, 'select_gk_layout']);
@@ -289,7 +308,29 @@ Route::prefix('/gk')->group(function () {
 
     Route::post('/ubahunit', [SparepartController::class, 'updateUnit']);
     Route::post('/edit-in', [SparepartController::class, 'edit_draft_terima']);
+    Route::post('/edit-out', [SparepartController::class, 'edit_draft_transfer']);
 
+    Route::post('/updateDraft', [SparepartController::class, 'updateTerima']);
+    Route::post('/updateFinal', [SparepartController::class, 'updateTerimaFinal']);
+    Route::post('/deleteDraftTerima', [SparepartController::class, 'deleteDraftTerima']);
+    Route::post('/editseri', [SparepartController::class, 'getNoseriEdit']);
+    Route::post('/editseriunit', [SparepartController::class, 'getNoseriEditUnit']);
+    Route::post('/editseri-out', [SparepartController::class, 'getOutSeriEdit']);
+    Route::post('/editseriunit-out', [SparepartController::class, 'getOutSeriEditUnit']);
+
+    Route::post('/uncheck', [SparepartController::class, 'uncheckNoseri']);
+    Route::post('/check', [SparepartController::class, 'checkNoseri']);
+
+    // edit transfer
+    Route::post('/updateTransfer', [SparepartController::class, 'updateTransfer']);
+    Route::post('/updateTransferDraft', [SparepartController::class, 'updateTransferDraft']);
+
+    Route::prefix('/terima')->group(function() {
+        Route::get('/all', [SparepartController::class, 'getProdukgudang']);
+        Route::get('/detail-seri/{id}', [SparepartController::class, 'getSeriProduk']);
+        Route::get('/terima-seri/{id}', [SparepartController::class, 'getSeriRakit']);
+        Route::post('/submit', [SparepartController::class, 'terimaSeri']);
+    });
 
     // history trx
     Route::prefix('/transaksi')->group(function () {
@@ -298,6 +339,7 @@ Route::prefix('/gk')->group(function () {
         Route::get('/noseri/{id}', [SparepartController::class, 'get_noseri_history']);
         Route::get('/header/{id}', [App\Http\Controllers\SparepartController::class, 'get_detail_id']);
         Route::get('/history/{id}', [App\Http\Controllers\SparepartController::class, 'get_trx']);
+        Route::post('/grafik-trf', [SparepartController::class, 'grafik_trf']);
     });
 
     Route::prefix('/dashboard')->group(function () {
@@ -440,3 +482,5 @@ Route::prefix('/as')->group(function () {
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard']);
 });
+
+Route::namespace('v2')->group(__DIR__. '/yogi/api.php');
