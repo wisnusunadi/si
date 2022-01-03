@@ -99,7 +99,7 @@ class Pesanan extends Model
         $id = $this->id;
         $jumlah = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($id) {
             $q->where('id', $id)->where('status_id', 2);
-        });
+        })->count();
         return $jumlah;
     }
 
