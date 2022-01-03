@@ -151,6 +151,25 @@ class PpicController extends Controller
         return $data;
     }
 
+    public function count_proses_jadwal()
+    {
+        $data = KomentarJadwalPerakitan::all();
+        $permintaan = 0;
+        $proses = 0;
+
+        foreach ($data as $item) {
+            if (!$item->tanggal_hasil) {
+                $permintaan += 1;
+            } else {
+                if ((time() - (60 * 60 * 24)) < strtotime($item->tanggal_hasil)) {
+                    $proses += 1;
+                }
+            }
+        }
+
+        return [$permintaan, $proses];
+    }
+
     public function create_data_perakitan(Request $request)
     {
         $status = $this->change_status($request->status);
