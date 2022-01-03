@@ -34,6 +34,14 @@
 
     <div class="tabs is-centered">
       <ul>
+        <li :class="{ 'is-active': view === 'table' }" @click="view = 'table'">
+          <a>
+            <span class="icon is-small"
+              ><i class="fas fa-table" aria-hidden="true"></i
+            ></span>
+            <span>Tabel</span>
+          </a>
+        </li>
         <li
           :class="{ 'is-active': view === 'calendar' }"
           @click="view = 'calendar'"
@@ -51,14 +59,6 @@
               ><i class="fas fa-chart-bar" aria-hidden="true"></i
             ></span>
             <span>Chart</span>
-          </a>
-        </li>
-        <li :class="{ 'is-active': view === 'table' }" @click="view = 'table'">
-          <a>
-            <span class="icon is-small"
-              ><i class="fas fa-table" aria-hidden="true"></i
-            ></span>
-            <span>Tabel</span>
           </a>
         </li>
       </ul>
@@ -163,7 +163,7 @@
           <apexchart
             type="rangeBar"
             :options="options"
-            :height="this.series_rencana[0].data.length * 25"
+            :height="this.series_rencana[0].data.length * 30"
             :series="series_rencana"
           ></apexchart>
         </div>
@@ -178,7 +178,7 @@
           v-else
           type="rangeBar"
           :options="options"
-          :height="this.series[0].data.length * 25"
+          :height="this.series[0].data.length * 30"
           :series="series"
         ></apexchart>
       </div>

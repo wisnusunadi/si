@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 // library
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 // model
 use App\Models\JadwalPerakitan;
@@ -14,7 +15,7 @@ use App\Models\GudangBarangJadi;
 use App\Models\KomentarJadwalPerakitan;
 
 // event
-use App\Models\DetailPesananProduk;
+use App\Models\DetailPesanan;
 use App\Models\GudangKarantinaDetail;
 
 use function PHPSTORM_META\type;
@@ -72,15 +73,43 @@ class PpicController extends Controller
 
     public function get_data_so()
     {
-        $data = DetailPesananProduk::with(
-            'GudangBarangJadi.produk',
-            'DetailPesanan.Pesanan.Ekatalog.Customer',
-            'DetailPesanan.Pesanan.Spa.Customer',
-            'DetailPesanan.Pesanan.Spb.Customer',
-            'DetailPesanan.Pesanan.log'
-        )
-            ->get();
-        return $data;
+        $data = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+            $q->whereIn('log_id', ['7', '9']);
+        })->get();
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                if ($data->nama) {
+                    return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
+                } else {
+                    return $data->Produk->nama;
+                }
+            })
+            ->addColumn('gbj', function ($data) {
+                return $data->stok;
+            })
+            ->addColumn('total', function ($data) {
+                $jumlah_stok_permintaan = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id, $data->produk->id);
+                return $jumlah_stok_permintaan;
+            })
+            ->addColumn('penjualan', function ($data) {
+                $jumlah_gbj = $data->stok;
+                $jumlah_stok_permintaan = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id, $data->produk->id);
+                $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
+                if ($jumlah >= 0) {
+                    return "<div>" . $jumlah . "</div>";
+                } else {
+                    return '<div style="color:red;">' . $jumlah . '</div>';
+                }
+            })
+            ->addColumn('aksi', function ($data) {
+                return '
+                    <button @click="alert(`test`)">test</button>
+                ';
+            })
+            ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
+            ->make(true);
     }
 
     public function get_data_sparepart_gk()
@@ -328,6 +357,46 @@ class PpicController extends Controller
         }
 
         return [$permintaan, $proses];
+    }
+
+    public function get_count_ekatalog($id, $produk_id, $status)
+    {
+        $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('gudang_barang_jadi_id', $id);
+        })->whereHas('Pesanan.Ekatalog', function ($q) use ($status) {
+            $q->where('status', '=', $status);
+        })->whereHas('Pesanan', function ($q) {
+            $q->whereIn('log_id', ['7', '9']);
+        })->get();
+        $jumlah = 0;
+        foreach ($res as $a) {
+            $a->jumlah;
+            foreach ($a->PenjualanProduk->Produk as $b) {
+                if ($b->id == $produk_id) {
+                    $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                }
+            }
+        }
+        return $jumlah;
+    }
+
+    public function get_count_spa_spb_po($id, $produk_id)
+    {
+        $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('gudang_barang_jadi_id', $id);
+        })->whereHas('Pesanan', function ($q) {
+            $q->whereIn('log_id', ['7', '9']);
+        })->doesntHave('Pesanan.Ekatalog')->get();
+        $jumlah = 0;
+        foreach ($res as $a) {
+            $a->jumlah;
+            foreach ($a->PenjualanProduk->Produk as $b) {
+                if ($b->id == $produk_id) {
+                    $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                }
+            }
+        }
+        return $jumlah;
     }
 
     public function test_query()

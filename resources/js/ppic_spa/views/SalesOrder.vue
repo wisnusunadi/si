@@ -44,34 +44,12 @@
             <tr>
               <th>No</th>
               <th>Nama Produk</th>
-              <th>Jumlah</th>
-              <th>No SO</th>
-              <th>Tanggal Order</th>
-              <th>Batas Kontrak</th>
-              <th>Customer</th>
-              <th>Jenis</th>
-              <th>Status</th>
-              <th>Detail</th>
+              <th>Stok</th>
+              <th>Pesanan</th>
+              <th>Selisih stok dengan pesanan</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="(d, index) in format_data" :key="d.id">
-              <td>{{ index + 1 }}</td>
-              <td>{{ d.nama_produk }}</td>
-              <td>{{ d.jumlah }}</td>
-              <td>{{ d.no_so }}</td>
-              <td>{{ d.tanggal_order }}</td>
-              <td>{{ d.batas_kontrak }}</td>
-              <td>{{ d.customer }}</td>
-              <td>{{ d.jenis }}</td>
-              <td>{{ d.status }}</td>
-              <td>
-                <button class="button is-success" @click="getDetail(d.id)">
-                  <i class="fas fa-search"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </div>
@@ -148,7 +126,29 @@ export default {
     });
     this.$store.commit("setIsLoading", false);
 
-    this.table = $("#table").DataTable();
+    this.table = $("#table").DataTable({
+      serverSide: true,
+      ajax: "/api/ppic/data/so",
+      columns: [
+        {
+          data: "DT_RowIndex",
+          orderable: false,
+          searchable: false,
+        },
+        {
+          data: "nama_produk",
+        },
+        {
+          data: "gbj",
+        },
+        {
+          data: "total",
+        },
+        {
+          data: "penjualan",
+        },
+      ],
+    });
   },
 
   computed: {
