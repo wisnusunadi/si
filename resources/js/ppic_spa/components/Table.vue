@@ -82,11 +82,11 @@
               "
             >
               <div>
-                <span class="is-clickable" @click="updateEvent(item.tanggal)">
+                <span class="is-clickable" @click="updateEvent(item)">
                   <i class="fas fa-edit"></i>
                 </span>
                 &nbsp;&nbsp;&nbsp;
-                <span class="is-clickable" @click="deleteEvent(item.tanggal)">
+                <span class="is-clickable" @click="deleteEvent(item.events)">
                   <i class="fas fa-trash"></i>
                 </span>
               </div>
@@ -98,7 +98,7 @@
                 backgroundColor:
                   weekend_date.indexOf(i + 1) !== -1
                     ? 'black'
-                    : isDate(item.tanggal, i + 1)
+                    : isDate(item.events, i + 1)
                     ? 'yellow'
                     : '',
               }"
@@ -198,7 +198,7 @@
             v-if="action === 'add'"
             class="button is-success"
             :class="{ 'is-loading': this.$store.state.isLoading }"
-            @click="submitAddProduk"
+            @click="handleSubmit"
           >
             Tambah
           </button>
@@ -206,7 +206,7 @@
             v-else-if="action"
             class="button is-info"
             :class="{ 'is-loading': this.$store.state.isLoading }"
-            @click="submitAddProduk"
+            @click="handleSubmit"
           >
             Ubah
           </button>
@@ -228,9 +228,7 @@
         </section>
         <footer class="modal-card-foot">
           <div class="buttons is-justify-content-space-between">
-            <button class="button is-success" @click="submitAddProduk">
-              Ok
-            </button>
+            <button class="button is-success" @click="handleSubmit">Ok</button>
             <button class="button is-danger" @click="deleteProdukModal = false">
               Batal
             </button>
@@ -251,7 +249,7 @@
             <div class="column is-4">
               <div class="field">
                 <label class="label">Tanggal Mulai</label>
-                <div v-for="item in jadwal_id" class="control">
+                <div v-for="item in updated_events.events" class="control">
                   <input
                     type="date"
                     :min="dateFormatter(year, month, 1)"
@@ -265,7 +263,7 @@
             <div class="column is-4">
               <div class="field">
                 <label class="label">Tanggal Selesai</label>
-                <div v-for="item in jadwal_id" class="control">
+                <div v-for="item in updated_events.events" class="control">
                   <input
                     type="date"
                     :min="dateFormatter(year, month, 1)"
@@ -279,7 +277,7 @@
             <div class="column is-2">
               <div class="field">
                 <label class="label">Jumlah</label>
-                <div v-for="item in jadwal_id" class="control">
+                <div v-for="item in updated_events.events" class="control">
                   <input
                     class="input"
                     type="number"
@@ -292,10 +290,13 @@
             <div class="column is-2">
               <div class="field">
                 <label class="label">Aksi</label>
-                <div v-for="item in jadwal_id" class="control">
+                <div
+                  v-for="(item, index) in updated_events.events"
+                  class="control"
+                >
                   <button
                     class="button is-light"
-                    @click="deleteEvent([item.id])"
+                    @click="deleteSingleEvent(index)"
                   >
                     <i class="fas fa-trash"></i>
                   </button>
@@ -303,13 +304,24 @@
               </div>
             </div>
           </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Stok</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <div>GBJ: {{ gbj_stok }}</div>
+                  <div>GK : {{ gk_stok }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
         <footer class="modal-card-foot">
           <div class="buttons is-justify-content-space-between">
-            <button class="button is-success" @click="submitAddProduk">
-              Ok
-            </button>
-            <button class="button is-danger" @click="deleteProdukModal = false">
+            <button class="button is-success" @click="handleSubmit">Ok</button>
+            <button class="button is-danger" @click="editProdukModal = false">
               Batal
             </button>
           </div>
@@ -324,8 +336,6 @@ import axios from "axios";
 
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-
-import xlsx from "xlsx-color";
 
 export default {
   name: "table-component",
@@ -358,8 +368,10 @@ export default {
 
       hiddenAction: false,
 
-      events_by_produk: [],
-      event: {},
+      updated_events: {
+        events: [],
+      },
+      deleted_events: [],
 
       start_date: "",
       end_date: "",
@@ -463,7 +475,7 @@ export default {
       this.$store.commit("setIsLoading", false);
     },
 
-    async submitAddProduk() {
+    async handleSubmit() {
       this.$store.commit("setIsLoading", true);
       if (this.action === "add") {
         let data = {
@@ -483,49 +495,55 @@ export default {
             this.$store.commit("setJadwal", response.data);
           });
       } else if (this.action === "update") {
+        for (const index in this.updated_events.events) {
+          await axios.post(
+            "/api/ppic/update/perakitan/" +
+              this.updated_events.events[index].id,
+            {
+              tanggal_mulai: this.updated_events.events[index].start,
+              tanggal_selesai: this.updated_events.events[index].end,
+              jumlah: this.updated_events.events[index].jumlah,
+              status: this.status,
+            }
+          );
+
+          // this.updated_events.jumlah = 0;
+          // for (let i = 0; i < this.updated_events.events.length; i++)
+          //   this.updated_events.jumlah += this.updated_events.events[i].jumlah;
+        }
+
         await axios
-          .post("/api/ppic/update/perakitan/" + this.jadwal_id, {
-            tanggal_mulai: this.start_date,
-            tanggal_selesai: this.end_date,
-            status: this.status,
-          })
+          .get("/api/ppic/data/perakitan/" + this.status)
           .then((response) => {
             this.$store.commit("setJadwal", response.data);
           });
       } else if (this.action === "delete") {
-        for (const id in this.jadwal_id) {
-          await axios
-            .post("/api/ppic/delete/perakitan/" + jadwal_id.id)
-            .then(() => {
-              axios
-                .get("/api/ppic/data/perakitan/" + this.status)
-                .then((response) => {
-                  this.$store.commit("setJadwal", response.data);
-                });
-            });
+        for (const index in this.deleted_events) {
+          await axios.post(
+            "/api/ppic/delete/perakitan/" + this.deleted_events[index].id
+          );
         }
+        await axios
+          .get("/api/ppic/data/perakitan/" + this.status)
+          .then((response) => {
+            this.$store.commit("setJadwal", response.data);
+          });
       }
       this.$store.commit("setIsLoading", false);
       this.addProdukModal = false;
+      this.editProdukModal = false;
       this.deleteProdukModal = false;
       this.resetData();
     },
 
-    async updateEvent(id) {
+    async updateEvent(events) {
       this.action = "update";
-      this.jadwal_id = id;
-
-      // let item = this.events.find((item) => item.id == id);
-
-      // this.start_date = item.start;
-      // this.end_date = item.end;
-      // this.jumlah = item.jumlah;
-      // this.produk = this.options.find((data) => data.value == item.produk_id);
+      this.updated_events = events;
 
       await axios
         .get("/api/ppic/data/gbj", {
           params: {
-            id: item.produk_id,
+            id: events.produk_id,
           },
         })
         .then((response) => {
@@ -539,7 +557,7 @@ export default {
       await axios
         .get("/api/ppic/data/gk/unit", {
           params: {
-            id: item.produk_id,
+            id: events.produk_id,
           },
         })
         .then((response) => {
@@ -553,11 +571,39 @@ export default {
       this.editProdukModal = true;
     },
 
-    deleteEvent(id) {
+    deleteEvent(events) {
       this.action = "delete";
-      this.jadwal_id = id;
+      this.deleted_events = events;
 
       this.deleteProdukModal = true;
+    },
+
+    async deleteSingleEvent(index) {
+      this.$store.commit("setIsLoading");
+      await axios
+        .post(
+          "/api/ppic/delete/perakitan/" + this.updated_events.events[index].id
+        )
+        .then(async (response) => {
+          await axios
+            .get("/api/ppic/data/perakitan/" + this.status)
+            .then((response) => {
+              this.$store.commit("setJadwal", response.data);
+            });
+
+          this.updated_events.events.splice(index, 1);
+          if (this.updated_events.events.length === 0)
+            this.editProdukModal = false;
+        })
+        .catch((error) => {
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: "Terdapat error pada program",
+          });
+        });
+      // this.updated_events.events.slice(index, 1);
+      // console.log(this.updated_events);
     },
 
     async sendEvent(state) {
@@ -590,28 +636,6 @@ export default {
     },
 
     convertToExcel(table, name) {
-      // let element = this.$refs.export_table;
-      // let wb = xlsx.utils.table_to_book(element, { sheet: "Sheet JS" });
-      // console.log(wb);
-
-      // for (const item in this.getWeekendCell()) {
-      //   wb.Sheets["Sheet JS"][item].s = {
-      //     fill: {
-      //       patternType: "solid",
-      //       fgColor: { rgb: "111111" },
-      //     },
-      //   };
-      // }
-
-      // wb.Sheets["Sheet JS"]["F5"].s = {
-      //   fill: {
-      //     patternType: "solid",
-      //     fgColor: { rgb: "111111" },
-      //   },
-      // };
-
-      // return xlsx.writeFile(wb, "test.xlsx");
-
       let uri = "data:application/vnd.ms-excel;base64,",
         template =
           '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
@@ -722,7 +746,7 @@ export default {
             produk_id: this.events[i].produk_id,
             title: this.events[i].title,
             jumlah: this.events[i].jumlah,
-            tanggal: [
+            events: [
               {
                 id: this.events[i].id,
                 start: this.events[i].start,
@@ -741,7 +765,7 @@ export default {
           //   this.events[i].start,
           //   this.events[i].end,
           // ];
-          exists.tanggal.push({
+          exists.events.push({
             id: this.events[i].id,
             start: this.events[i].start,
             end: this.events[i].end,

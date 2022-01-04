@@ -298,6 +298,9 @@ class PpicController extends Controller
             $object->tanggal_selesai_baru = $data->tanggal_selesai;
         }
 
+        if (isset($request->jumlah)) {
+            $data->jumlah = $request->jumlah;
+        }
         if (isset($request->state)) {
             $state = $this->change_state($request->state);
             $data->state = $state;
