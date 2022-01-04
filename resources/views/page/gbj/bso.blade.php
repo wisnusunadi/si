@@ -373,7 +373,7 @@
     });
 
     var prd = '';
-    var jml = '';
+var jml = '';
     $(document).on('click', '.detailmodal', function(e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
