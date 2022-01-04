@@ -153,18 +153,26 @@
 
 
     $(document).ready(function () {
+        $('#head-cb').prop('checked', false);
         $('.terimaProduk').click(function (e) {
             $('.terima-produk').modal('show');
         });
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
     });
 
     function ubahData() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let checkbox_terpilih = $('.scan-produk').DataTable().column(0).nodes()
+                .to$().find('input[type=checkbox]:checked');
         let layout = $('#change-layout').val();
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);

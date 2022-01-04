@@ -285,7 +285,7 @@
         destroy: true,
         "lengthChange": false,
         "ordering": false,
-        "displayLength": 25,
+        "displayLength": 5,
         "info": false,
         "responsive": true,
         "order": [[ 0, 'asc' ]],
