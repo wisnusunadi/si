@@ -22,12 +22,10 @@ class Pesanan extends Model
     {
         return $this->hasOne(Spb::class);
     }
-
     public function DetailPesanan()
     {
         return $this->hasMany(DetailPesanan::class);
     }
-
     function TFProduksi()
     {
         return $this->hasOne(TFProduksi::class);

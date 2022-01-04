@@ -9,10 +9,9 @@
 
 @section('adminlte_css')
 <style lang="scss">
-    .fc-event-time {
-        display: none;
+    .fc-event-time{
+    display : none;
     }
-
     body {
         font-size: 14px;
     }
@@ -149,7 +148,6 @@
     #tableKerusakan_filter {
         display: none;
     }
-
     .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }

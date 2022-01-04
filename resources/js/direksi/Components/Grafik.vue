@@ -1,6 +1,5 @@
 <template>
-    <apexchart type="bar" :options="options" :series="series" :height="this.series[0].data.length * 50"/>
-    <!-- <div>{{ dataPenyusunan }}</div> -->
+    <apexchart type="rangeBar" :options="options" :series="series" :height="this.series[0].data.length * 50"/>
 </template>
 
 <script>
@@ -22,8 +21,8 @@ export default {
                         horizontal: true
                     }
                 },
-                xaxis: {
-                    type: "datetime",
+               xaxis: {
+                type: "datetime",
                 },
             },
             series: [{
@@ -47,7 +46,6 @@ export default {
         dataSeries() {
             axios.get("/api/ppic/data/perakitan/penyusunan").then(response => {
                 this.series[0].data = this.mappingData(response.data);
-                // console.log(response.data);
             })
         },
     },

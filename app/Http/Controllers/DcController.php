@@ -285,7 +285,6 @@ class DcController extends Controller
                 }
             })
             ->addColumn('instansi', function ($data) {
-
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
                     return $data->ekatalog->instansi;
@@ -305,7 +304,6 @@ class DcController extends Controller
                     }
                 }
             })
-
             ->addColumn('button', function ($data) {
                 $name = explode('/', $data->so);
                 $x = array();
@@ -783,7 +781,6 @@ class DcController extends Controller
         }
         return view('page.dc.dashboard', ['daftar_so' => $daftar_so, 'belum_coo' => $belum_coo, 'lewat_batas' => $lewat_batas]);
     }
-
     public function dashboard_data($value)
     {
         if ($value == 'pengirimansotable') {

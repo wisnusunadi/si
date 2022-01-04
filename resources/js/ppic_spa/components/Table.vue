@@ -247,8 +247,6 @@ import axios from "axios";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 
-import xlsx from "xlsx-color";
-
 export default {
   name: "table-component",
 

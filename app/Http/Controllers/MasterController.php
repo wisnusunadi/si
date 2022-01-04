@@ -759,7 +759,6 @@ class MasterController extends Controller
     }
 
     //Show Modal
-
     public function update_customer_modal($id)
     {
         $customer = Customer::find($id);
