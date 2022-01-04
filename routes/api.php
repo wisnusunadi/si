@@ -240,7 +240,7 @@ Route::prefix('/prd')->group(function () {
     Route::post('/exp_rakit', [ProduksiController::class, 'exp_rakit']);
 
     Route::post('/exp_jadwal/h', [ProduksiController::class, 'exp_jadwal_h']);
-    Route::post('/exp_jadwal', [ProduksiController::class, 'change_jadwal']);
+    Route::post('/exp_jadwal', [ProduksiController::class, 'exp_jadwal']);
 
     // jadwal
     // plan

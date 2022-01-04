@@ -272,14 +272,31 @@
     var mytable = '';
 
     $(document).ready(function () {
+        $('#head-cb').prop('checked', false);
+        $('#head-cb-produk').prop('checked', false);
+        $('#head-cb-produk-edit').prop('checked', false);
+        $('#head-cb-edit').prop('checked', false);
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
+
         });
 
         $("#head-cb-edit").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child-edit').prop('checked', isChecked)
+            // $('.cb-child-edit').prop('checked', isChecked)
+            $('.scan-produk-edit').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
 
         $("#head-cb-produk").on('click', function () {
@@ -432,7 +449,7 @@ var jml = '';
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Melebihi Batas Maksimal'
+                        text: 'Batas Maksimal '+jml+' Barang!',
                     })
                 } else {
                     ids.push($(this).val());
@@ -672,7 +689,7 @@ var jml = '';
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Melebihi Batas Maksimal'
+                        text: 'Batas Maksimal '+jml+' Barang!',
                     })
                 } else {
                     ids.push($(this).val());

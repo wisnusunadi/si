@@ -579,6 +579,8 @@
     }
 
     $(document).ready(function () {
+        $('#head-cb-rancang').prop('checked', false);
+        $('#head-cb').prop('checked', false);
         $('.division').select2();
         $('.productt').select2();
 
@@ -651,12 +653,24 @@
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk1').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
 
         $("#head-cb-rancang").on('click', function () {
             var isChecked = $("#head-cb-rancang").prop('checked')
-            $('.cb-child-rancang').prop('checked', isChecked)
+            // $('.cb-child-rancang').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
 
         // divisi
