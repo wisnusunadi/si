@@ -27,6 +27,13 @@ const store = new Vuex.Store({
         setJadwal(state, jadwal) {
             state.jadwal = jadwal;
 
+            // reset state if jadwal length is 0
+            if (state.jadwal.length === 0) {
+                state.state = 'perencanaan';
+                state.konfirmasi = 0;
+                state.state_ppic = "pembuatan";
+            }
+
             // set konfirmasi
             let flag = false;
             for (let i = 0; i < jadwal.length; i++) {
@@ -60,6 +67,14 @@ const store = new Vuex.Store({
             else if (state.state === "persetujuan" && state.konfirmasi == 1) state.state_ppic = "disetujui"
             else if (state.state === "persetujuan" && state.konfirmasi == 2) state.state_ppic = "revisi"
         },
+
+        setStatus(state, status) {
+            state.status = status;
+        },
+
+        setUser(state, user) {
+            state.user = user;
+        }
     }
 })
 

@@ -9,6 +9,10 @@ import "jquery/dist/jquery"
 import "datatables.net/js/jquery.dataTables.min"
 import "datatables.net-bulma/js/dataTables.bulma"
 
+import VueSweetalert2 from "vue-sweetalert2"
+
+import 'sweetalert2/dist/sweetalert2.min.css'
+
 const api_token = document.querySelector('meta[name="api-token"]').content
 const csrf_token = document.querySelector('meta[name="csrf-token"]').content
 
@@ -21,6 +25,7 @@ axios.defaults.headers.common = {
 }
 // axios.defaults.baseURL = "http://localhost:8000/"
 
+Vue.use(VueSweetalert2)
 
 new Vue({
     router,

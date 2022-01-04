@@ -27,6 +27,7 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana']);
     Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
     Route::get('/data/so', [App\Http\Controllers\PpicController::class, 'get_data_so']);
+    Route::get('/data/so/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_data_so_detail']);
     Route::get('/data/gk/sparepart', [App\Http\Controllers\PpicController::class, 'get_data_sparepart_gk']);
     Route::get('/data/gk/unit', [App\Http\Controllers\PpicController::class, 'get_data_unit_gk']);
     Route::get('/data/komentar', [App\Http\Controllers\PpicController::class, 'get_komentar_jadwal_perakitan']);

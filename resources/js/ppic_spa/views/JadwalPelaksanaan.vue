@@ -1,5 +1,7 @@
 <template>
-  <Jadwal :status="'pelaksanaan'" :jadwal_rencana="jadwal_rencana" />
+  <div>
+    <Jadwal :status="'pelaksanaan'" :jadwal_rencana="jadwal_rencana" />
+  </div>
 </template>
 
 <script>
@@ -26,9 +28,7 @@ export default {
       this.$store.commit("setJadwal", response.data);
     });
 
-    await axios.get("/api/ppic/data/rencana_perakitan").then((response) => {
-      this.jadwal_rencana = response.data;
-    });
+    this.$store.commit("setStatus", "pelaksanaan");
 
     this.$store.commit("setIsLoading", false);
   },
