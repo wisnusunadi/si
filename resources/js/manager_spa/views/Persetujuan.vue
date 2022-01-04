@@ -240,12 +240,20 @@ export default {
           this.resetData();
         });
 
-      await axios.post("/api/ppic/update/komentar", {
-        status: this.$store.state.status,
-        tanggal_hasil: new Date(),
-        hasil: this.hasil,
-        komentar: this.komentar,
-      });
+      await axios
+        .post("/api/ppic/update/komentar", {
+          status: this.$store.state.status,
+          tanggal_hasil: new Date(),
+          hasil: this.hasil,
+          komentar: this.komentar,
+        })
+        .catch((err) => {
+          this.$swal({
+            icon: "warning",
+            title: "Peringatan",
+            text: "Persetujuan berhasil dikirm, namun gagal menambahkan komentar",
+          });
+        });
 
       this.$store.commit("setIsLoading", false);
       this.showModal = false;
@@ -263,12 +271,20 @@ export default {
           this.resetData();
         });
 
-      await axios.post("/api/ppic/update/komentar", {
-        status: this.$store.state.status,
-        tanggal_hasil: new Date(),
-        hasil: this.hasil,
-        komentar: this.komentar,
-      });
+      await axios
+        .post("/api/ppic/update/komentar", {
+          status: this.$store.state.status,
+          tanggal_hasil: new Date(),
+          hasil: this.hasil,
+          komentar: this.komentar,
+        })
+        .catch((err) => {
+          this.$swal({
+            icon: "warning",
+            title: "Peringatan",
+            text: "Persetujuan berhasil dikirm, namun gagal menambahkan komentar",
+          });
+        });
 
       this.$store.commit("setIsLoading", false);
       this.showModal = false;
@@ -286,12 +302,20 @@ export default {
           this.resetDate();
         });
 
-      await axios.post("/api/ppic/update/komentar", {
-        status: this.$store.state.status,
-        tanggal_hasil: new Date(),
-        hasil: this.hasil,
-        komentar: this.komentar,
-      });
+      await axios
+        .post("/api/ppic/update/komentar", {
+          status: this.$store.state.status,
+          tanggal_hasil: new Date(),
+          hasil: this.hasil,
+          komentar: this.komentar,
+        })
+        .catch((err) => {
+          this.$swal({
+            icon: "warning",
+            title: "Peringatan",
+            text: "Persetujuan berhasil dikirm, namun gagal menambahkan komentar",
+          });
+        });
 
       this.$store.commit("setIsLoading", false);
       this.showModal = false;

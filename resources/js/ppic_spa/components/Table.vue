@@ -2,39 +2,41 @@
   <div>
     <h1 class="subtitle">{{ getMonthYear() }}</h1>
     <div class="buttons">
-      <button
-        v-if="
-          this.$store.state.state_ppic === 'pembuatan' ||
-          this.$store.state.state_ppic === 'revisi'
-        "
-        class="button is-success"
-        @click="showAddProdukModal"
-      >
-        <span>Tambah <i class="fas fa-plus"></i></span>
-      </button>
-      <button
-        v-if="
-          this.$store.state.state_ppic === 'pembuatan' ||
-          this.$store.state.state_ppic === 'revisi'
-        "
-        class="button"
-        :class="{
-          'is-loading': this.$store.state.isLoading,
-          'is-primary': this.$store.state.state_ppic === 'pembuatan',
-          'is-danger': this.$store.state.state_ppic === 'revisi',
-        }"
-        @click="sendEvent('persetujuan')"
-      >
-        Kirim
-      </button>
-      <button
-        v-if="this.$store.state.state_ppic === 'disetujui'"
-        class="button is-success"
-        :class="{ 'is-loading': this.$store.state.isLoading }"
-        @click="sendEvent('perubahan')"
-      >
-        Minta Perubahan
-      </button>
+      <template v-if="$store.state.user.divisi_id === 24">
+        <button
+          v-if="
+            this.$store.state.state_ppic === 'pembuatan' ||
+            this.$store.state.state_ppic === 'revisi'
+          "
+          class="button is-success"
+          @click="showAddProdukModal"
+        >
+          <span>Tambah <i class="fas fa-plus"></i></span>
+        </button>
+        <button
+          v-if="
+            this.$store.state.state_ppic === 'pembuatan' ||
+            this.$store.state.state_ppic === 'revisi'
+          "
+          class="button"
+          :class="{
+            'is-loading': this.$store.state.isLoading,
+            'is-primary': this.$store.state.state_ppic === 'pembuatan',
+            'is-danger': this.$store.state.state_ppic === 'revisi',
+          }"
+          @click="sendEvent('persetujuan')"
+        >
+          Kirim
+        </button>
+        <button
+          v-if="this.$store.state.state_ppic === 'disetujui'"
+          class="button is-success"
+          :class="{ 'is-loading': this.$store.state.isLoading }"
+          @click="sendEvent('perubahan')"
+        >
+          Minta Perubahan
+        </button>
+      </template>
       <button
         class="button is-info"
         @click="convertToExcel('export_table', 'W3C Example Table')"
@@ -54,6 +56,7 @@
             <th rowspan="2">Jumlah</th>
             <th
               v-if="
+                $store.state.user.divisi_id === 24 &&
                 ($store.state.state_ppic === 'pembuatan' ||
                   $store.state.state_ppic === 'revisi') &&
                 !hiddenAction
@@ -76,6 +79,7 @@
             <td>{{ item.jumlah }}</td>
             <td
               v-if="
+                $store.state.user.divisi_id === 24 &&
                 ($store.state.state_ppic === 'pembuatan' ||
                   $store.state.state_ppic === 'revisi') &&
                 !hiddenAction
@@ -506,10 +510,6 @@ export default {
               status: this.status,
             }
           );
-
-          // this.updated_events.jumlah = 0;
-          // for (let i = 0; i < this.updated_events.events.length; i++)
-          //   this.updated_events.jumlah += this.updated_events.events[i].jumlah;
         }
 
         await axios
@@ -519,9 +519,15 @@ export default {
           });
       } else if (this.action === "delete") {
         for (const index in this.deleted_events) {
-          await axios.post(
-            "/api/ppic/delete/perakitan/" + this.deleted_events[index].id
-          );
+          await axios
+            .post("/api/ppic/delete/perakitan/" + this.deleted_events[index].id)
+            .catch((error) => {
+              this.$swal({
+                icon: "error",
+                title: "Oops...",
+                text: "Error: gagal menghapus jadwal",
+              });
+            });
         }
         await axios
           .get("/api/ppic/data/perakitan/" + this.status)
@@ -599,7 +605,7 @@ export default {
           this.$swal({
             icon: "error",
             title: "Oops...",
-            text: "Terdapat error pada program",
+            text: "Error: gagal menghapus jadwal",
           });
         });
       // this.updated_events.events.slice(index, 1);
@@ -627,9 +633,12 @@ export default {
           state: this.$store.state.state,
           status: this.status,
         })
-        .catch((error) => {
-          console.log("error create komentar");
-          console.log(error);
+        .catch((err) => {
+          this.$swal({
+            icon: "warning",
+            title: "Peringatan",
+            text: "Terdapat kesalahan saat membuat komentar pada database",
+          });
         });
 
       this.$store.commit("setIsLoading", false);

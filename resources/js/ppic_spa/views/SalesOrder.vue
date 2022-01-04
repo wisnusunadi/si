@@ -5,7 +5,7 @@
     </div>
     <div class="columns is-multiline">
       <div class="column is-12">
-        <table class="table is-fullwidth has-text-centered" id="table">
+        <table class="table is-fullwidth has-text-centered" id="table_so">
           <thead>
             <tr>
               <th>No</th>
@@ -21,7 +21,7 @@
               <td>{{ item.DT_RowIndex }}</td>
               <td v-html="item.nama_produk"></td>
               <td>{{ item.stok }}</td>
-              <td>{{ item.jumlah }}</td>
+              <td>{{ item.total }}</td>
               <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
                 {{ item.penjualan }}
               </td>
@@ -52,7 +52,7 @@
           ></button>
         </header>
         <section class="modal-card-body">
-          <table class="table" id="detailtable">
+          <table class="table is-fullwidth" id="detailtable">
             <thead>
               <tr>
                 <th>SO</th>
@@ -109,14 +109,15 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     this.$store.commit("setIsLoading", true);
-    axios.get("/api/ppic/data/so").then((response) => {
+    await axios.get("/api/ppic/data/so").then((response) => {
       this.data = response.data.data;
     });
+    $("#table_so").DataTable();
+
     this.$store.commit("setIsLoading", false);
 
-    $("#table").DataTable();
     $("#detailtable").DataTable();
   },
 };
