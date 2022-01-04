@@ -419,9 +419,9 @@ class ProduksiController extends Controller
 
     function getSOCek()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->where('log_id', 9)->get());
+        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->get());
+        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -531,9 +531,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->where('log_id', 9)->get());
+        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->get());
+        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -1517,8 +1517,8 @@ class ProduksiController extends Controller
             'produk' => $gdg->produk->nama . ' ' . $gdg->nama,
             'kategori' => $gdg->produk->KelompokProduk->nama,
             'jumlah' => $jadwal->jumlah . ' ' . $gdg->satuan->nama,
-            'start' => Carbon::parse($jadwal->tanggal_mulai)->isoFormat('D MMM YYYY'), 
-            'end' => Carbon::parse($jadwal->tanggal_selesai)->isoFormat('D MMM YYYY'), 
+            'start' => Carbon::parse($jadwal->tanggal_mulai)->isoFormat('D MMM YYYY'),
+            'end' => Carbon::parse($jadwal->tanggal_selesai)->isoFormat('D MMM YYYY'),
         ]);
     }
 
