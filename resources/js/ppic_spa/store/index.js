@@ -60,6 +60,10 @@ const store = new Vuex.Store({
             else if (state.state === "persetujuan" && state.konfirmasi == 1) state.state_ppic = "disetujui"
             else if (state.state === "persetujuan" && state.konfirmasi == 2) state.state_ppic = "revisi"
         },
+
+        setUser(state, user) {
+            state.user = user;
+        }
     }
 })
 

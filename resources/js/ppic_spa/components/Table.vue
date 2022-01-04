@@ -82,10 +82,10 @@
               "
             >
               <div>
-                <!-- <span class="is-clickable" @click="updateEvent(item.id)">
+                <span class="is-clickable" @click="updateEvent(item.tanggal)">
                   <i class="fas fa-edit"></i>
                 </span>
-                &nbsp;&nbsp;&nbsp; -->
+                &nbsp;&nbsp;&nbsp;
                 <span class="is-clickable" @click="deleteEvent(item.tanggal)">
                   <i class="fas fa-trash"></i>
                 </span>
@@ -238,6 +238,84 @@
         </footer>
       </div>
     </div>
+
+    <div class="modal" :class="{ 'is-active': editProdukModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Edit Produk</p>
+          <button class="delete" @click="editProdukModal = false"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="columns">
+            <div class="column is-4">
+              <div class="field">
+                <label class="label">Tanggal Mulai</label>
+                <div v-for="item in jadwal_id" class="control">
+                  <input
+                    type="date"
+                    :min="dateFormatter(year, month, 1)"
+                    :max="dateFormatter(year, month, last_date)"
+                    class="input"
+                    v-model="item.start"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-4">
+              <div class="field">
+                <label class="label">Tanggal Selesai</label>
+                <div v-for="item in jadwal_id" class="control">
+                  <input
+                    type="date"
+                    :min="dateFormatter(year, month, 1)"
+                    :max="dateFormatter(year, month, last_date)"
+                    class="input"
+                    v-model="item.end"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-2">
+              <div class="field">
+                <label class="label">Jumlah</label>
+                <div v-for="item in jadwal_id" class="control">
+                  <input
+                    class="input"
+                    type="number"
+                    min="1"
+                    v-model="item.jumlah"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-2">
+              <div class="field">
+                <label class="label">Aksi</label>
+                <div v-for="item in jadwal_id" class="control">
+                  <button
+                    class="button is-light"
+                    @click="deleteEvent([item.id])"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="buttons is-justify-content-space-between">
+            <button class="button is-success" @click="submitAddProduk">
+              Ok
+            </button>
+            <button class="button is-danger" @click="deleteProdukModal = false">
+              Batal
+            </button>
+          </div>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -276,10 +354,13 @@ export default {
 
       addProdukModal: false,
       deleteProdukModal: false,
+      editProdukModal: false,
 
       hiddenAction: false,
 
-      jadwal_id: 0,
+      events_by_produk: [],
+      event: {},
+
       start_date: "",
       end_date: "",
       produk: {},
@@ -327,8 +408,8 @@ export default {
   methods: {
     isDate(tanggal, i) {
       for (const id in tanggal) {
-        let start = new Date(tanggal[id][0]);
-        let end = new Date(tanggal[id][1]);
+        let start = new Date(tanggal[id].start);
+        let end = new Date(tanggal[id].end);
 
         let start_number = start.getDate();
         let end_number = end.getDate();
@@ -413,13 +494,15 @@ export default {
           });
       } else if (this.action === "delete") {
         for (const id in this.jadwal_id) {
-          await axios.post("/api/ppic/delete/perakitan/" + id).then(() => {
-            axios
-              .get("/api/ppic/data/perakitan/" + this.status)
-              .then((response) => {
-                this.$store.commit("setJadwal", response.data);
-              });
-          });
+          await axios
+            .post("/api/ppic/delete/perakitan/" + jadwal_id.id)
+            .then(() => {
+              axios
+                .get("/api/ppic/data/perakitan/" + this.status)
+                .then((response) => {
+                  this.$store.commit("setJadwal", response.data);
+                });
+            });
         }
       }
       this.$store.commit("setIsLoading", false);
@@ -432,12 +515,12 @@ export default {
       this.action = "update";
       this.jadwal_id = id;
 
-      let item = this.events.find((item) => item.id == id);
+      // let item = this.events.find((item) => item.id == id);
 
-      this.start_date = item.start;
-      this.end_date = item.end;
-      this.jumlah = item.jumlah;
-      this.produk = this.options.find((data) => data.value == item.produk_id);
+      // this.start_date = item.start;
+      // this.end_date = item.end;
+      // this.jumlah = item.jumlah;
+      // this.produk = this.options.find((data) => data.value == item.produk_id);
 
       await axios
         .get("/api/ppic/data/gbj", {
@@ -467,7 +550,7 @@ export default {
           console.log(error);
         });
 
-      this.addProdukModal = true;
+      this.editProdukModal = true;
     },
 
     deleteEvent(id) {
@@ -639,15 +722,31 @@ export default {
             produk_id: this.events[i].produk_id,
             title: this.events[i].title,
             jumlah: this.events[i].jumlah,
-            tanggal: {
-              [this.events[i].id]: [this.events[i].start, this.events[i].end],
-            },
+            tanggal: [
+              {
+                id: this.events[i].id,
+                start: this.events[i].start,
+                end: this.events[i].end,
+                jumlah: this.events[i].jumlah,
+              },
+            ],
+
+            // {
+            //   id:
+            //   [this.events[i].id]: [this.events[i].start, this.events[i].end],
+            // },
           });
         } else {
-          exists.tanggal[this.events[i].id] = [
-            this.events[i].start,
-            this.events[i].end,
-          ];
+          // exists.tanggal[this.events[i].id] = [
+          //   this.events[i].start,
+          //   this.events[i].end,
+          // ];
+          exists.tanggal.push({
+            id: this.events[i].id,
+            start: this.events[i].start,
+            end: this.events[i].end,
+            jumlah: this.events[i].jumlah,
+          });
           exists.jumlah += this.events[i].jumlah;
         }
       }
