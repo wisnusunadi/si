@@ -161,7 +161,7 @@ class PpicController extends Controller
             if (!$item->tanggal_hasil) {
                 $permintaan += 1;
             } else {
-                if ((time() - (60 * 60 * 24)) < strtotime($item->tanggal_hasil)) {
+                if ((time() - (60 * 60 * 12)) < strtotime($item->tanggal_hasil)) {
                     $proses += 1;
                 }
             }

@@ -170,14 +170,17 @@ export default {
     await axios.get("/api/ppic/data/gbj").then((response) => {
       this.data_gbj = response.data;
     });
+    $("#table_gbj").DataTable();
 
     await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
       this.data_sparepart = response.data;
     });
+    $("#table-sparepart").DataTable();
 
     await axios.get("/api/ppic/data/gk/unit").then((response) => {
       this.data_unit = response.data;
     });
+    $("#table-unit").DataTable();
 
     await axios.get("/api/ppic/counting/komentar").then((response) => {
       this.jumlah_permintaan = response.data[0];
@@ -207,9 +210,6 @@ export default {
         },
       ],
     });
-    $("#table_gbj").DataTable();
-    $("#table-unit").DataTable();
-    $("#table-sparepart").DataTable();
 
     this.$store.commit("setIsLoading", false);
   },
