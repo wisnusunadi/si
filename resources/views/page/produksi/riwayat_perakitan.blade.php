@@ -285,7 +285,7 @@
         destroy: true,
         "lengthChange": false,
         "ordering": false,
-        "displayLength": 5,
+        "bPaginate": false,
         "info": false,
         "responsive": true,
         "order": [[ 0, 'asc' ]],
@@ -316,6 +316,7 @@
 
                 if (last !== group) {
                     var rowData = api.row(i).data();
+
 
                     $(rows).eq(i).before(
                     '<tr class="table-dark text-bold"><td colspan="1">' + group + '</td><td colspan="5">'+rowData.day_kirim+'</td></tr>'
