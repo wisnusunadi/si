@@ -217,7 +217,9 @@
                                                 <th>Nomor SO</th>
                                                 <th>Customer</th>
                                                 <th>Batas Transfer</th>
-                                                <th>Aksi</th>
+                                                @if (Auth::user()->divisi_id != 2)
+                                                    <th>Aksi</th>
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -230,9 +232,11 @@
                                                 <td>{{ $d->pesanan->so }}</td>
                                                 <td>{{ $d->pesanan->ekatalog->customer->nama }}</td>
                                                 <td>{{ Carbon\Carbon::parse($d->pesanan->ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY') }}</td>
+                                                @if (Auth::user()->divisi_id != 2)
                                                 <td><a href="{{ url('gbj/export_spb/'.$d->pesanan->id) }}">
                                                     <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
                                                     </a></td>
+                                                @endif
                                             </tr>
                                             @endforeach
                                         </tbody>
