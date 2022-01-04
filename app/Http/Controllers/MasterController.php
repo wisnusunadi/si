@@ -31,6 +31,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Arr;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
+use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use Illuminate\Support\Facades\DB;
 
@@ -835,6 +836,13 @@ class MasterController extends Controller
 
         echo json_encode($data);
     }
+
+    function select_m_sparepart()
+    {
+        $data = Sparepart::all();
+        return response()->json($data);
+    }
+
     function select_sparepart()
     {
         $data = SparepartGudang::all();

@@ -53,478 +53,518 @@
         top: 0;
 
     }
+
+    @media screen and (min-width: 1440px) {
+
+        section {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+
+        /* label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        } */
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
 </style>
 @stop
 
 @section('content')
-<div class="row justify-content-center" id="penjualanform">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-info">
-                <div class="card-title">Form Tambah Data</div>
-            </div>
-            <div class="card-body">
-                @if(Session::has('error') || count($errors) > 0 )
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>{{Session::get('error')}}</strong> Periksa
-                    kembali data yang diinput
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @elseif(Session::has('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>{{Session::get('success')}}</strong>,
-                    Terima kasih
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @endif
-                <form method="post" action="{{route('penjualan.penjualan.store')}}">
-                    {{csrf_field()}}
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-11">
-                            <h4>Info Customer</h4>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="form-horizontal">
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
-                                            <div class="col-5">
-                                                <select name="customer_id" id="customer_id" class="form-control custom-select customer_id @error('customer_id') is-invalid @enderror">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
-                                            <div class="col-7">
-                                                <input type="text" class="form-control col-form-label" name="alamat" id="alamat" readonly />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
-                                            <div class="col-5">
-                                                <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Jenis Penjualan</label>
-                                            <div class="col-5 col-form-label">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan1" value="ekatalog" />
-                                                    <label class="form-check-label" for="jenis_penjualan1">E-Catalogue</label>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row justify-content-center" id="penjualanform">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info">
+                        <div class="card-title">Form Tambah Data</div>
+                    </div>
+                    <div class="card-body">
+                        @if(Session::has('error') || count($errors) > 0 )
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>{{Session::get('error')}}</strong> Periksa
+                            kembali data yang diinput
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @elseif(Session::has('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>{{Session::get('success')}}</strong>,
+                            Terima kasih
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
+                        <form method="post" action="{{route('penjualan.penjualan.store')}}">
+                            {{csrf_field()}}
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-11">
+                                    <h4>Info Customer</h4>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-horizontal">
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
+                                                    <div class="col-5">
+                                                        <select name="customer_id" id="customer_id" class="form-control custom-select customer_id @error('customer_id') is-invalid @enderror">
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan2" value="spa" />
-                                                    <label class="form-check-label" for="jenis_penjualan2">SPA</label>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
+                                                    <div class="col-7">
+                                                        <input type="text" class="form-control col-form-label" name="alamat" id="alamat" readonly />
+                                                    </div>
                                                 </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan3" value="spb" />
-                                                    <label class="form-check-label" for="jenis_penjualan3">SPB</label>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
+                                                    <div class="col-5">
+                                                        <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
+                                                    </div>
                                                 </div>
-                                                <div class="invalid-feedback" id="msgjenis_penjualan">
-                                                    @if($errors->has('jenis_penjualan'))
-                                                    {{ $errors->first('jenis_penjualan')}}
-                                                    @endif
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jenis Penjualan</label>
+                                                    <div class="col-5 col-form-label">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan1" value="ekatalog" />
+                                                            <label class="form-check-label" for="jenis_penjualan1">E-Catalogue</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan2" value="spa" />
+                                                            <label class="form-check-label" for="jenis_penjualan2">SPA</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan3" value="spb" />
+                                                            <label class="form-check-label" for="jenis_penjualan3">SPB</label>
+                                                        </div>
+                                                        <div class="invalid-feedback" id="msgjenis_penjualan">
+                                                            @if($errors->has('jenis_penjualan'))
+                                                            {{ $errors->first('jenis_penjualan')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center hide" id="akn">
-                        <div class="col-11">
-                            <h4>Info AKN</h4>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="form-horizontal">
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
-                                            <div class="col-4">
-                                                <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
-                                                <div class="invalid-feedback" id="msgtanggal_pemesanan">
-                                                    @if($errors->has('tanggal_pemesanan'))
-                                                    {{ $errors->first('tanggal_pemesanan')}}
-                                                    @endif
+                            <div class="row d-flex justify-content-center hide" id="akn">
+                                <div class="col-11">
+                                    <h4>Info AKN</h4>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-horizontal">
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
+                                                    <div class="col-4">
+                                                        <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
+                                                        <div class="invalid-feedback" id="msgtanggal_pemesanan">
+                                                            @if($errors->has('tanggal_pemesanan'))
+                                                            {{ $errors->first('tanggal_pemesanan')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
-                                            <div class="col-7">
-                                                <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
-                                                <div class="invalid-feedback" id="msginstansi">
-                                                    @if($errors->has('instansi'))
-                                                    {{ $errors->first('instansi')}}
-                                                    @endif
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
+                                                    <div class="col-7">
+                                                        <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
+                                                        <div class="invalid-feedback" id="msginstansi">
+                                                            @if($errors->has('instansi'))
+                                                            {{ $errors->first('instansi')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
-                                            <div class="col-7">
-                                                <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" />
-                                                <div class="invalid-feedback" id="msgalamatinstansi">
-                                                    @if($errors->has('alamatinstansi'))
-                                                    {{ $errors->first('alamatinstansi')}}
-                                                    @endif
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
+                                                    <div class="col-7">
+                                                        <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" />
+                                                        <div class="invalid-feedback" id="msgalamatinstansi">
+                                                            @if($errors->has('alamatinstansi'))
+                                                            {{ $errors->first('alamatinstansi')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
-                                            <div class="col-7">
-                                                <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
-                                                </select>
-                                                <div class="invalid-feedback" id="msgprovinsi">
-                                                    @if($errors->has('provinsi'))
-                                                    {{ $errors->first('provinsi')}}
-                                                    @endif
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
+                                                    <div class="col-7">
+                                                        <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                        </select>
+                                                        <div class="invalid-feedback" id="msgprovinsi">
+                                                            @if($errors->has('provinsi'))
+                                                            {{ $errors->first('provinsi')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
-                                            <div class="col-7">
-                                                <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
-                                                <div class="invalid-feedback" id="msgsatuan_kerja">
-                                                    @if($errors->has('satuan_kerja'))
-                                                    {{ $errors->first('satuan_kerja')}}
-                                                    @endif
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
+                                                    <div class="col-7">
+                                                        <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
+                                                        <div class="invalid-feedback" id="msgsatuan_kerja">
+                                                            @if($errors->has('satuan_kerja'))
+                                                            {{ $errors->first('satuan_kerja')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
-                                            <div class="col-5 col-form-label">
-                                                <!-- <div class="form-check form-check-inline">
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
+                                                    <div class="col-5 col-form-label">
+                                                        <!-- <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
                                                     <label class="form-check-label" for="satuan4">Draft</label>
                                                 </div> -->
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
-                                                    <label class="form-check-label" for="satuan1">Sepakat</label>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
+                                                            <label class="form-check-label" for="satuan1">Sepakat</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="status" id="satuan2" value="negosiasi" />
+                                                            <label class="form-check-label" for="satuan2">Negosiasi</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
+                                                            <label class="form-check-label" for="satuan3">Batal</label>
+                                                        </div>
+                                                        <div class="invalid-feedback" id="msgstatus">
+                                                            @if($errors->has('status'))
+                                                            {{ $errors->first('status')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="status" id="satuan2" value="negosiasi" />
-                                                    <label class="form-check-label" for="satuan2">Negosiasi</label>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">No Paket</label>
+                                                    <div class="col-5 input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="ket_no_paket">AK1-</span>
+                                                        </div>
+                                                        <input type="text" class="form-control col-form-label @error('nomor_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
+                                                        <div class="invalid-feedback" id="msgno_paket">
+                                                            @if($errors->has('no_paket'))
+                                                            {{ $errors->first('no_paket')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
-                                                    <label class="form-check-label" for="satuan3">Batal</label>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Delivery</label>
+                                                    <div class="col-4">
+                                                        <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
+                                                        <div class="invalid-feedback" id="msgbatas_kontrak">
+                                                            @if($errors->has('batas_kontrak'))
+                                                            {{ $errors->first('batas_kontrak')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="invalid-feedback" id="msgstatus">
-                                                    @if($errors->has('status'))
-                                                    {{ $errors->first('status')}}
-                                                    @endif
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
+                                                    <div class="col-5">
+                                                        <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
+                                                        <div class="invalid-feedback" id="msgdeskripsi">
+                                                            @if($errors->has('deskripsi'))
+                                                            {{ $errors->first('deskripsi')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">No Paket</label>
-                                            <div class="col-5 input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="ket_no_paket">AK1-</span>
+                                                <div class="form-group row">
+                                                    <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
+                                                    <div class="col-5">
+                                                        <textarea class="form-control col-form-label" name="keterangan"></textarea>
+                                                    </div>
                                                 </div>
-                                                <input type="text" class="form-control col-form-label @error('nomor_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
-                                                <div class="invalid-feedback" id="msgno_paket">
-                                                    @if($errors->has('no_paket'))
-                                                    {{ $errors->first('no_paket')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Delivery</label>
-                                            <div class="col-4">
-                                                <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
-                                                <div class="invalid-feedback" id="msgbatas_kontrak">
-                                                    @if($errors->has('batas_kontrak'))
-                                                    {{ $errors->first('batas_kontrak')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
-                                            <div class="col-5">
-                                                <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
-                                                <div class="invalid-feedback" id="msgdeskripsi">
-                                                    @if($errors->has('deskripsi'))
-                                                    {{ $errors->first('deskripsi')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                            <div class="col-5">
-                                                <textarea class="form-control col-form-label" name="keterangan"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center hide" id="nonakn">
-                        <div class="col-11">
-                            <h4>Info Penjualan</h4>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
-                                        <div class="col-4">
-                                            <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
-                                            <div class="invalid-feedback" id="msgno_po">
-                                                @if($errors->has('no_po'))
-                                                {{ $errors->first('no_po')}}
-                                                @endif
+                            <div class="row d-flex justify-content-center hide" id="nonakn">
+                                <div class="col-11">
+                                    <h4>Info Penjualan</h4>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
+                                                    <div class="invalid-feedback" id="msgno_po">
+                                                        @if($errors->has('no_po'))
+                                                        {{ $errors->first('no_po')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
-                                        <div class="col-4">
-                                            <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
-                                            <div class="invalid-feedback" id="msgtanggal_po">
-                                                @if($errors->has('tanggal_po'))
-                                                {{ $errors->first('tanggal_po')}}
-                                                @endif
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
+                                                <div class="col-4">
+                                                    <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
+                                                    <div class="invalid-feedback" id="msgtanggal_po">
+                                                        @if($errors->has('tanggal_po'))
+                                                        {{ $errors->first('tanggal_po')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
-                                        <div class="col-5 col-form-label">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="do" id="yes" value="yes" />
-                                                <label class="form-check-label" for="yes">Tersedia</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="do" id="no" value="no" />
-                                                <label class="form-check-label" for="no">Tidak tersedia</label>
-                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
+                                                <div class="col-5 col-form-label">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="do" id="yes" value="yes" />
+                                                        <label class="form-check-label" for="yes">Tersedia</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="do" id="no" value="no" />
+                                                        <label class="form-check-label" for="no">Tidak tersedia</label>
+                                                    </div>
 
-                                        </div>
-                                    </div>
-                                    <div class="form-group row hide" id="do_detail_no">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
-                                        <div class="col-4">
-                                            <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
-                                            <div class="invalid-feedback" id="msgno_do">
-                                                @if($errors->has('no_do'))
-                                                {{ $errors->first('no_do')}}
-                                                @endif
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row hide" id="do_detail_tgl">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
-                                        <div class="col-4">
-                                            <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
-                                            <div class="invalid-feedback" id="msgtanggal_do">
-                                                @if($errors->has('tanggal_do'))
-                                                {{ $errors->first('tanggal_do')}}
-                                                @endif
+                                            <div class="form-group row hide" id="do_detail_no">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
+                                                    <div class="invalid-feedback" id="msgno_do">
+                                                        @if($errors->has('no_do'))
+                                                        {{ $errors->first('no_do')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                        <div class="col-5">
-                                            <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
+                                            <div class="form-group row hide" id="do_detail_tgl">
+                                                <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
+                                                <div class="col-4">
+                                                    <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
+                                                    <div class="invalid-feedback" id="msgtanggal_do">
+                                                        @if($errors->has('tanggal_do'))
+                                                        {{ $errors->first('tanggal_do')}}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
+                                                <div class="col-5">
+                                                    <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center hide" id="dataproduk">
-                        <div class="col-11">
-                            <h4>Data Produk</h4>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="table-responsive">
-                                                <table class="table" style="text-align: center;" id="produktable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="7">
-                                                                <button type="button" class="btn btn-primary float-right" id="addrowproduk">
-                                                                    <i class="fas fa-plus"></i>
-                                                                    Produk
-                                                                </button>
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th width="5%">No</th>
-                                                            <th width="35%">Nama Paket</th>
-                                                            <th width="15%">Jumlah</th>
-                                                            <th width="20%">Harga</th>
-                                                            <th width="20%">Subtotal</th>
-                                                            <th width="5%">Aksi</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
-                                                                        <option value=""></option>
-                                                                    </select>
+                            <div class="row d-flex justify-content-center hide" id="dataproduk">
+                                <div class="col-11">
+                                    <h4>Data Produk</h4>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table" style="text-align: center;" id="produktable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="7">
+                                                                        <button type="button" class="btn btn-primary float-right" id="addrowproduk">
+                                                                            <i class="fas fa-plus"></i>
+                                                                            Produk
+                                                                        </button>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th width="5%">No</th>
+                                                                    <th width="35%">Nama Paket</th>
+                                                                    <th width="15%">Jumlah</th>
+                                                                    <th width="20%">Harga</th>
+                                                                    <th width="20%">Subtotal</th>
+                                                                    <th width="5%">Aksi</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                                                                <option value=""></option>
+                                                                            </select>
 
-                                                                </div>
-                                                                <div class="detail_produk" id="detail_produk0">
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group d-flex justify-content-center">
-                                                                    <div class="input-group">
-                                                                        <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah0" style="width:100%;">
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text" id="produk_satuan">pcs</span>
                                                                         </div>
-                                                                    </div>
-                                                                    <small id="produk_ketersediaan"></small>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group d-flex justify-content-center">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text">Rp</span>
-                                                                    </div>
-                                                                    <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" />
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group d-flex justify-content-center">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text">Rp</span>
-                                                                    </div>
-                                                                    <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th colspan="4" style="text-align:right;">Total Harga</th>
-                                                            <th id="totalhargaprd" class="align-right">Rp. 0</th>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center hide" id="datapart">
-                        <div class="col-11">
-                            <h4>Data Part</h4>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="table-responsive">
-                                                <table class="table" style="text-align: center;" id="parttable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="7">
-                                                                <button type="button" class="btn btn-primary float-right" id="addrowpart">
-                                                                    <i class="fas fa-plus"></i>
-                                                                    Part
-                                                                </button>
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th width="5%">No</th>
-                                                            <th width="35%">Nama Part</th>
-                                                            <th width="15%">Jumlah</th>
-                                                            <th width="20%">Harga</th>
-                                                            <th width="20%">Subtotal</th>
-                                                            <th width="5%">Aksi</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
-                                                                    </select>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group d-flex justify-content-center">
-                                                                    <div class="input-group">
-                                                                        <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah" style="width:100%;">
-                                                                        <div class="input-group-append">
-                                                                            <span class="input-group-text" id="part_satuan">pcs</span>
+                                                                        <div class="detail_produk" id="detail_produk0">
                                                                         </div>
-                                                                    </div>
-                                                                    <small id="part_ketersediaan"></small>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group d-flex justify-content-center">
-                                                                    <input type="number" class="form-control part_harga" id="part_harga" name="part_harga[]" style="width:100%;" />
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-group d-flex justify-content-center">
-                                                                    <input type="number" class="form-control part_subtotal" id="part_subtotal" name="part_subtotal[]" style="width:100%;" readonly />
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th colspan="4" style="text-align:right;">Total Harga</th>
-                                                            <th id="totalhargapart" class="align-right">Rp. 0</th>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+                                                                            <div class="input-group">
+                                                                                <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah0" style="width:100%;">
+                                                                                <div class="input-group-append">
+                                                                                    <span class="input-group-text" id="produk_satuan">pcs</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <small id="produk_ketersediaan"></small>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">Rp</span>
+                                                                            </div>
+                                                                            <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">Rp</span>
+                                                                            </div>
+                                                                            <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                                    <th id="totalhargaprd" class="align-right">Rp. 0</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-11">
-                            <span>
-                                <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
-                                    Batal
-                                </a>
-                            </span>
-                            <span class="float-right">
-                                <button type="submit" class="btn btn-info" id="btntambah" disabled="true">
-                                    Simpan
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                </form>
+                            <div class="row d-flex justify-content-center hide" id="datapart">
+                                <div class="col-11">
+                                    <h4>Data Part</h4>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table" style="text-align: center;" id="parttable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="7">
+                                                                        <button type="button" class="btn btn-primary float-right" id="addrowpart">
+                                                                            <i class="fas fa-plus"></i>
+                                                                            Part
+                                                                        </button>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th width="5%">No</th>
+                                                                    <th width="35%">Nama Part</th>
+                                                                    <th width="15%">Jumlah</th>
+                                                                    <th width="20%">Harga</th>
+                                                                    <th width="20%">Subtotal</th>
+                                                                    <th width="5%">Aksi</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id0" width="100%">
+                                                                            </select>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+                                                                            <div class="input-group">
+                                                                                <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah0" style="width:100%;">
+                                                                                <div class="input-group-append">
+                                                                                    <span class="input-group-text" id="part_satuan">pcs</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <small id="part_ketersediaan"></small>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">Rp</span>
+                                                                            </div>
+                                                                            <input type="text" class="form-control part_harga" name="part_harga[]" id="part_harga0" placeholder="Masukkan Harga" style="width:100%;" />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">Rp</span>
+                                                                            </div>
+                                                                            <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                                    <th id="totalhargapart" class="align-right">Rp. 0</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-11">
+                                    <span>
+                                        <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
+                                            Batal
+                                        </a>
+                                    </span>
+                                    <span class="float-right">
+                                        <button type="submit" class="btn btn-info" id="btntambah" disabled="true">
+                                            Simpan
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
 
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 
 @section('adminlte_js')
@@ -541,6 +581,7 @@
         $("#tanggal_po").attr("max", today);
         $("#tanggal_do").attr("min", today);
         select_data();
+        load_part();
         // $('#customer_id').on('keyup change', function() {
         //     if ($(this).val() != "") {
         //         $('#msgcustomer_id').text("");
@@ -624,17 +665,21 @@
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").addClass("hide");
                 $("#akn").removeClass("hide");
-                $(".os-content-arrange").text("hail");
+                $(".os-content-arrange").remove();
             } else if ($(this).val() == "spa") {
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
+                $(".os-content-arrange").remove();
             } else if ($(this).val() == "spb") {
-                $("#datapart").addClass("hide");
-                $("#dataproduk").removeClass("hide");
+                // $("#datapart").addClass("hide");
+                // $("#dataproduk").removeClass("hide");
+                $("#datapart").removeClass("hide");
+                $("#dataproduk").addClass("hide");
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
+                $(".os-content-arrange").remove();
             }
         });
 
@@ -1115,6 +1160,37 @@
             // });
         }
 
+        function load_part() {
+            $('.part_id').select2({
+                placeholder: "Pilih Part",
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'POST',
+                    url: '/api/gk/sel-m-spare',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+
+                        //console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            });
+        }
+
         function totalhargaprd() {
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
@@ -1366,25 +1442,30 @@
                 var j = c - 1;
                 $(el).find('.part_id').attr('name', 'part_id[' + j + ']');
                 $(el).find('.part_id').attr('id', 'part_id' + j);
-                $(el).find('input[id="part_jumlah"]').attr('name', 'part_jumlah[' + j + ']');
+                $(el).find('.part_jumlah').attr('name', 'part_jumlah[' + j + ']');
+                $(el).find('.part_jumlah').attr('id', 'part_jumlah' + j);
+                $(el).find('.part_harga').attr('name', 'part_harga[' + j + ']');
+                $(el).find('.part_harga').attr('id', 'part_harga' + j);
+                $(el).find('.part_subtotal').attr('name', 'part_subtotal[' + j + ']');
+                $(el).find('.part_subtotal').attr('id', 'part_subtotal' + j);
+                load_part();
             });
         }
 
         $('#addrowpart').on('click', function() {
             $('#parttable tbody tr:last').after(`
             <tr>
-                <td></td>
+                <td>1</td>
                 <td>
                     <div class="form-group">
-                        <select class="select2 form-control select-info custom-select part_id" name="part_id" id="part_id" width="100%">
-                            <option value=""></option>
+                        <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id0" width="100%">
                         </select>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group">
-                            <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah" style="width:100%;">
+                            <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah0" style="width:100%;">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="part_satuan">pcs</span>
                             </div>
@@ -1397,14 +1478,15 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Rp</span>
                         </div>
-                        <input type="text" class="form-control" name="part_harga" id="part_harga[]" placeholder="Masukkan Harga" />
-
-                        <input type="number" class="form-control part_harga" id="part_harga" name="part_harga[]" style="width:100%;" />
+                        <input type="text" class="form-control part_harga" name="part_harga[]" id="part_harga0" placeholder="Masukkan Harga" style="width:100%;" />
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control part_subtotal" id="part_subtotal" name="part_subtotal[]" style="width:100%;" />
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                     </div>
                 </td>
                 <td>
@@ -1418,19 +1500,29 @@
             var jumlah = $(this).closest('tr').find('.part_jumlah').val();
             var harga = $(this).closest('tr').find('.part_harga').val();
             var subtotal = $(this).closest('tr').find('.part_subtotal');
-
             if (jumlah != "" && harga != "") {
-                subtotal.val(jumlah * harga);
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargapart();
+            } else {
+                subtotal.val(formatmoney("0"));
                 totalhargapart();
             }
         });
 
         $("#parttable").on('keyup change', '.part_harga', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
             var jumlah = $(this).closest('tr').find('.part_jumlah').val();
             var harga = $(this).closest('tr').find('.part_harga').val();
             var subtotal = $(this).closest('tr').find('.part_subtotal');
+
             if (jumlah != "" && harga != "") {
-                subtotal.val(jumlah * harga);
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargapart();
+            } else {
+                subtotal.val(formatmoney("0"));
                 totalhargapart();
             }
         });

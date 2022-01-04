@@ -320,7 +320,111 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row d-flex justify-content-center" id="dataproduk">
+
+                                <div class="row d-flex justify-content-center" id="datapart">
+                                    <div class="col-11">
+                                        <h4>Data Part</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="table-responsive">
+                                                            <table class="table" style="text-align: center;" id="parttable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th colspan="7">
+                                                                            <button type="button" class="btn btn-primary float-right" id="addrowpart">
+                                                                                <i class="fas fa-plus"></i>
+                                                                                Part
+                                                                            </button>
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th width="5%">No</th>
+                                                                        <th width="35%">Nama Part</th>
+                                                                        <th width="15%">Jumlah</th>
+                                                                        <th width="20%">Harga</th>
+                                                                        <th width="20%">Subtotal</th>
+                                                                        <th width="5%">Aksi</th>
+                                                                    </tr>
+                                                                </thead>
+
+                                                                <tbody>
+                                                                    @if(isset($e->pesanan))
+                                                                    @if(isset($e->pesanan->detailpesananpart))
+                                                                    @foreach($e->pesanan->detailpesananpart as $f)
+                                                                    <tr>
+                                                                        <td>{{$loop->iteration}}</td>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="{{$loop->iteration-1}}" width="100%">
+                                                                                    <option value="{{$f->sparepart->id}}" selected>{{$f->sparepart->nama}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+                                                                                <div class="input-group">
+                                                                                    <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah{{$loop->iteration-1}}" style="width:100%;" value="{{$f->jumlah}}">
+                                                                                    <div class="input-group-append">
+                                                                                        <span class="input-group-text" id="part_satuan">pcs</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <small id="part_ketersediaan"></small>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Rp</span>
+                                                                                </div>
+                                                                                <input type="text" class="form-control part_harga" name="part_harga[]" id="part_harga{{$loop->iteration-1}}" placeholder="Masukkan Harga" style="width:100%;" value="{{number_format($f->harga,0,',','.')}}" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Rp</span>
+                                                                                </div>
+                                                                                <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal{{$loop->iteration-1}}" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->jumlah * $f->harga,0,',','.')}}" readonly />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                    @endif
+                                                                    @endif
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                                    <th id="totalhargapart" class="align-right">Rp.
+                                                                        @if(isset($e->pesanan))
+                                                                        @if(isset($e->pesanan->detailpesananpart))
+                                                                        <?php $x = 0;
+                                                                        foreach ($e->pesanan->detailpesananpart as $f) {
+                                                                            $x += $f->harga * $f->jumlah;
+                                                                        }
+                                                                        ?>
+                                                                        {{number_format($x,0,',','.')}}
+                                                                        @endif
+                                                                        @endif
+                                                                    </th>
+                                                                </tfoot>
+
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- <div class="row d-flex justify-content-center" id="dataproduk">
                                     <div class="col-10">
                                         <h4>Data Produk</h4>
                                         <div class="card">
@@ -348,7 +452,6 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-
                                                                     <?php $produkpenjualan = 0; ?>
                                                                     @if(isset($e->pesanan))
                                                                     @if(isset($e->pesanan->detailpesanan))
@@ -536,7 +639,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-10">
@@ -573,7 +676,8 @@
 
         function loop() {
             for (i = 0; i < 20; i++) {
-                select_data(i);
+                // select_data(i);
+                load_part(i);
             }
         }
 
@@ -626,6 +730,7 @@
                 $("#no_po").addClass('is-invalid');
             }
         });
+
         $('#tanggal_po').on('keyup', function() {
             if ($(this).val() != "") {
                 $("#msgtanggal_po").text("");
@@ -1058,6 +1163,181 @@
             }
 
         }
+
+
+
+
+
+
+
+
+        function load_part(i) {
+            $('#' + i).select2({
+                placeholder: "Pilih Part",
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'POST',
+                    url: '/api/gk/sel-m-spare',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+
+                        //console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            });
+        }
+
+        function totalhargapart() {
+            var totalharga = 0;
+            $('#parttable').find('tr .part_subtotal').each(function() {
+                var subtotal = replaceAll($(this).val(), '.', '');
+                totalharga = parseInt(totalharga) + parseInt(subtotal);
+                $("#totalhargapart").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
+            })
+        }
+
+        $("#parttable").on('keyup change', '.part_id', function() {
+            var jumlah = $(this).closest('tr').find('.part_jumlah').val();
+            var harga = $(this).closest('tr').find('.part_harga').val();
+            var subtotal = $(this).closest('tr').find('.part_subtotal');
+
+            if (jumlah != "" && harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargapart();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargapart();
+            }
+        });
+
+        $("#parttable").on('keyup change', '.part_jumlah', function() {
+            var jumlah = $(this).closest('tr').find('.part_jumlah').val();
+            var harga = $(this).closest('tr').find('.part_harga').val();
+            var subtotal = $(this).closest('tr').find('.part_subtotal');
+            if (jumlah != "" && harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargapart();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargapart();
+                variasi.removeClass('is-invalid');
+                ketstok.text('');
+            }
+        });
+
+
+        function numberRowsPart($t) {
+            var c = 0 - 2;
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.part_id').attr('name', 'part_id[' + j + ']');
+                $(el).find('.part_id').attr('id', j);
+                $(el).find('.part_jumlah').attr('name', 'part_jumlah[' + j + ']');
+                $(el).find('.part_jumlah').attr('id', 'part_jumlah' + j);
+                $(el).find('.part_harga').attr('name', 'part_harga[' + j + ']');
+                $(el).find('.part_harga').attr('id', 'part_harga' + j);
+                $(el).find('.part_subtotal').attr('name', 'part_subtotal[' + j + ']');
+                $(el).find('.part_subtotal').attr('id', 'part_subtotal' + j);
+                load_part($(el).find('.part_id').attr('id'));
+            });
+        }
+
+        function trparttable() {
+            var data = `<tr>
+                <td>1</td>
+                <td>
+                    <div class="form-group">
+                        <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id0" width="100%">
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <div class="input-group">
+                            <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah0" style="width:100%;">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="part_satuan">pcs</span>
+                            </div>
+                        </div>
+                        <small id="part_ketersediaan"></small>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control part_harga" name="part_harga[]" id="part_harga0" placeholder="Masukkan Harga" style="width:100%;" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
+                    </div>
+                </td>
+                <td>
+                    <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
+                </td>
+            </tr>`;
+            return data;
+        }
+
+        $("#parttable").on('keyup change', '.part_harga', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+            var jumlah = $(this).closest('tr').find('.part_jumlah').val();
+            var harga = $(this).closest('tr').find('.part_harga').val();
+            var subtotal = $(this).closest('tr').find('.part_subtotal');
+            if (jumlah != "" && harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                totalhargapart();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargapart();
+            }
+        });
+
+
+        $('#addrowpart').on('click', function() {
+            if ($('#parttable > tbody > tr').length <= 0) {
+                $('#parttable tbody').append(trparttable());
+                numberRowsPart($("#parttable"));
+            } else {
+                $('#parttable tbody tr:last').after(trparttable());
+                numberRowsPart($("#parttable"));
+            }
+        });
+
+        $('#parttable').on('click', '#removerowpart', function(e) {
+            $(this).closest('tr').remove();
+            numberRowsPart($("#parttable"));
+            totalhargapart();
+            if ($('#parttable > tbody > tr').length <= 0) {
+                $("#totalhargapart").text("0");
+            }
+        });
     });
 </script>
 @stop

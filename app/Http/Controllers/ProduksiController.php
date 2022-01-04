@@ -145,7 +145,7 @@ class ProduksiController extends Controller
         // return $a->id;
         if (isset($a->id)) {
 
-            foreach($request->data as $key => $value) {
+            foreach ($request->data as $key => $value) {
                 $b = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $key)->first();
                 if ($b->gdg_brg_jadi_id == $key) {
                     // return 'updated';
@@ -419,9 +419,9 @@ class ProduksiController extends Controller
 
     function getSOCek()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->where('log_id', 9)->get());
+        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->get());
+        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -531,9 +531,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->where('log_id', 9)->get());
+        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->get());
+        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -575,7 +575,7 @@ class ProduksiController extends Controller
             ->addColumn('status', function ($data) {
                 $cek = TFProduksi::where('pesanan_id', $data->id)->where('status_id', 1)->get()->count();
                 if ($cek == 0) {
-                    if($data->status_cek == 4) {
+                    if ($data->status_cek == 4) {
                         return '<span class="badge badge-success">Produk Sudah disiapkan</span>';
                     } else {
                         return '<span class="badge badge-danger">Produk belum disiapkan</span>';
@@ -596,7 +596,7 @@ class ProduksiController extends Controller
                 $x = explode('/', $data->so);
                 $cek = TFProduksi::where('pesanan_id', $data->id)->where('status_id', 1)->get()->count();
                 if ($cek == 0) {
-                    if($data->status_cek == 4) {
+                    if ($data->status_cek == 4) {
                         for ($i = 1; $i < count($x); $i++) {
                             if ($x[1] == 'EKAT') {
                                 return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
@@ -735,18 +735,17 @@ class ProduksiController extends Controller
                     $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
                 })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->get();
                 if (count($cek) > 0) {
-                    $datacek = NoseriTGbj::whereHas('detail', function($q) use($data) {
+                    $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($data) {
                         $q->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id);
                     })->whereHas('detail.header', function ($q) use ($data) {
                         $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
                     })
-                    ->get()->count();
+                        ->get()->count();
 
                     $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($data) {
                         $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
                     })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->select('qty')->first();
                     if ($cek1->qty == $datacek) {
-
                     } else {
                         $jml_now = $cek1->qty - $datacek;
                         // return $datacek;
@@ -781,18 +780,17 @@ class ProduksiController extends Controller
                     $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
                 })->where('gdg_brg_jadi_id', $d->gudang_barang_jadi_id)->get();
                 if (count($cek) > 0) {
-                    $datacek = NoseriTGbj::whereHas('detail', function($q) use($d) {
+                    $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
                         $q->where('gdg_brg_jadi_id', $d->gudang_barang_jadi_id);
                     })->whereHas('detail.header', function ($q) use ($d) {
                         $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
                     })
-                    ->get()->count();
+                        ->get()->count();
 
                     $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
                         $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
                     })->where('gdg_brg_jadi_id', $d->gudang_barang_jadi_id)->select('qty')->first();
                     if ($cek1->qty == $datacek) {
-
                     } else {
                         return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '">';
                     }
@@ -868,7 +866,7 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('action', function ($data) {
-                return '<a data-toggle="modal" data-target="#serimodal" class="serimodal" data-attr="" data-so="'.$data->detailpesanan->pesanan->id.'" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
+                return '<a data-toggle="modal" data-target="#serimodal" class="serimodal" data-attr="" data-so="' . $data->detailpesanan->pesanan->id . '" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
                                 <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan-edit"><i
                                 class="fas fa-qrcode"></i> Scan Produk</button>
                                 </a>';
@@ -1295,7 +1293,7 @@ class ProduksiController extends Controller
 
     function change_jadwal()
     {
-        $data = JadwalPerakitan::Has('log', function($q) {
+        $data = JadwalPerakitan::Has('log', function ($q) {
             // $q->orderBy('created_at');
         })->get()->sortByDesc('log.created_at');
 
@@ -1517,8 +1515,8 @@ class ProduksiController extends Controller
             'produk' => $gdg->produk->nama . ' ' . $gdg->nama,
             'kategori' => $gdg->produk->KelompokProduk->nama,
             'jumlah' => $jadwal->jumlah . ' ' . $gdg->satuan->nama,
-            'start' => Carbon::parse($jadwal->tanggal_mulai)->isoFormat('D MMM YYYY'), 
-            'end' => Carbon::parse($jadwal->tanggal_selesai)->isoFormat('D MMM YYYY'), 
+            'start' => Carbon::parse($jadwal->tanggal_mulai)->isoFormat('D MMM YYYY'),
+            'end' => Carbon::parse($jadwal->tanggal_selesai)->isoFormat('D MMM YYYY'),
         ]);
     }
 
@@ -1775,37 +1773,38 @@ class ProduksiController extends Controller
     }
 
     // versi 2
-    function getCountProdukBySO() {
+    function getCountProdukBySO()
+    {
         $data = GudangBarangJadi::Has('DetailPesananProduk.DetailPesanan.Pesanan')->get();
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('produk', function($data) {
+            ->addColumn('produk', function ($data) {
                 if (!empty($data->nama)) {
                     return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
                 } else {
                     return $data->Produk->nama;
                 }
             })
-            ->addColumn('jumlah', function($d) {
+            ->addColumn('jumlah', function ($d) {
                 // get jumlah produk semua so
-                $dd = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($d) {
+                $dd = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($d) {
                     $q->whereIn('gudang_barang_jadi_id', [$d->id]);
                 })->select(DB::raw('sum(jumlah) as jumlah'))->get();
                 // get jumlah yang sudah dirakit
-                $rakit = JadwalRakitNoseri::whereHas('header', function($q) use($d) {
+                $rakit = JadwalRakitNoseri::whereHas('header', function ($q) use ($d) {
                     $q->whereIn('produk_id', [$d->id]);
                 })->select(DB::raw('count(jadwal_id) as jumlah'))->get();
-                return 'Jumlah '.$dd.' Rakit '.$rakit;
-
+                return 'Jumlah ' . $dd . ' Rakit ' . $rakit;
             })
-            ->addColumn('aksi', function($d) {
+            ->addColumn('aksi', function ($d) {
                 return 'Aksi';
             })
             ->rawColumns(['aksi', 'jumlah'])
             ->make(true);
     }
 
-    function detailCountProdukBySO($id) {
+    function detailCountProdukBySO($id)
+    {
         $Ekatalog = collect(Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
         })->has('Ekatalog')->whereNotNull('no_po')->get());
@@ -1818,14 +1817,14 @@ class ProduksiController extends Controller
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('so', function($d) {
+            ->addColumn('so', function ($d) {
                 if (empty($d->so)) {
                     return '-';
                 } else {
                     return $d->so;
                 }
             })
-            ->addColumn('batas_max', function($d) {
+            ->addColumn('batas_max', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
                     return $d->Ekatalog->tgl_kontrak;
                 } else {
