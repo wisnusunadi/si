@@ -6,6 +6,9 @@ use App\Models\Logistik;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
+
+use App\Models\DetailLogistikPart;
+use App\Models\DetailPesananPart;
 use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
 use App\Models\Spb;
@@ -18,34 +21,52 @@ class AfterSalesController extends Controller
     public function get_data_so()
     {
         // $data = Logistik::all();
-        $data = DetailPesanan::whereHas('DetailPesananProduk.DetailLogistik.Logistik', function ($q) {
+
+        $datas = DetailPesanan::whereHas('DetailPesananProduk.DetailLogistik.Logistik', function ($q) {
             $q->whereIn('status_id', ['10']);
         })->orderBy('id', 'desc')->get();
+
+        $datas1 = DetailPesananPart::whereHas('DetailLogistikPart.Logistik', function ($q) {
+            $q->whereIn('status_id', ['10']);
+        })->orderBy('id', 'desc')->get();
+
+        $data = $datas->merge($datas1);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->Pesanan->so;
             })
             ->addColumn('nama_produk', function ($data) {
-                $id = array();
-                $detail_produk = DetailPesananProduk::where('detail_pesanan_id', $data->id)->get();
-                foreach ($detail_produk as $d) {
-
-                    if ($d->gudangbarangjadi->nama == '') {
-                        $id[] = $d->gudangbarangjadi->produk->nama;
-                    } else {
-                        $id[]  = $d->gudangbarangjadi->nama;
+                if (isset($data->DetailPesananProduk)) {
+                    $id = array();
+                    $detail_produk = DetailPesananProduk::where('detail_pesanan_id', $data->id)->get();
+                    foreach ($detail_produk as $d) {
+                        if ($d->gudangbarangjadi->nama == '') {
+                            $id[] = $d->gudangbarangjadi->produk->nama;
+                        } else {
+                            $id[]  = $d->gudangbarangjadi->nama;
+                        }
                     }
+                    return implode(',', $id);
+                } else {
+                    return $data->Sparepart->nama;
                 }
-                return implode(',', $id);
             })
             ->addColumn('tgl_kirim', function ($data) {
                 $id = $data->id;
-                $l = Logistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
-                    $q->where('detail_pesanan_id', $id);
-                })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
+                if (isset($data->DetailPesananProduk)) {
+                    $l = Logistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
+                        $q->where('detail_pesanan_id', $id);
+                    })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
 
-                return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
+                    return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
+                } else {
+                    $l = Logistik::whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                        $q->where('id', $id);
+                    })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
+
+                    return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
+                }
                 // $arr = array();
                 // foreach ($l as $k) {
                 //     $arr[] = Carbon::createFromFormat('Y-m-d', $k->tgl_kirim)->format('d-m-Y');
@@ -94,18 +115,22 @@ class AfterSalesController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                $id = $data->id;
-                $jumlahkirim = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
-                    $q->where('id', $id);
-                })->count();
-                $jumlahseri = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
-                    $q->where('detail_pesanan_id', $id);
-                })->count();
+                if (isset($data->DetailPesananProduk)) {
+                    $id = $data->id;
+                    $jumlahkirim = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                        $q->where('id', $id);
+                    })->count();
+                    $jumlahseri = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                        $q->where('detail_pesanan_id', $id);
+                    })->count();
 
-                if ($jumlahkirim == $jumlahseri) {
-                    return '<span class="badge green-text">Selesai</span>';
-                } else if ($jumlahkirim < $jumlahseri) {
-                    return '<span class="badge yellow-text">Terkirim Sebagian</span>';
+                    if ($jumlahkirim == $jumlahseri) {
+                        return '<span class="badge green-text">Selesai</span>';
+                    } else if ($jumlahkirim < $jumlahseri) {
+                        return '<span class="badge yellow-text">Terkirim Sebagian</span>';
+                    }
+                } else {
+                    return $data->jumlah;
                 }
                 // if ($data->status_id  == "10") {
                 //     return '<span class="badge blue-text">' . $data->State->nama . '</span>';
@@ -220,22 +245,38 @@ class AfterSalesController extends Controller
 
     public function get_detail_so($id, $jenis)
     {
-        $d = DetailPesanan::find($id);
-
+        $d = "";
         $status = "";
+        if ($jenis != "SPB") {
+            $d = DetailPesanan::find($id);
 
-        $jumlahkirim = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
-            $q->where('id', $id);
-        })->count();
+            $jumlahkirim = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->count();
 
-        $jumlahseri = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
-            $q->where('detail_pesanan_id', $id);
-        })->count();
+            $jumlahseri = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                $q->where('detail_pesanan_id', $id);
+            })->count();
 
-        if ($jumlahkirim == $jumlahseri) {
-            $status = '<span class="badge green-text">Selesai</span>';
-        } else if ($jumlahkirim < $jumlahseri) {
-            $status = '<span class="badge yellow-text">Terkirim Sebagian</span>';
+            if ($jumlahkirim == $jumlahseri) {
+                $status = '<span class="badge green-text">Selesai</span>';
+            } else if ($jumlahkirim < $jumlahseri) {
+                $status = '<span class="badge yellow-text">Terkirim Sebagian</span>';
+            }
+        } else {
+            $d = DetailPesananPart::find($id);
+            $jumlahkirim = 0;
+            if (isset($d->DetailLogistikPart)) {
+                $jumlahkirim = $d->jumlah;
+            } else {
+                $jumlahkirim = 0;
+            }
+
+            if ($jumlahkirim == $d->jumlah) {
+                $status = '<span class="badge green-text">Selesai</span>';
+            } else if ($jumlahkirim < $d->jumlah) {
+                $status = '<span class="badge yellow-text">Terkirim Sebagian</span>';
+            }
         }
 
         return view('page.as.so.detail', ['id' => $id, 'jenis' => $jenis, 'd' => $d, 'status' => $status]);
@@ -243,11 +284,21 @@ class AfterSalesController extends Controller
 
     public function get_detail_pengiriman($id)
     {
-        $data = DetailLogistik::whereHas('DetailPesananProduk', function ($q) use ($id) {
-            $q->where('detail_pesanan_id', $id);
-        })->whereHas('Logistik', function ($q) {
-            $q->whereIn('status_id', ['10']);
-        })->orderBy('id', 'desc')->get();
+        $data = "";
+        $dp = DetailPesanan::find($id);
+        if ($dp) {
+            $data = DetailLogistik::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                $q->where('detail_pesanan_id', $id);
+            })->whereHas('Logistik', function ($q) {
+                $q->whereIn('status_id', ['10']);
+            })->orderBy('id', 'desc')->get();
+        } else {
+            $data = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->whereHas('Logistik', function ($q) {
+                $q->whereIn('status_id', ['10']);
+            })->orderBy('id', 'desc')->get();
+        }
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -277,10 +328,18 @@ class AfterSalesController extends Controller
                 }
             })
             ->addColumn('nama_produk', function ($data) {
-                return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                if (isset($data->DetailPesananProduk)) {
+                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                } else {
+                    return $data->DetailPesananPart->Sparepart->nama;
+                }
             })
             ->addColumn('jumlah', function ($data) {
-                $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+                if (isset($data->DetailPesananProduk)) {
+                    $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+                } else {
+                    $c = $data->DetailPesananPart->jumlah;
+                }
                 return $c;
             })
             ->addColumn('button', function ($data) {

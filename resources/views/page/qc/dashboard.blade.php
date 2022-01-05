@@ -81,8 +81,18 @@
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
+
+
     @media screen and (max-width: 1440px) {
-        #pengirimantable {
+        #pengujianterbarutable {
+            font-size: 12px;
+        }
+
+        #belumdiujitable {
+            font-size: 12px;
+        }
+
+        #lewatbatasujitable {
             font-size: 12px;
         }
 
@@ -92,6 +102,40 @@
 
         #detailmodal {
             font-size: 12px;
+        }
+
+        .so-title {
+            font-size: 12px;
+        }
+
+        section {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (min-width: 1440px) {
+        #pengujianterbarutable {
+            font-size: 14px;
+        }
+
+        #belumdiujitable {
+            font-size: 14px;
+        }
+
+        #lewatbatasujitable {
+            font-size: 14px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        section {
+            font-size: 14px;
         }
     }
 </style>

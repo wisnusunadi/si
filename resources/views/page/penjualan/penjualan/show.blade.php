@@ -1275,10 +1275,16 @@
 
         function detailtabel_ekatalog(id) {
             var dt = $('#detailtabel').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
                     'url': '/api/ekatalog/paket/detail/' + id,
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -1362,10 +1368,16 @@
 
         function detailtabel_spa(id) {
             $('#detailtabel_spa').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
                     'url': '/api/spa/paket/detail/' + id,
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -1438,10 +1450,16 @@
 
         function detailtabel_spb(id) {
             $('#detailtabel_spb').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
                     'url': '/api/spb/paket/detail/' + id,
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'

@@ -11,8 +11,13 @@ class Sparepart extends Model
 
     protected $table = 'm_sparepart';
 
-    function kategori() {
+    function kategori()
+    {
         return $this->belongsTo(KelompokProduk::class, 'kelompok_produk_id');
     }
 
+    public function DetailPesananPart()
+    {
+        return $this->hasMany(DetailPesananPart::class, 'm_sparepart_id');
+    }
 }

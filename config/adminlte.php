@@ -1381,7 +1381,7 @@ return [
                     'text' => 'Master Pengiriman',
                     'icon' => 'far fa-circle',
                     'url' => '/ppic/master_pengiriman/show',
-                    'auth' => [2],
+                    'auth' => [2, 26],
                 ],
                 [
                     'text' => 'Perencanaan',

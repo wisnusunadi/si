@@ -86,7 +86,15 @@
     }
 
     @media screen and (max-width: 1440px) {
-        #pengirimantable {
+        #pengirimanterbarutable {
+            font-size: 12px;
+        }
+
+        #belumdikirimtable {
+            font-size: 12px;
+        }
+
+        #lewatbataskirimtable {
             font-size: 12px;
         }
 
@@ -96,6 +104,41 @@
 
         #detailmodal {
             font-size: 12px;
+        }
+
+        .so-title {
+            font-size: 12px;
+        }
+
+        section {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (min-width: 1440px) {
+        #pengirimanterbarutable {
+            font-size: 14px;
+        }
+
+        #belumdikirimtable {
+            font-size: 14px;
+        }
+
+        #lewatbataskirimtable {
+            font-size: 14px;
+        }
+
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        section {
+            font-size: 14px;
         }
     }
 </style>

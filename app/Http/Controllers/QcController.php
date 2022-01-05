@@ -306,15 +306,9 @@ class QcController extends Controller
                 } else {
                     $x =  'spb';
                 }
-                return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a href="' . route('qc.so.detail', [$data->id, $x]) . '">
-                    <button class="dropdown-item" type="button">
+                return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '">
                         <i class="fas fa-search"></i>
-                        Detail
-                    </button>
-                </a>
-            </div>';
+                </a>';
             })
             ->rawColumns(['button', 'status', 'batas_uji'])
             ->make(true);

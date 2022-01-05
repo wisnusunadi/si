@@ -26,6 +26,17 @@ class Pesanan extends Model
     {
         return $this->hasMany(DetailPesanan::class);
     }
+
+    public function DetailPesananPart()
+    {
+        return $this->hasMany(DetailPesananPart::class);
+    }
+
+    public function DetailLogistikPart()
+    {
+        return $this->hasMany(DetailLogistikPart::class);
+    }
+
     function TFProduksi()
     {
         return $this->hasOne(TFProduksi::class);
@@ -95,8 +106,8 @@ class Pesanan extends Model
     function cekJumlahkirim()
     {
         $id = $this->id;
-        $jumlah = NoseriTGbj::whereHas('detail.header.pesanan', function($q) use($id) {
-            $q->where('id', $id)->where('status_id',2);
+        $jumlah = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($id) {
+            $q->where('id', $id)->where('status_id', 2);
         })->count();
         return $jumlah;
     }
@@ -117,6 +128,30 @@ class Pesanan extends Model
         $jumlah = 0;
         foreach ($detail as $d) {
             $jumlah += $d->qty;
+        }
+        return $jumlah;
+    }
+
+    public function getJumlahPesananPart()
+    {
+        $id = $this->id;
+        $s = DetailPesananPart::where('pesanan_id', $id)->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            $jumlah = $jumlah + $i->jumlah;
+        }
+        return $jumlah;
+    }
+
+    public function getJumlahKirimPart()
+    {
+        $id = $this->id;
+        $s = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            $jumlah = $jumlah + $i->DetailPesananPart->jumlah;
         }
         return $jumlah;
     }

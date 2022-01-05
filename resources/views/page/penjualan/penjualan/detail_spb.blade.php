@@ -83,7 +83,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>
-                            @if(isset($data->Pesanan))
+                            <!-- @if(isset($data->Pesanan))
                             @foreach($data->pesanan->detailpesanan as $e)
                             <div class="card removeshadow">
                                 <div class="card-body">
@@ -136,6 +136,43 @@
                             </div>
                             @endforeach
 
+                            <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
+                            @else
+                            <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
+                            @endif -->
+                            <?php $totalharga = 0; ?>
+                            @if(isset($data->Pesanan))
+                            <div class="card removeshadow">
+                                <div class="card-body">
+                                    <h6>Part</h6>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="list-group">
+                                                @isset($data->Pesanan->DetailPesananPart)
+                                                @foreach($data->Pesanan->DetailPesananPart as $l)
+                                                <li class="list-group-item">
+                                                    <div class="row">
+                                                        <div class="col-5">
+                                                            {{$l->Sparepart->nama}}
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <h5> <span class="badge badge-light"><i class="fas fa-shopping-cart"></i> : {{$l->jumlah}}
+                                                                </span> <span class="badge badge-dark"> <i class="fas fa-truck"></i> : @if(isset($l->DetailLogistikPart->id)) {{$l->jumlah}} @else 0 @endif</span></h5>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <span style="text-align: right;">@currency($l->jumlah * $l->harga)</span>
+                                                        </div>
+
+                                                    </div>
+                                                </li>
+                                                <?php $totalharga = $totalharga + ($l->harga * $l->jumlah); ?>
+                                                @endforeach
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
                             @else
                             <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
