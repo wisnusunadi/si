@@ -8,10 +8,11 @@ import axios from 'axios'
 // global library
 import "jquery/dist/jquery"
 import "datatables.net/js/jquery.dataTables.min"
-import "datatables.net-bulma/js/dataTables.bulma"
+import "datatables-bulma/js/dataTables.bulma"
 
 import VueSweetalert2 from "vue-sweetalert2"
 
+import "datatables-bulma/css/dataTables.bulma.css"
 import 'sweetalert2/dist/sweetalert2.min.css'
 
 const api_token = document.querySelector('meta[name="api-token"]').content
