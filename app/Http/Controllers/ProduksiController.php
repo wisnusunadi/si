@@ -1344,7 +1344,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [12, 13])->OrwhereNull('status_tf')->get();
+        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12, 13])->OrwhereNull('status_tf')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1642,14 +1642,14 @@ class ProduksiController extends Controller
     {
         // $detail = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->where('produk_id', $id)->get();
         $detail = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
-                        ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-                        ->groupBy('jadwal_rakit_noseri.jadwal_id')
-                        ->groupBy('jadwal_rakit_noseri.date_in')
-                        ->groupBy('jadwal_rakit_noseri.waktu_tf')
-                        ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-                        ->where('jadwal_perakitan.status_tf', 14)
-                        ->where('jadwal_perakitan.produk_id', $id)
-                        ->get();
+            ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+            ->groupBy('jadwal_rakit_noseri.jadwal_id')
+            ->groupBy('jadwal_rakit_noseri.date_in')
+            ->groupBy('jadwal_rakit_noseri.waktu_tf')
+            ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
+            ->where('jadwal_perakitan.status_tf', 14)
+            ->where('jadwal_perakitan.produk_id', $id)
+            ->get();
         $a = [];
         foreach ($detail as $d) {
             $a[] = [
