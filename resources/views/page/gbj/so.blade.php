@@ -228,6 +228,7 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function () {
+        $('#head-cb-so').prop('checked', false);
         $('.addProduk').click(function (e) {
             $('#addProdukModal').modal('show');
         });

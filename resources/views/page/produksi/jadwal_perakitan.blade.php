@@ -269,7 +269,7 @@
                                     end: item.tanggal_selesai +
                                         'T23:59:59',
                                     title: item.produk.produk.nama +
-                                        '-' + item.produk.nama,
+                                        ' ' + item.produk.nama,
                                     backgroundColor: item.warna,
                                     borderColor: item.warna,
                                 })

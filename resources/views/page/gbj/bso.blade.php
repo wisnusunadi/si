@@ -433,6 +433,11 @@ var jml = '';
     const prd1 = {};
     var t = 0;
     $(document).on('click', '#simpan', function(e) {
+        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function() {
+            return $(this).val();
+        }).get();
+        console.log(a);
+        console.log(a.length);
         $('.cb-child-prd').each(function() {
             if($(this).is(":checked")) {
                 if (!prd1[$(this).val()])
@@ -442,17 +447,15 @@ var jml = '';
             }
         })
 
-        const ids = [];
         $('.cb-child').each(function() {
             if($(this).is(":checked")) {
-                if ($('.cb-child').filter(':checked').length > jml) {
+                if (a.length > jml) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
                         text: 'Batas Maksimal '+jml+' Barang!',
                     })
                 } else {
-                    ids.push($(this).val());
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -465,7 +468,7 @@ var jml = '';
             }
 
         })
-        prd1[prd].noseri = ids;
+        prd1[prd].noseri = a;
         console.log(prd1);
     })
 
@@ -546,7 +549,7 @@ var jml = '';
                             console.log(res);
                         }
                     })
-                    location.reload();
+                    // location.reload();
                 }
             })
 

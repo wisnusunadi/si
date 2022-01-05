@@ -46,7 +46,7 @@
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                                 aria-controls="home" aria-selected="true">Kalender</a>
                             <a id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                                aria-selected="false">Produk</a>
+                                aria-selected="false">Tabel</a>
                         </div>
                     </nav>
                 </div><!-- /.col -->
@@ -134,7 +134,7 @@
                                 events.push({
                                     start: item.tanggal_mulai,
                                     end: item.tanggal_selesai + 'T23:59:59',
-                                    title: item.produk.produk.nama + '-' + item.produk.nama,
+                                    title: item.produk.produk.nama + ' ' + item.produk.nama,
                                     backgroundColor: item.warna,
                                     borderColor: item.warna,
                                 })

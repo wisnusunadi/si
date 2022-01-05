@@ -1226,7 +1226,7 @@ class ProduksiController extends Controller
                 return '-';
             })
             ->addColumn('produk', function ($d) {
-                return $d->produk->produk->nama . '-' . $d->produk->nama;
+                return $d->produk->produk->nama . ' ' . $d->produk->nama;
             })
             ->addColumn('jml', function ($d) {
                 return $d->jumlah . ' ' . $d->produk->satuan->nama;
@@ -1321,7 +1321,7 @@ class ProduksiController extends Controller
             })
             ->addColumn('produk', function ($d) {
                 if (isset($d->produk_id)) {
-                    return $d->produk->produk->nama . '-' . $d->produk->nama;
+                    return $d->produk->produk->nama . ' ' . $d->produk->nama;
                 }
             })
             ->addColumn('jml', function ($d) {
@@ -1463,11 +1463,11 @@ class ProduksiController extends Controller
         $d = JadwalPerakitan::find($id);
         return response()->json([
             'no_bppb' => '-',
-            'produk' => $d->produk->produk->nama . '-' . $d->produk->nama,
+            'produk' => $d->produk->produk->nama . ' ' . $d->produk->nama,
             'kategori' => $d->produk->produk->KelompokProduk->nama,
             'jml' => $d->jumlah . ' ' . $d->produk->satuan->nama,
-            'start' => date('d-m-Y', strtotime($d->tanggal_mulai)),
-            'end' => date('d-m-Y', strtotime($d->tanggal_selesai)),
+            'start' => Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY'),
+            'end' => Carbon::parse($d->tanggal_sel)->isoFormat('D MMM YYYY'),
         ]);
     }
 
@@ -1640,16 +1640,26 @@ class ProduksiController extends Controller
 
     function header_his_rakit($id)
     {
-        $detail = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->where('produk_id', $id)->get();
+        // $detail = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->where('produk_id', $id)->get();
+        $detail = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
+                        ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+                        ->groupBy('jadwal_rakit_noseri.jadwal_id')
+                        ->groupBy('jadwal_rakit_noseri.date_in')
+                        ->groupBy('jadwal_rakit_noseri.waktu_tf')
+                        ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
+                        ->where('jadwal_perakitan.status_tf', 14)
+                        ->where('jadwal_perakitan.produk_id', $id)
+                        ->get();
         $a = [];
         foreach ($detail as $d) {
             $a[] = [
-                'day_rakit' => Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->format('l, d-m-Y'),
-                'time_rakit' => Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->format('H:i'),
-                'day_kirim' => Carbon::createFromFormat('Y-m-d H:i:s', $d->updated_at)->format('l, d-m-Y'),
-                'time_kirim' => Carbon::createFromFormat('Y-m-d H:i:s', $d->updated_at)->format('H:i'),
+                'day_rakit' => Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y'),
+                'time_rakit' => Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i'),
+                'day_kirim' => Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y'),
+                'time_kirim' => Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i'),
                 'bppb' => '-',
-                'produk' => $d->produk->produk->nama . ' ' . $d->produk->nama,
+                // 'produk' => $d->produk->produk->nama . ' ' . $d->produk->nama,
+                'produk' => $d->produk_id,
                 'jml' => $d->jumlah . ' Unit',
             ];
         }
@@ -1745,6 +1755,7 @@ class ProduksiController extends Controller
     // gbj
     function terimaseri(Request $request)
     {
+        // dd($request->all());
         $seri = NoseriTGbj::whereIn('id', $request->seri)->get()->toArray();
         $i = 0;
         foreach ($seri as $s) {

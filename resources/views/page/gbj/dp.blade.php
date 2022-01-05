@@ -65,6 +65,32 @@
         </div>
     </div>
 </div>
+<div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-seri">
+                    <thead>
+                        <tr>
+                            <th>No Seri</th>
+                            <th>Layout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal Ubah Layout-->
 <div class="modal fade" id="ubah-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -93,32 +119,7 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-seri">
-                    <thead>
-                        <tr>
-                            <th>No Seri</th>
-                            <th>Layout</th>
-                        </tr>
-                    </thead>
-                    <tbody>
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 @stop
 
 @section('adminlte_js')
@@ -273,15 +274,19 @@
     }
 
     // submit
+    $('#form-terima').on('submit', function(e) {
+        console.log('test');
+    })
     $(document).on('click', '#simpanseri', function () {
-        const ids = [];
-        const lay = [];
-        $('.cb-child').each(function () {
-            if ($(this).is(":checked")) {
-                ids.push($(this).val());
-                lay.push($(this).parent().next().next().children().val());
-            }
-        })
+        let no_seri = [];
+        let layout = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            no_seri.push($(elm).val());
+            layout.push($(elm).parent().next().next().children().val());
+        });
+
         Swal.fire({
             title: 'Apakah anda yakin?',
             text: "Produk yang anda terima akan diubah layoutnya",
@@ -298,8 +303,8 @@
                     data: {
                         "_token": "{{ csrf_token() }}",
                         userid: $('#userid').val(),
-                        seri: ids,
-                        layout: lay,
+                        seri: no_seri,
+                        layout: layout,
                     },
                     success: function (res) {
                         console.log(res);
@@ -310,7 +315,6 @@
                                 'success'
                             )
                             $('.terima-produk').modal('hide');
-                            // $('.scan-produk').DataTable().ajax.reload();
                             location.reload();
                         } else {
                             Swal.fire(
