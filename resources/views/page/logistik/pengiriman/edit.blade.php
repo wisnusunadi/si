@@ -21,9 +21,9 @@
                                         <div><b class="smtxt">{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}</b></div>
                                         <div><b class="smtxt">{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}</b></div>
                                         <div><b class="smtxt">-</b></div>
-                                        @elseif(isset($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb))
-                                        <div><b class="smtxt">{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}</b></div>
-                                        <div><b class="smtxt">{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}</b></div>
+                                        @elseif(isset($data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb))
+                                        <div><b class="smtxt">{{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama}}</b></div>
+                                        <div><b class="smtxt">{{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat}}</b></div>
                                         <div><b class="smtxt">-</b></div>
                                         @endif
                                     </div>
@@ -31,9 +31,19 @@
 
                                     <div class="col-3">
                                         <div><small class="text-muted">No SO</small></div>
-                                        <div><b class="smtxt">{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</b></div>
+                                        <div><b class="smtxt">
+                                                @if($jenis != "SPB")
+                                                {{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                                @else
+                                                {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so}}
+                                                @endif</b></div>
                                         <div><small class="text-muted">No PO</small></div>
-                                        <div><b class="smtxt">{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</b></div>
+                                        <div><b class="smtxt">
+                                                @if($jenis != "SPB")
+                                                {{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                                @else
+                                                {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
+                                                @endif</b></div>
                                     </div>
 
                                     <div class="col-2">

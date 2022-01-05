@@ -488,7 +488,7 @@ class LogistikController extends Controller
         $dataspb = Pesanan::has('DetailPesananPart')->get();
         foreach ($dataspb as $d) {
             if ($value == 'semua') {
-                if ($d->getJumlahPesananPart() > $d->getJumlahKirim() || $d->getJumlahKirim() == "0") {
+                if ($d->getJumlahPesananPart() > $d->getJumlahKirimPart() || $d->getJumlahKirimPart() == "0") {
                     $array_ids[] = $d->id;
                 }
             } else if ($x == ['sebagian_kirim', 'sudah_kirim']) {
@@ -1288,7 +1288,7 @@ class LogistikController extends Controller
             ->addColumn('button', function ($data) {
                 $string = "";
                 $name = "";
-                if ($data->DetailLogistik) {
+                if (isset($data->DetailLogistik)) {
                     $names = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     $name = $names[1];
                 } else {
@@ -1303,7 +1303,7 @@ class LogistikController extends Controller
                         </button>
                     </a>';
                 if (auth()->user()->divisi_id == "15") {
-                    $string .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="' . route('logistik.pengiriman.edit', [$data->id]) . '" data-id="' . $data->id . '">
+                    $string .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-href="' . route('logistik.pengiriman.edit', [$data->id, $name]) . '" data-id="' . $data->id . '" data-attr="' . $name . '">
                         <button class="dropdown-item" type="button">
                             <i class="fas fa-pencil-alt"></i>
                             Edit
@@ -1782,7 +1782,6 @@ class LogistikController extends Controller
 
     public function get_pengiriman_detail_data($id, $jenis)
     {
-        $l = [];
         $l = Logistik::find($id);
         return view('page.logistik.pengiriman.detail', ['id' => $id, 'l' => $l, 'jenis' => $jenis]);
     }
@@ -1845,10 +1844,10 @@ class LogistikController extends Controller
     }
 
     //Edit
-    public function update_modal_surat_jalan($id)
+    public function update_modal_surat_jalan($id, $jenis)
     {
         $data = Logistik::find($id);
-        return view('page.logistik.pengiriman.edit', ['id' => $id, 'data' => $data]);
+        return view('page.logistik.pengiriman.edit', ['id' => $id, 'data' => $data, 'jenis' => $jenis]);
     }
 
     public function update_pengiriman(Request $request, $id)
@@ -2607,7 +2606,7 @@ class LogistikController extends Controller
             $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
-            $prt = DetailLogistik::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
+            $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
             $s = $prd->merge($prt);
@@ -2615,7 +2614,7 @@ class LogistikController extends Controller
             $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
-            $prt = DetailLogistik::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
+            $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
             $s = $prd->merge($prt);
@@ -2652,7 +2651,7 @@ class LogistikController extends Controller
                         return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                     }
                 } else {
-                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                    return $data->DetailPesananPart->Pesanan->Spb->Customer->nama;
                 }
             })
             ->addColumn('alamat', function ($data) {
@@ -2664,7 +2663,7 @@ class LogistikController extends Controller
                         return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
                     }
                 } else {
-                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
+                    return $data->DetailPesananPart->Pesanan->Spb->Customer->alamat;
                 }
             })
             ->addColumn('provinsi', function ($data) {
@@ -2676,7 +2675,7 @@ class LogistikController extends Controller
                         return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
                     }
                 } else {
-                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
+                    return $data->DetailPesananPart->Pesanan->Spb->Customer->Provinsi->nama;
                 }
             })
             ->addColumn('telp', function ($data) {
@@ -2688,7 +2687,7 @@ class LogistikController extends Controller
                         return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp;
                     }
                 } else {
-                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp;
+                    return $data->DetailPesananPart->Pesanan->Spb->Customer->telp;
                 }
             })
             ->addColumn('ekspedisi', function ($data) {

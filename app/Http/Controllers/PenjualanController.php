@@ -836,23 +836,25 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('no_so', function ($data) {
-                    if (isset($data->DetailLogistik->DetailPesananProduk)) {
+                    if (isset($data->DetailLogistik)) {
                         return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                    } else {
+                        return $data->DetailLogistikPart->DetailPesananPart->Pesanan->so;
                     }
                 })
                 ->addColumn('nosurat', function ($data) {
                     return $data->nosurat;
                 })
                 ->addColumn('customer', function ($data) {
-                    if (isset($data->DetailLogistik->DetailPesananProduk)) {
+                    if (isset($data->DetailLogistik)) {
                         $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
                         if ($name[1] == 'EKAT') {
                             return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
                         } else if ($name[1] == 'SPA') {
                             return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
-                        } else if ($name[1] == 'SPB') {
-                            return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                         }
+                    } else if (!isset($data->DetailLogistik)) {
+                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                     } else {
                         return '-';
                     }
@@ -2263,7 +2265,7 @@ class PenjualanController extends Controller
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -2279,7 +2281,7 @@ class PenjualanController extends Controller
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $data = $Ekatalog->merge($Spb);
@@ -2287,7 +2289,7 @@ class PenjualanController extends Controller
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $data = $Spa->merge($Spb);
@@ -2300,7 +2302,7 @@ class PenjualanController extends Controller
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
             } else if ($penjualan == 'spb') {
-                $data  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $data  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
             }
@@ -2314,7 +2316,7 @@ class PenjualanController extends Controller
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
@@ -2334,7 +2336,7 @@ class PenjualanController extends Controller
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
@@ -2344,7 +2346,7 @@ class PenjualanController extends Controller
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
@@ -2360,7 +2362,7 @@ class PenjualanController extends Controller
                         ->where('customer_id', $distributor);
                 })->get();
             } else if ($penjualan == 'spb') {
-                $data  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                $data  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
@@ -2426,7 +2428,11 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('nama_produk', function ($data) {
-                return $data->penjualanproduk->nama;
+                if ($data->PenjualanProduk) {
+                    return $data->penjualanproduk->nama;
+                } else {
+                    return $data->Sparepart->nama;
+                }
             })
             ->addColumn('no_seri', function () {
                 return '-';
@@ -2624,7 +2630,7 @@ class PenjualanController extends Controller
     {
         $gbj = GudangBarangJadi::find($id);
         $jumlah_ekatalog = $this->get_count_ekatalog($id, $gbj->produk_id, "sepakat") + $this->get_count_ekatalog($id, $gbj->produk_id, "negosiasi");
-        $jumlah_po = $this->get_count_spa_spb_po($id, $gbj->produk_id);
+        $jumlah_po = $this->get_count_spa_po($id, $gbj->produk_id);
         $jumlah = $gbj->stok - ($jumlah_ekatalog + $jumlah_po);
         return $jumlah;
     }
@@ -2649,7 +2655,7 @@ class PenjualanController extends Controller
         return $jumlah;
     }
 
-    public function get_count_spa_spb_po($id, $produk_id)
+    public function get_count_spa_po($id, $produk_id)
     {
         $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
             $q->where('gudang_barang_jadi_id', $id);
