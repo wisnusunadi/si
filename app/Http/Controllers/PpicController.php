@@ -54,7 +54,56 @@ class PpicController extends Controller
             $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         }
 
+        foreach ($data as $item) {
+            $noseri_count = count($item->noseri);
+            $item->noseri_count = $noseri_count;
+        }
+
         return $data;
+    }
+
+    public function get_datatables_data_perakitan()
+    {
+        $data = JadwalPerakitan::where('status', '!=', $this->change_status('penyusunan'))->orderBy('tanggal_mulai', 'desc')->get();
+        return datatables($data)
+            ->addIndexColumn()
+            ->addColumn('nama', function ($data) {
+                if ($data->Produk->nama) {
+                    return $data->Produk->produk->nama . " - <b>" . $data->Produk->nama . "</b>";
+                } else {
+                    return $data->Produk->produk->nama;
+                }
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('tanggal_mulai', function ($data) {
+                return $data->tanggal_mulai;
+            })
+            ->addColumn('tanggal_selesai', function ($data) {
+                return $data->tanggal_selesai;
+            })
+            ->addColumn('progres', function ($data) {
+                $max_value = $data->jumlah;
+                $progres = count($data->noseri);
+                $percentage = $progres * 100 / $max_value;
+                $color = $data->status == $this->change_status('pelaksanaan') ? 'is-warning' : 'is-success';
+                return
+                    "<progress class='progress " . $color . "' " .
+                    "style='margin-bottom: 0;'" .
+                    "value='" . $progres . "' " .
+                    "max='" . $max_value . "' >" .
+                    $percentage . "%" .
+                    "</progress>" .
+                    "<small>" .
+                    $progres . " dari " . $max_value .
+                    "</small>";
+            })
+            ->addColumn('status', function ($data) {
+                return $data->status;
+            })
+            ->rawColumns(['nama', 'progres'])
+            ->make(true);
     }
 
     public function get_data_perakitan_rencana()
@@ -877,17 +926,8 @@ class PpicController extends Controller
 
     public function test_query()
     {
-        $data = JadwalPerakitan::all();
-        foreach ($data as $d) {
-            if ($d->status == $this->change_status("penyusunan")) {
-                $d->state = $this->change_state("perencanaan");
-                $d->save();
-            } else {
-                $d->state = $this->change_state("persetujuan");
-                $d->konfirmasi = 1;
-                $d->save();
-            }
-        }
+        $data = JadwalPerakitan::with('noseri')->get();
+        return $data;
     }
 
     public function get_count_selesai_pengiriman_produk($id)

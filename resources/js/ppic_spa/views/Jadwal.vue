@@ -89,6 +89,7 @@
                   'is-primary': this.$store.state.state_ppic === 'pembuatan',
                   'is-danger': this.$store.state.state_ppic === 'revisi',
                 }"
+                :disabled="$store.state.jadwal.length === 0"
                 @click="sendEvent('persetujuan')"
               >
                 Kirim

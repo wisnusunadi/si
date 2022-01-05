@@ -24,6 +24,7 @@
             'is-primary': this.$store.state.state_ppic === 'pembuatan',
             'is-danger': this.$store.state.state_ppic === 'revisi',
           }"
+          :disabled="events.length === 0"
           @click="sendEvent('persetujuan')"
         >
           Kirim
@@ -39,6 +40,7 @@
       </template>
       <button
         class="button is-info"
+        :disabled="events.length === 0"
         @click="convertToExcel('export_table', 'W3C Example Table')"
       >
         Export
@@ -54,6 +56,7 @@
           <tr>
             <th rowspan="2">Nama Produk</th>
             <th rowspan="2">Jumlah</th>
+            <th rowspan="2" v-if="status === 'pelaksanaan'">Progres</th>
             <th
               v-if="
                 $store.state.user.divisi_id === 24 &&
@@ -77,6 +80,7 @@
           <tr v-for="item in format_events" :key="item.id">
             <td>{{ item.title }}</td>
             <td>{{ item.jumlah }}</td>
+            <td v-if="status === 'pelaksanaan'">{{ item.progres }}</td>
             <td
               v-if="
                 $store.state.user.divisi_id === 24 &&
@@ -250,7 +254,7 @@
         </header>
         <section class="modal-card-body">
           <div class="columns">
-            <div class="column is-4">
+            <div class="column is-3">
               <div class="field">
                 <label class="label">Tanggal Mulai</label>
                 <div v-for="item in updated_events.events" class="control">
@@ -264,7 +268,7 @@
                 </div>
               </div>
             </div>
-            <div class="column is-4">
+            <div class="column is-3">
               <div class="field">
                 <label class="label">Tanggal Selesai</label>
                 <div v-for="item in updated_events.events" class="control">
@@ -287,6 +291,19 @@
                     type="number"
                     min="1"
                     v-model="item.jumlah"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-2">
+              <div class="field">
+                <label class="label">Progres</label>
+                <div v-for="item in updated_events.events" class="control">
+                  <input
+                    class="input"
+                    type="number"
+                    v-model="item.progres"
+                    disabled
                   />
                 </div>
               </div>
@@ -419,6 +436,8 @@ export default {
       date.setDate(i);
       if (date.getDay() == 6 || date.getDay() == 0) this.weekend_date.push(i);
     }
+
+    console.log("table created", this.format_events);
   },
 
   methods: {
@@ -755,32 +774,27 @@ export default {
             produk_id: this.events[i].produk_id,
             title: this.events[i].title,
             jumlah: this.events[i].jumlah,
+            progres: this.events[i].progres,
             events: [
               {
                 id: this.events[i].id,
                 start: this.events[i].start,
                 end: this.events[i].end,
                 jumlah: this.events[i].jumlah,
+                progres: this.events[i].progres,
               },
             ],
-
-            // {
-            //   id:
-            //   [this.events[i].id]: [this.events[i].start, this.events[i].end],
-            // },
           });
         } else {
-          // exists.tanggal[this.events[i].id] = [
-          //   this.events[i].start,
-          //   this.events[i].end,
-          // ];
           exists.events.push({
             id: this.events[i].id,
             start: this.events[i].start,
             end: this.events[i].end,
             jumlah: this.events[i].jumlah,
+            progres: this.events[i].progres,
           });
           exists.jumlah += this.events[i].jumlah;
+          exists.progres += this.events[i].progres;
         }
       }
 

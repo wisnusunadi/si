@@ -24,6 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('/ppic')->group(function () {
     Route::get('/data/perakitan/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan']);
+    Route::get('/datatables/perakitan', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan']);
     Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana']);
     Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
     Route::get('/data/so', [App\Http\Controllers\PpicController::class, 'get_data_so']);
