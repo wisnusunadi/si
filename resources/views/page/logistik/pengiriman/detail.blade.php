@@ -313,16 +313,16 @@
                                     <div><small class="text-muted">Subjek Pengiriman</small></div>
                                 </div>
                                 <div class="margin">
-                                    <b id="customer">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}</b>
+                                    <b id="customer">{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama}}</b>
                                 </div>
                                 <div class="margin">
-                                    <b id="alamat">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}</b>
+                                    <b id="alamat">{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat}}</b>
                                 </div>
                                 <div class="margin">
-                                    <b id="provinsi">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}</b>
+                                    <b id="provinsi">{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->Provinsi->nama}}</b>
                                 </div>
                                 <div class="margin">
-                                    <b id="telepon">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp}}</b>
+                                    <b id="telepon">{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->telp}}</b>
                                 </div>
                             </div>
                             <div class="col-3">
@@ -347,15 +347,15 @@
                             <div class="col-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No Sales Order</small></div>
-                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</b></div>
+                                    <div><b id="no_so">{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so}}</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
-                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</b></div>
+                                    <div><b id="no_so">{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Tanggal PO</small></div>
-                                    <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}</b></div>
+                                    <div><b id="no_so">{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->tgl_po}}</b></div>
                                 </div>
                             </div>
                             <div class="col-2">
@@ -401,9 +401,7 @@
                                         <th>Jumlah</th>
                                         <th>No Seri</th>
                                         <th>Keterangan</th>
-                                        @if(Auth::user()->divisi->id == "15")
                                         <th>Aksi</th>
-                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -439,12 +437,13 @@
 <script>
     $(function() {
         var role = "{{Auth::user()->divisi->id}}";
+        var jenis = "{{$jenis}}";
         var showtable = $('#detailtable').DataTable({
             destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/pengiriman/data/' + "{{$id}}",
+                'url': '/api/logistik/pengiriman/data/' + "{{$id}}" + '/' + jenis,
                 'dataType': 'json',
                 'type': 'POST',
                 'headers': {
@@ -467,13 +466,14 @@
                 },
                 {
                     data: 'no_seri',
+                    visible: jenis == "SPB" ? false : true
                 },
                 {
                     data: 'keterangan',
                 },
                 {
                     data: 'aksi',
-                    visible: role == 15 ? true : false
+                    visible: role != 15 || jenis == "SPB" ? false : true
                 }
             ]
         });

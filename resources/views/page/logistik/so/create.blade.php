@@ -1,4 +1,4 @@
-<form action="/api/logistik/so/create/{{$id}}/{{$id_produk}}" method="POST" id="form-logistik-create">
+<form action="/api/logistik/so/create/{{$id}}/{{$id_produk}}/{{$jenis}}" method="POST" id="form-logistik-create">
     @method('PUT')
     @csrf
     <div class="content">

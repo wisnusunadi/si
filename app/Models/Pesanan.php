@@ -140,16 +140,20 @@ class Pesanan extends Model
         foreach ($s as $i) {
             $jumlah = $jumlah + $i->jumlah;
         }
+        return $jumlah;
     }
 
     public function getJumlahKirimPart()
     {
         $id = $this->id;
-        $s = DetailLogistikPart::whereHas('detail_pesanan_part', $id)->get();
+        $s = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->get();
         $jumlah = 0;
         foreach ($s as $i) {
-            $jumlah = $jumlah + $i->jumlah;
+            $jumlah = $jumlah + $i->DetailPesananPart->jumlah;
         }
+        return $jumlah;
     }
 
     function log()

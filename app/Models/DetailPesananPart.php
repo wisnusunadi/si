@@ -20,6 +20,6 @@ class DetailPesananPart extends Model
     }
     public function DetailLogistikPart()
     {
-        return $this->hasMany(DetailLogistikPart::class);
+        return $this->hasOne(DetailLogistikPart::class);
     }
 }

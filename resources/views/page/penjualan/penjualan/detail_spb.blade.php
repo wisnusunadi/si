@@ -157,7 +157,7 @@
                                                         </div>
                                                         <div class="col-4">
                                                             <h5> <span class="badge badge-light"><i class="fas fa-shopping-cart"></i> : {{$l->jumlah}}
-                                                                </span> <span class="badge badge-dark"> <i class="fas fa-truck"></i> : </span></h5>
+                                                                </span> <span class="badge badge-dark"> <i class="fas fa-truck"></i> : @if(isset($l->DetailLogistikPart->id)) {{$l->jumlah}} @else 0 @endif</span></h5>
                                                         </div>
                                                         <div class="col-3">
                                                             <span style="text-align: right;">@currency($l->jumlah * $l->harga)</span>
