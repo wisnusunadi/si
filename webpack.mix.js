@@ -16,8 +16,8 @@ const mix = require('laravel-mix');
 //     .sass('resources/sass/app.scss', 'public/css');
 
 // plugin library
-// mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
-// mix.sass('resources/css/bootstrap.scss', 'public/native/css/plugin.css')
+mix.js('resources/js/bootstrap.js', 'public/native/js/plugin.js')
+mix.sass('resources/css/bootstrap.scss', 'public/native/css/plugin.css')
 
 // ppic
 // mix.js('resources/js/ppic/jadwal/app.js', 'public/native/js/ppic/jadwal.js').vue()

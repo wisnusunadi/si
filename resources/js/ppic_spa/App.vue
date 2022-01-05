@@ -38,7 +38,7 @@ export default {
 
   beforeCreate() {
     axios.get("/api/user").then((response) => {
-      this.$store.state.user = response.data;
+      this.$store.commit("setUser", response.data);
     });
   },
 };

@@ -247,14 +247,23 @@ export default {
         jsEvent.pageY <= y2
       ) {
         this.$store.commit("setIsLoading", true);
-        await axios.post("/api/ppic/delete/perakitan/" + event.id).then(() => {
-          event.remove();
-          axios
-            .get("/api/ppic/data/perakitan/" + this.$store.state.status)
-            .then((response) => {
-              this.$store.commit("setJadwal", response.data);
+        await axios
+          .post("/api/ppic/delete/perakitan/" + event.id)
+          .then(() => {
+            event.remove();
+            axios
+              .get("/api/ppic/data/perakitan/" + this.$store.state.status)
+              .then((response) => {
+                this.$store.commit("setJadwal", response.data);
+              });
+          })
+          .catch((error) => {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: "Error: gagal menghapus jadwal",
             });
-        });
+          });
         this.$store.commit("setIsLoading", false);
       }
     },

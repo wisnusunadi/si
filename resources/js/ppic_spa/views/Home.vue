@@ -34,7 +34,17 @@
                 <th>Selisih stok dengan pesanan</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <tr v-for="item in data_so" :key="item.id">
+                <td>{{ item.DT_RowIndex }}</td>
+                <td v-html="item.nama_produk"></td>
+                <td>{{ item.stok }}</td>
+                <td>{{ item.total }}</td>
+                <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
+                  {{ item.penjualan }}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -164,114 +174,31 @@ export default {
     this.$store.commit("setIsLoading", true);
 
     await axios.get("/api/ppic/data/so").then((response) => {
-      this.data_so = response.data;
+      this.data_so = response.data.data;
     });
+    $("#table_so").DataTable();
 
     await axios.get("/api/ppic/data/gbj").then((response) => {
       this.data_gbj = response.data;
     });
+    $("#table_gbj").DataTable();
 
     await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
       this.data_sparepart = response.data;
     });
+    $("#table-sparepart").DataTable();
 
     await axios.get("/api/ppic/data/gk/unit").then((response) => {
       this.data_unit = response.data;
     });
+    $("#table-unit").DataTable();
 
     await axios.get("/api/ppic/counting/komentar").then((response) => {
       this.jumlah_permintaan = response.data[0];
       this.jumlah_proses = response.data[1];
     });
 
-    $("#table_so").DataTable({
-      serverSide: true,
-      ajax: "/api/ppic/data/so",
-      columns: [
-        {
-          data: "DT_RowIndex",
-          orderable: false,
-          searchable: false,
-        },
-        {
-          data: "nama_produk",
-        },
-        {
-          data: "gbj",
-        },
-        {
-          data: "total",
-        },
-        {
-          data: "penjualan",
-        },
-      ],
-    });
-    $("#table_gbj").DataTable();
-    $("#table-unit").DataTable();
-    $("#table-sparepart").DataTable();
-
     this.$store.commit("setIsLoading", false);
-  },
-
-  computed: {
-    format_data() {
-      let data = Array.from(this.data_so, (item, index) => {
-        let nama_produk = `${item.gudang_barang_jadi.produk.nama} ${item.gudang_barang_jadi.nama}`;
-        let jumlah = item.detail_pesanan.jumlah;
-        let no_so = item.detail_pesanan.pesanan.so;
-        let tanggal_order = item.detail_pesanan.pesanan.ekatalog
-          ? item.detail_pesanan.pesanan.ekatalog.tgl_buat
-          : item.detail_pesanan.pesanan.tgl_po;
-        let batas_kontrak = item.detail_pesanan.pesanan.ekatalog
-          ? item.detail_pesanan.pesanan.ekatalog.tgl_buat
-          : "";
-
-        let customer;
-        let jenis;
-        let detail = {
-          no_akn: "",
-          no_po: "",
-          instansi: "",
-          alamat: "",
-        };
-        if (item.detail_pesanan.pesanan.ekatalog) {
-          customer = item.detail_pesanan.pesanan.ekatalog.customer.nama;
-          jenis = "Ekatalog";
-          detail.no_akn = item.detail_pesanan.pesanan.ekatalog.no_paket;
-          detail.instansi = item.detail_pesanan.pesanan.ekatalog.instansi;
-          detail.alamat = item.detail_pesanan.pesanan.ekatalog.customer.alamat;
-        } else if (item.detail_pesanan.pesanan.spa) {
-          customer = item.detail_pesanan.pesanan.spa.customer.nama;
-          jenis = "SPA";
-          detail.alamat = item.detail_pesanan.pesanan.spa.customer.alamat;
-        } else if (item.detail_pesanan.pesanan.spb) {
-          customer = item.detail_pesanan.pesanan.spb.customer.nama;
-          jenis = "SPB";
-          detail.alamat = item.detail_pesanan.pesanan.spb.customer.alamat;
-        }
-        detail.no_po = item.detail_pesanan.pesanan.no_po;
-
-        let status;
-        if (item.detail_pesanan.pesanan.log) {
-          status = item.detail_pesanan.pesanan.log.nama;
-        }
-
-        return {
-          id: item.id,
-          nama_produk: nama_produk,
-          jumlah: jumlah,
-          no_so: no_so,
-          tanggal_order: tanggal_order,
-          batas_kontrak: batas_kontrak,
-          customer: customer,
-          jenis: jenis,
-          status: status,
-          detail: detail,
-        };
-      });
-      return data;
-    },
   },
 };
 </script>

@@ -22,7 +22,6 @@ class Pesanan extends Model
     {
         return $this->hasOne(Spb::class);
     }
-
     public function DetailPesanan()
     {
         return $this->hasMany(DetailPesanan::class);
@@ -31,6 +30,11 @@ class Pesanan extends Model
     public function DetailPesananPart()
     {
         return $this->hasMany(DetailPesananPart::class);
+    }
+
+    public function DetailLogistikPart()
+    {
+        return $this->hasMany(DetailLogistikPart::class);
     }
 
     function TFProduksi()
@@ -126,6 +130,26 @@ class Pesanan extends Model
             $jumlah += $d->qty;
         }
         return $jumlah;
+    }
+
+    public function getJumlahPesananPart()
+    {
+        $id = $this->id;
+        $s = DetailPesananPart::where('pesanan_id', $id)->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            $jumlah = $jumlah + $i->jumlah;
+        }
+    }
+
+    public function getJumlahKirimPart()
+    {
+        $id = $this->id;
+        $s = DetailLogistikPart::whereHas('detail_pesanan_part', $id)->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            $jumlah = $jumlah + $i->jumlah;
+        }
     }
 
     function log()

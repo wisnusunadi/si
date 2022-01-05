@@ -101,7 +101,6 @@
     }
 
 
-
     .removeshadow {
         box-shadow: none;
     }

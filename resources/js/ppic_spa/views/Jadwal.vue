@@ -151,36 +151,13 @@
         </div>
       </div>
     </template>
-    <template v-if="view === 'chart'"> 
-      <template
-        v-if="
-          $store.state.status === 'pelaksanaan' &&
-          this.series_rencana.length > 0
-        "
-      >
-        <div class="box">
-          <h1>Rencana</h1>
-          <apexchart
-            type="rangeBar"
-            :options="options"
-            :height="this.series_rencana[0].data.length * 30"
-            :series="series_rencana"
-          ></apexchart>
+    <template v-if="view === 'chart'">
+      <div class="columns">
+        <div class="column is-12">
+          <div class="box">
+            <Chart :events="events" :status="status" />
+          </div>
         </div>
-      </template>
-
-      <div class="box">
-        <h1 v-if="$store.state.status === 'pelaksanaan'">Pelaksanaan</h1>
-        <div v-if="this.$store.state.jadwal.length == 0" class="p-3">
-          Data Kosong
-        </div>
-        <apexchart
-          v-else
-          type="rangeBar"
-          :options="options"
-          :height="this.series[0].data.length * 30"
-          :series="series"
-        ></apexchart>
       </div>
     </template>
 
@@ -233,7 +210,7 @@ import axios from "axios";
 
 import Calendar from "../components/Calendar.vue";
 import Table from "../components/Table.vue";
-import VueApexCharts from "vue-apexcharts";
+import Chart from "../components/Chart.vue";
 
 import mixins from "../mixins";
 
@@ -245,32 +222,17 @@ export default {
       type: String,
       required: true,
     },
-
-    jadwal_rencana: {
-      type: Array,
-    },
   },
 
   components: {
     Calendar,
-    apexchart: VueApexCharts,
+    Chart,
     Table,
   },
 
   data() {
     return {
       view: "table",
-
-      options: {
-        plotOptions: {
-          bar: {
-            horizontal: true,
-          },
-        },
-        xaxis: {
-          type: "datetime",
-        },
-      },
 
       showModal: false,
       data_komentar: [],
@@ -319,11 +281,13 @@ export default {
           state: this.$store.state.state,
           status: this.$store.state.status,
         })
-        .catch((error) => {
-          console.log("error create komentar");
-          console.log(error);
+        .catch((err) => {
+          this.$swal({
+            icon: "warning",
+            title: "Peringatan",
+            text: "Terdapat kesalahan saat membuat komentar pada database",
+          });
         });
-
       this.$store.commit("setIsLoading", false);
     },
 
@@ -337,37 +301,6 @@ export default {
       return this.$store.state.jadwal.sort(
         (a, b) => new Date(a.tanggal_mulai) - new Date(b.tanggal_mulai)
       );
-    },
-
-    series: function () {
-      return [
-        {
-          data: this.$store.state.jadwal.map((event) => ({
-            x: `${event.produk.produk.nama} ${event.produk.nama}`,
-            y: [
-              new Date(event.tanggal_mulai).getTime(),
-              new Date(event.tanggal_selesai).getTime(),
-            ],
-          })),
-        },
-      ];
-    },
-
-    series_rencana: function () {
-      if (this.jadwal_rencana != undefined) {
-        return [
-          {
-            data: this.jadwal_rencana.map((data) => ({
-              x: `${data.jadwal_perakitan.produk.produk.nama} ${data.jadwal_perakitan.produk.nama}`,
-              y: [
-                new Date(data.tanggal_mulai).getTime(),
-                new Date(data.tanggal_selesai).getTime(),
-              ],
-            })),
-          },
-        ];
-      }
-      return [];
     },
 
     events() {

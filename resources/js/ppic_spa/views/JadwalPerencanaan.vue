@@ -1,5 +1,7 @@
 <template>
-  <Jadwal :status="'penyusunan'" />
+  <div>
+    <Jadwal :status="'penyusunan'" />
+  </div>
 </template>
 
 <script>
@@ -19,6 +21,8 @@ export default {
     await axios.get("/api/ppic/data/perakitan/penyusunan").then((response) => {
       this.$store.commit("setJadwal", response.data);
     });
+
+    this.$store.commit("setStatus", "perencanaan");
 
     this.$store.commit("setIsLoading", false);
   },

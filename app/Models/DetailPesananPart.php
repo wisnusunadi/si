@@ -18,4 +18,8 @@ class DetailPesananPart extends Model
     {
         return $this->belongsTo(Sparepart::class, 'm_sparepart_id');
     }
+    public function DetailLogistikPart()
+    {
+        return $this->hasMany(DetailLogistikPart::class);
+    }
 }

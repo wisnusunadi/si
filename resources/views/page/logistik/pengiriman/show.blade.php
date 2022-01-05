@@ -531,7 +531,6 @@
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
             var logistik_id = $(this).attr('data-id');
-
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -719,7 +718,6 @@
                         }
                     },
                     processResults: function(data) {
-
                         return {
                             results: $.map(data, function(obj) {
                                 return {

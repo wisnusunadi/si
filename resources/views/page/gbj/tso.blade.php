@@ -158,7 +158,13 @@
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
 
         // load produk
@@ -184,7 +190,7 @@
             // console.log($(this).val());
             $.ajax({
                 url : "{{ URL('/api/tfp/cekStok')}}",
-                type: "post", 
+                type: "post",
                 data: {gdg_brg_jadi_id: $(this).val()},
                 success: function(res) {
                     $('span#stock').text(res.stok);
@@ -305,7 +311,7 @@
                 $('.scan-produk').DataTable({
                     destroy: true,
                     processing: true,
-                    serverSide: true,
+                    serverSide: false,
                     autoWidth: false,
                     ordering: false,
                     ajax: {
