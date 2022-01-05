@@ -24,6 +24,7 @@
             'is-primary': this.$store.state.state_ppic === 'pembuatan',
             'is-danger': this.$store.state.state_ppic === 'revisi',
           }"
+          :disabled="events.length === 0"
           @click="sendEvent('persetujuan')"
         >
           Kirim
@@ -39,6 +40,7 @@
       </template>
       <button
         class="button is-info"
+        :disabled="events.length === 0"
         @click="convertToExcel('export_table', 'W3C Example Table')"
       >
         Export
@@ -54,6 +56,7 @@
           <tr>
             <th rowspan="2">Nama Produk</th>
             <th rowspan="2">Jumlah</th>
+            <th rowspan="2" v-if="status === 'pelaksanaan'">Progres</th>
             <th
               v-if="
                 $store.state.user.divisi_id === 24 &&
@@ -77,6 +80,7 @@
           <tr v-for="item in format_events" :key="item.id">
             <td>{{ item.title }}</td>
             <td>{{ item.jumlah }}</td>
+            <td v-if="status === 'pelaksanaan'">{{ item.progres }}</td>
             <td
               v-if="
                 $store.state.user.divisi_id === 24 &&
@@ -250,7 +254,7 @@
         </header>
         <section class="modal-card-body">
           <div class="columns">
-            <div class="column is-4">
+            <div class="column is-3">
               <div class="field">
                 <label class="label">Tanggal Mulai</label>
                 <div v-for="item in updated_events.events" class="control">
@@ -264,7 +268,7 @@
                 </div>
               </div>
             </div>
-            <div class="column is-4">
+            <div class="column is-3">
               <div class="field">
                 <label class="label">Tanggal Selesai</label>
                 <div v-for="item in updated_events.events" class="control">
@@ -287,6 +291,19 @@
                     type="number"
                     min="1"
                     v-model="item.jumlah"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="column is-2">
+              <div class="field">
+                <label class="label">Progres</label>
+                <div v-for="item in updated_events.events" class="control">
+                  <input
+                    class="input"
+                    type="number"
+                    v-model="item.progres"
+                    disabled
                   />
                 </div>
               </div>
@@ -379,7 +396,7 @@ export default {
 
       start_date: "",
       end_date: "",
-      produk: {},
+      produk: null,
       jumlah: 1,
       action: "add",
 
@@ -419,6 +436,8 @@ export default {
       date.setDate(i);
       if (date.getDay() == 6 || date.getDay() == 0) this.weekend_date.push(i);
     }
+
+    console.log("table created", this.format_events);
   },
 
   methods: {
@@ -446,7 +465,7 @@ export default {
     },
 
     async changeProduk() {
-      console.log(this.produk);
+      if (this.produk === null) return;
       this.$store.commit("setIsLoading", true);
       await axios
         .get("/api/ppic/data/gbj", {
@@ -482,6 +501,31 @@ export default {
     async handleSubmit() {
       this.$store.commit("setIsLoading", true);
       if (this.action === "add") {
+        let start_date = new Date(this.start_date);
+        let end_date = new Date(this.end_date);
+
+        if (
+          !this.start_date ||
+          !this.end_date ||
+          this.produk === null ||
+          this.jumlah < 1 ||
+          end_date.getDate() < start_date.getDate()
+        ) {
+          let text;
+          if (end_date.getDate() < start_date.getDate())
+            text =
+              "Tanggal mulai harus lebih dahulu dibandingkan tanggal selesai";
+          else text = "Mohon periksa kembali form yang Anda isi !!";
+
+          this.$swal({
+            icon: "warning",
+            title: "Peringatan",
+            text: text,
+          });
+          this.$store.commit("setIsLoading", false);
+          return;
+        }
+
         let data = {
           produk_id: this.produk.value,
           jumlah: this.jumlah,
@@ -497,25 +541,66 @@ export default {
           .post("/api/ppic/create/perakitan", data)
           .then((response) => {
             this.$store.commit("setJadwal", response.data);
+            this.addProdukModal = false;
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "error",
+              title: "Error",
+              text: "Gagal menambahkan data, hubungi pihak IT untuk memeriksa masalah!!",
+            });
           });
       } else if (this.action === "update") {
         for (const index in this.updated_events.events) {
-          await axios.post(
-            "/api/ppic/update/perakitan/" +
-              this.updated_events.events[index].id,
-            {
-              tanggal_mulai: this.updated_events.events[index].start,
-              tanggal_selesai: this.updated_events.events[index].end,
-              jumlah: this.updated_events.events[index].jumlah,
-              status: this.status,
-            }
-          );
+          let start_date = new Date(this.updated_events.events[index].start);
+          let end_date = new Date(this.updated_events.events[index].end);
+
+          if (
+            this.updated_events.events[index].jumlah < 1 ||
+            end_date.getDate() < start_date.getDate()
+          ) {
+            let text;
+            if (end_date.getDate() < start_date.getDate())
+              text =
+                "Tanggal mulai harus lebih dahulu dibandingkan tanggal selesai";
+            else text = "Mohon periksa kembali form yang Anda isi !!";
+
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: text,
+            });
+            this.$store.commit("setIsLoading", false);
+            return;
+          }
+        }
+
+        for (const index in this.updated_events.events) {
+          await axios
+            .post(
+              "/api/ppic/update/perakitan/" +
+                this.updated_events.events[index].id,
+              {
+                tanggal_mulai: this.updated_events.events[index].start,
+                tanggal_selesai: this.updated_events.events[index].end,
+                jumlah: this.updated_events.events[index].jumlah,
+                status: this.status,
+              }
+            )
+            .catch((err) => {
+              this.$swal({
+                icon: "error",
+                title: "Error",
+                text: "Gagal mengubah data, hubungi pihak IT untuk memeriksa masalah!!",
+              });
+            });
         }
 
         await axios
           .get("/api/ppic/data/perakitan/" + this.status)
           .then((response) => {
             this.$store.commit("setJadwal", response.data);
+            this.editProdukModal = false;
           });
       } else if (this.action === "delete") {
         for (const index in this.deleted_events) {
@@ -524,8 +609,8 @@ export default {
             .catch((error) => {
               this.$swal({
                 icon: "error",
-                title: "Oops...",
-                text: "Error: gagal menghapus jadwal",
+                title: "Error",
+                text: "Gagal menghapus jadwal",
               });
             });
         }
@@ -533,13 +618,10 @@ export default {
           .get("/api/ppic/data/perakitan/" + this.status)
           .then((response) => {
             this.$store.commit("setJadwal", response.data);
+            this.deleteProdukModal = false;
           });
       }
       this.$store.commit("setIsLoading", false);
-      this.addProdukModal = false;
-      this.editProdukModal = false;
-      this.deleteProdukModal = false;
-      this.resetData();
     },
 
     async updateEvent(events) {
@@ -604,12 +686,10 @@ export default {
         .catch((error) => {
           this.$swal({
             icon: "error",
-            title: "Oops...",
-            text: "Error: gagal menghapus jadwal",
+            title: "Error",
+            text: "Gagal menghapus jadwal",
           });
         });
-      // this.updated_events.events.slice(index, 1);
-      // console.log(this.updated_events);
     },
 
     async sendEvent(state) {
@@ -666,7 +746,7 @@ export default {
     resetData() {
       this.start_date = "";
       this.end_date = "";
-      this.produk = {};
+      this.produk = null;
       this.jumlah = 1;
       this.gk_stok = 0;
       this.gbj_stok = 0;
@@ -755,32 +835,27 @@ export default {
             produk_id: this.events[i].produk_id,
             title: this.events[i].title,
             jumlah: this.events[i].jumlah,
+            progres: this.events[i].progres,
             events: [
               {
                 id: this.events[i].id,
                 start: this.events[i].start,
                 end: this.events[i].end,
                 jumlah: this.events[i].jumlah,
+                progres: this.events[i].progres,
               },
             ],
-
-            // {
-            //   id:
-            //   [this.events[i].id]: [this.events[i].start, this.events[i].end],
-            // },
           });
         } else {
-          // exists.tanggal[this.events[i].id] = [
-          //   this.events[i].start,
-          //   this.events[i].end,
-          // ];
           exists.events.push({
             id: this.events[i].id,
             start: this.events[i].start,
             end: this.events[i].end,
             jumlah: this.events[i].jumlah,
+            progres: this.events[i].progres,
           });
           exists.jumlah += this.events[i].jumlah;
+          exists.progres += this.events[i].progres;
         }
       }
 
