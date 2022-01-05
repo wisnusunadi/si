@@ -433,20 +433,25 @@ class MasterController extends Controller
                 })
                 ->addColumn('status', function ($data) {
                     $datas = "";
-                    if ($data->log == "penjualan") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->log == "po") {
-                        $datas .= '<span class="purple-text badge">';
-                    } else if ($data->log == "gudang") {
-                        $datas .= '<span class="orange-text badge">';
-                    } else if ($data->log == "qc") {
-                        $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->log == "logistik") {
-                        $datas .= '<span class="blue-text badge">';
-                    } else if ($data->log == "selesai") {
-                        $datas .= '<span class="green-text badge">';
+                    if (!empty($data->Pesanan->log_id)) {
+                        if ($data->Pesanan->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->Pesanan->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->Pesanan->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                     }
-                    $datas .= ucfirst($data->log) . '</span>';
+
                     return $datas;
                 })
                 ->addColumn('button', function ($data) {

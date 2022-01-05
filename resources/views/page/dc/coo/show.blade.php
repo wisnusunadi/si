@@ -173,7 +173,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/dc/data/',
+                'url': '/api/dc/data',
                 'type': 'POST',
                 'datatype': 'JSON',
                 'headers': {
