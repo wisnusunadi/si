@@ -174,8 +174,8 @@ export default {
         headerToolbar: {
           end: "",
         },
-        selectable: true,
-        editable: true,
+        selectable: false,
+        editable: false,
         weekends: false,
         showNonCurrentDates: false,
 
