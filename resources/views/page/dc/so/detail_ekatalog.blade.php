@@ -444,6 +444,7 @@
 
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
+            console.log(data);
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseri').removeClass('hide');

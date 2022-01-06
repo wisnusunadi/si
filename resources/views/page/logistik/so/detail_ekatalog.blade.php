@@ -962,7 +962,7 @@
         function check_no_sj(val) {
             var hasil = "";
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: '/api/logistik/cek/no_sj/' + val,
                 async: false,
                 dataType: 'json',

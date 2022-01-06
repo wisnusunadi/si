@@ -139,48 +139,6 @@ class PenjualanController extends Controller
             } else if ($Ekatalog == "" && $Spa == "" && $Spb != "") {
                 $data = $Spb;
             }
-
-
-
-            // if ($this->in_array_all(['ekatalog', 'spa', 'spb'], $jenis)) {
-            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-
-            //     $data = $Ekatalog->merge($Spa)->merge($Spb);
-            // } else if ($this->in_array_all(['ekatalog', 'spa'], $jenis)) {
-            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-
-            //     $data = $Ekatalog->merge($Spa);
-            // } else if ($this->in_array_all(['ekatalog', 'spb'], $jenis)) {
-            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-
-            //     $data = $Ekatalog->merge($Spb);
-            // } else if ($this->in_array_all(['spa', 'spb'], $jenis)) {
-            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $data = $Spa->merge($Spb);
-            // }
         }
         return datatables()->of($data)
             ->addIndexColumn()
@@ -480,13 +438,17 @@ class PenjualanController extends Controller
         } else if ($parameter == 'customer') {
             $ekatalog = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
                 $q->where('satuan', 'LIKE', '%' . $value . '%');
-            })->has('NoseriBarangJadi')->get();
+            })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
+                $q->where('instansi', 'LIKE', '%' . $value . '%');
+            })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Customer', function ($q) use ($value) {
+                $q->where('nama', 'LIKE', '%' . $value . '%');
+            })->get();
             $spa = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
-            })->has('NoseriBarangJadi')->get();
+            })->get();
             $spb = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
-            })->has('NoseriBarangJadi')->get();
+            })->get();
             $data = $ekatalog->merge($spa)->merge($spb);
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -507,7 +469,9 @@ class PenjualanController extends Controller
                     if (isset($data->NoseriDetailPesanan)) {
                         $name = explode('/', $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->so);
                         if ($name[1] == 'EKAT') {
-                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                            $cus = $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                            $cus .= "<div><small>" . $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan . "</small></div>";
+                            return $cus;
                         } else if ($name[1] == 'SPA') {
                             return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                         } else if ($name[1] == 'SPB') {
@@ -570,16 +534,16 @@ class PenjualanController extends Controller
                     }
                     return $datas;
                 })
-                ->rawColumns(['divisi_id', 'status'])
+                ->rawColumns(['divisi_id', 'status', 'nama_customer'])
                 ->make(true);
         } else if ($parameter == 'produk') {
-            $ekatalog = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+            $ekatalog = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
             })->get();
-            $spa = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+            $spa = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
             })->get();
-            $spb = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+            $spb = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
             })->get();
             $data = $ekatalog->merge($spa)->merge($spb);
@@ -602,7 +566,9 @@ class PenjualanController extends Controller
                     if (isset($data->NoseriDetailPesanan)) {
                         $name = explode('/', $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->so);
                         if ($name[1] == 'EKAT') {
-                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                            $cus = $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                            $cus .= "<div><small>" . $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan . "</small></div>";
+                            return $cus;
                         } else if ($name[1] == 'SPA') {
                             return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                         } else if ($name[1] == 'SPB') {
@@ -665,7 +631,7 @@ class PenjualanController extends Controller
                     }
                     return $datas;
                 })
-                ->rawColumns(['divisi_id', 'status'])
+                ->rawColumns(['divisi_id', 'status', 'nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_seri') {
             $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {

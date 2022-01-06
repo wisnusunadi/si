@@ -77,20 +77,20 @@
                             <div class="col-12">
                                 <div class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Masukkan Data</label>
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Lacak</label>
                                         <div class="col-4">
-                                            <input type="text" class="form-control col-form-label @error('data') is-invalid @enderror" id="data" name="data" />
+                                            <input type="text" class="form-control col-form-label @error('data') is-invalid @enderror" id="data" name="data" placeholder="Masukkan data" />
                                             <div class="invalid-feedback" id="msgdata">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Data Lacak</label>
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Pilih</label>
                                         <div class="col-4">
                                             <select name="pilih_data" id="pilih_data" class="select2 select-info form-control custom-select col-form-label pilih_data" placeholder="Pilih Data" disabled>
                                                 <option value=""></option>
                                                 <option value="produk">Produk</option>
-                                                <option value="customer">Customer / Satuan Kerja</option>
+                                                <option value="customer">Distributor / Customer / Satuan Kerja / Instansi</option>
                                                 <option value="no_po">No Purchase Order</option>
                                                 <option value="no_akn">No AKN</option>
                                                 <option value="no_seri">No Seri</option>
@@ -220,7 +220,7 @@
                                         <th>No SO</th>
                                         <th>Tgl Buat</th>
                                         <th>Batas Kontrak</th>
-                                        <th>Customer</th>
+                                        <th>Distributor</th>
                                         <th>Instansi</th>
                                         <th>Posisi</th>
                                         <th>Status</th>
