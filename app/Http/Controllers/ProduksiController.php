@@ -140,14 +140,14 @@ class ProduksiController extends Controller
 
     function TfbySOFinal(Request $request)
     {
-        // dd($request->all());
         $a = TFProduksi::where('pesanan_id', $request->pesanan_id)->first();
         // return $a->id;
         if (isset($a->id)) {
 
             foreach ($request->data as $key => $value) {
-                $b = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $key)->first();
-                if ($b->gdg_brg_jadi_id == $key) {
+                $b = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $key)->get()->count();
+                // return $b;
+                if ($b > 0) {
                     // return 'updated';
                     foreach ($value['noseri'] as $k => $v) {
                         $nn = new NoseriTGbj();
@@ -182,7 +182,8 @@ class ProduksiController extends Controller
                         ]);
                     }
                 } else {
-                    return 'insert';
+                    // return 'insert';
+                    foreach ($request->data as $key => $value) {
                     $dd = new TFProduksiDetail();
                     $dd->t_gbj_id = $a->id;
                     $dd->gdg_brg_jadi_id = $key;
@@ -229,8 +230,11 @@ class ProduksiController extends Controller
                         ]);
                     }
                 }
+
+                }
             }
         } else {
+            // return 'insert';
             $d = new TFProduksi();
             $d->pesanan_id = $request->pesanan_id;
             $d->tgl_keluar = Carbon::now();
@@ -268,6 +272,7 @@ class ProduksiController extends Controller
                     $nn->save();
 
                     NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+
                 }
 
                 $gdg = GudangBarangJadi::whereIn('id', [$key])->get()->toArray();
@@ -290,10 +295,29 @@ class ProduksiController extends Controller
                 }
             }
 
-            Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);
         }
 
-        // return response()->json(['msg' => 'Data Terkirim ke QC']);
+        $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+            }
+        }
+
+        $jumlah_kirim = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($request) {
+            $q->where('id', $request->pesanan_id)->where('status_id', 2);
+        })->get()->count();
+        $now = intval($jumlah - $jumlah_kirim);
+        if ($jumlah == $jumlah_kirim) {
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);
+        } elseif ($now == $jumlah_kirim) {
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);
+        } else {
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 9]);
+        }
+
+        return response()->json(['msg' => 'Data Terkirim ke QC']);
     }
 
     function updateRancangSO(Request $request)
@@ -641,6 +665,118 @@ class ProduksiController extends Controller
                                             <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                         </button>
                                     </a>';
+                        }
+                    }
+                }
+            })
+            ->addColumn('button_prd', function ($d) {
+                $x = explode('/', $d->so);
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
+                            <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                        </a>';
+                    } elseif ($x[1] == 'SPA') {
+                        return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spa"  data-id="' . $d->id . '">
+                            <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                        </a>';
+                    } elseif ($x[1] == 'SPB') {
+                        return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spb"  data-id="' . $d->id . '">
+                            <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                        </a>';
+                    }
+                }
+            })
+            ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
+            ->make(true);
+    }
+
+    function getSOProduksi()
+    {
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->so;
+            })
+            ->addColumn('nama_customer', function ($data) {
+                $name = explode('/', $data->so);
+                for ($i = 1; $i < count($name); $i++) {
+                    if ($name[1] == 'EKAT') {
+                        return $data->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } elseif ($name[1] == 'SPB') {
+                        return $data->Spb->Customer->nama;
+                    }
+                }
+            })
+            ->addColumn('batas_out', function ($d) {
+                if (isset($d->Ekatalog->tgl_kontrak)) {
+                    return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status_prd', function ($data) {
+                if ($data->log_id) {
+                    # code...
+                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status1', function ($data) {
+                $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
+                $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
+                if ($sumcek == $sumprd) {
+                    return '<span class="badge badge-primary">Sudah Dicek</span>';
+                } elseif ($sumcek != $sumprd) {
+                    return '<span class="badge badge-danger">Belum Dicek</span>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                $x = explode('/', $data->so);
+                $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
+                $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
+                if ($sumcek == $sumprd) {
+                    for ($i = 1; $i < count($x); $i++) {
+                        if ($x[1] == 'EKAT') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    ';
+                        } elseif ($x[1] == 'SPA') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    ';
+                        } elseif ($x[1] == 'SPB') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    ';
+                        }
+                    }
+                } else {
+                    for ($i = 1; $i < count($x); $i++) {
+                        if ($x[1] == 'EKAT') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
+                        } elseif ($x[1] == 'SPA') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
+                        } elseif ($x[1] == 'SPB') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
                         }
                     }
                 }
@@ -1293,9 +1429,7 @@ class ProduksiController extends Controller
 
     function change_jadwal()
     {
-        $data = JadwalPerakitan::Has('log', function ($q) {
-            // $q->orderBy('created_at');
-        })->get()->sortByDesc('log.created_at');
+        $data = JadwalPerakitanLog::groupBy()->get();
 
         return $data;
     }
@@ -1428,12 +1562,26 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('jml', function ($d) {
-                return  $d->jumlah . ' ' . $d->produk->satuan->nama;
+                $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
+                $c = count($seri);
+                if ($c != $d->jumlah) {
+                    return  $d->jumlah . ' ' . $d->produk->satuan->nama .'<br><span class="badge badge-dark">Terisi ' . intval($c) . ' Unit</span>';
+                } else {
+                    return  $d->jumlah . ' ' . $d->produk->satuan->nama;
+                }
+
             })
             ->addColumn('action', function ($d) {
-                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                                <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
-                            </a>';
+                if ($d->status_tf == 12) {
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                        <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+                    </a>';
+                } elseif ($d->status_tf == 13) {
+
+                } else {
+                    return '<span class="sudah_diterima">Sudah Terisi Semua</span>';
+                }
+
             })
             ->addColumn('status', function ($d) {
                 $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
@@ -1445,7 +1593,7 @@ class ProduksiController extends Controller
                 if ($d->status_tf == 12) {
                     return '<span class="belum_diterima">Sudah Terisi Sebagian</span>';
                 } elseif ($d->status_tf == 13) {
-                    return '<span class="belum_diterima">Sudah Terkirim Sebagian</span>';
+                    return '<span class="sebagian_diterima">Sudah Terkirim Sebagian</span>';
                 } else {
                     return '<span class="sudah_diterima">Sudah Terisi Semua</span>';
                     // return 'xx';
@@ -1454,7 +1602,7 @@ class ProduksiController extends Controller
             ->addColumn('no_bppb', function () {
                 return '-';
             })
-            ->rawColumns(['action', 'status'])
+            ->rawColumns(['action', 'status', 'jml'])
             ->make(true);
     }
 
@@ -1596,23 +1744,27 @@ class ProduksiController extends Controller
             JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->whereIn('noseri', [$request->noseri[$key]])->update(['waktu_tf' => Carbon::now(), 'status' => 14, 'transfer_by' => $request->userid]);
         }
 
-
-        $jj = NoseriTGbj::whereHas('detail', function ($q) use ($request) {
-            $q->where('gdg_brg_jadi_id', $request->gbj_id);
-        })->get()->count();
-        $rakitseri = JadwalPerakitan::find($request->jadwal_id);
-        if ($rakitseri->jumlah == $jj) {
-            $rakitseri->status_tf = 14;
-            $rakitseri->status = 8;
-            $rakitseri->filled_by = $request->userid;
-            $rakitseri->save();
+        // rubah logic
+        $sdh_terkirim = JadwalRakitNoseri::whereHas('header', function($q) use ($request) {
+            $q->where('produk_id', $request->gbj_id);
+        })->where('status', 14)->get()->count();
+        $blm_terkirim = JadwalRakitNoseri::whereHas('header', function($q) use ($request) {
+            $q->where('produk_id', $request->gbj_id);
+        })->where('status', 11)->get()->count();
+        $total_rakit = JadwalPerakitan::find($request->jadwal_id);
+        $now = $total_rakit->jumlah - $sdh_terkirim;
+        if ($now == $blm_terkirim) {
+            $total_rakit->status_tf = 14;
+            $total_rakit->status = 8;
+            $total_rakit->filled_by = $request->userid;
+            $total_rakit->save();
         } else {
-            $rakitseri->status_tf = 13;
-            $rakitseri->filled_by = $request->userid;
-            $rakitseri->save();
+            $total_rakit->status_tf = 13;
+            $total_rakit->filled_by = $request->userid;
+            $total_rakit->save();
         }
 
-        return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
+        // return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
     }
 
     // riwayat rakit

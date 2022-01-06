@@ -154,7 +154,8 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/api/tfp/cek-so',
+                url: '/api/prd/so',
+                type: 'post',
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
