@@ -348,6 +348,14 @@ class PpicController extends Controller
 
         if (isset($request->jumlah)) {
             $data->jumlah = $request->jumlah;
+
+            if (count($data->noseri) == $data->jumlah) {
+                if ($data->status_tf == 12) $data->status_tf = 15;
+                else if (($data->status_tf == 13) && ($this->count_noseri_terkirim($data->noseri) == $data->jumlah)) $data->status_tf = 14;
+            } else if (count($data->noseri) < $data->jumlah) {
+                if ($data->status_tf == 15) $data->status_tf = 12;
+                else if ($data->status_tf == 14) $data->status_tf = 13;
+            }
         }
         if (isset($request->state)) {
             $state = $this->change_state($request->state);
@@ -472,6 +480,24 @@ class PpicController extends Controller
             $data->save();
         }
     }
+
+    public function count_noseri_terkirim($arr)
+    {
+        $result = 0;
+        foreach ($arr as $item) {
+            if ($item->waktu_tf != null) $result += 1;
+        }
+
+        return $result;
+    }
+
+    public function test_query()
+    {
+        $data = JadwalPerakitan::with('noseri')->get();
+        return $data;
+    }
+    // end helper function
+
 
     public function get_master_stok_data()
     {
@@ -921,12 +947,6 @@ class PpicController extends Controller
             }
         }
         return $jumlah;
-    }
-
-    public function test_query()
-    {
-        $data = JadwalPerakitan::with('noseri')->get();
-        return $data;
     }
 
     public function get_count_selesai_pengiriman_produk($id)

@@ -289,7 +289,7 @@
                   <input
                     class="input"
                     type="number"
-                    min="1"
+                    :min="item.progres > 0 ? item.progres : 1"
                     v-model="item.jumlah"
                   />
                 </div>
@@ -436,8 +436,6 @@ export default {
       date.setDate(i);
       if (date.getDay() == 6 || date.getDay() == 0) this.weekend_date.push(i);
     }
-
-    console.log("table created", this.format_events);
   },
 
   methods: {
@@ -467,10 +465,11 @@ export default {
     async changeProduk() {
       if (this.produk === null) return;
       this.$store.commit("setIsLoading", true);
+
       await axios
         .get("/api/ppic/data/gbj", {
           params: {
-            id: this.produk.id,
+            id: this.produk.value,
           },
         })
         .then((response) => {
@@ -484,7 +483,7 @@ export default {
       await axios
         .get("/api/ppic/data/gk/unit", {
           params: {
-            id: this.produk.id,
+            id: this.produk.value,
           },
         })
         .then((response) => {
@@ -557,12 +556,20 @@ export default {
 
           if (
             this.updated_events.events[index].jumlah < 1 ||
-            end_date.getDate() < start_date.getDate()
+            end_date.getDate() < start_date.getDate() ||
+            this.updated_events.events[index].jumlah <
+              this.updated_events.events[index].progres
           ) {
             let text;
             if (end_date.getDate() < start_date.getDate())
               text =
                 "Tanggal mulai harus lebih dahulu dibandingkan tanggal selesai";
+            else if (
+              this.updated_events.events[index].jumlah <
+              this.updated_events.events[index].progres
+            )
+              text =
+                "Jumlah tidak boleh kurang dari progres yang telah dirakit";
             else text = "Mohon periksa kembali form yang Anda isi !!";
 
             this.$swal({
