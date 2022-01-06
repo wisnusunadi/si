@@ -47,7 +47,6 @@
         "datatables.net-bulma": "^1.0.1",
         "fullcalendar": "^5.10.1",
         "laravel-echo": "^1.11.3",
-        "ngrok": "^4.2.2",
         "node-sass": "^6.0.1",
         "overlayscrollbars": "^1.13.1",
         "pusher-js": "^7.0.3",

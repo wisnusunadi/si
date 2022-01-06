@@ -23,237 +23,291 @@
     .tes {
         background-color: #ffff !important;
     }
+
+    .nowraptext {
+        white-space: nowrap;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        section {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 550px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+
+        label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 450px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+    }
 </style>
 @stop
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-secondary">
-                    <div class="card-title">Pencarian</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-secondary">
+                        <div class="card-title">Pencarian</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <form id="filter">
+                                    <div class="form-horizontal">
+                                        <div class="form-group row">
+                                            <label for="" class="col-form-label col-5" style="text-align: right">Distributor / Customer</label>
+                                            <div class="col-4">
+                                                <select class="select2 select-info form-control customer_id" name="customer_id" id="customer_id">
+                                                    <option value="semua">Semua Distributor</option>
+                                                </select>
+                                                <div class="feedback" id="msgcustomer_id">
+                                                    <small class="text-muted">Distributor / Customer boleh dikosongi</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="penjualan" class="col-form-label col-5" style="text-align: right">Penjualan</label>
+                                            <div class="col-5 col-form-label">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="penjualan" value="ekatalog" name="penjualan">
+                                                    <label class="form-check-label" for="inlineCheckbox1">E-katalog</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="penjualan" value="spa" name="penjualan">
+                                                    <label class="form-check-label" for="inlineCheckbox1">SPA</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="penjualan" value="spb" name="penjualan">
+                                                    <label class="form-check-label" for="inlineCheckbox1">SPB</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="tanggal_mulai" class="col-form-label col-5" style="text-align: right">Tanggal Awal</label>
+                                            <div class="col-2">
+                                                <input type="date" class="form-control col-form-label @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" readonly />
+                                                <div class="invalid-feedback" id="msgtanggal_mulai">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="tanggal_akhir" class="col-form-label col-5" style="text-align: right">Tanggal Akhir</label>
+                                            <div class="col-2">
+                                                <input type="date" class="form-control col-form-label @error('tanggal_akhir') is-invalid @enderror" id="tanggal_akhir" name="tanggal_akhir" readonly />
+                                                <div class="invalid-feedback" id="msgtanggal_akhir">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-5"></div>
+                                            <div class="col-4">
+                                                <span class="float-right filter"><button type="submit" class="btn btn-success" id="btncetak" disabled>Cetak</button></span>
+                                                <span class="float-right filter"><button type="button" class="btn btn-outline-danger" id="btnbatal">Batal</button></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <form id="filter">
-                                <div class="form-horizontal">
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Distributor / Customer</label>
-                                        <div class="col-4">
-                                            <select class="select2 select-info form-control customer_id" name="customer_id" id="customer_id">
-                                                <option value="semua">Semua Distributor</option>
-                                            </select>
-                                            <div class="feedback" id="msgcustomer_id">
-                                                <small class="text-muted">Distributor / Customer boleh dikosongi</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="penjualan" class="col-form-label col-5" style="text-align: right">Penjualan</label>
-                                        <div class="col-5 col-form-label">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="penjualan" value="ekatalog" name="penjualan">
-                                                <label class="form-check-label" for="inlineCheckbox1">E-katalog</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="penjualan" value="spa" name="penjualan">
-                                                <label class="form-check-label" for="inlineCheckbox1">SPA</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="penjualan" value="spb" name="penjualan">
-                                                <label class="form-check-label" for="inlineCheckbox1">SPB</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="tanggal_mulai" class="col-form-label col-5" style="text-align: right">Tanggal Awal</label>
-                                        <div class="col-2">
-                                            <input type="date" class="form-control col-form-label @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" readonly />
-                                            <div class="invalid-feedback" id="msgtanggal_mulai">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="tanggal_akhir" class="col-form-label col-5" style="text-align: right">Tanggal Akhir</label>
-                                        <div class="col-2">
-                                            <input type="date" class="form-control col-form-label @error('tanggal_akhir') is-invalid @enderror" id="tanggal_akhir" name="tanggal_akhir" readonly />
-                                            <div class="invalid-feedback" id="msgtanggal_akhir">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-5"></div>
-                                        <div class="col-4">
-                                            <span class="float-right filter"><button type="submit" class="btn btn-success" id="btncetak" disabled>Cetak</button></span>
-                                            <span class="float-right filter"><button type="button" class="btn btn-outline-danger" id="btnbatal">Batal</button></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+            </div>
+        </div>
+        <div class="row hide" id="semuaform">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Laporan Penjualan</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="semuatable" style="width:100%">
+                                <thead style="text-align: center;">
+                                    <tr>
+                                        <th>No PO</th>
+                                        <th>No AKN</th>
+                                        <th>Customer / Distributor</th>
+                                        <th>Tanggal Pesan</th>
+                                        <th>Batas Kontrak</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Instansi</th>
+                                        <th>Satuan</th>
+                                        <th>Produk</th>
+                                        <th>No Seri</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga</th>
+                                        <th>Subtotal</th>
+                                        <th>Status</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row hide" id="ekatalogform">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Laporan Penjualan Ekatalog</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="ekatalogtable" style="width: 100%;">
+                                <thead style="text-align: center;">
+                                    <tr>
+                                        <th>No AKN</th>
+                                        <th>No SO</th>
+                                        <th>No PO</th>
+                                        <th>No SJ</th>
+                                        <th>Customer / Distributor</th>
+                                        <th>Batas Kontrak</th>
+                                        <th>Tanggal Pengiriman</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Instansi</th>
+                                        <th>Satuan</th>
+                                        <th>Produk</th>
+                                        <th>No Seri</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga</th>
+                                        <th>Subtotal</th>
+                                        <th>Status</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row hide" id="spaform">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Laporan Penjualan SPA</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="spatable" style="width:100%">
+                                <thead style="text-align: center;">
+                                    <tr>
+                                        <th>No PO</th>
+                                        <th>No SO</th>
+                                        <th>Customer / Distributor</th>
+                                        <th>Tanggal Pesan</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Produk</th>
+                                        <th>No Seri</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga</th>
+                                        <th>Subtotal</th>
+                                        <th>Status</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row hide" id="spbform">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Laporan Penjualan SPB</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="spbtable" style="width:100%">
+                                <thead style="text-align: center;">
+                                    <tr>
+                                        <th>No PO</th>
+                                        <th>No SO</th>
+                                        <th>Customer / Distributor</th>
+                                        <th>Tanggal Pesan</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Produk</th>
+                                        <th>No Seri</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga</th>
+                                        <th>Subtotal</th>
+                                        <th>Status</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row hide" id="semuaform">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5>Laporan Penjualan</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="semuatable" style="width:100%">
-                            <thead style="text-align: center;">
-                                <tr>
-                                    <th>No PO</th>
-                                    <th>No AKN</th>
-                                    <th>Customer / Distributor</th>
-                                    <th>Tanggal Pesan</th>
-                                    <th>Batas Kontrak</th>
-                                    <th>Tanggal PO</th>
-                                    <th>Instansi</th>
-                                    <th>Satuan</th>
-                                    <th>Produk</th>
-                                    <th>No Seri</th>
-                                    <th>Jumlah</th>
-                                    <th>Harga</th>
-                                    <th>Subtotal</th>
-                                    <th>Status</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row hide" id="ekatalogform">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5>Laporan Penjualan Ekatalog</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="ekatalogtable" style="width: 100%;">
-                            <thead style="text-align: center;">
-                                <tr>
-                                    <th>No AKN</th>
-                                    <th>No SO</th>
-                                    <th>No PO</th>
-                                    <th>No SJ</th>
-                                    <th>Customer / Distributor</th>
-                                    <th>Batas Kontrak</th>
-                                    <th>Tanggal Pengiriman</th>
-                                    <th>Tanggal PO</th>
-                                    <th>Instansi</th>
-                                    <th>Satuan</th>
-                                    <th>Produk</th>
-                                    <th>No Seri</th>
-                                    <th>Jumlah</th>
-                                    <th>Harga</th>
-                                    <th>Subtotal</th>
-                                    <th>Status</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row hide" id="spaform">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5>Laporan Penjualan SPA</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="spatable" style="width:100%">
-                            <thead style="text-align: center;">
-                                <tr>
-                                    <th>No PO</th>
-                                    <th>No SO</th>
-                                    <th>Customer / Distributor</th>
-                                    <th>Tanggal Pesan</th>
-                                    <th>Tanggal PO</th>
-                                    <th>Produk</th>
-                                    <th>No Seri</th>
-                                    <th>Jumlah</th>
-                                    <th>Harga</th>
-                                    <th>Subtotal</th>
-                                    <th>Status</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row hide" id="spbform">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5>Laporan Penjualan SPB</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="spbtable" style="width:100%">
-                            <thead style="text-align: center;">
-                                <tr>
-                                    <th>No PO</th>
-                                    <th>No SO</th>
-                                    <th>Customer / Distributor</th>
-                                    <th>Tanggal Pesan</th>
-                                    <th>Tanggal PO</th>
-                                    <th>Produk</th>
-                                    <th>No Seri</th>
-                                    <th>Jumlah</th>
-                                    <th>Harga</th>
-                                    <th>Subtotal</th>
-                                    <th>Status</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 @endsection
 
 @section('adminlte_js')
+<script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
 
-<script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.1.3/css/rowGroup.bootstrap4.min.css">
-
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js "></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css "></script>
+<script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
+<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
+<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
+<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
+<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}">
 
 <script>
     $(function() {
-        $('#customer_id').append('<option value="">s</option>');
+        $('#customer_id').append('<option value=""></option>');
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -273,7 +327,7 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             ajax: {
-                'url': '/api/laporan/penjualan/ekatalog,spa,spb/semua/0/0/',
+                'url': '/api/laporan/penjualan/ekatalog,spa,spb/semua/0/0',
                 'dataType': 'json',
                 'type': 'POST',
                 'headers': {
@@ -297,19 +351,24 @@
                     data: 'kosong'
                 },
                 {
-                    data: 'no_paket'
+                    data: 'no_paket',
+                    className: 'nowraptext'
                 },
                 {
-                    data: 'nama_customer'
+                    data: 'nama_customer',
+                    className: 'nowraptext'
                 },
                 {
-                    data: 'tgl_kirim'
+                    data: 'tgl_kirim',
+                    className: 'nowraptext'
                 },
                 {
-                    data: 'tgl_kontrak'
+                    data: 'tgl_kontrak',
+                    className: 'nowraptext'
                 },
                 {
-                    data: 'tgl_po'
+                    data: 'tgl_po',
+                    className: 'nowraptext'
                 },
                 {
                     data: 'instansi'
@@ -321,7 +380,8 @@
                     data: 'nama_produk'
                 },
                 {
-                    data: 'no_seri'
+                    data: 'no_seri',
+                    className: 'nowraptext'
                 },
                 {
                     data: 'jumlah'
@@ -358,7 +418,7 @@
                     totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
                     return $('<tr/>')
                         .append('<td colspan="12">Total Penjualan Produk: ' + rows.count() + '</td>')
-                        .append('<td colspan="2">' + totalPenjualan + '</td>');
+                        .append('<td colspan="3">' + totalPenjualan + '</td>');
                 },
                 dataSrc: function(row) {
                     return row.no_po;
@@ -504,10 +564,8 @@
                 penjualan.push($(this).val());
             });
 
-
             if (penjualan != 0) {
                 var x = penjualan;
-
             } else {
                 var x = ['kosong']
             }

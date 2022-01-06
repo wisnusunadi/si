@@ -239,18 +239,19 @@
         var id = $(this).data('id');
         var time = $(this).data('tf');
         var rakit = $(this).data('rakit');
-        console.log(rakit);
+        console.log($(this).parent());
+        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
+        $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
+        $('div#bppb').text($(this).parent().prev().prev().prev().html());
+        $('div#produk').text($(this).parent().prev().prev().html());
+        $('div#jml').text($(this).parent().prev().html());
         $.ajax({
             url: "/api/prd/history/header/" + id,
             type: "get",
             success: function(res) {
+                console.log(res);
                 $('p#d_rakit').text(res[0].day_rakit);
-                $('p#t_rakit').text(res[0].time_rakit);
                 $('p#d_kirim').text(res[0].day_kirim);
-                $('p#t_kirim').text(res[0].time_kirim);
-                $('div#bppb').text(res[0].bppb);
-                $('div#produk').text(res[0].produk);
-                $('div#jml').text(res[0].jml);
             }
         });
 
@@ -285,7 +286,7 @@
         destroy: true,
         "lengthChange": false,
         "ordering": false,
-        "displayLength": 25,
+        "bPaginate": false,
         "info": false,
         "responsive": true,
         "order": [[ 0, 'asc' ]],
@@ -316,6 +317,7 @@
 
                 if (last !== group) {
                     var rowData = api.row(i).data();
+
 
                     $(rows).eq(i).before(
                     '<tr class="table-dark text-bold"><td colspan="1">' + group + '</td><td colspan="5">'+rowData.day_kirim+'</td></tr>'

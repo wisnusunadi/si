@@ -528,10 +528,10 @@
         });
 
         $(document).on('click', '.editmodal', function() {
-            var href = $(this).attr('data-attr');
+            var href = $(this).attr('data-href');
             var id = $(this).data('id');
             var logistik_id = $(this).attr('data-id');
-
+            var jenis = $(this).data('attr');
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -541,7 +541,7 @@
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     ekspedisi_select();
-                    barang_detail(logistik_id);
+                    barang_detail(logistik_id, jenis);
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {
@@ -719,7 +719,6 @@
                         }
                     },
                     processResults: function(data) {
-
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -733,13 +732,13 @@
             });
         }
 
-        function barang_detail(id) {
+        function barang_detail(id, jenis) {
             $('#barangtable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/logistik/pengiriman/data/' + id,
+                    'url': '/api/logistik/pengiriman/data/' + id + '/' + jenis,
                     'dataType': 'json',
                     'type': 'POST',
                     'headers': {

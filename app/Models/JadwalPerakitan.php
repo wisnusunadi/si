@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class JadwalPerakitan extends Model
 {
     protected $table = 'jadwal_perakitan';
-    protected $fillable = ['produk_id', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna'];
+    protected $fillable = ['produk_id', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna', 'status_tf'];
 
     public function Produk()
     {
@@ -19,7 +19,8 @@ class JadwalPerakitan extends Model
         return $this->hasMany(JadwalRakitNoseri::class, 'jadwal_id');
     }
 
-    function log() {
+    function log()
+    {
         return $this->hasMany(JadwalPerakitanLog::class, 'jadwal_perakitan_id');
     }
 }

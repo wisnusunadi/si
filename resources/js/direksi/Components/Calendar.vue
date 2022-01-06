@@ -17,12 +17,10 @@
                     plugins: [dayGridPlugin, interactionPlugin],
                     initialView: 'dayGridMonth',
                     weekends: false,
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                    },
                     locale: 'id',
+                    headerToolbar: {
+                    end: "",
+                    },
                     events: [],
                 }
             }

@@ -460,7 +460,11 @@ class GudangController extends Controller
             ->addColumn('posisi', function($d) use($layout) {
                 $opt = '';
                 foreach($layout as $l) {
-                    $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
+                    if ($d->layout_id == $l->id) {
+                        $opt .= '<option value="'.$l->id.'" selected>'.$l->ruang.'</option>';
+                    } else {
+                        $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
+                    }
                 }
                 return '<select name="layout_id[]" id="layout_id[]" class="form-control">
                         ' . $opt . '
@@ -644,6 +648,7 @@ class GudangController extends Controller
 
     function storeDraftRancang(Request $request)
     {
+        // dd($request->all());
         $h = new TFProduksi();
         $h->tgl_masuk = $request->tgl_masuk;
         $h->dari = $request->dari;
@@ -764,31 +769,32 @@ class GudangController extends Controller
         $dd = TFProduksiDetail::where('t_gbj_id', $request->id)->get()->toArray();
 
         foreach($dd as $dd) {
-            for ($i=0; $i < count($request->seri[$dd['gdg_brg_jadi_id']]); $i++) {
-                NoseriTGbj::where('id', $request->seri[$dd['gdg_brg_jadi_id']][$i])->update(['status_id' => 2]);
-                $a = NoseriTGbj::where('id', $request->seri[$dd['gdg_brg_jadi_id']][$i])->get()->toArray();
-                foreach ($a as $a) {
-                    echo NoseriBarangJadi::where('id',$a['noseri_id'])->get();
-                    NoseriBarangJadi::where('id',$a['noseri_id'])->update(['is_aktif' => 1]);
-                    $b = NoseriBarangJadi::whereIn('id',[$a['noseri_id']])->get()->toArray();
-                    foreach($b as $b) {
-                        $ac = GudangBarangJadi::where('id', $b['gdg_barang_jadi_id'])->get()->toArray();
-                        foreach($ac as $vv) {
-                            $vv['stok'] = $vv['stok'] + count($ac);
-                            GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-                            GudangBarangJadiHis::create([
-                                'gdg_brg_jadi_id' => $vv['id'],
-                                'stok' => count($ac),
-                                'tgl_masuk' => $header->tgl_masuk,
-                                'jenis' => 'MASUK',
-                                'created_by' => $request->userid,
-                                'created_at' => Carbon::now(),
-                                'dari' => $request->dari,
-                                'tujuan' => $request->deskripsi,
-                            ]);
+            foreach($request->seri as $key => $value) {
+                for ($i=0; $i < count($value); $i++) {
+                    NoseriTGbj::where('id', $value[$i]['noseri'])->update(['layout_id' => $value[$i]['layout'], 'status_id' => 2]);
+                    $a = NoseriTGbj::where('id', $value[$i]['noseri'])->get()->toArray();
+                    foreach($a as $a) {
+                        echo NoseriBarangJadi::where('id',$a['noseri_id'])->get();
+                        NoseriBarangJadi::where('id',$a['noseri_id'])->update(['is_aktif' => 1, 'layout_id' => $value[$i]['layout']]);
+                        $b = NoseriBarangJadi::whereIn('id',[$a['noseri_id']])->get()->toArray();
+                        foreach($b as $b) {
+                            $ac = GudangBarangJadi::where('id', $b['gdg_barang_jadi_id'])->get()->toArray();
+                            foreach($ac as $vv) {
+                                $vv['stok'] = $vv['stok'] + count($ac);
+                                GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                                GudangBarangJadiHis::create([
+                                    'gdg_brg_jadi_id' => $vv['id'],
+                                    'stok' => count($ac),
+                                    'tgl_masuk' => $header->tgl_masuk,
+                                    'jenis' => 'MASUK',
+                                    'created_by' => $request->userid,
+                                    'created_at' => Carbon::now(),
+                                    'dari' => $request->dari,
+                                    'tujuan' => $request->deskripsi,
+                                ]);
+                            }
                         }
                     }
-
                 }
             }
         }

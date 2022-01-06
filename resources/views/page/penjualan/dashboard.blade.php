@@ -425,7 +425,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/ekatalog/pengiriman/data/',
+                'url': '/api/ekatalog/pengiriman/data',
                 'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'

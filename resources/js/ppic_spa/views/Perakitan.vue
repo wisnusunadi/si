@@ -15,48 +15,7 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="(d, i) in data" :key="d.id">
-              <td>{{ i + 1 }}</td>
-              <td>{{ d.produk.produk.nama + " " + d.produk.nama }}</td>
-              <td>{{ d.jumlah }}</td>
-              <td>{{ d.tanggal_mulai }}</td>
-              <td>{{ d.tanggal_selesai }}</td>
-              <td>
-                <progress
-                  class="progress"
-                  :value="countVal(mixins.change_status(d.status))"
-                  :class="{
-                    'is-danger':
-                      mixins.change_status(d.status) === 'penyusunan',
-                    'is-warning':
-                      mixins.change_status(d.status) === 'pelaksanaan',
-                    'is-success': mixins.change_status(d.status) === 'selesai',
-                  }"
-                  max="100"
-                >
-                  {{ countVal(mixins.change_status(d.status)) }}%
-                </progress>
-                <small>
-                  {{ countVal(mixins.change_status(d.status)) }}% Complete
-                </small>
-              </td>
-              <td>
-                <span
-                  :class="{
-                    'badge badge-pill': true,
-                    'badge-warning':
-                      mixins.change_status(d.status) === 'penyusunan',
-                    'badge-info':
-                      mixins.change_status(d.status) === 'pelaksanaan',
-                    'badge-success':
-                      mixins.change_status(d.status) === 'selesai',
-                  }"
-                  >{{ mixins.change_status(d.status) }}</span
-                >
-              </td>
-            </tr>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </div>
@@ -65,41 +24,43 @@
 
 <script>
 import $ from "jquery";
-import axios from "axios";
 import mixins from "../mixins";
 
 export default {
   name: "Perakitan",
 
-  data() {
-    return {
-      data: [],
-      mixins: mixins,
-    };
-  },
-
-  methods: {
-    async loadData() {
-      this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/perakitan").then((response) => {
-        this.data = response.data;
-      });
-      this.$store.commit("setIsLoading", false);
-
-      let table = $("#table").DataTable();
-    },
-
-    countVal(status) {
-      let val;
-      if (status === "penyusunan") val = 0;
-      else if (status === "pelaksanaan") val = 50;
-      else if (status === "selesai") val = 100;
-      return val;
-    },
-  },
-
   mounted() {
-    this.loadData();
+    $("#table").DataTable({
+      serverSide: true,
+      ajax: "/api/ppic/datatables/perakitan",
+      columns: [
+        {
+          data: "DT_RowIndex",
+          orderable: false,
+          searchable: false,
+        },
+        {
+          data: "nama",
+        },
+        {
+          data: "jumlah",
+        },
+        {
+          data: "tanggal_mulai",
+        },
+        {
+          data: "tanggal_selesai",
+        },
+        {
+          data: "progres",
+        },
+        {
+          data: function (row) {
+            return mixins.change_status(row["status"]);
+          },
+        },
+      ],
+    });
   },
 };
 </script>

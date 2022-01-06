@@ -120,7 +120,7 @@
                                         <table class="table table-hover add_sparepart_table">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th style="width: 150px">Nama Produk</th>
+                                                    <th style="width: 300px">Nama Produk</th>
                                                     {{-- <th style="width: 150px">Unit</th> --}}
                                                     <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
@@ -340,9 +340,9 @@
 @stop
 @section('adminlte_js')
 <script>
-    $(document).ready(function () {
-
-    });
+    // Sparepart
+    var sparepart = [];
+    var unit = [];
     // Date
     var today = new Date();
     var dd = today.getDate();
@@ -509,6 +509,7 @@
                             })
                             seri[d] = spr_arr;
                             spr_arr = [];
+                            console.log(seri);
                             $('.modalAddSparepart').modal('hide');
                         })
                     } else {
@@ -527,7 +528,7 @@
 
     function addSparepart(x, y, z) {
         // header
-        // console.log($('select[name="sparepart_id"] option:selected').text());
+        console.log($(this).closest('tr').find('.produkoption:selected').text());
         $('.jml_spr').text(x + ' Pcs')
         $('.in_spr').text(document.getElementsByName("date_in")[0].value)
         $('.divisi_spr').text(document.getElementsByName("dari")[0].selectedOptions[0].label)
@@ -769,22 +770,15 @@
 
     var nmrspr = 1;
     $(document).on('click', '.add_sparepart', function () {
-        $.ajax({
-            url: '/api/gk/sel-spare',
-            type: 'POST',
-            dataType: 'json',
-            success: function (res) {
-            $.each(res, function (key, value) {
-                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                $('.produk').append('<option value="' + value.id + '">' + value.nama + '</option');
-            });
-
-            }
-        });
         i++;
         let table_sparepart = '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_id'+nmrspr+'" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
-        $('#sparepart_id'+nmrspr+'').select2();
+        $.each(sparepart, function (index, value) {
+             $('.produk').append('<option value="' + value[0] + '">' + value[1] + '</option>');
+        });
+        $('#sparepart_id'+nmrspr+'').select2({
+            dropdownPosition: 'below',
+        });
         $(".number").inputFilter(function(value) {
             return /^\d*$/.test(value);    // Allow digits only, using a RegExp
         });
@@ -793,24 +787,15 @@
 
     var nmrunt = 1;
     $(document).on('click', '.add_unit', function () {
-        $.ajax({
-            url: '/api/gbj/sel-gbj',
-            type: 'get',
-            dataType: 'json',
-            success: function (res) {
-                // ii++;
-                console.log(res);
-                $.each(res, function (key, value) {
-                    // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                    $(".produkk").append('<option value="' + value.id + '">' + value
-                        .produk.nama + ' ' + value.nama + '</option');
-                });
-            }
-        });
         i++;
         let table_unit = '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_id'+nmrunt+'" class="form-control produkk"></select></td><td><input type="text" name="qty_unit[]" id="jum" class="form-control number"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
-        $('#gbj_id'+nmrunt+'').select2();
+        $.each(unit, function (index, value) {
+             $('.produkk').append('<option value="' + value[0] + '">' + value[1] + '</option>');
+        });
+        $('#gbj_id'+nmrunt+'').select2({
+            dropdownPosition: 'below',
+        });
         $(".number").inputFilter(function(value) {
             return /^\d*$/.test(value);    // Allow digits only, using a RegExp
         });
@@ -850,6 +835,27 @@
             }
         });
         $('.dari').select2({});
+        $.ajax({
+            url: '/api/gk/sel-spare',
+            type: 'POST',
+            dataType: 'json',
+            success: function (res) {
+            $.each(res, function (key, value) {
+                sparepart.push([value.id, value.nama]);
+            });
+            }
+        });
+        $.ajax({
+            url: '/api/gbj/sel-gbj',
+            type: 'get',
+            dataType: 'json',
+            success: function (res) {
+                // ii++;
+                $.each(res, function (key, value) {
+                    unit.push([value.id, value.produk.nama + ' ' + value.nama]);
+                });
+            }
+        });
     });
 
     function terima() {
@@ -906,12 +912,12 @@
                     },
                     success: function (res) {
                         console.log(res);
-                        Swal.fire(
-                            'Terima!',
-                            'Data berhasil diterima!',
-                            'success'
-                        )
-                        location.reload();
+                        // Swal.fire(
+                        //     'Terima!',
+                        //     'Data berhasil diterima!',
+                        //     'success'
+                        // )
+                        // location.reload();
                     },
                 })
 
@@ -924,7 +930,7 @@
             }
         });
     }
-
+    const arr_spr = {};
     function rancang() {
         Swal.fire({
             title: "Apakah anda yakin?",
@@ -962,6 +968,8 @@
                     jum.push($(this).val());
                 });
 
+                console.log(spr1, jml, unit1, jum);
+
                 $.ajax({
                     url: "/api/gk/in-draft",
                     type: "post",
@@ -979,12 +987,12 @@
                     },
                     success: function (res) {
                         console.log(res);
-                        Swal.fire(
-                            'Rancang!',
-                            'Data berhasil diterima!',
-                            'success'
-                        );
-                        location.reload();
+                        // Swal.fire(
+                        //     'Rancang!',
+                        //     'Data berhasil diterima!',
+                        //     'success'
+                        // );
+                        // location.reload();
                     },
                 })
 

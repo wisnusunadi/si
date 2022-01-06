@@ -272,14 +272,31 @@
     var mytable = '';
 
     $(document).ready(function () {
+        $('#head-cb').prop('checked', false);
+        $('#head-cb-produk').prop('checked', false);
+        $('#head-cb-produk-edit').prop('checked', false);
+        $('#head-cb-edit').prop('checked', false);
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
+
         });
 
         $("#head-cb-edit").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child-edit').prop('checked', isChecked)
+            // $('.cb-child-edit').prop('checked', isChecked)
+            $('.scan-produk-edit').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
 
         $("#head-cb-produk").on('click', function () {
@@ -373,7 +390,7 @@
     });
 
     var prd = '';
-    var jml = '';
+var jml = '';
     $(document).on('click', '.detailmodal', function(e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
@@ -416,6 +433,11 @@
     const prd1 = {};
     var t = 0;
     $(document).on('click', '#simpan', function(e) {
+        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function() {
+            return $(this).val();
+        }).get();
+        console.log(a);
+        console.log(a.length);
         $('.cb-child-prd').each(function() {
             if($(this).is(":checked")) {
                 if (!prd1[$(this).val()])
@@ -425,17 +447,15 @@
             }
         })
 
-        const ids = [];
         $('.cb-child').each(function() {
             if($(this).is(":checked")) {
-                if ($('.cb-child').filter(':checked').length > jml) {
+                if (a.length > jml) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Melebihi Batas Maksimal'
+                        text: 'Batas Maksimal '+jml+' Barang!',
                     })
                 } else {
-                    ids.push($(this).val());
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -448,7 +468,7 @@
             }
 
         })
-        prd1[prd].noseri = ids;
+        prd1[prd].noseri = a;
         console.log(prd1);
     })
 
@@ -529,7 +549,7 @@
                             console.log(res);
                         }
                     })
-                    location.reload();
+                    // location.reload();
                 }
             })
 
@@ -672,7 +692,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Melebihi Batas Maksimal'
+                        text: 'Batas Maksimal '+jml+' Barang!',
                     })
                 } else {
                     ids.push($(this).val());

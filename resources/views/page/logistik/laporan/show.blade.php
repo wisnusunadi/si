@@ -166,6 +166,18 @@
 @endsection
 
 @section('adminlte_js')
+<script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
+
+<script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
+<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
+<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
+<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
+<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}">
+
+
 <script>
     $(function() {
         var today = new Date();

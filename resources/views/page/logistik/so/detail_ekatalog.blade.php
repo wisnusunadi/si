@@ -476,6 +476,7 @@
 <script>
     $(function() {
         var divisi_id = "{{Auth::user()->divisi->id}}";
+        var jenis_penjualan = "{{$value}}";
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -520,7 +521,8 @@
                 data: 'aksi',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: jenis_penjualan == "SPB" ? false : true
             }]
 
         });
@@ -530,7 +532,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$data->pesanan_id}}',
+                'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$data->pesanan_id}}' + "/" + jenis_penjualan,
                 'dataType': 'json',
                 'type': 'POST',
                 'headers': {
@@ -563,7 +565,8 @@
                 data: 'button',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: jenis_penjualan == "SPB" ? false : true
             }]
 
         });
@@ -573,7 +576,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/logistik/so/data/detail/selesai_kirim/' + '{{$data->pesanan_id}}',
+                'url': '/api/logistik/so/data/detail/selesai_kirim/' + '{{$data->pesanan_id}}' + '/' + jenis_penjualan,
                 'dataType': 'json',
                 'type': 'POST',
                 'headers': {
@@ -611,7 +614,8 @@
                 data: 'button',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: jenis_penjualan == "SPB" ? false : true
             }]
 
         });
@@ -701,7 +705,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id,
+                    'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id + '/' + jenis_penjualan,
                     'dataType': 'json',
                     'type': 'POST',
                     'headers': {
@@ -902,7 +906,7 @@
             var pesanan_id = '{{$data->id}}';
 
             $.ajax({
-                url: "/logistik/so/create/" + checkedAry + '/' + pesanan_id,
+                url: "/logistik/so/create/" + checkedAry + '/' + pesanan_id + '/' + jenis_penjualan,
                 beforeSend: function() {
                     $('#loader').show();
                 },

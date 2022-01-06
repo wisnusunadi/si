@@ -127,6 +127,7 @@
                     <div class="col-4 align-items-stretch">
                         <div class="card">
                             <div class="card-body">
+                                @if($jenis != "SPB")
                                 <h5>Info Produk</h5>
                                 <div class="row">
                                     <div class="col-12">
@@ -140,6 +141,21 @@
                                         </div>
                                     </div>
                                 </div>
+                                @else
+                                <h5>Info Part</h5>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="margin">
+                                            <div><small class="text-muted">Nama Part</small></div>
+                                            <div><b id="no_akn">{{$d->Sparepart->nama}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Jumlah Produk</small></div>
+                                            <div><b id="no_so">{{$d->jumlah}}</b></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -325,6 +341,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var jenis = "{{$jenis}}";
         var selesaikirimtable = $('#selesaikirimtable').DataTable({
             processing: true,
             serverSide: true,
@@ -365,7 +382,8 @@
                 data: 'button',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: jenis == "SPB" ? false : true,
             }]
 
         });

@@ -6,6 +6,7 @@ use App\Exports\LaporanPenjualan;
 use App\Models\Customer;
 use App\Models\DetailEkatalog;
 use App\Models\DetailPesanan;
+use App\Models\DetailPesananPart;
 use App\Models\DetailPesananProduk;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
@@ -138,48 +139,6 @@ class PenjualanController extends Controller
             } else if ($Ekatalog == "" && $Spa == "" && $Spb != "") {
                 $data = $Spb;
             }
-
-
-
-            // if ($this->in_array_all(['ekatalog', 'spa', 'spb'], $jenis)) {
-            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-
-            //     $data = $Ekatalog->merge($Spa)->merge($Spb);
-            // } else if ($this->in_array_all(['ekatalog', 'spa'], $jenis)) {
-            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-
-            //     $data = $Ekatalog->merge($Spa);
-            // } else if ($this->in_array_all(['ekatalog', 'spb'], $jenis)) {
-            //     $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-
-            //     $data = $Ekatalog->merge($Spb);
-            // } else if ($this->in_array_all(['spa', 'spb'], $jenis)) {
-            //     $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
-            //         $q->whereIN('log_id', $y);
-            //     })->orderBy('id', 'DESC')->get());
-            //     $data = $Spa->merge($Spb);
-            // }
         }
         return datatables()->of($data)
             ->addIndexColumn()
@@ -208,8 +167,8 @@ class PenjualanController extends Controller
                     return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
                     // return $data->tgl_buat;
                 } else {
-                    if (isset($data->tgl_po)) {
-                        return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+                    if (!empty($data->Pesanan->tgl_po)) {
+                        return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
                     } else {
                         return "-";
                     }
@@ -222,7 +181,7 @@ class PenjualanController extends Controller
 
                     if (isset($data->Pesanan->so)) {
                         if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                            return $tgl_parameter;
+                            return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
                         } else {
                             if ($tgl_sekarang < $tgl_parameter) {
                                 $to = Carbon::now();
@@ -479,13 +438,17 @@ class PenjualanController extends Controller
         } else if ($parameter == 'customer') {
             $ekatalog = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
                 $q->where('satuan', 'LIKE', '%' . $value . '%');
-            })->has('NoseriBarangJadi')->get();
+            })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
+                $q->where('instansi', 'LIKE', '%' . $value . '%');
+            })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
+                $q->where('satuan', 'LIKE', '%' . $value . '%');
+            })->get();
             $spa = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
-            })->has('NoseriBarangJadi')->get();
+            })->get();
             $spb = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
-            })->has('NoseriBarangJadi')->get();
+            })->get();
             $data = $ekatalog->merge($spa)->merge($spb);
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -506,7 +469,9 @@ class PenjualanController extends Controller
                     if (isset($data->NoseriDetailPesanan)) {
                         $name = explode('/', $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->so);
                         if ($name[1] == 'EKAT') {
-                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                            $cus = $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                            $cus .= "<div><small>" . $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan . "</small></div>";
+                            return $cus;
                         } else if ($name[1] == 'SPA') {
                             return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                         } else if ($name[1] == 'SPB') {
@@ -569,16 +534,16 @@ class PenjualanController extends Controller
                     }
                     return $datas;
                 })
-                ->rawColumns(['divisi_id', 'status'])
+                ->rawColumns(['divisi_id', 'status', 'nama_customer'])
                 ->make(true);
         } else if ($parameter == 'produk') {
-            $ekatalog = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+            $ekatalog = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
             })->get();
-            $spa = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+            $spa = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
             })->get();
-            $spb = NoseriTGbj::whereHas('NoseriBarangJadi.Gudang.Produk', function ($q) use ($value) {
+            $spb = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
             })->get();
             $data = $ekatalog->merge($spa)->merge($spb);
@@ -601,7 +566,9 @@ class PenjualanController extends Controller
                     if (isset($data->NoseriDetailPesanan)) {
                         $name = explode('/', $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->so);
                         if ($name[1] == 'EKAT') {
-                            return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                            $cus = $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                            $cus .= "<div><small>" . $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan . "</small></div>";
+                            return $cus;
                         } else if ($name[1] == 'SPA') {
                             return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                         } else if ($name[1] == 'SPB') {
@@ -664,12 +631,12 @@ class PenjualanController extends Controller
                     }
                     return $datas;
                 })
-                ->rawColumns(['divisi_id', 'status'])
+                ->rawColumns(['divisi_id', 'status', 'nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_seri') {
             $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
                 $q->where('noseri', 'LIKE', '%' . $value . '%');
-            })->get();
+            })->orderBy('id', 'desc')->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -835,23 +802,25 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('no_so', function ($data) {
-                    if (isset($data->DetailLogistik->DetailPesananProduk)) {
+                    if (isset($data->DetailLogistik)) {
                         return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                    } else {
+                        return $data->DetailLogistikPart->DetailPesananPart->Pesanan->so;
                     }
                 })
                 ->addColumn('nosurat', function ($data) {
                     return $data->nosurat;
                 })
                 ->addColumn('customer', function ($data) {
-                    if (isset($data->DetailLogistik->DetailPesananProduk)) {
+                    if (isset($data->DetailLogistik)) {
                         $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
                         if ($name[1] == 'EKAT') {
                             return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
                         } else if ($name[1] == 'SPA') {
                             return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
-                        } else if ($name[1] == 'SPB') {
-                            return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                         }
+                    } else if (!isset($data->DetailLogistik)) {
+                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                     } else {
                         return '-';
                     }
@@ -1684,27 +1653,43 @@ class PenjualanController extends Controller
                 'log' => 'po'
             ]);
             $bool = true;
+            // if ($Spb) {
+            //     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+            //         $dspb = DetailPesanan::create([
+            //             'pesanan_id' => $x,
+            //             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+            //             'jumlah' => $request->produk_jumlah[$i],
+            //             'harga' => str_replace('.', "", $request->produk_harga[$i]),
+            //             'ongkir' => 0,
+            //         ]);
+            //         if (!$dspb) {
+            //             $bool = false;
+            //         } else {
+            //             for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+            //                 $dspbp = DetailPesananProduk::create([
+            //                     'detail_pesanan_id' => $dspb->id,
+            //                     'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+            //                 ]);
+            //                 if (!$dspbp) {
+            //                     $bool = false;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // } else {
+            //     $bool = false;
+            // }
             if ($Spb) {
-                for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                    $dspb = DetailPesanan::create([
+                for ($i = 0; $i < count($request->part_id); $i++) {
+                    $dspb = DetailPesananPart::create([
                         'pesanan_id' => $x,
-                        'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                        'jumlah' => $request->produk_jumlah[$i],
-                        'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                        'm_sparepart_id' => $request->part_id[$i],
+                        'jumlah' => $request->part_jumlah[$i],
+                        'harga' => str_replace('.', "", $request->part_harga[$i]),
                         'ongkir' => 0,
                     ]);
                     if (!$dspb) {
                         $bool = false;
-                    } else {
-                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
-                            $dspbp = DetailPesananProduk::create([
-                                'detail_pesanan_id' => $dspb->id,
-                                'gudang_barang_jadi_id' => $request->variasi[$i][$j]
-                            ]);
-                            if (!$dspbp) {
-                                $bool = false;
-                            }
-                        }
                     }
                 }
             } else {
@@ -1979,47 +1964,71 @@ class PenjualanController extends Controller
             $po = $pesanan->save();
 
             if ($po) {
-                $dspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
-                    $q->where('pesanan_id', $poid);
-                })->get();
-                if (count($dspbp) > 0) {
-                    $deldspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
-                        $q->where('pesanan_id', $poid);
-                    })->delete();
-                    if (!$deldspbp) {
-                        $bool = false;
-                    }
-                }
+                // $dspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                //     $q->where('pesanan_id', $poid);
+                // })->get();
+                // if (count($dspbp) > 0) {
+                //     $deldspbp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
+                //         $q->where('pesanan_id', $poid);
+                //     })->delete();
+                //     if (!$deldspbp) {
+                //         $bool = false;
+                //     }
+                // }
 
-                $dspb = DetailPesanan::where('pesanan_id', $poid)->get();
+                // $dspb = DetailPesanan::where('pesanan_id', $poid)->get();
+                // if (count($dspb) > 0) {
+                //     $deldspb = DetailPesanan::where('pesanan_id', $poid)->delete();
+                //     if (!$deldspb) {
+                //         $bool = false;
+                //     }
+                // }
+
+                // if ($dspb) {
+                //     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                //         $c = DetailPesanan::create([
+                //             'pesanan_id' => $spb->pesanan_id,
+                //             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                //             'jumlah' => $request->produk_jumlah[$i],
+                //             'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                //             'ongkir' => 0,
+                //         ]);
+                //         if (!$c) {
+                //             $bool = false;
+                //         } else {
+                //             for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                //                 $dspbp = DetailPesananProduk::create([
+                //                     'detail_pesanan_id' => $c->id,
+                //                     'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                //                 ]);
+                //                 if (!$dspbp) {
+                //                     $bool = false;
+                //                 }
+                //             }
+                //         }
+                //     }
+                // } else {
+                //     $bool = false;
+                // }
+
+                $dspb = DetailPesananPart::where('pesanan_id', $poid)->get();
                 if (count($dspb) > 0) {
-                    $deldspb = DetailPesanan::where('pesanan_id', $poid)->delete();
+                    $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
                     if (!$deldspb) {
                         $bool = false;
                     }
                 }
-
                 if ($dspb) {
-                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                        $c = DetailPesanan::create([
-                            'pesanan_id' => $spb->pesanan_id,
-                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                            'jumlah' => $request->produk_jumlah[$i],
-                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                    for ($i = 0; $i < count($request->part_id); $i++) {
+                        $dspb = DetailPesananPart::create([
+                            'pesanan_id' => $poid,
+                            'm_sparepart_id' => $request->part_id[$i],
+                            'jumlah' => $request->part_jumlah[$i],
+                            'harga' => str_replace('.', "", $request->part_harga[$i]),
                             'ongkir' => 0,
                         ]);
-                        if (!$c) {
+                        if (!$dspb) {
                             $bool = false;
-                        } else {
-                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
-                                $dspbp = DetailPesananProduk::create([
-                                    'detail_pesanan_id' => $c->id,
-                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
-                                ]);
-                                if (!$dspbp) {
-                                    $bool = false;
-                                }
-                            }
                         }
                     }
                 } else {
@@ -2222,7 +2231,7 @@ class PenjualanController extends Controller
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -2238,7 +2247,7 @@ class PenjualanController extends Controller
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $data = $Ekatalog->merge($Spb);
@@ -2246,7 +2255,7 @@ class PenjualanController extends Controller
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $data = $Spa->merge($Spb);
@@ -2259,7 +2268,7 @@ class PenjualanController extends Controller
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
             } else if ($penjualan == 'spb') {
-                $data  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $data  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
             }
@@ -2273,7 +2282,7 @@ class PenjualanController extends Controller
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
@@ -2293,7 +2302,7 @@ class PenjualanController extends Controller
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
@@ -2303,7 +2312,7 @@ class PenjualanController extends Controller
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesananPart::whereHas('Pesanan.SPB', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
@@ -2319,7 +2328,7 @@ class PenjualanController extends Controller
                         ->where('customer_id', $distributor);
                 })->get();
             } else if ($penjualan == 'spb') {
-                $data  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
+                $data  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($distributor, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $distributor);
                 })->get();
@@ -2373,19 +2382,23 @@ class PenjualanController extends Controller
                 if ($name[1] == 'EKAT') {
                     return $data->Pesanan->Ekatalog->instansi;
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('satuan', function ($data) {
                 $name = explode('/', $data->pesanan->so);
                 if ($name[1] == 'EKAT') {
-                    return $data->Pesanan->Ekatalog->Satuan;
+                    return $data->Pesanan->Ekatalog->satuan;
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('nama_produk', function ($data) {
-                return $data->penjualanproduk->nama;
+                if ($data->PenjualanProduk) {
+                    return $data->penjualanproduk->nama;
+                } else {
+                    return $data->Sparepart->nama;
+                }
             })
             ->addColumn('no_seri', function () {
                 return '-';
@@ -2583,7 +2596,7 @@ class PenjualanController extends Controller
     {
         $gbj = GudangBarangJadi::find($id);
         $jumlah_ekatalog = $this->get_count_ekatalog($id, $gbj->produk_id, "sepakat") + $this->get_count_ekatalog($id, $gbj->produk_id, "negosiasi");
-        $jumlah_po = $this->get_count_spa_spb_po($id, $gbj->produk_id);
+        $jumlah_po = $this->get_count_spa_po($id, $gbj->produk_id);
         $jumlah = $gbj->stok - ($jumlah_ekatalog + $jumlah_po);
         return $jumlah;
     }
@@ -2608,7 +2621,7 @@ class PenjualanController extends Controller
         return $jumlah;
     }
 
-    public function get_count_spa_spb_po($id, $produk_id)
+    public function get_count_spa_po($id, $produk_id)
     {
         $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
             $q->where('gudang_barang_jadi_id', $id);

@@ -31,6 +31,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Arr;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
+use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +46,11 @@ class MasterController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so;
+                if (isset($data->detaillogistik)) {
+                    return $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so;
+                } else {
+                    return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->so;
+                }
             })
             ->addColumn('sj', function ($data) {
                 return $data->nosurat;
@@ -61,35 +66,41 @@ class MasterController extends Controller
                 return $data->tgl_kirim;
             })
             ->addColumn('nama_customer', function ($data) {
-                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
-                } elseif ($name[1] == 'SPA') {
-                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
+                if (isset($data->detaillogistik)) {
+                    $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
+                    }
                 } else {
-                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->nama;
+                    return  $data->detaillogistikpart->first()->detailpesananpart->pesanan->spb->customer->nama;
                 }
                 return;
             })
             ->addColumn('alamat', function ($data) {
-                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->alamat;
-                } elseif ($name[1] == 'SPA') {
-                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->alamat;
+                if (isset($data->detaillogistik)) {
+                    $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->alamat;
+                    } elseif ($name[1] == 'SPA') {
+                        return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->alamat;
+                    }
                 } else {
-                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->alamat;
+                    return  $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->alamat;
                 }
                 return;
             })
             ->addColumn('telp', function ($data) {
-                $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
-                if ($name[1] == 'EKAT') {
-                    return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->telp;
-                } elseif ($name[1] == 'SPA') {
-                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->telp;
+                if (isset($data->detaillogistik)) {
+                    $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->telp;
+                    } elseif ($name[1] == 'SPA') {
+                        return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->telp;
+                    }
                 } else {
-                    return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spb->customer->telp;
+                    return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->telp;
                 }
                 return;
             })
@@ -422,20 +433,25 @@ class MasterController extends Controller
                 })
                 ->addColumn('status', function ($data) {
                     $datas = "";
-                    if ($data->log == "penjualan") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->log == "po") {
-                        $datas .= '<span class="purple-text badge">';
-                    } else if ($data->log == "gudang") {
-                        $datas .= '<span class="orange-text badge">';
-                    } else if ($data->log == "qc") {
-                        $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->log == "logistik") {
-                        $datas .= '<span class="blue-text badge">';
-                    } else if ($data->log == "selesai") {
-                        $datas .= '<span class="green-text badge">';
+                    if (!empty($data->Pesanan->log_id)) {
+                        if ($data->Pesanan->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->Pesanan->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->Pesanan->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                     }
-                    $datas .= ucfirst($data->log) . '</span>';
+
                     return $datas;
                 })
                 ->addColumn('button', function ($data) {
@@ -759,7 +775,6 @@ class MasterController extends Controller
     }
 
     //Show Modal
-
     public function update_customer_modal($id)
     {
         $customer = Customer::find($id);
@@ -835,6 +850,13 @@ class MasterController extends Controller
 
         echo json_encode($data);
     }
+
+    function select_m_sparepart()
+    {
+        $data = Sparepart::all();
+        return response()->json($data);
+    }
+
     function select_sparepart()
     {
         $data = SparepartGudang::all();

@@ -23,7 +23,8 @@ export default {
                 borderColor: item.warna,
 
                 produk_id: item.produk_id,
-                jumlah: item.jumlah
+                jumlah: item.jumlah,
+                progres: item.noseri_count
             }));
     },
 

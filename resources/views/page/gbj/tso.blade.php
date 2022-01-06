@@ -158,7 +158,13 @@
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
 
         // load produk
@@ -184,7 +190,7 @@
             // console.log($(this).val());
             $.ajax({
                 url : "{{ URL('/api/tfp/cekStok')}}",
-                type: "post", 
+                type: "post",
                 data: {gdg_brg_jadi_id: $(this).val()},
                 success: function(res) {
                     $('span#stock').text(res.stok);
@@ -305,7 +311,7 @@
                 $('.scan-produk').DataTable({
                     destroy: true,
                     processing: true,
-                    serverSide: true,
+                    serverSide: false,
                     autoWidth: false,
                     ordering: false,
                     ajax: {
@@ -330,19 +336,22 @@
     })
     const seri = {};
     $(document).on('click', '#btnSave', function() {
-        console.log('jum '+jml);
+        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type="checkbox"]:checked').map(function() {
+            return $(this).val();
+        }).get();
+        console.log(a);
+        // console.log('jum '+jml);
 
-        const ids = [];
+        // const ids = [];
         $('.cb-child').each(function() {
             if ($(this).is(":checked")) {
-                if ($('.cb-child').filter(':checked').length > jml) {
+                if (a.length > jml) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Melebihi Batas Maksimal'
+                        text: 'Batas Maksimal '+jml+' Barang!'
                     })
                 } else {
-                    ids.push($(this).val());
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -352,10 +361,9 @@
                     })
                     $('.modal-produk').modal('hide');
                 }
-
             }
         })
-        seri[id] = ids;
+        seri[id] = a;
         console.log(seri);
     })
 

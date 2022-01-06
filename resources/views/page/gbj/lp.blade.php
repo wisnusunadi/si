@@ -318,7 +318,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk <span id="title">AMBULATORY BLOOD PRESSURE MONITOR</span></b>
+                <h5 class="modal-title"><b>Detail Produk <span id="title"></span></b>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -517,6 +517,18 @@
         modalRancangan();
     });
 
+    $("#head-cb-rancang").on('click', function () {
+        var isChecked = $("#head-cb-rancang").prop('checked')
+        $('.scan-produk').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
+            // let a = $('.scan-produk').DataTable().columns(0).nodes().to$().find('input[type="checkbox"]').prop('checked', isChecked);
+            // console.log(a);
+    });
+
     $(document).on('click', '.detail', function (e) {
         var id = $(this).data('id');
         gbj = $(this).data('gbj');
@@ -529,7 +541,7 @@
             searching: false,
             "lengthChange": false,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: "/api/draft/data-seri",
                 type: "post",
@@ -579,6 +591,8 @@
     }
 
     $(document).ready(function () {
+        $('#head-cb-rancang').prop('checked', false);
+        $('#head-cb').prop('checked', false);
         $('.division').select2();
         $('.productt').select2();
 
@@ -651,12 +665,13 @@
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
-        });
-
-        $("#head-cb-rancang").on('click', function () {
-            var isChecked = $("#head-cb-rancang").prop('checked')
-            $('.cb-child-rancang').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk1').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
 
         // divisi
@@ -688,6 +703,7 @@
     var lay;
     var i = 0;
     $(document).on('click', '#btnPlus', function () {
+        $('#head-cb').prop('checked', false);
         var tr = $(this).closest('tr');
         x = tr.find('#qty').val();
         y = tr.find('.productt').val();
@@ -865,10 +881,10 @@
                                 data: seri,
                             },
                             success: function (res) {
-
+                                console.log(res);
                             }
                         })
-                        location.reload();
+                        // location.reload();
                     }
                 })
 
@@ -877,10 +893,27 @@
     });
 
     $(document).on('click', '#seriBtn', function (e) {
-        const ids = [];
+        let no_seri = [];
+        let layout = [];
+        serir[gbj] = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            let noseri_temp = $(elm).val();
+            let layout_temp = $(elm).parent().next().next().children().val()
+            // no_seri.push($(elm).val());
+            // layout.push($(elm).parent().next().next().children().val());
+            serir[gbj].push({
+                noseri: noseri_temp,
+                layout: layout_temp
+            })
+        });
+
+        // serir[gbj] = { 'noseri' : [], 'layout': []};
+        // const ids = [];
         $('.cb-child-rancang').each(function () {
             if ($(this).is(':checked')) {
-                ids.push($(this).val());
+                // a.push($(this).val());
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -889,7 +922,8 @@
                     timer: 1500
                 })
             }
-            serir[gbj] = ids;
+            // serir[gbj].noseri = no_seri;
+            // serir[gbj].layout = layout;
         })
         console.log(serir);
         $('.tambahan-rancangan').modal('hide');
@@ -919,7 +953,7 @@
                         seri: serir,
                     },
                     success: function (res) {
-
+                        console.log(res);
                     }
                 })
                 location.reload();
@@ -981,9 +1015,16 @@
             }
         });
 
-        $(document).on('click', '#btnSeri', function (e) {
-            e.preventDefault();
-
+        $(document).on('click', '#btnSeri', function () {
+            let no_seri = [];
+            let layout = [];
+            let a = $('.scan-produk1').DataTable().column(0).nodes().to$().find('input[type="checkbox"]:checked').map(function () {
+                no_seri.push($(this).parent().next().children().val());
+                layout.push($(this).parent().next().next().children().val());
+            }).get();
+            console.log("data");
+            console.log(no_seri);
+            console.log(layout);
             let arr = [];
             const data = tableScan.$('.seri').map(function () {
                 return $(this).val();
@@ -1041,8 +1082,8 @@
                             },
                             success: function (res) {
                                 if (res.msg) {
-                                    seri[y].noseri = ids;
-                                    seri[y].layout = lay;
+                                    seri[y].noseri = no_seri;
+                                    seri[y].layout = layout;
                                     $('.tambahan-perakitan').modal('hide');
 
                                 } else {
