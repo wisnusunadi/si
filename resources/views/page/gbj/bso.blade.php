@@ -292,7 +292,7 @@
             var isChecked = $("#head-cb").prop('checked')
             // $('.cb-child-edit').prop('checked', isChecked)
             $('.scan-produk-edit').DataTable()
-                .column(1)
+                .column(1) 
                 .nodes()
                 .to$()
                 .find('input[type=checkbox]')
@@ -547,7 +547,7 @@ var jml = '';
                         'Data Terkirim ke QC',
                         'success'
                     )
-                    // location.reload();
+                    location.reload();
                 }
             })
 

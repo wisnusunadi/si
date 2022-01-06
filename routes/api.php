@@ -278,6 +278,9 @@ Route::prefix('/prd')->group(function () {
     Route::post('/exp_jadwal/h', [ProduksiController::class, 'exp_jadwal_h']);
     Route::post('/exp_jadwal', [ProduksiController::class, 'exp_jadwal']);
 
+    // so
+    Route::post('/so', [ProduksiController::class, 'getSOProduksi']);
+
     // jadwal
     // plan
     Route::post('/plan', [ProduksiController::class, 'plan_rakit']);
@@ -291,7 +294,7 @@ Route::prefix('/prd')->group(function () {
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
 
-    Route::get('/testing', [ProduksiController::class, 'test']);
+    Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
 
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
