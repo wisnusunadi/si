@@ -29,4 +29,8 @@ class NoseriBarangJadi extends Model
     {
         return $this->hasMany(NoseriTGbj::class);
     }
+
+    function layout() {
+        return $this->belongsTo(Layout::class, 'layout_id');
+    }
 }

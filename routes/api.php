@@ -294,7 +294,7 @@ Route::prefix('/prd')->group(function () {
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
 
-    Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
+    Route::get('/testing/{id}', [ProduksiController::class, 'test']);
 
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);

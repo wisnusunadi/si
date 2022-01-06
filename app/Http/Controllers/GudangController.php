@@ -71,6 +71,12 @@ class GudangController extends Controller
                             <button class="btn btn-outline-info btn-sm" type="button" >
                             <i class="far fa-eye"></i>&nbsp;Detail
                             </button>
+                        </a>
+
+                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id="' . $data->id . '">
+                            <button class="btn btn-outline-warning btn-sm" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Daftar Stok
+                            </button>
                         </a>';
             })
             ->addColumn('action_direksi', function($data) {
@@ -97,8 +103,29 @@ class GudangController extends Controller
 
     function getNoseri(Request $request, $id)
     {
-        $data = GudangBarangJadi::with('noseri')->where('id', $id)->get();
-        return response()->json($data);
+        $data = NoseriBarangJadi::whereHas('gudang', function($d) use($id) {
+            $d->where('id', $id);
+        })->get();
+        // return response()->json($data);
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('ids', function($d) {
+                return 'checkbox';
+            })
+            ->addColumn('seri', function($d) {
+                return $d->noseri;
+            })
+            ->addColumn('Layout', function($d) {
+                if (empty($d->layout_id)) {
+                    return '-';
+                } else {
+                    return $d->layout->ruang;
+                }
+            })
+            ->addColumn('aksi', function($d) {
+                return 'aksi';
+            })
+            ->make(true);
     }
 
     function getHistory($id)

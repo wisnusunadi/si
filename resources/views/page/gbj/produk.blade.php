@@ -311,14 +311,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" id="noseriForm" name="noseriForm">
+                {{-- <form action="" id="noseriForm" name="noseriForm"> --}}
                 <table class="table scan-produk">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="head-cb"></th>
+                            {{-- <th><input type="checkbox" id="head-cb"></th> --}}
                             <th>No. Seri</th>
                             <th>Layout</th>
-                            <th>Aksi</th>
+                            {{-- <th>Aksi</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -327,12 +327,12 @@
 
                 </table>
             </div>
-            <div class="modal-footer">
+            {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-            </div>
-        </form>
+            </div> --}}
+        {{-- </form> --}}
         </div>
     </div>
 </div>
@@ -409,18 +409,7 @@
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
-    $('.scan-produk').DataTable({
-            "ordering":false,
-            "autoWidth": false,
-            searching: false,
-            "lengthChange": false,
-            "columnDefs": [
-                { "width": "5%", "targets": 0},
-            ],
-            "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
-    });
+
     $('#inputGroupFile02').on('change', function () {
         //get the file name
         var fileName = $(this).val();
@@ -666,23 +655,30 @@
     // modal noseri
     $(document).on('click', '.stokmodal', function() {
         var id = $(this).data('id');
-        console.log(id);
-        var i = 0;
-        var b = '';
 
-        $.ajax({
-            url: '/api/gbj/noseri/' + id,
-            dataType: 'json',
-            success: function(data) {
-                console.log(data);
-                $.each(data, function(key, value) {
-                    i++;
-                    b = "<tr ><td><input type='checkbox' class='cb-child' value="+value.id+"></td><td>"+value.noseri+"<input type='hidden' name='noseri[]' value="+value.noseri+"><input type='hidden' name='gdg_brg_jadi_id' value="+value.gdg_barang_jadi_id+"></td><td><select name='layout_id[]' id='layout_id' class='form-control'>"+select_layout()+"</select></td><td><button class='btn btn-info viewStock' data-id='"+value.id+"'><i class='far fa-eye'></i> View</button></td></tr>";
-                    $(".scan-produk").append(b);
-                })
-
+        $('.scan-produk').DataTable({
+                destroy: true,
+                "ordering":false,
+                "autoWidth": false,
+                searching: false,
+                "lengthChange": false,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/api/gbj/noseri/' + id,
+                },
+                columns: [
+                {data: 'seri'},
+                {data: 'Layout'}
+                ],
+                // "columnDefs": [
+                //     { "width": "5%", "targets": 0},
+                // ],
+                "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+
         $('.daftar-stok').modal('show');
     });
 
