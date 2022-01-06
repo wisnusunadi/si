@@ -440,8 +440,8 @@ class PenjualanController extends Controller
                 $q->where('satuan', 'LIKE', '%' . $value . '%');
             })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
                 $q->where('instansi', 'LIKE', '%' . $value . '%');
-            })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
-                $q->where('satuan', 'LIKE', '%' . $value . '%');
+            })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Customer', function ($q) use ($value) {
+                $q->where('nama', 'LIKE', '%' . $value . '%');
             })->get();
             $spa = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
