@@ -305,20 +305,20 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Daftar Stok Produk</h5>
+                <h5 class="modal-title">Daftar Stok <span id="nm_produk"><b></b></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                {{-- <form action="" id="noseriForm" name="noseriForm"> --}}
+                <form action="" id="noseriForm" name="noseriForm">
                 <table class="table scan-produk">
                     <thead>
                         <tr>
-                            {{-- <th><input type="checkbox" id="head-cb"></th> --}}
+                            <th><input type="checkbox" id="head-cb"></th>
                             <th>No. Seri</th>
                             <th>Layout</th>
-                            {{-- <th>Aksi</th> --}}
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -327,12 +327,12 @@
 
                 </table>
             </div>
-            {{-- <div class="modal-footer">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-            </div> --}}
-        {{-- </form> --}}
+            </div>
+        </form>
         </div>
     </div>
 </div>
@@ -345,11 +345,11 @@
                 <h5 class="modal-title">
                     <div class="row">
                         <div class="col">
-                            <b>Produk</b><p>Ambulatory</p>
+                            <b>Produk</b><p id="namaa">Ambulatory</p>
                         </div>
-                        <div class="col">
+                        {{-- <div class="col">
                             <b>Nomor SO</b><p>8457938475938475</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -363,7 +363,6 @@
                         <tr>
                             <th>Tanggal Masuk</th>
                             <th>Dari</th>
-                            <th>Tujuan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -409,7 +408,7 @@
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
-
+    $("#head-cb").prop('checked', false);
     $('#inputGroupFile02').on('change', function () {
         //get the file name
         var fileName = $(this).val();
@@ -431,12 +430,19 @@
 
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
     });
 
     function ubahData() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let checkbox_terpilih = $('.scan-produk').DataTable().column(0).nodes()
+                .to$().find('input[type=checkbox]:checked');
         let layout = $('#change_layout').val();
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
@@ -651,10 +657,11 @@
         }
     });
    }
-
+    var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
     $(document).on('click', '.stokmodal', function() {
         var id = $(this).data('id');
+        $('span#nm_produk').text($(this).parent().prev().prev().prev().prev().html());
 
         $('.scan-produk').DataTable({
                 destroy: true,
@@ -663,13 +670,15 @@
                 searching: false,
                 "lengthChange": false,
                 processing: true,
-                serverSide: true,
+                serverSide: false,
                 ajax: {
                     url: '/api/gbj/noseri/' + id,
                 },
                 columns: [
-                {data: 'seri'},
-                {data: 'Layout'}
+                    {data: 'ids'},
+                    {data: 'seri'},
+                    {data: 'Layout'},
+                    {data: 'aksi'}
                 ],
                 // "columnDefs": [
                 //     { "width": "5%", "targets": 0},
@@ -685,20 +694,23 @@
     // modal history
     $(document).on('focus', '.viewStock', function() {
         var id = $(this).data('id');
+        $('p#namaa').text(title);
         console.log(id);
         var i = 0;
 
         $.ajax({
             url: '/api/gbj/history/' + id,
+            type: 'get',
             dataType: 'json',
             success: function(data) {
-                console.log(data);
-                var a = '';
-
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
                 $.each(data, function(key, value) {
-                    a = "<tr><td>"+new Date(value.created_at).toLocaleDateString()+"</td><td>"+value.from.nama+"</td><td>"+value.to.nama+"</td></tr>";
+                    console.log(value);
+                    $(".view-produk tbody").append("<tr><td>"+new Date(value.created_at).toLocaleDateString('id-ID', options)+"</td><td>"+value.from.nama+"</td></tr>");
+                    // $(".view-produk tbody").append("<tr><td>"+new Date(value[key].created_at).toLocaleDateString()+"</td><td>"+value[key].from.nama+"</td><td>"+value[key].to.nama+"</td></tr>");
+                    // var a = ;
                 });
-                $(".view-produk tbody").html(a);
+                // $(".view-produk tbody").html(a);
             }
         })
         $('.modalViewStock').modal('show');
@@ -725,36 +737,48 @@
 
     $(document).ready(function() {
         $('#ubahSeri').on('click', function() {
+            // console.log('test');
             const cekid = [];
-            const noseri = [];
             const layout = [];
-
-            $('.cb-child').each(function() {
-                if($(this).is(":checked")) {
-                    cekid.push($(this).val());
-                }
+            let a = $('.scan-produk').DataTable().column(0).nodes()
+                .to$().find('input[type=checkbox]:checked');
+            $(a).each(function (index, elm) {
+                cekid.push($(elm).val());
+                layout.push($(elm).parent().next().next().children().val());
             });
+            // console.log(cekid);
 
-            $('input[name^="gdg_brg_jadi_id"]').each(function() {
-                noseri.push($(this).val());
-            });
-
-            $('select[name^="layout_id"]').each(function() {
-                layout.push($(this).val());
-            });
-
-            $.ajax({
-                url: '/api/gbj/noseri/' + noseri,
-                type: 'post',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    cekid : cekid,
-                    layout : layout,
-                },
-                success: function(res) {
-                    console.log(res);
-                }
-            })
+            Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Merubah Layout",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Terima!'
+            }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Sukses!',
+                    'Layout berhasil dirubah',
+                    'success'
+                )
+                $.ajax({
+                    url: '/api/gbj/ubahseri',
+                    type: 'post',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        cekid : cekid,
+                        layout : layout,
+                    },
+                    success: function(res) {
+                        console.log(res);
+                    }
+                })
+                location.reload();
+            }
+        })
+            
         })
     })
 </script>

@@ -713,7 +713,13 @@ class ProduksiController extends Controller
                         return $data->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
                         return $data->Spb->Customer->nama;
+                    } else {
+
                     }
+                }
+
+                if(empty($data->so)) {
+                    return $data->Ekatalog->Customer->nama;
                 }
             })
             ->addColumn('batas_out', function ($d) {
@@ -822,6 +828,7 @@ class ProduksiController extends Controller
                 $q->where('pesanan_id', $id);
             })->get();
             // return $a;
+            
         }
 
         return datatables()->of($a)
@@ -830,12 +837,12 @@ class ProduksiController extends Controller
                 if (empty($data->nama)) {
                     return $data->produk->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '">';
                 } else {
-                    return $data->produk->nama . '-' . $data->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '">';
+                    return $data->produk->nama . ' ' . $data->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '">';
                 }
             })
-            // ->addColumn('qty', function ($data) {
-            //     return $data->detailpesananproduk->detailpesanan . '<input type="hidden" class="jumlah" name="qty[]" id="qty" >';
-            // })
+            ->addColumn('qty', function ($data) {
+                return $data->detailpesananproduk->detailpesanan . '<input type="hidden" class="jumlah" name="qty[]" id="qty" >';
+            })
             ->addColumn('tipe', function ($data) {
                 if (empty($data->nama)) {
                     return $data->produk->nama;
@@ -893,34 +900,34 @@ class ProduksiController extends Controller
             })
             // ->addColumn('status_prd', function ($d) {
             //     if (isset($d->detailpesananproduk->detailpesanan->pesanan->log_id)) {
-            //         return '<span class="badge badge-success">' . $d->detailpesananproduk->detailpesanan->pesanan->log->nama . '</span>';
+            //         return '<span class="badge badge-success">' . $d->detailpesanan->pesanan->log->nama . '</span>';
             //     } else {
             //         return '<span class="badge badge-danger">Belum dicek</span>';
             //     }
             // })
-            ->addColumn('checkbox', function ($d) {
-                $cek = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
-                    $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
-                })->where('gdg_brg_jadi_id', $d->id)->get();
-                if (count($cek) > 0) {
-                    $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
-                        $q->where('gdg_brg_jadi_id', $d->id);
-                    })->whereHas('detail.header', function ($q) use ($d) {
-                        $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
-                    })
-                        ->get()->count();
+            // ->addColumn('checkbox', function ($d) {
+            //     $cek = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
+            //         $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+            //     })->where('gdg_brg_jadi_id', $d->id)->get();
+            //     if (count($cek) > 0) {
+            //         $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
+            //             $q->where('gdg_brg_jadi_id', $d->id);
+            //         })->whereHas('detail.header', function ($q) use ($d) {
+            //             $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+            //         })
+            //             ->get()->count();
 
-                    $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
-                        $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
-                    })->where('gdg_brg_jadi_id', $d->id)->select('qty')->first();
-                    if ($cek1->qty == $datacek) {
-                    } else {
-                        return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->id . '">';
-                    }
-                } else {
-                    return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->id . '">';
-                }
-            })
+            //         $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
+            //             $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+            //         })->where('gdg_brg_jadi_id', $d->id)->select('qty')->first();
+            //         if ($cek1->qty == $datacek) {
+            //         } else {
+            //             return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->id . '">';
+            //         }
+            //     } else {
+            //         return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->id . '">';
+            //     }
+            // })
             ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids'])
             ->make(true);
     }
@@ -1560,9 +1567,11 @@ class ProduksiController extends Controller
             })
             ->addColumn('action', function ($d) {
                 if ($d->status_tf == 12) {
-
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                        <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+                    </a>';
                 } elseif ($d->status_tf == 13) {
-
+                    
                 } else {
 
                 }

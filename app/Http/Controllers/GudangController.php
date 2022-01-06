@@ -105,32 +105,43 @@ class GudangController extends Controller
     {
         $data = NoseriBarangJadi::whereHas('gudang', function($d) use($id) {
             $d->where('id', $id);
-        })->get();
-        // return response()->json($data);
+        })->where('is_aktif', 1)->get();
+        $layout = Layout::where('jenis_id', 1)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('ids', function($d) {
-                return 'checkbox';
+                return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
             })
             ->addColumn('seri', function($d) {
                 return $d->noseri;
             })
-            ->addColumn('Layout', function($d) {
-                if (empty($d->layout_id)) {
-                    return '-';
-                } else {
-                    return $d->layout->ruang;
+            ->addColumn('Layout', function($d) use($layout) {
+                $opt = '';
+                foreach($layout as $l) {
+                    if ($d->layout_id == $l->id) {
+                        $opt .= '<option value="'.$l->id.'" selected>'.$l->ruang.'</option>';
+                    } else {
+                        $opt .= '<option value="'.$l->id.'">'.$l->ruang.'</option>';
+                    }
                 }
+                return '<select name="layout_id[]" id="layout_id[]" class="form-control">
+                        ' . $opt . '
+                        </select>';
             })
             ->addColumn('aksi', function($d) {
-                return 'aksi';
+                return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
+                        <button class="btn btn-outline-info btn-sm" type="button" >
+                        <i class="far fa-eye"></i>&nbsp;Detail
+                        </button>
+                    </a>';
             })
+            ->rawColumns(['ids','Layout', 'aksi'])
             ->make(true);
     }
 
     function getHistory($id)
     {
-        $data = NoseriBarangJadi::with('from', 'to')->where('id', $id)->get();
+        $data = NoseriBarangJadi::with('from', 'to')->where('gdg_barang_jadi_id', $id)->get();
         return response()->json($data);
     }
 
@@ -595,6 +606,18 @@ class GudangController extends Controller
         $gdg->save();
 
         return response()->json(['msg', 'Successfully']);
+    }
+
+    function updateSeriLayout(Request $request) {
+        // NoseriBarangJadi::find()
+        // dd($request->all());
+        $data = NoseriBarangJadi::whereIn('id', $request->cekid)->get();
+        foreach($data as $d)
+        {
+            for ($i=0; $i < count($request->layout); $i++) { 
+                NoseriBarangJadi::where('id', $request->cekid[$i])->update(['layout_id' => json_decode($request->layout[$i], true)] );
+            }
+        }
     }
 
     function StoreBarangJadi(Request $request)

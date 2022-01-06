@@ -169,6 +169,7 @@ Route::prefix('/gbj')->group(function () {
     Route::get('history/{id}', [GudangController::class, 'getHistory']);
     Route::post('noseri/{id}', [GudangController::class, 'storeNoseri']);
     Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
+    Route::post('ubahseri', [GudangController::class, 'updateSeriLayout']);
 });
 
 Route::prefix('/draft')->group(function () {
