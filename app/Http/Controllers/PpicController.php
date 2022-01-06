@@ -437,8 +437,9 @@ class PpicController extends Controller
         //     $q->whereIn('log', ['penjualan', 'po']);
         // })->count();
 
+
         $getid = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
-            $q->whereNotIn('log_id', ['10']);
+            $q->whereNotIn('log_id', ['7', '10']);
         })->get();
         $arrayid = array();
 
@@ -446,6 +447,7 @@ class PpicController extends Controller
             $jumlahpesan = $i->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $i->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $i->getJumlahPermintaanPesanan("spa", "");
             $jumlahtf = $i->getJumlahTransferPesanan("ekatalog", "sepakat") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa", "");
             // $jumlahtf = 0;
+
             if ($jumlahtf < $jumlahpesan) {
                 $arrayid[] = $i->id;
             }
@@ -473,8 +475,8 @@ class PpicController extends Controller
             ->addColumn('penjualan', function ($data) {
                 $jumlah_gbj = $data->stok;
                 $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "");
-                // $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
-                $jumlahtf = 0;
+                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+                // $jumlahtf = 0;
                 $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
                 $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
                 if ($jumlah >= 0) {
@@ -639,7 +641,7 @@ class PpicController extends Controller
     {
         $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
-        })->whereNotIn('log_id', ['10'])->get();
+        })->whereNotIn('log_id', ['7', '10'])->get();
 
         $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
@@ -672,12 +674,12 @@ class PpicController extends Controller
             ->addColumn('tgl_delivery', function ($data) {
                 if (isset($data->Ekatalog)) {
                     $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+                    $tgl_parameter = $data->ekatalog->tgl_kontrak;
                     $param = "";
 
                     if ($tgl_sekarang < $tgl_parameter) {
                         $to = Carbon::now();
-                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                        $from = $data->ekatalog->tgl_kontrak;
                         $hari = $to->diffInDays($from);
 
                         if ($hari > 7) {
@@ -820,12 +822,12 @@ class PpicController extends Controller
             ->addColumn('tgl_delivery', function ($data) {
                 if (isset($data->Ekatalog)) {
                     $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+                    $tgl_parameter = $data->ekatalog->tgl_kontrak;
                     $param = "";
 
                     if ($tgl_sekarang < $tgl_parameter) {
                         $to = Carbon::now();
-                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                        $from = $data->ekatalog->tgl_kontrak;
                         $hari = $to->diffInDays($from);
 
                         if ($hari > 7) {
@@ -839,7 +841,7 @@ class PpicController extends Controller
                         $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                     } else {
                         $to = Carbon::now();
-                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                        $from = $data->ekatalog->tgl_kontrak;
                         $hari = $to->diffInDays($from);
                         $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                     }
@@ -978,14 +980,19 @@ class PpicController extends Controller
     public function getJumlahPermintaanPesanan($produk_id, $gdg_id, $po_id)
     {
         $jumlah = 0;
-        $s = DetailPesananProduk::where('gudang_barang_jadi_id', $gdg_id)->whereHas('DetailPesanan.Pesanan', function ($q) use ($po_id) {
-            $q->where('id', $po_id);
-        })->get();
-        $jumlah = 0;
-        foreach ($s as $i) {
-            foreach ($i->DetailPesanan->PenjualanProduk->Produk as $j) {
-                if ($j->id == $produk_id) {
-                    $jumlah = $i->DetailPesanan->jumlah * $j->pivot->jumlah;
+        // $s = DetailPesananProduk::where('gudang_barang_jadi_id', $gdg_id)->whereHas('DetailPesanan.Pesanan', function ($q) use ($po_id) {
+        //     $q->where('id', $po_id);
+        // })->get();
+        $s = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function ($q) use ($gdg_id) {
+            $q->where('gudang_barang_jadi_id', $gdg_id);
+        })->where('id', $po_id)->get();
+
+        foreach ($s as $z) {
+            foreach ($z->DetailPesanan as $i) {
+                foreach ($i->PenjualanProduk->Produk as $j) {
+                    if ($j->id == $produk_id) {
+                        $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+                    }
                 }
             }
         }

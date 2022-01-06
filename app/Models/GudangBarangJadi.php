@@ -55,30 +55,42 @@ class GudangBarangJadi extends Model
         if ($jenis == "ekatalog") {
             $id = $this->id;
             $produk_id = $this->produk_id;
-            $s = DetailPesananProduk::where('gudang_barang_jadi_id', $id)->whereHas('DetailPesanan.Pesanan', function ($q) {
-                $q->whereNotIn('log_id', ['10']);
-            })->whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($status) {
+            // $s = DetailPesananProduk::where('gudang_barang_jadi_id', $id)->whereHas('DetailPesanan.Pesanan', function ($q) {
+            //     $q->whereNotIn('log_id', ['10']);
+            // })->whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($status) {
+            //     $q->where('status', $status);
+            // })->get();
+            $s = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function ($q) use ($id) {
+                $q->where('gudang_barang_jadi_id', $id);
+            })->whereNotIn('log_id', ['10'])->whereHas('Ekatalog', function ($q) use ($status) {
                 $q->where('status', $status);
             })->get();
-            $jumlah = 0;
-            foreach ($s as $i) {
-                foreach ($i->DetailPesanan->PenjualanProduk->Produk as $j) {
-                    if ($j->id == $produk_id) {
-                        $jumlah = $i->DetailPesanan->jumlah * $j->pivot->jumlah;
+            foreach ($s as $z) {
+                foreach ($z->DetailPesanan as $i) {
+                    foreach ($i->PenjualanProduk->Produk as $j) {
+                        if ($j->id == $produk_id) {
+                            $jumlah =  $jumlah + ($i->jumlah * $j->pivot->jumlah);
+                        }
                     }
                 }
             }
         } else if ($jenis == "spa") {
             $id = $this->id;
             $produk_id = $this->produk_id;
-            $s = DetailPesananProduk::where('gudang_barang_jadi_id', $id)->whereHas('DetailPesanan.Pesanan', function ($q) {
-                $q->whereNotIn('log_id', ['10']);
-            })->has('DetailPesanan.Pesanan.Spa')->get();
+            // $s = DetailPesananProduk::where('gudang_barang_jadi_id', $id)->whereHas('DetailPesanan.Pesanan', function ($q) {
+            //     $q->whereNotIn('log_id', ['10']);
+            // })->has('DetailPesanan.Pesanan.Spa')->get();
+
+            $s = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function ($q) use ($id) {
+                $q->where('gudang_barang_jadi_id', $id);
+            })->whereNotIn('log_id', ['10'])->has('Spa')->get();
             $jumlah = 0;
-            foreach ($s as $i) {
-                foreach ($i->DetailPesanan->PenjualanProduk->Produk as $j) {
-                    if ($j->id == $produk_id) {
-                        $jumlah = $i->DetailPesanan->jumlah * $j->pivot->jumlah;
+            foreach ($s as $z) {
+                foreach ($z->DetailPesanan as $i) {
+                    foreach ($i->PenjualanProduk->Produk as $j) {
+                        if ($j->id == $produk_id) {
+                            $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+                        }
                     }
                 }
             }
