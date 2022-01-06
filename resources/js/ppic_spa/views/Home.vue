@@ -98,7 +98,7 @@
           <div :class="{ 'is-hidden': tabs }">
             <table
               class="table is-fullwidth has-text-centered"
-              id="table-sparepart"
+              id="table_sparepart"
             >
               <thead>
                 <tr>
@@ -121,7 +121,7 @@
 
           <!-- unit -->
           <div :class="{ 'is-hidden': !tabs }">
-            <table class="table is-fullwidth has-text-centered" id="table-unit">
+            <table class="table is-fullwidth has-text-centered" id="table_unit">
               <thead>
                 <tr>
                   <th>Kode Unit</th>
@@ -170,35 +170,49 @@ export default {
     };
   },
 
-  async created() {
-    this.$store.commit("setIsLoading", true);
+  methods: {
+    async loadData() {
+      this.$store.commit("setIsLoading", true);
 
-    await axios.get("/api/ppic/data/so").then((response) => {
-      this.data_so = response.data.data;
-    });
-    $("#table_so").DataTable();
+      await axios.get("/api/ppic/data/so").then((response) => {
+        this.data_so = response.data.data;
+      });
+      $("#table_so").DataTable({
+        pagingType: "simple_numbers_no_ellipses",
+      });
 
-    await axios.get("/api/ppic/data/gbj").then((response) => {
-      this.data_gbj = response.data;
-    });
-    $("#table_gbj").DataTable();
+      await axios.get("/api/ppic/data/gbj").then((response) => {
+        this.data_gbj = response.data;
+      });
+      $("#table_gbj").DataTable({
+        pagingType: "simple_numbers_no_ellipses",
+      });
 
-    await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
-      this.data_sparepart = response.data;
-    });
-    $("#table-sparepart").DataTable();
+      await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
+        this.data_sparepart = response.data;
+      });
+      $("#table_sparepart").DataTable({
+        pagingType: "simple_numbers_no_ellipses",
+      });
 
-    await axios.get("/api/ppic/data/gk/unit").then((response) => {
-      this.data_unit = response.data;
-    });
-    $("#table-unit").DataTable();
+      await axios.get("/api/ppic/data/gk/unit").then((response) => {
+        this.data_unit = response.data;
+      });
+      $("#table_unit").DataTable({
+        pagingType: "simple_numbers_no_ellipses",
+      });
 
-    await axios.get("/api/ppic/counting/komentar").then((response) => {
-      this.jumlah_permintaan = response.data[0];
-      this.jumlah_proses = response.data[1];
-    });
+      await axios.get("/api/ppic/counting/komentar").then((response) => {
+        this.jumlah_permintaan = response.data[0];
+        this.jumlah_proses = response.data[1];
+      });
 
-    this.$store.commit("setIsLoading", false);
+      this.$store.commit("setIsLoading", false);
+    },
+  },
+
+  mounted() {
+    this.loadData();
   },
 };
 </script>

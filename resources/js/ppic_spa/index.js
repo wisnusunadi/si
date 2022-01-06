@@ -10,10 +10,9 @@ import "jquery/dist/jquery"
 import "datatables.net/js/jquery.dataTables.min"
 import "datatables-bulma/js/dataTables.bulma"
 
-import VueSweetalert2 from "vue-sweetalert2"
+import "./plugins/simple_numbers_no_ellipses"
 
-import "datatables-bulma/css/dataTables.bulma.css"
-import 'sweetalert2/dist/sweetalert2.min.css'
+import VueSweetalert2 from "vue-sweetalert2"
 
 const api_token = document.querySelector('meta[name="api-token"]').content
 const csrf_token = document.querySelector('meta[name="csrf-token"]').content

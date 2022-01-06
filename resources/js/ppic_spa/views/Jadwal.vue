@@ -77,32 +77,34 @@
         </div>
         <template v-if="this.$store.state.user.divisi_id == '24'">
           <div class="column is-3">
-            <div class="buttons">
-              <button
-                v-if="
-                  this.$store.state.state_ppic === 'pembuatan' ||
-                  this.$store.state.state_ppic === 'revisi'
-                "
-                class="button is-fullwidth"
-                :class="{
-                  'is-loading': this.$store.state.isLoading,
-                  'is-primary': this.$store.state.state_ppic === 'pembuatan',
-                  'is-danger': this.$store.state.state_ppic === 'revisi',
-                }"
-                :disabled="$store.state.jadwal.length === 0"
-                @click="sendEvent('persetujuan')"
-              >
-                Kirim
-              </button>
-              <button
-                v-if="this.$store.state.state_ppic === 'disetujui'"
-                class="button is-success is-fullwidth"
-                :class="{ 'is-loading': this.$store.state.isLoading }"
-                @click="sendEvent('perubahan')"
-              >
-                Minta Perubahan
-              </button>
-            </div>
+            <template v-if="!hide_button_calendar">
+              <div class="buttons">
+                <button
+                  v-if="
+                    this.$store.state.state_ppic === 'pembuatan' ||
+                    this.$store.state.state_ppic === 'revisi'
+                  "
+                  class="button is-fullwidth"
+                  :class="{
+                    'is-loading': this.$store.state.isLoading,
+                    'is-primary': this.$store.state.state_ppic === 'pembuatan',
+                    'is-danger': this.$store.state.state_ppic === 'revisi',
+                  }"
+                  :disabled="$store.state.jadwal.length === 0"
+                  @click="sendEvent('persetujuan')"
+                >
+                  Kirim
+                </button>
+                <button
+                  v-if="this.$store.state.state_ppic === 'disetujui'"
+                  class="button is-success is-fullwidth"
+                  :class="{ 'is-loading': this.$store.state.isLoading }"
+                  @click="sendEvent('perubahan')"
+                >
+                  Minta Perubahan
+                </button>
+              </div>
+            </template>
             <article class="message is-dark">
               <div class="message-header">
                 <p>Pesan</p>
@@ -234,6 +236,8 @@ export default {
   data() {
     return {
       view: "table",
+
+      hide_button_calendar: true,
 
       showModal: false,
       data_komentar: [],
