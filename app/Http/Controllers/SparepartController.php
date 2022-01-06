@@ -1078,150 +1078,150 @@ class SparepartController extends Controller
 
     function terima_by_draft(Request $request)
     {
-        dd($request->all());
-        // $header = new GudangKarantina();
-        // $header->date_in = $request->date_in;
-        // $header->dari = $request->dari;
-        // $header->is_draft = 1;
-        // $header->is_keluar = 0;
-        // $header->created_at = Carbon::now();
-        // $header->created_by = $request->userid;
-        // $header->save();
+        // dd($request->all());
+        $header = new GudangKarantina();
+        $header->date_in = $request->date_in;
+        $header->dari = $request->dari;
+        $header->is_draft = 1;
+        $header->is_keluar = 0;
+        $header->created_at = Carbon::now();
+        $header->created_by = $request->userid;
+        $header->save();
 
-        // $spr = $request->sparepart_id;
+        $spr = $request->sparepart_id;
 
-        // foreach ($spr as $k => $v) {
-        //     $sprr = new GudangKarantinaDetail();
-        //     $sprr->gk_id = $header->id;
-        //     $sprr->sparepart_id = $request->sparepart_id[$k];
-        //     $sprr->qty_spr = $request->qty_spr[$k];
-        //     $sprr->is_draft = 1;
-        //     $sprr->is_keluar = 0;
-        //     $sprr->created_at = Carbon::now();
-        //     $sprr->created_by = $request->userid;
-        //     $sprr->save();
+        foreach ($spr as $k => $v) {
+            $sprr = new GudangKarantinaDetail();
+            $sprr->gk_id = $header->id;
+            $sprr->sparepart_id = $request->sparepart_id[$k];
+            $sprr->qty_spr = $request->qty_spr[$k];
+            $sprr->is_draft = 1;
+            $sprr->is_keluar = 0;
+            $sprr->created_at = Carbon::now();
+            $sprr->created_by = $request->userid;
+            $sprr->save();
 
-        //     $x = $request->noseri;
-        //     $id = $sprr->id;
+            $x = $request->noseri;
+            $id = $sprr->id;
 
-        //     for ($i = 0; $i < count($request->noseri[$v]); $i++) {
-        //         $noseri = new GudangKarantinaNoseri();
-        //         $noseri->gk_detail_id = $id;
-        //         $noseri->noseri = $request->noseri[$v][$i]["noseri"];
-        //         $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
-        //         $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
-        //         $noseri->is_draft = 1;
-        //         $noseri->is_keluar = 0;
-        //         $noseri->created_at = Carbon::now();
-        //         $noseri->created_by = $request->userid;
-        //         $noseri->save();
-        //     }
-        // }
+            for ($i = 0; $i < count($request->noseri[$v]); $i++) {
+                $noseri = new GudangKarantinaNoseri();
+                $noseri->gk_detail_id = $id;
+                $noseri->noseri = $request->noseri[$v][$i]["noseri"];
+                $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
+                $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
+                $noseri->is_draft = 1;
+                $noseri->is_keluar = 0;
+                $noseri->created_at = Carbon::now();
+                $noseri->created_by = $request->userid;
+                $noseri->save();
+            }
+        }
 
-        // $unit = $request->gbj_id;
-        // foreach ($unit as $j => $vv) {
-        //     $unitt = new GudangKarantinaDetail();
-        //     $unitt->gk_id = $header->id;
-        //     $unitt->gbj_id = $request->gbj_id[$j];
-        //     $unitt->qty_unit = $request->qty_unit[$j];
-        //     $unitt->is_draft = 1;
-        //     $unitt->is_keluar = 0;
-        //     $unitt->created_at = Carbon::now();
-        //     $unitt->created_by = $request->userid;
-        //     $unitt->save();
+        $unit = $request->gbj_id;
+        foreach ($unit as $j => $vv) {
+            $unitt = new GudangKarantinaDetail();
+            $unitt->gk_id = $header->id;
+            $unitt->gbj_id = $request->gbj_id[$j];
+            $unitt->qty_unit = $request->qty_unit[$j];
+            $unitt->is_draft = 1;
+            $unitt->is_keluar = 0;
+            $unitt->created_at = Carbon::now();
+            $unitt->created_by = $request->userid;
+            $unitt->save();
 
-        //     $idd = $unitt->id;
+            $idd = $unitt->id;
 
-        //     for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
+            for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
 
-        //         $noserii = new GudangKarantinaNoseri();
-        //         $noserii->gk_detail_id = $idd;
-        //         $noserii->noseri = $request->seriunit[$vv][$m]["noseri"];
-        //         $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
-        //         $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
-        //         $noserii->is_draft = 1;
-        //         $noserii->is_keluar = 0;
-        //         $noserii->created_at = Carbon::now();
-        //         $noserii->created_by = $request->userid;
-        //         $noserii->save();
-        //     }
-        // }
+                $noserii = new GudangKarantinaNoseri();
+                $noserii->gk_detail_id = $idd;
+                $noserii->noseri = $request->seriunit[$vv][$m]["noseri"];
+                $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
+                $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
+                $noserii->is_draft = 1;
+                $noserii->is_keluar = 0;
+                $noserii->created_at = Carbon::now();
+                $noserii->created_by = $request->userid;
+                $noserii->save();
+            }
+        }
 
-        // return response()->json(['msg' => 'Data Berhasil dirancang']);
+        return response()->json(['msg' => 'Data Berhasil dirancang']);
     }
 
     function terima_by_final(Request $request)
     {
-        dd($request->all());
-        // $header = new GudangKarantina();
-        // $header->date_in = $request->date_in;
-        // $header->dari = $request->dari;
-        // $header->is_draft = 0;
-        // $header->is_keluar = 0;
-        // $header->created_at = Carbon::now();
-        // $header->created_by = $request->userid;
-        // $header->save();
+        // dd($request->all());
+        $header = new GudangKarantina();
+        $header->date_in = $request->date_in;
+        $header->dari = $request->dari;
+        $header->is_draft = 0;
+        $header->is_keluar = 0;
+        $header->created_at = Carbon::now();
+        $header->created_by = $request->userid;
+        $header->save();
 
-        // $spr = $request->sparepart_id;
+        $spr = $request->sparepart_id;
 
-        // foreach ($spr as $k => $v) {
-        //     $sprr = new GudangKarantinaDetail();
-        //     $sprr->gk_id = $header->id;
-        //     $sprr->sparepart_id = $request->sparepart_id[$k];
-        //     $sprr->qty_spr = $request->qty_spr[$k];
-        //     $sprr->is_draft = 0;
-        //     $sprr->is_keluar = 0;
-        //     $sprr->created_at = Carbon::now();
-        //     $sprr->created_by = $request->userid;
-        //     $sprr->save();
+        foreach ($spr as $k => $v) {
+            $sprr = new GudangKarantinaDetail();
+            $sprr->gk_id = $header->id;
+            $sprr->sparepart_id = $request->sparepart_id[$k];
+            $sprr->qty_spr = $request->qty_spr[$k];
+            $sprr->is_draft = 0;
+            $sprr->is_keluar = 0;
+            $sprr->created_at = Carbon::now();
+            $sprr->created_by = $request->userid;
+            $sprr->save();
 
-        //     $x = $request->noseri;
-        //     $id = $sprr->id;
+            $x = $request->noseri;
+            $id = $sprr->id;
 
-        //     for ($i = 0; $i < count($request->noseri[$v]); $i++) {
-        //         $noseri = new GudangKarantinaNoseri();
-        //         $noseri->gk_detail_id = $id;
-        //         $noseri->noseri = $request->noseri[$v][$i]["noseri"];
-        //         $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
-        //         $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
-        //         $noseri->is_draft = 0;
-        //         $noseri->is_keluar = 0;
-        //         $noseri->created_at = Carbon::now();
-        //         $noseri->created_by = $request->userid;
-        //         $noseri->save();
-        //     }
-        // }
+            for ($i = 0; $i < count($request->noseri[$v]); $i++) {
+                $noseri = new GudangKarantinaNoseri();
+                $noseri->gk_detail_id = $id;
+                $noseri->noseri = $request->noseri[$v][$i]["noseri"];
+                $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
+                $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
+                $noseri->is_draft = 0;
+                $noseri->is_keluar = 0;
+                $noseri->created_at = Carbon::now();
+                $noseri->created_by = $request->userid;
+                $noseri->save();
+            }
+        }
 
-        // $unit = $request->gbj_id;
-        // foreach ($unit as $j => $vv) {
-        //     $unitt = new GudangKarantinaDetail();
-        //     $unitt->gk_id = $header->id;
-        //     $unitt->gbj_id = $request->gbj_id[$j];
-        //     $unitt->qty_unit = $request->qty_unit[$j];
-        //     $unitt->is_draft = 0;
-        //     $unitt->is_keluar = 0;
-        //     $unitt->created_at = Carbon::now();
-        //     $unitt->created_by = $request->userid;
-        //     $unitt->save();
+        $unit = $request->gbj_id;
+        foreach ($unit as $j => $vv) {
+            $unitt = new GudangKarantinaDetail();
+            $unitt->gk_id = $header->id;
+            $unitt->gbj_id = $request->gbj_id[$j];
+            $unitt->qty_unit = $request->qty_unit[$j];
+            $unitt->is_draft = 0;
+            $unitt->is_keluar = 0;
+            $unitt->created_at = Carbon::now();
+            $unitt->created_by = $request->userid;
+            $unitt->save();
 
-        //     $idd = $unitt->id;
+            $idd = $unitt->id;
 
-        //     for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
+            for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
 
-        //         $noserii = new GudangKarantinaNoseri();
-        //         $noserii->gk_detail_id = $idd;
-        //         $noserii->noseri = $request->seriunit[$vv][$m]["noseri"];
-        //         $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
-        //         $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
-        //         $noserii->is_draft = 0;
-        //         $noserii->is_keluar = 0;
-        //         $noserii->created_at = Carbon::now();
-        //         $noserii->created_by = $request->userid;
-        //         $noserii->save();
-        //     }
-        // }
+                $noserii = new GudangKarantinaNoseri();
+                $noserii->gk_detail_id = $idd;
+                $noserii->noseri = $request->seriunit[$vv][$m]["noseri"];
+                $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
+                $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
+                $noserii->is_draft = 0;
+                $noserii->is_keluar = 0;
+                $noserii->created_at = Carbon::now();
+                $noserii->created_by = $request->userid;
+                $noserii->save();
+            }
+        }
 
-        // return response()->json(['msg' => 'Data Berhasil Diterima']);
+        return response()->json(['msg' => 'Data Berhasil Diterima']);
     }
 
     function edit_draft_terima(Request $request)

@@ -489,33 +489,34 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function () {
-                            // $('.scan-produk1 tbody tr').each((index, value) => {
-                            //     const obj = {
-                            //         noseri: value.childNodes[0].firstChild.value,
-                            //         kerusakan: value.childNodes[1].firstChild.value,
-                            //         tingkat: value.childNodes[2].firstChild.value,
-                            //     }
-                            //     spr_arr.push(obj);
-                            // })
+                            $('.scan-produk1 tbody tr').each((index, value) => {
+                                const obj = {
+                                    noseri: value.childNodes[0].firstChild.value,
+                                    kerusakan: value.childNodes[1].firstChild.value,
+                                    tingkat: value.childNodes[2].firstChild.value,
+                                }
+                                spr_arr.push(obj);
+                            })
+                            seri[d] = spr_arr;
+                            spr_arr = [];
+                            console.log(seri);
+                            $('.modalAddSparepart').modal('hide');
+                            // let obj = {
+                            //     noseri: $('.scan-produk1').DataTable().column(0).nodes().to$().find('input.seri').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            //     kerusakan: $('.scan-produk1').DataTable().column(1).nodes().to$().find('input.remark').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            //     tingkat: $('.scan-produk1').DataTable().column(2).nodes().to$().find('select.layout_id').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            // }
+                            // spr_arr.push(obj);
                             // seri[d] = spr_arr;
                             // spr_arr = [];
                             // console.log(seri);
                             // $('.modalAddSparepart').modal('hide');
-                            let obj = {
-                                noseri: $('.scan-produk1').DataTable().column(0).nodes().to$().find('input.seri').map(function () {
-                                            return $(this).val();
-                                        }),
-                                kerusakan: $('.scan-produk1').DataTable().column(1).nodes().to$().find('input.remark').map(function () {
-                                            return $(this).val();
-                                        }),
-                                tingkat: $('.scan-produk1').DataTable().column(2).nodes().to$().find('select.layout_id').map(function () {
-                                            return $(this).val();
-                                        }),
-                            }
-                            spr_arr.push(obj);
-                            seri[d] = spr_arr;
-                            spr_arr = [];
-                            $('.modalAddSparepart').modal('hide');
                         })
                     } else {
                         // console.log(res);
@@ -694,22 +695,34 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function () {
-                            let obj1 = {
-                                noseri: $('.scan-produk').DataTable().column(0).nodes().to$().find('input.seri').map(function () {
-                                            return $(this).val();
-                                        }),
-                                kerusakan: $('.scan-produk').DataTable().column(1).nodes().to$().find('input.kerusakan').map(function () {
-                                            return $(this).val();
-                                        }),
-                                tingkat: $('.scan-produk').DataTable().column(2).nodes().to$().find('select.tingkat').map(function () {
-                                            return $(this).val();
-                                        }),
-                            }
-                            unit_arr.push(obj1);
+                            $('.scan-produk tbody tr').each((index, value) => {
+                                const obj1 = {
+                                    noseri: value.childNodes[0].firstChild.value,
+                                    kerusakan: value.childNodes[1].firstChild.value,
+                                    tingkat: value.childNodes[2].firstChild.value,
+                                }
+                                unit_arr.push(obj1);
+                            })
                             seri_unit[c] = unit_arr;
                             unit_arr = [];
                             console.log(seri_unit)
                             $('.modalAddUnit').modal('hide');
+                            // let obj1 = {
+                            //     noseri: $('.scan-produk').DataTable().column(0).nodes().to$().find('input.seri').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            //     kerusakan: $('.scan-produk').DataTable().column(1).nodes().to$().find('input.kerusakan').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            //     tingkat: $('.scan-produk').DataTable().column(2).nodes().to$().find('select.tingkat').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            // }
+                            // unit_arr.push(obj1);
+                            // seri_unit[c] = unit_arr;
+                            // unit_arr = [];
+                            // console.log(seri_unit)
+                            // $('.modalAddUnit').modal('hide');
                         })
                     } else {
                         Swal.fire({
