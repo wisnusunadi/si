@@ -717,6 +717,7 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('batas_out', function ($d) {
+                // rubah DK minus 4 W, LK 5 W
                 if (isset($d->Ekatalog->tgl_kontrak)) {
                     return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
                 } else {
@@ -1572,15 +1573,16 @@ class ProduksiController extends Controller
 
             })
             ->addColumn('action', function ($d) {
-                if ($d->status_tf == 12) {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                        <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
-                    </a>';
-                } elseif ($d->status_tf == 13) {
+                // if ($d->status_tf == 12) {
 
-                } else {
-                    return '<span class="sudah_diterima">Sudah Terisi Semua</span>';
-                }
+                // } elseif ($d->status_tf == 13) {
+
+                // } else {
+
+                // }
+                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+            </a>';
 
             })
             ->addColumn('status', function ($d) {
