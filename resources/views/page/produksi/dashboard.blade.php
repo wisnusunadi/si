@@ -84,7 +84,7 @@
                                 <div id="transferoneday" class="card active otg" style="background-color: #E6EFFA">
                                     <div class="card-body text-center">
                                         <h4 id="m1">0</h4>
-                                        <p class="card-text">Produk Mendekati Batas Pengiriman Kurang Dari 10 Hari</p>
+                                        <p class="card-text" style="font-size: 13.5px">Produk Mendekati Batas Pengiriman Kurang Dari 10 Hari</p>
                                     </div>
                                 </div>
                             </div>
@@ -433,98 +433,52 @@
 @section('adminlte_js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 <script>
-        var dateObj = new Date();
-        var month = dateObj.getUTCMonth() + 1; //months from 1-12
-        var year = dateObj.getUTCFullYear();
+        // var dateObj = new Date();
+        // var month = dateObj.getUTCMonth() + 1; //months from 1-12
+        // var year = dateObj.getUTCFullYear();
 
-        newdate = month + "-" + year;
+        // newdate = month + "-" + year;
 
-        $('.monthpicker').val(newdate);
-        // Tanggal
-        // var month_date = $('.monthpicker').datepicker({
-        //     format: "mm-yyyy",
-        //     viewMode: "months",
-        //     minViewMode: "months",
-        //     autoclose: true,
-        // }).on('changeDate', function(e) {
-        //     var month = e.date.getMonth() + 1;
-        //     var year = e.date.getFullYear();
-        //     var date = month + '-' + year;
+        // $('.monthpicker').val(newdate);
+
+        // $.ajax({
+        //     type: "get",
+        //     url: "/api/prd/allproduk",
+        //     success: function (response) {
+        //         $.each(response, function (index, value) {
+        //             $('#all-produk').append('<option value="' + index + '">' + value +'</option')
+        //         });
+        //         $('.allprd').select2({});
+        //     }
         // });
 
-        $(document).ready(function () {
-            // alert(newdate);
-
-        });
-        $.ajax({
-            type: "get",
-            url: "/api/prd/allproduk",
-            success: function (response) {
-                $.each(response, function (index, value) {
-                    $('#all-produk').append('<option value="' + index + '">' + value +'</option')
-                });
-                $('.allprd').select2({});
-            }
-        });
-            // var ctx = document.getElementById('myChart').getContext('2d');
-            // var myChart = new Chart(ctx, {
-            //     type: 'bar',
-            //     data: {
-            //         labels: [], // data diambil 5 hari sebelum hari ini dan sesudah hari ini, misalkan hari ini tanggal (15-12-2021) maka yang diambil data tanggal 5 hari sebelumnya dan data tanggal 5 hari setelahnya.
-            //         datasets: [
-            //             {
-            //                 label: [], // nama produk
-            //                 data: [], // jumlah produk
-            //                 backgroundColor: [
-            //                     'rgba(255, 99, 132, 0.2)',
-            //                 ],
-            //                 borderColor: [
-            //                     'rgba(255, 99, 132, 1)',
-            //                 ],
-            //                 borderWidth: 5
-            //             },
-            //         ]
-            //     },
-            //     options: {
-            //         legend: {
-            //             display: false
-            //         },
-            //         tooltips: {
-            //             callbacks: {
-            //                 label: function labelTools(tooltipItem) {
-            //                     return tooltipItem.yLabel;
-            //                 }
+            // $(document).on('change', '#all-produk', function () {
+            //     $.ajax({
+            //         url: "/api/prd/grafikproduk/" +this.value,
+            //         type: "get",
+            //         success: function(res) {
+            //             if (myChart.data.labels.length > 0) {
+            //                 myChart.data.labels = [];
+            //                 myChart.data.datasets[0].label = [];
+            //                 myChart.data.datasets[0].data = [];
             //             }
-            //         },
-            //     }
+            //             let elementNama = [];
+            //             $.each(res, function(index, element) {
+            //                 myChart.data.labels.push(element.tgl);
+            //                 elementNama.push(element.nama);
+            //                 myChart.data.datasets[0].data.push(element.jumlah);
+            //             });
+            //             let uniqueNama = [...new Set(elementNama)];
+            //             uniqueNama.forEach(element => {
+            //                 myChart.data.datasets[0].label.push(element);
+            //             });
+            //             myChart.update();
+            //         }
+            //     });
             // });
-
-            $(document).on('change', '#all-produk', function () {
-                $.ajax({
-                    url: "/api/prd/grafikproduk/" +this.value,
-                    type: "get",
-                    success: function(res) {
-                        if (myChart.data.labels.length > 0) {
-                            myChart.data.labels = [];
-                            myChart.data.datasets[0].label = [];
-                            myChart.data.datasets[0].data = [];
-                        }
-                        let elementNama = [];
-                        $.each(res, function(index, element) {
-                            myChart.data.labels.push(element.tgl);
-                            elementNama.push(element.nama);
-                            myChart.data.datasets[0].data.push(element.jumlah);
-                        });
-                        let uniqueNama = [...new Set(elementNama)];
-                        uniqueNama.forEach(element => {
-                            myChart.data.datasets[0].label.push(element);
-                        });
-                        myChart.update();
-                    }
-                });
-            });
     // sale
-    $.ajax({
+    $(document).ready(function () {
+        $.ajax({
         url: "/api/prd/minus5/h",
         type: "post",
         success: function(res) {
@@ -533,7 +487,55 @@
         }
     })
 
-    $('.table-produk-batas-transfer-two-day').DataTable({
+    $.ajax({
+        url: "/api/prd/minus10/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m2').text(res);
+        }
+    })
+
+    $.ajax({
+        url: "/api/prd/exp/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m3').text(res);
+        }
+    })
+
+        // rakit
+        $.ajax({
+        url: "/api/prd/exp_rakit/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m4').text(res);
+        }
+    })
+
+    $.ajax({
+        url: "/api/prd/exp_rakit/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m5').text(res);
+        }
+    })
+
+    $.ajax({
+        url: "/api/prd/exp_jadwal/h",
+        type: "post",
+        success: function(res) {
+            console.log(res);
+            $('h4#m6').text(res);
+        }
+    })
+    });
+
+    function Pengiriman5Hari() {
+        $('.table-produk-batas-transfer-two-day').DataTable({
         destroy: true,
         dom: "Bfrtip",
         "paging": true,
@@ -599,16 +601,132 @@
 
         modalSO();
     })
+    }
 
-
-    $.ajax({
-        url: "/api/prd/minus10/h",
-        type: "post",
-        success: function(res) {
-            console.log(res);
-            $('h4#m2').text(res);
+    function MelewatiPengiriman() {
+        $('.table-produk-batas-transfer-three-day').DataTable({
+        destroy: true,
+        "paging": true,
+        dom: "Bfrtip",
+        "lengthChange": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/prd/exp',
+            type: "post",
+        },
+        columns: [
+            {data: 'DT_RowIndex'},
+            {data: 'so'},
+            {data: 'nama_customer'},
+            {data: 'batas_out'},
+            {data: 'button'},
+        ],
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
+    });
+
+        $(document).on('click', '.expired', function() {
+        var x = $(this).data('value');
+        console.log(x);
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/tfp/header-so/" +id+"/"+x,
+            success: function(res) {
+                console.log(res);
+                $('span#so').text(res.so);
+                $('span#po').text(res.po);
+                $('span#akn').text(res.akn);
+                $('span#instansi').text(res.customer);
+            }
+        });
+
+        $('#view-produk').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            dom: "Bfrtip",
+            autoWidth: false,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id+"/"+x,
+            },
+            columns: [
+                { data: 'produk', name: 'produk'},
+                { data: 'qty', name: 'qty'},
+                { data: 'merk', name: 'merk'},
+                { data: 'status_prd', name: 'status_prd'},
+            ],
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+        });
+
+        modalSO();
     })
+    }
+
+    function MendekatiPerakitan() {
+        $('.table-waktu-perakitan').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            dom: "Bfrtip",
+            ajax: {
+                url: "/api/prd/exp_rakit",
+                type: "post",
+            },
+            columns: [
+                {data: 'start'},
+                {data: 'end'},
+                {data: 'no_bppb'},
+                {data: 'produk'},
+                {data: 'jml'},
+                {data: 'button'}
+            ],
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            pageLength: 5,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+    });
+    }
+
+    function PerubahanJadwal() {
+            $('.table-perubahan-perakitan').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                dom: "Bfrtip",
+                ajax: {
+                    url: "/api/prd/exp_jadwal",
+                    type: "post",
+                },
+                columns: [
+                    {data: 'start'},
+                    {data: 'end'},
+                    {data: 'no_bppb'},
+                    {data: 'produk'},
+                    {data: 'jml'},
+                    {data: 'button'}
+                ],
+                "ordering":false,
+                "autoWidth": false,
+                "lengthChange": false,
+                pageLength: 5,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+        });
+    }
 
     $('.table-produk-batas-transfer-one-day').DataTable({
         destroy: true,
@@ -677,92 +795,6 @@
         modalSO();
     })
 
-    $.ajax({
-        url: "/api/prd/exp/h",
-        type: "post",
-        success: function(res) {
-            console.log(res);
-            $('h4#m3').text(res);
-        }
-    })
-
-    $('.table-produk-batas-transfer-three-day').DataTable({
-        destroy: true,
-        "paging": true,
-        dom: "Bfrtip",
-        "lengthChange": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '/api/prd/exp',
-            type: "post",
-        },
-        columns: [
-            {data: 'DT_RowIndex'},
-            {data: 'so'},
-            {data: 'nama_customer'},
-            {data: 'batas_out'},
-            {data: 'button'},
-        ],
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
-    });
-
-    $(document).on('click', '.expired', function() {
-        var x = $(this).data('value');
-        console.log(x);
-        var id = $(this).data('id');
-        console.log(id);
-
-        $.ajax({
-            url: "/api/tfp/header-so/" +id+"/"+x,
-            success: function(res) {
-                console.log(res);
-                $('span#so').text(res.so);
-                $('span#po').text(res.po);
-                $('span#akn').text(res.akn);
-                $('span#instansi').text(res.customer);
-            }
-        });
-
-        $('#view-produk').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            dom: "Bfrtip",
-            autoWidth: false,
-            ajax: {
-                url: "/api/tfp/detail-so/" +id+"/"+x,
-            },
-            columns: [
-                { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
-                { data: 'merk', name: 'merk'},
-                { data: 'status_prd', name: 'status_prd'},
-            ],
-            "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                }
-        });
-
-        modalSO();
-    })
-
-    // rakit
-    $.ajax({
-        url: "/api/prd/exp_rakit/h",
-        type: "post",
-        success: function(res) {
-            console.log(res);
-            $('h4#m4').text(res);
-        }
-    })
-
     $('.table-produk-gbj').DataTable({
             destroy: true,
             processing: true,
@@ -788,75 +820,6 @@
             },
     });
 
-    $.ajax({
-        url: "/api/prd/exp_rakit/h",
-        type: "post",
-        success: function(res) {
-            console.log(res);
-            $('h4#m5').text(res);
-        }
-    })
-
-    $('.table-waktu-perakitan').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            dom: "Bfrtip",
-            ajax: {
-                url: "/api/prd/exp_rakit",
-                type: "post",
-            },
-            columns: [
-                {data: 'start'},
-                {data: 'end'},
-                {data: 'no_bppb'},
-                {data: 'produk'},
-                {data: 'jml'},
-                {data: 'button'}
-            ],
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            pageLength: 5,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
-
-    $.ajax({
-        url: "/api/prd/exp_jadwal/h",
-        type: "post",
-        success: function(res) {
-            console.log(res);
-            $('h4#m6').text(res);
-        }
-    })
-
-    $('.table-perubahan-perakitan').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            dom: "Bfrtip",
-            ajax: {
-                url: "/api/prd/exp_jadwal",
-                type: "post",
-            },
-            columns: [
-                {data: 'start'},
-                {data: 'end'},
-                {data: 'no_bppb'},
-                {data: 'produk'},
-                {data: 'jml'},
-                {data: 'button'}
-            ],
-            "ordering":false,
-            "autoWidth": false,
-            "lengthChange": false,
-            pageLength: 5,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
 
     $(document).on('click','#bataswaktupenyerahan', function () {
         $('#bataswaktupenyerahan').addClass('active');
@@ -874,6 +837,7 @@
         $('.produkPerakitan').removeClass('hidden');
         $('.produkGbj').addClass('hidden');
         $('.perubahanPerakitan').addClass('hidden');
+        MendekatiPerakitan();
     });
 
     $(document).on('click','#perubahanperakitan', function () {
@@ -883,6 +847,7 @@
         $('.perubahanPerakitan').removeClass('hidden');
         $('.produkGbj').addClass('hidden');
         $('.produkPerakitan').addClass('hidden');
+        PerubahanJadwal();
     });
 
         $(document).on('click', '#transferoneday', function () {
@@ -900,6 +865,7 @@
             $('#transferthreeday').removeClass('active');
             $('.transferonedaytable').addClass('hidden');
             $('.transferthreedaytable').addClass('hidden');
+            Pengiriman5Hari();
         })
         $(document).on('click', '#transferthreeday', function () {
             $('#transferthreeday').addClass('active');
@@ -908,6 +874,7 @@
             $('#transferoneday').removeClass('active');
             $('.transfertwodaytable').addClass('hidden');
             $('.transferonedaytable').addClass('hidden');
+            MelewatiPengiriman();
         });
 
         function showDetail() {

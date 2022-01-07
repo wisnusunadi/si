@@ -658,494 +658,139 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function () {
-        // header
-        $.ajax({
-            url: "/api/dashboard-gbj/stok/1020/h",
-            success: function(res) {
-                console.log(res);
-                $('h4#prd1').text(res);
-            }
+        //
+        penjualan();
+        $('#nav-home-tab').on('click', function(){
+            console.log('jual');
+            produkdestroy();
+            terimadestroy();
+            penjualan();
         })
 
-        $.ajax({
-            url: "/api/dashboard-gbj/stok/59/h",
-            success: function(res) {
-                console.log(res);
-                $('h4#prd2').text(res);
-            }
-        })
+        $('#nav-profile-tab').on('click', function(){
+            console.log('produk');
+            penjualandestroy();
+            terimadestroy();
+            produk();
 
-        $.ajax({
-            url: "/api/dashboard-gbj/stok/14/h",
-            success: function(res) {
-                console.log(res);
-                $('h4#prd3').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/in/36/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#prd4').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/in/612/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#prd5').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/in/1236/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#prd6').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/in/36plus/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#prd7').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/terimaproduk1/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#r1').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/terimaproduk2/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#r2').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/terimaproduk3/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#r3').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/list/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#he3').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/list1/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#he1').text(res);
-            }
-        })
-
-        $.ajax({
-            url: "/api/dashboard-gbj/list2/h",
-            type: "post",
-            success: function(res) {
-                console.log(res);
-                $('h4#he2').text(res);
-            }
-        })
-
-        $.ajax({
-            url: '/api/gbj/sel-layout',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                if(res) {
-                    console.log(res);
-                    $(".layout").empty();
-                    $(".layout").append('<option value="" selected>All Layout</option>');
-                    $.each(res, function(key, value) {
-                        $(".layout").append('<option value="'+value.ruang+'">'+value.ruang+'</option');
-                    });
-                } else {
-                    $(".layout").empty();
-                }
-            }
-        });
-
-        // data
-        // penjualan
-        $('.table-produk-batas-transfer-one-day').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/list1',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'so'},
-                {data: 'nama_customer'},
-                {data: 'tgl_batas'},
-                {data: 'action'},
-            ]
-        });
-        $('.table-produk-batas-transfer-two-day').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/list2',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'so'},
-                {data: 'nama_customer'},
-                {data: 'tgl_batas'},
-                {data: 'action'},
-            ]
-        });
-        $('.table-produk-batas-transfer-three-day').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/list',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'so'},
-                {data: 'nama_customer'},
-                {data: 'tgl_batas'},
-                {data: 'action'},
-            ]
-        });
-
-        $('.table-jml-stok').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/list-all',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'produk'},
-                {data: 'permintaan'},
-                {data: 'current_stok'},
-            ]
-        });
-        // produk
-        $('.jml-produk-20-tab').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/stok/1020',
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'prd'},
-                {data: 'jml'},
-            ]
-        });
-        $('.jml-produk-5-tab').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/stok/59',
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'prd'},
-                {data: 'jml'},
-            ]
-        });
-        $('.jml-produk-4-tab').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/stok/14',
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'prd'},
-                {data: 'jml'},
-            ]
-        });
-        var table = $('.tableStokLayout').DataTable({
-            dom: 'lrtip',
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            "lengthChange": false,
-            ajax: {
-                url: '/api/dashboard-gbj/byproduct',
-                type: "get",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'prd'},
-                {data: 'jml'},
-                {data: 'layout'},
-            ],
-
-            initComplete: function () {
-                this.api().columns([3]).every( function () {
-                    var column = this;
-                    var select = $('<select class="form-control"><option value="">All Layout</option></select>')
-                        .appendTo( $(column.footer()).empty() )
-                        .on( 'change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-
-                            column
-                                .search( val ? '^'+val+'$' : '', true, false )
-                                .draw();
-                        } );
-
-                    column.data().unique().sort().each( function ( d, j ) {
-                        select.append( '<option value="'+d+'">'+d+'</option>' )
-                    } );
-                } );
-                $("#layout").select2();
-            }
-        });
-
-        $('#layout').on('change', function(){
-    	var search = [];
-
-            $.each($('#layout option:selected'), function(){
-                    search.push($(this).val());
-            });
-
-            search = search.join('|');
-            console.log(search);
-            table.column(3).search(search, true, false).draw();
-        });
-        $('.table-produk-batas-receipt-one-day').DataTable().destroy();
-        $('.table-produk-batas-receipt-two-day').DataTable().destroy();
-        $('.table-produk-batas-receipt-three-day').DataTable().destroy();
-        $('.table-produk-batas-receipt-one-day').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/terimaproduk1',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'product'},
-                {data: 'jumlah'},
-                {data: 'tgl_masuk'},
-                {data: 'action'},
-            ]
-        });
-        $('.table-produk-batas-receipt-two-day').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/terimaproduk2',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'product'},
-                {data: 'jumlah'},
-                {data: 'tgl_masuk'},
-                {data: 'action'},
-            ]
-        });
-        $('.table-produk-batas-receipt-three-day').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/terimaproduk3',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'product'},
-                {data: 'jumlah'},
-                {data: 'tgl_masuk'},
-                {data: 'action'},
-            ]
-        });
-        // receive
-        $('.table-produk-batas-receipt-all').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/terimaall',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'product'},
-                {data: 'jumlah'},
-                {data: 'tgl_masuk'},
-                {data: 'action'},
-            ]
-        });
-        $('.waktu-produk1').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/in/36',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'tgl_masuk'},
-                {data: 'product'},
-                {data: 'jumlah'},
-            ]
-        });
-        $('.waktu-produk2').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/in/612',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'tgl_masuk'},
-                {data: 'product'},
-                {data: 'jumlah'},
-            ]
-        });
-        $('.waktu-produk3').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/in/1236',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'tgl_masuk'},
-                {data: 'product'},
-                {data: 'jumlah'},
-            ]
-        });
-        $('.waktu-produk4').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/dashboard-gbj/in/36plus',
-                type: "post",
-            },
-            columns: [
-                {data: 'DT_RowIndex'},
-                {data: 'tgl_masuk'},
-                {data: 'product'},
-                {data: 'jumlah'},
-            ]
-        });
-
-        $(document).on('click', '.salemodal', function() {
-            var id = $(this).data('id');
-            console.log(id);
-            var x = $(this).data('value');
-            console.log(x);
+            // Produk Stok
+            $(document).on('click', '#jml-produk-20', function () {
+                $('#jml-produk-20').addClass('active');
+                $('.jml-produk-20-table').removeClass('hidden');
+                $('#jml-produk-5').removeClass('active');
+                $('#jml-produk-4').removeClass('active');
+                $('.jml-produk-5-table').addClass('hidden');
+                $('.jml-produk-4-table').addClass('hidden');
+            })
+            $(document).on('click', '#jml-produk-5', function () {
+                $('#jml-produk-5').addClass('active');
+                $('.jml-produk-5-table').removeClass('hidden');
+                $('#jml-produk-20').removeClass('active');
+                $('#jml-produk-4').removeClass('active');
+                $('.jml-produk-20-table').addClass('hidden');
+                $('.jml-produk-4-table').addClass('hidden');
+            })
+            $(document).on('click', '#jml-produk-4', function () {
+                $('#jml-produk-4').addClass('active');
+                $('.jml-produk-4-table').removeClass('hidden');
+                $('#jml-produk-5').removeClass('active');
+                $('#jml-produk-20').removeClass('active');
+                $('.jml-produk-5-table').addClass('hidden');
+                $('.jml-produk-20-table').addClass('hidden');
+            })
+            // Produk Masuk
+            $(document).on('click', '#produk-masuk-3-bulan', function () {
+                $('#produk-masuk-3-bulan').addClass('active');
+                $('.produk-masuk-3-bulan-table').removeClass('hidden');
+                $('#produk-masuk-6-bulan').removeClass('active');
+                $('#produk-masuk-1-tahun').removeClass('active');
+                $('#produk-masuk-3-tahun').removeClass('active');
+                $('.produk-masuk-6-bulan-table').addClass('hidden');
+                $('.produk-masuk-1-tahun-table').addClass('hidden');
+                $('.produk-masuk-3-tahun-table').addClass('hidden');
+            })
+            $(document).on('click', '#produk-masuk-6-bulan', function () {
+                $('#produk-masuk-6-bulan').addClass('active');
+                $('.produk-masuk-6-bulan-table').removeClass('hidden');
+                $('#produk-masuk-3-bulan').removeClass('active');
+                $('#produk-masuk-1-tahun').removeClass('active');
+                $('#produk-masuk-3-tahun').removeClass('active');
+                $('.produk-masuk-3-bulan-table').addClass('hidden');
+                $('.produk-masuk-1-tahun-table').addClass('hidden');
+                $('.produk-masuk-3-tahun-table').addClass('hidden');
+            })
+            $(document).on('click', '#produk-masuk-1-tahun', function () {
+                $('#produk-masuk-1-tahun').addClass('active');
+                $('.produk-masuk-1-tahun-table').removeClass('hidden');
+                $('#produk-masuk-6-bulan').removeClass('active');
+                $('#produk-masuk-3-bulan').removeClass('active');
+                $('#produk-masuk-3-tahun').removeClass('active');
+                $('.produk-masuk-6-bulan-table').addClass('hidden');
+                $('.produk-masuk-3-bulan-table').addClass('hidden');
+                $('.produk-masuk-3-tahun-table').addClass('hidden');
+            })
+            $(document).on('click', '#produk-masuk-3-tahun', function () {
+                $('.produk-masuk-3-tahun-table').removeClass('hidden');
+                $('#produk-masuk-3-tahun').addClass('active');
+                $('#produk-masuk-1-tahun').removeClass('active');
+                $('.produk-masuk-1-tahun-table').addClass('hidden');
+                $('#produk-masuk-6-bulan').removeClass('active');
+                $('#produk-masuk-3-bulan').removeClass('active');
+                $('.produk-masuk-6-bulan-table').addClass('hidden');
+                $('.produk-masuk-3-bulan-table').addClass('hidden');
+            })
 
             $.ajax({
-                url: "/api/tfp/header-so/" +id+"/"+x,
+                url: '/api/gbj/sel-layout',
+                type: 'GET',
+                dataType: 'json',
                 success: function(res) {
-                    console.log(res);
-                    $('span#so').text(res.so);
-                    $('span#po').text(res.po);
-                    $('span#akn').text(res.akn);
-                    $('span#instansi').text(res.customer);
+                    if(res) {
+                        console.log(res);
+                        $(".layout").empty();
+                        $(".layout").append('<option value="" selected>All Layout</option>');
+                        $.each(res, function(key, value) {
+                            $(".layout").append('<option value="'+value.ruang+'">'+value.ruang+'</option');
+                        });
+                    } else {
+                        $(".layout").empty();
+                    }
                 }
             });
-            // $('#view-produk').DataTable().destroy();
-            $('#view-produk').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: {
-                    url: "/api/dashboard-gbj/list-detail/" + id+"/"+x,
-                },
-                columns: [
-                    { data: "nama_produk" },
-                    { data: "jumlah" },
-                    // { data: "tipe" },
-                    { data: "merk" },
-                ],
-                "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                    }
-            });
-            modalSO();
         })
 
-        $(document).on('click', '.editmodal', function() {
-            // console.log($(this).parent().prev().prev().children().val());
-            // console.log('ok1');
-            var id = $(this).data('id');
-            console.log(id);
-            var brg = $(this).data('brg');
-            var tipe = $(this).data('var')
-            $('span#prd').text(brg + tipe);
-            
-            $('.table-seri').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: {
-                    url: "/api/dashboard-gbj/noseri/" + id,
-                    type: "get",
-                },
-                columns: [
-                    {data: "noser"},
-                    {data: "posisi"},
-                ],
-                "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                    }
+        $('#nav-contact-tab').on('click', function(){
+            console.log('terima');
+            penjualandestroy();
+            produkdestroy();
+            terima();
+             // Transfer
+            $(document).on('click', '#receiptoneday', function () {
+                $('#receiptoneday').addClass('active');
+                $('.receiptonedaytable').removeClass('hidden');
+                $('#receipttwoday').removeClass('active');
+                $('#receiptthreeday').removeClass('active');
+                $('.receipttwodaytable').addClass('hidden');
+                $('.receiptthreedaytable').addClass('hidden');
+            })
+            $(document).on('click', '#receipttwoday', function () {
+                $('#receipttwoday').addClass('active');
+                $('.receipttwodaytable').removeClass('hidden');
+                $('#receiptoneday').removeClass('active');
+                $('#receiptthreeday').removeClass('active');
+                $('.receiptonedaytable').addClass('hidden');
+                $('.receiptthreedaytable').addClass('hidden');
+            })
+            $(document).on('click', '#receiptthreeday', function () {
+                $('#receiptthreeday').addClass('active');
+                $('.receiptthreedaytable').removeClass('hidden');
+                $('#receipttwoday').removeClass('active');
+                $('#receiptoneday').removeClass('active');
+                $('.receipttwodaytable').addClass('hidden');
+                $('.receiptonedaytable').addClass('hidden');
             });
-            modalPenerimaan();
         })
 
-
-        // Penjualan
         $(document).on('click', '#transferoneday', function () {
             $('#transferoneday').addClass('active');
             $('.transferonedaytable').removeClass('hidden');
@@ -1170,115 +815,25 @@
             $('.transfertwodaytable').addClass('hidden');
             $('.transferonedaytable').addClass('hidden');
         })
-        // Produk Stok
-        $(document).on('click', '#jml-produk-20', function () {
-            $('#jml-produk-20').addClass('active');
-            $('.jml-produk-20-table').removeClass('hidden');
-            $('#jml-produk-5').removeClass('active');
-            $('#jml-produk-4').removeClass('active');
-            $('.jml-produk-5-table').addClass('hidden');
-            $('.jml-produk-4-table').addClass('hidden');
-        })
-        $(document).on('click', '#jml-produk-5', function () {
-            $('#jml-produk-5').addClass('active');
-            $('.jml-produk-5-table').removeClass('hidden');
-            $('#jml-produk-20').removeClass('active');
-            $('#jml-produk-4').removeClass('active');
-            $('.jml-produk-20-table').addClass('hidden');
-            $('.jml-produk-4-table').addClass('hidden');
-        })
-        $(document).on('click', '#jml-produk-4', function () {
-            $('#jml-produk-4').addClass('active');
-            $('.jml-produk-4-table').removeClass('hidden');
-            $('#jml-produk-5').removeClass('active');
-            $('#jml-produk-20').removeClass('active');
-            $('.jml-produk-5-table').addClass('hidden');
-            $('.jml-produk-20-table').addClass('hidden');
-        })
-        // Produk Masuk
-        $(document).on('click', '#produk-masuk-3-bulan', function () {
-            $('#produk-masuk-3-bulan').addClass('active');
-            $('.produk-masuk-3-bulan-table').removeClass('hidden');
-            $('#produk-masuk-6-bulan').removeClass('active');
-            $('#produk-masuk-1-tahun').removeClass('active');
-            $('#produk-masuk-3-tahun').removeClass('active');
-            $('.produk-masuk-6-bulan-table').addClass('hidden');
-            $('.produk-masuk-1-tahun-table').addClass('hidden');
-            $('.produk-masuk-3-tahun-table').addClass('hidden');
-        })
-        $(document).on('click', '#produk-masuk-6-bulan', function () {
-            $('#produk-masuk-6-bulan').addClass('active');
-            $('.produk-masuk-6-bulan-table').removeClass('hidden');
-            $('#produk-masuk-3-bulan').removeClass('active');
-            $('#produk-masuk-1-tahun').removeClass('active');
-            $('#produk-masuk-3-tahun').removeClass('active');
-            $('.produk-masuk-3-bulan-table').addClass('hidden');
-            $('.produk-masuk-1-tahun-table').addClass('hidden');
-            $('.produk-masuk-3-tahun-table').addClass('hidden');
-        })
-        $(document).on('click', '#produk-masuk-1-tahun', function () {
-            $('#produk-masuk-1-tahun').addClass('active');
-            $('.produk-masuk-1-tahun-table').removeClass('hidden');
-            $('#produk-masuk-6-bulan').removeClass('active');
-            $('#produk-masuk-3-bulan').removeClass('active');
-            $('#produk-masuk-3-tahun').removeClass('active');
-            $('.produk-masuk-6-bulan-table').addClass('hidden');
-            $('.produk-masuk-3-bulan-table').addClass('hidden');
-            $('.produk-masuk-3-tahun-table').addClass('hidden');
-        })
-        $(document).on('click', '#produk-masuk-3-tahun', function () {
-            $('.produk-masuk-3-tahun-table').removeClass('hidden');
-            $('#produk-masuk-3-tahun').addClass('active');
-            $('#produk-masuk-1-tahun').removeClass('active');
-            $('.produk-masuk-1-tahun-table').addClass('hidden');
-            $('#produk-masuk-6-bulan').removeClass('active');
-            $('#produk-masuk-3-bulan').removeClass('active');
-            $('.produk-masuk-6-bulan-table').addClass('hidden');
-            $('.produk-masuk-3-bulan-table').addClass('hidden');
-        })
-        // Transfer
-        $(document).on('click', '#receiptoneday', function () {
-            $('#receiptoneday').addClass('active');
-            $('.receiptonedaytable').removeClass('hidden');
-            $('#receipttwoday').removeClass('active');
-            $('#receiptthreeday').removeClass('active');
-            $('.receipttwodaytable').addClass('hidden');
-            $('.receiptthreedaytable').addClass('hidden');
-        })
-        $(document).on('click', '#receipttwoday', function () {
-            $('#receipttwoday').addClass('active');
-            $('.receipttwodaytable').removeClass('hidden');
-            $('#receiptoneday').removeClass('active');
-            $('#receiptthreeday').removeClass('active');
-            $('.receiptonedaytable').addClass('hidden');
-            $('.receiptthreedaytable').addClass('hidden');
-        })
-        $(document).on('click', '#receiptthreeday', function () {
-            $('#receiptthreeday').addClass('active');
-            $('.receiptthreedaytable').removeClass('hidden');
-            $('#receipttwoday').removeClass('active');
-            $('#receiptoneday').removeClass('active');
-            $('.receipttwodaytable').addClass('hidden');
-            $('.receiptonedaytable').addClass('hidden');
-        });
+
         $('.select2').select2({});
 
     });
 
         function filterFunction() {
-        var input, filter, ul, li, a, i;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        div = document.getElementById("myDropdown");
-        a = div.getElementsByTagName("a");
-        for (i = 0; i < a.length; i++) {
-            txtValue = a[i].textContent || a[i].innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            a[i].style.display = "";
-            } else {
-            a[i].style.display = "none";
+            var input, filter, ul, li, a, i;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("myDropdown");
+            a = div.getElementsByTagName("a");
+            for (i = 0; i < a.length; i++) {
+                txtValue = a[i].textContent || a[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+                } else {
+                a[i].style.display = "none";
+                }
             }
-        }
         }
         function modalPenerimaan() {
             $('.detail-layout').modal('show');
@@ -1287,37 +842,518 @@
             $('#viewProdukModal').modal('show');
         }
 
+        function penjualan() {
+            $.ajax({
+                url: "/api/dashboard-gbj/list/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#he3').text(res);
+                }
+            })
 
+            $.ajax({
+                url: "/api/dashboard-gbj/list1/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#he1').text(res);
+                }
+            })
 
-        // $(document).on('click', '.editmodal2', function() {
-        //     console.log('ok2');
-        //     var id = $(this).data('id');
-        //     console.log(id);
-        //     modalPenerimaan();
-        // })
+            $.ajax({
+                url: "/api/dashboard-gbj/list2/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#he2').text(res);
+                }
+            })
 
-        // $(document).on('click', '.editmodal3', function() {
-        //     console.log('ok3');
-        //     var id = $(this).data('id');
-        //     console.log(id);
-        //     modalPenerimaan();
-        // })
+            // penjualan
+            $('.table-produk-batas-transfer-one-day').DataTable({
+                processing: true,
+                destroy: true,
+                serverSide: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/list1',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'so'},
+                    {data: 'nama_customer'},
+                    {data: 'tgl_batas'},
+                    {data: 'action'},
+                ]
+            });
+            $('.table-produk-batas-transfer-two-day').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/list2',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'so'},
+                    {data: 'nama_customer'},
+                    {data: 'tgl_batas'},
+                    {data: 'action'},
+                ]
+            });
+            $('.table-produk-batas-transfer-three-day').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/list',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'so'},
+                    {data: 'nama_customer'},
+                    {data: 'tgl_batas'},
+                    {data: 'action'},
+                ]
+            });
 
-        // $(document).on('click', '.editmodal', function() {
-        //     console.log('ok4');
-        //     var id = $(this).data('id');
-        //     console.log(id);
-        //     modalPenerimaan();
-        // })
-        // $('.table-seri').DataTable({
-        //     "language": {
-        //             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        //         }
-        // });
-        // $('#view-produk').DataTable({
-        //     "language": {
-        //             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        //         }
-        // });
+            $('.table-jml-stok').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/list-all',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'produk'},
+                    {data: 'permintaan'},
+                    {data: 'current_stok'},
+                ]
+            });
+
+            $(document).on('click', '.salemodal', function() {
+                var id = $(this).data('id');
+                console.log(id);
+                var x = $(this).data('value');
+                console.log(x);
+
+                $.ajax({
+                    url: "/api/tfp/header-so/" +id+"/"+x,
+                    success: function(res) {
+                        console.log(res);
+                        $('span#so').text(res.so);
+                        $('span#po').text(res.po);
+                        $('span#akn').text(res.akn);
+                        $('span#instansi').text(res.customer);
+                    }
+                });
+                // $('#view-produk').DataTable().destroy();
+                $('#view-produk').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    ajax: {
+                        url: "/api/dashboard-gbj/list-detail/" + id+"/"+x,
+                    },
+                    columns: [
+                        { data: "nama_produk" },
+                        { data: "jumlah" },
+                        // { data: "tipe" },
+                        { data: "merk" },
+                    ],
+                    "language": {
+                            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                        }
+                });
+                modalSO();
+            })
+        }
+
+        function penjualandestroy() {
+            $('.table-produk-batas-transfer-one-day').DataTable().clear().destroy();
+            $('.table-produk-batas-transfer-two-day').DataTable().clear().destroy();
+            $('.table-produk-batas-transfer-three-day').DataTable().clear().destroy();
+            $('.table-jml-stok').DataTable().clear().destroy();
+        }
+
+        function produk() {
+
+            $.ajax({
+                url: "/api/dashboard-gbj/stok/1020/h",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#prd1').text(res);
+                }
+            })
+
+            $.ajax({
+                url: "/api/dashboard-gbj/stok/59/h",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#prd2').text(res);
+                }
+            })
+
+            $.ajax({
+                url: "/api/dashboard-gbj/stok/14/h",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#prd3').text(res);
+                }
+            })
+
+            $.ajax({
+                url: "/api/dashboard-gbj/in/36/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#prd4').text(res);
+                }
+            })
+
+            $.ajax({
+                url: "/api/dashboard-gbj/in/612/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#prd5').text(res);
+                }
+            })
+
+            $.ajax({
+                url: "/api/dashboard-gbj/in/1236/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#prd6').text(res);
+                }
+            })
+
+            $.ajax({
+                url: "/api/dashboard-gbj/in/36plus/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#prd7').text(res);
+                }
+            })
+
+            $('.jml-produk-20-tab').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/stok/1020',
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'prd'},
+                    {data: 'jml'},
+                ]
+            });
+            $('.jml-produk-5-tab').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/stok/59',
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'prd'},
+                    {data: 'jml'},
+                ]
+            });
+            $('.jml-produk-4-tab').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/stok/14',
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'prd'},
+                    {data: 'jml'},
+                ]
+            });
+            var table = $('.tableStokLayout').DataTable({
+                dom: 'lrtip',
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                "lengthChange": false,
+                ajax: {
+                    url: '/api/dashboard-gbj/byproduct',
+                    type: "get",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'prd'},
+                    {data: 'jml'},
+                    {data: 'layout'},
+                ],
+
+                initComplete: function () {
+                    this.api().columns([3]).every( function () {
+                        var column = this;
+                        var select = $('<select class="form-control"><option value="">All Layout</option></select>')
+                            .appendTo( $(column.footer()).empty() )
+                            .on( 'change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search( val ? '^'+val+'$' : '', true, false )
+                                    .draw();
+                            } );
+
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                        } );
+                    } );
+                    $("#layout").select2();
+                }
+            });
+
+            $('#layout').on('change', function(){
+                var search = [];
+
+                $.each($('#layout option:selected'), function(){
+                        search.push($(this).val());
+                });
+
+                search = search.join('|');
+                console.log(search);
+                table.column(3).search(search, true, false).draw();
+            });
+            // $('.table-produk-batas-receipt-one-day').DataTable().destroy();
+            // $('.table-produk-batas-receipt-two-day').DataTable().destroy();
+            // $('.table-produk-batas-receipt-three-day').DataTable().destroy();
+            $('.waktu-produk1').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/in/36',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'tgl_masuk'},
+                    {data: 'product'},
+                    {data: 'jumlah'},
+                ]
+            });
+            $('.waktu-produk2').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/in/612',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'tgl_masuk'},
+                    {data: 'product'},
+                    {data: 'jumlah'},
+                ]
+            });
+            $('.waktu-produk3').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/in/1236',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'tgl_masuk'},
+                    {data: 'product'},
+                    {data: 'jumlah'},
+                ]
+            });
+            $('.waktu-produk4').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/in/36plus',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'tgl_masuk'},
+                    {data: 'product'},
+                    {data: 'jumlah'},
+                ]
+            });
+        }
+
+        function produkdestroy() {
+            $('.jml-produk-20-tab').DataTable().clear().destroy();
+            $('.jml-produk-5-tab').DataTable().clear().destroy();
+            $('.jml-produk-4-tab').DataTable().clear().destroy();
+            $('.tableStokLayout').DataTable().clear().destroy();
+            $('.waktu-produk1').DataTable().clear().destroy();
+            $('.waktu-produk2').DataTable().clear().destroy();
+            $('.waktu-produk3').DataTable().clear().destroy();
+            $('.waktu-produk4').DataTable().clear().destroy();
+        }
+
+        function terima() {
+             $.ajax({
+                url: "/api/dashboard-gbj/terimaproduk1/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#r1').text(res);
+                }
+            })
+
+            $.ajax({
+                url: "/api/dashboard-gbj/terimaproduk2/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#r2').text(res);
+                }
+            })
+
+            $.ajax({
+                url: "/api/dashboard-gbj/terimaproduk3/h",
+                type: "post",
+                success: function(res) {
+                    console.log(res);
+                    $('h4#r3').text(res);
+                }
+            })
+
+            $('.table-produk-batas-receipt-all').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/terimaall',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'product'},
+                    {data: 'jumlah'},
+                    {data: 'tgl_masuk'},
+                    {data: 'action'},
+                ]
+            });
+
+            $('.table-produk-batas-receipt-one-day').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/terimaproduk1',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'product'},
+                    {data: 'jumlah'},
+                    {data: 'tgl_masuk'},
+                    {data: 'action'},
+                ]
+            });
+            $('.table-produk-batas-receipt-two-day').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/terimaproduk2',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'product'},
+                    {data: 'jumlah'},
+                    {data: 'tgl_masuk'},
+                    {data: 'action'},
+                ]
+            });
+            $('.table-produk-batas-receipt-three-day').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                autoWidth: false,
+                ajax: {
+                    url: '/api/dashboard-gbj/terimaproduk3',
+                    type: "post",
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'product'},
+                    {data: 'jumlah'},
+                    {data: 'tgl_masuk'},
+                    {data: 'action'},
+                ]
+            });
+
+            $(document).on('click', '.editmodal', function() {
+                var id = $(this).data('id');
+                console.log(id);
+                var brg = $(this).data('brg');
+                var tipe = $(this).data('var')
+                $('span#prd').text(brg + tipe);
+
+                $('.table-seri').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    ajax: {
+                        url: "/api/dashboard-gbj/noseri/" + id,
+                        type: "get",
+                    },
+                    columns: [
+                        {data: "noser"},
+                        {data: "posisi"},
+                    ],
+                    "language": {
+                            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                        }
+                });
+                modalPenerimaan();
+            })
+        }
+
+        function terimadestroy() {
+            $('.table-produk-batas-receipt-all').DataTable().clear().destroy();
+            $('.table-produk-batas-receipt-three-day').DataTable().clear().destroy();
+            $('.table-produk-batas-receipt-two-day').DataTable().clear().destroy();
+            $('.table-produk-batas-receipt-one-day').DataTable().clear().destroy();
+        }
+
 </script>
 @stop

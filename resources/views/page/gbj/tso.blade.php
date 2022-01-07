@@ -425,10 +425,10 @@
                         noseri_id : seri,
                     },
                     success: function (res) {
-
+                        location.reload();
                     }
                 });
-                location.reload();
+
             }
         })
 
