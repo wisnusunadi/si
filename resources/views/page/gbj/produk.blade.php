@@ -299,7 +299,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Daftar Stok Produk</h5>
+                <h5 class="modal-title">Daftar Stok <span id="nm_produk"><b></b></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -339,13 +339,11 @@
                 <h5 class="modal-title">
                     <div class="row">
                         <div class="col">
-                            <b>Produk</b>
-                            <p>Ambulatory</p>
+                            <b>Produk</b><p id="namaa">Ambulatory</p>
                         </div>
-                        <div class="col">
-                            <b>Nomor SO</b>
-                            <p>8457938475938475</p>
-                        </div>
+                        {{-- <div class="col">
+                            <b>Nomor SO</b><p>8457938475938475</p>
+                        </div> --}}
                     </div>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -359,7 +357,6 @@
                         <tr>
                             <th>Tanggal Masuk</th>
                             <th>Dari</th>
-                            <th>Tujuan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -404,20 +401,8 @@
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
-    $('.scan-produk').DataTable({
-        "ordering": false,
-        "autoWidth": false,
-        searching: false,
-        "lengthChange": false,
-        "columnDefs": [{
-            "width": "5%",
-            "targets": 0
-        }, ],
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
-    });
-    $('#inputGroupFile02').on('change', function() {
+    $("#head-cb").prop('checked', false);
+    $('#inputGroupFile02').on('change', function () {
         //get the file name
         var fileName = $(this).val();
         //replace the "Choose a file" label
@@ -438,12 +423,19 @@
 
         $("#head-cb").on('click', function() {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
     });
 
     function ubahData() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let checkbox_terpilih = $('.scan-produk').DataTable().column(0).nodes()
+                .to$().find('input[type=checkbox]:checked');
         let layout = $('#change_layout').val();
         $.each(checkbox_terpilih, function(index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
@@ -543,7 +535,7 @@
                 $("#produk_id").empty();
                 $("#produk_id").append('<option value="">Pilih Item</option>');
                 $.each(res, function(key, value) {
-                    $("#produk_id").append('<option value="' + value.id + '">' + value.product.nama + ' ' + value.nama + '</option');
+                    $("#produk_id").append('<option value="'+value.id+'">'+value.nama+'</option');
                 });
             } else {
                 $("#produk_id").empty();
@@ -673,59 +665,72 @@
         });
     });
 
-    function select_layout() {
-        $.ajax({
-            url: '/api/gbj/sel-layout',
-            type: 'GET',
-            dataType: 'json',
-            success: function(res) {
-                $.each(res, function(key, value) {
-                    $("#layout_id").append('<option value="' + value.id + '">' + value.ruang + '</option');
-                });
-            }
-        });
-    }
-
+   function select_layout() {
+    $.ajax({
+        url: '/api/gbj/sel-layout',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            $.each(res, function(key, value) {
+                $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
+            });
+        }
+    });
+   }
+    var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
     $(document).on('click', '.stokmodal', function() {
         var id = $(this).data('id');
-        console.log(id);
-        var i = 0;
-        var b = '';
+        $('span#nm_produk').text($(this).parent().prev().prev().prev().prev().html());
 
-        $.ajax({
-            url: '/api/gbj/noseri/' + id,
-            dataType: 'json',
-            success: function(data) {
-                console.log(data);
-                $.each(data, function(key, value) {
-                    i++;
-                    b = "<tr ><td><input type='checkbox' class='cb-child' value=" + value.id + "></td><td>" + value.noseri + "<input type='hidden' name='noseri[]' value=" + value.noseri + "><input type='hidden' name='gdg_brg_jadi_id' value=" + value.gdg_barang_jadi_id + "></td><td><select name='layout_id[]' id='layout_id' class='form-control'>" + select_layout() + "</select></td><td><button class='btn btn-info viewStock' data-id='" + value.id + "'><i class='far fa-eye'></i> View</button></td></tr>";
-                    $(".scan-produk").append(b);
-                })
-
+        $('.scan-produk').DataTable({
+                destroy: true,
+                "ordering":false,
+                "autoWidth": false,
+                searching: false,
+                "lengthChange": false,
+                processing: true,
+                serverSide: false,
+                ajax: {
+                    url: '/api/gbj/noseri/' + id,
+                },
+                columns: [
+                    {data: 'ids'},
+                    {data: 'seri'},
+                    {data: 'Layout'},
+                    {data: 'aksi'}
+                ],
+                // "columnDefs": [
+                //     { "width": "5%", "targets": 0},
+                // ],
+                "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+
         $('.daftar-stok').modal('show');
     });
 
     // modal history
     $(document).on('focus', '.viewStock', function() {
         var id = $(this).data('id');
+        $('p#namaa').text(title);
         console.log(id);
         var i = 0;
 
         $.ajax({
             url: '/api/gbj/history/' + id,
+            type: 'get',
             dataType: 'json',
             success: function(data) {
-                console.log(data);
-                var a = '';
-
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
                 $.each(data, function(key, value) {
-                    a = "<tr><td>" + new Date(value.created_at).toLocaleDateString() + "</td><td>" + value.from.nama + "</td><td>" + value.to.nama + "</td></tr>";
+                    console.log(value);
+                    $(".view-produk tbody").append("<tr><td>"+new Date(value.created_at).toLocaleDateString('id-ID', options)+"</td><td>"+value.from.nama+"</td></tr>");
+                    // $(".view-produk tbody").append("<tr><td>"+new Date(value[key].created_at).toLocaleDateString()+"</td><td>"+value[key].from.nama+"</td><td>"+value[key].to.nama+"</td></tr>");
+                    // var a = ;
                 });
-                $(".view-produk tbody").html(a);
+                // $(".view-produk tbody").html(a);
             }
         })
         $('.modalViewStock').modal('show');
@@ -752,36 +757,48 @@
 
     $(document).ready(function() {
         $('#ubahSeri').on('click', function() {
+            // console.log('test');
             const cekid = [];
-            const noseri = [];
             const layout = [];
-
-            $('.cb-child').each(function() {
-                if ($(this).is(":checked")) {
-                    cekid.push($(this).val());
-                }
+            let a = $('.scan-produk').DataTable().column(0).nodes()
+                .to$().find('input[type=checkbox]:checked');
+            $(a).each(function (index, elm) {
+                cekid.push($(elm).val());
+                layout.push($(elm).parent().next().next().children().val());
             });
+            // console.log(cekid);
 
-            $('input[name^="gdg_brg_jadi_id"]').each(function() {
-                noseri.push($(this).val());
-            });
+            Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Merubah Layout",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Terima!'
+            }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Sukses!',
+                    'Layout berhasil dirubah',
+                    'success'
+                )
+                $.ajax({
+                    url: '/api/gbj/ubahseri',
+                    type: 'post',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        cekid : cekid,
+                        layout : layout,
+                    },
+                    success: function(res) {
+                        console.log(res);
+                    }
+                })
+                location.reload();
+            }
+        })
 
-            $('select[name^="layout_id"]').each(function() {
-                layout.push($(this).val());
-            });
-
-            $.ajax({
-                url: '/api/gbj/noseri/' + noseri,
-                type: 'post',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    cekid: cekid,
-                    layout: layout,
-                },
-                success: function(res) {
-                    console.log(res);
-                }
-            })
         })
     })
 </script>

@@ -11,7 +11,7 @@ class NoseriTGbj extends Model
 
     protected $table = "t_gbj_noseri";
 
-    protected $fillable = ['created_at', 'updated_at', 't_gbj_detail_id', 'noseri_id', 'status_id', 'layout_id', 'state_id', 'jenis'];
+    protected $fillable = ['created_at', 'updated_at', 't_gbj_detail_id', 'noseri_id', 'status_id', 'layout_id', 'state_id', 'jenis', 'waktu_tf', 'transfer_by', 'created_by'];
 
     function detail()
     {
