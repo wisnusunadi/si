@@ -1784,8 +1784,12 @@ class ProduksiController extends Controller
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
+        } elseif($now == $blm_terkirim) {
+            $total_rakit->status_tf = 14;
+            $total_rakit->filled_by = $request->userid;
+            $total_rakit->save();
         } else {
-            $total_rakit->status_tf = 13;
+            $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
         }

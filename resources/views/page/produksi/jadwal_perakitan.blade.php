@@ -208,6 +208,23 @@
 
 @section('adminlte_js')
 <script>
+    $(document).ready(function () {
+        cal_jadwal();
+        // $('#home-tab').on('click', function() {
+        //     tab_jadwaldestroy();
+        //     cal_jadwal();
+        // })
+
+        $('#profile-tab').on('click', function() {
+            tab_jadwal();
+        })
+
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            $('.cb-child').prop('checked', isChecked)
+        });
+    })
+
     // Charts
         // $(document).ready(function () {
         //     var options = {
@@ -234,11 +251,26 @@
         //     charts.render();
         // });
 
+    function modalRakit() {
+
+        $('.modalRakit').modal('show');
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
+    }
 
+    function transfer() {
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di transfer tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        });
+    };
+
+    function cal_jadwal() {
         var date = new Date()
         var d = date.getDate(),
             m = date.getMonth(),
@@ -283,7 +315,14 @@
         });
 
         calendar.render();
+    }
 
+    function tab_jadwaldestroy() {
+        $('#table_produk_perakitan').DataTable().clear().destroy();
+        $('.scan-produk').DataTable().clear().destroy();
+    }
+
+    function tab_jadwal() {
         $('#table_produk_perakitan').DataTable({
             destroy: true,
             processing: true,
@@ -444,27 +483,6 @@
                 }
             })
         })
-
-
-    function modalRakit() {
-
-        $('.modalRakit').modal('show');
-        $("#head-cb").on('click', function () {
-            var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
-        });
     }
-
-    function transfer() {
-        Swal.fire({
-            title: "Apakah anda yakin?",
-            text: "Data yang sudah di transfer tidak dapat diubah!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        });
-    };
-
-
 </script>
 @stop
