@@ -78,7 +78,7 @@
                         <h2>SURAT JALAN</h2>
                     </td>
                     <td class="align-right">
-                        <img src="{{public_path('assets/image/logo/spa_long.png') }}" alt="" class="imgsize">
+
                     </td>
                 </tr>
             </tbody>
