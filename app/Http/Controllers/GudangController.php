@@ -352,7 +352,14 @@ class GudangController extends Controller
             ->addColumn('jumlah', function ($d) {
                 $seri = NoseriTGbj::where('t_gbj_detail_id', $d->id)->get();
                 $c = count($seri);
-                return $c . ' ' . $d->produk->satuan->nama;
+                $seri_done = NoseriTGbj::where('t_gbj_detail_id', $d->id)->where('state_id', 16)->get()->count();
+                if ($c == $seri_done) {
+                    # code...
+                    return $c . ' ' . $d->produk->satuan->nama;
+                } else {
+                    return $c . ' ' . $d->produk->satuan->nama.'<br><span class="badge badge-dark"> Sisa ' . intval($c - $seri_done) . '</span>';
+                }
+
             })
             ->addColumn('action', function ($d) {
                 $seri = NoseriTGbj::where('t_gbj_detail_id', $d->id)->get();
@@ -382,7 +389,7 @@ class GudangController extends Controller
                 }
 
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'jumlah'])
             ->make(true);
     }
 
@@ -1404,8 +1411,15 @@ class GudangController extends Controller
             ->addColumn('tgl_batas', function($d) {
                 if(isset($d->tgl_kontrak)) {
                     $a = Carbon::now()->diffInDays($d->tgl_kontrak);
+                    if($d->Provinsi->status == 1) {
+                        return Carbon::createFromFormat('Y-m-d', $d->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    }
 
-                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    if($d->Provinsi->status == 2) {
+                        return Carbon::createFromFormat('Y-m-d', $d->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    }
+
+                    // return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                 } else {
                     return '-';
                 }
@@ -1453,7 +1467,13 @@ class GudangController extends Controller
             ->addColumn('tgl_batas', function($d) {
                 if(isset($d->tgl_kontrak)) {
                     $a = Carbon::now()->diffInDays($d->tgl_kontrak);
-                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    if($d->Provinsi->status == 1) {
+                        return Carbon::createFromFormat('Y-m-d', $d->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    }
+
+                    if($d->Provinsi->status == 2) {
+                        return Carbon::createFromFormat('Y-m-d', $d->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    }
                 } else {
                     return '-';
                 }
@@ -1502,7 +1522,13 @@ class GudangController extends Controller
             ->addColumn('tgl_batas', function($d) {
                 if(isset($d->tgl_kontrak)) {
                     $a = Carbon::now()->diffInDays($d->tgl_kontrak);
-                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    if($d->Provinsi->status == 1) {
+                        return Carbon::createFromFormat('Y-m-d', $d->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    }
+
+                    if($d->Provinsi->status == 2) {
+                        return Carbon::createFromFormat('Y-m-d', $d->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY').'<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    }
                 } else {
                     return '-';
                 }
