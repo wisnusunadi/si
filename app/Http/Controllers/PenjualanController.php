@@ -1047,7 +1047,6 @@ class PenjualanController extends Controller
             ->rawColumns(['batas_kontrak', 'button', 'status'])
             ->make(true);
     }
-
     public function get_data_ekatalog($value)
     {
         $divisi_id = Auth::user()->divisi->id;
