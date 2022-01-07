@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import Home from '../../ppic_spa/views/Home.vue'
 import Perakitan from "../../ppic_spa/views/Perakitan.vue"
 import SalesOrder from "../../ppic_spa/views/SalesOrder.vue"
+import LaporanPesanan from "../../ppic_spa/views/LaporanPesanan.vue"
+import ProsesPesanan from "../../ppic_spa/views/ProsesPesanan.vue"
 import JadwalPerencanaan from "../../ppic_spa/views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../../ppic_spa/views/JadwalPelaksanaan.vue"
 import PersetujuanPerencanaan from "../views/PersetujuanPerencanaan.vue"
@@ -26,6 +28,16 @@ const routes = [
         path: '/manager-teknik/so',
         name: 'SalesOrder',
         component: SalesOrder,
+    },
+    {
+        path: '/ppic/laporan_pesanan',
+        name: 'LaporanPesanan',
+        component: LaporanPesanan,
+    },
+    {
+        path: '/ppic/proses_pesanan',
+        name: 'ProsesPesanan',
+        component: ProsesPesanan,
     },
     {
         path: '/manager-teknik/jadwal_perencanaan',
