@@ -1010,7 +1010,7 @@
         function cek_stok(id) {
             var jumlah = 0;
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 async: false,
                 url: '/api/produk/variasi_stok/' + id,
@@ -1027,7 +1027,7 @@
         function check_no_paket(values) {
             var hasil = "";
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 async: false,
                 url: '/api/penjualan/check_no_paket/' + '0/' + values,
