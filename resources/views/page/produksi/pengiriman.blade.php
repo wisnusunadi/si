@@ -15,6 +15,17 @@
         font-size: 14px;
         border-radius: 6px;
     }
+    .sebagian_diterima{
+        float: left;
+        width: auto;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #FFCC83; 
+        background-color: #FEF7EA;
+        color: #ff9e17;
+        font-size: 14px;
+        border-radius: 6px;
+    }
     .sudah_diterima{
         float: left;
         width: auto;
@@ -413,7 +424,7 @@
                             noseri: seri,
                         },
                         success: function(res) {
-                           
+                            console.log(res);
                         }
                     })
                     location.reload();

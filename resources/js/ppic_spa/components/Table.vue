@@ -114,6 +114,46 @@
           </tr>
         </tbody>
       </table>
+
+      <template
+        v-if="status === 'pelaksanaan' && format_rencana_jadwal.length > 0"
+      >
+        <table
+          class="table has-text-centered is-bordered"
+          style="white-space: nowrap"
+        >
+          <thead>
+            <tr>
+              <th rowspan="2">Nama Produk</th>
+              <th rowspan="2">Jumlah</th>
+              <th :colspan="last_date">Tanggal</th>
+            </tr>
+            <tr>
+              <th v-for="i in Array.from(Array(last_date).keys())" :key="i">
+                {{ i + 1 }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in format_rencana_jadwal" :key="item.id">
+              <td>{{ item.title }}</td>
+              <td>{{ item.jumlah }}</td>
+              <td
+                v-for="i in Array.from(Array(last_date).keys())"
+                :key="i"
+                :style="{
+                  backgroundColor:
+                    weekend_date.indexOf(i + 1) !== -1
+                      ? 'black'
+                      : isDate(item.events, i + 1)
+                      ? 'yellow'
+                      : '',
+                }"
+              ></td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
     </div>
 
     <div class="modal" :class="{ 'is-active': addProdukModal }">
@@ -289,7 +329,7 @@
                   <input
                     class="input"
                     type="number"
-                    min="1"
+                    :min="item.progres > 0 ? item.progres : 1"
                     v-model="item.jumlah"
                   />
                 </div>
@@ -403,6 +443,8 @@ export default {
       data_produk: [],
       gk_stok: 0,
       gbj_stok: 0,
+
+      rencana_jadwal: [],
     };
   },
 
@@ -412,6 +454,12 @@ export default {
     await axios.get("/api/ppic/data/gbj").then((response) => {
       this.data_produk = response.data;
     });
+
+    if (this.status === "pelaksanaan") {
+      await axios.get("/api/ppic/data/rencana_perakitan").then((response) => {
+        this.rencana_jadwal = response.data;
+      });
+    }
 
     this.$store.commit("setIsLoading", false);
 
@@ -437,7 +485,8 @@ export default {
       if (date.getDay() == 6 || date.getDay() == 0) this.weekend_date.push(i);
     }
 
-    console.log("table created", this.format_events);
+    console.log("table created", this.events);
+    console.log(this.format_events);
   },
 
   methods: {
@@ -467,10 +516,11 @@ export default {
     async changeProduk() {
       if (this.produk === null) return;
       this.$store.commit("setIsLoading", true);
+
       await axios
         .get("/api/ppic/data/gbj", {
           params: {
-            id: this.produk.id,
+            id: this.produk.value,
           },
         })
         .then((response) => {
@@ -484,7 +534,7 @@ export default {
       await axios
         .get("/api/ppic/data/gk/unit", {
           params: {
-            id: this.produk.id,
+            id: this.produk.value,
           },
         })
         .then((response) => {
@@ -557,12 +607,20 @@ export default {
 
           if (
             this.updated_events.events[index].jumlah < 1 ||
-            end_date.getDate() < start_date.getDate()
+            end_date.getDate() < start_date.getDate() ||
+            this.updated_events.events[index].jumlah <
+              this.updated_events.events[index].progres
           ) {
             let text;
             if (end_date.getDate() < start_date.getDate())
               text =
                 "Tanggal mulai harus lebih dahulu dibandingkan tanggal selesai";
+            else if (
+              this.updated_events.events[index].jumlah <
+              this.updated_events.events[index].progres
+            )
+              text =
+                "Jumlah tidak boleh kurang dari progres yang telah dirakit";
             else text = "Mohon periksa kembali form yang Anda isi !!";
 
             this.$swal({
@@ -860,6 +918,48 @@ export default {
       }
 
       return data;
+    },
+
+    format_rencana_jadwal() {
+      let data = [];
+      let exists = {};
+      for (let i = 0; i < this.rencana_jadwal.length; i++) {
+        exists = data.find(
+          (item) =>
+            item.produk_id === this.rencana_jadwal[i].jadwal_perakitan.produk_id
+        );
+        if (data.length === 0 || exists === undefined) {
+          data.push({
+            produk_id: this.rencana_jadwal[i].jadwal_perakitan.produk_id,
+            title: `${this.rencana_jadwal[i].jadwal_perakitan.produk.produk.nama} ${this.rencana_jadwal[i].jadwal_perakitan.produk.nama}`,
+            jumlah: this.rencana_jadwal[i].jadwal_perakitan.jumlah,
+            events: [
+              {
+                id: this.rencana_jadwal[i].jadwal_perakitan.id,
+                start: this.rencana_jadwal[i].jadwal_perakitan.tanggal_mulai,
+                end: this.rencana_jadwal[i].jadwal_perakitan.tanggal_selesai,
+                jumlah: this.rencana_jadwal[i].jadwal_perakitan.jumlah,
+              },
+            ],
+          });
+        } else {
+          exists.rencana_jadwal.pu.jadwal_perakitansh({
+            id: this.rencana_jadwal[i].jadwal_perakitan.id,
+            start: this.rencana_jadwal[i].jadwal_perakitan.tanggal_mulai,
+            end: this.rencana_jadwal[i].jadwal_perakitan.tanggal_selesai,
+            jumlah: this.rencana_jadwal[i].jadwal_perakitan.jumlah,
+          });
+          exists.jumlah += this.rencana_jadwal[i].jadwal_perakitan.jumlah;
+        }
+      }
+
+      return data;
+    },
+  },
+
+  watch: {
+    format_rencana_jadwal(new_val) {
+      console.log("watch rencana", new_val);
     },
   },
 };

@@ -194,7 +194,6 @@
                                 <label for="">Tanggal Masuk</label>
                                 <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body in_spr">
-                                        23-09-2021
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +201,6 @@
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
                                     <div class="card-body spr">
-                                        Produk 1
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +218,6 @@
                                 <label for="">Dari</label>
                                 <div class="card" style="background-color: #FFE0B4">
                                     <div class="card-body divisi_spr">
-                                        Divisi IT
                                     </div>
                                 </div>
                             </div>
@@ -228,7 +225,6 @@
                                 <label for="">Jumlah</label>
                                 <div class="card" style="background-color: #FFECB2">
                                     <div class="card-body jml_spr">
-                                        100 pcs
                                     </div>
                                 </div>
                             </div>
@@ -277,16 +273,14 @@
                             <div class="col-sm">
                                 <label for="">Tanggal Masuk</label>
                                 <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body">
-                                        23-09-2021
+                                    <div class="card-body tgl_unit">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
-                                    <div class="card-body">
-                                        Produk 1
+                                    <div class="card-body nm_unit">
                                     </div>
                                 </div>
                             </div>
@@ -295,16 +289,14 @@
                             <div class="col-sm">
                                 <label for="">Dari</label>
                                 <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body">
-                                        Divisi IT
+                                    <div class="card-body from_unit">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Jumlah</label>
                                 <div class="card" style="background-color: #FFECB2">
-                                    <div class="card-body">
-                                        100 pcs
+                                    <div class="card-body jml_unit">
                                     </div>
                                 </div>
                             </div>
@@ -322,7 +314,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -504,13 +495,28 @@
                                     kerusakan: value.childNodes[1].firstChild.value,
                                     tingkat: value.childNodes[2].firstChild.value,
                                 }
-
                                 spr_arr.push(obj);
                             })
                             seri[d] = spr_arr;
                             spr_arr = [];
                             console.log(seri);
                             $('.modalAddSparepart').modal('hide');
+                            // let obj = {
+                            //     noseri: $('.scan-produk1').DataTable().column(0).nodes().to$().find('input.seri').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            //     kerusakan: $('.scan-produk1').DataTable().column(1).nodes().to$().find('input.remark').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            //     tingkat: $('.scan-produk1').DataTable().column(2).nodes().to$().find('select.layout_id').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            // }
+                            // spr_arr.push(obj);
+                            // seri[d] = spr_arr;
+                            // spr_arr = [];
+                            // console.log(seri);
+                            // $('.modalAddSparepart').modal('hide');
                         })
                     } else {
                         // console.log(res);
@@ -528,7 +534,8 @@
 
     function addSparepart(x, y, z) {
         // header
-        console.log($(this).closest('tr').find('.produkoption:selected').text());
+        let testing = sparepart.find(element => element[0] == z);
+        $('.spr').text(testing[1]);
         $('.jml_spr').text(x + ' Pcs')
         $('.in_spr').text(document.getElementsByName("date_in")[0].value)
         $('.divisi_spr').text(document.getElementsByName("dari")[0].selectedOptions[0].label)
@@ -689,17 +696,33 @@
                             timer: 1500
                         }).then(function () {
                             $('.scan-produk tbody tr').each((index, value) => {
-                                            const obj1 = {
-                                                noseri: value.childNodes[0].firstChild.value,
-                                                kerusakan: value.childNodes[1].firstChild.value,
-                                                tingkat: value.childNodes[2].firstChild.value,
-                                            }
-                                            unit_arr.push(obj1);
-                                        })
-                                        seri_unit[c] = unit_arr;
-                                        unit_arr = [];
-                                        console.log(seri_unit)
-                                        $('.modalAddUnit').modal('hide');
+                                const obj1 = {
+                                    noseri: value.childNodes[0].firstChild.value,
+                                    kerusakan: value.childNodes[1].firstChild.value,
+                                    tingkat: value.childNodes[2].firstChild.value,
+                                }
+                                unit_arr.push(obj1);
+                            })
+                            seri_unit[c] = unit_arr;
+                            unit_arr = [];
+                            console.log(seri_unit)
+                            $('.modalAddUnit').modal('hide');
+                            // let obj1 = {
+                            //     noseri: $('.scan-produk').DataTable().column(0).nodes().to$().find('input.seri').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            //     kerusakan: $('.scan-produk').DataTable().column(1).nodes().to$().find('input.kerusakan').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            //     tingkat: $('.scan-produk').DataTable().column(2).nodes().to$().find('select.tingkat').map(function () {
+                            //                 return $(this).val();
+                            //             }),
+                            // }
+                            // unit_arr.push(obj1);
+                            // seri_unit[c] = unit_arr;
+                            // unit_arr = [];
+                            // console.log(seri_unit)
+                            // $('.modalAddUnit').modal('hide');
                         })
                     } else {
                         Swal.fire({
@@ -714,7 +737,12 @@
         }
     }
 
-    function addUnit(x,y,z) {
+    function addUnit(x,y) {
+        let testing = unit.find(element => element[0] == y);
+        $('.tgl_unit').text(document.getElementsByName("date_in")[0].value)
+        $('.nm_unit').text(testing[1]);
+        $('.from_unit').text(document.getElementsByName("dari")[0].selectedOptions[0].label);
+        $('.jml_unit').text(x + ' Unit');
         $('.modalAddUnit').modal('show');
         $('.modalAddUnit').find('#btnAddUnit').attr('onclick', 'clickUnit(' + y + ')');
         $('.modalAddUnit').on('shown.bs.modal', function () {
@@ -968,7 +996,7 @@
                     jum.push($(this).val());
                 });
 
-                console.log(spr1, jml, unit1, jum);
+                // console.log(spr1, jml, unit1, jum);
 
                 $.ajax({
                     url: "/api/gk/in-draft",
