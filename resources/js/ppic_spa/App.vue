@@ -96,5 +96,9 @@ export default {
 #calendar-component a {
   color: #000;
 }
+
+.modal-card-title {
+  font-size: 1rem;
+}
 /* costum */
 </style>

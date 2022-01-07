@@ -48,6 +48,18 @@
             <span class="menu-item-label">Sales Order</span>
           </router-link>
         </li>
+        <li>
+          <router-link to="/ppic/laporan_pesanan" class="has-icon">
+            <span class="icon"><i class="fas fa-book-open"></i></span>
+            <span class="menu-item-label">Laporan Pesanan</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/ppic/proses_pesanan" class="has-icon">
+            <span class="icon"><i class="fas fa-sort-amount-up-alt"></i></span>
+            <span class="menu-item-label">Proses Pesanan</span>
+          </router-link>
+        </li>
       </ul>
       <p class="menu-label">Fitur</p>
       <ul class="menu-list">

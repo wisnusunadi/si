@@ -848,6 +848,92 @@ class PpicController extends Controller
             ->make(true);
     }
 
+    public function get_detail_pengiriman_for_ppic($id)
+    {
+        $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->whereNotIn('log_id', ['7', '9', '10'])->get();
+
+        $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->first();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->so;
+            })
+            ->addColumn('jumlah_pesanan', function ($data) use ($prd) {
+                $ids = $data->id;
+                $res = DetailPesanan::where('pesanan_id', $ids)->get();
+                $jumlah = 0;
+                foreach ($res as $a) {
+                    foreach ($a->PenjualanProduk->Produk as $b) {
+                        if ($b->id == $prd->id) {
+                            $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                        }
+                    }
+                }
+                return $jumlah;
+            })
+            ->addColumn('jumlah_selesai_kirim', function ($data) use ($id) {
+                $ids = $data->id;
+                $c = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
+                    $q->where('gudang_barang_jadi_id', $id);
+                })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($ids) {
+                    $q->where('pesanan_id', $ids);
+                })->count();
+                return $c;
+            })
+            ->addColumn('jumlah_belum_kirim', function ($data) use ($prd, $id) {
+                $ids = $data->id;
+                $res = DetailPesanan::where('pesanan_id', $ids)->get();
+                $jumlahpesanan = 0;
+                foreach ($res as $a) {
+                    foreach ($a->PenjualanProduk->Produk as $b) {
+                        if ($b->id == $prd->id) {
+                            $jumlahpesanan = $jumlahpesanan + ($a->jumlah * $b->pivot->jumlah);
+                        }
+                    }
+                }
+
+                $c = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
+                    $q->where('gudang_barang_jadi_id', $id);
+                })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($ids) {
+                    $q->where('pesanan_id', $ids);
+                })->count();
+
+                return $jumlahpesanan - $c;
+            })
+            ->addColumn('tgl_delivery', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    $tanggal_sekarang = Carbon::now()->format('Y-m-d');
+                    $tanggal_sekarang = Carbon::parse($tanggal_sekarang);
+                    $tanggal_pengiriman = Carbon::parse($data->ekatalog->tgl_kontrak);
+                    $days = $tanggal_sekarang->diffInDays($tanggal_pengiriman);
+
+                    $param = "";
+                    if ($tanggal_sekarang <= $tanggal_pengiriman) {
+                        if ($days > 7) {
+                            $param = ' <div>' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $days . ' Hari</small>';
+                        } else if ($days > 0 && $days <= 7) {
+                            $param = ' <div class="has-text-warning">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $days . ' Hari</small>';
+                        } else {
+                            $param = '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                        }
+                    } else {
+                        $param =  '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $days . ' Hari</small>';
+                    }
+
+                    return $param;
+                } else {
+                    return '-';
+                }
+            })
+            ->rawColumns(['tgl_delivery'])
+            ->make(true);
+    }
+
     public function get_count_ekatalog($id, $produk_id, $status)
     {
         $res = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
