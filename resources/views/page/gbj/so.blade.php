@@ -129,7 +129,7 @@
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             <th>Tipe</th>
-                                            <th>Merk</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -285,81 +285,81 @@
                 $('span#instansii').text(res.customer);
             }
         });
-        var tab = $('.add-produk').DataTable({
-            destroy: true,
-            serverSide: false,
-            autoWidth: false,
-            processing: true,
-            "ordering": false,
-            stateSave: true,
-            'bPaginate': true,
-            ajax: {
-                url: "/api/tfp/detail-so/" +id+"/"+x,
-            },
-            columns: [
-                { data: 'ids', name: 'ids'},
-                { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
-                { data: 'merk', name: 'merk'},
-                { data: 'status', name: 'status'},
+        // var tab = $('.add-produk').DataTable({
+        //     destroy: true,
+        //     serverSide: false,
+        //     autoWidth: false,
+        //     processing: true,
+        //     "ordering": false,
+        //     stateSave: true,
+        //     'bPaginate': true,
+        //     ajax: {
+        //         url: "/api/tfp/detail-so/" +id+"/"+x,
+        //     },
+        //     columns: [
+        //         { data: 'ids', name: 'ids'},
+        //         // { data: 'produk', name: 'produk'},
+        //         // { data: 'qty', name: 'qty'},
+        //         // { data: 'tipe', name: 'tipe'},
+        //         // { data: 'status', name: 'status'},
 
-            ],
-            'select': {
-                'style': 'multi'
-            },
-            'order': [
-                [1, 'asc']
-            ],
-            "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
+        //     ],
+        //     'select': {
+        //         'style': 'multi'
+        //     },
+        //     'order': [
+        //         [1, 'asc']
+        //     ],
+        //     "language": {
+        //     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        //     }
+        // });
 
-        $(document).on('click', '#btnSave', function(e) {
-            e.preventDefault();
-            const ids = [];
+        // $(document).on('click', '#btnSave', function(e) {
+        //     e.preventDefault();
+        //     const ids = [];
 
-            $('.cb-child-so').each(function() {
-                if ($(this).is(":checked")) {
-                    ids.push($(this).val());
-                }
-            })
-            // console.log(ids);
-            Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, save it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire(
-                    'Sukses!',
-                    'Data Berhasil Disimpan',
-                    'success'
-                    )
+        //     $('.cb-child-so').each(function() {
+        //         if ($(this).is(":checked")) {
+        //             ids.push($(this).val());
+        //         }
+        //     })
+        //     // console.log(ids);
+        //     Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes, save it!'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             Swal.fire(
+        //             'Sukses!',
+        //             'Data Berhasil Disimpan',
+        //             'success'
+        //             )
 
-                }
-            })
+        //         }
+        //     })
 
-            $.ajax({
-                url: "/api/so/cek",
-                type: "post",
-                data: {
-                    pesanan_id : id,
-                    userid: $('#userid').val(),
-                    gbj_id: ids,
-                },
-                success: function(res) {
-                    // location.reload();
-                    console.log(res);
-                }
-            })
+        //     $.ajax({
+        //         url: "/api/so/cek",
+        //         type: "post",
+        //         data: {
+        //             pesanan_id : id,
+        //             userid: $('#userid').val(),
+        //             gbj_id: ids,
+        //         },
+        //         success: function(res) {
+        //             // location.reload();
+        //             console.log(res);
+        //         }
+        //     })
 
-            console.log(ids);
-        })
+        //     console.log(ids);
+        // })
         $('#addProdukModal').modal('show');
     })
 
@@ -388,11 +388,12 @@
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
             columns: [
+                { data: 'ids', name: 'ids'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
                 { data: 'tipe', name: 'tipe'},
-                { data: 'merk', name: 'merk'},
                 { data: 'status', name: 'status'},
+                { data: 'aksi', name: 'aksi'},
             ],
             "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
