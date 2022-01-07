@@ -305,6 +305,23 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <input type="text" name="" class="seri_id" hidden>
+                        <input type="text" class="created_by" name="" id="" value="{{ Auth::user()->id }}" hidden>
+                    <div class="row">
+                        <div class="col">
+                            <label for="">Tambah Data No Seri</label>
+                            <input type="text" class="form-control number" id="jumlah_noseri" placeholder="Jumlah No Seri">
+                        </div>
+                        <div class="col">
+                            <label for="">Dari</label>
+                            <select name="" id="" class="form-control dari"></select>
+                        </div>
+                    </div>
+                    <button class=" btn btn-primary tambah_noseri mt-2">Tambah</button>
+                    </div>
+                </div>
                 <form action="" id="noseriForm" name="noseriForm">
                     <table class="table scan-produk">
                         <thead>
@@ -391,6 +408,36 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade tambah_seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Data No Seri</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <table class="table tambah_noseri_tableee">
+                    <thead>
+                        <tr>
+                            <th>No Seri</th>
+                            <th>Layout</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tambah_noseri_table">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary" id="save_data">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     img {
         width: 100%;
@@ -401,6 +448,7 @@
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
+    let layout = [];
     $("#head-cb").prop('checked', false);
     $('#inputGroupFile02').on('change', function () {
         //get the file name
@@ -431,6 +479,21 @@
                 .find('input[type=checkbox]')
                 .prop('checked', isChecked);
         });
+
+         $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            // ii++;
+            console.log(res);
+            $.each(res, function (key, value) {
+                $('.dari').append(
+                    '<option value="' + value.id + '">' + value.nama + '</option>'
+                );
+            });
+        }
+    });
     });
 
     function ubahData() {
@@ -681,6 +744,8 @@
     // modal noseri
     $(document).on('click', '.stokmodal', function() {
         var id = $(this).data('id');
+        $('.seri_id').val(id);
+        console.log(id);
         $('span#nm_produk').text($(this).parent().prev().prev().prev().prev().html());
 
         $('.scan-produk').DataTable({
@@ -745,6 +810,7 @@
             console.log(res);
             $("#change_layout").empty();
             $.each(res, function(key, value) {
+                layout.push([value.id, value.ruang]);
                 $("#change_layout").append('<option value="' + value.id + '">' + value.ruang + '</option');
             });
         }
@@ -800,6 +866,61 @@
         })
 
         })
+    })
+
+    $(document).on('click','.tambah_noseri', function () {
+        $('.tambah_noseri_tableee').DataTable().destroy();
+        $('.tambah_noseri_table').empty();
+        let jumlah = $('#jumlah_noseri').val();
+        let table = '<tr><td><input type="text" name="" id="" class="form-control no_seri"></td><td><select name="" id="" class="form-control layout_seri"></select></td></tr>';
+        for (let i = 0; i < jumlah; i++) {
+            $('.tambah_noseri_table').append(table);
+        }
+        $.each(layout, function (index, value) { 
+             $('.layout_seri').append('<option value="'+value[0]+'">'+value[1]+'</option');
+        });
+        $('.tambah_noseri_tableee').DataTable({
+            destroy: true,
+            searching: false,
+        });
+        $('.tambah_seri').modal('show');
+    });
+
+    $(document).on('click', '#save_data', function () {
+    let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]').map(function (index, elm) {
+        return $(elm).val();
+    }).get();
+    let layout = $('.tambah_noseri_tableee').DataTable().column(1).nodes().to$().find('select').map(function (index, elm) {
+        return $(elm).val();
+    }).get();
+    let id = $('.seri_id').val();
+    let dari = $('.dari').val();
+    let created_by = $('.created_by').val();
+    
+    $.ajax({
+        type: 'post',
+        url: '/api/gbj/addSeri',
+        data: {
+            "_token": "{{ csrf_token() }}",
+            no_seri : no_seri,
+            layout: layout,
+            id: id,
+            dari: dari,
+            created_by: created_by,
+        },
+        success: function(res) {
+            if (res.success) {
+                Swal.fire(
+                    'Sukses!',
+                    'Data berhasil ditambahkan',
+                    'success'
+                )
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        }
+    });
     })
 </script>
 @stop
