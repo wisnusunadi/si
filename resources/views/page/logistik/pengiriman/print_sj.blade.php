@@ -41,12 +41,7 @@
         text-align: left;
     }
 
-    .imgsize {
-        width: auto;
-        height: 70px;
-        background-image: url("{{public_path('assets/image/logo/spa_long.png') }}");
-        background-size: 100%;
-    }
+
 
     div.header {
 
@@ -80,9 +75,6 @@
                         <h2>SURAT JALAN</h2>
                     </td>
                     <td class="align-right">
-                        <div class="imgsize">
-
-                        </div>
                     </td>
                 </tr>
             </tbody>
