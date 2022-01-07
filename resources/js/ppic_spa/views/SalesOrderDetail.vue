@@ -13,6 +13,10 @@
               <th>Stok</th>
               <th>Pesanan</th>
               <th>Selisih stok dengan pesanan</th>
+              <th>Sepakat</th>
+              <th>Negosiasi</th>
+              <th>Batal</th>
+              <th>PO</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -25,6 +29,10 @@
               <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
                 {{ item.penjualan }}
               </td>
+              <td>{{ item.sepakat }}</td>
+              <td>{{ item.nego }}</td>
+              <td>{{ item.batal }}</td>
+              <td>{{ item.po }}</td>
               <td>
                 <button
                   class="button is-light"
@@ -56,27 +64,17 @@
             <thead>
               <tr>
                 <th>SO</th>
-                <th>PO</th>
-                <th>AKN</th>
                 <th>Tanggal order</th>
                 <th>Tanggal pengiriman</th>
                 <th>Jumlah</th>
-                <th>Pelanggan</th>
-                <th>Jenis</th>
-                <th>Status</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in detail" :key="item.id">
                 <td v-html="item.so"></td>
-                <td>{{ item.po }}</td>
-                <td>{{ item.akn }}</td>
                 <td v-html="item.tgl_order"></td>
                 <td v-html="item.tgl_delivery"></td>
                 <td v-html="item.jumlah"></td>
-                <td>{{ item.customer }}</td>
-                <td>{{ item.jenis }}</td>
-                <td>{{ item.status }}</td>
               </tr>
             </tbody>
           </table>
@@ -110,7 +108,6 @@ export default {
       this.$store.commit("setIsLoading", true);
       await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
         this.detail = response.data.data;
-        console.log("get detail", this.detail);
       });
       $("#detailtable").DataTable();
       this.$store.commit("setIsLoading", false);
@@ -132,14 +129,3 @@ export default {
   },
 };
 </script>
-
-
-
-<style lang="scss" scoped>
-@media screen and (min-width: 769px) {
-  .modal-content,
-  .modal-card {
-    width: 900px;
-  }
-}
-</style>

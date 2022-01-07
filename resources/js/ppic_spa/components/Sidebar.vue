@@ -63,6 +63,12 @@
             <span class="menu-item-label">Sales Order</span>
           </router-link>
         </li>
+        <li>
+          <router-link to="/ppic/so_detail" class="has-icon">
+            <span class="icon"><i class="fas fa-search"></i></span>
+            <span class="menu-item-label">Detail Pesanan</span>
+          </router-link>
+        </li>
       </ul>
       <p class="menu-label">Fitur</p>
       <ul class="menu-list">

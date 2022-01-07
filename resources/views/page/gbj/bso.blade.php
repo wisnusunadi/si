@@ -292,7 +292,7 @@
             var isChecked = $("#head-cb").prop('checked')
             // $('.cb-child-edit').prop('checked', isChecked)
             $('.scan-produk-edit').DataTable()
-                .column(1)
+                .column(1) 
                 .nodes()
                 .to$()
                 .find('input[type=checkbox]')
@@ -519,8 +519,6 @@ var jml = '';
     $(document).on('click', '#okk', function(e) {
         e.preventDefault();
 
-        console.log(prd1);
-
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -531,11 +529,6 @@ var jml = '';
             confirmButtonText: 'Yes, Transfer it'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire(
-                        'Success!',
-                        'Data Terkirim ke QC',
-                        'success'
-                    )
                     $.ajax({
                         url: "/api/tfp/byso-final",
                         type: "post",
@@ -549,10 +542,14 @@ var jml = '';
                             console.log(res);
                         }
                     })
-                    // location.reload();
+                    Swal.fire(
+                        'Success!',
+                        'Data Terkirim ke QC',
+                        'success'
+                    )
+                    location.reload();
                 }
             })
-
 
         $('.cb-child-prd').each(function() {
             if($(this).is(":checked")) {
