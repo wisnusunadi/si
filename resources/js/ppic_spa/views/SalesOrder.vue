@@ -13,6 +13,10 @@
               <th>Stok</th>
               <th>Pesanan</th>
               <th>Selisih stok dengan pesanan</th>
+              <th>Sepakat</th>
+              <th>Negosiasi</th>
+              <th>Batal</th>
+              <th>PO</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -25,6 +29,10 @@
               <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
                 {{ item.penjualan }}
               </td>
+              <td>{{ item.sepakat }}</td>
+              <td>{{ item.nego }}</td>
+              <td>{{ item.batal }}</td>
+              <td>{{ item.po }}</td>
               <td>
                 <button
                   class="button is-light"
@@ -101,6 +109,7 @@ export default {
       await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
         this.detail = response.data.data;
       });
+      $("#detailtable").DataTable();
       this.$store.commit("setIsLoading", false);
 
       this.nama_produk = nama;
@@ -117,8 +126,6 @@ export default {
     $("#table_so").DataTable();
 
     this.$store.commit("setIsLoading", false);
-
-    $("#detailtable").DataTable();
   },
 };
 </script>
