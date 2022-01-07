@@ -124,9 +124,20 @@ class PpicController extends Controller
 
     public function get_data_so()
     {
-        $data = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
-            $q->whereIn('log_id', ['7', '9']);
+        $getid = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+            $q->whereNotIn('log_id', ['7', '10']);
         })->get();
+        $arrayid = array();
+
+        foreach ($getid as $i) {
+            $jumlahpesan = $i->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $i->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $i->getJumlahPermintaanPesanan("spa", "");
+            $jumlahtf = $i->getJumlahTransferPesanan("ekatalog", "sepakat") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa", "");
+            if ($jumlahtf < $jumlahpesan) {
+                $arrayid[] = $i->id;
+            }
+        }
+
+        $data = GudangBarangJadi::whereIn('id', $arrayid)->get();
 
         return DataTables::of($data)
             ->addIndexColumn()
@@ -168,12 +179,22 @@ class PpicController extends Controller
 
     public function get_data_so_detail($id)
     {
-        $data = Pesanan::whereIn('log_id', ['7', '9'])->get();
-        return $data;
+        $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->whereNotIn('log_id', ['7', '10'])->get();
 
         $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
         })->first();
+
+        $arrayid = array();
+        foreach ($datas as $i) {
+            if ($this->getJumlahPermintaanPesanan($prd->id, $id, $i->id) > $this->getJumlahTransferPesanan($id, $i->id)) {
+                $arrayid[] = $i->id;
+            }
+        }
+
+        $data = Pesanan::whereIn('id', $arrayid)->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
