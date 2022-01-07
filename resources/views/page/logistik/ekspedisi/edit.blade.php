@@ -1,4 +1,5 @@
-<form action="" method="post">
+@foreach($ekspedisi as $e)
+<form action="" method="post" data-attr="{{route('logistik.ekspedisi.update', ['id' => $e->id])}}" data-id="{{$e->id}}">
     {{ csrf_field() }}
     <div class="row d-flex justify-content-center">
         <div class="col-11">
@@ -22,7 +23,7 @@
                         </button>
                     </div>
                     @endif
-                    @foreach($ekspedisi as $e)
+
                     <div class="row">
                         <div class="col-11">
                             <div class="form-group row">

@@ -191,6 +191,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::view('/create', 'page.logistik.ekspedisi.create')->name('logistik.ekspedisi.create');
         Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_ekspedisi'])->name('logistik.ekspedisi.store');
         Route::get('/edit/{id}', [App\Http\Controllers\MasterController::class, 'update_ekspedisi_modal'])->name('logistik.ekspedisi.edit');
+        Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_ekspedisi'])->name('logistik.ekspedisi.update');
     });
 
     Route::group(['prefix' => '/pengiriman'], function () {
