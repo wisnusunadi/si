@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 
 // model
@@ -150,6 +149,18 @@ class PpicController extends Controller
                 $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
                 return $jumlah;
             })
+            ->addColumn('sepakat', function ($data) {
+                return $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat');
+            })
+            ->addColumn('nego', function ($data) {
+                return $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi');
+            })
+            ->addColumn('batal', function ($data) {
+                return $this->get_count_ekatalog($data->id, $data->produk->id, 'batal');
+            })
+            ->addColumn('po', function ($data) {
+                return $this->get_count_spa_spb_po($data->id, $data->produk->id);
+            })
             ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
             ->make(true);
     }
@@ -178,30 +189,24 @@ class PpicController extends Controller
             })
             ->addColumn('tgl_delivery', function ($data) {
                 if (isset($data->Ekatalog)) {
-                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+                    $tanggal_sekarang = Carbon::now()->format('Y-m-d');
+                    $tanggal_sekarang = Carbon::parse($tanggal_sekarang);
+                    $tanggal_pengiriman = Carbon::parse($data->ekatalog->tgl_kontrak);
+                    $days = $tanggal_sekarang->diffInDays($tanggal_pengiriman);
+
                     $param = "";
-
-                    if ($tgl_sekarang < $tgl_parameter) {
-                        $to = Carbon::now();
-                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                        $hari = $to->diffInDays($from);
-
-                        if ($hari > 7) {
-                            $param = ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $hari . ' Hari</small>';
-                        } else if ($hari > 0 && $hari <= 7) {
-                            $param = ' <div class="has-text-warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                    if ($tanggal_sekarang <= $tanggal_pengiriman) {
+                        if ($days > 7) {
+                            $param = ' <div>' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $days . ' Hari</small>';
+                        } else if ($days > 0 && $days <= 7) {
+                            $param = ' <div class="has-text-warning">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $days . ' Hari</small>';
                         } else {
-                            $param = '<div class="has-text-danger">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                            $param = '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
                         }
-                    } elseif ($tgl_sekarang == $tgl_parameter) {
-                        $param =  '<div class="has-text-danger">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                     } else {
-                        $to = Carbon::now();
-                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                        $hari = $to->diffInDays($from);
-                        $param =  '<div class="has-text-danger">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        $param =  '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $days . ' Hari</small>';
                     }
+
                     return $param;
                 } else {
                     return '-';
@@ -925,8 +930,28 @@ class PpicController extends Controller
 
     public function test_query()
     {
-        $data = JadwalPerakitan::with('noseri')->get();
-        return $data;
+        // $date = date('d');
+        // $month = date('m');
+        // $year = date('Y');
+        // $date_now = $year . "-" . $month . "-" . $date;
+
+        // $date_now = Carbon::parse($date_now);
+        // $date_target = Carbon::parse("2022-01-05");
+        // return $date_now->lessThan($date_target) ? "true" : "false";
+        $month = date('m');
+        $year = date('Y');
+
+        JadwalPerakitanRencana::truncate();
+        $pelaksanaan = JadwalPerakitan::whereYear('tanggal_mulai', $year)->whereMonth('tanggal_mulai', $month)->get();
+        foreach ($pelaksanaan as $data) {
+            JadwalPerakitanRencana::create([
+                'jadwal_perakitan_id' => $data->id,
+                'tanggal_mulai' => $data->tanggal_mulai,
+                'tanggal_selesai' => $data->tanggal_selesai,
+            ]);
+        }
+
+        return "success move pelaksanaan to rencana";
     }
 
     public function get_count_selesai_pengiriman_produk($id)
