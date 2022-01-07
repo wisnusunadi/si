@@ -343,9 +343,12 @@
     $(function() {
         var jenis = "{{$jenis}}";
         var selesaikirimtable = $('#selesaikirimtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/as/so/detail/' + '{{$d->id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -394,6 +397,8 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/logistik/so/noseri/detail/selesai_kirim/data/' + id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
