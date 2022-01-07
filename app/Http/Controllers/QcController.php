@@ -983,9 +983,9 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 if ($data->status == "ok") {
-                    return '<div><i class="fas fa-check-circle" style="color:green;"></i></div>';
+                    return 'OK';
                 } else if ($data->status == "nok") {
-                    return '<div><i class="fas fa-times-circle" style="color:red;"></i></div>';
+                    return 'Tidak OK';
                 }
             })
             ->rawColumns(['status'])

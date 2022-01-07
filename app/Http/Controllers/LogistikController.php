@@ -31,8 +31,8 @@ class LogistikController extends Controller
 {
     public function pdf_surat_jalan($id)
     {
-        $data = Logistik::where('id', $id)->get();
-        $data_produk = array();
+        $data = Logistik::find($id);
+        $data_produk = "";
         if (isset($data->DetailLogistik)) {
             $data_produk = DetailLogistik::where('logistik_id', $id)->get();
         } else {

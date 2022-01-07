@@ -7,6 +7,7 @@ import GudangKarantina from "../views/GudangKarantina.vue"
 import Perakitan from "../views/Perakitan.vue"
 import SalesOrder from "../views/SalesOrder.vue"
 import LaporanPesanan from "../views/LaporanPesanan.vue"
+import ProsesPesanan from "../views/ProsesPesanan.vue"
 import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
 
@@ -52,6 +53,11 @@ const routes = [
         path: '/ppic/laporan_pesanan',
         name: 'LaporanPesanan',
         component: LaporanPesanan,
+    },
+    {
+        path: '/ppic/proses_pesanan',
+        name: 'ProsesPesanan',
+        component: ProsesPesanan,
     },
 
 ]

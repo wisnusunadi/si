@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="is-flex is-justify-content-space-between">
-      <h1 class="title">Data Sales Order</h1>
+      <h1 class="title">Proses Pesanan</h1>
     </div>
     <div class="columns is-multiline">
       <div class="column is-12">
@@ -10,9 +10,9 @@
             <tr>
               <th>No</th>
               <th>Nama Produk</th>
-              <th>Stok</th>
-              <th>Pesanan</th>
-              <th>Selisih stok dengan pesanan</th>
+              <th>Jumlah Pesanan</th>
+              <th>Jumlah Selesai</th>
+              <th>Jumlah Sisa</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -20,11 +20,9 @@
             <tr v-for="item in data" :key="item.id">
               <td>{{ item.DT_RowIndex }}</td>
               <td v-html="item.nama_produk"></td>
-              <td>{{ item.stok }}</td>
-              <td>{{ item.total }}</td>
-              <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
-                {{ item.penjualan }}
-              </td>
+              <td>{{ item.jumlah }}</td>
+              <td>{{ item.jumlah_pengiriman }}</td>
+              <td>{{ item.belum_pengiriman }}</td>
               <td>
                 <button
                   class="button is-light"
@@ -55,28 +53,22 @@
           <table class="table is-fullwidth" id="detailtable">
             <thead>
               <tr>
+                <th>No</th>
                 <th>SO</th>
-                <th>PO</th>
-                <th>AKN</th>
-                <th>Tanggal order</th>
                 <th>Tanggal pengiriman</th>
                 <th>Jumlah</th>
-                <th>Pelanggan</th>
-                <th>Jenis</th>
-                <th>Status</th>
+                <th>Terkirim</th>
+                <th>Sisa</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in detail" :key="item.id">
-                <td v-html="item.so"></td>
-                <td>{{ item.po }}</td>
-                <td>{{ item.akn }}</td>
-                <td v-html="item.tgl_order"></td>
+                <td>{{ item.DT_RowIndex }}</td>
+                <td>{{ item.so }}</td>
                 <td v-html="item.tgl_delivery"></td>
-                <td v-html="item.jumlah"></td>
-                <td>{{ item.customer }}</td>
-                <td>{{ item.jenis }}</td>
-                <td>{{ item.status }}</td>
+                <td>{{ item.jumlah_pesanan }}</td>
+                <td>{{ item.jumlah_selesai_kirim }}</td>
+                <td>{{ item.jumlah_belum_kirim }}</td>
               </tr>
             </tbody>
           </table>
@@ -108,10 +100,11 @@ export default {
   methods: {
     async getDetail(id, nama) {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
-        this.detail = response.data.data;
-        console.log("get detail", this.detail);
-      });
+      await axios
+        .get("/api/ppic/data/master_pengiriman_for_ppic/detail/" + id)
+        .then((response) => {
+          this.detail = response.data.data;
+        });
       $("#detailtable").DataTable();
       this.$store.commit("setIsLoading", false);
 
@@ -123,7 +116,7 @@ export default {
 
   async created() {
     this.$store.commit("setIsLoading", true);
-    await axios.get("/api/ppic/data/so").then((response) => {
+    await axios.post("/api/ppic/master_pengiriman/data").then((response) => {
       this.data = response.data.data;
     });
     $("#table_so").DataTable();

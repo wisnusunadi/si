@@ -41,10 +41,7 @@
         text-align: left;
     }
 
-    .imgsize {
-        width: auto;
-        height: 70px;
-    }
+
 
     div.header {
 
@@ -78,13 +75,11 @@
                         <h2>SURAT JALAN</h2>
                     </td>
                     <td class="align-right">
-                        <img src="{{public_path('assets/image/logo/spa_long.png') }}" alt="" class="imgsize">
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    @foreach($data as $d)
     <div class="body">
         <div class="row mdtxt">
             <div class="col-12">
@@ -93,9 +88,9 @@
                         <tr>
                             <td style="width:10%;" class="vera">Nomor SJ</td>
                             <td style="width:2% ;" class="vera">:</td>
-                            <td class="wb">SJ.{{$d->nosurat}}</td>
+                            <td class="wb">SJ.{{$data->nosurat}}</td>
                             <td class="align-right">
-                                Tanggal : {{App\Http\Controllers\LogistikController::tgl_footer($d->tgl_kirim)}}
+                                Tanggal : {{App\Http\Controllers\LogistikController::tgl_footer($data->tgl_kirim)}}
                             </td>
                         </tr>
                     </tbody>
@@ -107,10 +102,10 @@
                             <td style="width:2% ;" class="vera">:</td>
                             <td class="wb" class="vera">
                                 <?php
-                                if (isset($d->DetailLogistik)) {
-                                    echo $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
+                                if (isset($data->DetailLogistik)) {
+                                    echo $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
                                 } else {
-                                    echo $d->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po;
+                                    echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po;
                                 } ?>
                             </td>
                         </tr>
@@ -119,15 +114,15 @@
                             <td class="vera">:</td>
                             <td class="vera">
                                 <?php
-                                if (isset($d->DetailLogistik)) {
-                                    $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                                if (isset($data->DetailLogistik)) {
+                                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
                                     if ($name[1] == 'EKAT') {
-                                        echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                                        echo    $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
                                     } else if ($name[1] == 'SPA') {
-                                        echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                                        echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                                     }
                                 } else {
-                                    echo $d->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama;
+                                    echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama;
                                 }
                                 ?>
 
@@ -138,15 +133,15 @@
                             <td class="vera">:</td>
                             <td class="vera">
                                 <?php
-                                if (isset($d->DetailLogistik)) {
-                                    $name = explode('/', $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                                if (isset($data->DetailLogistik)) {
+                                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
                                     if ($name[1] == 'EKAT') {
-                                        echo    $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
+                                        echo    $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
                                     } else if ($name[1] == 'SPA') {
-                                        echo   $d->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
+                                        echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
                                     }
                                 } else {
-                                    echo $d->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat;
+                                    echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat;
                                 }
                                 ?>
 
@@ -228,10 +223,10 @@
                             <td class="nospace">Ekspedisi </td>
                             <td class="nospace"> : </td>
                             <td class="wb align-left">
-                                @if ($d->nama_pengirim == '')
-                                {{$d->Ekspedisi->nama}}
+                                @if ($data->nama_pengirim == '')
+                                {{$data->Ekspedisi->nama}}
                                 @else
-                                {{$d->nama_pengirim}}
+                                {{$data->nama_pengirim}}
                                 @endif
                             </td>
                         </tr>
@@ -271,10 +266,10 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td>@if ($d->nama_pengirim == '')
-                            {{$d->Ekspedisi->nama}}
+                        <td>@if ($data->nama_pengirim == '')
+                            {{$data->Ekspedisi->nama}}
                             @else
-                            {{$d->nama_pengirim}}
+                            {{$data->nama_pengirim}}
                             @endif
                         </td>
                         <td>Erna Cantika A</td>
@@ -293,6 +288,5 @@
             </table>
             <div class="align-right">No Dokumen: SPA-FR/GUD-04, Tanggal Terbit: 20 Maret 2020, Revisi:02</div>
         </div>
-        @endforeach
     </div>
 </div>
