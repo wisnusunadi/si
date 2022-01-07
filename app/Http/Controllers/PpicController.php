@@ -346,6 +346,9 @@ class PpicController extends Controller
         $status = $this->change_status($request->status);
         $state = $this->change_state($request->state);
 
+        $color = ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"];
+        $selected_color = $color[array_rand($color)];
+
         $data = [
             'produk_id' => $request->produk_id,
             'jumlah' => $request->jumlah,
@@ -354,7 +357,7 @@ class PpicController extends Controller
             'status' => $status,
             'state' => $state,
             'konfirmasi' => $request->konfirmasi,
-            'warna' => $request->warna,
+            'warna' => $selected_color,
             'status_tf' => 11,
         ];
         JadwalPerakitan::create($data);
@@ -995,28 +998,10 @@ class PpicController extends Controller
 
     public function test_query()
     {
-        // $date = date('d');
-        // $month = date('m');
-        // $year = date('Y');
-        // $date_now = $year . "-" . $month . "-" . $date;
+        $color = ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"];
+        $selected_color = $color[array_rand($color)];
 
-        // $date_now = Carbon::parse($date_now);
-        // $date_target = Carbon::parse("2022-01-05");
-        // return $date_now->lessThan($date_target) ? "true" : "false";
-        $month = date('m');
-        $year = date('Y');
-
-        JadwalPerakitanRencana::truncate();
-        $pelaksanaan = JadwalPerakitan::whereYear('tanggal_mulai', $year)->whereMonth('tanggal_mulai', $month)->get();
-        foreach ($pelaksanaan as $data) {
-            JadwalPerakitanRencana::create([
-                'jadwal_perakitan_id' => $data->id,
-                'tanggal_mulai' => $data->tanggal_mulai,
-                'tanggal_selesai' => $data->tanggal_selesai,
-            ]);
-        }
-
-        return "success move pelaksanaan to rencana";
+        return [$selected_color, array_rand($color)];
     }
 
     public function get_count_selesai_pengiriman_produk($id)
