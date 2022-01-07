@@ -100,5 +100,12 @@ export default {
 .modal-card-title {
   font-size: 1rem;
 }
+
+@media screen and (min-width: 769px) {
+  .modal-content,
+  .modal-card {
+    width: 900px;
+  }
+}
 /* costum */
 </style>

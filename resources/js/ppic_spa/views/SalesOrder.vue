@@ -132,14 +132,3 @@ export default {
   },
 };
 </script>
-
-
-
-<style lang="scss" scoped>
-@media screen and (min-width: 769px) {
-  .modal-content,
-  .modal-card {
-    width: 900px;
-  }
-}
-</style>
