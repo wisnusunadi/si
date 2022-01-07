@@ -424,6 +424,7 @@
         });
 
         $('#noseritable ').on('click', '.nosericheck', function() {
+            $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 checkedAry = [];

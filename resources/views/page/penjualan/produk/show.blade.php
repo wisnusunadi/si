@@ -429,7 +429,6 @@
                         className: 'nowrap-text align-center',
                         data: 'jumlah'
                     }
-
                 ],
             });
             $('#modaldetail').modal('show');

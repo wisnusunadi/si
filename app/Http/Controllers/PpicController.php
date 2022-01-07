@@ -17,6 +17,7 @@ use App\Models\GudangKarantinaDetail;
 use App\Models\KomentarJadwalPerakitan;
 use App\Models\DetailPesanan;
 use App\Models\NoseriDetailLogistik;
+use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
 
@@ -583,19 +584,30 @@ class PpicController extends Controller
     public function master_stok_detail_show($id)
     {
         $data = GudangBarangJadi::find($id);
-        $jumlah = $this->get_count_ekatalog($data->id, $data->produk->id, 'sepakat') + $this->get_count_ekatalog($data->id, $data->produk->id, 'negosiasi') + $this->get_count_spa_spb_po($data->id, $data->produk->id);
+        $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "");
+        $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+        $jumlah = $jumlahdiminta - $jumlahtf;
         return view('spa.ppic.master_stok.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah]);
     }
 
     public function get_detail_master_stok($id)
     {
-        $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+        $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
         })->whereNotIn('log_id', ['7', '10'])->get();
 
         $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
         })->first();
+
+        $arrayid = array();
+        foreach ($datas as $i) {
+            if ($this->getJumlahPermintaanPesanan($prd->id, $id, $i->id) > $this->getJumlahTransferPesanan($id, $i->id)) {
+                $arrayid[] = $i->id;
+            }
+        }
+
+        $data = Pesanan::whereIn('id', $arrayid)->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -640,17 +652,18 @@ class PpicController extends Controller
                     return '-';
                 }
             })
-            ->addColumn('jumlah', function ($data) use ($prd) {
-                $id = $data->id;
-                $res = DetailPesanan::where('pesanan_id', $id)->get();
-                $jumlah = 0;
-                foreach ($res as $a) {
-                    foreach ($a->PenjualanProduk->Produk as $b) {
-                        if ($b->id == $prd->id) {
-                            $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
-                        }
-                    }
-                }
+            ->addColumn('jumlah', function ($data) use ($prd, $id) {
+                $jumlah = $this->getJumlahPermintaanPesanan($prd->id, $id, $data->id) - $this->getJumlahTransferPesanan($id, $data->id);
+                // $id = $data->id;
+                // $res = DetailPesanan::where('pesanan_id', $id)->get();
+                // $jumlah = 0;
+                // foreach ($res as $a) {
+                //     foreach ($a->PenjualanProduk->Produk as $b) {
+                //         if ($b->id == $prd->id) {
+                //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                //         }
+                //     }
+                // }
                 return $jumlah;
             })
             ->rawColumns(['tgl_delivery'])
