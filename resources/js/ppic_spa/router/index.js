@@ -6,7 +6,7 @@ import GudangBarangJadi from "../views/GudangBarangJadi.vue"
 import GudangKarantina from "../views/GudangKarantina.vue"
 import Perakitan from "../views/Perakitan.vue"
 import SalesOrder from "../views/SalesOrder.vue"
-import SalesOrderDetail from "../views/SalesOrderDetail.vue"
+import LaporanPesanan from "../views/LaporanPesanan.vue"
 import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
 
@@ -49,9 +49,9 @@ const routes = [
         component: JadwalPelaksanaan,
     },
     {
-        path: '/ppic/so_detail',
-        name: 'SalesOrderDetail',
-        component: SalesOrderDetail,
+        path: '/ppic/laporan_pesanan',
+        name: 'LaporanPesanan',
+        component: LaporanPesanan,
     },
 
 ]
