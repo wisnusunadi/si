@@ -33,13 +33,13 @@ class LogistikController extends Controller
     {
         $data = Logistik::find($id);
         $data_produk = "";
-        if (isset($data->DetailLogistik)) {
-            $data_produk = DetailLogistik::where('logistik_id', $id)->get();
-        } else {
-            $data_produk = DetailLogistikPart::where('logistik_id', $id)->get();
-        }
+        // if (isset($data->DetailLogistik)) {
+        //     $data_produk = DetailLogistik::where('logistik_id', $id)->get();
+        // } else {
+        //     $data_produk = DetailLogistikPart::where('logistik_id', $id)->get();
+        // }
         $customPaper = array(0, 0, 684.8094, 792.9372);
-        $pdf = PDF::loadView('page.logistik.pengiriman.print_sj', ['id' => $id, 'data' => $data, 'data_produk' => $data_produk])->setPaper($customPaper);
+        $pdf = PDF::loadView('page.logistik.pengiriman.print_sj')->setPaper($customPaper);
         return $pdf->stream('');
     }
     public function get_data_select_produk($detail_produk, $pesanan_id, $jenis)
