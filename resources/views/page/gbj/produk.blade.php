@@ -5,13 +5,13 @@
 @section('content')
 <div class="content-header">
     <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Produk Gudang Barang Jadi</h1>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Produk Gudang Barang Jadi</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
     </div><!-- /.container-fluid -->
-  </div>
+</div>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -26,24 +26,20 @@
                                     <div class="col-lg-12">
                                         @if (Auth::user()->divisi->id != 2)
                                         <span class="float-right">
-                                            <button type="button" class="btn btn-info" data-toggle="modal"
-                                                data-target="#modal-create" id="create">
+                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create" id="create">
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
                                         @endif
                                         <span class="float-right mr-1">
-                                            <button class="btn btn-outline-info dropdown-toggle" type="button"
-                                                id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
+                                            <button class="btn btn-outline-info dropdown-toggle" type="button" id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
                                                 Filter
                                             </button>
-                                            <div class="dropdown-menu p-3 text-nowrap"
-                                                aria-labelledby="semuaprodukfilter">
+                                            <div class="dropdown-menu p-3 text-nowrap" aria-labelledby="semuaprodukfilter">
                                                 <div class="dropdown-header">Kelompok Produk</div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="alkes"
-                                                            value="Alat Kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="alkes" value="Alat Kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Alat Kesehatan
                                                         </label>
@@ -51,8 +47,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="sarkes"
-                                                            value="Sarana Kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="sarkes" value="Sarana Kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Sarana Kesehatan
                                                         </label>
@@ -101,77 +96,76 @@
                 </button>
             </div>
             <div class="modal-body">
-            <form action="" id="produkForm" name="produkForm" enctype="multipart/form-data">
-                <input type="hidden" name="id" id="id">
-                <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="">Produk</label>
-                            <input type="hidden" name="produk_id" id="produk_idd">
-                            <select name="produk_id" id="produk_id" class="form-control produk-add">
-                                <option value="">Buku</option>
-                                <option value="">Bolpoin</option>
+                <form action="" id="produkForm" name="produkForm" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Produk</label>
+                                <input type="hidden" name="produk_id" id="produk_idd">
+                                <select name="produk_id" id="produk_id" class="form-control produk-add">
+                                    <option value="">Buku</option>
+                                    <option value="">Bolpoin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="">Nama Variasi</label>
+                            <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror" placeholder="Nama Variasi Produk">
+                            @error('title')
+                            <span class="invalid-feedback">Silahkan isi Nama Produk</span>
+                            @enderror
+                        </div>
+                        <div class="col">
+                            <label for="">Satuan</label>
+                            <select name="satuan_id" id="satuan_id" class="form-control">
+                                <option value="">mm</option>
+                                <option value="">unit</option>
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="">Nama Variasi</label>
-                        <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror"
-                            placeholder="Nama Variasi Produk">
-                        @error('title')
-                        <span class="invalid-feedback">Silahkan isi Nama Produk</span>
-                        @enderror
+                    <div class="form-group">
+                        <label for="">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" cols="5" rows="5"></textarea>
                     </div>
-                    <div class="col">
-                        <label for="">Satuan</label>
-                       <select name="satuan_id" id="satuan_id" class="form-control">
-                           <option value="">mm</option>
-                           <option value="">unit</option>
-                       </select>
+                    <div class="form-group">
+                        <label for="">Dimensi</label>
+                        <div class="d-flex justify-content-between">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="">Deskripsi</label>
-                    <textarea class="form-control" id="deskripsi" name="deskripsi" cols="5" rows="5"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="">Dimensi</label>
-                    <div class="d-flex justify-content-between">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" name="gambar" class="custom-file-input gambar" id="inputGroupFile02" />
+                            <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" name="gambar" class="custom-file-input gambar" id="inputGroupFile02" />
-                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                 <button type="submit" class="btn btn-primary" id="Submitmodalcreate">Kirim</button>
             </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>
@@ -208,10 +202,10 @@
                     </div>
                     <div class="col">
                         <label for="">Satuan</label>
-                       <select name="" id="" class="form-control satuan-edit">
-                           <option value="">mm</option>
-                           <option value="">unit</option>
-                       </select>
+                        <select name="" id="" class="form-control satuan-edit">
+                            <option value="">mm</option>
+                            <option value="">unit</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -312,27 +306,27 @@
             </div>
             <div class="modal-body">
                 <form action="" id="noseriForm" name="noseriForm">
-                <table class="table scan-produk">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="head-cb"></th>
-                            <th>No. Seri</th>
-                            <th>Layout</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <table class="table scan-produk">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="head-cb"></th>
+                                <th>No. Seri</th>
+                                <th>Layout</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>
@@ -352,9 +346,9 @@
                         </div> --}}
                     </div>
                 </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
 
@@ -379,15 +373,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Ubah Layout</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="">Layout</label>
                     <select name="" id="change_layout" class="form-control">
-                  </select>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -401,7 +395,6 @@
     img {
         width: 100%;
     }
-
 </style>
 @stop
 
@@ -415,20 +408,20 @@
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
     });
-    $('.editProduk').click(function (e) {
+    $('.editProduk').click(function(e) {
         $('.modal-edit').modal('show');
         $('.produk-edit ').select2();
         $('.satuan-edit').select2();
         $('.layout-edit').select2();
     });
-    $('.viewProduk').click(function (e) {
+    $('.viewProduk').click(function(e) {
         $('.modal-view').modal('show');
     });
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.produk-add ').select2();
         $('.layout-add').select2();
 
-        $("#head-cb").on('click', function () {
+        $("#head-cb").on('click', function() {
             var isChecked = $("#head-cb").prop('checked')
             // $('.cb-child').prop('checked', isChecked)
             $('.scan-produk').DataTable()
@@ -444,21 +437,21 @@
         let checkbox_terpilih = $('.scan-produk').DataTable().column(0).nodes()
                 .to$().find('input[type=checkbox]:checked');
         let layout = $('#change_layout').val();
-        $.each(checkbox_terpilih, function (index, elm) {
+        $.each(checkbox_terpilih, function(index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('.edit-stok').modal('hide');
     }
 
-    $('.stokProduct').click(function (e) {
+    $('.stokProduct').click(function(e) {
         $('.daftar-stok').modal('show');
     });
 
-    $('.editStok').click(function (e) {
+    $('.editStok').click(function(e) {
         $('.edit-stok').modal('show');
     });
 
-    $('.viewStock').click(function (e) {
+    $('.viewStock').click(function(e) {
         $('.modalViewStock').modal('show');
     });
     $('#satuan_id').select2();
@@ -473,18 +466,18 @@
         }
     });
 
-    $('#alkes').click(function () {
+    $('#alkes').click(function() {
         if ($(this).prop('checked') == true) {
             datatable.column(5).search($(this).val()).draw();
-        }else{
+        } else {
             datatable.column(5).search('').draw();
         }
     })
 
-    $('#sarkes').click(function () {
+    $('#sarkes').click(function() {
         if ($(this).prop('checked') == true) {
             datatable.column(5).search($(this).val()).draw();
-        }else{
+        } else {
             datatable.column(5).search('').draw();
         }
     })
@@ -494,19 +487,40 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/api/gbj/data',
+            'type': 'POST',
+            'datatype': 'JSON',
+            'url': '/api/gbj/data',
+            'headers': {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
         },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            { data: 'kode_produk', name: 'kode_produk'},
-            { data: 'nama_produk', name: 'nama_produk'},
-            { data: 'jumlah'},
-            { data: 'jumlah1'},
-            { data: 'kelompok'},
-            { data: 'action'}
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex'
+            },
+            {
+                data: 'kode_produk',
+                name: 'kode_produk'
+            },
+            {
+                data: 'nama_produk',
+                name: 'nama_produk'
+            },
+            {
+                data: 'jumlah'
+            },
+            {
+                data: 'jumlah1'
+            },
+            {
+                data: 'kelompok'
+            },
+            {
+                data: 'action'
+            }
         ],
         language: {
-            search : "Cari:"
+            search: "Cari:"
         }
     });
 
@@ -516,7 +530,7 @@
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            if(res) {
+            if (res) {
                 console.log(res);
                 $("#produk_id").empty();
                 $("#produk_id").append('<option value="">Pilih Item</option>');
@@ -535,12 +549,12 @@
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            if(res) {
+            if (res) {
                 console.log(res);
                 $("#satuan_id").empty();
                 $("#satuan_id").append('<option value="">Pilih Item</option>');
                 $.each(res, function(key, value) {
-                    $("#satuan_id").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    $("#satuan_id").append('<option value="' + value.id + '">' + value.nama + '</option');
                 });
             } else {
                 $("#satuan_id").empty();
@@ -558,15 +572,17 @@
 
     // load modal edit
     $(document).on('click', '.editmodal', function() {
-    var id = $(this).data('id');
+        var id = $(this).data('id');
         console.log(id);
         // ajax
         $.ajax({
-            type:"POST",
+            type: "POST",
             url: '/api/gbj/get',
-            data: { id: id },
+            data: {
+                id: id
+            },
             dataType: 'json',
-            success: function(res){
+            success: function(res) {
                 console.log(res);
                 $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('#Submitmodalcreate').val('edit-product');
@@ -583,7 +599,9 @@
                 $('#produk_id').val(res.data[0].produk_id);
                 $('#produk_idd').val(res.data[0].produk_id);
                 $('#produk_id').select2().trigger('change');
-                $('#produk_id').select2({disabled: 'readonly'});
+                $('#produk_id').select2({
+                    disabled: 'readonly'
+                });
                 $('#inputGroupFile02').val(res.data[0].gambar);
             }
         });
@@ -591,15 +609,17 @@
 
     // detail
     $(document).on('click', '.detailmodal', function() {
-    var id = $(this).data('id');
+        var id = $(this).data('id');
         console.log(id);
         // ajax
         $.ajax({
-            type:"POST",
+            type: "POST",
             url: '/api/gbj/get',
-            data: { id: id },
+            data: {
+                id: id
+            },
             dataType: 'json',
-            success: function(res){
+            success: function(res) {
                 console.log(res);
 
                 $('#header_data').html('Detail Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
@@ -616,7 +636,7 @@
     });
 
     // proses submit
-    $('body').on('submit', '#produkForm', function (e) {
+    $('body').on('submit', '#produkForm', function(e) {
         e.preventDefault();
         var actionType = $('#Submitmodalcreate').val();
         $('#Submitmodalcreate').html('Sending..');
@@ -625,7 +645,7 @@
             type: 'POST',
             url: "/api/gbj/create",
             data: formData,
-            cache:false,
+            cache: false,
             contentType: false,
             processData: false,
             success: (data) => {
@@ -633,12 +653,12 @@
                 $('#modal-create').modal('hide');
                 $('#Submitmodalcreate').html('Kirim');
                 Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Your data has been saved',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Your data has been saved',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 $('.datatable').DataTable().ajax.reload();
                 location.reload();
             }
@@ -725,7 +745,7 @@
             console.log(res);
             $("#change_layout").empty();
             $.each(res, function(key, value) {
-                $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                $("#change_layout").append('<option value="' + value.id + '">' + value.ruang + '</option');
             });
         }
     });

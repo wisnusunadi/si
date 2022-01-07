@@ -539,10 +539,18 @@ class DcController extends Controller
                 return  $data->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri;
             })
             ->addColumn('tgl', function ($data) {
-                return $data->NoseriCoo['tgl_kirim'];
+                if (isset($data->NoseriCoo->tgl_kirim)) {
+                    return $data->NoseriCoo->tgl_kirim;
+                } else {
+                    return '';
+                }
             })
             ->addColumn('ket', function ($data) {
-                return $data->NoseriCoo['catatan'];
+                if (isset($data->NoseriCoo->catatan)) {
+                    return $data->NoseriCoo->catatan;
+                } else {
+                    return '';
+                }
             })
             ->addColumn('laporan', function ($data) {
                 $get = NoseriCoo::where('noseri_logistik_id', $data->id)->get()->count();

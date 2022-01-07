@@ -145,7 +145,7 @@ Route::prefix('/laporan')->group(function () {
     Route::post('/logistik/{pengiriman}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'get_data_laporan_logistik']);
 });
 Route::prefix('/gbj')->group(function () {
-    Route::get('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
+    Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
@@ -508,7 +508,7 @@ Route::prefix('/logistik')->group(function () {
     });
 
     Route::group(['prefix' => '/cek'], function () {
-        Route::get('/no_sj/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_sj']);
+        Route::post('/no_sj/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_sj']);
         Route::get('/no_resi/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_resi']);
     });
 });

@@ -6,10 +6,9 @@ import GudangBarangJadi from "../views/GudangBarangJadi.vue"
 import GudangKarantina from "../views/GudangKarantina.vue"
 import Perakitan from "../views/Perakitan.vue"
 import SalesOrder from "../views/SalesOrder.vue"
+import SalesOrderDetail from "../views/SalesOrderDetail.vue"
 import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
-
-import Calendar from "../components/Calendar.vue"
 
 Vue.use(VueRouter)
 
@@ -50,9 +49,9 @@ const routes = [
         component: JadwalPelaksanaan,
     },
     {
-        path: '/ppic/test',
-        name: 'Calendar',
-        component: Calendar,
+        path: '/ppic/so_detail',
+        name: 'SalesOrderDetail',
+        component: SalesOrderDetail,
     },
 
 ]

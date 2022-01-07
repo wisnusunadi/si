@@ -12,32 +12,43 @@ class DireksiController extends Controller
 {
     public function dashboard()
     {
-        $penj = Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNull('so');
-        })->where('status', 'sepakat')->count();
+        $penj = Pesanan::whereNull('so')->where('log_id', '7')->count();
+        $gudang = 0;
+        $qc = 0;
+        $log = 0;
+        $dc = 0;
+        $pes = Pesanan::whereNotIn('log_id', ['7', '10'])->get();
+        foreach ($pes as $i) {
+            if (isset($i->DetailPesanan)) {
+                if ($i->getJumlahSeri() < $i->getJumlahPesanan()) {
+                    $gudang = $gudang + 1;
+                }
+            }
 
-        $gudangekat = Pesanan::doesntHave('TFProduksi')->whereHas('Ekatalog', function ($q) {
-            $q->where('log', 'po');
-        })->count();
+            if (isset($i->DetailPesanan)) {
+                if ($i->getJumlahCek() < $i->getJumlahPesanan()) {
+                    $qc = $qc + 1;
+                }
+            }
 
-        $gudangspa = Pesanan::doesntHave('TFProduksi')->whereHas('Spa', function ($q) {
-            $q->where('log', 'po');
-        })->orWhereHas('Spb', function ($q) {
-            $q->where('log', 'po');
-        })->count();
+            if (isset($i->DetailPesanan)) {
+                if ($i->getJumlahKirim() < $i->getJumlahPesanan()) {
+                    $log = $log + 1;
+                }
+            }
 
-        $gudangspb = Pesanan::doesntHave('TFProduksi')->whereHas('Spb', function ($q) {
-            $q->where('log', 'po');
-        })->count();
+            if (isset($i->DetailPesananPart)) {
+                if ($i->getJumlahKirimPart() < $i->getJumlahPesananPart()) {
+                    $log = $log + 1;
+                }
+            }
 
-        $gudang = $gudangekat + $gudangspa + $gudangspb;
-
-        $qc = Pesanan::has('TFProduksi')->doesntHave('DetailPesanan.DetailPesananProduk.NoSeriDetailPesanan')->count();
-
-        $log = Pesanan::has('DetailPesanan.DetailPesananProduk.NoSeriDetailPesanan')->doesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik')->count();
-
-        $dc = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->doesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik.NoseriDetailLogistik.NoseriCoo')->count();
-
+            if (isset($i->DetailPesananPart)) {
+                if ($i->getJumlahCoo() < $i->getJumlahPesanan()) {
+                    $dc = $dc + 1;
+                }
+            }
+        }
         return view('page.direksi.dashboard', ['penj' => $penj, 'gudang' => $gudang, 'qc' => $qc, 'log' => $log, 'dc' => $dc]);
     }
 }

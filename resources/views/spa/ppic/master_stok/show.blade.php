@@ -220,7 +220,6 @@
             ]
         });
 
-
         function detailtable(id) {
             $('#detailtable').DataTable({
                 destroy: true,

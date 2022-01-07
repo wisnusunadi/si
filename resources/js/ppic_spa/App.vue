@@ -46,7 +46,8 @@ export default {
 
 <style lang="scss">
 @import "~bulma";
-@import "~datatables.net-bulma/css/dataTables.bulma";
+/* @import "~datatables-bulma/css/dataTables.bulma"; */
+@import "~sweetalert2/src/sweetalert2";
 
 /* loading animation */
 .lds-dual-ring {

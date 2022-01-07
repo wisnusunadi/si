@@ -179,7 +179,7 @@ export default {
         weekends: false,
         showNonCurrentDates: false,
 
-        events: this.events,
+        events: [],
 
         select: this.handleSelect,
         eventDragStop: this.handleEventDragStop,
@@ -213,6 +213,7 @@ export default {
   },
 
   mounted() {
+    this.calendarOptions.events = this.format_events;
     if (this.status === "penyusunan") this.$refs.calendar.getApi().next();
   },
 
@@ -428,6 +429,21 @@ export default {
         if (current >= start && current < end) this.selectedEvents.push(event);
       });
     },
+
+    addOneDay(insert_date) {
+      let date = new Date(insert_date);
+      date.setDate(date.getDate() + 1);
+
+      let days = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+
+      if (month / 9 < 1) month = `0${month}`;
+      if (days / 9 < 1) days = `0${days}`;
+
+      date = `${year}-${month}-${days}`;
+      return date;
+    },
   },
 
   computed: {
@@ -435,6 +451,17 @@ export default {
       return this.data_gbj.map((data) => ({
         label: `${data.produk.nama} ${data.nama}`,
         value: { id: data.id, nama: `${data.produk.nama} ${data.nama}` },
+      }));
+    },
+
+    format_events() {
+      return this.events.map((item) => ({
+        id: item.id,
+        title: item.title,
+        start: item.start,
+        end: this.addOneDay(item.end),
+        backgroundColor: item.warna,
+        borderColor: item.warna,
       }));
     },
   },
