@@ -214,6 +214,7 @@ export default {
 
   mounted() {
     this.calendarOptions.events = this.format_events;
+    console.log("calendar mounted", this.calendarOptions.events);
     if (this.status === "penyusunan") this.$refs.calendar.getApi().next();
   },
 
@@ -438,8 +439,8 @@ export default {
       let month = date.getMonth() + 1;
       let year = date.getFullYear();
 
-      if (month / 9 < 1) month = `0${month}`;
-      if (days / 9 < 1) days = `0${days}`;
+      if (month / 10 < 1) month = `0${month}`;
+      if (days / 10 < 1) days = `0${days}`;
 
       date = `${year}-${month}-${days}`;
       return date;

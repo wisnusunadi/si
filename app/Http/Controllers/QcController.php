@@ -31,11 +31,13 @@ class QcController extends Controller
         if ($seri_id == '0') {
             $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
                 $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
-            });
+            })->whereDoesntHave('NoseriDetailPesanan', function ($q) {
+                $q->where('status', 'ok');
+            })->get();
         } else {
             $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
                 $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
-            })->whereIN('noseri_id', $x);
+            })->whereIN('noseri_id', $x)->get();
         }
         return datatables()->of($data)
             ->addIndexColumn()
@@ -75,10 +77,23 @@ class QcController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
-                return '  <div class="form-check">
-                <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
+                $get = NoseriDetailPesanan::where('t_tfbj_noseri_id', $data->id)->first();
+                if (empty($get)) {
+                    return '  <div class="form-check">
+                    <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
 
-                </div>';
+                    </div>';
+                } else {
+                    //   return $get;
+                    if ($get->status == 'nok') {
+                        return '  <div class="form-check">
+                    <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail->gdg_brg_jadi_id . '" data-id="' . $data->noseri_id . '" />
+
+                    </div>';
+                    } else {
+                        return '';
+                    }
+                }
             })
             ->addColumn('seri', function ($data) {
                 return $data->NoseriBarangJadi->noseri;
@@ -175,8 +190,36 @@ class QcController extends Controller
                 })->get()->count();
                 return $c;
             })
-            ->addColumn('button', function ($data) {
-                return '<a type="button" class="noserishow" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
+            ->addColumn('button', function ($data) use ($x) {
+                $id = $data->gudang_barang_jadi_id;
+                $pesanan_id = $data->DetailPesanan->pesanan_id;
+                $ok = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id, $x) {
+                    $q->where([
+                        ['gudang_barang_jadi_id', '=', $id],
+                        ['status', '=', 'ok']
+                    ])->whereIn('detail_pesanan_id', $x);
+                })->get()->count();
+                $nok = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id, $x) {
+                    $q->where([
+                        ['gudang_barang_jadi_id', '=', $id],
+                        ['status', '=', 'nok']
+                    ])->whereIn('detail_pesanan_id', $x);
+                })->get()->count();
+                $jumlah = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+                    $q->where('gdg_brg_jadi_id', $id);
+                })->whereHas('detail.header', function ($q) use ($pesanan_id) {
+                    $q->where('pesanan_id', $pesanan_id);
+                })->count();
+
+                $bool = "0";
+
+                if ($jumlah > 0) {
+                    if ($jumlah == $ok) {
+                        return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
+                    } else {
+                        return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
+                    }
+                }
             })
             ->rawColumns(['nama_produk', 'button'])
             ->make(true);
@@ -940,9 +983,9 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 if ($data->status == "ok") {
-                    return '<div><i class="fas fa-check-circle" style="color:green;"></i></div>';
+                    return 'OK';
                 } else if ($data->status == "nok") {
-                    return '<div><i class="fas fa-times-circle" style="color:red;"></i></div>';
+                    return 'Tidak OK';
                 }
             })
             ->rawColumns(['status'])

@@ -537,16 +537,9 @@ class PenjualanController extends Controller
                 ->rawColumns(['divisi_id', 'status', 'nama_customer'])
                 ->make(true);
         } else if ($parameter == 'produk') {
-            $ekatalog = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
+            $data = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
                 $q->where('nama', 'LIKE', '%' . $value . '%');
             })->get();
-            $spa = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
-                $q->where('nama', 'LIKE', '%' . $value . '%');
-            })->get();
-            $spb = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.GudangBarangJadi.produk', function ($q) use ($value) {
-                $q->where('nama', 'LIKE', '%' . $value . '%');
-            })->get();
-            $data = $ekatalog->merge($spa)->merge($spb);
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('noseri', function ($data) {
@@ -636,7 +629,7 @@ class PenjualanController extends Controller
         } else if ($parameter == 'no_seri') {
             $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
                 $q->where('noseri', 'LIKE', '%' . $value . '%');
-            })->orderBy('id', 'desc')->get();
+            })->Has('NoseriDetailPesanan')->orderBy('id', 'desc')->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -1047,7 +1040,6 @@ class PenjualanController extends Controller
             ->rawColumns(['batas_kontrak', 'button', 'status'])
             ->make(true);
     }
-
     public function get_data_ekatalog($value)
     {
         $divisi_id = Auth::user()->divisi->id;
