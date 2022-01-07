@@ -449,9 +449,17 @@
             idtrf = '{{$d->pesanan->TFProduksi->id}}';
             idpesanan = '{{$d->pesanan->id}}';
             var data = $(this).attr('data-id');
+            var datacount = $(this).attr('data-count');
             $('.nosericheck').prop('checked', false);
+            if (datacount == 0) {
+                // $('.sericheckbox').addClass("hide");
+                $('#noseritable').DataTable().column(0).visible(false);
+            } else {
+                // $('.sericheckbox').removeClass("hide");
+                $('#noseritable').DataTable().column(0).visible(true);
+            }
             $('#cekbrg').prop('disabled', true);
-            $('input[name ="check_all"]').prop('checked', false);
+            $('input[name="check_all"]').prop('checked', false);
             $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
@@ -582,7 +590,7 @@
             }
         });
 
-        $('#noseritable ').on('click', '.nosericheck', function() {
+        $('#noseritable').on('click', '.nosericheck', function() {
             $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
