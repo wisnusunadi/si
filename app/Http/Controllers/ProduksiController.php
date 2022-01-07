@@ -1577,7 +1577,6 @@ class ProduksiController extends Controller
                 } else {
                     return  $d->jumlah . ' ' . $d->produk->satuan->nama;
                 }
-
             })
             ->addColumn('action', function ($d) {
                 if ($d->status_tf == 12) {
@@ -1587,7 +1586,9 @@ class ProduksiController extends Controller
                 } elseif ($d->status_tf == 13) {
 
                 } else {
-
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                        <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+                    </a>';
                 }
 
             })
