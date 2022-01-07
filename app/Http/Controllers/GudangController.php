@@ -866,29 +866,29 @@ class GudangController extends Controller
     function storeCekSO(Request $request)
     {
 
-        dd($request->all());
-        // $check_array = $request->gbj_id;
-        // $id = $request->pesanan_id;
-        // $h = Pesanan::find($request->pesanan_id);
-        // $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
-        // foreach ($request->gbj_id as $key => $value) {
-        //     if (in_array($request->gbj_id[$key], $check_array)) {
-        //         DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->where('gudang_barang_jadi_id', $check_array)
-        //             ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
-        //     }
-        //     // dd($request->gbj_id[$key]);
-        // }
+        // dd($request->all());
+        $check_array = $request->gbj_id;
+        $id = $request->pesanan_id;
+        $h = Pesanan::find($request->pesanan_id);
+        $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
+        foreach ($request->gbj_id as $key => $value) {
+            if (in_array($request->gbj_id[$key], $check_array)) {
+                DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->whereIn('gudang_barang_jadi_id', $check_array)
+                    ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
+            }
+            // dd($request->gbj_id[$key]);
+        }
 
-        // $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->where('status_cek',4)->get()->count();
-        // $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->get()->count();
-        // if ($cek == $cek_prd) {
-        //     $h->status_cek = 4;
-        //     $h->checked_by = $request->userid;
-        //     $h->save();
-        // }
+        $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->where('status_cek',4)->get()->count();
+        $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->get()->count();
+        if ($cek == $cek_prd) {
+            $h->status_cek = 4;
+            $h->checked_by = $request->userid;
+            $h->save();
+        }
 
         // return response()->json($dt);
-        // return response()->json(['msg' => 'Successfully']);
+        return response()->json(['msg' => 'Successfully']);
     }
 
     // select
