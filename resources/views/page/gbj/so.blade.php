@@ -349,10 +349,9 @@
                             gbj_id: ids,
                         },
                         success: function(res) {
-
+                            location.reload();
                         }
                     })
-                    location.reload();
                 }
             })
 
