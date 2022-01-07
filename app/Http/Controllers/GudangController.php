@@ -1645,7 +1645,7 @@ class GudangController extends Controller
     function addSeri(Request $request)
     {
         $count = count($request->no_seri);
-        for ($i=0; $i < $count; $i++) { 
+        for ($i=0; $i < $count; $i++) {
             NoseriBarangJadi::create([
                 'noseri' => $request->no_seri[$i],
                 'layout_id' => $request->layout[$i],
@@ -1656,6 +1656,26 @@ class GudangController extends Controller
                 'is_aktif' => 1
             ]);
         }
+
+        $a = GudangBarangJadi::find($request->id)->first();
+        $stok = $a->stok + $count;
+        GudangBarangJadi::find($request->id)->update(['stok' => $stok]);
+        GudangBarangJadiHis::create([
+            'gdg_brg_jadi_id' => $request->id,
+            'stok' => $count,
+            'tgl_masuk' => Carbon::now(),
+            'jenis' => 'MASUK',
+            'created_by' => $request->created_by,
+            'created_at' => Carbon::now(),
+            'dari' => $request->dari,
+            // 'tujuan' => $request->deskripsi,
+        ]);
         return response()->json(['success' => 'Sukses']);
+    }
+
+    function cekReadySeri(Request $request) {
+        $data = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get();
+        // return
+        // dd($request->all());
     }
 }

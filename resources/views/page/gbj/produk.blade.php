@@ -876,7 +876,7 @@
         for (let i = 0; i < jumlah; i++) {
             $('.tambah_noseri_table').append(table);
         }
-        $.each(layout, function (index, value) { 
+        $.each(layout, function (index, value) {
              $('.layout_seri').append('<option value="'+value[0]+'">'+value[1]+'</option');
         });
         $('.tambah_noseri_tableee').DataTable({
@@ -896,31 +896,48 @@
     let id = $('.seri_id').val();
     let dari = $('.dari').val();
     let created_by = $('.created_by').val();
-    
+
     $.ajax({
+        url: '/api/gbj/ceknoseri',
         type: 'post',
-        url: '/api/gbj/addSeri',
-        data: {
-            "_token": "{{ csrf_token() }}",
-            no_seri : no_seri,
-            layout: layout,
-            id: id,
-            dari: dari,
-            created_by: created_by,
-        },
+        data: {noseri: no_seri},
         success: function(res) {
-            if (res.success) {
+            if(res.msg) {
+                $.ajax({
+                    type: 'post',
+                    url: '/api/gbj/addSeri',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        no_seri : no_seri,
+                        layout: layout,
+                        id: id,
+                        dari: dari,
+                        created_by: created_by,
+                    },
+                    success: function(res) {
+                        if (res.success) {
+                            Swal.fire(
+                                'Sukses!',
+                                'Data berhasil ditambahkan',
+                                'success'
+                            )
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    }
+                });
+            } else {
                 Swal.fire(
-                    'Sukses!',
-                    'Data berhasil ditambahkan',
-                    'success'
+                    'Oops',
+                    res.error,
+                    'error'
                 )
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
             }
         }
-    });
+    })
+
+
     })
 </script>
 @stop
