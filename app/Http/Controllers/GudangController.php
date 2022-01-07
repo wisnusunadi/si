@@ -564,8 +564,8 @@ class GudangController extends Controller
             $q->where('pesanan_id', $id);
         })->with('seri.seri', 'produk.produk')->get();
         $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get();
-        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
-        return $pdf->stream();
+        // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
+        // return $pdf->stream();
         // return view('page.gbj.reports.spb',['data' => $data, 'tfby' => $tfby, 'header' => $header]);
     }
 
@@ -614,16 +614,6 @@ class GudangController extends Controller
         $gdg->save();
 
         return response()->json(['msg', 'Successfully']);
-    }
-
-    function updateSeriLayout(Request $request)
-    {
-        $data = NoseriBarangJadi::whereIn('id', $request->cekid)->get();
-        foreach ($data as $d) {
-            for ($i = 0; $i < count($request->layout); $i++) {
-                NoseriBarangJadi::where('id', $request->cekid[$i])->update(['layout_id' => json_decode($request->layout[$i], true)]);
-            }
-        }
     }
 
     function StoreBarangJadi(Request $request)
@@ -1640,5 +1630,32 @@ class GudangController extends Controller
             $q->where('pesanan_id', 8);
         })->with('seri.seri', 'header.pesanan', 'produk.produk')->get();
         return $data;
+    }
+
+    function updateSeriLayout(Request $request)
+    {
+        $data = NoseriBarangJadi::whereIn('id', $request->cekid)->get();
+        foreach ($data as $d) {
+            for ($i = 0; $i < count($request->layout); $i++) {
+                NoseriBarangJadi::where('id', $request->cekid[$i])->update(['layout_id' => json_decode($request->layout[$i], true)]);
+            }
+        }
+    }
+
+    function addSeri(Request $request)
+    {
+        $count = count($request->no_seri);
+        for ($i=0; $i < $count; $i++) { 
+            NoseriBarangJadi::create([
+                'noseri' => $request->no_seri[$i],
+                'layout_id' => $request->layout[$i],
+                'gdg_barang_jadi_id' => $request->id,
+                'dari' => $request->dari,
+                'created_by' => $request->created_by,
+                'jenis' => 'MASUK',
+                'is_aktif' => 1
+            ]);
+        }
+        return response()->json(['success' => 'Sukses']);
     }
 }
