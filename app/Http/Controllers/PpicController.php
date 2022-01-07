@@ -178,7 +178,17 @@ class PpicController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->so;
+                return $data->so ? $data->so : "-";
+            })
+            ->addColumn('po', function ($data) {
+                return $data->no_po ? $data->no_po : "-";
+            })
+            ->addColumn('akn', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    return $data->Ekatalog->no_paket;
+                } else {
+                    return "-";
+                }
             })
             ->addColumn('tgl_order', function ($data) {
                 if (isset($data->Ekatalog)) {
@@ -211,6 +221,27 @@ class PpicController extends Controller
                 } else {
                     return '-';
                 }
+            })
+            ->addColumn('customer', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    return $data->ekatalog->instansi;
+                } else if (isset($data->spa)) {
+                    return $data->spa->customer->nama;
+                } else if (isset($data->spb)) {
+                    return $data->spb->customer->nama;
+                }
+            })
+            ->addColumn('jenis', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    return "Ekatalog";
+                } else if (isset($data->spa)) {
+                    return "SPA";
+                } else if (isset($data->spb)) {
+                    return "SPB";
+                }
+            })
+            ->addColumn('status', function ($data) {
+                return $data->log->nama;
             })
             ->addColumn('jumlah', function ($data) use ($prd) {
                 $id = $data->id;

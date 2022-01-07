@@ -47,6 +47,53 @@
       </button>
     </div>
     <div class="table-container">
+      <template
+        v-if="status === 'pelaksanaan' && format_jadwal_rencana.length > 0"
+      >
+        <h1 class="subtitle">Perencanaan</h1>
+        <table
+          class="table has-text-centered is-bordered"
+          style="white-space: nowrap"
+        >
+          <thead>
+            <tr>
+              <th rowspan="2">Nama Produk</th>
+              <th rowspan="2">Jumlah</th>
+              <th :colspan="last_date">Tanggal</th>
+            </tr>
+            <tr>
+              <th v-for="i in Array.from(Array(last_date).keys())" :key="i">
+                {{ i + 1 }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in format_jadwal_rencana" :key="item.id">
+              <td>{{ item.title }}</td>
+              <td>{{ item.jumlah }}</td>
+              <td
+                v-for="i in Array.from(Array(last_date).keys())"
+                :key="i"
+                :style="{
+                  backgroundColor:
+                    weekend_date.indexOf(i + 1) !== -1
+                      ? 'black'
+                      : isDate(item.events, i + 1)
+                      ? 'yellow'
+                      : '',
+                }"
+              ></td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+
+      <h1
+        class="subtitle"
+        v-if="status === 'pelaksanaan' && format_jadwal_rencana.length > 0"
+      >
+        Pelaksanaan
+      </h1>
       <table
         class="table has-text-centered is-bordered"
         style="white-space: nowrap"
@@ -114,46 +161,6 @@
           </tr>
         </tbody>
       </table>
-
-      <template
-        v-if="status === 'pelaksanaan' && format_rencana_jadwal.length > 0"
-      >
-        <table
-          class="table has-text-centered is-bordered"
-          style="white-space: nowrap"
-        >
-          <thead>
-            <tr>
-              <th rowspan="2">Nama Produk</th>
-              <th rowspan="2">Jumlah</th>
-              <th :colspan="last_date">Tanggal</th>
-            </tr>
-            <tr>
-              <th v-for="i in Array.from(Array(last_date).keys())" :key="i">
-                {{ i + 1 }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in format_rencana_jadwal" :key="item.id">
-              <td>{{ item.title }}</td>
-              <td>{{ item.jumlah }}</td>
-              <td
-                v-for="i in Array.from(Array(last_date).keys())"
-                :key="i"
-                :style="{
-                  backgroundColor:
-                    weekend_date.indexOf(i + 1) !== -1
-                      ? 'black'
-                      : isDate(item.events, i + 1)
-                      ? 'yellow'
-                      : '',
-                }"
-              ></td>
-            </tr>
-          </tbody>
-        </table>
-      </template>
     </div>
 
     <div class="modal" :class="{ 'is-active': addProdukModal }">
@@ -484,9 +491,6 @@ export default {
       date.setDate(i);
       if (date.getDay() == 6 || date.getDay() == 0) this.weekend_date.push(i);
     }
-
-    console.log("table created", this.events);
-    console.log(this.format_events);
   },
 
   methods: {
@@ -920,7 +924,7 @@ export default {
       return data;
     },
 
-    format_rencana_jadwal() {
+    format_jadwal_rencana() {
       let data = [];
       let exists = {};
       for (let i = 0; i < this.rencana_jadwal.length; i++) {
@@ -943,7 +947,7 @@ export default {
             ],
           });
         } else {
-          exists.rencana_jadwal.pu.jadwal_perakitansh({
+          exists.events.push({
             id: this.rencana_jadwal[i].jadwal_perakitan.id,
             start: this.rencana_jadwal[i].jadwal_perakitan.tanggal_mulai,
             end: this.rencana_jadwal[i].jadwal_perakitan.tanggal_selesai,
@@ -954,12 +958,6 @@ export default {
       }
 
       return data;
-    },
-  },
-
-  watch: {
-    format_rencana_jadwal(new_val) {
-      console.log("watch rencana", new_val);
     },
   },
 };
