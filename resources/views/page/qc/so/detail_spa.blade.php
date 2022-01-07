@@ -565,6 +565,7 @@
         });
 
         $('#noseritable ').on('click', '.nosericheck', function() {
+            $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 checkedAry = [];
@@ -623,7 +624,23 @@
 
         $(document).on('change', 'input[type="radio"][name="cek"]', function(event) {
             if ($(this).val() != "") {
-                $('#btnsimpan').removeAttr('disabled');
+                if ($('#tanggal_uji').val() != "") {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            } else {
+                $('#btnsimpan').attr('disabled', true);
+            }
+        });
+        $(document).on('change', 'input[type="date"][name="tanggal_uji"]', function(event) {
+            if ($(this).val() != "") {
+
+                if ($("input[name=cek][type='radio']").prop("checked")) {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
             } else {
                 $('#btnsimpan').attr('disabled', true);
             }
