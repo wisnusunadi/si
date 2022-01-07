@@ -11,7 +11,7 @@ class NoseriBarangJadi extends Model
 
     protected $table = "noseri_barang_jadi";
 
-    protected $fillable = ['is_aktif', 'is_ready', 'used_by'];
+    protected $fillable = ['is_aktif', 'is_ready', 'used_by', 'layout_id', 'gdg_barang_jadi_id', 'dari', 'noseri', 'jenis', 'created_by'];
 
     function from()
     {
@@ -28,5 +28,9 @@ class NoseriBarangJadi extends Model
     function NoseriTGbj()
     {
         return $this->hasMany(NoseriTGbj::class);
+    }
+
+    function layout() {
+        return $this->belongsTo(Layout::class, 'layout_id');
     }
 }

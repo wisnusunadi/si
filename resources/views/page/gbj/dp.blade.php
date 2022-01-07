@@ -287,7 +287,20 @@
             layout.push($(elm).parent().next().next().children().val());
         });
 
-        Swal.fire({
+        if (no_seri == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No Seri tidak boleh kosong!',
+            });
+        } else if (layout == '') {
+           Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Layout tidak boleh kosong!',
+            });
+        } else {
+            Swal.fire({
             title: 'Apakah anda yakin?',
             text: "Produk yang anda terima akan diubah layoutnya",
             icon: 'warning',
@@ -327,6 +340,7 @@
                 })
             }
         })
+        }
     })
 
 </script>

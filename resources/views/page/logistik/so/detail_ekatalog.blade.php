@@ -833,6 +833,7 @@
 
 
         $('#belumkirimtable').on('click', '.detail_produk_id', function() {
+            $('#check_all').prop('checked', false);
             if ($('.detail_produk_id:checked').length > 0) {
                 $('#kirim_produk').removeAttr('disabled');
                 checkedAry = [];

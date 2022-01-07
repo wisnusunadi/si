@@ -169,6 +169,7 @@ Route::prefix('/gbj')->group(function () {
     Route::get('history/{id}', [GudangController::class, 'getHistory']);
     Route::post('noseri/{id}', [GudangController::class, 'storeNoseri']);
     Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
+    Route::post('ubahseri', [GudangController::class, 'updateSeriLayout']);
 });
 
 Route::prefix('/draft')->group(function () {
@@ -294,7 +295,7 @@ Route::prefix('/prd')->group(function () {
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
 
-    Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
+    Route::get('/testing/{id}', [ProduksiController::class, 'test']);
 
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);

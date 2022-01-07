@@ -449,13 +449,22 @@
             idtrf = '{{$d->pesanan->TFProduksi->id}}';
             idpesanan = '{{$d->pesanan->id}}';
             var data = $(this).attr('data-id');
+            var datacount = $(this).attr('data-count');
             $('.nosericheck').prop('checked', false);
+            if (datacount == 0) {
+                // $('.sericheckbox').addClass("hide");
+                $('#noseritable').DataTable().column(0).visible(false);
+            } else {
+                // $('.sericheckbox').removeClass("hide");
+                $('#noseritable').DataTable().column(0).visible(true);
+            }
             $('#cekbrg').prop('disabled', true);
-            $('input[name ="check_all"]').prop('checked', false);
+            $('input[name="check_all"]').prop('checked', false);
             $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
+
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
@@ -539,6 +548,7 @@
         function listnoseri(seri_id, produk_id, tfgbj_id) {
 
             $('#listnoseri').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -580,7 +590,8 @@
             }
         });
 
-        $('#noseritable ').on('click', '.nosericheck', function() {
+        $('#noseritable').on('click', '.nosericheck', function() {
+            $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 checkedAry = [];
@@ -640,7 +651,23 @@
 
         $(document).on('change', 'input[type="radio"][name="cek"]', function(event) {
             if ($(this).val() != "") {
-                $('#btnsimpan').removeAttr('disabled');
+                if ($('#tanggal_uji').val() != "") {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            } else {
+                $('#btnsimpan').attr('disabled', true);
+            }
+        });
+        $(document).on('change', 'input[type="date"][name="tanggal_uji"]', function(event) {
+            if ($(this).val() != "") {
+
+                if ($("input[name=cek][type='radio']").prop("checked")) {
+                    $('#btnsimpan').removeAttr('disabled');
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
             } else {
                 $('#btnsimpan').attr('disabled', true);
             }
