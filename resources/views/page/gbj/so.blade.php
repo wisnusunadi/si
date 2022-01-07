@@ -324,7 +324,7 @@
                     ids.push($(this).val());
                 }
             })
-
+            // console.log(ids);
             Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -340,22 +340,23 @@
                     'Data Berhasil Disimpan',
                     'success'
                     )
-                    $.ajax({
-                        url: "/api/so/cek",
-                        type: "post",
-                        data: {
-                            pesanan_id : id,
-                            userid: $('#userid').val(),
-                            gbj_id: ids,
-                        },
-                        success: function(res) {
-                            location.reload();
-                        }
-                    })
+
                 }
             })
 
-
+            $.ajax({
+                url: "/api/so/cek",
+                type: "post",
+                data: {
+                    pesanan_id : id,
+                    userid: $('#userid').val(),
+                    gbj_id: ids,
+                },
+                success: function(res) {
+                    // location.reload();
+                    console.log(res);
+                }
+            })
 
             console.log(ids);
         })
