@@ -292,7 +292,7 @@
             var isChecked = $("#head-cb").prop('checked')
             // $('.cb-child-edit').prop('checked', isChecked)
             $('.scan-produk-edit').DataTable()
-                .column(1) 
+                .column(1)
                 .nodes()
                 .to$()
                 .find('input[type=checkbox]')
@@ -508,9 +508,10 @@ var jml = '';
                         },
                         success: function(res) {
                            console.log(res);
+                           location.reload();
                         }
                     })
-                    location.reload();
+
                 }
             })
 
@@ -547,16 +548,18 @@ var jml = '';
                         'Data Terkirim ke QC',
                         'success'
                     )
-                    location.reload();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 }
-            })
+            });
 
         $('.cb-child-prd').each(function() {
             if($(this).is(":checked")) {
             } else {
                 delete prd1[$(this).val()]
             }
-        })
+        });
     });
 
     $(document).on('click', '.cb-child-prd', function () {
@@ -775,9 +778,9 @@ var jml = '';
                             data: editPrd,
                         },
                         success: function(res) {
+                            location.reload();
                         }
                     })
-                    location.reload();
                 }
             })
 

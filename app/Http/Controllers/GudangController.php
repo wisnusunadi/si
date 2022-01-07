@@ -609,12 +609,10 @@ class GudangController extends Controller
     }
 
     function updateSeriLayout(Request $request) {
-        // NoseriBarangJadi::find()
-        // dd($request->all());
         $data = NoseriBarangJadi::whereIn('id', $request->cekid)->get();
         foreach($data as $d)
         {
-            for ($i=0; $i < count($request->layout); $i++) { 
+            for ($i=0; $i < count($request->layout); $i++) {
                 NoseriBarangJadi::where('id', $request->cekid[$i])->update(['layout_id' => json_decode($request->layout[$i], true)] );
             }
         }

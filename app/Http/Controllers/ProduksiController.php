@@ -147,11 +147,12 @@ class ProduksiController extends Controller
             foreach ($request->data as $key => $value) {
                 $b = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $key)->get()->count();
                 // return $b;
+                $c = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $key)->first();
                 if ($b > 0) {
                     // return 'updated';
                     foreach ($value['noseri'] as $k => $v) {
                         $nn = new NoseriTGbj();
-                        $nn->t_gbj_detail_id = $b->id;
+                        $nn->t_gbj_detail_id = $c->id;
                         $nn->noseri_id = $v;
                         $nn->status_id = 2;
                         $nn->state_id = 8;
@@ -312,7 +313,7 @@ class ProduksiController extends Controller
         if ($jumlah == $jumlah_kirim) {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
         } elseif ($now == $jumlah_kirim) {
-            Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
+            // Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
         } else {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 9]);
         }
@@ -804,6 +805,12 @@ class ProduksiController extends Controller
                             <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
                         </a>';
                     }
+                }
+
+                if(empty($d->so)) {
+                    return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
+                        <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                    </a>';
                 }
             })
             ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
@@ -1584,7 +1591,17 @@ class ProduksiController extends Controller
                         <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
                     </a>';
                 } elseif ($d->status_tf == 13) {
+                    $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
+                    $c = count($seri);
+                    $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
+                    $c_all = count($seri_all);
+                    if ($c == $c_all) {
 
+                    } else {
+                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                            <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+                        </a>';
+                    }
                 } else {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
                         <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
@@ -1761,10 +1778,10 @@ class ProduksiController extends Controller
             $q->where('produk_id', $request->gbj_id);
         })->where('status', 11)->get()->count();
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
-        $now = $total_rakit->jumlah - $sdh_terkirim;
-        if ($now == $blm_terkirim) {
+        $now = intval($total_rakit->jumlah - $sdh_terkirim);
+        // return $now - count($request->noseri);
+        if ($now == count($request->noseri)) {
             $total_rakit->status_tf = 14;
-            $total_rakit->status = 8;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
         } else {

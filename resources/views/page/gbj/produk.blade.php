@@ -521,7 +521,7 @@
                 $("#produk_id").empty();
                 $("#produk_id").append('<option value="">Pilih Item</option>');
                 $.each(res, function(key, value) {
-                    $("#produk_id").append('<option value="'+value.id+'">'+value.product.nama+' '+value.nama+'</option');
+                    $("#produk_id").append('<option value="'+value.id+'">'+value.nama+'</option');
                 });
             } else {
                 $("#produk_id").empty();
@@ -778,7 +778,7 @@
                 location.reload();
             }
         })
-            
+
         })
     })
 </script>

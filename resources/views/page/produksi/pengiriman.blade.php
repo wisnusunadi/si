@@ -425,9 +425,10 @@
                         },
                         success: function(res) {
                             console.log(res);
+                            location.reload();
                         }
                     })
-                    location.reload();
+                    
                 }
             })
        
