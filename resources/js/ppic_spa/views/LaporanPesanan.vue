@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="is-flex is-justify-content-space-between">
-      <h1 class="title">Data Sales Order</h1>
+      <h1 class="title">Laporan Pesanan</h1>
     </div>
     <div class="columns is-multiline">
       <div class="column is-12">

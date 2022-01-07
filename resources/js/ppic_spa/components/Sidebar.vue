@@ -64,9 +64,9 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/ppic/so_detail" class="has-icon">
-            <span class="icon"><i class="fas fa-search"></i></span>
-            <span class="menu-item-label">Detail Pesanan</span>
+          <router-link to="/ppic/laporan_pesanan" class="has-icon">
+            <span class="icon"><i class="fas fa-book-open"></i></span>
+            <span class="menu-item-label">Laporan Pesanan</span>
           </router-link>
         </li>
       </ul>

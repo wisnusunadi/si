@@ -167,9 +167,8 @@ class PpicController extends Controller
 
     public function get_data_so_detail($id)
     {
-        $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
-            $q->where('id', $id);
-        })->whereIn('log_id', ['7', '9'])->get();
+        $data = Pesanan::whereIn('log_id', ['7', '9'])->get();
+        return $data;
 
         $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
@@ -383,7 +382,9 @@ class PpicController extends Controller
         }
 
         if (isset($request->jumlah)) {
-            $data->jumlah = $request->jumlah;
+            $noseri_count = count($data->noseri);
+            if ($noseri_count > $request->jumlah) $data->jumlah = $noseri_count;
+            else $data->jumlah = $request->jumlah;
         }
         if (isset($request->state)) {
             $state = $this->change_state($request->state);

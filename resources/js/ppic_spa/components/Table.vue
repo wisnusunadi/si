@@ -296,7 +296,7 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Edit Produk</p>
+          <p class="modal-card-title">Edit Jadwal ({{ updated_events }})</p>
           <button class="delete" @click="editProdukModal = false"></button>
         </header>
         <section class="modal-card-body">
