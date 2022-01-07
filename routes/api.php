@@ -126,7 +126,7 @@ Route::prefix('/penjualan')->group(function () {
     Route::post('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('chart', [App\Http\Controllers\PenjualanController::class, 'chart_penjualan']);
     // Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
-    Route::get('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
+    Route::post('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
 
     //   Route::get('customer/data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
 
@@ -420,7 +420,7 @@ Route::prefix('/noseri')->group(function () {
     Route::delete('/delete/{id}', [App\Http\Controllers\NoseriController::class, 'DestroyNoSeri']);
 });
 Route::prefix('/produk')->group(function () {
-    Route::get('/variasi_stok/{id}', [App\Http\Controllers\PenjualanController::class, 'check_variasi_jumlah']);
+    Route::post('/variasi_stok/{id}', [App\Http\Controllers\PenjualanController::class, 'check_variasi_jumlah']);
 });
 Route::prefix('/ekatalog')->group(function () {
     // Route::get('data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
@@ -510,7 +510,7 @@ Route::prefix('/logistik')->group(function () {
 
     Route::group(['prefix' => '/cek'], function () {
         Route::post('/no_sj/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_sj']);
-        Route::get('/no_resi/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_resi']);
+        Route::post('/no_resi/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_resi']);
     });
 });
 

@@ -618,7 +618,7 @@
         function check_no_resi(value) {
             var hasil = "";
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 async: false,
                 url: '/api/logistik/cek/no_resi/' + value,
