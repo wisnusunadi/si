@@ -190,45 +190,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>CMS-600 PLUS + PRINTER + LINEAR PROBE + TROLLEY + UPS</td>
-                                                <td>26-10-2021</td>
-                                                <td>29-10-2021</td>
-                                                <td>2</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
-                                                <td>28-10-2021</td>
-                                                <td>30-10-2021</td>
-                                                <td>1</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>ELITECH ULTRASONIC POCKET DOPPLER</td>
-                                                <td>29-10-2021</td>
-                                                <td>29-10-2021</td>
-                                                <td>1</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
