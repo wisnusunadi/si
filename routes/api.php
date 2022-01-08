@@ -171,7 +171,7 @@ Route::prefix('/gbj')->group(function () {
     Route::post('noseri/{id}', [GudangController::class, 'storeNoseri']);
     Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
     Route::post('ubahseri', [GudangController::class, 'updateSeriLayout']);
-    Route::post('addSeri', [GudangController::class,'addSeri']);
+    Route::post('addSeri', [GudangController::class, 'addSeri']);
 });
 
 Route::prefix('/draft')->group(function () {
@@ -490,7 +490,7 @@ Route::prefix('/logistik')->group(function () {
     });
     Route::group(['prefix' => '/ekspedisi'], function () {
         // Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
-        Route::get('select', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
+        Route::get('select/{provinsi}', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
         Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_ekspedisi']);
         // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });

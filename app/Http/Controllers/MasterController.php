@@ -889,10 +889,12 @@ class MasterController extends Controller
         // $data = GudangKarantinaDetail::with('units.produk')->groupBy('gbj_id')->where('is_draft',0)->where('is_keluar', 0)->whereNotNull('gbj_id')->get()->pluck('gbj_id', 'units.produk.nama');
         return $data;
     }
-    public function select_ekspedisi(Request $request)
+    public function select_ekspedisi(Request $request, $provinsi)
     {
         $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-            ->orderby('nama', 'ASC')->get();
+            ->orderby('nama', 'ASC')->whereHas('Provinsi', function ($q) use ($provinsi) {
+                $q->where('id', $provinsi);
+            })->get();
         echo json_encode($data);
     }
 

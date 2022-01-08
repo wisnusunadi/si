@@ -531,6 +531,7 @@
             var href = $(this).attr('data-href');
             var id = $(this).data('id');
             var logistik_id = $(this).attr('data-id');
+            var provinsi = $(this).attr('data-provinsi');
             var jenis = $(this).data('attr');
             $.ajax({
                 url: href,
@@ -540,7 +541,7 @@
                 success: function(result) {
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    ekspedisi_select();
+                    ekspedisi_select(provinsi);
                     barang_detail(logistik_id, jenis);
                     // $("#editform").attr("action", href);
                 },
@@ -701,7 +702,7 @@
             }
         });
 
-        function ekspedisi_select() {
+        function ekspedisi_select(id) {
             $('.ekspedisi_id').select2({
                 placeholder: "Pilih Ekspedisi",
                 allowClear: true,
@@ -712,7 +713,7 @@
                     theme: "bootstrap",
                     delay: 250,
                     type: 'GET',
-                    url: '/api/logistik/ekspedisi/select',
+                    url: '/api/logistik/ekspedisi/select' + id,
                     data: function(params) {
                         return {
                             term: params.term
