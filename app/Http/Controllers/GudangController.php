@@ -140,8 +140,18 @@ class GudangController extends Controller
 
     function getHistory($id)
     {
-        $data = NoseriBarangJadi::with('from', 'to')->where('gdg_barang_jadi_id', $id)->get();
-        return response()->json($data);
+        $data = NoseriBarangJadi::with('from', 'to')->where('noseri', $id)->get()->unique(function ($item) {
+            return Carbon::parse($item->created_at)->format('Y-m-d');
+        });
+
+        return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('tanggal', function ($d) {
+                    return Carbon::parse($d->created_at)->isoFormat('dddd, D MMMM Y');
+                })
+                ->addColumn('dari', function ($d) {
+                    return $d->from->nama;
+                })->make(true);
     }
 
     function getHistorybyProduk()
@@ -874,6 +884,7 @@ class GudangController extends Controller
         if ($cek == $cek_prd) {
             $h->status_cek = 4;
             $h->checked_by = $request->userid;
+            $h->log_id = 6;
             $h->save();
         }
 

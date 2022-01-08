@@ -295,25 +295,25 @@ class ProduksiController extends Controller
             }
         }
 
-        // $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
-        // $jumlah = 0;
-        // foreach ($s as $i) {
-        //     foreach ($i->PenjualanProduk->Produk as $j) {
-        //         $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
-        //     }
-        // }
+        $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+            }
+        }
 
-        // $jumlah_kirim = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($request) {
-        //     $q->where('id', $request->pesanan_id)->where('status_id', 2);
-        // })->get()->count();
-        // $now = intval($jumlah - $jumlah_kirim);
-        // if ($jumlah == $jumlah_kirim) {
-        //     Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
-        // } elseif ($now == $jumlah_kirim) {
-        //     // Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
-        // } else {
-        //     Pesanan::find($request->pesanan_id)->update(['log_id' => 9]);
-        // }
+        $jumlah_kirim = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($request) {
+            $q->where('id', $request->pesanan_id)->where('status_id', 2);
+        })->get()->count();
+        $now = intval($jumlah - $jumlah_kirim);
+        if ($jumlah == $jumlah_kirim) {
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
+        } elseif ($now == $jumlah_kirim) {
+            // Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
+        } else {
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);
+        }
 
         return response()->json(['msg' => 'Data Terkirim ke QC']);
     }
@@ -559,9 +559,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->where('log_id', 9)->get());
-        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->get());
-        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereIn('log_id', [9,6])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereIn('log_id', [9,6])->get());
+        $Spb = collect(Pesanan::has('Spb')->whereIn('log_id', [9,6])->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -1701,7 +1701,7 @@ class ProduksiController extends Controller
     {
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
-        })->where('waktu_tf', $dd)->where('date_in', $rakit)->get();
+        })->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -1856,8 +1856,8 @@ class ProduksiController extends Controller
         $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy('jadwal_rakit_noseri.date_in')
-            ->groupBy('jadwal_rakit_noseri.waktu_tf')
+            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
             ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
             ->get();
         return datatables()->of($d)
@@ -1892,7 +1892,7 @@ class ProduksiController extends Controller
                 return $d->jml . ' Unit';
             })
             ->addColumn('action', function ($d) {
-                return '<button class="btn btn-outline-secondary detail" data-rakit="' . $d->date_in . '" data-tf="' . $d->waktu_tf . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
+                return '<button class="btn btn-outline-secondary detail" data-rakit="' . Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('Y-m-d H:i') . '" data-tf="' . Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('Y-m-d H:i') . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
             })->addColumn('day_rakit_filter', function ($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('D-MM-Y');
             })->addColumn('day_kirim_filter', function ($d) {

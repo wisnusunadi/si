@@ -350,7 +350,7 @@
 
 <!-- Modal Detail-->
 <div class="modal fade modalViewStock" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -369,7 +369,7 @@
             </div>
             <div class="modal-body">
 
-                <table class="table view-produk">
+                <table class="table view_produk">
                     <thead>
                         <tr>
                             <th>Tanggal Masuk</th>
@@ -768,36 +768,35 @@
                 // "columnDefs": [
                 //     { "width": "5%", "targets": 0},
                 // ],
-                "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
         });
 
         $('.daftar-stok').modal('show');
     });
 
     // modal history
-    $(document).on('focus', '.viewStock', function() {
-        var id = $(this).data('id');
-        $('p#namaa').text(title);
+    $(document).on('click', '.viewStock', function() {
+        var id = $(this).parent().prev().prev().text();
+        let judul_detail = $('#nm_produk').text();
+        $('p#namaa').text(judul_detail);
         console.log(id);
         var i = 0;
-
-        $.ajax({
-            url: '/api/gbj/history/' + id,
-            type: 'get',
-            dataType: 'json',
-            success: function(data) {
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-                $.each(data, function(key, value) {
-                    console.log(value);
-                    $(".view-produk tbody").append("<tr><td>"+new Date(value.created_at).toLocaleDateString('id-ID', options)+"</td><td>"+value.from.nama+"</td></tr>");
-                    // $(".view-produk tbody").append("<tr><td>"+new Date(value[key].created_at).toLocaleDateString()+"</td><td>"+value[key].from.nama+"</td><td>"+value[key].to.nama+"</td></tr>");
-                    // var a = ;
-                });
-                // $(".view-produk tbody").html(a);
-            }
-        })
+        $('.view_produk').DataTable().destroy();
+        $('view_produk tbody').empty();
+        $('.view_produk').DataTable({   
+            destroy: true,
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            processing: true,
+            ajax: {
+                url: '/api/gbj/history/' + id,
+            },
+            columns: [
+                {data: 'tanggal'},
+                {data: 'dari'},
+            ],
+        });
+        
         $('.modalViewStock').modal('show');
     });
 
