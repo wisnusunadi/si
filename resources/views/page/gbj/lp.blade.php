@@ -884,7 +884,9 @@
                                 console.log(res);
                             }
                         })
-                        // location.reload();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     }
                 })
 
@@ -954,9 +956,10 @@
                     },
                     success: function (res) {
                         console.log(res);
+                        location.reload();
                     }
                 })
-                location.reload();
+
             }
         })
 
