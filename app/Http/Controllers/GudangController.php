@@ -140,8 +140,18 @@ class GudangController extends Controller
 
     function getHistory($id)
     {
-        $data = NoseriBarangJadi::with('from', 'to')->where('gdg_barang_jadi_id', $id)->get();
-        return response()->json($data);
+        $data = NoseriBarangJadi::with('from', 'to')->where('noseri', $id)->get()->unique(function ($item) {
+            return Carbon::parse($item->created_at)->format('Y-m-d');
+        });
+
+        return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('tanggal', function ($d) {
+                    return Carbon::parse($d->created_at)->isoFormat('dddd, D MMMM Y');
+                })
+                ->addColumn('dari', function ($d) {
+                    return $d->from->nama;
+                })->make(true);
     }
 
     function getHistorybyProduk()
@@ -856,29 +866,30 @@ class GudangController extends Controller
     function storeCekSO(Request $request)
     {
 
-        dd($request->all());
-        // $check_array = $request->gbj_id;
-        // $id = $request->pesanan_id;
-        // $h = Pesanan::find($request->pesanan_id);
-        // $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
-        // foreach ($request->gbj_id as $key => $value) {
-        //     if (in_array($request->gbj_id[$key], $check_array)) {
-        //         DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->where('gudang_barang_jadi_id', $check_array)
-        //             ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
-        //     }
-        //     // dd($request->gbj_id[$key]);
-        // }
+        // dd($request->all());
+        $check_array = $request->gbj_id;
+        $id = $request->pesanan_id;
+        $h = Pesanan::find($request->pesanan_id);
+        $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
+        foreach ($request->gbj_id as $key => $value) {
+            if (in_array($request->gbj_id[$key], $check_array)) {
+                DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->whereIn('gudang_barang_jadi_id', $check_array)
+                    ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
+            }
+            // dd($request->gbj_id[$key]);
+        }
 
-        // $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->where('status_cek',4)->get()->count();
-        // $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->get()->count();
-        // if ($cek == $cek_prd) {
-        //     $h->status_cek = 4;
-        //     $h->checked_by = $request->userid;
-        //     $h->save();
-        // }
+        $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->where('status_cek',4)->get()->count();
+        $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->get()->count();
+        if ($cek == $cek_prd) {
+            $h->status_cek = 4;
+            $h->checked_by = $request->userid;
+            $h->log_id = 6;
+            $h->save();
+        }
 
         // return response()->json($dt);
-        // return response()->json(['msg' => 'Successfully']);
+        return response()->json(['msg' => 'Successfully']);
     }
 
     // select
@@ -1645,7 +1656,7 @@ class GudangController extends Controller
     function addSeri(Request $request)
     {
         $count = count($request->no_seri);
-        for ($i=0; $i < $count; $i++) { 
+        for ($i=0; $i < $count; $i++) {
             NoseriBarangJadi::create([
                 'noseri' => $request->no_seri[$i],
                 'layout_id' => $request->layout[$i],
@@ -1656,6 +1667,26 @@ class GudangController extends Controller
                 'is_aktif' => 1
             ]);
         }
+
+        $a = GudangBarangJadi::find($request->id)->first();
+        $stok = $a->stok + $count;
+        GudangBarangJadi::find($request->id)->update(['stok' => $stok]);
+        GudangBarangJadiHis::create([
+            'gdg_brg_jadi_id' => $request->id,
+            'stok' => $count,
+            'tgl_masuk' => Carbon::now(),
+            'jenis' => 'MASUK',
+            'created_by' => $request->created_by,
+            'created_at' => Carbon::now(),
+            'dari' => $request->dari,
+            // 'tujuan' => $request->deskripsi,
+        ]);
         return response()->json(['success' => 'Sukses']);
+    }
+
+    function cekReadySeri(Request $request) {
+        $data = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get();
+        // return
+        // dd($request->all());
     }
 }
