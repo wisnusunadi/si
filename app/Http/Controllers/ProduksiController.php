@@ -1612,7 +1612,9 @@ class ProduksiController extends Controller
                     $c = count($seri);
                     $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
                     $c_all = count($seri_all);
-                    if ($c == $c_all) { } else {
+                    if ($c == $c_all) {
+
+                    } else {
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
                             <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
                         </a>';
@@ -1676,7 +1678,7 @@ class ProduksiController extends Controller
             }
 
             $d = JadwalPerakitan::find($request->jadwal_id);
-            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
+            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->where('status', 14)->get()->count();
             if ($d->jumlah == $jj) {
                 $d->status_tf = 15;
                 $d->filled_by = $request->userid;
@@ -1870,7 +1872,7 @@ class ProduksiController extends Controller
             ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
             ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
             ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-            ->get();
+            ->get()->sortByDesc('date_in');
         return datatables()->of($d)
             ->addColumn('day_rakit', function ($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
