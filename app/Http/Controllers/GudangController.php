@@ -189,7 +189,7 @@ class GudangController extends Controller
 
     function getAllTransaksi()
     {
-        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->get();
+        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->get()->sortByDesc('header.tgl_keluar');
         $g = datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
@@ -448,7 +448,9 @@ class GudangController extends Controller
     function getDraftPerakitan(Request $request)
     {
         if ($request->id) {
-            $data = TFProduksiDetail::with('header', 'produk', 'noseri')->where('t_gbj_id', $request->id)->get();
+            $data = TFProduksiDetail::whereHas('header', function($q) {
+                $q->where('status_id', 1);
+            })->with('header', 'produk', 'noseri')->where('t_gbj_id', $request->id)->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_produk', function ($d) {
@@ -821,6 +823,7 @@ class GudangController extends Controller
 
     function finalDraftRakit(Request $request)
     {
+        // dd($request->all());
         $header = TFProduksi::find($request->id);
 
         $dd = TFProduksiDetail::where('t_gbj_id', $request->id)->get()->toArray();
@@ -831,7 +834,7 @@ class GudangController extends Controller
                     NoseriTGbj::where('id', $value[$i]['noseri'])->update(['layout_id' => $value[$i]['layout'], 'status_id' => 2]);
                     $a = NoseriTGbj::where('id', $value[$i]['noseri'])->get()->toArray();
                     foreach ($a as $a) {
-                        echo NoseriBarangJadi::where('id', $a['noseri_id'])->get();
+                        // echo NoseriBarangJadi::where('id', $a['noseri_id'])->get();
                         NoseriBarangJadi::where('id', $a['noseri_id'])->update(['is_aktif' => 1, 'layout_id' => $value[$i]['layout']]);
                         $b = NoseriBarangJadi::whereIn('id', [$a['noseri_id']])->get()->toArray();
                         foreach ($b as $b) {
