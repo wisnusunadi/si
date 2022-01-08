@@ -295,25 +295,25 @@ class ProduksiController extends Controller
             }
         }
 
-        // $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
-        // $jumlah = 0;
-        // foreach ($s as $i) {
-        //     foreach ($i->PenjualanProduk->Produk as $j) {
-        //         $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
-        //     }
-        // }
+        $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+            }
+        }
 
-        // $jumlah_kirim = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($request) {
-        //     $q->where('id', $request->pesanan_id)->where('status_id', 2);
-        // })->get()->count();
-        // $now = intval($jumlah - $jumlah_kirim);
-        // if ($jumlah == $jumlah_kirim) {
-        //     Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
-        // } elseif ($now == $jumlah_kirim) {
-        //     // Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
-        // } else {
-        //     Pesanan::find($request->pesanan_id)->update(['log_id' => 9]);
-        // }
+        $jumlah_kirim = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($request) {
+            $q->where('id', $request->pesanan_id)->where('status_id', 2);
+        })->get()->count();
+        $now = intval($jumlah - $jumlah_kirim);
+        if ($jumlah == $jumlah_kirim) {
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
+        } elseif ($now == $jumlah_kirim) {
+            // Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
+        } else {
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);
+        }
 
         return response()->json(['msg' => 'Data Terkirim ke QC']);
     }
@@ -559,9 +559,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->where('log_id', 9)->get());
-        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->get());
-        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereIn('log_id', [9,6])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereIn('log_id', [9,6])->get());
+        $Spb = collect(Pesanan::has('Spb')->whereIn('log_id', [9,6])->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -826,155 +826,135 @@ class ProduksiController extends Controller
 
     function getDetailSO(Request $request, $id, $value)
     {
-        if ($value == 'ekatalog') {
-            $data = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
+        if ($value == "ekatalog") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
             })->get();
-            // $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
-            //     $q->where('pesanan_id', $id);
-            // })->get();
-            // $detail_id = array();
-            // foreach ($detail_pesanan as $d) {
-            //     $detail_id[] = $d->id;
-            // }
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
 
-            // $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->groupBy('gudang_barang_jadi_id')->get();
+        } else if ($value == "spa") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
+
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->groupBy('gudang_barang_jadi_id')->get();
+        } else if ($value == "spb") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $detail_id = array();
+            foreach ($detail_pesanan as $d) {
+                $detail_id[] = $d->id;
+            }
+
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->groupBy('gudang_barang_jadi_id')->get();
         }
-        // return $data;
-        // if ($value == "ekatalog") {
-        //     $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
-        //         $q->where('pesanan_id', $id);
-        //     })->get();
-        //     $detail_id = array();
-        //     foreach ($detail_pesanan as $d) {
-        //         $detail_id[] = $d->id;
-        //     }
 
-        //     $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
-        // } else if ($value == "spa") {
-        //     $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
-        //         $q->where('pesanan_id', $id);
-        //     })->get();
-        //     $detail_id = array();
-        //     foreach ($detail_pesanan as $d) {
-        //         $detail_id[] = $d->id;
-        //     }
-
-        //     $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
-        // } else if ($value == "spb") {
-        //     $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
-        //         $q->where('pesanan_id', $id);
-        //     })->get();
-        //     $detail_id = array();
-        //     foreach ($detail_pesanan as $d) {
-        //         $detail_id[] = $d->id;
-        //     }
-
-        //     $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
-        // }
-
-        return datatables()->of($data)
+        return datatables()->of($g)
             ->addIndexColumn()
             ->addColumn('produk', function ($data) {
-                if (empty($data->nama)) {
-                    return $data->produk->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->id . '">';
+                if (empty($data->gudangbarangjadi->nama)) {
+                    return $data->gudangbarangjadi->produk->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '">';
                 } else {
-                    return $data->produk->nama . '-' . $data->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->id . '">';
+                    return $data->gudangbarangjadi->produk->nama . '-' . $data->gudangbarangjadi->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '">';
                 }
             })
             ->addColumn('qty', function ($data) {
-                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "");
-                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
-                return $jumlahdiminta;
+                return $data->detailpesanan->jumlah . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $data->detailpesanan->jumlah . '">';
             })
             ->addColumn('tipe', function ($data) {
-                if (empty($data->nama)) {
-                    return $data->produk->nama;
+                if (empty($data->gudangbarangjadi->nama)) {
+                    return $data->gudangbarangjadi->produk->nama;
                 } else {
-                    return $data->produk->nama . ' ' . $data->nama;
+                    return $data->gudangbarangjadi->produk->nama . ' ' . $data->gudangbarangjadi->nama;
                 }
             })
             ->addColumn('merk', function ($data) {
-                return $data->produk->merk;
+                return $data->gudangbarangjadi->produk->merk;
             })
-            ->addColumn('ids', function ($data) {
-                foreach($data->detailpesananproduk as $q) {
-                    // return $q->gudang_barang_jadi_id;
-                    if ($q->status_cek == 4) {
-                        return '<input type="checkbox" class="cb-child-so" value="' . $q->id . '" disabled>';
-                    } else {
-                        return '<input type="checkbox" class="cb-child-so" value="' . $q->id . '">';
-                    }
+            ->addColumn('ids', function ($d) {
+                if ($d->status_cek == 4) {
+                    return '<input type="checkbox" class="cb-child-so" value="' . $d->gudang_barang_jadi_id . '" disabled>';
+                } else {
+                    return '<input type="checkbox" class="cb-child-so" value="' . $d->gudang_barang_jadi_id . '">';
                 }
             })
-            // ->addColumn('action', function ($data) {
-            //     $cek = TFProduksiDetail::whereHas('header', function ($q) use ($data) {
-            //         $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
-            //     })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->get();
-            //     if (count($cek) > 0) {
-            //         $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($data) {
-            //             $q->where('gdg_brg_jadi_id', $data->id);
-            //         })->whereHas('detail.header', function ($q) use ($data) {
-            //             $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
-            //         })
-            //             ->get()->count();
+            ->addColumn('action', function ($data) {
+                $cek = TFProduksiDetail::whereHas('header', function ($q) use ($data) {
+                    $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
+                })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->get();
+                if (count($cek) > 0) {
+                    $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($data) {
+                        $q->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id);
+                    })->whereHas('detail.header', function ($q) use ($data) {
+                        $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
+                    })
+                        ->get()->count();
 
-            //         $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($data) {
-            //             $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
-            //         })->where('gdg_brg_jadi_id', $data->id)->select('qty')->first();
-            //         if ($cek1->qty == $datacek) {
-            //         } else {
-            //             $jml_now = $cek1->qty - $datacek;
-            //             // return $datacek;
-            //             return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $jml_now . '" data-id="' . $data->gudang_barang_jadi_id . '">
-            //                     <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
-            //                     class="fas fa-qrcode"></i> Scan Produk</button>
-            //                     </a>';
-            //         }
-            //     } else {
-            //         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
-            //                     <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
-            //                     class="fas fa-qrcode"></i> Scan Produk</button>
-            //                     </a>';
-            //     }
-            // })
+                    $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($data) {
+                        $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
+                    })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->select('qty')->first();
+                    if ($cek1->qty == $datacek) {
+                    } else {
+                        $jml_now = $cek1->qty - $datacek;
+                        // return $datacek;
+                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $jml_now . '" data-id="' . $data->gudang_barang_jadi_id . '">
+                                <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
+                                class="fas fa-qrcode"></i> Scan Produk</button>
+                                </a>';
+                    }
+                } else {
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
+                                <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
+                                class="fas fa-qrcode"></i> Scan Produk</button>
+                                </a>';
+                }
+            })
             ->addColumn('status', function ($data) {
-                if (isset($data->detailpesananproduk->status_cek)) {
+                if (isset($data->status_cek)) {
                     return '<span class="badge badge-success">Sudah Diinput</span>';
                 } else {
                     return '<span class="badge badge-danger">Belum Diinput</span>';
                 }
             })
-            // ->addColumn('status_prd', function ($d) {
-            //     if (isset($d->detailpesanan->pesanan->log_id)) {
-            //         return '<span class="badge badge-success">' . $d->detailpesanan->pesanan->log->nama . '</span>';
-            //     } else {
-            //         return '<span class="badge badge-danger">Belum dicek</span>';
-            //     }
-            // })
-            // ->addColumn('checkbox', function ($d) {
-            //     $cek = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
-            //         $q->where('pesanan_id', $d->detailpesananproduk->detailpesanan->pesanan->id);
-            //     })->where('gdg_brg_jadi_id', $d->id)->get();
-            //     if (count($cek) > 0) {
-            //         $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
-            //             $q->where('gdg_brg_jadi_id', $d->id);
-            //         })->whereHas('detail.header', function ($q) use ($d) {
-            //             $q->where('pesanan_id', $d->detailpesananproduk->detailpesanan->pesanan->id);
-            //         })
-            //             ->get()->count();
+            ->addColumn('status_prd', function ($d) {
+                if (isset($d->detailpesanan->pesanan->log_id)) {
+                    return '<span class="badge badge-success">' . $d->detailpesanan->pesanan->log->nama . '</span>';
+                } else {
+                    return '<span class="badge badge-danger">Belum dicek</span>';
+                }
+            })
+            ->addColumn('checkbox', function ($d) {
+                $cek = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
+                    $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+                })->where('gdg_brg_jadi_id', $d->gudang_barang_jadi_id)->get();
+                if (count($cek) > 0) {
+                    $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
+                        $q->where('gdg_brg_jadi_id', $d->gudang_barang_jadi_id);
+                    })->whereHas('detail.header', function ($q) use ($d) {
+                        $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+                    })
+                        ->get()->count();
 
-            //         $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
-            //             $q->where('pesanan_id', $d->detailpesananproduk->detailpesanan->pesanan->id);
-            //         })->where('gdg_brg_jadi_id', $d->id)->select('qty')->first();
-            //         if ($cek1->qty == $datacek) {
-            //         } else {
-            //             return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->id . '">';
-            //         }
-            //     } else {
-            //         return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->id . '">';
-            //     }
-            // })
+                    $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($d) {
+                        $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+                    })->where('gdg_brg_jadi_id', $d->gudang_barang_jadi_id)->select('qty')->first();
+                    if ($cek1->qty == $datacek) {
+                    } else {
+                        return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '">';
+                    }
+                } else {
+                    return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '">';
+                }
+            })
             ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids'])
             ->make(true);
     }
@@ -1721,7 +1701,7 @@ class ProduksiController extends Controller
     {
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
-        })->where('waktu_tf', $dd)->where('date_in', $rakit)->get();
+        })->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -1876,8 +1856,8 @@ class ProduksiController extends Controller
         $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy('jadwal_rakit_noseri.date_in')
-            ->groupBy('jadwal_rakit_noseri.waktu_tf')
+            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
             ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
             ->get();
         return datatables()->of($d)
@@ -1912,7 +1892,7 @@ class ProduksiController extends Controller
                 return $d->jml . ' Unit';
             })
             ->addColumn('action', function ($d) {
-                return '<button class="btn btn-outline-secondary detail" data-rakit="' . $d->date_in . '" data-tf="' . $d->waktu_tf . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
+                return '<button class="btn btn-outline-secondary detail" data-rakit="' . Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('Y-m-d H:i') . '" data-tf="' . Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('Y-m-d H:i') . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
             })->addColumn('day_rakit_filter', function ($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('D-MM-Y');
             })->addColumn('day_kirim_filter', function ($d) {
@@ -1947,10 +1927,17 @@ class ProduksiController extends Controller
 
     function test($id)
     {
-        $a = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
-            $q->where('pesanan_id', $id);
-        })->get();
-        return $a;
+        // $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+        //     $q->where('pesanan_id', $id);
+        // })->get();
+        // $detail_id = array();
+        // foreach ($detail_pesanan as $d) {
+        //     $detail_id[] = $d->id;
+        // }
+
+        // $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->sum('DetailPesanan.jumlah')->groupBy('gudang_barang_jadi_id')->get();
+        // return $g;
+        // $a = GudangBarangJadi::whereHas
     }
 
     // gbj

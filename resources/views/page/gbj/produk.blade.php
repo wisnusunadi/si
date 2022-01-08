@@ -350,7 +350,7 @@
 
 <!-- Modal Detail-->
 <div class="modal fade modalViewStock" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -369,7 +369,7 @@
             </div>
             <div class="modal-body">
 
-                <table class="table view-produk">
+                <table class="table view_produk">
                     <thead>
                         <tr>
                             <th>Tanggal Masuk</th>
@@ -768,36 +768,35 @@
                 // "columnDefs": [
                 //     { "width": "5%", "targets": 0},
                 // ],
-                "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
         });
 
         $('.daftar-stok').modal('show');
     });
 
     // modal history
-    $(document).on('focus', '.viewStock', function() {
-        var id = $(this).data('id');
-        $('p#namaa').text(title);
+    $(document).on('click', '.viewStock', function() {
+        var id = $(this).parent().prev().prev().text();
+        let judul_detail = $('#nm_produk').text();
+        $('p#namaa').text(judul_detail);
         console.log(id);
         var i = 0;
-
-        $.ajax({
-            url: '/api/gbj/history/' + id,
-            type: 'get',
-            dataType: 'json',
-            success: function(data) {
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-                $.each(data, function(key, value) {
-                    console.log(value);
-                    $(".view-produk tbody").append("<tr><td>"+new Date(value.created_at).toLocaleDateString('id-ID', options)+"</td><td>"+value.from.nama+"</td></tr>");
-                    // $(".view-produk tbody").append("<tr><td>"+new Date(value[key].created_at).toLocaleDateString()+"</td><td>"+value[key].from.nama+"</td><td>"+value[key].to.nama+"</td></tr>");
-                    // var a = ;
-                });
-                // $(".view-produk tbody").html(a);
-            }
-        })
+        $('.view_produk').DataTable().destroy();
+        $('view_produk tbody').empty();
+        $('.view_produk').DataTable({   
+            destroy: true,
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            processing: true,
+            ajax: {
+                url: '/api/gbj/history/' + id,
+            },
+            columns: [
+                {data: 'tanggal'},
+                {data: 'dari'},
+            ],
+        });
+        
         $('.modalViewStock').modal('show');
     });
 
@@ -876,7 +875,7 @@
         for (let i = 0; i < jumlah; i++) {
             $('.tambah_noseri_table').append(table);
         }
-        $.each(layout, function (index, value) { 
+        $.each(layout, function (index, value) {
              $('.layout_seri').append('<option value="'+value[0]+'">'+value[1]+'</option');
         });
         $('.tambah_noseri_tableee').DataTable({
@@ -896,31 +895,48 @@
     let id = $('.seri_id').val();
     let dari = $('.dari').val();
     let created_by = $('.created_by').val();
-    
+
     $.ajax({
+        url: '/api/gbj/ceknoseri',
         type: 'post',
-        url: '/api/gbj/addSeri',
-        data: {
-            "_token": "{{ csrf_token() }}",
-            no_seri : no_seri,
-            layout: layout,
-            id: id,
-            dari: dari,
-            created_by: created_by,
-        },
+        data: {noseri: no_seri},
         success: function(res) {
-            if (res.success) {
+            if(res.msg) {
+                $.ajax({
+                    type: 'post',
+                    url: '/api/gbj/addSeri',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        no_seri : no_seri,
+                        layout: layout,
+                        id: id,
+                        dari: dari,
+                        created_by: created_by,
+                    },
+                    success: function(res) {
+                        if (res.success) {
+                            Swal.fire(
+                                'Sukses!',
+                                'Data berhasil ditambahkan',
+                                'success'
+                            )
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    }
+                });
+            } else {
                 Swal.fire(
-                    'Sukses!',
-                    'Data berhasil ditambahkan',
-                    'success'
+                    'Oops',
+                    res.error,
+                    'error'
                 )
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
             }
         }
-    });
+    })
+
+
     })
 </script>
 @stop
