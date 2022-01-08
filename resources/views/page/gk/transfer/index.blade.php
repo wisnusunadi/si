@@ -128,7 +128,7 @@
                                         <table class="table table-hover add_sparepart_table">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th style="width: 150px">Nama Produk</th>
+                                                    <th style="width: 300px">Nama Produk</th>
                                                     {{-- <th style="width: 150px">Unit</th> --}}
                                                     <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
@@ -160,7 +160,7 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th style="width: 220px">Nama Produk</th>
-                                                    <th style="width: 180px">Jumlah</th>
+                                                    <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -583,7 +583,7 @@
     function addSparepart(x, y, z) {
 
         console.log('#sparepart_id'+(nmrspr-1));
-        alert($('#sparepart_id'+(nmrspr-1)).find(":selected").text());
+        // alert($('#sparepart_id'+(nmrspr-1)).find(":selected").text());
         xx++;
         $('.jumlah_spr').text(x + ' Unit')
         $('.date_out').text(document.getElementsByName("date_in")[0].value)
@@ -615,13 +615,8 @@
                 {data: 'note'},
                 {data: 'tingkat'},
             ],
-
         });
-
     }
-
-
-
     // Unit
     function addUn(l) {
         var j = $(".btnPlus" + l).parent().prev().children().val();
