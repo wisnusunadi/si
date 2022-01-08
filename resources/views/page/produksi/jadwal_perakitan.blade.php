@@ -477,7 +477,7 @@
                                     text: 'Nomor seri ada yang sama.',
                                 });
                             }
-                            location.reload();
+                            // location.reload();
                         }
                     })
                 }
