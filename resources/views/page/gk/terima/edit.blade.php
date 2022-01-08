@@ -1170,7 +1170,7 @@
                         seriunit: seri_unit,
                     },
                     success: function (res) {
-                        console.log(res); 
+                        console.log(res);
                         Swal.fire(
                             'Rancang!',
                             'Data berhasil diterima!',
@@ -1434,7 +1434,7 @@
                 $('.scan-produk1-edit').DataTable().destroy();
                 $('.scan-produk1-edit-tbody').empty();
                 for (let seri = 0; seri < response.length; seri++) {
-                    $('.scan-produk1-edit-tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].noseri+'" name="noseri[][' + seri +
+                    $('.scan-produk1-edit-tbody').append('<tr id="row' + seri + '"><td><input type="hidden" name="id" value="'+response[seri].id+'" id="serispr'+seri+'"><input type="text" value="'+response[seri].noseri+'" name="noseri[][' + seri +
                                         ']" id="noseri' + seri +
                                         '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
                                             seri + ']" value="'+response[seri].remark+'" id="remark' + seri +
@@ -1471,6 +1471,7 @@
         })
     }
     $(document).on('click','.removesparepartdetail', function () {
+        // console.log('test');
         Swal.fire({
             title: 'Apakah anda yakin?',
             text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -1494,6 +1495,7 @@
         var a = $('.btn_edit'+x).parent().prev().children().find('input.jumlah').val(jumlah);
         console.log(a);
         $('.btn_edit'+x).parent().prev().children().find('input.batas').val(jumlah);
+        // hapus data
     }
 
     // Unit
