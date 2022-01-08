@@ -292,7 +292,7 @@
             }, {
                 data: 'jurusan',
                 orderable: false,
-                searchable: false
+                searchable: true
 
             }, {
                 data: 'ket',

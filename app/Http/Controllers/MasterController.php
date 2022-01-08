@@ -894,6 +894,7 @@ class MasterController extends Controller
         $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
             ->orderby('nama', 'ASC')->whereHas('Provinsi', function ($q) use ($provinsi) {
                 $q->where('id', $provinsi);
+                $q->Orwhere('id', 35);
             })->get();
         echo json_encode($data);
     }
