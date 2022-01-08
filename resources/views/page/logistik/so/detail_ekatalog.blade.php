@@ -475,6 +475,11 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var provinsi = <?php if ($value == "EKAT") {
+                            echo $data->Provinsi->id;
+                        } else {
+                            echo $data->Customer->Provinsi->id;
+                        } ?>;
         var divisi_id = "{{Auth::user()->divisi->id}}";
         var jenis_penjualan = "{{$value}}";
         var today = new Date();
@@ -846,7 +851,7 @@
             }
         })
 
-        function ekspedisi_select() {
+        function ekspedisi_select(id) {
             $('.ekspedisi_id').select2({
                 ajax: {
                     minimumResultsForSearch: 20,
@@ -855,7 +860,7 @@
                     theme: "bootstrap",
                     delay: 250,
                     type: 'GET',
-                    url: '/api/logistik/ekspedisi/select',
+                    url: '/api/logistik/ekspedisi/select/' + id,
                     data: function(params) {
                         return {
                             term: params.term
@@ -876,7 +881,7 @@
                 if ($(this).val() != "") {
                     $('#ekspedisi_id').removeClass('is-invalid');
                     $('#msgekspedisi_id').text("");
-                    if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                    if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                         $('#btnsimpan').removeAttr('disabled');
                     } else {
                         $('#btnsimpan').attr('disabled', true);
@@ -916,7 +921,8 @@
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     detailpesanan(checkedAry, pesanan_id);
-                    ekspedisi_select();
+                    console.log('/api/logistik/so/detail/select/' + checkedAry + '/' + pesanan_id + '/' + jenis_penjualan)
+                    ekspedisi_select(provinsi);
                     $('#tgl_kirim').attr('max', today);
                     // $("#editform").attr("action", href);
                 },
@@ -942,7 +948,7 @@
                 $('#ekspedisi').removeClass('hide');
                 $('#nonekspedisi').addClass('hide');
                 $('#nama_pengirim').val("");
-                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -952,7 +958,7 @@
                 $('#ekspedisi').addClass('hide');
                 $('#nonekspedisi').removeClass('hide');
                 $('.ekspedisi_id').val("");
-                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -965,7 +971,6 @@
             $.ajax({
                 type: "POST",
                 url: '/api/logistik/cek/no_sj/' + val,
-                async: false,
                 dataType: 'json',
                 success: function(data) {
                     hasil = data;
@@ -987,7 +992,7 @@
                 } else {
                     $('#no_invoice').removeClass('is-invalid');
                     $('#msgnoinvoice').text("");
-                    if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                    if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                         $('#btnsimpan').removeAttr('disabled');
                     } else {
                         $('#btnsimpan').attr('disabled', true);
@@ -1004,7 +1009,7 @@
             if ($(this).val() != "") {
                 $('#tgl_kirim').removeClass('is-invalid');
                 $('#msgtgl_kirim').text("");
-                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -1020,7 +1025,7 @@
             if ($(this).val() != "") {
                 $('#nama_pengirim').removeClass('is-invalid');
                 $('#msgnama_pengirim').text("");
-                if (($('#no_invoice').val() != "" && check_no_sj($(this).val()) <= 0) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if ($('#no_invoice').val() != "" && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);

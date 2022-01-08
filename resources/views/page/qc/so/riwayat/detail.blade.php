@@ -63,15 +63,15 @@
                     <div class="form-horizontal">
                         <div class="form-group row">
                             <label for="" class="col-5 align-right col-form-label">Detail Produk</label>
-                            <div class="col-5">
-                                <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
-
-                                </select>
+                            <div class="col-7">
+                                @if(count($res->DetailPesananProduk) <= 1) <label for="" class="col-form-label">{{$res->PenjualanProduk->nama}}</label> @else <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
+                                    </select>
+                                    @endif
                             </div>
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped align-center" id="noseritable">
+                        <table class="table table-hover table-striped align-center" id="noseritable" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th>No</th>

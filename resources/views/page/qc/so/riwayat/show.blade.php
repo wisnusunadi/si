@@ -370,6 +370,8 @@
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
             var penjualan_produk_id = $(this).attr('data-attr');
+            var produk_count = $(this).attr('data-count');
+            var produk_id = $(this).attr('data-produk');
             var id = $(this).attr('data-id');
             $.ajax({
                 url: "/api/qc/so/riwayat/detail_modal/" + id,
@@ -382,8 +384,13 @@
                     $('#detail').html(result).show();
                     console.log("data " + id);
                     // $("#editform").attr("action", href);
+                    if (produk_count <= 1) {
+                        noseritable(produk_id);
+                        console.log('/api/qc/so/riwayat/detail/' + produk_id)
+                    } else {
+                        select_produk(id);
+                    }
 
-                    select_produk(id);
                 },
                 complete: function() {
                     $('#loader').hide();

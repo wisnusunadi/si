@@ -367,6 +367,10 @@ class QcController extends Controller
                 $data[$c]['id'] = $i->id;
                 $data[$c]['so'] = $i->Pesanan->so;
                 $data[$c]['nama_produk'] = $i->PenjualanProduk->nama;
+                $data[$c]['produk_count'] = $i->PenjualanProduk->Produk->count();
+                if ($i->PenjualanProduk->Produk->count() <= 1) {
+                    $data[$c]['produk_id'] = $i->DetailPesananProduk->first()->id;
+                }
                 $data[$c]['tgl_mulai'] = $i->getTanggalUji()->tgl_mulai;
                 $data[$c]['tgl_selesai'] = $i->getTanggalUji()->tgl_selesai;
                 $data[$c]['jumlah'] = $i->jumlah;
@@ -392,7 +396,11 @@ class QcController extends Controller
                 return $data['jumlah'];
             })
             ->addColumn('button', function ($data) {
-                return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" id="detmodal">
+                $produk_id = "";
+                if (isset($data['produk_id'])) {
+                    $produk_id = $data['produk_id'];
+                }
+                return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" data-count="' . $data['produk_count'] . '" data-produk="' . $produk_id . '" id="detmodal">
                     <div><i class="fas fa-search"></i></div>
                 </a>';
             })
