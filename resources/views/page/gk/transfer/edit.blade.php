@@ -1005,7 +1005,7 @@
     $(document).on('click', '.btn-delete', function (e) {
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
-        delete seri[$(this).val()].noseri
+        // delete seri[$(this).val()].noseriv
     });
 
     $(document).ready(function () {
@@ -1106,7 +1106,7 @@
                         },
                     })
                     setTimeout(() => {
-                        location.reload();
+                        window.location.href = "/gk/transfer"
                     }, 1000);
                 } else {
                     Swal.fire(
@@ -1179,7 +1179,7 @@
                     'error'
                 );
                 setTimeout(() => {
-                    location.reload();
+                    window.location.href = "/gk/transfer"
                 }, 1000);
             }
         });
@@ -1211,11 +1211,51 @@
                     'error'
                 );
                 setTimeout(() => {
-                    location.reload();
+                    window.location.href = "/gk/transfer"
                 }, 1000);
             }
         });
     }
+
+    $(document).on('click', '.btn-delete-edit', function (e) {
+        let id = $(this).parent().prev().prev().prev().val();
+        console.log(id);
+        // urutspr++;
+        // console.log($('#kodespr'+urutspr)[0].value);
+        // kodespr = $('#kodespr'+urutspr)[0].value;
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/api/gk/deleteDraftTransfer",
+                    type: "post",
+                    data: { id: id},
+                    success: function(res) {
+                        console.log(res);
+                        Swal.fire(
+                            'Deleted!',
+                            'Your data has been deleted.',
+                            'success'
+                        )
+
+                        // location.reload();
+                    }
+                })
+                $(this).parent().parent().remove();
+                var check = $('tbody.tambah_data tr').length;
+
+            }
+        })
+
+    });
 
     // edit
     function getData() {

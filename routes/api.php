@@ -362,6 +362,7 @@ Route::prefix('/gk')->group(function () {
     Route::post('/updateDraft', [SparepartController::class, 'updateTerima']);
     Route::post('/updateFinal', [SparepartController::class, 'updateTerimaFinal']);
     Route::post('/deleteDraftTerima', [SparepartController::class, 'deleteDraftTerima']);
+    Route::post('/deleteDraftTransfer', [SparepartController::class, 'deleteDraftTransfer']);
     Route::post('/editseri', [SparepartController::class, 'getNoseriEdit']);
     Route::post('/editseriunit', [SparepartController::class, 'getNoseriEditUnit']);
     Route::post('/editseri-out', [SparepartController::class, 'getOutSeriEdit']);
