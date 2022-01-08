@@ -45,7 +45,17 @@
                         <div><small class="text-muted">Nama Produk</small></div>
                         <div><b>{{$res->PenjualanProduk->nama}}</b></div>
                     </div>
+                    @foreach($res->DetailPesananProduk as $z)
+                    @if($z->GudangBarangJadi->nama != "")
+                    <div class="margin">
+                        <div><small class="text-muted">Variasi</small></div>
+                        <div>
+                            <b> {{$z->GudangBarangJadi->nama}}</b>
 
+                        </div>
+                    </div>
+                    @endif
+                    @endforeach
                     <div class="margin">
                         <div><small class="text-muted">No SO</small></div>
                         <div><b>{{$res->Pesanan->so}}</b></div>

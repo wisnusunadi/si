@@ -364,6 +364,7 @@ class QcController extends Controller
         $c = 0;
         foreach ($s as $i) {
             if ($i->getJumlahPesanan() == $i->countNoSeri()) {
+                //     $data[$c]['x'] = $i->DetailPesananProduk->GudangBarangkadiProduk->nama;
                 $data[$c]['id'] = $i->id;
                 $data[$c]['so'] = $i->Pesanan->so;
                 $data[$c]['nama_produk'] = $i->PenjualanProduk->nama;
@@ -404,7 +405,7 @@ class QcController extends Controller
                     <div><i class="fas fa-search"></i></div>
                 </a>';
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'nama_produk'])
             ->make(true);
     }
 
@@ -981,7 +982,15 @@ class QcController extends Controller
                 return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
             })
             ->addColumn('produk', function ($data) {
-                return $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama;
+                if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
+                    $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . '- <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b>';
+                    $datas .= "<div><small>" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . "</small></div>";
+                    return $datas;
+                } else {
+                    $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    $datas .= "<div><small>" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . "</small></div>";
+                    return $datas;
+                }
             })
             ->addColumn('noseri', function ($data) {
                 return $data->NoseriTGbj->NoseriBarangJadi->noseri;
@@ -996,10 +1005,9 @@ class QcController extends Controller
                     return 'Tidak OK';
                 }
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'produk'])
             ->make(true);
     }
-
     public function getHariBatasKontrak($value, $limit)
     {
         if ($limit == 2) {
