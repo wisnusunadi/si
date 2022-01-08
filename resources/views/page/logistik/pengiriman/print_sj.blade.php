@@ -80,7 +80,7 @@
                         <h2>SURAT JALAN</h2>
                     </td>
                     <td class="align-right">
-                        <img src="assets/image/logo/spa_long.png" alt="" class=" imgsize">
+                        <img src="public/assets/image/logo/spa_long.png" alt="" class=" imgsize">
                         <!-- <img src="{{public_path('assets/image/logo/spa_long.png') }}" alt="" class="imgsize"> -->
 
                     </td>
