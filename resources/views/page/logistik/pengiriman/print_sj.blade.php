@@ -66,15 +66,11 @@
         height: auto;
     }
 
-    .imgsize {
-        width: auto;
-        height: 70px;
-    }
+
 
     .back {
-        background-image: url("{{public_path('assets/image/logo/spa_long.png') }}");
-        background-size: 90%;
-        background-repeat: no-repeat;
+        background-image: url("{{public_path('assets/image/background_coo.jpg') }}");
+        background-size: 100%;
     }
 </style>
 <div class="wrapper-page">
