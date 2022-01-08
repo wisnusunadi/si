@@ -1028,7 +1028,7 @@
             var hasil = "";
             $.ajax({
                 type: 'POST',
-                dataType: 'json',
+                dataType: 'JSON',
                 async: false,
                 url: '/api/penjualan/check_no_paket/' + '0/' + values,
                 success: function(data) {

@@ -973,11 +973,7 @@ class QcController extends Controller
                 return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
             })
             ->addColumn('produk', function ($data) {
-                if (!empty($data->DetailPesananProduk->GudangBarangJadi->nama)) {
-                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - ' . $data->DetailPesananProduk->GudangBarangJadi->nama;
-                } else {
-                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
-                }
+                return $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama;
             })
             ->addColumn('noseri', function ($data) {
                 return $data->NoseriTGbj->NoseriBarangJadi->noseri;
