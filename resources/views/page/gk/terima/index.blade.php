@@ -522,7 +522,7 @@
                         // console.log(res);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Oops...',
+                            title: 'Oops...', 
                             text: res.error,
                         })
                     }

@@ -868,7 +868,10 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('qty', function ($data) {
-                return $data->detailpesanan->jumlah . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $data->detailpesanan->jumlah . '">';
+                $s = DetailPesananProduk::where('gudang_barang_jadi_id', $data->gudang_barang_jadi_id)->whereHas('DetailPesanan.Pesanan', function ($q) use($data) {
+                    $q->where('pesanan_id', $data->detailpesanan->pesanan_id);
+                })->get()->count();
+                return $s . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $s . '">';
             })
             ->addColumn('tipe', function ($data) {
                 if (empty($data->gudangbarangjadi->nama)) {
@@ -902,9 +905,13 @@ class ProduksiController extends Controller
                     $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($data) {
                         $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
                     })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->select('qty')->first();
-                    if ($cek1->qty == $datacek) {
+                    $s = DetailPesananProduk::where('gudang_barang_jadi_id', $data->gudang_barang_jadi_id)->whereHas('DetailPesanan.Pesanan', function ($q) use($data) {
+                        $q->where('pesanan_id', $data->detailpesanan->pesanan_id);
+                    })->get()->count();
+                    if ($s == $datacek) {
+
                     } else {
-                        $jml_now = $cek1->qty - $datacek;
+                        $jml_now = $s - $datacek;
                         // return $datacek;
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $jml_now . '" data-id="' . $data->gudang_barang_jadi_id . '">
                                 <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
@@ -912,7 +919,10 @@ class ProduksiController extends Controller
                                 </a>';
                     }
                 } else {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
+                    $s = DetailPesananProduk::where('gudang_barang_jadi_id', $data->gudang_barang_jadi_id)->whereHas('DetailPesanan.Pesanan', function ($q) use($data) {
+                        $q->where('pesanan_id', $data->detailpesanan->pesanan_id);
+                    })->get()->count();
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $s . '" data-id="' . $data->gudang_barang_jadi_id . '">
                                 <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
                                 class="fas fa-qrcode"></i> Scan Produk</button>
                                 </a>';
@@ -957,6 +967,7 @@ class ProduksiController extends Controller
             })
             ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids'])
             ->make(true);
+        // return response()->json($g);
     }
 
     function getEditSO(Request $request, $id, $value)

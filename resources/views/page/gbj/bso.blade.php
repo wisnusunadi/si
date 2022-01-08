@@ -386,6 +386,14 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
         })
+        // testing
+        $.ajax({
+            type: "get",
+            url: "/api/tfp/detail-so/" +id+"/"+x,
+            success: function (response) {
+                console.log(response);
+            }
+        });
         $('#addProdukModal').modal('show');
     });
 
