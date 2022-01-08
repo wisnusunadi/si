@@ -65,6 +65,11 @@
         right: 0px;
         height: auto;
     }
+
+    .imgsize {
+        width: auto;
+        height: 70px;
+    }
 </style>
 <div class="wrapper-page">
     <div class="header">
@@ -75,6 +80,9 @@
                         <h2>SURAT JALAN</h2>
                     </td>
                     <td class="align-right">
+                        <img src="{{url('/image/logo/spa_long.png')}}" alt="" class="imgsize">
+                        <!-- <img src="{{public_path('assets/image/logo/spa_long.png') }}" alt="" class="imgsize"> -->
+
                     </td>
                 </tr>
             </tbody>
