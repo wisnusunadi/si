@@ -58,6 +58,7 @@
                             <label for="dari">Dari</label>
                             <input type="hidden" name="dari" id="darii">
                             <select class="form-control dari" name="dari" id="dari" disabled>
+                            <select class="form-control dari" name="darii" id="dari" hidden>
                             </select>
                         </div>
                     </div>
@@ -686,7 +687,7 @@
         $('.spr').text(testing[1]);
         $('.jml_spr').text(x + ' Pcs')
         $('.in_spr').text(document.getElementsByName("date_in")[0].value)
-        $('.divisi_spr').text(document.getElementsByName("dari")[0].selectedOptions[0].label)
+        // $('.divisi_spr').text(document.getElementsByName("darii")[0].selectedOptions[0].label)
         $('.modalAddSparepart').modal('show');
         $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ','+z+','+x+')');
         $('.modalAddSparepart').on('shown.bs.modal', function () {
