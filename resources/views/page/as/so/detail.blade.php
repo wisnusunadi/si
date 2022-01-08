@@ -198,7 +198,7 @@
                                         </div>
                                         <div class="margin">
                                             <div><small class="text-muted">Batas Pengiriman</small></div>
-                                            <div class="urgent"><b></b></div>
+                                            <div><b>{{$d->pesanan->Ekatalog->tgl_kontrak}}</b></div>
                                         </div>
                                     </div>
 

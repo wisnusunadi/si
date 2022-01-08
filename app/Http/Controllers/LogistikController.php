@@ -101,8 +101,12 @@ class LogistikController extends Controller
                 })
                 ->make(true);
         } else {
+
             if ($detail_produk == '0') {
-                $data = DetailPesananPart::DoesntHave('DetailLogistikPart')->where('pesanan_id', $pesanan_id)->get();
+                $poid = Pesanan::whereHas('Spb', function ($q) use ($pesanan_id) {
+                    $q->where('id', $pesanan_id);
+                })->first();
+                $data = DetailPesananPart::doesntHave('DetailLogistikPart')->where('pesanan_id', $poid->id)->get();
             } else {
                 $data = DetailPesananPart::whereIN('id', $x)->get();
             }
@@ -1288,6 +1292,20 @@ class LogistikController extends Controller
             ->addColumn('button', function ($data) {
                 $string = "";
                 $name = "";
+
+                $provinsi = "";
+                if (isset($data->DetailLogistik)) {
+                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                    if ($name[1] == 'EKAT') {
+                        $provinsi =  $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->id;
+                    } elseif ($name[1] == 'SPA') {
+                        $provinsi =  $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->id;
+                    }
+                } else if (isset($data->DetailLogistikPart)) {
+                    $provinsi =  $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->Provinsi->id;
+                }
+
+
                 if (isset($data->DetailLogistik)) {
                     $names = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     $name = $names[1];
@@ -1303,7 +1321,7 @@ class LogistikController extends Controller
                         </button>
                     </a>';
                 if (auth()->user()->divisi_id == "15") {
-                    $string .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-href="' . route('logistik.pengiriman.edit', [$data->id, $name]) . '" data-id="' . $data->id . '" data-attr="' . $name . '">
+                    $string .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-href="' . route('logistik.pengiriman.edit', [$data->id, $name]) . '" data-id="' . $data->id . '" data-attr="' . $name . '" data-provinsi="' . $provinsi . '">
                         <button class="dropdown-item" type="button">
                             <i class="fas fa-pencil-alt"></i>
                             Edit
@@ -2133,17 +2151,14 @@ class LogistikController extends Controller
             return view('page.logistik.so.create', ['id' => $id, 'id_produk' => $id_produk, 'jenis' => $jenis]);
         } else {
             if ($detail_pesanan_id == "0") {
+                $array_id = array();
                 $datas = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
                 foreach ($datas as $i) {
-                    if (!isset($i->DetailLogistikPart)) {
-                        $array_id[] = $i->id;
+                    if (isset($i->DetailLogistikPart)) {
+                        echo $i->id;
+                        $value[$a]['id'] = $i->id;
+                        $a++;
                     }
-                }
-
-                foreach ($array_id as $d) {
-                    $value[$a]['id'] = $d;
-                    $count = 0;
-                    $a++;
                 }
 
                 $id =  json_encode($value);
