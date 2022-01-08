@@ -20,7 +20,7 @@
         width: auto;
         padding: 5px;
         margin-top: 5px;
-        border: 1px solid #FFCC83; 
+        border: 1px solid #FFCC83;
         background-color: #FEF7EA;
         color: #ff9e17;
         font-size: 14px;
@@ -341,6 +341,7 @@
         $('.modalRakit').modal('show');
         $('.scan-produk tbody').empty();
         id = $(this).data('id');
+        console.log(id);
         prd = $(this).data('prd');
         jumlah = $(this).data('jml');
         $.ajax({
@@ -358,10 +359,10 @@
             }
         })
         $('.scan').empty();
-        tableModal(prd)
+        tableModal(prd, id)
     });
 
-    function tableModal(prd) {
+    function tableModal(prd, jadwal) {
         var table = $('.scan-produk').DataTable({
             'destroy': true,
             'info': false,
@@ -371,7 +372,7 @@
             "autoWidth": false,
             ordering: false,
             "lengthChange": false,
-            ajax: "/api/prd/detailSeri1/" + prd,
+            ajax: "/api/prd/detailSeri1/" + prd +'/'+jadwal,
             columns: [
                 {data: "no_seri"},
                 {data: "no_seri"}
@@ -406,7 +407,7 @@
 
                     var rows_selected = table.column(0).checkboxes.selected();
                     const seri = [];
-                    
+
                     $.each(rows_selected, function (index, rowId) {
                         seri.push(rowId);
                     });
@@ -433,10 +434,10 @@
                             }, 1000);
                         }
                     })
-                    
+
                 }
             })
-       
+
     });
     }
 </script>

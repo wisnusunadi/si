@@ -1726,11 +1726,11 @@ class ProduksiController extends Controller
             ->make(true);
     }
 
-    function detailSeri1($id)
+    function detailSeri1($id, $jadwal)
     {
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
-        })->whereNull('waktu_tf')->get();
+        })->whereNull('waktu_tf')->where('jadwal_id', $jadwal)->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
