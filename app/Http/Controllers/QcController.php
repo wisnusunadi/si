@@ -193,6 +193,7 @@ class QcController extends Controller
             ->addColumn('button', function ($data) use ($x) {
                 $id = $data->gudang_barang_jadi_id;
                 $pesanan_id = $data->DetailPesanan->pesanan_id;
+
                 $ok = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id, $x) {
                     $q->where([
                         ['gudang_barang_jadi_id', '=', $id],
@@ -205,7 +206,8 @@ class QcController extends Controller
                         ['status', '=', 'nok']
                     ])->whereIn('detail_pesanan_id', $x);
                 })->get()->count();
-                $jumlah = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+
+                $jumlahditrf = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
                     $q->where('gdg_brg_jadi_id', $id);
                 })->whereHas('detail.header', function ($q) use ($pesanan_id) {
                     $q->where('pesanan_id', $pesanan_id);
@@ -213,8 +215,8 @@ class QcController extends Controller
 
                 $bool = "0";
 
-                if ($jumlah > 0) {
-                    if ($jumlah == $ok) {
+                if ($jumlahditrf > 0) {
+                    if ($jumlahditrf == $ok) {
                         return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
                     } else {
                         return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
