@@ -87,14 +87,14 @@
                                 <div class="row align-items-center">
                                     <div class="col-lg-9 col-xl-8">
                                         <div class="row align-items-center">
-                                            <div class="col-md-3 my-2 my-md-0">
+                                            <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
                                                     <input type="text" name="" id="datetimepicker1"
                                                         class="form-control">
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 my-2 my-md-0">
+                                            <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Dari / Ke</label>
                                                     <select name="" id="divisi" class="form-control">
@@ -102,7 +102,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 my-2 my-md-0">
+                                            <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Jenis Produk</label>
                                                     <select name="" id="jenis" class="form-control">

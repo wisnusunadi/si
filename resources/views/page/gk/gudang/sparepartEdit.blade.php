@@ -241,7 +241,7 @@
         dropdownParent: $('.changeStatus')
     });
     var id = $('#id').val();
-    console.log(id);
+
     $('.table_edit_sparepart').dataTable({
         destroy: true,
         "paging": true,
@@ -281,7 +281,6 @@
     var id = '';
     $(document).on('click', '.detailModal', function() {
         id = $(this).data('id');
-        console.log(id);
 
         $.ajax({
             url: "/api/gk/noseri/" + id,
