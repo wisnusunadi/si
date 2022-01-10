@@ -344,7 +344,7 @@ class GudangController extends Controller
 
         $data = TFProduksiDetail::whereHas('header', function ($q) {
             $q->where('dari', 17);
-        })->with('produk', 'header')->get()->sortByDesc('header.tgl_masuk');
+        })->with('produk', 'header')->whereNull('status_id')->get()->sortByDesc('header.tgl_masuk');
         // $data = TFProduksiDetail::whereHas('header', function($q) {
         //     $q->where('dari', 17);
         // })->groupBy('gdg_brg_jadi_id')->get();
