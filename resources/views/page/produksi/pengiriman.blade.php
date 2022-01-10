@@ -411,7 +411,8 @@
                     $.each(rows_selected, function (index, rowId) {
                         seri.push(rowId);
                     });
-                    Swal.fire(
+                    if (seri.length > 0) {
+                        Swal.fire(
                         'Success!',
                         'Data Terkirim ke Gudang Barang Jadi',
                         'success'
@@ -434,7 +435,14 @@
                             }, 1000);
                         }
                     })
-
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            'Tidak ada data yang dipilih',
+                            'error'
+                        )
+                    }
+                    
                 }
             })
 

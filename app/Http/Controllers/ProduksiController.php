@@ -1691,7 +1691,7 @@ class ProduksiController extends Controller
             }
 
             $d = JadwalPerakitan::find($request->jadwal_id);
-            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->where('status', 14)->get()->count();
+            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
             if ($d->jumlah == $jj) {
                 $d->status_tf = 15;
                 $d->filled_by = $request->userid;
@@ -1809,7 +1809,7 @@ class ProduksiController extends Controller
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
         $now = intval($total_rakit->jumlah - $sdh_terkirim);
         // return $now - count($request->noseri);
-        if ($now == count($request->noseri)) {
+        if ($now == $total_rakit->jumlah) {
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
