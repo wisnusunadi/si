@@ -280,7 +280,6 @@ class QcController extends Controller
                     if ($data->getJumlahPesanan() == $data->getJumlahCekSeri()) {
                         return  '-';
                     } else {
-
                         $tgl_sekarang = Carbon::now()->format('Y-m-d');
                         $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
 
