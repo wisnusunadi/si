@@ -65,16 +65,26 @@
         right: 0px;
         height: auto;
     }
+
+
+
+    .back {
+        background-image: url("{{public_path('assets/image/spa_long.jpg') }}");
+        background-size: 100%;
+        background-repeat: no-repeat;
+
+    }
 </style>
 <div class="wrapper-page">
-    <div class="header">
+    <div class="header ">
         <table border="0" style="border-collapse: collapse; text-align:center;" class="table" width="100%">
             <tbody style="border-bottom: 1px solid;">
                 <tr>
                     <td style="width:370px;">
                         <h2>SURAT JALAN</h2>
                     </td>
-                    <td class="align-right">
+                    <td class="align-right back">
+
                     </td>
                 </tr>
             </tbody>

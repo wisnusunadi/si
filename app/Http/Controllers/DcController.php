@@ -479,15 +479,23 @@ class DcController extends Controller
                 if ($coo == 0) {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '">
+                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="0">
                             <i class="fas fa-eye"></i>
                             Detail
                         </a>
                     </div>';
                 } else {
+                    $count_trf = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+
+                    if ($count_trf == $coo) {
+                        $c = 0;
+                    } else {
+                        $c = 1;
+                    }
+
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '">
+                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="' . $c . '">
                             <i class="fas fa-eye"></i>
                             Detail
                         </a>
@@ -592,7 +600,7 @@ class DcController extends Controller
     {
         $array_seri = explode(',', $id);
         if ($id == 0) {
-            $data =  NoseriDetailLogistik::where('detail_logistik_id', $value)->get();
+            $data =  NoseriDetailLogistik::DoesntHave('NoseriCoo')->where('detail_logistik_id', $value)->get();
         } else {
             $data =  NoseriDetailLogistik::whereIN('id', $array_seri)->get();
         }

@@ -40,7 +40,7 @@
                                         <th>No SO</th>
                                         <th>Tanggal Order</th>
                                         <th>Tanggal Delivery</th>
-                                        <th>Stok</th>
+                                        <th>Jumlah</th>
                                     </tr>
                                 </thead>
                                 <tbody>

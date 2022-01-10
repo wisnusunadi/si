@@ -20,7 +20,7 @@
         width: auto;
         padding: 5px;
         margin-top: 5px;
-        border: 1px solid #FFCC83; 
+        border: 1px solid #FFCC83;
         background-color: #FEF7EA;
         color: #ff9e17;
         font-size: 14px;
@@ -304,16 +304,8 @@
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
             table.draw();
         });
+
     })
-
-
-    function modalRakit() {
-        $('.modalRakit').modal('show');
-        $("#head-cb").on('click', function () {
-            var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
-        });
-    }
     function transfer() {
         Swal.fire({
             title: "Apakah anda yakin?",
@@ -342,11 +334,16 @@
     var id = '';
     var prd = '';
     var jml = '';
+
+
+
     $(document).on('click', '.detailmodal', function() {
+        $('.modalRakit').modal('show');
+        $('.scan-produk tbody').empty();
         id = $(this).data('id');
+        console.log(id);
         prd = $(this).data('prd');
         jumlah = $(this).data('jml');
-
         $.ajax({
             url: "/api/prd/headerSeri/" + id,
             type: "get",
@@ -361,14 +358,21 @@
                 $('span#end').text(res.end);
             }
         })
+        $('.scan').empty();
+        tableModal(prd, id)
+    });
 
+    function tableModal(prd, jadwal) {
         var table = $('.scan-produk').DataTable({
-            destroy: true,
-            ordering: false,
-            "autoWidth": false,
+            'destroy': true,
+            'info': false,
+            paging: true,
+            retrieve: false,
             processing: true,
+            "autoWidth": false,
+            ordering: false,
             "lengthChange": false,
-            ajax: "/api/prd/detailSeri1/" + prd,
+            ajax: "/api/prd/detailSeri1/" + prd +'/'+jadwal,
             columns: [
                 {data: "no_seri"},
                 {data: "no_seri"}
@@ -377,7 +381,7 @@
                 {
                     targets: [0],
                     checkboxes: {
-                        selectRow: true,
+                        selectRow: false,
                     },
                     width: "5%"
                 },
@@ -388,14 +392,6 @@
         });
         $('#form-scan').on('submit', function (e) {
         e.preventDefault();
-        var form = $(this);
-
-        var rows_selected = table.column(0).checkboxes.selected();
-        const seri = [];
-
-        $.each(rows_selected, function (index, rowId) {
-            seri.push(rowId);
-        });
 
         Swal.fire({
             title: 'Are you sure?',
@@ -407,6 +403,14 @@
             confirmButtonText: 'Yes, Transfer it'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    var form = $(this);
+
+                    var rows_selected = table.column(0).checkboxes.selected();
+                    const seri = [];
+
+                    $.each(rows_selected, function (index, rowId) {
+                        seri.push(rowId);
+                    });
                     Swal.fire(
                         'Success!',
                         'Data Terkirim ke Gudang Barang Jadi',
@@ -425,15 +429,16 @@
                         },
                         success: function(res) {
                             console.log(res);
-                            location.reload();
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
                         }
                     })
-                    
+
                 }
             })
-       
+
     });
-        modalRakit();
-    });
+    }
 </script>
 @stop

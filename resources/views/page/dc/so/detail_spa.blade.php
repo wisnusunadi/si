@@ -438,6 +438,15 @@
 
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
+            var datacount = $(this).attr('data-count');
+            console.log(datacount);
+            if (datacount == 0) {
+                // $('.sericheckbox').addClass("hide");
+                $('#noseritable').DataTable().column(0).visible(false);
+            } else {
+                // $('.sericheckbox').removeClass("hide");
+                $('#noseritable').DataTable().column(0).visible(true);
+            }
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseri').removeClass('hide');

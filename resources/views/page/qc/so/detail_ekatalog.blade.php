@@ -451,6 +451,7 @@
             var data = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
             $('.nosericheck').prop('checked', false);
+            console.log(datacount);
             if (datacount == 0) {
                 // $('.sericheckbox').addClass("hide");
                 $('#noseritable').DataTable().column(0).visible(false);

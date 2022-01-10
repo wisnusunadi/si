@@ -58,6 +58,7 @@
                             <label for="dari">Dari</label>
                             <input type="hidden" name="dari" id="darii">
                             <select class="form-control dari" name="dari" id="dari" disabled>
+                            <select class="form-control dari" name="darii" id="dari" hidden>
                             </select>
                         </div>
                     </div>
@@ -175,7 +176,7 @@
                                 <label for="">Unit</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body">
-                                        Unit 1
+                                        -
                                     </div>
                                 </div>
                             </div>
@@ -259,7 +260,7 @@
                                 <label for="">Unit</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body edit_unit">
-                                        Unit 1
+                                        -
                                     </div>
                                 </div>
                             </div>
@@ -464,7 +465,8 @@
 @section('adminlte_js')
 <script>
     var kodee = $('#kode').val();
-
+    var sparepart = [];
+    var unit = [];
     $.ajax({
         url: '/api/gbj/sel-divisi',
         type: 'GET',
@@ -475,6 +477,30 @@
                     '</option');
             });
         }
+    });
+    $(document).ready(function () {
+        $.ajax({
+            url: '/api/gk/sel-spare',
+            type: 'POST',
+            dataType: 'json',
+            success: function (res) {
+                $.each(res, function (key, value) {
+                sparepart.push([value.id, value.nama]);
+            });
+            }
+        });
+
+        $.ajax({
+            url: '/api/gbj/sel-gbj',
+            type: 'get',
+            dataType: 'json',
+            success: function (res) {
+                // ii++;
+                $.each(res, function (key, value) {
+                    unit.push([value.id, value.produk.nama + ' ' + value.nama]);
+                });
+            }
+        });
     });
     $(document).on('click', '.pluss', function (e) {
         e.preventDefault();
@@ -657,6 +683,11 @@
 
     function addSparepart(x, y, z) {
         console.log('jumlah '+ x);
+        let testing = sparepart.find(element => element[0] == z);
+        $('.spr').text(testing[1]);
+        $('.jml_spr').text(x + ' Pcs')
+        $('.in_spr').text(document.getElementsByName("date_in")[0].value)
+        // $('.divisi_spr').text(document.getElementsByName("darii")[0].selectedOptions[0].label)
         $('.modalAddSparepart').modal('show');
         $('.modalAddSparepart').find('#btnSeri').attr('onclick', 'clickSparepart(' + y + ','+z+','+x+')');
         $('.modalAddSparepart').on('shown.bs.modal', function () {
@@ -915,9 +946,11 @@
     var kodespr = '';
     var urutspr = 0;
     $(document).on('click', '.btn-delete-edit', function (e) {
-        urutspr++;
-        console.log($('#kodespr'+urutspr)[0].value);
-        kodespr = $('#kodespr'+urutspr)[0].value;
+        let id = $(this).parent().prev().prev().prev().val();
+        console.log(id);
+        // urutspr++;
+        // console.log($('#kodespr'+urutspr)[0].value);
+        // kodespr = $('#kodespr'+urutspr)[0].value;
 
         Swal.fire({
             title: 'Are you sure?',
@@ -932,7 +965,7 @@
                 $.ajax({
                     url: "/api/gk/deleteDraftTerima",
                     type: "post",
-                    data: { id: kodespr},
+                    data: { id: id},
                     success: function(res) {
                         console.log(res);
                         Swal.fire(
@@ -941,7 +974,7 @@
                             'success'
                         )
 
-                        location.reload();
+                        // location.reload();
                     }
                 })
                 $(this).parent().parent().remove();
@@ -1055,7 +1088,9 @@
                             'Data berhasil diterima!',
                             'success'
                         );
-                        window.location.href = "/gk/terimaProduk";
+                        setTimeout(() => {
+                            window.location.href = "/gk/terimaProduk"
+                        }, 1000);
                     },
                 })
 
@@ -1141,7 +1176,9 @@
                             'Data berhasil diterima!',
                             'success'
                         );
-                        location.reload();
+                        setTimeout(() => {
+                            window.location.href = "/gk/terimaProduk"
+                        }, 1000);
                     },
                 })
 
@@ -1170,12 +1207,18 @@
                     'Data berhasil dibatalkan!',
                     'success'
                 );
+                setTimeout(() => {
+                            location.reload();
+                        }, 1000);
             } else {
                 Swal.fire(
                     'Batal!',
                     'Data tidak berhasil dibatalkan!',
                     'error'
                 );
+                setTimeout(() => {
+                            location.reload();
+                        }, 1000);
             }
         });
     }
@@ -1391,7 +1434,7 @@
                 $('.scan-produk1-edit').DataTable().destroy();
                 $('.scan-produk1-edit-tbody').empty();
                 for (let seri = 0; seri < response.length; seri++) {
-                    $('.scan-produk1-edit-tbody').append('<tr id="row' + seri + '"><td><input type="text" value="'+response[seri].noseri+'" name="noseri[][' + seri +
+                    $('.scan-produk1-edit-tbody').append('<tr id="row' + seri + '"><td><input type="hidden" name="id" value="'+response[seri].id+'" id="serispr'+seri+'"><input type="text" value="'+response[seri].noseri+'" name="noseri[][' + seri +
                                         ']" id="noseri' + seri +
                                         '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
                                             seri + ']" value="'+response[seri].remark+'" id="remark' + seri +
@@ -1428,6 +1471,7 @@
         })
     }
     $(document).on('click','.removesparepartdetail', function () {
+        // console.log('test');
         Swal.fire({
             title: 'Apakah anda yakin?',
             text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -1451,6 +1495,7 @@
         var a = $('.btn_edit'+x).parent().prev().children().find('input.jumlah').val(jumlah);
         console.log(a);
         $('.btn_edit'+x).parent().prev().children().find('input.batas').val(jumlah);
+        // hapus data
     }
 
     // Unit

@@ -45,15 +45,24 @@
                         <div><small class="text-muted">Nama Produk</small></div>
                         <div><b>{{$res->PenjualanProduk->nama}}</b></div>
                     </div>
+                    @if(count($res->DetailPesananProduk) <= 1) @if($res->DetailPesananProduk->first()->GudangBarangJadi->nama != "")
+                        <div class="margin">
+                            <div><small class="text-muted">Variasi</small></div>
+                            <div>
+                                <b> {{$res->DetailPesananProduk->first()->GudangBarangJadi->nama}} </b>
 
-                    <div class="margin">
-                        <div><small class="text-muted">No SO</small></div>
-                        <div><b>{{$res->Pesanan->so}}</b></div>
-                    </div>
-                    <div class="margin">
-                        <div><small class="text-muted">Jumlah</small></div>
-                        <div><b>{{$res->jumlah}}</b></div>
-                    </div>
+                            </div>
+                        </div>
+                        @endif
+                        @endif
+                        <div class="margin">
+                            <div><small class="text-muted">No SO</small></div>
+                            <div><b>{{$res->Pesanan->so}}</b></div>
+                        </div>
+                        <div class="margin">
+                            <div><small class="text-muted">Jumlah</small></div>
+                            <div><b>{{$res->jumlah}}</b></div>
+                        </div>
                 </div>
             </div>
         </div>
@@ -63,15 +72,17 @@
                     <div class="form-horizontal">
                         <div class="form-group row">
                             <label for="" class="col-5 align-right col-form-label">Detail Produk</label>
-                            <div class="col-5">
-                                <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
-
-                                </select>
+                            <div class="col-7">
+                                @if(count($res->DetailPesananProduk) <= 1) <label for="" class="col-form-label">{{$res->PenjualanProduk->nama}}
+                                    @if($res->DetailPesananProduk->first()->GudangBarangJadi->nama != "") - {{$res->DetailPesananProduk->first()->GudangBarangJadi->nama}} @endif</label>
+                                    @else <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
+                                    </select>
+                                    @endif
                             </div>
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped align-center" id="noseritable">
+                        <table class="table table-hover table-striped align-center" id="noseritable" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th>No</th>

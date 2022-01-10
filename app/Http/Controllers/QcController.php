@@ -193,6 +193,7 @@ class QcController extends Controller
             ->addColumn('button', function ($data) use ($x) {
                 $id = $data->gudang_barang_jadi_id;
                 $pesanan_id = $data->DetailPesanan->pesanan_id;
+
                 $ok = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id, $x) {
                     $q->where([
                         ['gudang_barang_jadi_id', '=', $id],
@@ -205,7 +206,8 @@ class QcController extends Controller
                         ['status', '=', 'nok']
                     ])->whereIn('detail_pesanan_id', $x);
                 })->get()->count();
-                $jumlah = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+
+                $jumlahditrf = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
                     $q->where('gdg_brg_jadi_id', $id);
                 })->whereHas('detail.header', function ($q) use ($pesanan_id) {
                     $q->where('pesanan_id', $pesanan_id);
@@ -213,8 +215,8 @@ class QcController extends Controller
 
                 $bool = "0";
 
-                if ($jumlah > 0) {
-                    if ($jumlah == $ok) {
+                if ($jumlahditrf > 0) {
+                    if ($jumlahditrf == $ok) {
                         return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
                     } else {
                         return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
@@ -364,9 +366,14 @@ class QcController extends Controller
         $c = 0;
         foreach ($s as $i) {
             if ($i->getJumlahPesanan() == $i->countNoSeri()) {
+                //     $data[$c]['x'] = $i->DetailPesananProduk->GudangBarangkadiProduk->nama;
                 $data[$c]['id'] = $i->id;
                 $data[$c]['so'] = $i->Pesanan->so;
                 $data[$c]['nama_produk'] = $i->PenjualanProduk->nama;
+                $data[$c]['produk_count'] = $i->PenjualanProduk->Produk->count();
+                if ($i->PenjualanProduk->Produk->count() <= 1) {
+                    $data[$c]['produk_id'] = $i->DetailPesananProduk->first()->id;
+                }
                 $data[$c]['tgl_mulai'] = $i->getTanggalUji()->tgl_mulai;
                 $data[$c]['tgl_selesai'] = $i->getTanggalUji()->tgl_selesai;
                 $data[$c]['jumlah'] = $i->jumlah;
@@ -392,11 +399,15 @@ class QcController extends Controller
                 return $data['jumlah'];
             })
             ->addColumn('button', function ($data) {
-                return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" id="detmodal">
+                $produk_id = "";
+                if (isset($data['produk_id'])) {
+                    $produk_id = $data['produk_id'];
+                }
+                return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" data-count="' . $data['produk_count'] . '" data-produk="' . $produk_id . '" id="detmodal">
                     <div><i class="fas fa-search"></i></div>
                 </a>';
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'nama_produk'])
             ->make(true);
     }
 
@@ -973,7 +984,25 @@ class QcController extends Controller
                 return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
             })
             ->addColumn('produk', function ($data) {
-                return $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama;
+                if (count($data->DetailPesananProduk->DetailPesanan->PenjualanProduk->Produk) > 1) {
+                    if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
+                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b> ';
+                        $datas .= "<div><small>(" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . ")</small></div>";
+                        return $datas;
+                    } else {
+                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . " ";
+                        $datas .= "<div><small>(" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . ")</small></div>";
+                        return $datas;
+                    }
+                } else {
+                    if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
+                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b> ';
+                        return $datas;
+                    } else {
+                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . " ";
+                        return $datas;
+                    }
+                }
             })
             ->addColumn('noseri', function ($data) {
                 return $data->NoseriTGbj->NoseriBarangJadi->noseri;
@@ -988,10 +1017,9 @@ class QcController extends Controller
                     return 'Tidak OK';
                 }
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'produk'])
             ->make(true);
     }
-
     public function getHariBatasKontrak($value, $limit)
     {
         if ($limit == 2) {

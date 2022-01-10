@@ -77,8 +77,8 @@
                 <div class="card mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"
-                                alt="...">
+                            {{-- <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"
+                                alt="..."> --}}
                         </div>
                         <div class="col-md-8">
                             <div class="card-body ml-5">
@@ -230,6 +230,8 @@
 @section('adminlte_js')
 <script>
      var id = $('#id').val();
+     var value = $(this).data('jenis');
+     console.log(value);
 
     console.log(id);
 

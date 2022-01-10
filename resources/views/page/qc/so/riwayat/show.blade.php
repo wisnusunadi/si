@@ -190,45 +190,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>CMS-600 PLUS + PRINTER + LINEAR PROBE + TROLLEY + UPS</td>
-                                                <td>26-10-2021</td>
-                                                <td>29-10-2021</td>
-                                                <td>2</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
-                                                <td>28-10-2021</td>
-                                                <td>30-10-2021</td>
-                                                <td>1</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>ELITECH ULTRASONIC POCKET DOPPLER</td>
-                                                <td>29-10-2021</td>
-                                                <td>29-10-2021</td>
-                                                <td>1</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -370,6 +332,8 @@
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
             var penjualan_produk_id = $(this).attr('data-attr');
+            var produk_count = $(this).attr('data-count');
+            var produk_id = $(this).attr('data-produk');
             var id = $(this).attr('data-id');
             $.ajax({
                 url: "/api/qc/so/riwayat/detail_modal/" + id,
@@ -382,8 +346,13 @@
                     $('#detail').html(result).show();
                     console.log("data " + id);
                     // $("#editform").attr("action", href);
+                    if (produk_count <= 1) {
+                        noseritable(produk_id);
+                        console.log('/api/qc/so/riwayat/detail/' + produk_id)
+                    } else {
+                        select_produk(id);
+                    }
 
-                    select_produk(id);
                 },
                 complete: function() {
                     $('#loader').hide();

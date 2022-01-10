@@ -522,7 +522,7 @@
                         // console.log(res);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Oops...',
+                            title: 'Oops...', 
                             text: res.error,
                         })
                     }
@@ -940,12 +940,14 @@
                     },
                     success: function (res) {
                         console.log(res);
-                        // Swal.fire(
-                        //     'Terima!',
-                        //     'Data berhasil diterima!',
-                        //     'success'
-                        // )
-                        // location.reload();
+                        Swal.fire(
+                            'Terima!',
+                            'Data berhasil diterima!',
+                            'success'
+                        )
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     },
                 })
 
@@ -955,6 +957,9 @@
                     'Data tidak berhasil diterima!',
                     'error'
                 )
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             }
         });
     }
@@ -1015,12 +1020,14 @@
                     },
                     success: function (res) {
                         console.log(res);
-                        // Swal.fire(
-                        //     'Rancang!',
-                        //     'Data berhasil diterima!',
-                        //     'success'
-                        // );
-                        // location.reload();
+                        Swal.fire(
+                            'Rancang!',
+                            'Data berhasil diterima!',
+                            'success'
+                        );
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     },
                 })
 
@@ -1049,12 +1056,18 @@
                     'Data berhasil dibatalkan!',
                     'success'
                 );
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             } else {
                 Swal.fire(
                     'Batal!',
                     'Data tidak berhasil dibatalkan!',
                     'error'
                 );
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             }
         });
     }

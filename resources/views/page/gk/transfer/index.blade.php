@@ -128,7 +128,7 @@
                                         <table class="table table-hover add_sparepart_table">
                                             <thead class="thead-dark">
                                                 <tr>
-                                                    <th style="width: 150px">Nama Produk</th>
+                                                    <th style="width: 300px">Nama Produk</th>
                                                     {{-- <th style="width: 150px">Unit</th> --}}
                                                     <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
@@ -160,7 +160,7 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th style="width: 220px">Nama Produk</th>
-                                                    <th style="width: 180px">Jumlah</th>
+                                                    <th style="width: 150px">Jumlah</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -255,7 +255,7 @@
                                             <th>Tingkat Kerusakan</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="scan_produk_tbody">
                                     </tbody>
                                 </table>
                             </div>
@@ -581,9 +581,8 @@
     }
     var xx = 0;
     function addSparepart(x, y, z) {
-
         console.log('#sparepart_id'+(nmrspr-1));
-        alert($('#sparepart_id'+(nmrspr-1)).find(":selected").text());
+        // alert($('#sparepart_id'+(nmrspr-1)).find(":selected").text());
         xx++;
         $('.jumlah_spr').text(x + ' Unit')
         $('.date_out').text(document.getElementsByName("date_in")[0].value)
@@ -615,13 +614,24 @@
                 {data: 'note'},
                 {data: 'tingkat'},
             ],
-
         });
-
+        setTimeout(() => {
+            let panjang_table1 = $('.scan-produk1 input.cb-child').length;
+            console.log(panjang_table1);
+            if (x > panjang_table1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddSparepart').modal('hide');
+                    }
+                })
+            }
+        }, 800);
     }
-
-
-
     // Unit
     function addUn(l) {
         var j = $(".btnPlus" + l).parent().prev().children().val();
@@ -743,7 +753,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Melebihi Batas Maksimal'
+                        text: 'Melebihi Batas Maksimal '
                     })
                 } else {
                     uids.push($(this).val());
@@ -801,8 +811,24 @@
                 {data: 'note'},
                 {data: 'tingkat'},
             ],
-
         });
+
+        setTimeout(() => {
+            let panjang_table2 = $('.scan-produk input.cb-unit').length;
+            console.log(panjang_table2);
+            if (x > panjang_table2) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddUnit').modal('hide');
+                    }
+                })
+            }
+        }, 800);
     }
 
     $.ajax({

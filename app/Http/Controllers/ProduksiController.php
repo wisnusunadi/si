@@ -185,53 +185,52 @@ class ProduksiController extends Controller
                 } else {
                     // return 'insert';
                     foreach ($request->data as $key => $value) {
-                    $dd = new TFProduksiDetail();
-                    $dd->t_gbj_id = $a->id;
-                    $dd->gdg_brg_jadi_id = $key;
-                    $dd->qty = $value['jumlah'];
-                    $dd->jenis = 'keluar';
-                    $dd->status_id = 2;
-                    $dd->state_id = 8;
-                    $dd->created_at = Carbon::now();
-                    $dd->created_by = $request->userid;
-                    $dd->save();
+                        $dd = new TFProduksiDetail();
+                        $dd->t_gbj_id = $a->id;
+                        $dd->gdg_brg_jadi_id = $key;
+                        $dd->qty = $value['jumlah'];
+                        $dd->jenis = 'keluar';
+                        $dd->status_id = 2;
+                        $dd->state_id = 8;
+                        $dd->created_at = Carbon::now();
+                        $dd->created_by = $request->userid;
+                        $dd->save();
 
-                    $did = $dd->id;
-                    $checked = $request->noseri_id;
-                    foreach ($value['noseri'] as $k => $v) {
-                        $nn = new NoseriTGbj();
-                        $nn->t_gbj_detail_id = $did;
-                        $nn->noseri_id = $v;
-                        $nn->status_id = 2;
-                        $nn->state_id = 8;
-                        $nn->jenis = 'keluar';
-                        $nn->created_at = Carbon::now();
-                        $nn->created_by = $request->userid;
-                        $nn->save();
+                        $did = $dd->id;
+                        $checked = $request->noseri_id;
+                        foreach ($value['noseri'] as $k => $v) {
+                            $nn = new NoseriTGbj();
+                            $nn->t_gbj_detail_id = $did;
+                            $nn->noseri_id = $v;
+                            $nn->status_id = 2;
+                            $nn->state_id = 8;
+                            $nn->jenis = 'keluar';
+                            $nn->created_at = Carbon::now();
+                            $nn->created_by = $request->userid;
+                            $nn->save();
 
-                        NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                            NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                        }
+
+                        $gdg = GudangBarangJadi::whereIn('id', [$key])->get()->toArray();
+                        $i = 0;
+                        foreach ($gdg as $vv) {
+                            $vv['stok'] = $vv['stok'] - $value['jumlah'];
+                            print_r($vv['stok']);
+                            $i++;
+                            GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                            GudangBarangJadiHis::create([
+                                'gdg_brg_jadi_id' => $vv['id'],
+                                'stok' => $value['jumlah'],
+                                'tgl_masuk' => Carbon::now(),
+                                'jenis' => 'KELUAR',
+                                'created_by' => $request->userid,
+                                'created_at' => Carbon::now(),
+                                'ke' => 23,
+                                'tujuan' => $request->deskripsi,
+                            ]);
+                        }
                     }
-
-                    $gdg = GudangBarangJadi::whereIn('id', [$key])->get()->toArray();
-                    $i = 0;
-                    foreach ($gdg as $vv) {
-                        $vv['stok'] = $vv['stok'] - $value['jumlah'];
-                        print_r($vv['stok']);
-                        $i++;
-                        GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-                        GudangBarangJadiHis::create([
-                            'gdg_brg_jadi_id' => $vv['id'],
-                            'stok' => $value['jumlah'],
-                            'tgl_masuk' => Carbon::now(),
-                            'jenis' => 'KELUAR',
-                            'created_by' => $request->userid,
-                            'created_at' => Carbon::now(),
-                            'ke' => 23,
-                            'tujuan' => $request->deskripsi,
-                        ]);
-                    }
-                }
-
                 }
             }
         } else {
@@ -273,7 +272,6 @@ class ProduksiController extends Controller
                     $nn->save();
 
                     NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
-
                 }
 
                 $gdg = GudangBarangJadi::whereIn('id', [$key])->get()->toArray();
@@ -295,7 +293,6 @@ class ProduksiController extends Controller
                     ]);
                 }
             }
-
         }
 
         $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
@@ -315,7 +312,7 @@ class ProduksiController extends Controller
         } elseif ($now == $jumlah_kirim) {
             // Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
         } else {
-            Pesanan::find($request->pesanan_id)->update(['log_id' => 9]);
+            Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);
         }
 
         return response()->json(['msg' => 'Data Terkirim ke QC']);
@@ -469,7 +466,13 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
+                    if ($d->Ekatalog->Provinsi->status == 1) {
+                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                    }
+
+                    if ($d->Ekatalog->Provinsi->status == 2) {
+                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                    }
                 } else {
                     return '-';
                 }
@@ -556,9 +559,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->where('log_id', 9)->get());
-        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->get());
-        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereIn('log_id', [9,6])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereIn('log_id', [9,6])->get());
+        $Spb = collect(Pesanan::has('Spb')->whereIn('log_id', [9,6])->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -592,7 +595,13 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
+                    if ($d->Ekatalog->Provinsi->status == 1) {
+                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                    }
+
+                    if ($d->Ekatalog->Provinsi->status == 2) {
+                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                    }
                 } else {
                     return '-';
                 }
@@ -714,12 +723,10 @@ class ProduksiController extends Controller
                         return $data->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
                         return $data->Spb->Customer->nama;
-                    } else {
-
-                    }
+                    } else { }
                 }
 
-                if(empty($data->so)) {
+                if (empty($data->so)) {
                     return $data->Ekatalog->Customer->nama;
                 }
             })
@@ -807,7 +814,7 @@ class ProduksiController extends Controller
                     }
                 }
 
-                if(empty($d->so)) {
+                if (empty($d->so)) {
                     return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
                         <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
                     </a>';
@@ -819,7 +826,6 @@ class ProduksiController extends Controller
 
     function getDetailSO(Request $request, $id, $value)
     {
-
         if ($value == "ekatalog") {
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
@@ -829,7 +835,7 @@ class ProduksiController extends Controller
                 $detail_id[] = $d->id;
             }
 
-            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->groupBy('gudang_barang_jadi_id')->get();
         } else if ($value == "spa") {
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
@@ -839,7 +845,7 @@ class ProduksiController extends Controller
                 $detail_id[] = $d->id;
             }
 
-            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->groupBy('gudang_barang_jadi_id')->get();
         } else if ($value == "spb") {
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
@@ -849,7 +855,7 @@ class ProduksiController extends Controller
                 $detail_id[] = $d->id;
             }
 
-            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+            $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->groupBy('gudang_barang_jadi_id')->get();
         }
 
         return datatables()->of($g)
@@ -862,7 +868,15 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('qty', function ($data) {
-                return $data->detailpesanan->jumlah . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $data->detailpesanan->jumlah . '">';
+                $s = DetailPesananProduk::where('gudang_barang_jadi_id', $data->gudang_barang_jadi_id)
+                ->withCount(['DetailPesanan as pesanan_sum' => function($qq) {
+                    $qq->select(DB::raw('sum(jumlah)'));
+                }])
+                ->whereHas('DetailPesanan.Pesanan', function ($q) use($data) {
+                    $q->where('pesanan_id', $data->detailpesanan->pesanan_id);
+                })->get()->sum('pesanan_sum');
+                // return $s;
+                return $s . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $s . '">';
             })
             ->addColumn('tipe', function ($data) {
                 if (empty($data->gudangbarangjadi->nama)) {
@@ -896,9 +910,17 @@ class ProduksiController extends Controller
                     $cek1 = TFProduksiDetail::whereHas('header', function ($q) use ($data) {
                         $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
                     })->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id)->select('qty')->first();
-                    if ($cek1->qty == $datacek) {
+                    $s = DetailPesananProduk::where('gudang_barang_jadi_id', $data->gudang_barang_jadi_id)
+                        ->withCount(['DetailPesanan as pesanan_sum' => function($qq) {
+                            $qq->select(DB::raw('sum(jumlah)'));
+                        }])
+                        ->whereHas('DetailPesanan.Pesanan', function ($q) use($data) {
+                            $q->where('pesanan_id', $data->detailpesanan->pesanan_id);
+                        })->get()->sum('pesanan_sum');
+                    if ($s == $datacek) {
+
                     } else {
-                        $jml_now = $cek1->qty - $datacek;
+                        $jml_now = $s - $datacek;
                         // return $datacek;
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $jml_now . '" data-id="' . $data->gudang_barang_jadi_id . '">
                                 <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
@@ -906,7 +928,14 @@ class ProduksiController extends Controller
                                 </a>';
                     }
                 } else {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $data->detailpesanan->jumlah . '" data-id="' . $data->gudang_barang_jadi_id . '">
+                    $s = DetailPesananProduk::where('gudang_barang_jadi_id', $data->gudang_barang_jadi_id)
+                    ->withCount(['DetailPesanan as pesanan_sum' => function($qq) {
+                        $qq->select(DB::raw('sum(jumlah)'));
+                    }])
+                    ->whereHas('DetailPesanan.Pesanan', function ($q) use($data) {
+                        $q->where('pesanan_id', $data->detailpesanan->pesanan_id);
+                    })->get()->sum('pesanan_sum');
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $s . '" data-id="' . $data->gudang_barang_jadi_id . '">
                                 <button class="btn btn-primary disabled" data-toggle="modal" data-target=".modal-scan" disabled><i
                                 class="fas fa-qrcode"></i> Scan Produk</button>
                                 </a>';
@@ -951,6 +980,7 @@ class ProduksiController extends Controller
             })
             ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids'])
             ->make(true);
+        // return response()->json($g);
     }
 
     function getEditSO(Request $request, $id, $value)
@@ -1580,7 +1610,7 @@ class ProduksiController extends Controller
                 $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
                 $c = count($seri);
                 if ($c != $d->jumlah) {
-                    return  $d->jumlah . ' ' . $d->produk->satuan->nama .'<br><span class="badge badge-dark">Terisi ' . intval($c) . ' Unit</span>';
+                    return  $d->jumlah . ' ' . $d->produk->satuan->nama . '<br><span class="badge badge-dark">Terisi ' . intval($c) . ' Unit</span>';
                 } else {
                     return  $d->jumlah . ' ' . $d->produk->satuan->nama;
                 }
@@ -1607,7 +1637,6 @@ class ProduksiController extends Controller
                         <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
                     </a>';
                 }
-
             })
             ->addColumn('status', function ($d) {
                 $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
@@ -1662,7 +1691,7 @@ class ProduksiController extends Controller
             }
 
             $d = JadwalPerakitan::find($request->jadwal_id);
-            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
+            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->where('status', 14)->get()->count();
             if ($d->jumlah == $jj) {
                 $d->status_tf = 15;
                 $d->filled_by = $request->userid;
@@ -1698,7 +1727,7 @@ class ProduksiController extends Controller
     {
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
-        })->where('waktu_tf', $dd)->where('date_in', $rakit)->get();
+        })->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -1710,11 +1739,11 @@ class ProduksiController extends Controller
             ->make(true);
     }
 
-    function detailSeri1($id)
+    function detailSeri1($id, $jadwal)
     {
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
-        })->whereNull('waktu_tf')->get();
+        })->whereNull('waktu_tf')->where('jadwal_id', $jadwal)->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -1771,10 +1800,10 @@ class ProduksiController extends Controller
         }
 
         // rubah logic
-        $sdh_terkirim = JadwalRakitNoseri::whereHas('header', function($q) use ($request) {
+        $sdh_terkirim = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
             $q->where('produk_id', $request->gbj_id);
         })->where('status', 14)->get()->count();
-        $blm_terkirim = JadwalRakitNoseri::whereHas('header', function($q) use ($request) {
+        $blm_terkirim = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
             $q->where('produk_id', $request->gbj_id);
         })->where('status', 11)->get()->count();
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
@@ -1784,12 +1813,12 @@ class ProduksiController extends Controller
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
-        } elseif($now == $blm_terkirim) {
+        } elseif ($now == $blm_terkirim) {
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
         } else {
-            $total_rakit->status_tf = 14;
+            $total_rakit->status_tf = 13;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
         }
@@ -1853,10 +1882,10 @@ class ProduksiController extends Controller
         $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy('jadwal_rakit_noseri.date_in')
-            ->groupBy('jadwal_rakit_noseri.waktu_tf')
+            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
             ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-            ->get();
+            ->get()->sortByDesc('date_in');
         return datatables()->of($d)
             ->addColumn('day_rakit', function ($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
@@ -1889,7 +1918,7 @@ class ProduksiController extends Controller
                 return $d->jml . ' Unit';
             })
             ->addColumn('action', function ($d) {
-                return '<button class="btn btn-outline-secondary detail" data-rakit="' . $d->date_in . '" data-tf="' . $d->waktu_tf . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
+                return '<button class="btn btn-outline-secondary detail" data-rakit="' . Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('Y-m-d H:i') . '" data-tf="' . Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('Y-m-d H:i') . '" data-jml="' . $d->jml . '" data-id="' . $d->produk_id . '"><i class="far fa-eye"></i> Detail</button>';
             })->addColumn('day_rakit_filter', function ($d) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('D-MM-Y');
             })->addColumn('day_kirim_filter', function ($d) {
@@ -1924,10 +1953,17 @@ class ProduksiController extends Controller
 
     function test($id)
     {
-        $a = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use($id) {
-            $q->where('pesanan_id', $id);
-        })->get();
-        return $a;
+        // $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+        //     $q->where('pesanan_id', $id);
+        // })->get();
+        // $detail_id = array();
+        // foreach ($detail_pesanan as $d) {
+        //     $detail_id[] = $d->id;
+        // }
+
+        // $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->sum('DetailPesanan.jumlah')->groupBy('gudang_barang_jadi_id')->get();
+        // return $g;
+        // $a = GudangBarangJadi::whereHas
     }
 
     // gbj

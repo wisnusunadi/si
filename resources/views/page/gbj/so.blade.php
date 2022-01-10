@@ -129,7 +129,7 @@
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             <th>Tipe</th>
-                                            <th>Merk</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -208,7 +208,6 @@
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             <th>Tipe</th>
-                                            <th>Merk</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -302,7 +301,6 @@
                 { data: 'qty', name: 'qty'},
                 { data: 'merk', name: 'merk'},
                 { data: 'status', name: 'status'},
-
             ],
             'select': {
                 'style': 'multi'
@@ -314,8 +312,11 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+        // tab.column(2).data().sum();
+        $('#addProdukModal').modal('show');
+    })
 
-        $(document).on('click', '#btnSave', function(e) {
+    $(document).on('click', '#btnSave', function(e) {
             e.preventDefault();
             const ids = [];
 
@@ -324,7 +325,7 @@
                     ids.push($(this).val());
                 }
             })
-
+            // console.log(ids);
             Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -350,6 +351,7 @@
                         },
                         success: function(res) {
                             location.reload();
+                            console.log(res);
                         }
                     })
                 }
@@ -359,8 +361,6 @@
 
             console.log(ids);
         })
-        $('#addProdukModal').modal('show');
-    })
 
     $(document).on('click', '.detailmodal', function(e) {
         var x = $(this).data('value');
@@ -389,7 +389,6 @@
             columns: [
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
-                { data: 'tipe', name: 'tipe'},
                 { data: 'merk', name: 'merk'},
                 { data: 'status', name: 'status'},
             ],

@@ -171,6 +171,8 @@ Route::prefix('/gbj')->group(function () {
     Route::post('noseri/{id}', [GudangController::class, 'storeNoseri']);
     Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
     Route::post('ubahseri', [GudangController::class, 'updateSeriLayout']);
+    Route::post('addSeri', [GudangController::class, 'addSeri']);
+    Route::post('readyseri', [GudangController::class, 'cekReadySeri']);
 });
 
 Route::prefix('/draft')->group(function () {
@@ -302,7 +304,7 @@ Route::prefix('/prd')->group(function () {
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
     Route::get('/historySeri/{id}/{value}/{value2}', [ProduksiController::class, 'historySeri']);
-    Route::get('/detailSeri1/{id}', [ProduksiController::class, 'detailSeri1']);
+    Route::get('/detailSeri1/{id}/{value}', [ProduksiController::class, 'detailSeri1']);
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
 
@@ -360,6 +362,7 @@ Route::prefix('/gk')->group(function () {
     Route::post('/updateDraft', [SparepartController::class, 'updateTerima']);
     Route::post('/updateFinal', [SparepartController::class, 'updateTerimaFinal']);
     Route::post('/deleteDraftTerima', [SparepartController::class, 'deleteDraftTerima']);
+    Route::post('/deleteDraftTransfer', [SparepartController::class, 'deleteDraftTransfer']);
     Route::post('/editseri', [SparepartController::class, 'getNoseriEdit']);
     Route::post('/editseriunit', [SparepartController::class, 'getNoseriEditUnit']);
     Route::post('/editseri-out', [SparepartController::class, 'getOutSeriEdit']);
@@ -489,7 +492,7 @@ Route::prefix('/logistik')->group(function () {
     });
     Route::group(['prefix' => '/ekspedisi'], function () {
         // Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
-        Route::get('select', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
+        Route::get('select/{provinsi}', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
         Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_ekspedisi']);
         // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });
