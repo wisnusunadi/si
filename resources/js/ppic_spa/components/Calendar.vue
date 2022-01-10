@@ -461,8 +461,8 @@ export default {
         title: item.title,
         start: item.start,
         end: this.addOneDay(item.end),
-        backgroundColor: item.warna,
-        borderColor: item.warna,
+        backgroundColor: item.backgroundColor,
+        borderColor: item.borderColor,
       }));
     },
   },
