@@ -1674,6 +1674,20 @@ class ProduksiController extends Controller
         ]);
     }
 
+    function cekDuplicateNoseri(Request $request) {
+        $noseri = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
+        $data = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get()->count();
+        $seri = [];
+        if ($data > 0) {
+            foreach ($noseri as $item) {
+                array_push($seri, $item->noseri);
+            }
+            return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true]);
+        } else {
+            return response()->json(['msg' => 'Success', 'error' => false]);
+        }
+    }
+
     function storeRakitNoseri(Request $request)
     {
         $cek_seri = JadwalRakitNoseri::where('noseri', $request->noseri)->get();

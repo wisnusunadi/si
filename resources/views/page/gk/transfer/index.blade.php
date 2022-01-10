@@ -578,12 +578,6 @@
                         })
                         // $('.modalAddSparepart').modal('hide');
                     }
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Pilih Noseri dahulu'
-                    })
                 }
             })
 
@@ -626,22 +620,24 @@
                 {data: 'tingkat'},
             ],
         });
-        // setTimeout(() => {
-        //     let panjang_table1 = $('.scan-produk1 input.cb-child').length;
-        //     console.log(panjang_table1);
-        //     if (x > panjang_table1) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Oops...',
-        //             text: 'Melebihi Batas Maksimal atau Data Kosong'
-        //         }).then((result) => {
-        //         /* Read more about isConfirmed, isDenied below */
-        //         if (result.isConfirmed) {
-        //             $('.modalAddSparepart').modal('hide');
-        //             }
-        //         })
-        //     }
-        // }, 800);
+
+        setTimeout(() => {
+            let panjang_table1 = $('.scan-produk1 input.cb-child').length;
+            console.log(panjang_table1);
+            if (x > panjang_table1) {
+                // $('#btnSeri').prop('disabled', true);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddSparepart').modal('hide');
+                    }
+                })
+            } 
+        }, 800);
     }
     // Unit
     function addUn(l) {

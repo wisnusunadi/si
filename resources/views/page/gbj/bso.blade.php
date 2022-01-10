@@ -551,14 +551,14 @@ var jml = '';
                             console.log(res);
                         }
                     })
-                    // Swal.fire(
-                    //     'Success!',
-                    //     'Data Terkirim ke QC',
-                    //     'success'
-                    // )
-                    // setTimeout(() => {
-                    //     location.reload();
-                    // }, 1000);
+                    Swal.fire(
+                        'Success!',
+                        'Data Terkirim ke QC',
+                        'success'
+                    )
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 }
             });
 

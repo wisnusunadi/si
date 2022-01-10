@@ -377,11 +377,20 @@ class GudangController extends Controller
 
             })
             ->addColumn('action', function ($d) {
-                $seri = NoseriTGbj::where('t_gbj_detail_id', $d->id)->get();
-                $seri_final = NoseriTGbj::where('t_gbj_detail_id', $d->id)->where('status_id', 3)->get();
-                $cc = count(($seri_final));
-                $c = count($seri);
-                if ($cc == $c) {
+                $seri_done = NoseriTGbj::whereHas('detail', function($q) use($d) {
+                    $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
+                    $q->whereHas('header', function($a) use($d) {
+                        $a->where('tgl_masuk', $d->header->tgl_masuk);
+                    });
+                })->where('state_id', 16)->get()->count();
+
+                $seri = NoseriTGbj::whereHas('detail', function($q) use($d) {
+                    $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
+                    $q->whereHas('header', function($a) use($d) {
+                        $a->where('tgl_masuk', $d->header->tgl_masuk);
+                    });
+                })->get()->count();
+                if ($seri == $seri_done) {
                     return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produk->produk->nama . '" data-var="' . $d->produk->nama . '" data-attr=""  data-id="' . $d->id . '" data-tgl="'.$d->header->tgl_masuk.'" data-brgid="'.$d->gdg_brg_jadi_id.'">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
