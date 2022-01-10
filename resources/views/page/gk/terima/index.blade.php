@@ -481,7 +481,9 @@
                 type: "post",
                 data: {noseri:data},
                 success: function(res) {
-                    if(res.msg) {
+                    console.log(res);
+                    if(res.error == undefined) {
+                        // console.log('ok');
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
@@ -519,10 +521,11 @@
                             // $('.modalAddSparepart').modal('hide');
                         })
                     } else {
+                        // console.log('not');
                         // console.log(res);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Oops...', 
+                            title: 'Oops...',
                             text: res.error,
                         })
                     }

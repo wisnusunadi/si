@@ -49,6 +49,10 @@ class GudangBarangJadi extends Model
             ->withPivot('jumlah');
     }
 
+    function TrxProduk() {
+        return $this->hasOne(TFProduksiDetail::class, 'gdg_brg_jadi_id');
+    }
+
     public function getJumlahPermintaanPesanan($jenis, $status)
     {
         $jumlah = 0;

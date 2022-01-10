@@ -185,6 +185,8 @@
         var id = $(this).data('id');
         var nama = $(this).data('produk');
         var tipe = $(this).data('var');
+        var tgl = $(this).data('tgl');
+        var brgid = $(this).data('brgid');
         console.log(id);
         $('span#title').text(nama.concat(' ', tipe));
 
@@ -197,7 +199,7 @@
             stateSave: true,
             'bPaginate': true,
             ajax: {
-                url: '/api/tfp/rakit-terima/' + id,
+                url: '/api/tfp/rakit-terima/' + brgid + '/' + tgl,
             },
             columns: [{
                     data: 'checkbox'
@@ -239,7 +241,9 @@
         var id = $(this).data('id');
         var nama = $(this).data('produk');
         var tipe = $(this).data('var');
-        console.log(id);
+        var tgl = $(this).data('tgl');
+        var brgid = $(this).data('brgid');
+        console.log(tgl);
         $('span#titlee').text(nama.concat(' ', tipe));
 
         $('.table-seri').DataTable().destroy();
@@ -248,7 +252,7 @@
             serverSide: true,
             autoWidth: false,
             ajax: {
-                url: '/api/tfp/rakit-noseri/' + id,
+                url: '/api/tfp/rakit-noseri/' + brgid + '/' + tgl,
             },
             columns: [{
                     data: 'noserii'
@@ -328,7 +332,7 @@
                                 'success'
                             )
                             $('.terima-produk').modal('hide');
-                            location.reload();
+                            // location.reload();
                         } else {
                             Swal.fire(
                                 'Gagal!',

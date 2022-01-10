@@ -314,7 +314,7 @@
             processing: true,
             destroy: true,
             ajax: {
-                url: '/api/tfp/data-so', 
+                url: '/api/tfp/data-so',
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -551,14 +551,14 @@ var jml = '';
                             console.log(res);
                         }
                     })
-                    Swal.fire(
-                        'Success!',
-                        'Data Terkirim ke QC',
-                        'success'
-                    )
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
+                    // Swal.fire(
+                    //     'Success!',
+                    //     'Data Terkirim ke QC',
+                    //     'success'
+                    // )
+                    // setTimeout(() => {
+                    //     location.reload();
+                    // }, 1000);
                 }
             });
 

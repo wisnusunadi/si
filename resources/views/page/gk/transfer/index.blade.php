@@ -430,8 +430,8 @@
     var ii = 0;
     var kk = 0;
 
-    const seri = {};
-    const seri_unit = {};
+    let seri = {};
+    let seri_unit = {};
     let spr_arr = [];
     let unit_arr = [];
 
@@ -552,31 +552,42 @@
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
+            seri = {"id": d, "jumlah": e, "noseri": []};
+            spr_arr.push(seri);
+            // spr_arr = [];
             const ids = [];
             $('.cb-child').each(function() {
-            if($(this).is(":checked")) {
-                // cek validasi
-                if ($('.cb-child').filter(':checked').length > e) {
+                if($(this).is(":checked")) {
+                    // cek validasi
+                    if ($('.cb-child').filter(':checked').length > e) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Melebihi Batas Maksimal'
+                        })
+                    } else {
+                        ids.push($(this).val());
+                        seri.noseri = ids;
+                        // console.log(seri);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Nomor seri tersimpan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        // $('.modalAddSparepart').modal('hide');
+                    }
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Melebihi Batas Maksimal'
+                        text: 'Pilih Noseri dahulu'
                     })
-                } else {
-                    ids.push($(this).val());
-                    seri[d] = ids;
-                    console.log(seri);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Nomor seri tersimpan',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    $('.modalAddSparepart').modal('hide');
-                }
                 }
             })
+
+            console.log(spr_arr);
         }
     }
     var xx = 0;
@@ -615,22 +626,22 @@
                 {data: 'tingkat'},
             ],
         });
-        setTimeout(() => {
-            let panjang_table1 = $('.scan-produk1 input.cb-child').length;
-            console.log(panjang_table1);
-            if (x > panjang_table1) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Melebihi Batas Maksimal atau Data Kosong'
-                }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    $('.modalAddSparepart').modal('hide');
-                    }
-                })
-            }
-        }, 800);
+        // setTimeout(() => {
+        //     let panjang_table1 = $('.scan-produk1 input.cb-child').length;
+        //     console.log(panjang_table1);
+        //     if (x > panjang_table1) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Oops...',
+        //             text: 'Melebihi Batas Maksimal atau Data Kosong'
+        //         }).then((result) => {
+        //         /* Read more about isConfirmed, isDenied below */
+        //         if (result.isConfirmed) {
+        //             $('.modalAddSparepart').modal('hide');
+        //             }
+        //         })
+        //     }
+        // }, 800);
     }
     // Unit
     function addUn(l) {
