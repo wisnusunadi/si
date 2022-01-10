@@ -1642,6 +1642,7 @@ class PenjualanController extends Controller
                         }
                     }
                 } else if ($request->jenis_penj == 'semua') {
+
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $dspa = DetailPesanan::create([
                             'pesanan_id' => $x,
@@ -1665,14 +1666,12 @@ class PenjualanController extends Controller
                         }
                     }
 
-
-
-                    for ($i = 0; $i < count($request->part_id); $i++) {
+                    for ($k = 0; $k < count($request->part_id); $k++) {
                         $dspb = DetailPesananPart::create([
                             'pesanan_id' => $x,
-                            'm_sparepart_id' => $request->part_id[$i],
-                            'jumlah' => $request->part_jumlah[$i],
-                            'harga' => str_replace('.', "", $request->part_harga[$i]),
+                            'm_sparepart_id' => $request->part_id[$k],
+                            'jumlah' => $request->part_jumlah[$k],
+                            'harga' => str_replace('.', "", $request->part_harga[$k]),
                             'ongkir' => 0,
                         ]);
                         if (!$dspb) {
