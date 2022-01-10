@@ -9,8 +9,8 @@
         <th rowspan="2"><b>Keterangan</b></th>
         <th rowspan="2"><b>Noseri</b></th>
         <th rowspan="2"><b>Catatan</b></th>
-        <th rowspan="2"><b>Tingkat Kerusakan</b></th>
         <th rowspan="2"><b>Layout</b></th>
+        <th rowspan="2"><b>Tingkat Kerusakan</b></th>
     </tr>
     <tr>
         <th><b>Masuk</b></th>

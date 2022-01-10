@@ -983,14 +983,24 @@ class QcController extends Controller
                 return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
             })
             ->addColumn('produk', function ($data) {
-                if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
-                    $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . '- <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b>';
-                    $datas .= "<div><small>" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . "</small></div>";
-                    return $datas;
+                if (count($data->DetailPesananProduk->DetailPesanan->PenjualanProduk->Produk) > 1) {
+                    if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
+                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b> ';
+                        $datas .= "<div><small>(" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . ")</small></div>";
+                        return $datas;
+                    } else {
+                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . " ";
+                        $datas .= "<div><small>(" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . ")</small></div>";
+                        return $datas;
+                    }
                 } else {
-                    $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
-                    $datas .= "<div><small>" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . "</small></div>";
-                    return $datas;
+                    if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
+                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b> ';
+                        return $datas;
+                    } else {
+                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . " ";
+                        return $datas;
+                    }
                 }
             })
             ->addColumn('noseri', function ($data) {

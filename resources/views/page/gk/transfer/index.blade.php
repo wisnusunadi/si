@@ -255,7 +255,7 @@
                                             <th>Tingkat Kerusakan</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="scan_produk_tbody">
                                     </tbody>
                                 </table>
                             </div>
@@ -581,7 +581,6 @@
     }
     var xx = 0;
     function addSparepart(x, y, z) {
-
         console.log('#sparepart_id'+(nmrspr-1));
         // alert($('#sparepart_id'+(nmrspr-1)).find(":selected").text());
         xx++;
@@ -616,6 +615,22 @@
                 {data: 'tingkat'},
             ],
         });
+        setTimeout(() => {
+            let panjang_table1 = $('.scan-produk1 input.cb-child').length;
+            console.log(panjang_table1);
+            if (x > panjang_table1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddSparepart').modal('hide');
+                    }
+                })
+            }
+        }, 800);
     }
     // Unit
     function addUn(l) {
@@ -738,7 +753,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Melebihi Batas Maksimal'
+                        text: 'Melebihi Batas Maksimal '
                     })
                 } else {
                     uids.push($(this).val());
@@ -796,8 +811,24 @@
                 {data: 'note'},
                 {data: 'tingkat'},
             ],
-
         });
+
+        setTimeout(() => {
+            let panjang_table2 = $('.scan-produk input.cb-unit').length;
+            console.log(panjang_table2);
+            if (x > panjang_table2) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddUnit').modal('hide');
+                    }
+                })
+            }
+        }, 800);
     }
 
     $.ajax({

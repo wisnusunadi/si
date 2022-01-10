@@ -45,25 +45,24 @@
                         <div><small class="text-muted">Nama Produk</small></div>
                         <div><b>{{$res->PenjualanProduk->nama}}</b></div>
                     </div>
-                    @foreach($res->DetailPesananProduk as $z)
-                    @if($z->GudangBarangJadi->nama != "")
-                    <div class="margin">
-                        <div><small class="text-muted">Variasi</small></div>
-                        <div>
-                            <b> {{$z->GudangBarangJadi->nama}}</b>
+                    @if(count($res->DetailPesananProduk) <= 1) @if($res->DetailPesananProduk->first()->GudangBarangJadi->nama != "")
+                        <div class="margin">
+                            <div><small class="text-muted">Variasi</small></div>
+                            <div>
+                                <b> {{$res->DetailPesananProduk->first()->GudangBarangJadi->nama}} </b>
 
+                            </div>
                         </div>
-                    </div>
-                    @endif
-                    @endforeach
-                    <div class="margin">
-                        <div><small class="text-muted">No SO</small></div>
-                        <div><b>{{$res->Pesanan->so}}</b></div>
-                    </div>
-                    <div class="margin">
-                        <div><small class="text-muted">Jumlah</small></div>
-                        <div><b>{{$res->jumlah}}</b></div>
-                    </div>
+                        @endif
+                        @endif
+                        <div class="margin">
+                            <div><small class="text-muted">No SO</small></div>
+                            <div><b>{{$res->Pesanan->so}}</b></div>
+                        </div>
+                        <div class="margin">
+                            <div><small class="text-muted">Jumlah</small></div>
+                            <div><b>{{$res->jumlah}}</b></div>
+                        </div>
                 </div>
             </div>
         </div>
@@ -74,7 +73,9 @@
                         <div class="form-group row">
                             <label for="" class="col-5 align-right col-form-label">Detail Produk</label>
                             <div class="col-7">
-                                @if(count($res->DetailPesananProduk) <= 1) <label for="" class="col-form-label">{{$res->PenjualanProduk->nama}}</label> @else <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
+                                @if(count($res->DetailPesananProduk) <= 1) <label for="" class="col-form-label">{{$res->PenjualanProduk->nama}}
+                                    @if($res->DetailPesananProduk->first()->GudangBarangJadi->nama != "") - {{$res->DetailPesananProduk->first()->GudangBarangJadi->nama}} @endif</label>
+                                    @else <select class="select form-control detail_produk" name="detail_produk" id="detail_produk">
                                     </select>
                                     @endif
                             </div>

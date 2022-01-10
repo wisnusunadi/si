@@ -770,6 +770,23 @@
                 {data: 'tingkat'},
             ],
         });
+
+        setTimeout(() => {
+            let panjang_table1 = $('.scan-produk1 input.cb-child').length;
+            console.log(panjang_table1);
+            if (x > panjang_table1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddSparepart').modal('hide');
+                    }
+                })
+            }
+        }, 800);
     }
 
     // Unit
@@ -937,6 +954,23 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+
+        setTimeout(() => {
+            let panjang_table2 = $('.scan-produk input.cb-unit').length;
+            console.log(panjang_table2);
+            if (x > panjang_table2) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddSparepart').modal('hide');
+                    }
+                })
+            }
+        }, 800);
     }
 
     function transfer() {
@@ -1338,7 +1372,8 @@
 
     function clickSparepartEdit(c, d, e) {
         // console.log(e);
-        console.log(kode);
+        console.log("test");
+        console.log(c);
         var tableScan = $('.scan-produk1-edit').dataTable({
             "destroy": true,
             "ordering": false,
@@ -1474,9 +1509,8 @@
     }
 
     function editSparepart(x, y, z) {
-        console.log('jumlah ' + x);
-        console.log($('#kode').val());
-        console.log(z);
+        console.log("test");
+        console.log(x);
         $('.modalAddSparepartEdit').modal('show');
         $('.modalAddSparepartEdit').find('#btnSeriEdit').attr('onclick', 'clickSparepartEdit(' + y + ',' + z + ',' + x + ')');
         $('.modalAddSparepartEdit').on('shown.bs.modal', function () {
@@ -1506,6 +1540,23 @@
                 {data: 'tingkat'},
             ]
         });
+
+        setTimeout(() => {
+            let panjang_table1 = $('.scan-produk1-edit input.cb-child').length;
+            console.log(panjang_table1);
+            if (x > panjang_table1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddSparepart').modal('hide');
+                    }
+                })
+            }
+        }, 800);
     }
 
     // Unit
@@ -1701,6 +1752,23 @@
                 {data: 'tingkat'},
             ]
         });
+
+        setTimeout(() => {
+            let panjang_table2 = $('.scan-produk-edit input.cb-unit').length;
+            console.log(panjang_table2);
+            if (x > panjang_table2) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Melebihi Batas Maksimal atau Data Kosong'
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $('.modalAddUnitEdit').modal('hide');
+                    }
+                })
+            }
+        }, 800);
     }
 
     $(document).on('click', '.cb-child', function() {

@@ -52,13 +52,16 @@ class SparepartController extends Controller
                 return '-';
             })
             ->addColumn('jml', function ($d) {
-                return $d->jml . ' pcs';
+                $cek1 = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($d) {
+                    $q->where('sparepart_id', $d->sparepart_id)->where('is_draft', 0)->where('is_ready', 1);
+                })->get()->count();
+                return $d->jml . ' pcs'.'<br><span class="badge badge-dark">Keluar '.$cek1.' Noseri</span>';
             })
             ->addColumn('button', function ($d) {
                 return '<a class="btn btn-outline-info" href="' . url('gk/gudang/sparepart/' . $d->sparepart_id . '') . '"><i
                 class="far fa-eye"></i> Detail</a>';
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'jml'])
             ->make(true);
     }
 
@@ -81,7 +84,10 @@ class SparepartController extends Controller
                 return $data->units->produk->product->kode . '' . $data->units->produk->kode;
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->jml . ' ' . $data->units->satuan->nama;
+                $cek1 = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($data) {
+                    $q->where('gbj_id', $data->gbj_id)->where('is_draft', 0)->where('is_ready', 1);
+                })->get()->count();
+                return $data->jml . ' ' . $data->units->satuan->nama.'<br><span class="badge badge-dark">Keluar '.$cek1.' Noseri</span>';
             })
             ->addColumn('kelompok', function ($data) {
                 return $data->units->produk->KelompokProduk->nama;
@@ -90,7 +96,7 @@ class SparepartController extends Controller
                 return '<a class="btn btn-outline-info" href="' . url('gk/gudang/unit/' . $d->gbj_id . '') . '"><i
                 class="far fa-eye"></i> Detail</a>';
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'jumlah'])
             ->make(true);
     }
     // detail
@@ -621,10 +627,10 @@ class SparepartController extends Controller
             })
             ->addColumn('aksi', function ($d) {
                 if (empty($d->gbj_id)) {
-                    return '<a class="btn btn-info" href="' . url('gk/transaksi/' . $d->sparepart_id . '') . '" data-id="' . $d->sparepart_id . '"><i
+                    return '<a class="btn btn-info" href="' . url('gk/transaksi/' . $d->sparepart_id . '') . '?jenis=sparepart" data-id="' . $d->sparepart_id . '" data-jenis="sparepart"><i
                     class="far fa-eye"></i> Detail</a>';
                 } else {
-                    return '<a class="btn btn-info" href="' . url('gk/transaksi/' . $d->gbj_id . '') . '" data-id="' . $d->gbj_id . '"><i
+                    return '<a class="btn btn-info" href="' . url('gk/transaksi/' . $d->gbj_id . '') . '" data-id="' . $d->gbj_id . '" data-jenis="unit"><i
                     class="far fa-eye"></i> Detail</a>';
                 }
             })
@@ -1884,6 +1890,10 @@ class SparepartController extends Controller
         $cek->delete();
 
         return response()->json(['msg' => 'Data Berhasil Dihapus']);
+    }
+
+    function deleteNoseriTerima(Request $request) {
+
     }
 
     function uncheckNoseri(Request $request) {
