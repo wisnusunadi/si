@@ -162,6 +162,23 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right"></label>
+                                                    <div class="col-5 col-form-label">
+                                                        <div class="form-check form-check-inline hide" id="penj_prd">
+                                                            <input class="form-check-input" type="radio" name="jenis_penj" id="jenis_penj1" value="produk" />
+                                                            <label class="form-check-label" for="jenis_penj1">Produk</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline hide" id="penj_spr">
+                                                            <input class=" form-check-input" type="radio" name="jenis_penj" id="jenis_penj2" value="sparepart" />
+                                                            <label class="form-check-label" for="jenis_penj2">Sparepart</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline hide" id="penj_sem">
+                                                            <input class="form-check-input" type="radio" name="jenis_penj" id="jenis_penj3" value="semua" />
+                                                            <label class="form-check-label" for="jenis_penj3">Produk + Sparepart</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -660,18 +677,29 @@
             reset_penjualan();
 
             if ($(this).val() == "ekatalog") {
-
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").addClass("hide");
                 $("#akn").removeClass("hide");
                 $(".os-content-arrange").remove();
+                //cek
+                $("#penj_prd").removeClass("hide");
+                $("#penj_spr").addClass("hide");
+                $("#penj_sem").addClass("hide");
+                $("input[name=jenis_penj][value='produk']").prop("checked", true);
+                $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
             } else if ($(this).val() == "spa") {
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
                 $(".os-content-arrange").remove();
+                //cek
+                $("#penj_prd").removeClass("hide");
+                $("#penj_spr").removeClass("hide");
+                $("#penj_sem").removeClass("hide");
+                $("input[name=jenis_penj][value='produk']").prop("checked", true);
+                $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
             } else if ($(this).val() == "spb") {
                 // $("#datapart").addClass("hide");
                 // $("#dataproduk").removeClass("hide");
@@ -680,6 +708,26 @@
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
                 $(".os-content-arrange").remove();
+
+                //cek
+                $("#penj_prd").removeClass("hide");
+                $("#penj_spr").removeClass("hide");
+                $("#penj_sem").removeClass("hide");
+                $("input[name=jenis_penj][value='produk']").prop("checked", false);
+                $("input[name=jenis_penj][value='sparepart']").prop("checked", true);
+            }
+        });
+        $('input[type="radio"][name="jenis_penj"]').on('change', function() {
+            var x = $(this).val();
+            if ($(this).val() == "produk") {
+                $("#datapart").addClass("hide");
+                $("#dataproduk").removeClass("hide");
+            } else if ($(this).val() == "sparepart") {
+                $("#datapart").removeClass("hide");
+                $("#dataproduk").addClass("hide");
+            } else if ($(this).val() == "semua") {
+                $("#datapart").removeClass("hide");
+                $("#dataproduk").removeClass("hide");
             }
         });
 

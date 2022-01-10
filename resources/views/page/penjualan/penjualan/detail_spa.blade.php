@@ -4,7 +4,7 @@
             <div class="col-5">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Info Customer</h5>
+                        <h5 class="card-title">Info Customer {{$param}}</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -83,8 +83,9 @@
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>
                             @if(isset($data->Pesanan))
-                            @foreach($data->pesanan->detailpesanan as $e)
                             <div class="card removeshadow">
+                                @if(isset($data->Pesanan->detailpesanan))
+                                @foreach($data->pesanan->detailpesanan as $e)
                                 <div class="card-body">
                                     <h6>{{$e->PenjualanProduk->nama}}</h6>
                                     <div class="row align-center">
@@ -132,8 +133,33 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endforeach
+                                @endif
+                                @if($param == 'part' || $param == 'semua' )
+                                <div class="card-body">
+                                    <h6><b>Sparepart : </b></h6>
+                                    @foreach($data->Pesanan->DetailPesananPart as $l)
+                                    <h6> {{$l->Sparepart->nama}}</h6>
+                                    <div class="row align-center">
+                                        <div class="col-4">
+                                            <div class="text-muted">Harga</div>
+                                            <div><b>@currency($l->harga)</b></div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="text-muted">Jumlah</div>
+                                            <div><b>{{$l->jumlah}}</b></div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="text-muted">Subtotal</div>
+                                            <div><b>@currency($l->jumlah * $l->harga)</b></div>
+
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @endif
                             </div>
-                            @endforeach
+
 
                             <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
                             @else
