@@ -688,7 +688,7 @@ class SparepartController extends Controller
 
     function get_trx($id)
     {
-        $cek = GudangKarantinaDetail::where(['is_draft' => 0, 'sparepart_id' => $id])->get();
+        $cek = GudangKarantinaDetail::where('sparepart_id', $id)->where('is_draft', 0)->orWhere('gbj_id', $id)->get();
         return datatables()->of($cek)
             ->addColumn('tanggal', function ($d) {
                 if (empty($d->header->date_in)) {
