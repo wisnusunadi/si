@@ -25,7 +25,6 @@
 <script>
 import Navbar from "./components/Navbar.vue";
 import Sidebar from "./components/Sidebar.vue";
-import Table from "./components/Table.vue";
 
 import axios from "axios";
 
@@ -33,7 +32,6 @@ export default {
   components: {
     Navbar,
     Sidebar,
-    Table,
   },
 
   beforeCreate() {
@@ -46,7 +44,6 @@ export default {
 
 <style lang="scss">
 @import "~bulma";
-/* @import "~datatables-bulma/css/dataTables.bulma"; */
 @import "~sweetalert2/src/sweetalert2";
 
 /* loading animation */
