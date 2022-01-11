@@ -2,6 +2,7 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
+        "docs": "jsdoc -c ./jsdoc.json",
         "development": "mix",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
@@ -15,6 +16,9 @@
         "browser-sync": "^2.27.7",
         "browser-sync-webpack-plugin": "^2.3.0",
         "jquery": "^3.6",
+        "jsdoc": "^3.6.7",
+        "jsdoc-vuejs": "^4.0.0",
+        "jsdocs": "^1.0.0",
         "laravel-mix": "^6.0.39",
         "lodash": "^4.17.19",
         "popper.js": "^1.16.1",
@@ -25,7 +29,7 @@
         "vue": "^2.6.14",
         "vue-loader": "^15.9.8",
         "vue-router": "^3.5.2",
-        "vue-template-compiler": "^2.6.12",
+        "vue-template-compiler": "^2.6.14",
         "vuex": "^3.6.2"
     },
     "dependencies": {
@@ -56,8 +60,6 @@
         "vue-apexcharts": "^1.6.2",
         "vue-bulma-table": "^1.6.3",
         "vue-select": "^3.15.1",
-        "vue-sweetalert2": "^5.0.2",
-        "xlsx": "^0.17.4",
-        "xlsx-color": "^0.14.30"
+        "vue-sweetalert2": "^5.0.2"
     }
 }
