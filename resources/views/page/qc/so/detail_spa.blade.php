@@ -438,6 +438,7 @@
             idtrf = '{{$d->pesanan->TFProduksi->id}}';
             idpesanan = '{{$d->pesanan->id}}';
             var data = $(this).attr('data-id');
+            var datacount = $(this).attr('data-count');
             $('.nosericheck').prop('checked', false);
             $('#cekbrg').prop('disabled', true);
             $('input[name ="check_all"]').prop('checked', false);
@@ -453,7 +454,6 @@
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
         });
-
         $(document).on('submit', '#form-pengujian-update', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
