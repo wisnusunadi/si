@@ -1,8 +1,7 @@
 /**
- *  Plug-in offers the same functionality as `simple_numbers` pagination type 
- *  (see `pagingType` option) but without ellipses.
- *
- *  See [example](http://www.gyrocode.com/articles/jquery-datatables-pagination-without-ellipses) for demonstration.
+ *  @module Plugin
+ *  This function is plugin to fixing paging error for datatables using
+ *  bulma styling, this function most used at ppic_spa project.
  *
  *  @name Simple Numbers - No Ellipses
  *  @summary Same pagination as 'simple_numbers' but without ellipses

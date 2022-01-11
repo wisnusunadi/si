@@ -100,6 +100,11 @@
         id="export_table"
       >
         <thead>
+          <tr class="is-hidden">
+            <th :colspan="table_header_length" :style="{ fontSize: '2rem' }">
+              {{ table_header_title }}
+            </th>
+          </tr>
           <tr>
             <th rowspan="2">Nama Produk</th>
             <th rowspan="2">Jumlah</th>
@@ -454,6 +459,9 @@ export default {
       gbj_stok: 0,
 
       rencana_jadwal: [],
+
+      table_header_length: 0,
+      table_header_title: "",
     };
   },
 
@@ -922,6 +930,18 @@ export default {
           exists.progres += this.events[i].progres;
         }
       }
+
+      this.table_header_length = this.last_date + 2;
+      if (this.status === "pelaksanaan") this.table_header_length += 1;
+      if (
+        this.$store.state.user.divisi_id === 24 &&
+        (this.$store.state.state_ppic === "pembuatan" ||
+          this.$store.state.state_ppic === "revisi") &&
+        !this.hiddenAction
+      )
+        this.table_header_length += 1;
+
+      this.table_header_title = `(${this.status.toUpperCase()}) ${this.getMonthYear()}`;
 
       return data;
     },

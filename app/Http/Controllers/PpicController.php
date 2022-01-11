@@ -21,6 +21,12 @@ use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
 
+//temp
+use App\Models\TFProduksi;
+use App\Models\TFProduksiDetail;
+
+
+
 
 class PpicController extends Controller
 {
@@ -1013,10 +1019,7 @@ class PpicController extends Controller
 
     public function test_query()
     {
-        $color = ["#007bff", "#6c757d", "#28a745", "#dc3545", "#ffc107", "#17a2b8"];
-        $selected_color = $color[array_rand($color)];
-
-        return [$selected_color, array_rand($color)];
+        // $data = TFProduksi::
     }
 
     public function get_count_selesai_pengiriman_produk($id)
