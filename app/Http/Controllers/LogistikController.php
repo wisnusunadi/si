@@ -594,7 +594,7 @@ class LogistikController extends Controller
     public function get_data_so($value)
     {
         $x = explode(',', $value);
-        $datas = Pesanan::Has('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->get();
+        $datas = Pesanan::orHas('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->orHas('DetailPesananPart')->get();
         $array_id = array();
         foreach ($datas as $d) {
             if ($value == 'semua') {
@@ -631,43 +631,45 @@ class LogistikController extends Controller
                 }
             }
         }
-        $array_ids = array();
-        $dataspb = Pesanan::has('DetailPesananPart')->get();
-        foreach ($dataspb as $d) {
-            if ($value == 'semua') {
-                if ($d->getJumlahPesananPart() > $d->getJumlahKirimPart() || $d->getJumlahKirimPart() == "0") {
-                    $array_ids[] = $d->id;
-                }
-            } else if ($x == ['sebagian_kirim', 'sudah_kirim']) {
-                if ($d->getJumlahPesananPart() != $d->getJumlahKirimPart() ||  $d->getJumlahPesananPart() == $d->getJumlahKirimPart()) {
-                    $array_ids[] = $d->id;
-                }
-            } else if ($x == ['belum_kirim', 'sebagian_kirim']) {
-                if ($d->getJumlahPesananPart() != $d->getJumlahKirimPart() || $d->getJumlahKirimPart() == "0") {
-                    $array_ids[] = $d->id;
-                }
-            } else if ($x == ['belum_kirim', 'sudah_kirim']) {
-                if ($d->getJumlahKirimPart() == "0" || $d->getJumlahPesananPart() == $d->getJumlahKirimPart()) {
-                    $array_ids[] = $d->id;
-                }
-            } else if ($value == 'sebagian_kirim') {
-                if ($d->getJumlahPesananPart() != $d->getJumlahKirimPart()) {
-                    $array_ids[] = $d->id;
-                }
-            } else if ($value == 'sudah_kirim') {
-                if ($d->getJumlahPesananPart() == $d->getJumlahKirimPart()) {
-                    $array_ids[] = $d->id;
-                }
-            } else if ($value == 'belum_kirim') {
-                if ($d->getJumlahKirimPart() == 0) {
-                    $array_ids[] = $d->id;
-                }
-            } else {
-                if ($d->getJumlahPesananPart() > $d->getJumlahKirimPart() || $d->getJumlahKirimPart() == "0") {
-                    $array_ids[] = $d->id;
-                }
-            }
-        }
+        // $array_ids = array();
+        // $dataspb = Pesanan::has('DetailPesananPart')->get();
+        // foreach ($dataspb as $d) {
+        //     if ($value == 'semua') {
+        //         if ($d->getJumlahPesananPart() > $d->getJumlahKirimPart() || $d->getJumlahKirimPart() == "0") {
+        //             $array_ids[] = $d->id;
+        //         }
+        //     } else if ($x == ['sebagian_kirim', 'sudah_kirim']) {
+        //         if ($d->getJumlahPesananPart() != $d->getJumlahKirimPart() ||  $d->getJumlahPesananPart() == $d->getJumlahKirimPart()) {
+        //             $array_ids[] = $d->id;
+        //         }
+        //     } else if ($x == ['belum_kirim', 'sebagian_kirim']) {
+        //         if ($d->getJumlahPesananPart() != $d->getJumlahKirimPart() || $d->getJumlahKirimPart() == "0") {
+        //             $array_ids[] = $d->id;
+        //         }
+        //     } else if ($x == ['belum_kirim', 'sudah_kirim']) {
+        //         if ($d->getJumlahKirimPart() == "0" || $d->getJumlahPesananPart() == $d->getJumlahKirimPart()) {
+        //             $array_ids[] = $d->id;
+        //         }
+        //     } else if ($value == 'sebagian_kirim') {
+        //         if ($d->getJumlahPesananPart() != $d->getJumlahKirimPart()) {
+        //             $array_ids[] = $d->id;
+        //         }
+        //     } else if ($value == 'sudah_kirim') {
+        //         if ($d->getJumlahPesananPart() == $d->getJumlahKirimPart()) {
+        //             $array_ids[] = $d->id;
+        //         }
+        //     } else if ($value == 'belum_kirim') {
+        //         if ($d->getJumlahKirimPart() == 0) {
+        //             $array_ids[] = $d->id;
+        //         }
+        //     } else {
+        //         if ($d->getJumlahPesananPart() > $d->getJumlahKirimPart() || $d->getJumlahKirimPart() == "0") {
+        //             $array_ids[] = $d->id;
+        //         }
+        //     }
+        // }
+
+
         // $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($array_id) {
         //     $q->where('pesanan_id', $array_id);
         // })->count();
@@ -675,9 +677,9 @@ class LogistikController extends Controller
         // $jumlahsudahuji = NoseriDetailPesanan::where('status', 'ok')->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($array_id) {
         //     $q->where('pesanan_id', $array_id);
         // })->count();
-        $datas = Pesanan::whereIn('id', $array_id)->get();
-        $datas2 = Pesanan::whereIn('id', $array_ids)->get();
-        $data = $datas->merge($datas2);
+        $data = Pesanan::whereIn('id', $array_id)->get();
+        // $datas2 = Pesanan::whereIn('id', $array_ids)->get();
+        // $data = $datas->merge($datas2);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -717,32 +719,31 @@ class LogistikController extends Controller
                 return $data->ket;
             })
             ->addColumn('status', function ($data) {
-                $status = "";
-                $pesanan_id = $data->id;
-                $name = explode('/', $data->so);
-                if ($name[1] != 'SPB') {
-                    $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($pesanan_id) {
-                        $q->where('pesanan_id', $pesanan_id);
-                    })->count();
-
-                    $jumlahsudahuji = NoseriDetailPesanan::where('status', 'ok')->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($pesanan_id) {
-                        $q->where('pesanan_id', $pesanan_id);
-                    })->count();
-
-                    if ($jumlahsudahuji == $jumlahterkirim) {
-                        $status =   '<span class="badge green-text">Sudah Dikirim</span>';
+                if (isset($data->DetailPesanan) && !isset($data->DetailPesananPart)) {
+                    if ($data->getJumlahKirim() == $data->getJumlahPesanan()) {
+                        $status = '<span class="badge green-text">Sudah Dikirim</span>';
                     } else {
-                        if ($jumlahterkirim == 0) {
+                        if ($data->getJumlahKirim() == 0) {
                             $status =  ' <span class="badge red-text">Belum Dikirim</span>';
                         } else {
                             $status =   '<span class="badge yellow-text">Sebagian Dikirim</span>';
                         }
                     }
-                } else {
+                } else if (!isset($data->DetailPesanan) && isset($data->DetailPesananPart)) {
                     if ($data->getJumlahKirimPart() == $data->getJumlahPesananPart()) {
                         $status = '<span class="badge green-text">Sudah Dikirim</span>';
                     } else {
                         if ($data->getJumlahKirimPart() == 0) {
+                            $status =  ' <span class="badge red-text">Belum Dikirim</span>';
+                        } else {
+                            $status =   '<span class="badge yellow-text">Sebagian Dikirim</span>';
+                        }
+                    }
+                } else if (isset($data->DetailPesanan) && isset($data->DetailPesananPart)) {
+                    if ($data->getJumlahKirim() == $data->getJumlahPesanan() && $data->getJumlahKirimPart() == $data->getJumlahPesananPart()) {
+                        $status = '<span class="badge green-text">Sudah Dikirim</span>';
+                    } else {
+                        if ($data->getJumlahKirimPart() == 0 && $data->getJumlahKirim() == 0) {
                             $status =  ' <span class="badge red-text">Belum Dikirim</span>';
                         } else {
                             $status =   '<span class="badge yellow-text">Sebagian Dikirim</span>';
