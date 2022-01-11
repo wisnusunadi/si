@@ -809,94 +809,6 @@
             }
         });
 
-        var arrUnit = [];
-        var seriUnit = [];
-        var kerusakanUnit = [];
-        var tingkatUnit = [];
-
-        const dataUnit = tableUnit.$('.seri').map(function () {
-            return $(this).val();
-        }).get();
-
-        const ker = tableUnit.$('.kerusakan').map(function () {
-            return $(this).val();
-        }).get();
-
-        const ting = tableUnit.$('.tingkat').map(function () {
-            return $(this).val();
-        }).get();
-
-        dataUnit.forEach(function (item) {
-            if (item != '') {
-                arrUnit.push(item);
-            }
-        });
-
-        dataUnit.forEach(function (item) {
-            if (item == '') {
-                seriUnit.push(item);
-            }
-        });
-
-        ker.forEach(function (item) {
-            if (item == '') {
-                kerusakanUnit.push(item);
-            }
-        });
-
-        ting.forEach(function (item) {
-            if (item == '') {
-                tingkatUnit.push(item);
-            }
-        });
-
-        const count = arr =>
-            arr.reduce((a, b) => ({
-                ...a,
-                [b]: (a[b] || 0) + 1
-            }), {})
-
-        const duplicates = dict =>
-            Object.keys(dict).filter((a) => dict[a] > 1)
-
-        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0 || duplicates(count(
-                kerusakanUnit)).length > 0 || duplicates(count(tingkatUnit)).length > 0) {
-            $('.seri').removeClass('is-invalid');
-            $('.kerusakan').removeClass('is-invalid');
-            $('.tingkat').removeClass('is-invalid');
-            $('.seri').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            $('.kerusakan').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            $('.tingkat').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-        }
-
-        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0) {
-            $('.seri').removeClass('is-invalid');
-            $('.seri').filter(function () {
-                for (let index = 0; index < duplicates(count(arrUnit)).length; index++) {
-                    if ($(this).val() == duplicates(count(arrUnit))[index]) {
-                        return true;
-                    }
-                }
-            }).addClass('is-invalid');
-            $('.seri').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            if (duplicates(count(arrUnit)).length > 0) {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Nomor seri ' + duplicates(count(arrUnit)) + ' ada yang sama.',
-                })
-            }
-        }
-
         if ((duplicates(count(kerusakanUnit)).length == 0 && duplicates(count(seriUnit)).length == 0 && duplicates(
                 count(tingkatUnit)).length == 0 && duplicates(count(arrUnit)).length == 0) == true) {
             $('.seri').removeClass('is-invalid');
@@ -918,7 +830,6 @@
                     unit_arr.push(obj1);
                 })
                 seri_unit[c] = unit_arr;
-                unit_arr = [];
                 console.log(seri_unit)
                 $('.modalAddUnit').modal('hide');
             })
@@ -1505,6 +1416,14 @@
                     }
                 }
             })
+
+            if (ids.length == 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pilih Nomor Seri yang akan ditransfer'
+                })
+            }
         }
     }
 
@@ -1696,6 +1615,16 @@
                     }
                 }
             })
+
+            if (ids.length == 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pilih Nomor Seri yang akan ditransfer'
+                })
+            }
+                
+            }
             // Swal.fire({
             //     position: 'center',
             //     icon: 'success',

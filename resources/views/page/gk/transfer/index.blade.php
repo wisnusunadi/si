@@ -375,6 +375,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary simpan">Simpan</button>
             </div>
+
         </div>
     </div>
 </div>
@@ -432,8 +433,8 @@
 
     let seri = {};
     let seri_unit = {};
-    let spr_arr = [];
-    let unit_arr = [];
+    let spr_arr = {};
+    let unit_arr = {};
 
     function addSpare(a) {
         var b = $(".btn_plus" + a).parent().prev().children().val();
@@ -455,106 +456,13 @@
             }
         });
 
-        var arrSparepart = []
-        var seriSparepart = [];
-        var kerusakanSparepart = [];
-        var tingkatSparepart = [];
-        // No Seri
-        const data = tableScan.$('.seri').map(function () {
-            return $(this).val();
-        }).get();
-
-        data.forEach(function (item) {
-            if (item != '') {
-                arrSparepart.push(item);
-            }
-        })
-
-        // Data Null
-        const ker = tableScan.$('.remark').map(function () {
-            return $(this).val();
-        }).get();
-
-        const ting = tableScan.$('.layout_id').map(function () {
-            return $(this).val();
-        }).get();
-
-        // No Seri
-        data.forEach(function (item) {
-            if (item == '') {
-                seriSparepart.push(item);
-            }
-        })
-
-        // Kerusakan
-        ker.forEach(function (item) {
-            if (item == '') {
-                kerusakanSparepart.push(item);
-            }
-        })
-
-        // Tingkat
-        ting.forEach(function (item) {
-            if (item == '') {
-                tingkatSparepart.push(item);
-            }
-        })
-
-        const count = arr =>
-            arr.reduce((a, b) => ({
-                ...a,
-                [b]: (a[b] || 0) + 1
-            }), {})
-
-        const duplicates = dict =>
-            Object.keys(dict).filter((a) => dict[a] > 1)
-
-        if (duplicates(count(arrSparepart)).length > 0 || duplicates(count(seriSparepart)).length > 0 || duplicates(
-                count(tingkatSparepart)).length > 0 || duplicates(count(kerusakanSparepart)).length > 0) {
-            $('.seri').removeClass('is-invalid');
+        $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
-            $('.seri').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            $('.remark').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            $('.layout_id').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-        }
-        if (duplicates(count(arrSparepart)).length > 0 || duplicates(count(seriSparepart)).length > 0) {
-            $('.seri').removeClass('is-invalid');
-            $('.seri').filter(function () {
-                $('.seri').filter(function () {
-                    for (let index = 0; index < duplicates(count(arrSparepart)).length; index++) {
-                        if ($(this).val() == duplicates(count(arrSparepart))[index]) {
-                            return true;
-                        }
-                    }
-                }).addClass('is-invalid');
-            }).addClass('is-invalid');
-            $('.seri').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            if (duplicates(count(arrSparepart)).length > 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Nomor seri ' + duplicates(count(arrSparepart)) + ' ada yang sama.',
-                })
-            }
-        }
-        if ((duplicates(count(kerusakanSparepart)).length == 0 && duplicates(count(seriSparepart)).length == 0 &&
-                duplicates(count(tingkatSparepart)).length == 0 && duplicates(count(arrSparepart)).length == 0) ==
-            true) {
-            $('.seri').removeClass('is-invalid');
-            $('.remark').removeClass('is-invalid');
-            $('.layout_id').removeClass('is-invalid');
-            seri = {"id": d, "jumlah": e, "noseri": []};
-            spr_arr.push(seri);
-            // spr_arr = [];
+            // check
+            seri = {"jumlah": e, "noseri": []};
+            spr_arr[d] = seri;
+
             const ids = [];
             $('.cb-child').each(function() {
                 if($(this).is(":checked")) {
@@ -568,7 +476,6 @@
                     } else {
                         ids.push($(this).val());
                         seri.noseri = ids;
-                        // console.log(seri);
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
@@ -576,18 +483,24 @@
                             showConfirmButton: false,
                             timer: 1500
                         })
-                        // $('.modalAddSparepart').modal('hide');
+                        $('.modalAddSparepart').modal('hide');
                     }
                 }
             })
 
+            if ($('.cb-child').filter(':checked').length == 0) {
+                seri.noseri = []
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pilih Nomor Seri yang akan ditransfer'
+                })
+            }
             console.log(spr_arr);
-        }
     }
     var xx = 0;
     function addSparepart(x, y, z) {
         console.log('#sparepart_id'+(nmrspr-1));
-        // alert($('#sparepart_id'+(nmrspr-1)).find(":selected").text());
         xx++;
         $('.jumlah_spr').text(x + ' Unit')
         $('.date_out').text(document.getElementsByName("date_in")[0].value)
@@ -612,6 +525,25 @@
                     sparepart_id: z,
                 },
                 type: "post",
+                statusCode: {
+                    200: function (data) {
+                        let panjang_table1 = $('.scan-produk1 input.cb-child').length;
+                        console.log(panjang_table1);
+                        if (x > panjang_table1) {
+                            // $('#btnSeri').prop('disabled', true);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Melebihi Batas Maksimal atau Data Kosong'
+                            }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                $('.modalAddSparepart').modal('hide');
+                                }
+                            })
+                        }
+                    }
+                }
             },
             columns: [
                 {data: 'kode'},
@@ -620,24 +552,6 @@
                 {data: 'tingkat'},
             ],
         });
-
-        setTimeout(() => {
-            let panjang_table1 = $('.scan-produk1 input.cb-child').length;
-            console.log(panjang_table1);
-            if (x > panjang_table1) {
-                // $('#btnSeri').prop('disabled', true);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Melebihi Batas Maksimal atau Data Kosong'
-                }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    $('.modalAddSparepart').modal('hide');
-                    }
-                })
-            } 
-        }, 800);
     }
     // Unit
     function addUn(l) {
@@ -659,100 +573,10 @@
             }
         });
 
-        var arrUnit = [];
-        var seriUnit = [];
-        var kerusakanUnit = [];
-        var tingkatUnit = [];
+        seri_unit = {"jumlah":p, "noseri":[]};
+        unit_arr[c] = seri_unit;
 
-        const dataUnit = tableUnit.$('.seri').map(function () {
-            return $(this).val();
-        }).get();
-
-        const ker = tableUnit.$('.kerusakan').map(function () {
-            return $(this).val();
-        }).get();
-
-        const ting = tableUnit.$('.tingkat').map(function () {
-            return $(this).val();
-        }).get();
-
-        dataUnit.forEach(function (item) {
-            if (item != '') {
-                arrUnit.push(item);
-            }
-        });
-
-        dataUnit.forEach(function (item) {
-            if (item == '') {
-                seriUnit.push(item);
-            }
-        });
-
-        ker.forEach(function (item) {
-            if (item == '') {
-                kerusakanUnit.push(item);
-            }
-        });
-
-        ting.forEach(function (item) {
-            if (item == '') {
-                tingkatUnit.push(item);
-            }
-        });
-
-        const count = arr =>
-            arr.reduce((a, b) => ({
-                ...a,
-                [b]: (a[b] || 0) + 1
-            }), {})
-
-        const duplicates = dict =>
-            Object.keys(dict).filter((a) => dict[a] > 1)
-
-        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0 || duplicates(count(
-                kerusakanUnit)).length > 0 || duplicates(count(tingkatUnit)).length > 0) {
-            $('.seri').removeClass('is-invalid');
-            $('.kerusakan').removeClass('is-invalid');
-            $('.tingkat').removeClass('is-invalid');
-            $('.seri').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            $('.kerusakan').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            $('.tingkat').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-        }
-
-        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0) {
-            $('.seri').removeClass('is-invalid');
-            $('.seri').filter(function () {
-                for (let index = 0; index < duplicates(count(arrUnit)).length; index++) {
-                    if ($(this).val() == duplicates(count(arrUnit))[index]) {
-                        return true;
-                    }
-                }
-            }).addClass('is-invalid');
-            $('.seri').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            if (duplicates(count(arrUnit)).length > 0) {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Nomor seri ' + duplicates(count(arrUnit)) + ' ada yang sama.',
-                })
-            }
-        }
-
-        if ((duplicates(count(kerusakanUnit)).length == 0 && duplicates(count(seriUnit)).length == 0 && duplicates(
-                count(tingkatUnit)).length == 0 && duplicates(count(arrUnit)).length == 0) == true) {
-            $('.seri').removeClass('is-invalid');
-            $('.kerusakan').removeClass('is-invalid');
-            $('.tingkat').removeClass('is-invalid');
-            const uids = [];
+        const uids = [];
             $('.cb-unit').each(function() {
             if($(this).is(":checked")) {
                 // cek validasi
@@ -764,8 +588,7 @@
                     })
                 } else {
                     uids.push($(this).val());
-                    seri_unit[c] = uids;
-                    console.log(seri_unit);
+                    seri_unit.noseri = uids;
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -776,10 +599,17 @@
                     $('.modalAddUnit').modal('hide');
                 }
             }
+        })
 
+        if ($('.cb-unit').filter(':checked').length == 0) {
+            seri_unit.noseri = []
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Pilih Nomor Seri yang akan ditransfer'
             })
-
         }
+        console.log(unit_arr);
     }
 
     function addUnit(x, y, z) {
@@ -811,6 +641,24 @@
                     gbj_id: y,
                 },
                 type: "post",
+                statusCode: {
+                    200: function (data) {
+                        let panjang_table2 = $('.scan-produk input.cb-unit').length;
+                        console.log(panjang_table2);
+                        if (x > panjang_table2) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Melebihi Batas Maksimal atau Data Kosong'
+                            }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                $('.modalAddUnit').modal('hide');
+                                }
+                            })
+                        }
+                    }
+                }
             },
             columns: [
                 {data: 'kode'},
@@ -819,23 +667,6 @@
                 {data: 'tingkat'},
             ],
         });
-
-        setTimeout(() => {
-            let panjang_table2 = $('.scan-produk input.cb-unit').length;
-            console.log(panjang_table2);
-            if (x > panjang_table2) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Melebihi Batas Maksimal atau Data Kosong'
-                }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    $('.modalAddUnit').modal('hide');
-                    }
-                })
-            }
-        }, 800);
     }
 
     $.ajax({
@@ -852,6 +683,23 @@
             });
         }
     });
+    $(document).on('keyup','#jml', function () {
+        let a = $(this).parent().next().children().eq(0);
+        if (this.value != '') {
+            $(a).prop('disabled', false);
+        }else{
+            $(a).prop('disabled', true);
+        }
+    })
+
+    $(document).on('keyup','#jum', function () {
+        let a = $(this).parent().next().children().eq(0);
+        if (this.value != '') {
+            $(a).prop('disabled', false);
+        }else{
+            $(a).prop('disabled', true);
+        }
+    })
 
     function transfer() {
         Swal.fire({
@@ -862,7 +710,6 @@
             dangerMode: true,
         });
     };
-
 
     var nmrspr = 1;
     $(document).on('click', '.add_sparepart', function () {
@@ -883,7 +730,7 @@
         let table_sparepart =
             '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_id'+nmrspr+'" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus' +
             nmrspr + '" data-id="" data-kode="" data-jml="" id="" onclick=addSpare(' + nmrspr +
-            ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+            ') disabled><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
 
         $('.add_sparepart_table tbody').append(table_sparepart);
         $('#sparepart_id'+nmrspr+'').select2();
@@ -911,16 +758,17 @@
         let table_unit =
             '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_id'+nmrunt+'" class="form-control produkk"></select></td><td><input type="text" name="qty_unit[]" id="jum" class="form-control number"></td><td><button class="btn btn-primary btnPlus' +
             nmrunt + '" id="" onclick=addUn(' + nmrunt +
-            ')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+            ') disabled><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $('#gbj_id'+nmrunt+'').select2();
         $(".number").inputFilter(function(value) {
-            return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+            return /^\d*$/.test(value);
         });
         nmrunt++;
     });
 
     $(document).on('click', '.btn-delete', function (e) {
+        delete spr_arr[$(this).parent().prev().prev().children().val()]
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
     });
@@ -966,17 +814,122 @@
     });
 
     function modalTerima() {
-        $('.modal_transfer1').modal('show');
-        $('.catatan').val('');
+        // unit
+        if (Object.keys(unit_arr).length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tambahkan Nomor Seri yang akan ditransfer'
+            })
+        } else {
+            for (const prop in unit_arr) {
+                if (unit_arr[prop].noseri.length == 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak Ada Nomor Seri yang akan ditransfer'
+                    })
+                }
+            }
+        }
+        // spr
+        if (Object.keys(spr_arr).length == 0){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tambahkan Nomor Seri yang akan ditransfer'
+            })
+        } else {
+            for (const prop in spr_arr){
+                if (spr_arr[prop].noseri.length == 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak Ada Nomor Seri yang akan ditransfer'
+                    })
+                } else {
+                    $('.modal_transfer1').modal('show');
+                    $('.catatan').val('');
+                    $('.list-group').children().remove();
+                    $('.judul_modal').text('Silahkan isi tujuan transfer produk');
+                    $(document).on('click', '.remove', function () {
+                        $(this).parent().parent().remove();
+                    });
+
+                    $(document).on('click', '.simpan1', function () {
+                        let out = $('#datePicker').val();
+                        let to = $('.dari').val();
+                        let tujuan = $('#tujuan_tf').val();
+
+                        Swal.fire({
+                            title: "Apakah anda yakin?",
+                            text: "Data yang sudah di transfer tidak dapat diubah!",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                            showCancelButton: true,
+                        }).then((success) => {
+                            if (success) {
+                                Swal.fire(
+                                    'Data berhasil di transfer!',
+                                    '',
+                                    'success'
+                                );
+                                $.ajax({
+                                    url: "/api/gk/out-final",
+                                    type: "post",
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        userid: $('#user_id').val(),
+                                        date_out: out,
+                                        ke: to,
+                                        deskripsi: tujuan,
+                                        sparepart: spr_arr,
+                                        unit: unit_arr,
+                                        // gbj_id: unit1,
+                                        // qty_unit: jum,
+                                        // seriunit: seri_unit,
+                                    },
+                                    success: function (res) {
+                                        console.log(res);
+                                    },
+                                })
+                                // setTimeout(() => {
+                                //     location.reload();
+                                // }, 1000);
+                            } else {
+                                Swal.fire(
+                                    'Data gagal di transfer!',
+                                    '',
+                                    'error'
+                                );
+                                // setTimeout(() => {
+                                //     location.reload();
+                                // }, 1000);
+                            }
+                        });
+
+
+                    });
+                }
+            }
+        }
+
+
+    }
+
+    function modalRancang() {
+        $('.modal_transfer').modal('show');
         $('.list-group').children().remove();
-        $('.judul_modal').text('Silahkan isi tujuan transfer produk');
+        $('.judul_modal').text('Silahkan isi tujuan rancangan produk');
         $(document).on('click', '.remove', function () {
             $(this).parent().parent().remove();
         });
-        $(document).on('click', '.simpan1', function () {
+
+        $(document).on('click', '.simpan', function () {
             let out = $('#datePicker').val();
             let to = $('.dari').val();
-            let tujuan = $('#tujuan_tf').val();
+            let tujuan = $('#tujuan_draft').val();
             console.log(out);
             console.log(to);
             console.log(tujuan);
@@ -990,9 +943,6 @@
             $('input[name^="qty_spr"]').each(function () {
                 jml.push($(this).val());
             });
-            // $('input[name^="noseri"]').each(function() {
-            //     spr.push(seri_spr.push(seri1));
-            // });
             $('select[name^="gbj_id"]').each(function () {
                 unit1.push($(this).val());
             });
@@ -1001,7 +951,7 @@
             });
             Swal.fire({
                 title: "Apakah anda yakin?",
-                text: "Data yang sudah di transfer tidak dapat diubah!",
+                text: "Data yang sudah di rancangan tidak dapat diubah!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
@@ -1009,12 +959,12 @@
             }).then((success) => {
                 if (success) {
                     Swal.fire(
-                        'Data berhasil di transfer!',
+                        'Data berhasil di rancangan!',
                         '',
                         'success'
                     );
                     $.ajax({
-                        url: "/api/gk/out-final",
+                        url: "/api/gk/out-draft",
                         type: "post",
                         data: {
                             "_token": "{{ csrf_token() }}",
@@ -1038,7 +988,7 @@
                     }, 1000);
                 } else {
                     Swal.fire(
-                        'Data gagal di transfer!',
+                        'Data gagal di rancangan!',
                         '',
                         'error'
                     );
@@ -1047,89 +997,6 @@
                     }, 1000);
                 }
             });
-        });
-    }
-
-    // submit draft
-    $(document).on('click', '.simpan', function () {
-        let out = $('#datePicker').val();
-        let to = $('.dari').val();
-        let tujuan = $('#tujuan_draft').val();
-        console.log(out);
-        console.log(to);
-        console.log(tujuan);
-        const spr1 = [];
-        const jml = [];
-        const unit1 = [];
-        const jum = [];
-        $('select[name^="sparepart_id"]').each(function () {
-            spr1.push($(this).val());
-        });
-        $('input[name^="qty_spr"]').each(function () {
-            jml.push($(this).val());
-        });
-        $('select[name^="gbj_id"]').each(function () {
-            unit1.push($(this).val());
-        });
-        $('input[name^="qty_unit"]').each(function () {
-            jum.push($(this).val());
-        });
-        Swal.fire({
-            title: "Apakah anda yakin?",
-            text: "Data yang sudah di rancangan tidak dapat diubah!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-            showCancelButton: true,
-        }).then((success) => {
-            if (success) {
-                Swal.fire(
-                    'Data berhasil di rancangan!',
-                    '',
-                    'success'
-                );
-                $.ajax({
-                    url: "/api/gk/out-draft",
-                    type: "post",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        userid: $('#user_id').val(),
-                        date_out: out,
-                        ke: to,
-                        deskripsi: tujuan,
-                        sparepart_id: spr1,
-                        qty_spr: jml,
-                        noseri: seri,
-                        gbj_id: unit1,
-                        qty_unit: jum,
-                        seriunit: seri_unit,
-                    },
-                    success: function (res) {
-                        console.log(res);
-                    },
-                })
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            } else {
-                Swal.fire(
-                    'Data gagal di rancangan!',
-                    '',
-                    'error'
-                );
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
-            }
-        });
-    });
-
-    function modalRancang() {
-        $('.modal_transfer').modal('show');
-        $('.list-group').children().remove();
-        $('.judul_modal').text('Silahkan isi tujuan rancangan produk');
-        $(document).on('click', '.remove', function () {
-            $(this).parent().parent().remove();
         });
     }
 

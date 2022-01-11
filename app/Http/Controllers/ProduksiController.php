@@ -1697,7 +1697,7 @@ class ProduksiController extends Controller
                     $seri = new JadwalRakitNoseri();
                     $seri->date_in = Carbon::now();
                     $seri->jadwal_id = $request->jadwal_id;
-                    $seri->noseri = $value;
+                    $seri->noseri = strtoupper($value);
                     $seri->status = 11;
                     $seri->created_by = $request->userid;
                     $seri->save();
@@ -1994,29 +1994,29 @@ class ProduksiController extends Controller
         // // // // }
         $i = 0;
         foreach ($seri as $s) {
-            return $s;
-            // $i++;
-            // for ($k = 0; $k < count($request->layout); $k++) {
-            //     // print_r(NoseriTGbj::where('id', $request->seri[$k])->get());
-            //     NoseriTGbj::where('id', $request->seri[$k])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => json_decode($request->layout[$k], true)]);
-            // }
+            // return $s;
+            $i++;
+            for ($k = 0; $k < count($request->layout); $k++) {
+                // print_r(NoseriTGbj::where('id', $request->seri[$k])->get());
+                NoseriTGbj::where('id', $request->seri[$k])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => json_decode($request->layout[$k], true)]);
+            }
 
-            // NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
+            NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
 
             // $hid = NoseriTGbj::find($s['id']);
             // return TFProduksiDetail::find($hid->t_gbj_detail_id)->get()->pluck('gdg_brg_jadi_id');
             // $aa = TFProduksiDetail::where('gdg_brg_jadi_id', $hid-)
             // TFProduksiDetail::find($hid->t_gbj_detail_id)->update(['status_id' => 3, 'state_id' => 16]);
 
-            // $gid = NoseriBarangJadi::where('id', $s['noseri_id'])->get();
-            // foreach ($gid as $g) {
-            //     $gdg = GudangBarangJadi::where('id', $g->gdg_barang_jadi_id)->get()->toArray();
-            //     foreach ($gdg as $vv) {
-            //         $i++;
-            //         $vv['stok'] = $vv['stok'] + count($gid);
-            //         GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok'], 'updated_by' => $request->userid]);
-            //     }
-            // }
+            $gid = NoseriBarangJadi::where('id', $s['noseri_id'])->get();
+            foreach ($gid as $g) {
+                $gdg = GudangBarangJadi::where('id', $g->gdg_barang_jadi_id)->get()->toArray();
+                foreach ($gdg as $vv) {
+                    $i++;
+                    $vv['stok'] = $vv['stok'] + count($gid);
+                    GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok'], 'updated_by' => $request->userid]);
+                }
+            }
         }
         return response()->json(['msg' => 'Successfully']);
     }
@@ -2092,6 +2092,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
+
             ->make(true);
     }
 

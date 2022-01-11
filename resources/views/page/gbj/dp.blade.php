@@ -124,6 +124,12 @@
 
 @section('adminlte_js')
 <script>
+    // $.ajax({
+    //     url: '/api/tfp/rakit',
+    //     success: function(res) {
+    //         console.log(res);
+    //     }
+    // })
     $('.dalam-perakitan').DataTable({
         processing: true,
         serverSide: true,
@@ -332,7 +338,7 @@
                                 'success'
                             )
                             $('.terima-produk').modal('hide');
-                            // location.reload();
+                            location.reload();
                         } else {
                             Swal.fire(
                                 'Gagal!',

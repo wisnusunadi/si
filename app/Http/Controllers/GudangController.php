@@ -342,18 +342,55 @@ class GudangController extends Controller
 
     function getRakit()
     {
+        $data = TFProduksiDetail::with('header')
+                ->leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
+                ->select('*', DB::raw('sum(t_gbj_detail.qty) as total'))
+                ->groupBy('tg.tgl_masuk')
+                ->groupBy('t_gbj_detail.gdg_brg_jadi_id')
+                ->where('tg.dari', 17)
+                ->get();
 
-        $data = TFProduksiDetail::
-        whereHas('header', function ($q) {
-            $q->where('dari', 17);
-        })
-        ->with(['header' => function($qq) {
-            return $qq->groupBy('tgl_masuk');
-        }])
-        ->with('produk', 'header')
-        ->selectRaw('*, sum(qty) as total')
-        ->groupBy('gdg_brg_jadi_id')->get();
-        return datatables()->of($data)
+        $x = [];
+        $y = [];
+        foreach ($data as $k) {
+
+            $jumlah_done = NoseriTGbj::whereHas('detail.header', function ($q) use($k) {
+                                $q->where('dari', 17);
+                                $q->where('tgl_masuk', $k->header->tgl_masuk);
+                            })
+                            ->whereHas('detail', function($qq) use($k) {
+                                $qq->where('gdg_brg_jadi_id', $k->gdg_brg_jadi_id);
+                            })
+                            ->where('status_id', 3)
+                            ->with('detail.header')
+                            ->get()->count();
+
+            $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use($k) {
+                                $q->where('dari', 17);
+                                $q->where('tgl_masuk', $k->header->tgl_masuk);
+                            })
+                            ->whereHas('detail', function($qq) use($k) {
+                                $qq->where('gdg_brg_jadi_id', $k->gdg_brg_jadi_id);
+                            })
+                            ->with('detail.header')
+                            ->get()->count();
+            if ($jumlah != $jumlah_done) {
+                $x[] = $k->header->tgl_masuk;
+                $y[] = $k->gdg_brg_jadi_id;
+            }
+        }
+
+        $datax = TFProduksiDetail::with('header')
+                ->leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
+                ->select('*', DB::raw('sum(t_gbj_detail.qty) as total'))
+                ->groupBy('tg.tgl_masuk')
+                ->groupBy('t_gbj_detail.gdg_brg_jadi_id')
+                ->where('tg.dari', 17)
+                ->whereIn('tg.tgl_masuk', $x)
+                ->whereIn('t_gbj_detail.gdg_brg_jadi_id', $y)
+                ->get();
+                
+        return datatables()->of($datax)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
@@ -370,8 +407,9 @@ class GudangController extends Controller
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function($a) use($d) {
                         $a->where('tgl_masuk', $d->header->tgl_masuk);
+                        // $a->where('dari', 17);
                     });
-                })->where('state_id', 16)->get()->count();
+                })->where('jenis', 'masuk')->where('status_id', 3)->get()->count();
 
                 return $d->total . ' ' . $d->produk->satuan->nama . '<br><span class="badge badge-dark"> Sisa Diterima ' . intval($d->total - $seri_done) . '</span>';
 
@@ -381,22 +419,27 @@ class GudangController extends Controller
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function($a) use($d) {
                         $a->where('tgl_masuk', $d->header->tgl_masuk);
+                        $a->where('dari', 17);
                     });
-                })->where('state_id', 16)->get()->count();
+                })->where('jenis', 'masuk')->where('status_id', 3)->get()->count();
 
                 $seri = NoseriTGbj::whereHas('detail', function($q) use($d) {
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function($a) use($d) {
                         $a->where('tgl_masuk', $d->header->tgl_masuk);
+                        $a->where('dari', 17);
                     });
-                })->get()->count();
+                })->where('jenis', 'masuk')->get()->count();
+                // return $seri_done;
                 if ($seri == $seri_done) {
+                    // return 'a';
                     return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produk->produk->nama . '" data-var="' . $d->produk->nama . '" data-attr=""  data-id="' . $d->id . '" data-tgl="'.$d->header->tgl_masuk.'" data-brgid="'.$d->gdg_brg_jadi_id.'">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
                                 </button>
                             </a>';
                 } else {
+                    // return 'b';
                     return  '
                             <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produk->produk->nama . '" data-var="' . $d->produk->nama . '" data-attr=""  data-id="' . $d->id . '" data-tgl="'.$d->header->tgl_masuk.'" data-brgid="'.$d->gdg_brg_jadi_id.'">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
@@ -424,7 +467,7 @@ class GudangController extends Controller
             $q->whereHas('header', function($a) use($value)  {
                 $a->where('tgl_masuk', $value);
             });
-        })->where('status_id', 3)->get();
+        })->where('status_id', 3)->where('jenis', 'masuk')->get();
         return datatables()->of($data)
             ->addColumn('layout', function ($d) {
                 return $d->layout->ruang;
@@ -446,7 +489,7 @@ class GudangController extends Controller
             $q->whereHas('header', function($a) use($value)  {
                 $a->where('tgl_masuk', $value);
             });
-        })->where('status_id', null)->get();
+        })->where('status_id', null)->where('jenis', 'masuk')->get();
         $layout = Layout::where('jenis_id', 1)->get();
         $a = 0;
         return datatables()->of($data)
@@ -587,6 +630,45 @@ class GudangController extends Controller
             ['status_id', '=', 2],
         ])->whereNotNull('pesanan_id')->get();
         return view('page.gbj.tp.tp', compact('data1'));
+    }
+
+    function getSODone() {
+        $data = TFProduksi::with('pesanan')->where([
+            ['jenis', '=', 'keluar'],
+            ['status_id', '=', 2],
+        ])->whereNotNull('pesanan_id')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('noso', function($d) {
+                return $d->pesanan->so;
+            })
+            ->addColumn('customer', function($data) {
+                $name = explode('/', $data->pesanan->so);
+                for ($i = 1; $i < count($name); $i++) {
+                    if ($name[1] == 'EKAT') {
+                        return $data->pesanan->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->pesanan->Spa->Customer->nama;
+                    } elseif ($name[1] == 'SPB') {
+                        return $data->pesanan->Spb->Customer->nama;
+                    }
+                }
+            })
+            ->addColumn('tgl_kontrak', function($d) {
+                if (isset($d->pesanan->Ekatalog->tgl_kontrak)) {
+                    return $d->pesanan->Ekatalog->tgl_kontrak;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('aksi', function($d) {
+                return 12;
+                 return '<td><a href="'.url('gbj/export_spb/'.$d->pesanan->id.'').'">
+                        <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
+                        </a></td>';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
     function exportSpb($id)
@@ -810,7 +892,7 @@ class GudangController extends Controller
                 $nn = new NoseriBarangJadi();
                 $nn->gdg_barang_jadi_id = $key;
                 $nn->dari = $request->dari;
-                $nn->noseri = $value1;
+                $nn->noseri = strtoupper($value1);
                 $nn->layout_id = $value['layout'][$key1];
                 $nn->jenis = 'MASUK';
                 $nn->is_aktif = 1;
@@ -897,8 +979,6 @@ class GudangController extends Controller
 
     function storeCekSO(Request $request)
     {
-
-        // dd($request->all());
         $check_array = $request->gbj_id;
         $id = $request->pesanan_id;
         $h = Pesanan::find($request->pesanan_id);
@@ -908,7 +988,6 @@ class GudangController extends Controller
                 DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->whereIn('gudang_barang_jadi_id', $check_array)
                     ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
             }
-            // dd($request->gbj_id[$key]);
         }
 
         $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->where('status_cek',4)->get()->count();
@@ -920,7 +999,6 @@ class GudangController extends Controller
             $h->save();
         }
 
-        // return response()->json($dt);
         return response()->json(['msg' => 'Successfully']);
     }
 
@@ -1668,11 +1746,17 @@ class GudangController extends Controller
 
     function test(Request $request)
     {
-        // list all so
-        $data = TFProduksiDetail::whereHas('header', function ($q) {
-            $q->where('pesanan_id', 8);
-        })->with('seri.seri', 'header.pesanan', 'produk.produk')->get();
-        return $data;
+        $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use($request) {
+            $q->where('dari', 17);
+            $q->where('tgl_masuk', $request->tgl);
+        })
+        ->whereHas('detail', function($qq) use($request) {
+            $qq->where('gdg_brg_jadi_id', $request->gbj);
+        })
+        ->where('status_id', 3)
+        ->with('detail.header')
+        ->get();
+        return $jumlah;
     }
 
     function updateSeriLayout(Request $request)
@@ -1690,7 +1774,7 @@ class GudangController extends Controller
         $count = count($request->no_seri);
         for ($i=0; $i < $count; $i++) {
             NoseriBarangJadi::create([
-                'noseri' => $request->no_seri[$i],
+                'noseri' => strtoupper($request->no_seri[$i]),
                 'layout_id' => $request->layout[$i],
                 'gdg_barang_jadi_id' => $request->id,
                 'dari' => $request->dari,

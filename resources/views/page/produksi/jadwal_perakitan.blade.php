@@ -388,7 +388,7 @@
                 var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq(" + i + ")");
                 for (var k = 0; k < 1; k++) {
                     $row.append(
-                        '<td><input type="text" name="noseri[]" class="form-control noseri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>'
+                        '<td><input type="text" name="noseri[]" class="form-control noseri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>'
                     );
                 }
             }

@@ -151,6 +151,7 @@ Route::prefix('/gbj')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
+    Route::post('data-so', [GudangController::class, 'getSODone']);
 
     Route::get('/test', [App\Http\Controllers\GudangController::class, 'test']);
 
