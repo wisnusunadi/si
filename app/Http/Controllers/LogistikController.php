@@ -2229,17 +2229,18 @@ class LogistikController extends Controller
             return view('page.logistik.so.detail_ekatalog', ['proses' => $proses, 'status' => $status, 'data' => $data, 'detail_id' => $detail_id, 'value' => $value, 'status' => $status]);
         }
     }
-    public function create_logistik_view($detail_pesanan_id, $pesanan_id, $jenis)
+    public function create_logistik_view($produk_id, $part_id, $pesanan_id, $jenis)
     {
         $value = array();
         $value2 = [];
         $id = [];
         $id_produk = [];
         $a = 0;
-        $x = explode(',', $detail_pesanan_id);
+        $x = explode(',', $produk_id);
+        $y = explode(',', $part_id);
 
-        if ($jenis != "SPB") {
-            if ($detail_pesanan_id == '0') {
+        if ($jenis == "EKAT") {
+            if ($produk_id == '0') {
                 $datas = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
                     $q->where('pesanan_id', $pesanan_id);
                 })->get();
@@ -2277,6 +2278,7 @@ class LogistikController extends Controller
                 $id =  json_encode($value);
                 $id_produk =  json_encode($value2);
             } else {
+
                 foreach ($x as $d) {
                     $value[$a]['id'] = $d;
                     $count = 0;
@@ -2293,28 +2295,51 @@ class LogistikController extends Controller
 
             return view('page.logistik.so.create', ['id' => $id, 'id_produk' => $id_produk, 'jenis' => $jenis]);
         } else {
-            if ($detail_pesanan_id == "0") {
-                $array_id = array();
-                $datas = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
-                foreach ($datas as $i) {
-                    if (isset($i->DetailLogistikPart)) {
-                        echo $i->id;
-                        $value[$a]['id'] = $i->id;
-                        $a++;
-                    }
-                }
 
+            if ($produk_id != 0 && $part_id == 0) {
+                foreach ($x as $d) {
+                    $value[$a]['id'] = $d;
+                    $count = 0;
+                    $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+                    foreach ($e as $f) {
+                        $value[$a]['noseri'][$count] = $f->id;
+                        $count++;
+                    }
+                    $a++;
+                }
                 $id =  json_encode($value);
                 $id_produk =  json_encode($value2);
-            } else {
-                foreach ($x as $d) {
+            } else if ($produk_id == 0 && $part_id != 0) {
+                foreach ($y as $d) {
                     $value[$a]['id'] = $d;
                     $a++;
                 }
                 $id =  json_encode($value);
                 $id_produk =  json_encode($value2);
+            } else if ($produk_id != 0 && $part_id != 0) {
+            } else {
             }
+            // if ($detail_pesanan_id == "0") {
+            //     $array_id = array();
+            //     $datas = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
+            //     foreach ($datas as $i) {
+            //         if (isset($i->DetailLogistikPart)) {
+            //             echo $i->id;
+            //             $value[$a]['id'] = $i->id;
+            //             $a++;
+            //         }
+            //     }
 
+            //     $id =  json_encode($value);
+            //     $id_produk =  json_encode($value2);
+            // } else {
+            //     foreach ($x as $d) {
+            //         $value[$a]['id'] = $d;
+            //         $a++;
+            //     }
+            //     $id =  json_encode($value);
+            //     $id_produk =  json_encode($value2);
+            // }
             return view('page.logistik.so.create', ['id' => $id, 'id_produk' => $id_produk, 'jenis' => $jenis]);
         }
     }

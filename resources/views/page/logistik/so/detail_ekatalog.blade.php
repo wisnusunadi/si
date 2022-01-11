@@ -962,7 +962,7 @@
             var pesanan_id = '{{$data->pesanan_id}}';
 
             $.ajax({
-                url: "/logistik/so/create/" + 1 + '/' + pesanan_id + '/' + jenis_penjualan,
+                url: "/logistik/so/create/" + produk_id + '/' + part_id + '/' + pesanan_id + '/' + jenis_penjualan,
                 beforeSend: function() {
                     $('#loader').show();
                 },
