@@ -2179,7 +2179,12 @@ class LogistikController extends Controller
     {
         $array = array_values(json_decode($detail_pesanan_id, true));
         $ids = "";
-
+        $kodesj = "";
+        if ($jenis != "SPB") {
+            $kodesj = "SPA-";
+        } else {
+            $kodesj = "B.";
+        }
         // return response()->json(['data' =>  $poid]);
 
         $bool = true;
@@ -2187,13 +2192,13 @@ class LogistikController extends Controller
         if ($request->pengiriman == 'ekspedisi') {
             $Logistik = Logistik::create([
                 'ekspedisi_id' => $request->ekspedisi_id,
-                'nosurat' => 'SPA-' . $request->no_invoice,
+                'nosurat' => $kodesj . $request->no_invoice,
                 'tgl_kirim' => $request->tgl_kirim,
                 'status_id' => '11'
             ]);
         } else {
             $Logistik = Logistik::create([
-                'nosurat' => 'SPA-' . $request->no_invoice,
+                'nosurat' => $kodesj . $request->no_invoice,
                 'tgl_kirim' => $request->tgl_kirim,
                 'nama_pengirim' => $request->nama_pengirim,
                 'status_id' => '11'

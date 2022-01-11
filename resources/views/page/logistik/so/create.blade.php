@@ -15,7 +15,13 @@
                                         <div class="col-6">
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text">SPA-</span>
+
+                                                    <span class="input-group-text">
+                                                        @if($jenis != "SPB")
+                                                        SPA-
+                                                        @else
+                                                        B.
+                                                        @endif</span>
                                                 </div>
                                                 <input type="text" class="form-control col-form-label" name="no_invoice" id="no_invoice">
                                                 <div class="invalid-feedback" id="msgnoinvoice"></div>

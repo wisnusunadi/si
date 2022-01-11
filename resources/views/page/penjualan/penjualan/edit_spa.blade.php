@@ -87,7 +87,7 @@
     <div class="container-fluid">
         @foreach($spa as $e)
         <div class="row justify-content-center">
-            <div class="col-lg-10 col-md-12 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -201,7 +201,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-10 col-md-12 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header bg-warning">
                         <div class="card-title">Form Ubah Data</div>

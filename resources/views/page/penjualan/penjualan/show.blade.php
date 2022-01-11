@@ -25,6 +25,15 @@
 
 @section('adminlte_css')
 <style>
+    .wb {
+        word-break: break-all;
+        white-space: normal;
+    }
+
+    .nowraptxt {
+        white-space: nowrap;
+    }
+
     .filter {
         margin: 5px;
     }
@@ -814,7 +823,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
+
                                     <div class="table-responsive">
+
                                         <table class="table table-hover" id="spbtable" style="width:100%">
                                             <thead>
                                                 <tr>
@@ -930,6 +941,9 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $('#tabledetailpesan').DataTable({
+            "scrollX": false
+        });
         var divisi_id = "{{Auth::user()->divisi->id}}";
         var penjualantable = $('#penjualantable').DataTable({
             destroy: true,
