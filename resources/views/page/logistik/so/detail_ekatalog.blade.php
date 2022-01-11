@@ -704,15 +704,15 @@
             return false;
         });
 
-        function detailpesanan(id, pesanan_id) {
+        function detailpesanan(produk_id, part_id, pesanan_id) {
             $('#detailpesanan').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id + '/' + jenis_penjualan,
+                    'url': '/api/logistik/so/detail/select/' + produk_id + '/' + part_id + '/' + pesanan_id + '/' + jenis_penjualan,
                     'dataType': 'json',
-                    'type': 'POST',
+                    'type': 'GET',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -823,33 +823,83 @@
         //     });
         // }
 
-        var checkedAry = [];
+        produk_id = [];
+        part_id = [];
+
         $('#belumkirimtable').on('click', 'input[name="check_all"]', function() {
             if ($('input[name="check_all"]:checked').length > 0) {
-                $('.detail_produk_id').prop('checked', true);
-                checkedAry = []
-                checkedAry.push('0')
+                $('.check_detail').prop('checked', true);
+                produk_id = [];
+                part_id = [];
+                produk_id.push('0');
+                part_id.push('0');
+
                 $('#kirim_produk').removeAttr('disabled');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('.detail_produk_id').prop('checked', false);
+                $('.check_detail').prop('checked', false);
                 $('#kirim_produk').prop('disabled', true);
             }
         });
 
 
-        $('#belumkirimtable').on('click', '.detail_produk_id', function() {
+        $('#belumkirimtable').on('click', '.check_detail', function() {
             $('#check_all').prop('checked', false);
+
+
             if ($('.detail_produk_id:checked').length > 0) {
-                $('#kirim_produk').removeAttr('disabled');
-                checkedAry = [];
+                produk_id = [];
                 $.each($(".detail_produk_id:checked"), function() {
-                    checkedAry.push($(this).closest('tr').find('.detail_produk_id').attr('data-id'));
+                    produk_id.push($(this).closest('tr').find('.detail_produk_id').attr('data-id'));
                 });
 
             } else if ($('.detail_produk_id:checked').length <= 0) {
-                $('#kirim_produk').attr('disabled', true);
+                produk_id = ['0'];
             }
+            if ($('.detail_part_id:checked').length > 0) {
+                part_id = [];
+                $.each($(".detail_part_id:checked"), function() {
+                    part_id.push($(this).closest('tr').find('.detail_part_id').attr('data-id'));
+                });
+            } else if ($('.detail_part_id:checked').length <= 0) {
+                part_id = ['0'];
+            }
+
+            if ($('.check_detail').is(':checked')) {
+                $('#kirim_produk').removeAttr('disabled');
+            } else {
+                $('#kirim_produk').prop('disabled', true);
+            }
+
+
+
         })
+        // $('#belumkirimtable').on('click', '.detail_produk_id', function() {
+        //     $('#check_all').prop('checked', false);
+        //     if ($('.detail_produk_id:checked').length > 0) {
+        //         $('#kirim_produk').removeAttr('disabled');
+        //         checkedAry = [];
+        //         $.each($(".detail_produk_id:checked"), function() {
+        //             checkedAry.push($(this).closest('tr').find('.detail_produk_id').attr('data-id'));
+        //         });
+
+        //     } else if ($('.detail_produk_id:checked').length <= 0) {
+        //         $('#kirim_produk').removeAttr('disabled');
+        //     }
+        // })
+
+        // $('#belumkirimtable').on('click', '.detail_part_id', function() {
+        //     $('#check_all').prop('checked', false);
+        //     if ($('.detail_part_id:checked').length > 0) {
+        //         $('#kirim_produk').removeAttr('disabled');
+        //         partAry = [];
+        //         $.each($(".detail_part_id:checked"), function() {
+        //             partAry.push($(this).closest('tr').find('.detail_part_id').attr('data-id'));
+        //         });
+
+        //     } else if ($('.detail_part_id:checked').length <= 0) {
+        //         $('#kirim_produk').removeAttr('disabled');
+        //     }
+        // })
 
         function ekspedisi_select(id) {
             $('.ekspedisi_id').select2({
@@ -909,21 +959,25 @@
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data('id');
-            var pesanan_id = '{{$data->id}}';
+            var pesanan_id = '{{$data->pesanan_id}}';
 
             $.ajax({
-                url: "/logistik/so/create/" + checkedAry + '/' + pesanan_id + '/' + jenis_penjualan,
+                url: "/logistik/so/create/" + 1 + '/' + pesanan_id + '/' + jenis_penjualan,
                 beforeSend: function() {
                     $('#loader').show();
                 },
                 // return the result
                 success: function(result) {
+
+                    console.log(produk_id);
+                    console.log(part_id);
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    detailpesanan(checkedAry, pesanan_id);
-                    console.log('/api/logistik/so/detail/select/' + checkedAry + '/' + pesanan_id + '/' + jenis_penjualan)
-                    ekspedisi_select(provinsi);
-                    $('#tgl_kirim').attr('max', today);
+                    detailpesanan(produk_id, part_id, pesanan_id);
+                    console.log('/api/logistik/so/detail/select/' + produk_id + '/' + part_id + '/' + pesanan_id + '/' + jenis_penjualan)
+                    // ekspedisi_select(provinsi);
+                    // $('#tgl_kirim').attr('max', today);
+
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {

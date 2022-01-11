@@ -124,4 +124,6 @@
             </div>
         </div>
     </div>
+    {{$id}}
+    {{$id_produk}}
 </form>
