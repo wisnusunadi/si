@@ -861,7 +861,6 @@
         $('#no_paket').on('keyup change', function() {
             if ($(this).val() != "") {
                 var values = $(this).val();
-                console.log(check_no_paket(values));
                 if (check_no_paket(values) > 0) {
                     $("#msgno_paket").text("No Paket tidak boleh sama");
                     $("#no_paket").addClass('is-invalid');
@@ -1129,7 +1128,6 @@
                     },
                     processResults: function(data) {
 
-                        //console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -1243,7 +1241,6 @@
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
                 var subtotal = replaceAll($(this).val(), '.', '');
-                // console.log(subtotal);
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
@@ -1285,7 +1282,6 @@
                     if (jumlah_pesan == "") {
                         jumlah_pesan = 0;
                     }
-                    console.log('subtotal' + formatmoney((res[0].harga) * jumlah_pesan));
                     $('#produk_subtotal' + index).val(formatmoney((res[0].harga) * jumlah_pesan));
                     var tes = $('#detail_produk' + index);
                     tes.empty();

@@ -83,12 +83,14 @@
                         <div class="table-responsive">
                             <!-- <div class="form-horizontal"> -->
                             <?php $totalharga = 0; ?>
+                            <?php $no = 0; ?>
                             @if(isset($data->Pesanan))
-                            <div class="card removeshadow">
+                            <div class="card removeshadow" style="background-color:white;">
                                 <div class="card-body">
-                                    <table class="table" style="max-width:100%; overflow-x: hidden;" id="tabledetailpesan">
+                                    <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
                                         <thead>
                                             <tr>
+                                                <th rowspan="2">No</th>
                                                 <th rowspan="2">Produk</th>
                                                 <th colspan="2">Qty</th>
                                                 <th rowspan="2">Harga</th>
@@ -102,27 +104,28 @@
                                         <tbody>
                                             @if(isset($data->Pesanan->detailpesanan))
                                             @foreach($data->pesanan->detailpesanan as $e)
+                                            <?php $no = $no + 1; ?>
                                             <tr>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">{{$no}}</td>
                                                 <td><b class="wb">{{$e->PenjualanProduk->nama}}</b></td>
                                                 <td colspan="2" class="nowraptxt">{{$e->jumlah}}</td>
-                                                <td rowspan="{{count($e->DetailPesananProduk)}}" class="nowraptxt">@currency($e->harga)</td>
-                                                <td rowspan="{{count($e->DetailPesananProduk)}}" class="nowraptxt">@currency($e->harga * $e->jumlah)</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga)</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga * $e->jumlah)</td>
                                                 <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                             </tr>
                                             @if(isset($e->DetailPesananProduk))
                                             @foreach($e->DetailPesananProduk as $l)
                                             <tr>
-                                                <td>@if(!empty($l->GudangBarangJadi->nama))
-                                                    {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
-                                                    @else
-                                                    {{$l->GudangBarangJadi->Produk->nama}}
-                                                    @endif
+                                                <td><span class="text-muted">@if(!empty($l->GudangBarangJadi->nama))
+                                                        {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
+                                                        @else
+                                                        {{$l->GudangBarangJadi->Produk->nama}}
+                                                        @endif</span>
                                                 </td>
                                                 <td>
                                                     {{ $l->DetailPesanan->PenjualanProduk->produk->first()->pivot->jumlah * $l->DetailPesanan->jumlah}}
                                                 </td>
                                                 <td>{{$l->getJumlahKirim()}}</td>
-                                                <td colspan="2"></td>
                                             </tr>
                                             @endforeach
                                             @endif
@@ -131,7 +134,9 @@
 
                                             @if(isset($data->Pesanan->detailpesananpart))
                                             @foreach($data->pesanan->detailpesananpart as $e)
+                                            <?php $no = $no + 1; ?>
                                             <tr>
+                                                <td class="nowraptxt">{{$no}}</td>
                                                 <td class="wb"><b>{{$e->Sparepart->nama}}</b></td>
                                                 <td class="nowraptxt"><span class="text-muted">{{$e->jumlah}}</span></td>
                                                 <td class="nowraptxt">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
@@ -144,7 +149,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="4">Total Harga</td>
+                                                <td colspan="5">Total Harga</td>
                                                 <td>@currency($totalharga)</td>
                                             </tr>
                                         </tfoot>
