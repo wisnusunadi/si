@@ -295,7 +295,7 @@
                     dataType: 'json',
                     delay: 250,
                     type: 'GET',
-                    url: '/api/logistik/ekspedisi/select',
+                    url: '/api/logistik/ekspedisi/select/0',
                     data: function(params) {
                         return {
                             term: params.term

@@ -891,11 +891,17 @@ class MasterController extends Controller
     }
     public function select_ekspedisi(Request $request, $provinsi)
     {
-        $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-            ->orderby('nama', 'ASC')->whereHas('Provinsi', function ($q) use ($provinsi) {
-                $q->where('id', $provinsi);
-                $q->Orwhere('id', 35);
-            })->get();
+        $data = null;
+        if ($provinsi != "0") {
+            $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+                ->orderby('nama', 'ASC')->whereHas('Provinsi', function ($q) use ($provinsi) {
+                    $q->where('id', $provinsi);
+                    $q->Orwhere('id', 35);
+                })->get();
+        } else {
+            $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+                ->orderby('nama', 'ASC')->get();
+        }
         echo json_encode($data);
     }
 

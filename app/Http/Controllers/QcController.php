@@ -129,17 +129,18 @@ class QcController extends Controller
     public function get_data_detail_so($id)
     {
         $x = explode(',', $id);
-        $data = DetailPesananProduk::with('noseridetailpesanan')->whereIN('detail_pesanan_id', $x)->groupby('gudang_barang_jadi_id')->get();
-
+        $data = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->groupby('gudang_barang_jadi_id')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
+                $string = "";
                 if (empty($data->gudangbarangjadi->nama)) {
-                    return $data->gudangbarangjadi->produk->nama;
+                    $string .= $data->gudangbarangjadi->produk->nama;
                 } else {
-                    return $data->gudangbarangjadi->produk->nama . " - <b>" . $data->gudangbarangjadi->nama . "</b>";
+                    $string .= $data->gudangbarangjadi->produk->nama . " - <b>" . $data->gudangbarangjadi->nama . "</b>";
                 }
+                return $string;
             })
             ->addColumn('jumlah', function ($data) use ($x) {
                 // $j = DetailPesanan::whereIN('id', $x)->whereHas('DetailPesananProduk', function ($q) use ($id) {
@@ -159,6 +160,8 @@ class QcController extends Controller
                 //     // }
                 // }
                 // return $jumlah;
+
+                //V1
                 $id = $data->gudang_barang_jadi_id;
                 $pesanan_id = $data->DetailPesanan->pesanan_id;
                 $jumlah = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
@@ -167,6 +170,11 @@ class QcController extends Controller
                     $q->where('pesanan_id', $pesanan_id);
                 })->count();
                 return $jumlah;
+
+                //V2
+                // $jumlah = $data->getJumlahPesanan();
+                // return $jumlah;
+
                 // return $data->detailpesanan->jumlah * $data->detailpesanan->Penjualanproduk->produk->first()->pivot->jumlah;
             })
             ->addColumn('jumlah_ok', function ($data) use ($x) {
@@ -214,7 +222,6 @@ class QcController extends Controller
                 })->count();
 
                 $bool = "0";
-
                 if ($jumlahditrf > 0) {
                     if ($jumlahditrf == $ok) {
                         return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
@@ -329,7 +336,6 @@ class QcController extends Controller
                 }
 
                 $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
-
 
                 if ($jumlah == $jumlah_seri) {
                     return  '<span class="badge green-text">Selesai</span>';

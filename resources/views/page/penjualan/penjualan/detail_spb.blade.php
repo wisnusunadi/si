@@ -123,7 +123,7 @@
                                                         @endif</span>
                                                 </td>
                                                 <td>
-                                                    {{ $l->DetailPesanan->PenjualanProduk->produk->first()->pivot->jumlah * $l->DetailPesanan->jumlah}}
+                                                    {{$l->getJumlahPesanan()}}
                                                 </td>
                                                 <td>{{$l->getJumlahKirim()}}</td>
                                             </tr>
