@@ -424,12 +424,11 @@ $('#tahun').change(function (e) {
         type: "post",
         url: "/api/gk/transaksi/grafik-trf",
         data: {
-            id: id,
+            id: id, 
             tahun: this.value,
         },
         success: function (res) {
             console.log("grafik");
-            console.log(res);
             // if (res.masuk && res.data != null) {
             //     myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
             //     myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
