@@ -314,7 +314,7 @@
             processing: true,
             destroy: true,
             ajax: {
-                url: '/api/tfp/data-so', 
+                url: '/api/tfp/data-so',
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},

@@ -4,6 +4,7 @@
 
 @section('content')
 <div class="content-header">
+    <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -522,6 +523,7 @@
 
 {{-- data --}}
 <script type="text/javascript">
+var authid = $('#authid').val();
     // initial
     $.ajaxSetup({
         headers: {
@@ -578,9 +580,39 @@
             {
                 data: 'kelompok'
             },
-            {
-                data: 'action'
-            }
+            // {
+            //     data: 'action'
+            // }
+            {data: function(data) {
+                if (authid != 2) {
+                    // console.log(data)
+                    // return
+                    return `<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id=`+data.id+`>
+                            <button class="btn btn-outline-success btn-sm" type="button" >
+                            <i class="far fa-edit"></i>&nbsp;Edit
+                            </button>
+                        </a>
+
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id=`+data.id+`>
+                            <button class="btn btn-outline-info btn-sm" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Detail
+                            </button>
+                        </a>
+
+                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id=`+data.id+`>
+                            <button class="btn btn-outline-warning btn-sm" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Daftar Stok
+                            </button>
+                        </a>`
+                } else {
+                    return `<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id=`+data.id+`>
+                                <button class="btn btn-outline-info btn-sm" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>`;
+                }
+
+            }}
         ],
         language: {
             search: "Cari:"
@@ -782,7 +814,7 @@
         var i = 0;
         $('.view_produk').DataTable().destroy();
         $('view_produk tbody').empty();
-        $('.view_produk').DataTable({   
+        $('.view_produk').DataTable({
             destroy: true,
             "ordering":false,
             "autoWidth": false,
@@ -796,7 +828,7 @@
                 {data: 'dari'},
             ],
         });
-        
+
         $('.modalViewStock').modal('show');
     });
 
@@ -871,7 +903,7 @@
         $('.tambah_noseri_tableee').DataTable().destroy();
         $('.tambah_noseri_table').empty();
         let jumlah = $('#jumlah_noseri').val();
-        let table = '<tr><td><input type="text" name="" id="" class="form-control no_seri"></td><td><select name="" id="" class="form-control layout_seri"></select></td></tr>';
+        let table = '<tr><td><input type="text" name="" id="" class="form-control no_seri" style="text-transform:uppercase"></td><td><select name="" id="" class="form-control layout_seri"></select></td></tr>';
         for (let i = 0; i < jumlah; i++) {
             $('.tambah_noseri_table').append(table);
         }

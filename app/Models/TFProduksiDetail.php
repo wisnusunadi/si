@@ -29,5 +29,36 @@ class TFProduksiDetail extends Model
     {
         return $this->hasMany(NoseriTGbj::class, 't_gbj_detail_id');
     }
+
+    function getseriditerima() {
+        $tgl = $this->tgl_masuk;
+        $prd = $this->prd;
+        $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use($tgl) {
+                $q->where('dari', 17);
+                $q->where('tgl_masuk', $tgl);
+            })
+            ->whereHas('detail', function($qq) use($prd) {
+                $qq->where('gdg_brg_jadi_id', $prd);
+            })
+            ->where('status_id', 3)
+            ->with('detail.header')
+            ->get();
+        return $jumlah;
+    }
+
+    function getserisemua() {
+        $tgl = $this->tgl_masuk;
+        $prd = $this->prd;
+        $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use($tgl) {
+                $q->where('dari', 17);
+                $q->where('tgl_masuk', $tgl);
+            })
+            ->whereHas('detail', function($qq) use($prd) {
+                $qq->where('gdg_brg_jadi_id', $prd);
+            })
+            ->with('detail.header')
+            ->get();
+        return $jumlah;
+    }
 }
 

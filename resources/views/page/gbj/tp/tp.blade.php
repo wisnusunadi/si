@@ -45,6 +45,7 @@
     }
 </style>
 <div class="content-header">
+    <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id; }}">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
@@ -217,28 +218,10 @@
                                                 <th>Nomor SO</th>
                                                 <th>Customer</th>
                                                 <th>Batas Transfer</th>
-                                                @if (Auth::user()->divisi_id != 2)
-                                                    <th>Aksi</th>
-                                                @endif
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php
-                                                $no = 1;
-                                            @endphp
-                                            @foreach ($data1 as $d)
-                                            <tr>
-                                                <td>{{ $no++ }}</td>
-                                                <td>{{ $d->pesanan->so }}</td>
-                                                <td>{{ $d->pesanan->ekatalog->customer->nama }}</td>
-                                                <td>{{ Carbon\Carbon::parse($d->pesanan->ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY') }}</td>
-                                                @if (Auth::user()->divisi_id != 2)
-                                                <td><a href="{{ url('gbj/export_spb/'.$d->pesanan->id) }}">
-                                                    <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
-                                                    </a></td>
-                                                @endif
-                                            </tr>
-                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -518,7 +501,8 @@
         detailtanggal();
     });
 
-
+    var userid = $('#authid').val();
+    console.log(userid);
     var soTable = $('#gudang-salesorder').DataTable({
         processing: true,
         responsive: true,
@@ -527,7 +511,29 @@
         ordering: false,
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
+        },
+        ajax: {
+            url: "/api/gbj/data-so",
+            type: "post",
+        },
+        columns:[
+            {data: 'DT_RowIndex'},
+            {data: 'noso'},
+            {data: 'customer'},
+            {data: 'tgl_kontrak'},
+            {data: function(data) {
+                if (userid != 2) {
+                    // console.log(data)
+                    // return
+                    return `<td><a href="export_spb/`+data.pesanan.id+`">
+                        <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
+                        </a></td>`
+                } else {
+                    return '';
+                }
+
+            }}
+        ],
     });
     // Sales Order Cetak
     $('#gudang-salesorder-search').on('keyup', function() {

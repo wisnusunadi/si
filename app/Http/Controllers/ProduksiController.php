@@ -12,6 +12,7 @@ use App\Models\JadwalPerakitan;
 use App\Models\JadwalPerakitanLog;
 use App\Models\JadwalRakitNoseri;
 use App\Models\NoseriBarangJadi;
+use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriTGbj;
 use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
@@ -297,20 +298,19 @@ class ProduksiController extends Controller
 
         $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
         $jumlah = 0;
+        $x = 0;
         foreach ($s as $i) {
             foreach ($i->PenjualanProduk->Produk as $j) {
-                $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+                $x = $jumlah + ($i->jumlah * $j->pivot->jumlah);
             }
         }
 
         $jumlah_kirim = NoseriTGbj::whereHas('detail.header.pesanan', function ($q) use ($request) {
-            $q->where('id', $request->pesanan_id)->where('status_id', 2);
-        })->get()->count();
-        $now = intval($jumlah - $jumlah_kirim);
-        if ($jumlah == $jumlah_kirim) {
+            $q->where('id', $request->pesanan_id);
+        })->where('status_id', 2)->get()->count();
+
+        if ($x == $jumlah_kirim) {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
-        } elseif ($now == $jumlah_kirim) {
-            // Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
         } else {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);
         }
@@ -442,8 +442,8 @@ class ProduksiController extends Controller
     function getSOCek()
     {
         $Ekatalog = collect(Pesanan::has('Ekatalog')->where('log_id', 9)->get());
-        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->get());
-        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->get());
+        $Spa = collect(Pesanan::has('Spa')->where('log_id', 9)->Has('DetailPesanan')->get());
+        $Spb = collect(Pesanan::has('Spb')->where('log_id', 9)->Has('DetailPesanan')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -524,7 +524,7 @@ class ProduksiController extends Controller
                         } elseif ($x[1] == 'SPA') {
                             return '
                                     <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spa" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                     ';
                         } elseif ($x[1] == 'SPB') {
                             return '
@@ -1674,6 +1674,20 @@ class ProduksiController extends Controller
         ]);
     }
 
+    function cekDuplicateNoseri(Request $request) {
+        $noseri = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
+        $data = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get()->count();
+        $seri = [];
+        if ($data > 0) {
+            foreach ($noseri as $item) {
+                array_push($seri, $item->noseri);
+            }
+            return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true]);
+        } else {
+            return response()->json(['msg' => 'Success', 'error' => false]);
+        }
+    }
+
     function storeRakitNoseri(Request $request)
     {
         $cek_seri = JadwalRakitNoseri::where('noseri', $request->noseri)->get();
@@ -1683,7 +1697,7 @@ class ProduksiController extends Controller
                     $seri = new JadwalRakitNoseri();
                     $seri->date_in = Carbon::now();
                     $seri->jadwal_id = $request->jadwal_id;
-                    $seri->noseri = $value;
+                    $seri->noseri = strtoupper($value);
                     $seri->status = 11;
                     $seri->created_by = $request->userid;
                     $seri->save();
@@ -1768,7 +1782,7 @@ class ProduksiController extends Controller
         $detail = new TFProduksiDetail();
         $detail->t_gbj_id = $header->id;
         $detail->gdg_brg_jadi_id = $request->gbj_id;
-        $detail->qty = $request->qty;
+        $detail->qty = count($request->noseri);
         $detail->jenis = 'masuk';
         $detail->created_at = Carbon::now();
         $detail->created_by = $request->userid;
@@ -1969,20 +1983,30 @@ class ProduksiController extends Controller
     // gbj
     function terimaseri(Request $request)
     {
-        // dd($request->all());
+
+        // dd($request->seri);
         $seri = NoseriTGbj::whereIn('id', $request->seri)->get()->toArray();
+        // // return $seri;
+        // // // // if (count($seri) == $request->seri) {
+        // // // //     return 'a';
+        // // // // } else {
+        // // // //     return 'b';
+        // // // // }
         $i = 0;
         foreach ($seri as $s) {
+            // return $s;
             $i++;
-
             for ($k = 0; $k < count($request->layout); $k++) {
+                // print_r(NoseriTGbj::where('id', $request->seri[$k])->get());
                 NoseriTGbj::where('id', $request->seri[$k])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => json_decode($request->layout[$k], true)]);
             }
 
             NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
 
-            $hid = NoseriTGbj::find($s['id']);
-            TFProduksiDetail::find($hid->t_gbj_detail_id)->update(['status_id' => 3, 'state_id' => 16]);
+            // $hid = NoseriTGbj::find($s['id']);
+            // return TFProduksiDetail::find($hid->t_gbj_detail_id)->get()->pluck('gdg_brg_jadi_id');
+            // $aa = TFProduksiDetail::where('gdg_brg_jadi_id', $hid-)
+            // TFProduksiDetail::find($hid->t_gbj_detail_id)->update(['status_id' => 3, 'state_id' => 16]);
 
             $gid = NoseriBarangJadi::where('id', $s['noseri_id'])->get();
             foreach ($gid as $g) {
@@ -2068,6 +2092,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
+
             ->make(true);
     }
 

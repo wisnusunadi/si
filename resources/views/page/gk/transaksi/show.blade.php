@@ -110,9 +110,9 @@
                         <div class="card-tools">
                                     <select name="tahun" id="tahun" class="form-control">
                                         <option value="" selected>Pilih Tahun</option>
-                                        @foreach ($data as $d)
-                                            @if ($d->tahun != null)
-                                                <option value="{{ $d->tahun }}">{{ $d->tahun }}</option>
+                                        @foreach ($data as $k => $v)
+                                            @if ($k != null)
+                                                <option value="{{ $k }}">{{ $k }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -124,6 +124,7 @@
                 </div>
             </div>
             <div class="col-xl-7">
+
                 <div class="card">
                     <div class="card-title">
                         <div class="ml-3 mr-3">
@@ -230,10 +231,26 @@
 @section('adminlte_js')
 <script>
      var id = $('#id').val();
-     var value = $(this).data('jenis');
-     console.log(value);
+     var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
 
-    console.log(id);
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+        return false;
+    };
+
+     var value = getUrlParameter('jenis');
+    //  console.log(value);
+
+    // console.log(id);
 
     $.ajax({
         url: "/api/gk/transaksi/header/" + id,
@@ -250,6 +267,8 @@
             $('span#tinggi').text(res.tinggi);
         }
     });
+
+
 
     var start_date;
     var end_date;
@@ -409,22 +428,23 @@ $('#tahun').change(function (e) {
             tahun: this.value,
         },
         success: function (res) {
+            console.log("grafik");
             console.log(res);
-            if (res.masuk && res.data != null) {
-                myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
-                myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
-                myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
-                myChart.update();
-            }
-            else if (res.masuk != null) {
-                myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
-                myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
-                myChart.update();
-            }else if (res.data != null) {
-                myChart.data.labels = res.data.map(r => res.data[0].bulan);
-                myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
-                myChart.update();
-            }
+            // if (res.masuk && res.data != null) {
+            //     myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
+            //     myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
+            //     myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
+            //     myChart.update();
+            // }
+            // else if (res.masuk != null) {
+            //     myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
+            //     myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
+            //     myChart.update();
+            // }else if (res.data != null) {
+            //     myChart.data.labels = res.data.map(r => res.data[0].bulan);
+            //     myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
+            //     myChart.update();
+            // }
         }
     });
 });

@@ -360,6 +360,24 @@
     let spr_arr = [];
     let unit_arr = [];
 
+    $(document).on('keyup','#jml', function () {
+        let a = $(this).parent().next().children().eq(0);
+        if (this.value != '') {
+            $(a).prop('disabled', false);
+        }else{
+            $(a).prop('disabled', true);
+        }
+    })
+
+    $(document).on('keyup','#jum', function () {
+        let a = $(this).parent().next().children().eq(0);
+        if (this.value != '') {
+            $(a).prop('disabled', false);
+        }else{
+            $(a).prop('disabled', true);
+        }
+    })
+
     function addSpare(a) {
         var b = $(".btn_plus" + a).parent().prev().children().val();
         var c = $(".btn_plus" + a).parent().prev().prev().children().val();
@@ -481,7 +499,9 @@
                 type: "post",
                 data: {noseri:data},
                 success: function(res) {
-                    if(res.msg) {
+                    console.log(res);
+                    if(res.error == undefined) {
+                        // console.log('ok');
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
@@ -519,10 +539,11 @@
                             // $('.modalAddSparepart').modal('hide');
                         })
                     } else {
+                        // console.log('not');
                         // console.log(res);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Oops...', 
+                            title: 'Oops...',
                             text: res.error,
                         })
                     }
@@ -532,7 +553,7 @@
         }
     }
 
-    function addSparepart(x, y, z) {
+    function addSparepart(x, y, z) { 
         // header
         let testing = sparepart.find(element => element[0] == z);
         $('.spr').text(testing[1]);
@@ -551,7 +572,7 @@
             ii++;
             $('.scan-produk1 tbody').append('<tr id="row' + ii + '"><td><input type="text" name="noseri[][' + ii +
                 ']" id="noseri' + ii +
-                '" maxlength="13" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
+                '" maxlength="13" class="form-control seri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div></td><td><input type="text" name="remark[][' +
                 ii + ']" id="remark' + ii +
                 '" class="form-control remark"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="layout_id[][' +
                 ii + ']" id="layout_id' + ii +
@@ -754,7 +775,7 @@
             kk++;
             $('.scan-produk tbody').append('<tr id="u' + kk + '"><td><input type="text" name="noseri[][' + kk +
                 ']" id="noseri' + kk +
-                '" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
+                '" class="form-control seri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><input type="text" name="remark[][' +
                 kk + ']" id="remark' + kk + '" class="form-control kerusakan"><div class="invalid-feedback">Kerusakan Tidak Boleh Kosong.</div></td><td><select name="tk_kerusakan[][' + kk +
                 ']" id="tk_kerusakan' + kk +
                 '" class="form-control tingkat"><option value="" selected>Pilih Level</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option></select><div class="invalid-feedback">Silahkan pilih tingkat kerusakan.</div></td></tr>'
@@ -799,7 +820,7 @@
     var nmrspr = 1;
     $(document).on('click', '.add_sparepart', function () {
         i++;
-        let table_sparepart = '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_id'+nmrspr+'" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_sparepart = '<tr id='+nmrspr+'><td><select name="sparepart_id[]" id="sparepart_id'+nmrspr+'" class="form-control produk"></select></td><td><input type="text" name="qty_spr[]" id="jml" class="form-control number"></td><td><button class="btn btn-primary btn_plus'+nmrspr+'" data-id="" data-jml="" id="" onclick=addSpare('+nmrspr+') disabled><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_sparepart_table tbody').append(table_sparepart);
         $.each(sparepart, function (index, value) {
              $('.produk').append('<option value="' + value[0] + '">' + value[1] + '</option>');
@@ -816,7 +837,7 @@
     var nmrunt = 1;
     $(document).on('click', '.add_unit', function () {
         i++;
-        let table_unit = '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_id'+nmrunt+'" class="form-control produkk"></select></td><td><input type="text" name="qty_unit[]" id="jum" class="form-control number"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+')><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
+        let table_unit = '<tr id='+nmrunt+'><td><select name="gbj_id[]" id="gbj_id'+nmrunt+'" class="form-control produkk"></select></td><td><input type="text" name="qty_unit[]" id="jum" class="form-control number"></td><td><button class="btn btn-primary btnPlus'+nmrunt+'" id="" onclick=addUn('+nmrunt+') disabled><i class="fas fa-qrcode"></i> Tambah No Seri</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Delete</button></td></tr>';
         $('.add_unit_table tbody').append(table_unit);
         $.each(unit, function (index, value) {
              $('.produkk').append('<option value="' + value[0] + '">' + value[1] + '</option>');

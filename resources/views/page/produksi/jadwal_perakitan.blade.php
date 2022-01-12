@@ -388,7 +388,7 @@
                 var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq(" + i + ")");
                 for (var k = 0; k < 1; k++) {
                     $row.append(
-                        '<td><input type="text" name="noseri[]" class="form-control noseri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>'
+                        '<td><input type="text" name="noseri[]" class="form-control noseri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>'
                     );
                 }
             }
@@ -449,37 +449,48 @@
                     })
                 } else {
                     $.ajax({
-                        url: "/api/prd/rakit-seri",
+                        url: "/api/prd/cek-noseri",
                         type: "post",
                         data: {
-                            "_token": "{{ csrf_token() }}",
                             noseri: arr,
-                            userid: $('#userid').val(),
-                            jadwal_id: id,
                         },
-                        success: function (res) {
-                            console.log(res);
-                            if (res.msg == 'Successfully') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil',
-                                    text: 'Data berhasil disimpan.',
-                                })
-                                $('.modalRakit').modal('hide');
-                                $('.scan-produk').DataTable().destroy();
-                                $('.scan-produk tbody').empty();
-                                $('#table_produk_perakitan').DataTable().ajax
-                                    .reload();
-                            } else {
+                        success: function(res) {
+                            if(res.error == true) {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Oops...',
-                                    text: 'Nomor seri ada yang sama.',
+                                    text: res.msg,
                                 });
+                            } else {
+                                // console.log('a');
+                                $.ajax({
+                                    url: "/api/prd/rakit-seri",
+                                    type: "post",
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        noseri: arr,
+                                        userid: $('#userid').val(),
+                                        jadwal_id: id,
+                                    },
+                                    success: function (res) {
+                                        console.log(res);
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Berhasil',
+                                            text: 'Data berhasil disimpan.',
+                                        })
+                                        $('.modalRakit').modal('hide');
+                                        $('.scan-produk').DataTable().destroy();
+                                        $('.scan-produk tbody').empty();
+                                        $('#table_produk_perakitan').DataTable().ajax
+                                            .reload();
+                                        location.reload();
+                                    }
+                                })
                             }
-                            // location.reload();
                         }
                     })
+
                 }
             })
         })

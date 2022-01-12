@@ -1004,7 +1004,7 @@
             $('.scan-produk1 tbody').append('<tr id="row' + a +
                 '"><td><input type="checkbox" class="cb-child"  value="' + y +
                 '"></td><td><input type="text" name="noseri_id[][' + a + ']" id="noseri_id[' + a +
-                ']" class="form-control seri"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id[' +
+                ']" class="form-control seri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id[' +
                 a + ']" id="layout_id' + a + '" class="form-control layout"></select></td></tr>');
             $.each(function_layout[0], function (indexInArray, valueOfElement) {
                 $('#layout_id' + a).append('<option value="' + valueOfElement.id + '">' + valueOfElement.ruang +
