@@ -949,7 +949,7 @@ class SparepartController extends Controller
     // tf
     function transfer_by_draft(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $header = new GudangKarantina();
         $header->date_out = $request->date_out;
         $header->ke = $request->ke;
