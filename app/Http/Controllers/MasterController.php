@@ -841,7 +841,7 @@ class MasterController extends Controller
         $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
             ->orderby('nama', 'ASC')
             ->get();
-        echo json_encode($data);
+        return response()->json($data);
     }
     public function select_penjualan_produk_id($id)
     {
@@ -851,9 +851,11 @@ class MasterController extends Controller
         echo json_encode($data);
     }
 
-    function select_m_sparepart()
+    function select_m_sparepart(Request $request)
     {
-        $data = Sparepart::all();
+        $data = Sparepart::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')
+            ->get();
         return response()->json($data);
     }
 
