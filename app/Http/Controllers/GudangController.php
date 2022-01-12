@@ -1805,4 +1805,10 @@ class GudangController extends Controller
         // return
         // dd($request->all());
     }
+
+    function dataTesting(){
+        $data = storage_path('json/testing.json');
+        $json = json_decode(file_get_contents($data), true);
+        return $json;
+    }
 }

@@ -1,0 +1,28 @@
+{
+    "data": [
+      {
+        "id": "1",
+        "paket": "CMS + TIMBANGAN DIGITAL + AMBULATORY",
+        "quantity": "2",
+        "product_id": "<input type='checkbox' class='dt-checkboxes'>",
+        "product": "CMS",
+        "status": "<span class='badge badge-danger'>Belum Diinput</span>"
+      },
+      {
+        "id": "2",
+        "paket": "CMS + TIMBANGAN DIGITAL + AMBULATORY",
+        "quantity": "2",
+        "product_id": "<input type='checkbox' class='dt-checkboxes'>",
+        "product": "TIMBANGAN DIGITAL",
+        "status": "<span class='badge badge-danger'>Belum Diinput</span>"
+      },
+      {
+        "id": "3",
+        "paket": "CMS + TIMBANGAN DIGITAL + AMBULATORY",
+        "quantity": "2",
+        "product_id": "<input type='checkbox' class='dt-checkboxes'>",
+        "product": "AMBULATORY",
+        "status": "<span class='badge badge-success'>Sudah Diinput</span>"
+      }
+    ]
+  }

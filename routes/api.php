@@ -540,4 +540,6 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard']);
 });
 
+Route::get('testingJson', [GudangController::class, 'dataTesting']);
+
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');
