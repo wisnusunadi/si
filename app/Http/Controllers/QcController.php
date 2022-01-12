@@ -239,27 +239,27 @@ class QcController extends Controller
     {
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->orderby('id', 'ASC')->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get());
             $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get());
             $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get();
         } else {
-            $data = Pesanan::whereIN('id', $this->check_input())->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->get();
         }
 
         return datatables()->of($data)
