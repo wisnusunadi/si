@@ -946,6 +946,7 @@ var authid = $('#authid').val();
                         created_by: created_by,
                     },
                     success: function(res) {
+                        console.log(res);
                         if (res.success) {
                             Swal.fire(
                                 'Sukses!',

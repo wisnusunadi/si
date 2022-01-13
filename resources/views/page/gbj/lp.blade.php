@@ -464,10 +464,11 @@
         }
     });
     var id = '';
+    let jml = '';
     var gbj;
     $(document).on('click', '.editmodal', function () {
         id = $(this).data('id');
-        console.log(id);
+
 
         $.ajax({
             url: '/api/draft/data',
@@ -525,13 +526,16 @@
                 .to$()
                 .find('input[type=checkbox]')
                 .prop('checked', isChecked);
-            // let a = $('.scan-produk').DataTable().columns(0).nodes().to$().find('input[type="checkbox"]').prop('checked', isChecked);
-            // console.log(a);
+
     });
 
     $(document).on('click', '.detail', function (e) {
         var id = $(this).data('id');
         gbj = $(this).data('gbj');
+        var tr = $(this).closest('tr');
+        jml = tr.find('#qty').val();
+        did = tr.find('#tfid').val();
+        console.log(did);
         $('span#title').text($(this).data('nama') + $(this).data('var'));
 
         $('.scan-produk').DataTable({
@@ -897,22 +901,20 @@
     $(document).on('click', '#seriBtn', function (e) {
         let no_seri = [];
         let layout = [];
-        serir[gbj] = [];
+        serir[did] = {gbj: gbj, jumlah: jml, data: []};
         let a = $('.scan-produk').DataTable().column(0).nodes()
             .to$().find('input[type=checkbox]:checked');
         $(a).each(function (index, elm) {
             let noseri_temp = $(elm).val();
             let layout_temp = $(elm).parent().next().next().children().val()
-            // no_seri.push($(elm).val());
-            // layout.push($(elm).parent().next().next().children().val());
-            serir[gbj].push({
+
+            serir[did].data.push({
                 noseri: noseri_temp,
                 layout: layout_temp
             })
         });
 
-        // serir[gbj] = { 'noseri' : [], 'layout': []};
-        // const ids = [];
+
         $('.cb-child-rancang').each(function () {
             if ($(this).is(':checked')) {
                 // a.push($(this).val());
@@ -924,8 +926,7 @@
                     timer: 1500
                 })
             }
-            // serir[gbj].noseri = no_seri;
-            // serir[gbj].layout = layout;
+            
         })
         console.log(serir);
         $('.tambahan-rancangan').modal('hide');
@@ -956,7 +957,7 @@
                     },
                     success: function (res) {
                         console.log(res);
-                        location.reload();
+                        // location.reload();
                     }
                 })
 

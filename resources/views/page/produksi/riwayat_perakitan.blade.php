@@ -278,7 +278,7 @@
 
     var table = $('.table-history').DataTable({
         "columnDefs": [
-            { "visible": false, "targetstable-history": 0 },
+            { "visible": false, "targets": 0 },
             { "visible": false, "targets": 2 },
             { "visible": false, "targets": 8 },
             { "visible": false, "targets": 9 }
