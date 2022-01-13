@@ -104,6 +104,15 @@
 import $ from "jquery";
 import axios from "axios";
 
+/**
+ * @vue-data {Array} [data=[]] - this data store list of gbj products getted from API (url = '/api/ppic/data/gbj')
+ * @vue-data {Object} [detail={}] - this data store product detail that shown in modal when detail button clicked
+ * @vue-data {Boolean} [showModal=false] - this data store flag for show or hide modal detail product
+ *
+ * @vue-event {Array} loadData - function for initialized list of gbj products
+ * @vue-event {Object} getDetail - this function calling API to get product detail by id
+ */
+
 export default {
   name: "GudangBarangJadi",
 

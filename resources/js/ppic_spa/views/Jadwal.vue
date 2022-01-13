@@ -65,65 +65,11 @@
     </div>
     <template v-if="view === 'calendar'">
       <div class="columns">
-        <div
-          :class="[
-            'column',
-            this.$store.state.user.divisi_id == '24' ? 'is-9' : 'is-12',
-          ]"
-        >
+        <div class="column is-12">
           <div class="box">
             <Calendar :events="events" :status="status" />
           </div>
         </div>
-        <template v-if="this.$store.state.user.divisi_id == '24'">
-          <div class="column is-3">
-            <template v-if="!hide_button_calendar">
-              <div class="buttons">
-                <button
-                  v-if="
-                    this.$store.state.state_ppic === 'pembuatan' ||
-                    this.$store.state.state_ppic === 'revisi'
-                  "
-                  class="button is-fullwidth"
-                  :class="{
-                    'is-loading': this.$store.state.isLoading,
-                    'is-primary': this.$store.state.state_ppic === 'pembuatan',
-                    'is-danger': this.$store.state.state_ppic === 'revisi',
-                  }"
-                  :disabled="$store.state.jadwal.length === 0"
-                  @click="sendEvent('persetujuan')"
-                >
-                  Kirim
-                </button>
-                <button
-                  v-if="this.$store.state.state_ppic === 'disetujui'"
-                  class="button is-success is-fullwidth"
-                  :class="{ 'is-loading': this.$store.state.isLoading }"
-                  @click="sendEvent('perubahan')"
-                >
-                  Minta Perubahan
-                </button>
-              </div>
-            </template>
-            <article class="message is-dark">
-              <div class="message-header">
-                <p>Pesan</p>
-              </div>
-              <div class="message-body">
-                {{
-                  this.data_komentar.length > 0
-                    ? this.data_komentar[0].komentar
-                    : ""
-                }}
-                <div class="is-flex is-justify-content-flex-end">
-                  <button class="button is-circle" @click="detailMessage">
-                    <i class="fas fa-envelope"></i>
-                  </button>
-                </div>
-              </div>
-            </article>
-          </div>
-        </template>
       </div>
       <div class="columns">
         <div class="column is-12">
@@ -173,38 +119,6 @@
         </div>
       </div>
     </template>
-
-    <!-- modal -->
-    <div v-if="showModal" class="modal" :class="{ 'is-active': showModal }">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Komentar</p>
-          <button
-            class="delete"
-            aria-label="close"
-            @click="showModal = !showModal"
-          ></button>
-        </header>
-        <section class="modal-card-body">
-          <table class="table is-fullwidth has-text-centered">
-            <thead>
-              <tr>
-                <th>hasil</th>
-                <th>komentar</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in data_komentar" :key="item.id">
-                <td>{{ item.hasil ? "disetujui" : "ditolak" }}</td>
-                <td>{{ item.komentar }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-        <footer class="modal-card-foot"></footer>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -216,6 +130,15 @@ import Table from "../components/Table.vue";
 import Chart from "../components/Chart.vue";
 
 import mixins from "../mixins";
+
+/**
+ * @vue-prop {String} status - status value
+ *
+ * @vue-data {String} [view='table'] - string as flag to choose which component to display
+ *
+ * @vue-computed {Array} sorting_jadwal - sorted array of jadwal from store state which is global data
+ * @vue-computed {Array} events - array of data that get from re-structured array of jadwal
+ */
 
 export default {
   name: "Jadwal",
@@ -236,69 +159,7 @@ export default {
   data() {
     return {
       view: "table",
-
-      hide_button_calendar: true,
-
-      showModal: false,
-      data_komentar: [],
     };
-  },
-
-  async created() {
-    this.$store.commit("setIsLoading", true);
-
-    await axios
-      .get("/api/ppic/data/komentar", {
-        params: {
-          status: this.status,
-        },
-      })
-      .then((response) => {
-        this.data_komentar = response.data;
-      })
-      .catch((error) => {
-        console.log("error to get data komentar");
-        console.log(error);
-      });
-
-    this.$store.commit("setIsLoading", false);
-  },
-
-  methods: {
-    async sendEvent(state) {
-      this.$store.commit("setIsLoading", true);
-      await axios
-        .post("/api/ppic/update/perakitans/" + this.$store.state.status, {
-          state: state,
-          konfirmasi: 0,
-        })
-        .then((response) => {
-          this.$store.commit("setJadwal", response.data);
-        })
-        .catch((error) => {
-          console.log("error update data perakitan");
-          console.log(error);
-        });
-
-      await axios
-        .post("/api/ppic/create/komentar", {
-          tanggal_permintaan: new Date(),
-          state: this.$store.state.state,
-          status: this.$store.state.status,
-        })
-        .catch((err) => {
-          this.$swal({
-            icon: "warning",
-            title: "Peringatan",
-            text: "Terdapat kesalahan saat membuat komentar pada database",
-          });
-        });
-      this.$store.commit("setIsLoading", false);
-    },
-
-    detailMessage() {
-      this.showModal = true;
-    },
   },
 
   computed: {

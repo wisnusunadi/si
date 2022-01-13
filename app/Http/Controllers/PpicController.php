@@ -324,7 +324,10 @@ class PpicController extends Controller
 
     public function get_komentar_jadwal_perakitan(Request $request)
     {
-        $data = KomentarJadwalPerakitan::where('status', $this->change_status($request->status))->orderBy('tanggal_permintaan', 'desc')->get();
+        $data = KomentarJadwalPerakitan::where('status', $this->change_status($request->status))
+            ->where('tanggal_hasil', '>=', date('Y-m-d'))
+            ->orderBy('tanggal_permintaan', 'desc')
+            ->get();
         return $data;
     }
 

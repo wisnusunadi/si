@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,46 +17,66 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: index.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h2>PPIC vue documentation</h2>
-<p>This documentation explain all functions and vue components used in PPIC project</p>
-<h3>Usage</h3>
-<pre class="prettyprint source"><code># add line below to webpack.min.js file in root folder
-mix.js('resources/js/ppic_spa/index.js', 'public/native/js/ppic_spa.js').vue()
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @name Index
+ * @summary This document is the entry point of PPIC project
+ */
+
+import Vue from 'vue'
+import router from './router'
+import store from './store'
+import plugins from './plugins'
+import App from './App.vue'
+
+import axios from 'axios'
+import $ from "jquery"
+
+// global library
+import "jquery/dist/jquery"
+import "datatables.net/js/jquery.dataTables.min"
+import "datatables-bulma/js/dataTables.bulma"
+
+import VueSweetalert2 from "vue-sweetalert2"
+
+ $.fn.DataTable.ext.pager.simple_numbers_no_ellipses = plugins.simple_numbers_no_ellipses
+
+/**
+ * @constant {String} api_token  constant that store api token used for authorization
+ */
+const api_token = document.querySelector('meta[name="api-token"]').content
+/**
+ * @constant {String} csrf_token constant that store csrf token used for form handler
+ */
+const csrf_token = document.querySelector('meta[name="csrf-token"]').content
+
+store.state.csrf_token = csrf_token;
+
+axios.defaults.headers.common = {
+    'Accept': "application/json",
+    'Authorization': "Bearer " + api_token,
+    'X-CSRF-TOKEN': csrf_token
+}
+// axios.defaults.baseURL = "http://localhost:8000/"
+
+Vue.use(VueSweetalert2);
+
+new Vue({
+    router,
+    store,
+    render: h => h(App)
+}).$mount("#app")
 </code></pre>
-<pre class="prettyprint source"><code># install project library and dependencies
-npm install
-# build PPIC project
-npm run dev
-</code></pre></article>
+        </article>
     </section>
-
-
 
 
 

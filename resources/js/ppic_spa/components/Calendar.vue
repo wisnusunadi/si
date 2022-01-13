@@ -146,6 +146,17 @@ import "vue-select/dist/vue-select.css";
 import $ from "jquery";
 import axios from "axios";
 
+/**
+ * @vue-prop {Array} events - array of schedule data
+ * @vue-prop {String} status - status string
+ *
+ * @vue-data {Object} calendarOPtions - option for fullcalendar object
+ *
+ * @vue-event {String} addOneDay - function to add 1 day to date string and return in string
+ *
+ * @vue-computed {Array} format_events - array of object events for calendar
+ */
+
 export default {
   name: "CalendarComponent",
 
@@ -214,7 +225,6 @@ export default {
 
   mounted() {
     this.calendarOptions.events = this.format_events;
-    console.log("calendar mounted", this.calendarOptions.events);
     if (this.status === "penyusunan") this.$refs.calendar.getApi().next();
   },
 
@@ -469,21 +479,21 @@ export default {
 
   watch: {
     events(newVal, oldVal) {
-      if (this.$store.state.user.divisi_id == 24) {
-        if (
-          this.$store.state.state_ppic === "pembuatan" ||
-          this.$store.state.state_ppic === "revisi"
-        ) {
-          this.calendarOptions.selectable = true;
-          this.calendarOptions.editable = true;
-        } else {
-          this.calendarOptions.selectable = false;
-          this.calendarOptions.editable = false;
-        }
-      } else {
-        this.calendarOptions.selectable = false;
-        this.calendarOptions.editable = false;
-      }
+      // if (this.$store.state.user.divisi_id == 24) {
+      //   if (
+      //     this.$store.state.state_ppic === "pembuatan" ||
+      //     this.$store.state.state_ppic === "revisi"
+      //   ) {
+      //     this.calendarOptions.selectable = true;
+      //     this.calendarOptions.editable = true;
+      //   } else {
+      //     this.calendarOptions.selectable = false;
+      //     this.calendarOptions.editable = false;
+      //   }
+      // } else {
+      //   this.calendarOptions.selectable = false;
+      //   this.calendarOptions.editable = false;
+      // }
     },
   },
 };
