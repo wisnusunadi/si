@@ -111,8 +111,10 @@
                                 <table class="table table-striped add-produk" id="addProduk">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" id="head-cb-produk"></th>
-                                            <th>Nama Produk</th>
+                                            <th>Produk</th>
+                                            <th>Produk</th>
+                                            {{-- <th><input type="checkbox" id="head-cb-produk"></th> --}}
+                                            <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Merk</th>
                                             <th>Aksi</th>
@@ -218,6 +220,8 @@
                 </button>
             </div>
             <div class="modal-body">
+                 <input type="text" name="" id="dpp" class="dpp" hidden>
+                 <input type="text" name="" id="jml" class="jml" hidden>
                 <table class="table table-striped scan-produk" id="scan">
                     <thead>
                         <tr>
@@ -270,6 +274,7 @@
 @section('adminlte_js')
 <script>
     var mytable = '';
+    let prd1 = {};
 
     $(document).ready(function () {
         $('#head-cb').prop('checked', false);
@@ -362,18 +367,21 @@
                 $('span#akn').text(res.akn);
             }
         });
-
         $('#addProduk').DataTable({
+            scrollY: 400,
             destroy: true,
             autoWidth: false,
             processing: true,
             serverSide: true,
             "ordering": false,
+            bPaginate: false,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
             columns: [
-                {data: 'checkbox'},
+                {data: 'detail_pesanan_id'},
+                {data: 'paket'},
+                // {data: 'checkbox'},
                 { data: 'produk', name: 'produk'},
                 { data: 'qty', name: 'qty'},
                 { data: 'merk', name: 'merk'},
@@ -381,6 +389,26 @@
             ],
             "order": [
                 [1, 'asc']
+            ],
+            "drawCallback": function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+
+            api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                if (last !== group) {
+                    var rowData = api.row(i).data();
+                    $(rows).eq(i).before(
+                    '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="5">' + rowData.paket + '</td></tr>'
+                );
+                    last = group;
+                }
+            });
+            },
+            columnDefs: [
+                {"targets": [0], "visible": false},
+                {"targets": [1], "visible": false},
             ],
             "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
@@ -397,13 +425,31 @@
         $('#addProdukModal').modal('show');
     });
 
+    function make_temp_array(prd1){
+        let result = {};
+        console.log("func",prd1)
+        for (const dpp in prd1){
+            for (let i = 0; i < prd1[dpp].noseri.length; i++){
+                result[prd1[dpp].noseri[i]] = dpp
+            }
+        }
+        console.log("res", result)
+        return result;
+    }
+
     var prd = '';
-var jml = '';
+    var jml = '';
+    var dpp = '';
     $(document).on('click', '.detailmodal', function(e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
-        console.log(prd);
-        jml = $(this).data('jml');
+        // console.log(prd);
+        jml = $(this).parent().prev().prev().text();
+        dpp = $(this).data('dpp');
+        // dpp = $(this).parent().prev()
+        // console.log(jml);
+
+        let temp_array = make_temp_array(prd1)
 
         mytable = $('.scan-produk').DataTable({
             processing: false,
@@ -419,7 +465,17 @@ var jml = '';
             },
             columns: [
                 { data: 'seri', name: 'seri'},
-                { data: 'checkbox', name: 'checkbox'},
+                { data(data) {
+                    console.log("colm", data.ids, temp_array[data.ids])
+                    if (temp_array[data.ids] !== undefined){
+                        if (temp_array[data.ids] == dpp)
+                            return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`
+                        else
+                        return '<span class="badge badge-info">Sudah Digunakan</span>'
+                    }
+                    else
+                       return  `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
+                }},
             ],
             'select': {
                 'style': 'multi'
@@ -438,45 +494,37 @@ var jml = '';
         $('.modal-scan').modal('show');
     });
 
-    const prd1 = {};
     var t = 0;
     $(document).on('click', '#simpan', function(e) {
+        console.log(jml);
+        console.log(dpp);
+        console.log(prd);
         let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function() {
             return $(this).val();
         }).get();
-        console.log(a);
-        console.log(a.length);
-        $('.cb-child-prd').each(function() {
-            if($(this).is(":checked")) {
-                if (!prd1[$(this).val()])
-                    prd1[$(this).val()] = {"jumlah": $(this).parent().next().next().children().val(), "noseri": []};
-            } else {
-                delete prd1[$(this).val()]
-            }
-        })
 
-        $('.cb-child').each(function() {
-            if($(this).is(":checked")) {
-                if (a.length > jml) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Batas Maksimal '+jml+' Barang!',
-                    })
-                } else {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Noseri Berhasil Disimpan',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    $('.modal-scan').modal('hide');
-                }
+        if (a.length > jml) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Batas Maksimal '+jml+' Barang!',
+            })
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Noseri Berhasil Disimpan',
+                showConfirmButton: false,
+                timer: 1500
+            })
+
+            prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": a};
+            $('.modal-scan').modal('hide');
+            if(prd1[dpp].noseri.length == 0) {
+                delete prd1[dpp]
             }
 
-        })
-        prd1[prd].noseri = a;
+        }
         console.log(prd1);
     })
 
@@ -561,13 +609,6 @@ var jml = '';
                     }, 1000);
                 }
             });
-
-        $('.cb-child-prd').each(function() {
-            if($(this).is(":checked")) {
-            } else {
-                delete prd1[$(this).val()]
-            }
-        });
     });
 
     $(document).on('click', '.cb-child-prd', function () {
@@ -793,6 +834,12 @@ var jml = '';
             })
 
     })
+    $(document).on('click', '.detailmodal', function () {
+        let jml = $(this).data('jml');
+        let dpp = $(this).data('dpp');
+        $('#jml').val(jml);
+        $('#dpp').val(dpp);
+    });
 
 </script>
 @stop

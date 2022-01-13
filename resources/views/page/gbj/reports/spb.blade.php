@@ -95,7 +95,7 @@
             @endforeach
         </table>
         <table class="table">
-            <thead>
+            <thead> 
                 <tr>
                     <th class="th" style="width: 5%;">Banyaknya</th>
                     <th class="th">Nama Barang</th>

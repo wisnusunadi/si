@@ -28,14 +28,7 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
-    td.dt-control {
-    background: url("https://www.datatables.net/examples/resources/details_open.png") no-repeat center center;
-    cursor: pointer
-    }
 
-    tr.dt-hasChild td.dt-control {
-        background: url("https://www.datatables.net/examples/resources/details_close.png") no-repeat center center
-    }
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="content-header">
@@ -134,7 +127,8 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Paket</th>
+                                            <th>ID</th>
+                                            <th><input type="checkbox" name="" id="head-cb-so"></th>
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Status</th>
@@ -213,6 +207,7 @@
                                 <table class="table table-striped" id="view-produk">
                                     <thead>
                                         <tr>
+                                            <th>Paket</th>
                                             <th>Paket</th>
                                             <th>Produk</th>
                                             <th>Jumlah</th>
@@ -296,10 +291,13 @@
         var table = $('.add-produk').DataTable({
             destroy: true,
             autoWidth: false,
+            bPaginate: false,
+            "scrollY": 300,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x
             },
             "columns": [
+                { "data": "detail_pesanan_id" },
                 { "data": "paket" },
                 { "data": "ids" },
                 { "data": "produk" },
@@ -315,10 +313,8 @@
 
                 if (last !== group) {
                     var rowData = api.row(i).data();
-
-
                     $(rows).eq(i).before(
-                    '<tr class="table-dark text-bold"><td colspan="4">' + group + '</td></tr>'
+                    '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="4">' + rowData.paket + '</td></tr>'
                 );
                     last = group;
                 }
@@ -326,6 +322,7 @@
         },
             "columnDefs":[
                 {"targets": [0], "visible": false},
+                {"targets": [1], "visible": false},
             ],
             "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
@@ -334,17 +331,26 @@
         // tab.column(2).data().sum();
         $('#addProdukModal').modal('show');
     })
-
+    let so = {};
+    let so_dpp = {};
     $(document).on('click', '#btnSave', function(e) {
             e.preventDefault();
-            const ids = [];
+            let ids = {};
+            let dpp_id = [];
 
             $('.cb-child-so').each(function() {
                 if ($(this).is(":checked")) {
-                    ids.push($(this).val());
+                    // so_dpp.gbj = ids;
+                    if (ids[$(this).val()] === undefined){
+                        ids[$(this).val()] = [];
+                        ids[$(this).val()].push($(this).next().val())
+                    }
+                    else {
+                        ids[$(this).val()].push($(this).next().val())
+                    }
                 }
             })
-            // console.log(ids);
+
             Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -366,7 +372,7 @@
                         data: {
                             pesanan_id : id,
                             userid: $('#userid').val(),
-                            gbj_id: ids,
+                            data: ids,
                         },
                         success: function(res) {
                             location.reload();
@@ -376,9 +382,6 @@
                 }
             })
 
-
-
-            console.log(ids);
         })
 
     $(document).on('click', '.detailmodal', function(e) {
@@ -396,16 +399,19 @@
                 $('span#instansi').text(res.customer);
             }
         });
-
+        console.log(id+ " " +x);
         var table = $('#view-produk').DataTable({
             destroy: true,
             processing: true,
             autoWidth: false,
+            bPaginate: false,
+            scrollY: 300,
             ajax: {
                 url: "/api/tfp/detail-so/" +id+"/"+x,
                 // url: "/api/testingJson",
             },
             columns: [
+                {data: 'detail_pesanan_id'},
                 { data: 'paket' },
                 { data: 'produk' },
                 { data: 'qty' },
@@ -421,9 +427,8 @@
                 if (last !== group) {
                     var rowData = api.row(i).data();
 
-
                     $(rows).eq(i).before(
-                    '<tr class="table-dark text-bold"><td colspan="3">' + group + '</td></tr>'
+                    '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="3">' + rowData.paket + '</td></tr>'
                 );
                     last = group;
                 }
@@ -431,6 +436,7 @@
         },
         "columnDefs":[
                 {"targets": [0], "visible": false},
+                {"targets": [1], "visible": false},
             ],
             "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
@@ -438,5 +444,6 @@
         })
         $('#viewProdukModal').modal('show');
     })
+
 </script>
 @stop

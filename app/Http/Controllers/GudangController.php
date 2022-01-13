@@ -389,7 +389,7 @@ class GudangController extends Controller
                 ->whereIn('tg.tgl_masuk', $x)
                 ->whereIn('t_gbj_detail.gdg_brg_jadi_id', $y)
                 ->get();
-                
+
         return datatables()->of($datax)
             ->addIndexColumn()
             ->addColumn('tgl_masuk', function ($d) {
@@ -656,7 +656,7 @@ class GudangController extends Controller
             })
             ->addColumn('tgl_kontrak', function($d) {
                 if (isset($d->pesanan->Ekatalog->tgl_kontrak)) {
-                    return $d->pesanan->Ekatalog->tgl_kontrak;
+                    return Carbon::parse($d->pesanan->Ekatalog->tgl_kontrak)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -670,7 +670,7 @@ class GudangController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
-
+    // Export Excell
     function exportSpb($id)
     {
         $tfbyid = LogSurat::where('pesanan_id', $id)->get();
@@ -687,8 +687,9 @@ class GudangController extends Controller
             $q->where('pesanan_id', $id);
         })->with('seri.seri', 'produk.produk')->get();
         $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get();
-        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
-        return $pdf->stream();
+        // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
+        // return $pdf->stream();
+        dd($data);
         return view('page.gbj.reports.spb',['data' => $data, 'tfby' => $tfby, 'header' => $header]);
     }
 
@@ -979,25 +980,21 @@ class GudangController extends Controller
 
     function storeCekSO(Request $request)
     {
-        $check_array = $request->gbj_id;
-        $id = $request->pesanan_id;
         $h = Pesanan::find($request->pesanan_id);
         $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
-        foreach ($request->gbj_id as $key => $value) {
-            if (in_array($request->gbj_id[$key], $check_array)) {
-                DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->whereIn('gudang_barang_jadi_id', $check_array)
-                    ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
-            }
+        foreach ($request->data as $key => $value) {
+            DetailPesananProduk::whereIn('id', $value)->whereIn('gudang_barang_jadi_id', [$key])
+                ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
         }
 
-        $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->where('status_cek',4)->get()->count();
-        $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->WhereIn('gudang_barang_jadi_id', $check_array)->get()->count();
-        if ($cek == $cek_prd) {
-            $h->status_cek = 4;
-            $h->checked_by = $request->userid;
-            $h->log_id = 6;
-            $h->save();
-        }
+        $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->where('status_cek',4)->get()->count();
+        $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->get()->count();
+            if ($cek == $cek_prd) {
+                $h->status_cek = 4;
+                $h->checked_by = $request->userid;
+                $h->log_id = 6;
+                $h->save();
+            }
 
         return response()->json(['msg' => 'Successfully']);
     }
@@ -1784,19 +1781,19 @@ class GudangController extends Controller
             ]);
         }
 
-        $a = GudangBarangJadi::find($request->id)->first();
-        $stok = $a->stok + $count;
-        GudangBarangJadi::find($request->id)->update(['stok' => $stok]);
-        GudangBarangJadiHis::create([
-            'gdg_brg_jadi_id' => $request->id,
-            'stok' => $count,
-            'tgl_masuk' => Carbon::now(),
-            'jenis' => 'MASUK',
-            'created_by' => $request->created_by,
-            'created_at' => Carbon::now(),
-            'dari' => $request->dari,
-            // 'tujuan' => $request->deskripsi,
-        ]);
+        // $a = GudangBarangJadi::find($request->id)->first();
+        // $stok = $a->stok + $count;
+        // GudangBarangJadi::find($request->id)->update(['stok' => $stok]);
+        // GudangBarangJadiHis::create([
+        //     'gdg_brg_jadi_id' => $request->id,
+        //     'stok' => $count,
+        //     'tgl_masuk' => Carbon::now(),
+        //     'jenis' => 'MASUK',
+        //     'created_by' => $request->created_by,
+        //     'created_at' => Carbon::now(),
+        //     'dari' => $request->dari,
+        //     // 'tujuan' => $request->deskripsi,
+        // ]);
         return response()->json(['success' => 'Sukses']);
     }
 
