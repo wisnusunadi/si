@@ -352,7 +352,8 @@
                 },
                 {
                     data: 'no_paket',
-                    className: 'nowraptext'
+                    className: 'nowraptext',
+                    searchable: true
                 },
                 {
                     data: 'nama_customer',

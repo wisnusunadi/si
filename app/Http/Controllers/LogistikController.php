@@ -2637,7 +2637,6 @@ class LogistikController extends Controller
                         }
                     }
                 }
-
                 if ($bool == true) {
                     $iddpp = DetailPesananPart::find($ids);
                     $poid = $iddpp->pesanan_id;
