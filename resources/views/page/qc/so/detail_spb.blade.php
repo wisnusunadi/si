@@ -269,6 +269,7 @@
     $(function() {
         y = [];
         y = <?php echo json_encode($detail_id); ?>;
+        var getjumlah = "";
 
         var showtable = $('#showtable').DataTable({
             destroy: true,

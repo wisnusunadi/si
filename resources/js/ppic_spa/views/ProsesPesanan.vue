@@ -83,6 +83,16 @@
 import $ from "jquery";
 import axios from "axios";
 
+/**
+ * @vue-data {Array} [data=[]] - Array to store data sales order get from API (url = '/api/ppic/data/so')
+ * @vue-data {Object} [detail={}] - Object to store detail sales order when detail button clicked
+ * @vue-data {String} [nama_produk=""] - variable to store product name that use as header modal of detail sales order
+ * @vue-data {Boolean} [showModal=false] - flag used to show or hide detail sales order modal
+ *
+ * @vue-event {Array} loadData - this function is used to initialized data by calling APIs
+ * @vue-event {Object} getDetail - function to get product sales order detail and get product name
+ */
+
 export default {
   name: "SalesOrder",
 
@@ -93,11 +103,20 @@ export default {
       nama_produk: "",
 
       showModal: false,
-      table: null,
     };
   },
 
   methods: {
+    async loadData() {
+      this.$store.commit("setIsLoading", true);
+      await axios.post("/api/ppic/master_pengiriman/data").then((response) => {
+        this.data = response.data.data;
+      });
+      $("#table_so").DataTable();
+
+      this.$store.commit("setIsLoading", false);
+    },
+
     async getDetail(id, nama) {
       this.$store.commit("setIsLoading", true);
       await axios
@@ -114,14 +133,8 @@ export default {
     },
   },
 
-  async created() {
-    this.$store.commit("setIsLoading", true);
-    await axios.post("/api/ppic/master_pengiriman/data").then((response) => {
-      this.data = response.data.data;
-    });
-    $("#table_so").DataTable();
-
-    this.$store.commit("setIsLoading", false);
+  mounted() {
+    this.loadData();
   },
 };
 </script>

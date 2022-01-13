@@ -260,7 +260,7 @@
                 dataType: 'json',
                 delay: 250,
                 type: 'GET',
-                url: '/api/penjualan_produk/select/',
+                url: '/api/penjualan_produk/select',
                 processResults: function(data) {
                     //console.log(data);
                     return {

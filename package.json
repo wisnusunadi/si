@@ -2,7 +2,7 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
-        "docs": "jsdoc -c ./jsdoc.json",
+        "docs": "rm -r ./resources/js/ppic_spa/docs && jsdoc -c ./jsdoc.json",
         "development": "mix",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",

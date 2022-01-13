@@ -11,8 +11,16 @@ import ProsesPesanan from "../views/ProsesPesanan.vue"
 import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
 
-Vue.use(VueRouter)
+/**
+ * This module is defined routes component in PPIC project
+ * @namespace Router
+ */
 
+Vue.use(VueRouter)
+/**
+ * This constant is array of object of all routes used for routing
+ * @memberof Router
+ */
 const routes = [
     {
         path: '/ppic',
@@ -62,6 +70,11 @@ const routes = [
 
 ]
 
+/**
+ * This constant is vue router object created to handle all url routing with
+ * some option setting
+ * @memberof Router
+ */
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,

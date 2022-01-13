@@ -76,6 +76,14 @@
 import $ from "jquery";
 import axios from "axios";
 
+/**
+ * @vue-data {Boolean} [tabs=false] - flag for switch tabs unit or sparepart
+ * @vue-data {Array} [data_sparepart=[]] - array to store data sparepart gk that getted from API (url = '/api/ppic/data/gk/sparepart')
+ * @vue-data {Array} [data_sparepart=[]] - array to store data unit gk that getted from API (url = '/api/ppic/data/gk/unit')
+ *
+ * @vue-event {Array} loadData - function to initialized data unit and sparepart when this component rendered
+ */
+
 export default {
   name: "GudangKarantina",
 
@@ -84,8 +92,6 @@ export default {
       tabs: false,
       data_sparepart: [],
       data_unit: [],
-      table_sparepart: null,
-      table_unit: null,
     };
   },
 
@@ -95,13 +101,13 @@ export default {
       await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
         this.data_sparepart = response.data;
       });
-      this.table_sparepart = $("#table-sparepart").DataTable();
+      $("#table-sparepart").DataTable();
 
       await axios.get("/api/ppic/data/gk/unit").then((response) => {
         this.data_unit = response.data;
       });
 
-      this.table_unit = $("#table-unit").DataTable();
+      $("#table-unit").DataTable();
       this.$store.commit("setIsLoading", false);
     },
   },

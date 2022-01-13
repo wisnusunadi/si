@@ -17,94 +17,43 @@
       </div>
     </div>
     <div class="menu is-menu-main">
-      <p class="menu-label">General</p>
-      <ul class="menu-list">
-        <li>
-          <router-link to="/ppic" class="router-link-active has-icon">
-            <span class="icon"><i class="fas fa-home"></i></span>
-            <span class="menu-item-label">Dashboard</span>
-          </router-link>
-        </li>
-      </ul>
-      <p class="menu-label">Data</p>
-      <ul class="menu-list">
-        <li>
-          <a class="has-icon has-dropdown-icon">
-            <span class="icon"><i class="fas fa-boxes"></i></span>
-            <span class="menu-item-label">Stok</span>
-            <div class="dropdown-icon">
-              <span class="icon"><i class="fas fa-plus"></i></span>
-            </div>
-          </a>
-          <ul>
-            <li>
-              <router-link to="/ppic/gbj">
-                <span>GBJ</span>
+      <div v-for="item in sidebar" :key="item.header">
+        <p class="menu-label">{{ item.header }}</p>
+        <ul class="menu-list">
+          <li v-for="menu in item.menu" :key="menu.text">
+            <template v-if="menu.url !== undefined">
+              <router-link :to="menu.url" class="has-icon">
+                <span class="icon"><i :class="menu.icon"></i></span>
+                <span class="menu-item-label">{{ menu.text }}</span>
               </router-link>
-            </li>
-            <li>
-              <router-link to="/ppic/gk">
-                <span>GK</span>
-              </router-link>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <router-link to="/ppic/perakitan" class="has-icon">
-            <span class="icon has-update-mark"
-              ><i class="fas fa-table"></i
-            ></span>
-            <span class="menu-item-label">Perakitan</span>
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/ppic/so" class="has-icon">
-            <span class="icon"><i class="fas fa-database"></i></span>
-            <span class="menu-item-label">Sales Order</span>
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/ppic/laporan_pesanan" class="has-icon">
-            <span class="icon"><i class="fas fa-book-open"></i></span>
-            <span class="menu-item-label">Laporan Pesanan</span>
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/ppic/proses_pesanan" class="has-icon">
-            <span class="icon"><i class="fas fa-sort-amount-up-alt"></i></span>
-            <span class="menu-item-label">Proses Pesanan</span>
-          </router-link>
-        </li>
-      </ul>
-      <p class="menu-label">Fitur</p>
-      <ul class="menu-list">
-        <li>
-          <a class="has-icon has-dropdown-icon">
-            <span class="icon"><i class="fas fa-calendar-alt"></i></span>
-            <span class="menu-item-label">Jadwal Perakitan</span>
-            <div class="dropdown-icon">
-              <span class="icon"><i class="fas fa-plus"></i></span>
-            </div>
-          </a>
-          <ul>
-            <li>
-              <router-link to="/ppic/jadwal_perencanaan">
-                <span>Perencanaan</span>
-              </router-link>
-            </li>
-            <li>
-              <router-link to="/ppic/jadwal_pelaksanaan">
-                <span>Pelaksanaan</span>
-              </router-link>
-            </li>
-          </ul>
-        </li>
-      </ul>
+            </template>
+            <template v-else>
+              <a class="has-icon has-dropdown-icon">
+                <span class="icon"><i :class="menu.icon"></i></span>
+                <span class="menu-item-label">{{ menu.text }}</span>
+                <div class="dropdown-icon">
+                  <span class="icon"><i class="fas fa-plus"></i></span>
+                </div>
+              </a>
+              <ul>
+                <li v-for="submenu in menu.submenu">
+                  <router-link :to="submenu.url">
+                    <span>{{ submenu.text }}</span>
+                  </router-link>
+                </li>
+              </ul>
+            </template>
+          </li>
+        </ul>
+      </div>
     </div>
   </aside>
 </template>
 
 <script>
+import ppic_sidebar from "../config/sidebar.json";
+import manager_sidebar from "../../manager_spa/config/sidebar.json";
+
 export default {
   name: "Sidebar",
 
@@ -118,8 +67,14 @@ export default {
     );
   },
 
-  mounted() {
-    let this_obj = this;
+  computed: {
+    sidebar() {
+      if (this.$store.state.user.divisi_id === 24) return ppic_sidebar;
+      else if (this.$store.state.user.divisi_id === 3) return manager_sidebar;
+    },
+  },
+
+  updated() {
     Array.from(document.getElementsByClassName("menu is-menu-main")).forEach(
       function (el) {
         Array.from(el.getElementsByClassName("has-dropdown-icon")).forEach(

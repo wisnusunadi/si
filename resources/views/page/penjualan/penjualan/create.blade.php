@@ -634,7 +634,7 @@
         }
 
         function checkvalidasi() {
-            if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && check_no_paket($("#no_paket").val()) <= 0) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+            if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid') <= 0) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
                 $('#btntambah').removeAttr("disabled");
             } else {
                 $('#btntambah').attr("disabled", true);
@@ -861,48 +861,34 @@
         $('#no_paket').on('keyup change', function() {
             if ($(this).val() != "") {
                 var values = $(this).val();
-                if (check_no_paket(values) > 0) {
-                    $("#msgno_paket").text("No Paket tidak boleh sama");
-                    $("#no_paket").addClass('is-invalid');
-                    $('#btntambah').attr("disabled", true);
-                } else {
-                    $("#msgno_paket").text("");
-                    $("#no_paket").removeClass('is-invalid');
-                    checkvalidasi();
-                }
-                // $.ajax({
-                //     type: 'GET',
-                //     dataType: 'json',
-                //     url: '/api/penjualan/check_no_paket/' + '0/' + values,
-                //     success: function(data) {
-                //         if (data.data > 0) {
-                //             $("#msgno_paket").text("No Paket telah digunakan");
-                //             $("#no_paket").addClass('is-invalid');
-                //             $('#btntambah').attr("disabled", true);
-                //         } else {
-                //             $("#msgno_paket").text("");
-                //             $("#no_paket").removeClass('is-invalid');
-                //             checkvalidasi();
-                //         }
-                //     },
-                //     error: function(data) {
-                //         return values;
-                //     }
-                // });
-
-                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
-                //     $('#btntambah').removeAttr("disabled");
-                // } else {
-                //     $('#btntambah').attr("disabled", true);
-                // }
-
-
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'JSON',
+                    url: '/api/penjualan/check_no_paket/' + '0/' + values,
+                    success: function(data) {
+                        if (data > 0) {
+                            $("#msgno_paket").text("No Paket tidak boleh sama");
+                            $("#no_paket").addClass('is-invalid');
+                            $('#btntambah').attr("disabled", true);
+                        } else {
+                            $("#msgno_paket").text("");
+                            $("#no_paket").removeClass('is-invalid');
+                            checkvalidasi();
+                        }
+                    },
+                    error: function(data) {
+                        $("#msgno_paket").text("No Paket tidak boleh sama");
+                        $("#no_paket").addClass('is-invalid');
+                        $('#btntambah').attr("disabled", true);
+                    }
+                });
             } else if ($(this).val() == "") {
                 $("#msgno_paket").text("No Paket harus diisi");
                 $("#no_paket").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
         });
+
         $('#no_po').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgno_po").text("");
@@ -1071,22 +1057,22 @@
             return jumlah;
         }
 
-        function check_no_paket(values) {
-            var hasil = "";
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                async: false,
-                url: '/api/penjualan/check_no_paket/' + '0/' + values,
-                success: function(data) {
-                    hasil = data;
-                },
-                error: function(data) {
-                    hasil = data;
-                }
-            });
-            return hasil;
-        }
+        // function check_no_paket(values) {
+        //     var hasil = "";
+        //     $.ajax({
+        //         type: 'POST',
+        //         dataType: 'JSON',
+        //         async: false,
+        //         url: '/api/penjualan/check_no_paket/' + '0/' + values,
+        //         success: function(data) {
+        //             hasil = data;
+        //         },
+        //         error: function(data) {
+        //             hasil = data;
+        //         }
+        //     });
+        //     return hasil;
+        // }
 
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),

@@ -291,6 +291,20 @@ class MasterController extends Controller
             ->editColumn('nama', function ($data) {
                 return $data->nama;
             })
+            ->editColumn('no_akd', function ($data) {
+                $id = $data->id;
+                $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
+                    $q->where('id', $id);
+                })->first();
+                return $s->no_akd;
+            })
+            ->editColumn('merk', function ($data) {
+                $id = $data->id;
+                $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
+                    $q->where('id', $id);
+                })->first();
+                return $s->merk;
+            })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -344,39 +358,43 @@ class MasterController extends Controller
     //}
     public function get_data_detail_penjualan_produk($id)
     {
-        $data = Produk::whereHas('PenjualanProduk', function ($q) use ($id) {
-            $q->where('id', $id);
-        })->get();
+        // $data = Produk::whereHas('PenjualanProduk', function ($q) use ($id) {
+        //     $q->where('id', $id);
+        // })->get();
 
+        $data = array();
+        $c = 0;
+        $datas = PenjualanProduk::find($id);
+        foreach ($datas->Produk as $i) {
+            $data[$c]['id'] = $i->id;
+            $data[$c]['nama'] = $i->nama;
+            $data[$c]['kelompok_produk'] = $i->KelompokProduk->nama;
+            $data[$c]['jumlah'] = $i->pivot->jumlah;
+            $c++;
+        }
 
         //$data = PenjualanProduk::with('produk')->where('id', $id)->get();
         // $data = PenjualanProduk::with('Produk')->selectRaw('distinct penjualan_produk.*')->where('id', '5')->get();
         return datatables()->of($data)
-            // ->addColumn('produk_nama', function ($data) {
-            //     return implode(',', $data->Produk->pluck('nama')->toArray());
-            // })
-            // ->rawColumns(['produk_nama'])
+            ->addColumn('nama', function ($data) {
+                return $data['nama'];
+            })
             ->addColumn('kelompok', function ($data) {
                 $return = "";
-                if ($data->KelompokProduk->nama == 'Alat Kesehatan') {
+                if ($data['kelompok_produk'] == 'Alat Kesehatan') {
                     $return .= '<span class="badge blue-text">';
-                } else if ($data->KelompokProduk->nama == 'Water Treatment') {
+                } else if ($data['kelompok_produk'] == 'Water Treatment') {
                     $return .= '<span class="badge orange-text">';
                 } else {
                     $return .= '<span class="badge purple-text">';
                 }
-                $return .= $data->KelompokProduk->nama;
+                $return .= $data['kelompok_produk'];
                 $return .= '</span>';
 
                 return $return;
             })
             ->addColumn('jumlah', function ($data) {
-                foreach ($data->PenjualanProduk as $k) {
-                    if ($k->pivot->produk_id == $data->id) {
-                        return $k->pivot->jumlah;
-                    }
-                }
-                // return $data->PenjualanProduk->first()->pivot->jumlah;
+                return $data['jumlah'];
             })
             ->addIndexColumn()
             ->rawColumns(['kelompok'])
@@ -841,7 +859,7 @@ class MasterController extends Controller
         $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
             ->orderby('nama', 'ASC')
             ->get();
-        echo json_encode($data);
+        return response()->json($data);
     }
     public function select_penjualan_produk_id($id)
     {
@@ -851,9 +869,11 @@ class MasterController extends Controller
         echo json_encode($data);
     }
 
-    function select_m_sparepart()
+    function select_m_sparepart(Request $request)
     {
-        $data = Sparepart::all();
+        $data = Sparepart::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')
+            ->get();
         return response()->json($data);
     }
 
@@ -891,11 +911,17 @@ class MasterController extends Controller
     }
     public function select_ekspedisi(Request $request, $provinsi)
     {
-        $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-            ->orderby('nama', 'ASC')->whereHas('Provinsi', function ($q) use ($provinsi) {
-                $q->where('id', $provinsi);
-                $q->Orwhere('id', 35);
-            })->get();
+        $data = null;
+        if ($provinsi != "0") {
+            $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+                ->orderby('nama', 'ASC')->whereHas('Provinsi', function ($q) use ($provinsi) {
+                    $q->where('id', $provinsi);
+                    $q->Orwhere('id', 35);
+                })->get();
+        } else {
+            $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+                ->orderby('nama', 'ASC')->get();
+        }
         echo json_encode($data);
     }
 

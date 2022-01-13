@@ -747,14 +747,15 @@ class LogistikController extends Controller
                 return $data->ket;
             })
             ->addColumn('status', function ($data) {
+                $status = "";
                 if (isset($data->DetailPesanan) && !isset($data->DetailPesananPart)) {
                     if ($data->getJumlahKirim() == $data->getJumlahPesanan()) {
                         $status = '<span class="badge green-text">Sudah Dikirim</span>';
                     } else {
                         if ($data->getJumlahKirim() == 0) {
-                            $status =  ' <span class="badge red-text">Belum Dikirim</span>';
+                            $status = '<span class="badge red-text">Belum Dikirim</span>';
                         } else {
-                            $status =   '<span class="badge yellow-text">Sebagian Dikirim</span>';
+                            $status = '<span class="badge yellow-text">Sebagian Dikirim</span>';
                         }
                     }
                 } else if (!isset($data->DetailPesanan) && isset($data->DetailPesananPart)) {
@@ -835,17 +836,21 @@ class LogistikController extends Controller
 
     public function get_data_selesai_so()
     {
-        $datas = Pesanan::has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->get();
-        $arr = [];
+        $datas = Pesanan::orHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->orHas('DetailPesananPart')->get();
+        $arr = array();
         foreach ($datas as $i) {
-            if ($i->getJumlahPesanan() == $i->getJumlahKirim()) {
-                $arr[] = $i->id;
-            }
-        }
-        $dataspb = Pesanan::has('DetailPesananPart')->get();
-        foreach ($dataspb as $i) {
-            if ($i->getJumlahPesananPart() == $i->getJumlahKirimPart()) {
-                $arr[] = $i->id;
+            if (isset($i->DetailPesanan) && !isset($i->DetailPesananPart)) {
+                if ($i->getJumlahPesanan() == $i->getJumlahKirim()) {
+                    $arr[] = $i->id;
+                }
+            } else if (!isset($i->DetailPesanan) && isset($i->DetailPesananPart)) {
+                if ($i->getJumlahPesananPart() == $i->getJumlahKirimPart()) {
+                    $arr[] = $i->id;
+                }
+            } else {
+                if (($i->getJumlahPesanan() == $i->getJumlahKirim()) && ($i->getJumlahPesananPart() == $i->getJumlahKirimPart())) {
+                    $arr[] = $i->id;
+                }
             }
         }
 

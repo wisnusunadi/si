@@ -53,7 +53,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group row">
-                                                <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Nama Paket</label>
+                                                <label for="nama_produk" class="col-5 col-form-label" style="text-align: right">Nama Paket</label>
                                                 <div class="col-6">
                                                     <input type="text" class="form-control @error('nama_paket') is-invalid @enderror" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" />
                                                     <div class="invalid-feedback" id="msgnama_paket">
@@ -64,7 +64,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Harga</label>
+                                                <label for="nama_produk" class="col-5 col-form-label" style="text-align: right">Harga</label>
                                                 <div class="input-group col-5">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">Rp</span>
@@ -216,7 +216,7 @@
                 $('#msgharga').text("");
                 $('#harga').removeClass("is-invalid");
                 console.log($("#createtable tbody").length);
-                if ($('#nama_paket').val() != "" && $("#createtable tbody").length > 0) {
+                if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $("#createtable tbody").length > 0) {
                     $('#btntambah').removeClass('disabled');
                 } else {
                     $('#btntambah').addClass('disabled');

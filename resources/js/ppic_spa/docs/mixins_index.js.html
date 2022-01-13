@@ -28,59 +28,63 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * This provides functions that is used globally in vue component
- * @mixin
+ * @namespace Mixins
  */
 
-let mixins = {
-    /**
-     * This function convert status number to string
-     * @param {string} status - status number get from api
-     * @returns {string} status string ['penyusunan', 'pelaksanaan', 'selesai']
-     */
-    change_status(status) {
-        if (status == 6) return 'penyusunan';
-        else if (status == 7) return 'pelaksanaan';
-        else if (status == 8) return 'selesai';
-    },
-
-    /**
-     * This function convert state number to string
-     * @param {string} status - state number get from api
-     * @returns {string} state string ['perencanaan', 'persetujuan', 'perubahan']
-     */
-    change_state(state) {
-        if (state == 17) return 'perencanaan';
-        else if (state == 18) return 'persetujuan';
-        else if (state == 19) return 'perubahan'
-    },
-
-    /**
-     * this function is used to mapping jadwal array getted from api 
-     * (example: '/api/ppic/data/perakitan') to array of object that 
-     * can be used be other component like calnedar, table, and chart
-     * @param {Array} jadwal - Array get from api
-     * @returns {Array} schedule that had been mapping
-     */
-    convertJadwal: function (jadwal) {
-        return jadwal.length == 0
-            ? []
-            : jadwal.map((item) => ({
-                id: item.id,
-                title: `${item.produk.produk.nama} ${item.produk.nama}`,
-                start: item.tanggal_mulai,
-                end: item.tanggal_selesai,
-                backgroundColor: item.warna,
-                borderColor: item.warna,
-
-                produk_id: item.produk_id,
-                jumlah: item.jumlah,
-                progres: item.noseri_count
-            }));
-    },
-
+/**
+ * This function convert status number to string
+ * @memberof Mixins
+ * @param {string} status - status number get from api
+ * @returns {string} status string ['penyusunan', 'pelaksanaan', 'selesai']
+ */
+function change_status(status) {
+    if (status == 6) return 'penyusunan';
+    else if (status == 7) return 'pelaksanaan';
+    else if (status == 8) return 'selesai';
 }
 
-export default mixins</code></pre>
+/**
+ * This function convert state number to string
+ * @memberof Mixins
+ * @param {string} status - state number get from api
+ * @returns {string} state string ['perencanaan', 'persetujuan', 'perubahan']
+ */
+function change_state(state) {
+    if (state == 17) return 'perencanaan';
+    else if (state == 18) return 'persetujuan';
+    else if (state == 19) return 'perubahan'
+}
+
+/**
+ * this function is used to mapping jadwal array getted from api 
+ * (example: '/api/ppic/data/perakitan') to array of object that 
+ * can be used by other component like calnedar, table, and chart
+ * @memberof Mixins
+ * @param {Array} jadwal - array get from api
+ * @returns {Array} schedule that had been mapping
+ */
+function convertJadwal (jadwal) {
+    return jadwal.length == 0
+        ? []
+        : jadwal.map((item) => ({
+            id: item.id,
+            title: `${item.produk.produk.nama} ${item.produk.nama}`,
+            start: item.tanggal_mulai,
+            end: item.tanggal_selesai,
+            backgroundColor: item.warna,
+            borderColor: item.warna,
+
+            produk_id: item.produk_id,
+            jumlah: item.jumlah,
+            progres: item.noseri_count
+        }));
+}
+
+export default {
+    change_status,
+    change_state, 
+    convertJadwal
+}</code></pre>
         </article>
     </section>
 
@@ -90,13 +94,13 @@ export default mixins</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Simple%2520Numbers%2520-%2520No%2520Ellipses.html">Simple Numbers - No Ellipses</a></li></ul><h3>Mixins</h3><ul><li><a href="mixins.html">mixins</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-Chart.html">Chart</a></li><li><a href="module-GudangBarangJadi.html">GudangBarangJadi</a></li><li><a href="module-GudangKarantina.html">GudangKarantina</a></li><li><a href="module-Home.html">Home</a></li><li><a href="module-Jadwal.html">Jadwal</a></li><li><a href="module-LaporanPesanan.html">LaporanPesanan</a></li><li><a href="module-Perakitan.html">Perakitan</a></li><li><a href="module-ProsesPesanan.html">ProsesPesanan</a></li><li><a href="module-SalesOrder.html">SalesOrder</a></li><li><a href="module-Table.html">Table</a></li></ul><h3>Namespaces</h3><ul><li><a href="Mixins.html">Mixins</a></li><li><a href="Plugin.html">Plugin</a></li><li><a href="Router.html">Router</a></li><li><a href="Store.html">Store</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api_token">api_token</a></li><li><a href="global.html#csrf_token">csrf_token</a></li><li><a href="global.html#Index">Index</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Jan 10 2022 17:11:59 GMT+0700 (Western Indonesia Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Jan 12 2022 16:24:51 GMT+0700 (Western Indonesia Time)
 </footer>
 
 <script> prettyPrint(); </script>
