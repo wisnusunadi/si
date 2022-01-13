@@ -451,7 +451,7 @@ class LogistikController extends Controller
 
     public function get_data_detail_selesai_kirim_so($id, $jenis)
     {
-        if ($jenis != "SPB") {
+        if ($jenis == "EKAT") {
             $data = DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
             })->get();
@@ -498,9 +498,26 @@ class LogistikController extends Controller
                 ->rawColumns(['checkbox', 'button', 'status'])
                 ->make(true);
         } else {
-            $data = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
-                $q->where('pesanan_id', $id);
-            })->get();
+            $c_prd = DetailPesanan::where('pesanan_id', $id)->get()->count();
+            $c_prt = DetailPesananPart::where('pesanan_id', $id)->get()->count();
+
+            if ($c_prd <= 0 && $c_prt > 0) {
+                $data = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+            } else if ($c_prt <= 0 && $c_prd > 0) {
+                $data = DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+            } else if ($c_prd > 0 && $c_prd > 0) {
+                $prd = collect(DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->get());
+                $part = collect(DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->get());
+                $data = $prd->merge($part);
+            }
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -530,15 +547,28 @@ class LogistikController extends Controller
                     }
                 })
                 ->addColumn('nama_produk', function ($data) {
-                    return $data->DetailPesananPart->Sparepart->nama;
+
+                    if (isset($data->DetailPesananProduk)) {
+                        return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    } else {
+                        return $data->DetailPesananPart->Sparepart->nama;
+                    }
                 })
                 ->addColumn('jumlah', function ($data) {
-                    return $data->DetailPesananPart->jumlah;
+
+                    if (isset($data->DetailPesananProduk)) {
+                        $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+                        return $c;
+                    } else {
+                        return $data->DetailPesananPart->jumlah;
+                    }
                 })
                 ->addColumn('button', function ($data) {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-                <div><i class="fas fa-search"></i></div>
-            </a>';
+                    if (isset($data->DetailPesananProduk)) {
+                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
+            <div><i class="fas fa-search"></i></div>
+        </a>';
+                    }
                 })
                 ->rawColumns(['checkbox', 'button', 'status'])
                 ->make(true);
@@ -2446,7 +2476,7 @@ class LogistikController extends Controller
         }
 
 
-        if ($jenis != "SPB") {
+        if ($jenis == "EKAT") {
             if ($Logistik) {
                 for ($i = 0; $i < count($prd_array); $i++) {
                     $c = DetailLogistik::create([
@@ -2490,31 +2520,149 @@ class LogistikController extends Controller
                 }
             }
         } else {
-            if ($Logistik) {
-                for ($i = 0; $i < count($prd_array); $i++) {
-                    $c = DetailLogistikPart::create([
-                        'logistik_id' => $Logistik->id,
-                        'detail_pesanan_part_id' => $prd_array[$i]['id']
-                    ]);
-                    $ids =  $prd_array[$i]['id'];
-                    if (!$c) {
-                        $bool = false;
+            if ($prd_id != '0' && $part_id == '0') {
+                if ($Logistik) {
+                    for ($i = 0; $i < count($prd_array); $i++) {
+                        $c = DetailLogistik::create([
+                            'logistik_id' => $Logistik->id,
+                            'detail_pesanan_produk_id' => $prd_array[$i]['id'],
+                        ]);
+                        $ids =  $prd_array[$i]['id'];
+                        if ($c) {
+                            for ($y = 0; $y < count($prd_array[$i]['noseri']); $y++) {
+                                $b = NoseriDetailLogistik::create([
+                                    'detail_logistik_id' => $c->id,
+                                    'noseri_detail_pesanan_id' => $prd_array[$i]['noseri'][$y],
+                                ]);
+                            }
+                            if (!$b) {
+                                $bool = false;
+                            }
+                        } else {
+                            $bool = false;
+                        }
+                    }
+                } else {
+                    return response()->json(['data' =>  $Logistik]);
+                }
+                // echo $ids;
+                // $poid = "";
+                if ($ids) {
+                    $iddpp = DetailPesananProduk::find($ids);
+                    $poid = strval($iddpp->DetailPesanan->Pesanan->id);
+                    $po = Pesanan::find($poid);
+                    if ($po) {
+                        if ($po->getJumlahKirim() > 0) {
+                            if ($po->getJumlahPesanan() > $po->getJumlahKirim()) {
+                                $po->log_id = '13';
+                                $po->save();
+                            } else if ($po->getJumlahPesanan() == $po->getJumlahKirim()) {
+                                $po->log_id = '10';
+                                $po->save();
+                            }
+                        }
                     }
                 }
-            }
+            } else if ($prd_id == '0' && $part_id != '0') {
+                if ($Logistik) {
+                    for ($i = 0; $i < count($part_array); $i++) {
+                        $c = DetailLogistikPart::create([
+                            'logistik_id' => $Logistik->id,
+                            'detail_pesanan_part_id' => $part_array[$i]['id']
+                        ]);
+                        $ids =  $part_array[$i]['id'];
+                        if (!$c) {
+                            $bool = false;
+                        }
+                    }
+                }
 
-            if ($bool == true) {
-                $iddpp = DetailPesananPart::find($ids);
-                $poid = $iddpp->pesanan_id;
-                $po = Pesanan::find($poid);
-                if ($po) {
-                    if ($po->getJumlahKirimPart() > 0) {
-                        if ($po->getJumlahPesananPart() > $po->getJumlahKirimPart()) {
-                            $po->log_id = '13';
-                            $po->save();
-                        } else if ($po->getJumlahPesananPart() == $po->getJumlahKirimPart()) {
-                            $po->log_id = '10';
-                            $po->save();
+                if ($bool == true) {
+                    $iddpp = DetailPesananPart::find($ids);
+                    $poid = $iddpp->pesanan_id;
+                    $po = Pesanan::find($poid);
+                    if ($po) {
+                        if ($po->getJumlahKirimPart() > 0) {
+                            if ($po->getJumlahPesananPart() > $po->getJumlahKirimPart()) {
+                                $po->log_id = '13';
+                                $po->save();
+                            } else if ($po->getJumlahPesananPart() == $po->getJumlahKirimPart()) {
+                                $po->log_id = '10';
+                                $po->save();
+                            }
+                        }
+                    }
+                }
+            } else if ($prd_id != '0' && $part_id != '0') {
+                if ($Logistik) {
+                    for ($i = 0; $i < count($prd_array); $i++) {
+                        $c = DetailLogistik::create([
+                            'logistik_id' => $Logistik->id,
+                            'detail_pesanan_produk_id' => $prd_array[$i]['id'],
+                        ]);
+                        $ids =  $prd_array[$i]['id'];
+                        if ($c) {
+                            for ($y = 0; $y < count($prd_array[$i]['noseri']); $y++) {
+                                $b = NoseriDetailLogistik::create([
+                                    'detail_logistik_id' => $c->id,
+                                    'noseri_detail_pesanan_id' => $prd_array[$i]['noseri'][$y],
+                                ]);
+                            }
+                            if (!$b) {
+                                $bool = false;
+                            }
+                        } else {
+                            $bool = false;
+                        }
+                    }
+                } else {
+                    return response()->json(['data' =>  $Logistik]);
+                }
+                // echo $ids;
+                // $poid = "";
+                if ($ids) {
+                    $iddpp = DetailPesananProduk::find($ids);
+                    $poid = strval($iddpp->DetailPesanan->Pesanan->id);
+                    $po = Pesanan::find($poid);
+                    if ($po) {
+                        if ($po->getJumlahKirim() > 0) {
+                            if ($po->getJumlahPesanan() > $po->getJumlahKirim()) {
+                                $po->log_id = '13';
+                                $po->save();
+                            } else if ($po->getJumlahPesanan() == $po->getJumlahKirim()) {
+                                $po->log_id = '10';
+                                $po->save();
+                            }
+                        }
+                    }
+                }
+
+                if ($Logistik) {
+                    for ($i = 0; $i < count($part_array); $i++) {
+                        $c = DetailLogistikPart::create([
+                            'logistik_id' => $Logistik->id,
+                            'detail_pesanan_part_id' => $part_array[$i]['id']
+                        ]);
+                        $ids =  $part_array[$i]['id'];
+                        if (!$c) {
+                            $bool = false;
+                        }
+                    }
+                }
+
+                if ($bool == true) {
+                    $iddpp = DetailPesananPart::find($ids);
+                    $poid = $iddpp->pesanan_id;
+                    $po = Pesanan::find($poid);
+                    if ($po) {
+                        if ($po->getJumlahKirimPart() > 0) {
+                            if ($po->getJumlahPesananPart() > $po->getJumlahKirimPart()) {
+                                $po->log_id = '13';
+                                $po->save();
+                            } else if ($po->getJumlahPesananPart() == $po->getJumlahKirimPart()) {
+                                $po->log_id = '10';
+                                $po->save();
+                            }
                         }
                     }
                 }
