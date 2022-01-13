@@ -1,12 +1,17 @@
 /**
- *  @module Plugin
+ * This module is used as plugin to datatables ellipses
+ * @namespace Plugin
+ */
+
+
+ import $ from 'jquery'
+
+
+/**
  *  This function is plugin to fixing paging error for datatables using
- *  bulma styling, this function most used at ppic_spa project.
- *
- *  @name Simple Numbers - No Ellipses
- *  @summary Same pagination as 'simple_numbers' but without ellipses
- *  @author [Michael Ryvkin](http://www.gyrocode.com)
- *
+ *  bulma styling.
+ *  @function simple_numbers_no_ellipses
+ *  @memberof Plugin
  *  @example
  *    $(document).ready(function() {
  *        $('#example').dataTable( {
@@ -14,9 +19,7 @@
  *        } );
  *    } );
  */
-import $ from "jquery"
-
-$.fn.DataTable.ext.pager.simple_numbers_no_ellipses = function (page, pages) {
+const simple_numbers_no_ellipses = function (page, pages) {
     var numbers = [];
     var buttons = $.fn.DataTable.ext.pager.numbers_length;
     var half = Math.floor(buttons / 2);
@@ -57,3 +60,5 @@ $.fn.DataTable.ext.pager.simple_numbers_no_ellipses = function (page, pages) {
 
     return ['previous', numbers, 'next'];
 };
+
+export default {simple_numbers_no_ellipses}

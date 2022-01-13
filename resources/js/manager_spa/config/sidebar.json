@@ -1,0 +1,70 @@
+[
+    {
+        "header": "General",
+        "menu": [
+            {
+                "text": "Dashboard",
+                "icon": "fas fa-home",
+                "url": "/manager-teknik"
+            }
+        ]
+    },
+    {
+        "header": "Data",
+        "menu": [
+            {
+                "text": "Perakitan",
+                "icon": "fas fa-table",
+                "url": "/manager-teknik/perakitan"
+            },
+            {
+                "text": "Sales Order",
+                "icon": "fas fa-database",
+                "url": "/manager-teknik/so"
+            },
+            {
+                "text": "Laporan Pesanan",
+                "icon": "fas fa-book-open",
+                "url": "/manager-teknik/laporan_pesanan"
+            },
+            {
+                "text": "Proses Pesanan",
+                "icon": "fas fa-sort-amount-up-alt",
+                "url": "/manager-teknik/proses_pesanan"
+            }
+        ]
+    },
+    {
+        "header": "Fitur",
+        "menu": [
+            {
+                "text": "Jadwal Perakitan",
+                "icon": "fas fa-calendar-alt",
+                "submenu": [
+                    {
+                        "text": "Perencanaan",
+                        "url": "/manager-teknik/jadwal_perencanaan"
+                    },
+                    {
+                        "text": "Pelaksanaan",
+                        "url": "/manager-teknik/jadwal_pelaksanaan"
+                    }
+                ]
+            },
+            {
+                "text": "Persetujuan Jadwal",
+                "icon": "fas fa-check",
+                "submenu": [
+                    {
+                        "text": "Perencanaan",
+                        "url": "/manager-teknik/persetujuan_perencanaan"
+                    },
+                    {
+                        "text": "Pelaksanaan",
+                        "url": "/manager-teknik/persetujuan_pelaksanaan"
+                    }
+                ]
+            }
+        ]
+    }
+]

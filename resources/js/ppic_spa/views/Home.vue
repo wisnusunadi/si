@@ -149,6 +149,17 @@ import VueApexCharts from "vue-apexcharts";
 import $ from "jquery";
 import axios from "axios";
 
+/**
+ * @vue-data {Array} [data_gbj=[]] - this data store list of gbj products getted from API (url = '/api/ppic/data/gbj')
+ * @vue-data {Array} [data_so=[]] - this data store list of sales order data getted from API (url = '/api/ppic/data/so')
+ * @vue-data {Array} [data_unit=[]] - this data store list of gk unit items getted from API (url = '/api/ppic/data/gk/unit')
+ * @vue-data {Array} [data_sparepart=[]] - this data store list of gk sparepart items getted from API (url = '/api/ppic/data/gk/sparepart')
+ * @vue-data {Number} [jumlah_permintaan=0] - this data store number of schedule change request from PPIC to manager
+ * @vue-data {Number} [jumlah_proses=0] - this data store number of schedule change process from manager to PPIC
+ *
+ * @vue-event {Array} loadData - this function is used to initialized data by calling the APIs
+ */
+
 export default {
   name: "Home",
 
