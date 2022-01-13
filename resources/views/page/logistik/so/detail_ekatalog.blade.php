@@ -679,6 +679,7 @@
                 url: action,
                 data: $('#form-logistik-create').serialize(),
                 success: function(response) {
+                    //  alert(response);
                     if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',

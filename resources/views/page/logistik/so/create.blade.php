@@ -1,4 +1,4 @@
-<form action="/api/logistik/so/create/{{$id}}/{{$id_produk}}/{{$jenis}}" method="POST" id="form-logistik-create">
+<form action="/api/logistik/so/create/{{$prd_array}}/{{$part_array}}/{{$jenis}}" method="POST" id="form-logistik-create">
     @method('PUT')
     @csrf
     <div class="content">
@@ -130,6 +130,7 @@
             </div>
         </div>
     </div>
-    {{$id}}
-    {{$id_produk}}
+    {{$prd_array}}
+    {{$part_array}}
+
 </form>
