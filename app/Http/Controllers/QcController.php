@@ -627,13 +627,50 @@ class QcController extends Controller
         }
 
         $po = Pesanan::find($pesanan_id);
-        if ($po->getJumlahPesanan() == $po->getJumlahSeri()) {
-            if ($po->getJumlahCek() > 0 && ($po->getJumlahPesanan() >= $po->getJumlahCek()) && $po->getJumlahKirim() == 0) {
-                $po->log_id = '8';
-                $po->save();
+        if ($po->log_id == "8") {
+            if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
+                if (isset($po->DetailPesanan) && !isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirim() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else {
+                        if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
+                    }
+                } else if (!isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirimPart() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else {
+                        if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
+                    }
+                } else if (isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
+                        if ($po->getJumlahKirim() >= $po->getJumlahPesanan() &&  $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
+                    }
+                }
             }
         }
-
         if ($bool == true) {
             return response()->json(['data' => 'success']);
         } else {

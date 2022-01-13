@@ -2552,22 +2552,22 @@ class LogistikController extends Controller
                 }
                 // echo $ids;
                 // $poid = "";
-                if ($ids) {
-                    $iddpp = DetailPesananProduk::find($ids);
-                    $poid = strval($iddpp->DetailPesanan->Pesanan->id);
-                    $po = Pesanan::find($poid);
-                    if ($po) {
-                        if ($po->getJumlahKirim() > 0) {
-                            if ($po->getJumlahPesanan() > $po->getJumlahKirim()) {
-                                $po->log_id = '13';
-                                $po->save();
-                            } else if ($po->getJumlahPesanan() == $po->getJumlahKirim()) {
-                                $po->log_id = '10';
-                                $po->save();
-                            }
-                        }
-                    }
-                }
+                // if ($ids) {
+                //     $iddpp = DetailPesananProduk::find($ids);
+                //     $poid = strval($iddpp->DetailPesanan->Pesanan->id);
+                //     $po = Pesanan::find($poid);
+                //     if ($po) {
+                //         if ($po->getJumlahKirim() > 0) {
+                //             if ($po->getJumlahPesanan() > $po->getJumlahKirim()) {
+                //                 $po->log_id = '13';
+                //                 $po->save();
+                //             } else if ($po->getJumlahPesanan() == $po->getJumlahKirim()) {
+                //                 $po->log_id = '10';
+                //                 $po->save();
+                //             }
+                //         }
+                //     }
+                // }
             } else if ($prd_id == '0' && $part_id != '0') {
                 if ($Logistik) {
                     for ($i = 0; $i < count($part_array); $i++) {
@@ -2582,22 +2582,22 @@ class LogistikController extends Controller
                     }
                 }
 
-                if ($bool == true) {
-                    $iddpp = DetailPesananPart::find($ids);
-                    $poid = $iddpp->pesanan_id;
-                    $po = Pesanan::find($poid);
-                    if ($po) {
-                        if ($po->getJumlahKirimPart() > 0) {
-                            if ($po->getJumlahPesananPart() > $po->getJumlahKirimPart()) {
-                                $po->log_id = '13';
-                                $po->save();
-                            } else if ($po->getJumlahPesananPart() == $po->getJumlahKirimPart()) {
-                                $po->log_id = '10';
-                                $po->save();
-                            }
-                        }
-                    }
-                }
+                // if ($bool == true) {
+                //     $iddpp = DetailPesananPart::find($ids);
+                //     $poid = $iddpp->pesanan_id;
+                //     $po = Pesanan::find($poid);
+                //     if ($po) {
+                //         if ($po->getJumlahKirimPart() > 0) {
+                //             if ($po->getJumlahPesananPart() > $po->getJumlahKirimPart()) {
+                //                 $po->log_id = '13';
+                //                 $po->save();
+                //             } else if ($po->getJumlahPesananPart() == $po->getJumlahKirimPart()) {
+                //                 $po->log_id = '10';
+                //                 $po->save();
+                //             }
+                //         }
+                //     }
+                // }
             } else if ($prd_id != '0' && $part_id != '0') {
                 if ($Logistik) {
                     for ($i = 0; $i < count($prd_array); $i++) {
@@ -2638,24 +2638,71 @@ class LogistikController extends Controller
                     }
                 }
 
-                if ($bool == true) {
-                    $iddpp = DetailPesananPart::find($ids);
-                    $poid = $iddpp->pesanan_id;
-                    $po = Pesanan::find($poid);
-                    if ($po) {
-                        if ($po->getJumlahKirimPart() > 0 || $po->getJumlahKirim() > 0) {
-                            if ($po->getJumlahPesananPart() > $po->getJumlahKirimPart() || $po->getJumlahPesanan() > $po->getJumlahKirim()) {
-                                $po->log_id = '13';
-                                $po->save();
-                            } else if ($po->getJumlahPesananPart() == $po->getJumlahKirimPart() && $po->getJumlahPesanan() == $po->getJumlahKirim()) {
-                                $po->log_id = '10';
-                                $po->save();
-                            }
+                // if ($bool == true) {
+
+                //     if ($po) {
+                //         if ($po->getJumlahKirimPart() > 0 || $po->getJumlahKirim() > 0) {
+                //             if ($po->getJumlahPesananPart() > $po->getJumlahKirimPart() || $po->getJumlahPesanan() > $po->getJumlahKirim()) {
+                //                 $po->log_id = '13';
+                //                 $po->save();
+                //             } else if ($po->getJumlahPesananPart() == $po->getJumlahKirimPart() && $po->getJumlahPesanan() == $po->getJumlahKirim()) {
+                //                 $po->log_id = '10';
+                //                 $po->save();
+                //             }
+                //         }
+                //     }
+                // }
+            }
+        }
+
+        $iddpp = DetailPesananPart::find($ids);
+        $poid = $iddpp->pesanan_id;
+        $po = Pesanan::find($poid);
+        if ($po) {
+            if ($po->log_id == "10" || $po->log_id == "11" || $po->log_id == "13") {
+                if (isset($po->DetailPesanan) && !isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirim() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else {
+                        if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
+                    }
+                } else if (!isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirimPart() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else {
+                        if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
+                    }
+                } else if (isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
+                        if ($po->getJumlahKirim() >= $po->getJumlahPesanan() &&  $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
                         }
                     }
                 }
             }
         }
+
         if ($bool == true) {
             return response()->json(['data' => "success"]);
         } else if ($bool == false) {
