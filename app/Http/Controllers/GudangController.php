@@ -689,9 +689,9 @@ class GudangController extends Controller
             $q->where('pesanan_id', $id);
         })->with('seri.seri', 'produk.produk')->get();
         $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get();
-        // $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
-        // return $pdf->stream();
-        dd($data);
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
+        return $pdf->stream();
+        // dd($data);
         return view('page.gbj.reports.spb',['data' => $data, 'tfby' => $tfby, 'header' => $header]);
     }
 
