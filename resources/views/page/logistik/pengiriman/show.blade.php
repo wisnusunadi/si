@@ -616,37 +616,30 @@
             }
         });
 
-        function check_no_resi(value) {
-            var hasil = "";
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                async: false,
-                url: '/api/logistik/cek/no_resi/' + value,
-                success: function(data) {
-                    hasil = data;
-                },
-                error: function(data) {
-                    hasil = data;
-                }
-            });
-            return hasil;
-        }
-
         $(document).on('change keyup', '#no_resi', function(event) {
             if ($(this).val() != "") {
-                var values = $(this).val();
-
-                if (check_no_resi(values) > 0) {
-                    $('#no_resi').addClass('is-invalid');
-                    $('#msgno_resi').text("No Resi sudah terpakai");
-                    $('#btnsimpan').attr('disabled', true);
-                } else {
-                    $('#no_resi').removeClass('is-invalid');
-                    $('#msgno_resi').text("");
-                    $('#btnsimpan').removeAttr('disabled');
-                }
-
+                var value = $(this).val();
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '/api/logistik/cek/no_resi/' + value,
+                    success: function(data) {
+                        if (data > 0) {
+                            $('#no_resi').addClass('is-invalid');
+                            $('#msgno_resi').text("No Resi sudah terpakai");
+                            $('#btnsimpan').attr('disabled', true);
+                        } else {
+                            $('#no_resi').removeClass('is-invalid');
+                            $('#msgno_resi').text("");
+                            $('#btnsimpan').removeAttr('disabled');
+                        }
+                    },
+                    error: function(data) {
+                        $('#no_resi').addClass('is-invalid');
+                        $('#msgno_resi').text("No Resi harus diisi");
+                        $('#btnsimpan').attr('disabled', true);
+                    }
+                });
             } else if ($(this).val() == "") {
                 $('#no_resi').addClass('is-invalid');
                 $('#msgno_resi').text("No Resi harus diisi");
@@ -713,7 +706,7 @@
                     theme: "bootstrap",
                     delay: 250,
                     type: 'GET',
-                    url: '/api/logistik/ekspedisi/select' + id,
+                    url: '/api/logistik/ekspedisi/select/' + id,
                     data: function(params) {
                         return {
                             term: params.term
