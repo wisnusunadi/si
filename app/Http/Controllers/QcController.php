@@ -129,17 +129,18 @@ class QcController extends Controller
     public function get_data_detail_so($id)
     {
         $x = explode(',', $id);
-        $data = DetailPesananProduk::with('noseridetailpesanan')->whereIN('detail_pesanan_id', $x)->groupby('gudang_barang_jadi_id')->get();
-
+        $data = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->groupby('gudang_barang_jadi_id')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
+                $string = "";
                 if (empty($data->gudangbarangjadi->nama)) {
-                    return $data->gudangbarangjadi->produk->nama;
+                    $string .= $data->gudangbarangjadi->produk->nama;
                 } else {
-                    return $data->gudangbarangjadi->produk->nama . " - <b>" . $data->gudangbarangjadi->nama . "</b>";
+                    $string .= $data->gudangbarangjadi->produk->nama . " - <b>" . $data->gudangbarangjadi->nama . "</b>";
                 }
+                return $string;
             })
             ->addColumn('jumlah', function ($data) use ($x) {
                 // $j = DetailPesanan::whereIN('id', $x)->whereHas('DetailPesananProduk', function ($q) use ($id) {
@@ -159,6 +160,8 @@ class QcController extends Controller
                 //     // }
                 // }
                 // return $jumlah;
+
+                //V1
                 $id = $data->gudang_barang_jadi_id;
                 $pesanan_id = $data->DetailPesanan->pesanan_id;
                 $jumlah = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
@@ -167,6 +170,11 @@ class QcController extends Controller
                     $q->where('pesanan_id', $pesanan_id);
                 })->count();
                 return $jumlah;
+
+                //V2
+                // $jumlah = $data->getJumlahPesanan();
+                // return $jumlah;
+
                 // return $data->detailpesanan->jumlah * $data->detailpesanan->Penjualanproduk->produk->first()->pivot->jumlah;
             })
             ->addColumn('jumlah_ok', function ($data) use ($x) {
@@ -214,7 +222,6 @@ class QcController extends Controller
                 })->count();
 
                 $bool = "0";
-
                 if ($jumlahditrf > 0) {
                     if ($jumlahditrf == $ok) {
                         return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
@@ -239,27 +246,27 @@ class QcController extends Controller
     {
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->orderby('id', 'ASC')->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get());
             $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get());
             $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%ekat%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spa%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::whereIN('id', $this->check_input())->where('so', 'LIKE', '%spb%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get();
         } else {
-            $data = Pesanan::whereIN('id', $this->check_input())->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->get();
         }
 
         return datatables()->of($data)
@@ -280,7 +287,6 @@ class QcController extends Controller
                     if ($data->getJumlahPesanan() == $data->getJumlahCekSeri()) {
                         return  '-';
                     } else {
-
                         $tgl_sekarang = Carbon::now()->format('Y-m-d');
                         $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
 
@@ -330,7 +336,6 @@ class QcController extends Controller
                 }
 
                 $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
-
 
                 if ($jumlah == $jumlah_seri) {
                     return  '<span class="badge green-text">Selesai</span>';
@@ -588,21 +593,23 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc($seri_id, $tfgbj_id, $pesanan_id, $produk_id, Request $request)
     {
-        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
-            $q->where('Pesanan_id', $pesanan_id);
-        })->where('gudang_barang_jadi_id', $produk_id)->first();
+        // $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
+        //     $q->where('Pesanan_id', $pesanan_id);
+        // })->where('gudang_barang_jadi_id', $produk_id)->first();
 
         $replace_array_seri = strtr($seri_id, array('[' => '', ']' => ''));
         $array_seri = explode(',', $replace_array_seri);
 
-        // //  return response()->json(['data' =>  count($array_seri)]);
-
         $bool = true;
         for ($i = 0; $i < count($array_seri); $i++) {
+
+            $data = NoseriTGbj::find($array_seri[$i]);
+
+
             $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
             if ($check == null) {
                 $c = NoseriDetailPesanan::create([
-                    'detail_pesanan_produk_id' => $data->id,
+                    'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
                     't_tfbj_noseri_id' => $array_seri[$i],
                     'status' => $request->cek,
                     'tgl_uji' => $request->tanggal_uji,
@@ -622,13 +629,50 @@ class QcController extends Controller
         }
 
         $po = Pesanan::find($pesanan_id);
-        if ($po->getJumlahPesanan() == $po->getJumlahSeri()) {
-            if ($po->getJumlahCek() > 0 && ($po->getJumlahPesanan() >= $po->getJumlahCek()) && $po->getJumlahKirim() == 0) {
-                $po->log_id = '8';
-                $po->save();
+        if ($po->log_id == "8") {
+            if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
+                if (isset($po->DetailPesanan) && !isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirim() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else {
+                        if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
+                    }
+                } else if (!isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirimPart() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else {
+                        if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
+                    }
+                } else if (isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
+                    if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
+                        $po->log_id = '11';
+                        $po->save();
+                    } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
+                        if ($po->getJumlahKirim() >= $po->getJumlahPesanan() &&  $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
+                    }
+                }
             }
         }
-
         if ($bool == true) {
             return response()->json(['data' => 'success']);
         } else {

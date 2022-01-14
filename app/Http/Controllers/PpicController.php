@@ -28,6 +28,16 @@ use App\Events\PpicNotif;
 class PpicController extends Controller
 {
     // Properties
+    /**
+     * Change status from string to number
+     *
+     * This function used as converter status, so status can be uploaded 
+     * to database
+     *
+     * @param string $status status string
+     *
+     * @return int status number
+     */
     public function change_status($status)
     {
         if ($status == 'penyusunan') return 6;
@@ -36,6 +46,16 @@ class PpicController extends Controller
         return $status;
     }
 
+    /**
+     * Change state from string to number
+     *
+     * This function used as converter state, so state can be uploaded 
+     * to database
+     *
+     * @param string $state status string
+     *
+     * @return int state number
+     */
     public function change_state($state)
     {
         if ($state == 'perencanaan') return 17;
@@ -44,7 +64,12 @@ class PpicController extends Controller
         return $state;
     }
 
-    // API
+    /**
+     * Get data perakitan from database
+     * 
+     * @param string $status status string
+     * @return array collection of data
+     */
     public function get_data_perakitan($status = "all")
     {
         $this->update_perakitan_status();
@@ -65,6 +90,11 @@ class PpicController extends Controller
         return $data;
     }
 
+    /**
+     * Change data get from get_data_perakitan function to datatables format
+     * 
+     * @return array datatables formatted data
+     */
     public function get_datatables_data_perakitan()
     {
         $data = JadwalPerakitan::where('status', '!=', $this->change_status('penyusunan'))->orderBy('tanggal_mulai', 'desc')->get();
@@ -109,12 +139,22 @@ class PpicController extends Controller
             ->make(true);
     }
 
+    /**
+     * Get data perakitan from previous planning from database
+     * 
+     * @return array collections of data
+     */
     public function get_data_perakitan_rencana()
     {
         $data = JadwalPerakitanRencana::with('JadwalPerakitan.Produk.produk')->orderBy('tanggal_mulai', 'asc')->get();
         return $data;
     }
 
+    /**
+     * Get data from GBJ
+     * 
+     * @return array collections of data
+     */
     public function get_data_barang_jadi(Request $request)
     {
         $data = GudangBarangJadi::with('produk.KelompokProduk', 'produk.product', 'satuan');
@@ -125,6 +165,11 @@ class PpicController extends Controller
         return $data;
     }
 
+    /**
+     * Get data product from sales order
+     * 
+     * @return array datatables formatted data
+     */
     public function get_data_so()
     {
         $getid = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
@@ -184,6 +229,12 @@ class PpicController extends Controller
             ->make(true);
     }
 
+    /**
+     * Get detail sales order from spesific product
+     * 
+     * @param int $id product id from gdg_barang_jadi table
+     * @return array collections of data
+     */
     public function get_data_so_detail($id)
     {
         $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
@@ -288,6 +339,11 @@ class PpicController extends Controller
             ->make(true);
     }
 
+    /**
+     * Get data sparepart from GK
+     * 
+     * @return array collections of data
+     */
     public function get_data_sparepart_gk()
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_spr) as jml'))
@@ -301,6 +357,11 @@ class PpicController extends Controller
         return $data;
     }
 
+    /**
+     * Get data unit from GK
+     * 
+     * @return array collections of data
+     */
     public function get_data_unit_gk(Request $request)
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
@@ -319,6 +380,11 @@ class PpicController extends Controller
         return $data;
     }
 
+    /**
+     * Get komentar jadwal perakitan based on status request and current date
+     * 
+     * @return array collections of data
+     */
     public function get_komentar_jadwal_perakitan(Request $request)
     {
         $data = KomentarJadwalPerakitan::where('status', $this->change_status($request->status))
@@ -328,6 +394,13 @@ class PpicController extends Controller
         return $data;
     }
 
+    /**
+     * Function to count number of request and process of schedule change
+     * from PPIC
+     * 
+     * @return array array data consist of 2 member which is number of request
+     * and number of precess
+     */
     public function count_proses_jadwal()
     {
         $data = KomentarJadwalPerakitan::all();
@@ -347,6 +420,11 @@ class PpicController extends Controller
         return [$permintaan, $proses];
     }
 
+    /**
+     * add data peratkitan to database
+     * 
+     * @return array collections of data perakitan after new data added
+     */
     public function create_data_perakitan(Request $request)
     {
         $status = $this->change_status($request->status);
@@ -371,6 +449,11 @@ class PpicController extends Controller
         return $this->get_data_perakitan($status);
     }
 
+    /**
+     * add data to komentar_jadwal_perakitan table
+     * 
+     * @return void
+     */
     public function create_komentar_jadwal_perakitan(Request $request)
     {
         $state = $this->change_state($request->state);
@@ -392,6 +475,11 @@ class PpicController extends Controller
         ]);
     }
 
+    /**
+     * update data from komentar_jadwal_perakitan table
+     * 
+     * @return void
+     */
     public function update_komentar_jadwal_perakitan(Request $request)
     {
         $data = KomentarJadwalPerakitan::orderBy('tanggal_permintaan', 'desc')->where("status", $this->change_status($request->status))->first();
@@ -401,6 +489,12 @@ class PpicController extends Controller
         $data->save();
     }
 
+    /**
+     * update data from jadwal_perakitan table
+     * 
+     * @param int $id id data jadwal_perakitan
+     * @return array collections of data jadwal_perakitan after update
+     */
     public function update_data_perakitan(Request $request, $id)
     {
         $data = JadwalPerakitan::find($id);
@@ -441,6 +535,12 @@ class PpicController extends Controller
         return $this->get_data_perakitan($request->status);
     }
 
+    /**
+     * update many datas from jadwal_perakitan table based on status
+     * 
+     * @param string $status status string
+     * @return array collections of data jadwal_perakitan after update
+     */
     public function update_many_data_perakitan(Request $request, $status)
     {
         if (isset($request->data)) {
@@ -484,6 +584,12 @@ class PpicController extends Controller
         return $this->get_data_perakitan($status);
     }
 
+    /**
+     * delete data from jadwal_perakitan table
+     * 
+     * @param int $id id data of jadwal_perakitan
+     * @return void
+     */
     public function delete_data_perakitan(Request $request, $id)
     {
         $data = JadwalPerakitan::find($id);
@@ -499,12 +605,23 @@ class PpicController extends Controller
         return [$penyusunan, $pelaksanaan, $selesai];
     }
 
+    /**
+     * trigger event for notification
+     * 
+     * @return void
+     */
     public function send_notification(Request $request)
     {
-        event(new PpicNotif($request->user));
+        event(new PpicNotif($request->user, $request->status, $request->state));
     }
 
     // helper function
+    /**
+     * update status of data from jadwal_perkaitan based on current month,
+     * this function called inside get_data_perakitan()
+     * 
+     * @return void
+     */
     public function update_perakitan_status()
     {
         // update jadwal_perakitan
@@ -1030,7 +1147,7 @@ class PpicController extends Controller
 
     public function test_query()
     {
-        event(new PpicNotif('test name', 'test divisi'));
+        event(new PpicNotif('test user', 'test status', 'test state'));
         return "success";
     }
 

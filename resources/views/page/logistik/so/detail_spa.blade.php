@@ -390,6 +390,8 @@
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/so/data/detail/belum_kirim/' + '{{$d->pesanan_id}}',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -429,6 +431,8 @@
             serverSide: true,
             ajax: {
                 'url': '/api/logistik/so/data/detail/selesai_kirim/' + '{{$d->pesanan_id}}',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -551,6 +555,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/detail/select/' + id + '/' + pesanan_id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -584,6 +590,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/noseri/detail/belum_kirim/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -604,6 +612,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/logistik/so/noseri/detail/selesai_kirim/data/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }

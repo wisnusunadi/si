@@ -35,5 +35,17 @@ export default {
   mounted() {
     this.loadData();
   },
+
+  computed: {
+    notif() {
+      return this.$store.state.notif;
+    },
+  },
+
+  watch: {
+    notif() {
+      if (this.$store.state.notif.user.divisi_id === 24) this.loadData();
+    },
+  },
 };
 </script>

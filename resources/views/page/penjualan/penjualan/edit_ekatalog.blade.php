@@ -574,20 +574,24 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <span>
-                                                    <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
-                                                        Batal
-                                                    </a>
-                                                </span>
-                                                <span class="float-right">
-                                                    <button type="submit" class="btn btn-warning" id="btnsimpan">
-                                                        Simpan
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-10">
+                                        <span>
+                                            <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
+                                                Batal
+                                            </a>
+                                        </span>
+                                        <span class="float-right">
+                                            <button type="submit" class="btn btn-warning" id="btnsimpan">
+                                                Simpan
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
 
                             </form>
 
@@ -609,8 +613,8 @@
 <script>
     $(function() {
 
-
         loop();
+        load_variasi();
 
         function loop() {
             for (i = 0; i < 20; i++) {
@@ -621,7 +625,7 @@
         function cek_stok(id) {
             var jumlah = 0;
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 async: false,
                 url: '/api/produk/variasi_stok/' + id,
@@ -634,6 +638,71 @@
             });
             return jumlah;
         }
+
+        $('#customer_id').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Customer",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/customer/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        }).change(function() {
+            var id = $(this).val();
+            $.ajax({
+                url: '/api/customer/select/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#alamat_customer').val(data[0].alamat);
+                    $('#telepon_customer').val(data[0].telp);
+                }
+            });
+        });
+
+        $('.provinsi').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/provinsi/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
 
         $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
         $('#customer_id').on('keyup change', function() {
@@ -752,8 +821,6 @@
             $('#produktable').find('tr .produk_subtotal').each(function() {
                 var subtotal = replaceAll($(this).val(), '.', '');
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
-                console.log("subtotal " + subtotal);
-                console.log("total harga " + totalharga)
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
         }
@@ -942,75 +1009,6 @@
             }
         });
 
-
-        $('#customer_id').select2({
-            ajax: {
-                minimumResultsForSearch: 20,
-                placeholder: "Pilih Customer",
-                dataType: 'json',
-                theme: "bootstrap",
-                delay: 250,
-                type: 'GET',
-                url: '/api/customer/select',
-                data: function(params) {
-                    return {
-                        term: params.term
-                    }
-                },
-                processResults: function(data) {
-                    console.log(data);
-                    return {
-                        results: $.map(data, function(obj) {
-                            return {
-                                id: obj.id,
-                                text: obj.nama
-                            };
-                        })
-                    };
-                },
-            }
-        }).change(function() {
-            var id = $(this).val();
-            $.ajax({
-                url: '/api/customer/select/' + id,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    console.log(data);
-                    $('#alamat_customer').val(data[0].alamat);
-                    $('#telepon_customer').val(data[0].telp);
-                }
-            });
-        });
-
-        $('.provinsi').select2({
-            ajax: {
-                minimumResultsForSearch: 20,
-                placeholder: "Pilih Produk",
-                dataType: 'json',
-                theme: "bootstrap",
-                delay: 250,
-                type: 'GET',
-                url: '/api/provinsi/select',
-                data: function(params) {
-                    return {
-                        term: params.term
-                    }
-                },
-                processResults: function(data) {
-                    console.log(data);
-                    return {
-                        results: $.map(data, function(obj) {
-                            return {
-                                id: obj.id,
-                                text: obj.nama
-                            };
-                        })
-                    };
-                },
-            }
-        })
-
         function select_data(i) {
             $('#' + i).select2({
                 ajax: {
@@ -1025,7 +1023,6 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -1039,8 +1036,6 @@
             }).change(function(i) {
                 var index = $(this).attr('id');
                 var id = $(this).val();
-                console.log(index);
-                console.log(id);
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
@@ -1049,7 +1044,6 @@
                         $('#produk_harga' + index).val(formatmoney(res[0].harga));
                         $('#produk_subtotal' + index).val(formatmoney(res[0].harga * $('#produk_jumlah' + index).val()));
                         totalhargaprd();
-                        console.log(res);
                         var tes = $('#detail_produk' + index);
                         tes.empty();
                         var datas = "";
@@ -1079,7 +1073,6 @@
                                     });
                                 }
                             }
-                            console.log(data);
                             $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
                                 placeholder: 'Pilih Variasi',
                                 data: data,
@@ -1101,7 +1094,7 @@
                 });
             });
         }
-        load_variasi();
+
 
         function load_variasi() {
             produk = [];

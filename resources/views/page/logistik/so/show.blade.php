@@ -273,7 +273,7 @@
             ajax: {
                 'url': '/api/logistik/so/data/selesai',
                 'dataType': 'json',
-                'type': 'POST',
+                'type': 'GET',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

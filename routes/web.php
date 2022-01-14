@@ -29,6 +29,10 @@ Route::get('/home', function () {
     return redirect('/');
 })->middleware('auth');
 
+Route::get("/test", function () {
+    return view('test');
+});
+
 Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/{any?}', 'spa.ppic.spa');
     // Route::get('/data/{status}', function ($status) {
@@ -173,7 +177,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
         Route::post('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
-        Route::get('/create/{detail_pesanan_id}/{pesanan_id}/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
+        Route::get('/create/{detail_pesanan_id}/{part}/{pesanan_id}/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
         Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
             Route::view('/show', 'page.logistik.so.riwayat.show')->name('logistik.so.riwayat.show');
@@ -266,11 +270,6 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
             Route::view('/show', 'page.dc.laporan.show')->name('dc.coo.laporan.show');
         });
     });
-});
-// Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
-
-Route::get('/test/{name?}', function ($name = null) {
-    return $name;
 });
 
 Route::group(['prefix' => '/gk', 'middleware' => 'auth'], function () {

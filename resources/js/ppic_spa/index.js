@@ -11,6 +11,7 @@ import App from './App.vue'
 
 import axios from 'axios'
 import $ from "jquery"
+import Pusher from "pusher-js"
 
 // global library
 import "jquery/dist/jquery"
@@ -46,3 +47,20 @@ new Vue({
     store,
     render: h => h(App)
 }).$mount("#app")
+
+if (store.state.enable_notif){
+    let pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
+        cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+        encrypted: true
+    });
+    
+    let channel = pusher.subscribe('notif');
+    
+    channel.bind("App\\Events\\PpicNotif", (data) => {
+        store.commit('setNotif', {
+            user: data.user,
+            status: data.status,
+            state: data.state
+        })
+    })
+}

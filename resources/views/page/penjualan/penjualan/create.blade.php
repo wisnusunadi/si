@@ -162,6 +162,23 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right"></label>
+                                                    <div class="col-5 col-form-label">
+                                                        <div class="form-check form-check-inline hide" id="penj_prd">
+                                                            <input class="form-check-input" type="radio" name="jenis_penj" id="jenis_penj1" value="produk" />
+                                                            <label class="form-check-label" for="jenis_penj1">Produk</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline hide" id="penj_spr">
+                                                            <input class=" form-check-input" type="radio" name="jenis_penj" id="jenis_penj2" value="sparepart" />
+                                                            <label class="form-check-label" for="jenis_penj2">Sparepart</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline hide" id="penj_sem">
+                                                            <input class="form-check-input" type="radio" name="jenis_penj" id="jenis_penj3" value="semua" />
+                                                            <label class="form-check-label" for="jenis_penj3">Produk + Sparepart</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -617,7 +634,7 @@
         }
 
         function checkvalidasi() {
-            if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && check_no_paket($("#no_paket").val()) <= 0) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+            if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid') <= 0) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
                 $('#btntambah').removeAttr("disabled");
             } else {
                 $('#btntambah').attr("disabled", true);
@@ -660,18 +677,29 @@
             reset_penjualan();
 
             if ($(this).val() == "ekatalog") {
-
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").addClass("hide");
                 $("#akn").removeClass("hide");
                 $(".os-content-arrange").remove();
+                //cek
+                $("#penj_prd").removeClass("hide");
+                $("#penj_spr").addClass("hide");
+                $("#penj_sem").addClass("hide");
+                $("input[name=jenis_penj][value='produk']").prop("checked", true);
+                $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
             } else if ($(this).val() == "spa") {
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
                 $(".os-content-arrange").remove();
+                //cek
+                $("#penj_prd").removeClass("hide");
+                $("#penj_spr").removeClass("hide");
+                $("#penj_sem").removeClass("hide");
+                $("input[name=jenis_penj][value='produk']").prop("checked", true);
+                $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
             } else if ($(this).val() == "spb") {
                 // $("#datapart").addClass("hide");
                 // $("#dataproduk").removeClass("hide");
@@ -680,6 +708,26 @@
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
                 $(".os-content-arrange").remove();
+
+                //cek
+                $("#penj_prd").removeClass("hide");
+                $("#penj_spr").removeClass("hide");
+                $("#penj_sem").removeClass("hide");
+                $("input[name=jenis_penj][value='produk']").prop("checked", false);
+                $("input[name=jenis_penj][value='sparepart']").prop("checked", true);
+            }
+        });
+        $('input[type="radio"][name="jenis_penj"]').on('change', function() {
+            var x = $(this).val();
+            if ($(this).val() == "produk") {
+                $("#datapart").addClass("hide");
+                $("#dataproduk").removeClass("hide");
+            } else if ($(this).val() == "sparepart") {
+                $("#datapart").removeClass("hide");
+                $("#dataproduk").addClass("hide");
+            } else if ($(this).val() == "semua") {
+                $("#datapart").removeClass("hide");
+                $("#dataproduk").removeClass("hide");
             }
         });
 
@@ -813,49 +861,34 @@
         $('#no_paket').on('keyup change', function() {
             if ($(this).val() != "") {
                 var values = $(this).val();
-                console.log(check_no_paket(values));
-                if (check_no_paket(values) > 0) {
-                    $("#msgno_paket").text("No Paket tidak boleh sama");
-                    $("#no_paket").addClass('is-invalid');
-                    $('#btntambah').attr("disabled", true);
-                } else {
-                    $("#msgno_paket").text("");
-                    $("#no_paket").removeClass('is-invalid');
-                    checkvalidasi();
-                }
-                // $.ajax({
-                //     type: 'GET',
-                //     dataType: 'json',
-                //     url: '/api/penjualan/check_no_paket/' + '0/' + values,
-                //     success: function(data) {
-                //         if (data.data > 0) {
-                //             $("#msgno_paket").text("No Paket telah digunakan");
-                //             $("#no_paket").addClass('is-invalid');
-                //             $('#btntambah').attr("disabled", true);
-                //         } else {
-                //             $("#msgno_paket").text("");
-                //             $("#no_paket").removeClass('is-invalid');
-                //             checkvalidasi();
-                //         }
-                //     },
-                //     error: function(data) {
-                //         return values;
-                //     }
-                // });
-
-                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
-                //     $('#btntambah').removeAttr("disabled");
-                // } else {
-                //     $('#btntambah').attr("disabled", true);
-                // }
-
-
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'JSON',
+                    url: '/api/penjualan/check_no_paket/' + '0/' + values,
+                    success: function(data) {
+                        if (data > 0) {
+                            $("#msgno_paket").text("No Paket tidak boleh sama");
+                            $("#no_paket").addClass('is-invalid');
+                            $('#btntambah').attr("disabled", true);
+                        } else {
+                            $("#msgno_paket").text("");
+                            $("#no_paket").removeClass('is-invalid');
+                            checkvalidasi();
+                        }
+                    },
+                    error: function(data) {
+                        $("#msgno_paket").text("No Paket tidak boleh sama");
+                        $("#no_paket").addClass('is-invalid');
+                        $('#btntambah').attr("disabled", true);
+                    }
+                });
             } else if ($(this).val() == "") {
                 $("#msgno_paket").text("No Paket harus diisi");
                 $("#no_paket").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
         });
+
         $('#no_po').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgno_po").text("");
@@ -1024,22 +1057,22 @@
             return jumlah;
         }
 
-        function check_no_paket(values) {
-            var hasil = "";
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                async: false,
-                url: '/api/penjualan/check_no_paket/' + '0/' + values,
-                success: function(data) {
-                    hasil = data;
-                },
-                error: function(data) {
-                    hasil = data;
-                }
-            });
-            return hasil;
-        }
+        // function check_no_paket(values) {
+        //     var hasil = "";
+        //     $.ajax({
+        //         type: 'POST',
+        //         dataType: 'JSON',
+        //         async: false,
+        //         url: '/api/penjualan/check_no_paket/' + '0/' + values,
+        //         success: function(data) {
+        //             hasil = data;
+        //         },
+        //         error: function(data) {
+        //             hasil = data;
+        //         }
+        //     });
+        //     return hasil;
+        // }
 
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
@@ -1081,7 +1114,6 @@
                     },
                     processResults: function(data) {
 
-                        //console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -1195,7 +1227,6 @@
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
                 var subtotal = replaceAll($(this).val(), '.', '');
-                // console.log(subtotal);
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
@@ -1237,7 +1268,6 @@
                     if (jumlah_pesan == "") {
                         jumlah_pesan = 0;
                     }
-                    console.log('subtotal' + formatmoney((res[0].harga) * jumlah_pesan));
                     $('#produk_subtotal' + index).val(formatmoney((res[0].harga) * jumlah_pesan));
                     var tes = $('#detail_produk' + index);
                     tes.empty();
