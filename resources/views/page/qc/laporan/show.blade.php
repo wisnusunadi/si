@@ -330,18 +330,11 @@
                     }
                 },
                 buttons: [{
-                        extend: 'excel',
-                        title: 'Laporan QC Outgoing',
-                        text: '<i class="far fa-file-excel"></i> Export',
-                        className: "btn btn-info"
-                    },
-                    {
-                        extend: 'print',
-                        title: 'Laporan QC Outgoing',
-                        text: '<i class="fas fa-print"></i> Cetak',
-                        className: "btn btn-primary"
-                    },
-                ],
+                    extend: 'excel',
+                    title: 'Laporan QC Outgoing',
+                    text: '<i class="far fa-file-excel"></i> Export',
+                    className: "btn btn-info"
+                }, ],
                 columns: [{
                         data: 'DT_RowIndex',
                         className: 'nowrap-text align-center'

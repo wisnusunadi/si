@@ -335,24 +335,18 @@
                 }
             },
             buttons: [{
-                    extend: 'excel',
-                    title: 'Laporan Penjualan',
-                    text: '<i class="far fa-file-excel"></i> Export',
-                    className: "btn btn-info"
-                },
-                {
-                    extend: 'print',
-                    title: 'Laporan Penjualan',
-                    text: '<i class="fas fa-print"></i> Cetak',
-                    className: "btn btn-primary"
-                },
-            ],
+                extend: 'excel',
+                title: 'Laporan Penjualan',
+                text: '<i class="far fa-file-excel"></i> Export',
+                className: "btn btn-info"
+            }, ],
             columns: [{
                     data: 'kosong'
                 },
                 {
                     data: 'no_paket',
-                    className: 'nowraptext'
+                    className: 'nowraptext',
+                    searchable: true
                 },
                 {
                     data: 'nama_customer',
@@ -404,7 +398,7 @@
             rowGroup: {
                 startRender: function(rows, group) {
                     var i = 0;
-                    console.log(group);
+                    console.log(group); 
                     return $('<tr/>')
                         .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
                 },

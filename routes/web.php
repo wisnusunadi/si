@@ -29,6 +29,10 @@ Route::get('/home', function () {
     return redirect('/');
 })->middleware('auth');
 
+Route::get("/test", function () {
+    return view('test');
+});
+
 Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/{any?}', 'spa.ppic.spa');
     // Route::get('/data/{status}', function ($status) {
@@ -266,11 +270,6 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
             Route::view('/show', 'page.dc.laporan.show')->name('dc.coo.laporan.show');
         });
     });
-});
-// Route::get('/provinsi', [ProvincesController::class, 'provinsi'])->name('provinsi');
-
-Route::get('/test/{name?}', function ($name = null) {
-    return $name;
 });
 
 Route::group(['prefix' => '/gk', 'middleware' => 'auth'], function () {
