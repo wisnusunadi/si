@@ -593,21 +593,23 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc($seri_id, $tfgbj_id, $pesanan_id, $produk_id, Request $request)
     {
-        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
-            $q->where('Pesanan_id', $pesanan_id);
-        })->where('gudang_barang_jadi_id', $produk_id)->first();
+        // $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
+        //     $q->where('Pesanan_id', $pesanan_id);
+        // })->where('gudang_barang_jadi_id', $produk_id)->first();
 
         $replace_array_seri = strtr($seri_id, array('[' => '', ']' => ''));
         $array_seri = explode(',', $replace_array_seri);
 
-        // //  return response()->json(['data' =>  count($array_seri)]);
-
         $bool = true;
         for ($i = 0; $i < count($array_seri); $i++) {
+
+            $data = NoseriTGbj::find($array_seri[$i]);
+
+
             $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
             if ($check == null) {
                 $c = NoseriDetailPesanan::create([
-                    'detail_pesanan_produk_id' => $data->id,
+                    'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
                     't_tfbj_noseri_id' => $array_seri[$i],
                     'status' => $request->cek,
                     'tgl_uji' => $request->tanggal_uji,

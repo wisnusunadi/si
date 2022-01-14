@@ -797,26 +797,32 @@ class PenjualanController extends Controller
                 ->addColumn('no_so', function ($data) {
                     if (isset($data->DetailLogistik)) {
                         return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                    } else if (isset($data->DetailLogistikPart)) {
+                        $list = array();
+                        foreach ($data->DetailLogistikPart as $s) {
+                            $list[] = $s->DetailPesananPart->Pesanan->so;
+                        }
+                        return implode('<br>', $list);
                     } else {
-                        return $data->DetailLogistikPart->DetailPesananPart->Pesanan->so;
+                        return 3;
                     }
                 })
                 ->addColumn('nosurat', function ($data) {
                     return $data->nosurat;
                 })
                 ->addColumn('customer', function ($data) {
-                    if (isset($data->DetailLogistik)) {
-                        $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
-                        if ($name[1] == 'EKAT') {
-                            return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
-                        } else if ($name[1] == 'SPA') {
-                            return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
-                        }
-                    } else if (!isset($data->DetailLogistik)) {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
-                    } else {
-                        return '-';
-                    }
+                    // if (isset($data->DetailLogistik)) {
+                    //     $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                    //     if ($name[1] == 'EKAT') {
+                    //         return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
+                    //     } else if ($name[1] == 'SPA') {
+                    //         return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                    //     }
+                    // } else if (!isset($data->DetailLogistik)) {
+                    //     return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                    // } else {
+                    //     return '-';
+                    // }
                 })
                 ->addColumn('tgl_kirim', function ($data) {
                     if ($data->tgl_kirim) {
@@ -2387,14 +2393,14 @@ class PenjualanController extends Controller
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
-                $Spa  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                $Spb  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
                 $Part  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
                 })->get();
 
-                $prd = $Ekatalog->merge($Spa);
+                $prd = $Ekatalog->merge($Spb);
                 $data = $prd->merge($Part);
             } else if ($x == ['ekatalog', 'spb']) {
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
