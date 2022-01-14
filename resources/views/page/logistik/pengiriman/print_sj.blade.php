@@ -130,9 +130,17 @@
                                         echo    $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
                                     } else if ($name[1] == 'SPA') {
                                         echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                                    } else if ($name[1] == 'SPB') {
+                                        echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                                     }
                                 } else {
-                                    echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama;
+
+                                    $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
+                                    if ($name[1] == 'SPA') {
+                                        echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->nama;
+                                    } else if ($name[1] == 'SPB') {
+                                        echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama;
+                                    }
                                 }
                                 ?>
 
@@ -149,9 +157,16 @@
                                         echo    $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
                                     } else if ($name[1] == 'SPA') {
                                         echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
+                                    } else if ($name[1] == 'SPB') {
+                                        echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
                                     }
                                 } else {
-                                    echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat;
+                                    $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
+                                    if ($name[1] == 'SPA') {
+                                        echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->alamat;
+                                    } else if ($name[1] == 'SPB') {
+                                        echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat;
+                                    }
                                 }
                                 ?>
 

@@ -526,8 +526,7 @@
                 data: 'aksi',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false,
-                visible: jenis_penjualan == "SPB" ? false : true
+                searchable: false
             }]
 
         });
@@ -620,7 +619,6 @@
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false,
-                visible: jenis_penjualan == "SPB" ? false : true
             }]
 
         });
