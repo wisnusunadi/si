@@ -1,5 +1,10 @@
 <template>
-    <apexchart type="rangeBar" :options="options" :series="series" :height="this.series[0].data.length * 50"/>
+    <div v-if="series.data == null">
+        Belum ada Perencanaan Perakitan
+    </div>
+    <div v-else>
+        <apexchart type="rangeBar" :options="options" :series="series" :height="this.series[0].data.length * 50"/>
+    </div>
 </template>
 
 <script>

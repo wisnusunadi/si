@@ -961,57 +961,62 @@ class SparepartController extends Controller
         $header->save();
 
         $spr = $request->sparepart;
+        if (isset($spr)) {
+            foreach ($spr as $k => $v) {
+                $sprr = new GudangKarantinaDetail();
+                $sprr->gk_id = $header->id;
+                $sprr->sparepart_id = $k;
+                $sprr->qty_spr = $v['jumlah'];
+                $sprr->is_draft = 1;
+                $sprr->is_keluar = 1;
+                $sprr->created_at = Carbon::now();
+                $sprr->created_by = $request->userid;
+                $sprr->save();
 
-        foreach ($spr as $k => $v) {
-            $sprr = new GudangKarantinaDetail();
-            $sprr->gk_id = $header->id;
-            $sprr->sparepart_id = $k;
-            $sprr->qty_spr = $v['jumlah'];
-            $sprr->is_draft = 1;
-            $sprr->is_keluar = 1;
-            $sprr->created_at = Carbon::now();
-            $sprr->created_by = $request->userid;
-            $sprr->save();
+                $x = $request->noseri;
+                $id = $sprr->id;
 
-            $x = $request->noseri;
-            $id = $sprr->id;
+                for ($i = 0; $i < count($request->noseri[$v]); $i++) {
+                    $noseri = new NoseriKeluarGK();
+                    $noseri->gk_detail_id = $id;
+                    $noseri->noseri_id = json_decode($v['noseri'][$i], true);
+                    $noseri->created_at = Carbon::now();
+                    $noseri->created_by = $request->userid;
+                    $noseri->save();
 
-            for ($i = 0; $i < count($request->noseri[$v]); $i++) {
-                $noseri = new NoseriKeluarGK();
-                $noseri->gk_detail_id = $id;
-                $noseri->noseri_id = json_decode($v['noseri'][$i], true);
-                $noseri->created_at = Carbon::now();
-                $noseri->created_by = $request->userid;
-                $noseri->save();
-
-                GudangKarantinaNoseri::find(json_decode($v['noseri'][$i], true))->update(['is_ready' => 1]);
+                    GudangKarantinaNoseri::find(json_decode($v['noseri'][$i], true))->update(['is_ready' => 1]);
+                }
             }
         }
+
 
         $unit = $request->unit;
-        foreach ($unit as $j => $vv) {
-            $unitt = new GudangKarantinaDetail();
-            $unitt->gk_id = $header->id;
-            $unitt->gbj_id = $j;
-            $unitt->qty_unit = $vv['jumlah'];
-            $unitt->is_draft = 1;
-            $unitt->is_keluar = 1;
-            $unitt->created_by = $request->userid;
-            $unitt->save();
+        if (isset($unit)) {
+            foreach ($unit as $j => $vv) {
+                $unitt = new GudangKarantinaDetail();
+                $unitt->gk_id = $header->id;
+                $unitt->gbj_id = $j;
+                $unitt->qty_unit = $vv['jumlah'];
+                $unitt->is_draft = 1;
+                $unitt->is_keluar = 1;
+                $unitt->created_by = $request->userid;
+                $unitt->save();
 
-            $idd = $unitt->id;
+                $idd = $unitt->id;
 
-            for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
-                $noserii = new NoseriKeluarGK();
-                $noserii->gk_detail_id = $idd;
-                $noserii->noseri_id = json_decode($vv['noseri'][$m], true);
-                $noserii->created_at = Carbon::now();
-                $noserii->created_by = $request->userid;
-                $noserii->save();
+                for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
+                    $noserii = new NoseriKeluarGK();
+                    $noserii->gk_detail_id = $idd;
+                    $noserii->noseri_id = json_decode($vv['noseri'][$m], true);
+                    $noserii->created_at = Carbon::now();
+                    $noserii->created_by = $request->userid;
+                    $noserii->save();
 
-                GudangKarantinaNoseri::find(json_decode($vv['noseri'][$m], true))->update(['is_ready' => 1]);
+                    GudangKarantinaNoseri::find(json_decode($vv['noseri'][$m], true))->update(['is_ready' => 1]);
+                }
             }
         }
+
 
         return response()->json(['msg' => 'Data Berhasil dirancang']);
     }
@@ -1031,55 +1036,59 @@ class SparepartController extends Controller
 
         $spr = $request->sparepart;
 
-        foreach ($spr as $k => $v) {
-            $sprr = new GudangKarantinaDetail();
-            $sprr->gk_id = $header->id;
-            $sprr->sparepart_id = $k;
-            $sprr->qty_spr = $v['jumlah'];
-            $sprr->is_draft = 0;
-            $sprr->is_keluar = 1;
-            $sprr->created_at = Carbon::now();
-            $sprr->created_by = $request->userid;
-            $sprr->save();
+        if (isset($spr)) {
+            foreach ($spr as $k => $v) {
+                $sprr = new GudangKarantinaDetail();
+                $sprr->gk_id = $header->id;
+                $sprr->sparepart_id = $k;
+                $sprr->qty_spr = $v['jumlah'];
+                $sprr->is_draft = 0;
+                $sprr->is_keluar = 1;
+                $sprr->created_at = Carbon::now();
+                $sprr->created_by = $request->userid;
+                $sprr->save();
 
-            $x = $request->noseri;
-            $id = $sprr->id;
+                $x = $request->noseri;
+                $id = $sprr->id;
 
-            for ($i = 0; $i < count($v['noseri']); $i++) {
-                $noseri = new NoseriKeluarGK();
-                $noseri->gk_detail_id = $id;
-                // $noseri->noseri_id = json_decode($request->noseri[$v][$i], true);
-                $noseri->noseri_id = json_decode($v['noseri'][$i], true);
-                $noseri->created_at = Carbon::now();
-                $noseri->created_by = $request->userid;
-                $noseri->save();
+                for ($i = 0; $i < count($v['noseri']); $i++) {
+                    $noseri = new NoseriKeluarGK();
+                    $noseri->gk_detail_id = $id;
+                    // $noseri->noseri_id = json_decode($request->noseri[$v][$i], true);
+                    $noseri->noseri_id = json_decode($v['noseri'][$i], true);
+                    $noseri->created_at = Carbon::now();
+                    $noseri->created_by = $request->userid;
+                    $noseri->save();
 
-                GudangKarantinaNoseri::find(json_decode($v['noseri'][$i], true))->update(['is_ready' => 1]);
+                    GudangKarantinaNoseri::find(json_decode($v['noseri'][$i], true))->update(['is_ready' => 1]);
+                }
             }
         }
 
         $unit = $request->unit;
-        foreach ($unit as $j => $vv) {
-            $unitt = new GudangKarantinaDetail();
-            $unitt->gk_id = $header->id;
-            $unitt->gbj_id = $j;
-            $unitt->qty_unit = $vv['jumlah'];
-            $unitt->is_draft = 0;
-            $unitt->is_keluar = 1;
-            $unitt->created_by = $request->userid;
-            $unitt->save();
+        if (isset($unit)) {
+            foreach ($unit as $j => $vv) {
+                $unitt = new GudangKarantinaDetail();
+                $unitt->gk_id = $header->id;
+                $unitt->gbj_id = $j;
+                $unitt->qty_unit = $vv['jumlah'];
+                $unitt->is_draft = 0;
+                $unitt->is_keluar = 1;
+                $unitt->created_by = $request->userid;
+                $unitt->save();
 
-            $idd = $unitt->id;
+                $idd = $unitt->id;
 
-            for ($m = 0; $m < count($vv['noseri']); $m++) {
-                $noserii = new NoseriKeluarGK();
-                $noserii->gk_detail_id = $idd;
-                $noserii->noseri_id = json_decode($vv['noseri'][$m], true);
-                $noserii->created_at = Carbon::now();
-                $noserii->created_by = $request->userid;
-                $noserii->save();
+                for ($m = 0; $m < count($vv['noseri']); $m++) {
+                    $noserii = new NoseriKeluarGK();
+                    $noserii->gk_detail_id = $idd;
+                    $noserii->noseri_id = json_decode($vv['noseri'][$m], true);
+                    $noserii->created_at = Carbon::now();
+                    $noserii->created_by = $request->userid;
+                    $noserii->save();
 
-                GudangKarantinaNoseri::find(json_decode($vv['noseri'][$m], true))->update(['is_ready' => 1]);
+                    GudangKarantinaNoseri::find(json_decode($vv['noseri'][$m], true))->update(['is_ready' => 1]);
+                }
             }
         }
 
@@ -1099,61 +1108,65 @@ class SparepartController extends Controller
         $header->save();
 
         $spr = $request->sparepart_id;
+        if (isset($spr)) {
+            foreach ($spr as $k => $v) {
+                $sprr = new GudangKarantinaDetail();
+                $sprr->gk_id = $header->id;
+                $sprr->sparepart_id = $request->sparepart_id[$k];
+                $sprr->qty_spr = $request->qty_spr[$k];
+                $sprr->is_draft = 1;
+                $sprr->is_keluar = 0;
+                $sprr->created_at = Carbon::now();
+                $sprr->created_by = $request->userid;
+                $sprr->save();
 
-        foreach ($spr as $k => $v) {
-            $sprr = new GudangKarantinaDetail();
-            $sprr->gk_id = $header->id;
-            $sprr->sparepart_id = $request->sparepart_id[$k];
-            $sprr->qty_spr = $request->qty_spr[$k];
-            $sprr->is_draft = 1;
-            $sprr->is_keluar = 0;
-            $sprr->created_at = Carbon::now();
-            $sprr->created_by = $request->userid;
-            $sprr->save();
+                $x = $request->noseri;
+                $id = $sprr->id;
 
-            $x = $request->noseri;
-            $id = $sprr->id;
-
-            for ($i = 0; $i < count($request->noseri[$v]); $i++) {
-                $noseri = new GudangKarantinaNoseri();
-                $noseri->gk_detail_id = $id;
-                $noseri->noseri = strtoupper($request->noseri[$v][$i]["noseri"]);
-                $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
-                $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
-                $noseri->is_draft = 1;
-                $noseri->is_keluar = 0;
-                $noseri->created_at = Carbon::now();
-                $noseri->created_by = $request->userid;
-                $noseri->save();
+                for ($i = 0; $i < count($request->noseri[$v]); $i++) {
+                    $noseri = new GudangKarantinaNoseri();
+                    $noseri->gk_detail_id = $id;
+                    $noseri->noseri = strtoupper($request->noseri[$v][$i]["noseri"]);
+                    $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
+                    $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
+                    $noseri->is_draft = 1;
+                    $noseri->is_keluar = 0;
+                    $noseri->created_at = Carbon::now();
+                    $noseri->created_by = $request->userid;
+                    $noseri->save();
+                }
             }
         }
 
+
         $unit = $request->gbj_id;
-        foreach ($unit as $j => $vv) {
-            $unitt = new GudangKarantinaDetail();
-            $unitt->gk_id = $header->id;
-            $unitt->gbj_id = $request->gbj_id[$j];
-            $unitt->qty_unit = $request->qty_unit[$j];
-            $unitt->is_draft = 1;
-            $unitt->is_keluar = 0;
-            $unitt->created_at = Carbon::now();
-            $unitt->created_by = $request->userid;
-            $unitt->save();
+        if (isset($unit)) {
+            foreach ($unit as $j => $vv) {
+                $unitt = new GudangKarantinaDetail();
+                $unitt->gk_id = $header->id;
+                $unitt->gbj_id = $request->gbj_id[$j];
+                $unitt->qty_unit = $request->qty_unit[$j];
+                $unitt->is_draft = 1;
+                $unitt->is_keluar = 0;
+                $unitt->created_at = Carbon::now();
+                $unitt->created_by = $request->userid;
+                $unitt->save();
 
-            $idd = $unitt->id;
+                $idd = $unitt->id;
 
-            for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
+                for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
 
-                $noserii = new GudangKarantinaNoseri();
-                $noserii->gk_detail_id = $idd;
-                $noserii->noseri = strtoupper($request->seriunit[$vv][$m]["noseri"]);
-                $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
-                $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
-                $noserii->is_draft = 1;
-                $noserii->is_keluar = 0;
-                $noserii->created_at = Carbon::now();
-                $noserii->created_by = $request->userid;
-                $noserii->save();
+                    $noserii = new GudangKarantinaNoseri();
+                    $noserii->gk_detail_id = $idd;
+                    $noserii->noseri = strtoupper($request->seriunit[$vv][$m]["noseri"]);
+                    $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
+                    $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
+                    $noserii->is_draft = 1;
+                    $noserii->is_keluar = 0;
+                    $noserii->created_at = Carbon::now();
+                    $noserii->created_by = $request->userid;
+                    $noserii->save();
+                }
             }
         }
 
@@ -1174,6 +1187,7 @@ class SparepartController extends Controller
 
         $spr = $request->sparepart_id;
 
+       if (isset($spr)) {
         foreach ($spr as $k => $v) {
             $sprr = new GudangKarantinaDetail();
             $sprr->gk_id = $header->id;
@@ -1201,33 +1215,36 @@ class SparepartController extends Controller
                 $noseri->save();
             }
         }
+       }
 
         $unit = $request->gbj_id;
-        foreach ($unit as $j => $vv) {
-            $unitt = new GudangKarantinaDetail();
-            $unitt->gk_id = $header->id;
-            $unitt->gbj_id = $request->gbj_id[$j];
-            $unitt->qty_unit = $request->qty_unit[$j];
-            $unitt->is_draft = 0;
-            $unitt->is_keluar = 0;
-            $unitt->created_at = Carbon::now();
-            $unitt->created_by = $request->userid;
-            $unitt->save();
+        if (isset($unit)) {
+            foreach ($unit as $j => $vv) {
+                $unitt = new GudangKarantinaDetail();
+                $unitt->gk_id = $header->id;
+                $unitt->gbj_id = $request->gbj_id[$j];
+                $unitt->qty_unit = $request->qty_unit[$j];
+                $unitt->is_draft = 0;
+                $unitt->is_keluar = 0;
+                $unitt->created_at = Carbon::now();
+                $unitt->created_by = $request->userid;
+                $unitt->save();
 
-            $idd = $unitt->id;
+                $idd = $unitt->id;
 
-            for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
+                for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
 
-                $noserii = new GudangKarantinaNoseri();
-                $noserii->gk_detail_id = $idd;
-                $noserii->noseri = strtoupper($request->seriunit[$vv][$m]["noseri"]);
-                $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
-                $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
-                $noserii->is_draft = 0;
-                $noserii->is_keluar = 0;
-                $noserii->created_at = Carbon::now();
-                $noserii->created_by = $request->userid;
-                $noserii->save();
+                    $noserii = new GudangKarantinaNoseri();
+                    $noserii->gk_detail_id = $idd;
+                    $noserii->noseri = strtoupper($request->seriunit[$vv][$m]["noseri"]);
+                    $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
+                    $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
+                    $noserii->is_draft = 0;
+                    $noserii->is_keluar = 0;
+                    $noserii->created_at = Carbon::now();
+                    $noserii->created_by = $request->userid;
+                    $noserii->save();
+                }
             }
         }
 

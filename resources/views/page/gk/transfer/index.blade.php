@@ -435,6 +435,7 @@
     let seri_unit = {};
     let spr_arr = {};
     let unit_arr = {};
+    let total_item = 0;
 
     function addSpare(a) {
         var b = $(".btn_plus" + a).parent().prev().children().val();
@@ -462,6 +463,7 @@
             // check
             seri = {"jumlah": e, "noseri": []};
             spr_arr[d] = seri;
+            total_item--;
 
             const ids = [];
             $('.cb-child').each(function() {
@@ -575,6 +577,7 @@
 
         seri_unit = {"jumlah":p, "noseri":[]};
         unit_arr[c] = seri_unit;
+        total_item--;
 
         const uids = [];
             $('.cb-unit').each(function() {
@@ -738,6 +741,7 @@
             return /^\d*$/.test(value);    // Allow digits only, using a RegExp
         });
         nmrspr++;
+        total_item++;
     });
 
     var nmrunt = 1;
@@ -765,6 +769,7 @@
             return /^\d*$/.test(value);
         });
         nmrunt++;
+        total_item++;
     });
 
     $(document).on('click', '.btn-delete', function (e) {
@@ -814,26 +819,21 @@
     });
 
     function modalTerima() {
-        if (Object.keys(spr_arr).length == 0 || Object.keys(unit_arr).length == 0){
+        if (Object.keys(spr_arr).length == 0 && Object.keys(unit_arr).length == 0){
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Tambahkan Nomor Seri yang akan ditransfer'
             })
-        } else if(Object.keys(spr_arr).length != 0 && Object.keys(unit_arr).length == 0) {
+        } else if (total_item !== 0){
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Tambahkan Nomor Seri yang akan ditransfer test'
-            })
-        } else if(Object.keys(spr_arr).length == 0 && Object.keys(unit_arr).length != 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Tambahkan Nomor Seri yang akan ditransfer coba'
+                text: 'Tambahkan Nomor Seri yang akan ditransfer'
             })
         }
          else {
+            let flag1 = false, flag2 = false;
             for (const prop in spr_arr){
                 if (spr_arr[prop].noseri.length == 0) {
                     Swal.fire({
@@ -842,66 +842,7 @@
                         text: 'Tidak Ada Nomor Seri yang akan ditransfer'
                     })
                 } else {
-                    $('.modal_transfer1').modal('show');
-                    $('.catatan').val('');
-                    $('.list-group').children().remove();
-                    $('.judul_modal').text('Silahkan isi tujuan transfer produk');
-                    $(document).on('click', '.remove', function () {
-                        $(this).parent().parent().remove();
-                    });
-
-                    $(document).on('click', '.simpan1', function () {
-                        let out = $('#datePicker').val();
-                        let to = $('.dari').val();
-                        let tujuan = $('#tujuan_tf').val();
-
-                        Swal.fire({
-                            title: "Apakah anda yakin?",
-                            text: "Data yang sudah di transfer tidak dapat diubah!",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                            showCancelButton: true,
-                        }).then((success) => {
-                            if (success) {
-                                Swal.fire(
-                                    'Data berhasil di transfer!',
-                                    '',
-                                    'success'
-                                );
-                                $.ajax({
-                                    url: "/api/gk/out-final",
-                                    type: "post",
-                                    data: {
-                                        "_token": "{{ csrf_token() }}",
-                                        userid: $('#user_id').val(),
-                                        date_out: out,
-                                        ke: to,
-                                        deskripsi: tujuan,
-                                        sparepart: spr_arr,
-                                        unit: unit_arr,
-                                    },
-                                    success: function (res) {
-                                        console.log(res);
-                                    },
-                                })
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1000);
-                            } else {
-                                Swal.fire(
-                                    'Data gagal di transfer!',
-                                    '',
-                                    'error'
-                                );
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1000);
-                            }
-                        });
-
-
-                    });
+                    flag1 = true;
                 }
             }
 
@@ -912,11 +853,140 @@
                         title: 'Oops...',
                         text: 'Tidak Ada Nomor Seri yang akan ditransfer'
                     })
+                } else {
+                    flag2 = true
                 }
             }
+
+            if (flag1 || flag2)final_submit()
         }
 
 
+    }
+    // final transfer
+    $(document).on('click', '.simpan1', function () {
+        let out = $('#datePicker').val();
+        let to = $('.dari').val();
+        let tujuan = $('#tujuan_tf').val();
+
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di transfer tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((success) => {
+            if (success) {
+                Swal.fire(
+                    'Data berhasil di transfer!',
+                    '',
+                    'success'
+                );
+                $.ajax({
+                    url: "/api/gk/out-final",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#user_id').val(),
+                        date_out: out,
+                        ke: to,
+                        deskripsi: tujuan,
+                        sparepart: spr_arr,
+                        unit: unit_arr,
+                    },
+                    success: function (res) {
+                        console.log(res);
+                    },
+                })
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                Swal.fire(
+                    'Data gagal di transfer!',
+                    '',
+                    'error'
+                );
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        });
+
+
+    });
+    // DRAFT SUBMIT
+    $(document).on('click', '.simpan', function () {
+        let out = $('#datePicker').val();
+        let to = $('.dari').val();
+        let tujuan = $('#tujuan_draft').val();
+
+        Swal.fire({
+            title: "Apakah anda yakin?",
+            text: "Data yang sudah di rancangan tidak dapat diubah!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+        }).then((success) => {
+            if (success) {
+                Swal.fire(
+                    'Data berhasil di rancangan!',
+                    '',
+                    'success'
+                );
+                $.ajax({
+                    url: "/api/gk/out-draft",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#user_id').val(),
+                        date_out: out,
+                        ke: to,
+                        deskripsi: tujuan,
+                        sparepart: spr_arr,
+                        unit: unit_arr,
+                    },
+                    success: function (res) {
+                        console.log(res);
+                    },
+                })
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                Swal.fire(
+                    'Data gagal di rancangan!',
+                    '',
+                    'error'
+                );
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        });
+    });
+
+    function final_submit()
+    {
+        $('.modal_transfer1').modal('show');
+        $('.catatan').val('');
+        $('.list-group').children().remove();
+        $('.judul_modal').text('Silahkan isi tujuan transfer produk');
+        $(document).on('click', '.remove', function () {
+            $(this).parent().parent().remove();
+        });
+    }
+
+    function draft_submit()
+    {
+        $('.modal_transfer').modal('show');
+        $('.list-group').children().remove();
+        $('.judul_modal').text('Silahkan isi tujuan rancangan produk');
+        $(document).on('click', '.remove', function () {
+            $(this).parent().parent().remove();
+        });
     }
 
     function modalRancang() {
@@ -926,20 +996,15 @@
                 title: 'Oops...',
                 text: 'Tambahkan Nomor Seri yang akan ditransfer'
             })
-        } else if(Object.keys(spr_arr).length != 0 && Object.keys(unit_arr).length == 0) {
+        } else if (total_item !== 0){
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Tambahkan Nomor Seri yang akan ditransfer test'
-            })
-        } else if(Object.keys(spr_arr).length == 0 && Object.keys(unit_arr).length != 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Tambahkan Nomor Seri yang akan ditransfer coba'
+                text: 'Tambahkan Nomor Seri yang akan ditransfer'
             })
         }
          else {
+            let flag1 = false, flag2 = false;
             for (const prop in spr_arr){
                 if (spr_arr[prop].noseri.length == 0) {
                     Swal.fire({
@@ -948,67 +1013,24 @@
                         text: 'Tidak Ada Nomor Seri yang akan ditransfer'
                     })
                 } else {
-                    $('.modal_transfer').modal('show');
-                    $('.list-group').children().remove();
-                    $('.judul_modal').text('Silahkan isi tujuan rancangan produk');
-                    $(document).on('click', '.remove', function () {
-                        $(this).parent().parent().remove();
-                    });
-
-                    $(document).on('click', '.simpan', function () {
-                        let out = $('#datePicker').val();
-                        let to = $('.dari').val();
-                        let tujuan = $('#tujuan_draft').val();
-
-                        Swal.fire({
-                            title: "Apakah anda yakin?",
-                            text: "Data yang sudah di rancangan tidak dapat diubah!",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                            showCancelButton: true,
-                        }).then((success) => {
-                            if (success) {
-                                Swal.fire(
-                                    'Data berhasil di rancangan!',
-                                    '',
-                                    'success'
-                                );
-                                $.ajax({
-                                    url: "/api/gk/out-draft",
-                                    type: "post",
-                                    data: {
-                                        "_token": "{{ csrf_token() }}",
-                                        userid: $('#user_id').val(),
-                                        date_out: out,
-                                        ke: to,
-                                        deskripsi: tujuan,
-                                        sparepart: spr_arr,
-                                        unit: unit_arr,
-                                    },
-                                    success: function (res) {
-                                        console.log(res);
-                                    },
-                                })
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1000);
-                            } else {
-                                Swal.fire(
-                                    'Data gagal di rancangan!',
-                                    '',
-                                    'error'
-                                );
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1000);
-                            }
-                        });
-                    });
+                    flag1 = true;
                 }
             }
-        }
 
+            for (const prop in unit_arr) {
+                if (unit_arr[prop].noseri.length == 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak Ada Nomor Seri yang akan ditransfer'
+                    })
+                } else {
+                    flag2 = true
+                }
+            }
+
+            if (flag1 || flag2)draft_submit()
+        }
     }
 
     function batal() {
