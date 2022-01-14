@@ -189,52 +189,33 @@
     $(function() {
         $('#npwp').mask('00.000.000.0-000.000');
 
-        function check_nama_cust(val) {
-            var hasil = 0;
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                async: false,
-                url: '/api/customer/nama/0/' + val,
-                success: function(data) {
-                    hasil = data;
-                    // if (data.data >= 1) {
-                    //     $("#msgnama_customer").text("Nama sudah terpakai");
-                    //     $('#nama_customer').addClass('is-invalid');
-                    //     $("#btnsimpan").attr("disabled", true);
-                    // } else {
-                    //     $("#msgnama_customer").text("");
-                    //     $('#nama_customer').removeClass('is-invalid');
-                    //     if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
-                    //         $("#btnsimpan").removeAttr("disabled");
-                    //     } else {
-                    //         $("#btnsimpan").attr("disabled", true);
-                    //     }
-                    // }
-                }
-            });
-            return hasil;
-        }
-
         $('input[name="nama_customer"]').on('keyup change', function() {
             var val = $(this).val();
             if ($(this).val() == "") {
                 $("#msgnama_customer").text("Nama tidak boleh kosong");
                 $('#nama_customer').addClass('is-invalid');
             } else if ($(this).val() != "") {
-                if (check_nama_cust(val) >= 1) {
-                    $("#msgnama_customer").text("Nama sudah terpakai");
-                    $('#nama_customer').addClass('is-invalid');
-                    $("#btnsimpan").attr("disabled", true);
-                } else {
-                    $("#msgnama_customer").text("");
-                    $('#nama_customer').removeClass('is-invalid');
-                    if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
-                        $("#btnsimpan").removeAttr("disabled");
-                    } else {
-                        $("#btnsimpan").attr("disabled", true);
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '/api/customer/nama/0/' + val,
+                    success: function(data) {
+                        if (data >= 1) {
+                            $("#msgnama_customer").text("Nama sudah terpakai");
+                            $('#nama_customer').addClass('is-invalid');
+                            $("#btnsimpan").attr("disabled", true);
+                        } else {
+                            $("#msgnama_customer").text("");
+                            $('#nama_customer').removeClass('is-invalid');
+                            if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
+                                $("#btnsimpan").removeAttr("disabled");
+                            } else {
+                                $("#btnsimpan").attr("disabled", true);
+                            }
+                        }
                     }
-                }
+                });
+
             }
         });
 
@@ -261,7 +242,7 @@
                     $("#msgtelepon").text("");
                     $("#telepon").removeClass('is-invalid');
                     $("#btntambah").removeAttr('disabled');
-                    if (($("#nama_customer").val() != "" && check_nama_cust($("#nama_customer").val()) <= 0) && $("#npwp").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "" && $('.provinsi').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     } else {
                         $("#btntambah").attr('disabled', true);
@@ -274,7 +255,7 @@
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if (($("#nama_customer").val() != "" && check_nama_cust($("#nama_customer").val()) <= 0) && $("#npwp").val() != "" && $("#telepon").val() != "" && $('.provinsi').val() != "") {
+                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $('.provinsi').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 } else {
                     $("#btntambah").attr('disabled', true);
@@ -307,7 +288,7 @@
                 } else {
                     $("#msgnpwp").text("");
                     $('#npwp').removeClass('is-invalid');
-                    if ($('#telepon').val() != "" && ($("#nama_customer").val() != "" && check_nama_cust($("#nama_customer").val()) <= 0) && $('#alamat').val() != "" && $('.provinsi').val() != "") {
+                    if ($('#telepon').val() != "" && ($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && $('#alamat').val() != "" && $('.provinsi').val() != "") {
                         $("#btntambah").removeAttr("disabled");
                     } else {
                         $("#btntambah").attr("disabled", true);
@@ -326,14 +307,14 @@
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if (($("#nama_customer").val() != "" && check_nama_cust($("#nama_customer").val()) <= 0) && $("#npwp").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if (($("#nama_customer").val() != "" && check_nama_cust($("#nama_customer").val()) <= 0) && $("#npwp").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 }
             }

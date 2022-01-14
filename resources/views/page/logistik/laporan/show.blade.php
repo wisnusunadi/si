@@ -211,18 +211,11 @@
                     }
                 },
                 buttons: [{
-                        extend: 'excel',
-                        title: 'Laporan Pengiriman',
-                        text: '<i class="far fa-file-excel"></i> Export',
-                        className: "btn btn-info"
-                    },
-                    {
-                        extend: 'print',
-                        title: 'Laporan Pengiriman',
-                        text: '<i class="fas fa-print"></i> Cetak',
-                        className: "btn btn-primary"
-                    },
-                ],
+                    extend: 'excel',
+                    title: 'Laporan Pengiriman',
+                    text: '<i class="far fa-file-excel"></i> Export',
+                    className: "btn btn-info"
+                }],
                 columns: [{
                         data: 'DT_RowIndex',
                         className: 'nowrap-text align-center'
@@ -295,7 +288,7 @@
                     dataType: 'json',
                     delay: 250,
                     type: 'GET',
-                    url: '/api/logistik/ekspedisi/select',
+                    url: '/api/logistik/ekspedisi/select/0',
                     data: function(params) {
                         return {
                             term: params.term

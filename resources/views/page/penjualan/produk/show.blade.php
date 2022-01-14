@@ -137,35 +137,6 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <!--
-                                                    <div class="dropdown-header">
-                                                        Stok
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" name="stok" value="tersedia" />
-                                                            <label class="form-check-label" for="dropdownstok">
-                                                                Tersedia
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" name="stok" value="hammpir" />
-                                                            <label class="form-check-label" for="dropdownstok">
-                                                                Hampir Habis
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownstok" name="stok" value="habis" />
-                                                            <label class="form-check-label" for="dropdownstok">
-                                                                Habis
-                                                            </label>
-                                                        </div>
-                                                    </div> -->
-
                                                     <div class="dropdown-header">
                                                         Harga Minimum
                                                     </div>
@@ -194,7 +165,9 @@
                                                 <thead style="text-align: center;">
                                                     <tr>
                                                         <th width="5%">No</th>
-                                                        <th width="78%">Nama Produk</th>
+                                                        <th width="16%">No AKD</th>
+                                                        <th width="12%">Merk</th>
+                                                        <th width="50%">Nama Produk</th>
                                                         <th width="12%">Harga</th>
                                                         <th width="5%">Aksi</th>
                                                     </tr>
@@ -263,7 +236,7 @@
                     </div>
                 </div>
                 <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-dialog modal-xl" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header yellow-bg">
                                 <h4 class="modal-title"><b>Ubah</b></h4>
@@ -277,7 +250,7 @@
                 <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content" style="margin: 10px">
-                            <div class="modal-header yellow-bg">
+                            <div class="modal-header bg-danger">
                                 <h4 class="modal-title"><b>Hapus</b></h4>
                             </div>
                             <div class="modal-body" id="hapus">
@@ -365,6 +338,16 @@
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
+                },
+                {
+                    data: 'no_akd',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'merk',
+                    orderable: true,
+                    searchable: true
                 },
                 {
                     data: 'nama',
@@ -568,7 +551,7 @@
                 $('#msgharga').text("");
                 $('#harga').removeClass("is-invalid");
                 console.log($("#createtable tbody").length);
-                if ($('#nama_paket').val() != "" && $("#createtable tbody").length > 0) {
+                if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $("#createtable tbody").length > 0) {
                     $('#btnsimpan').removeClass('disabled');
                 } else {
                     $('#btnsimpan').addClass('disabled');

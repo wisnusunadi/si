@@ -138,7 +138,7 @@
                 </div>
                 <div class="card hide" id="customer">
                     <div class="card-body">
-                        <h4>Hasil Pencarian No Seri</h4>
+                        <h4>Hasil Pencarian Distributor/Customer/Satuan Kerja/Instansi</h4>
                         <div class="table-responsive">
                             <table class="table table-hover" id="customertable" style="width:100%">
                                 <thead>
@@ -162,7 +162,7 @@
                 </div>
                 <div class="card hide" id="produk">
                     <div class="card-body">
-                        <h4>Hasil Pencarian No Seri</h4>
+                        <h4>Hasil Pencarian Produk</h4>
                         <div class="table-responsive">
                             <table class="table table-hover" id="produktable" style="width:100%">
                                 <thead>
