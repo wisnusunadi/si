@@ -95,6 +95,15 @@ function setUser(state, user) {
     state.user = user;
 }
 
+/**
+ * This function used to set user variable
+ * @memberof Store
+ * @param {Object} state 
+ * @param {Object} notif 
+ */
+ function setNotif(state, notif) {
+    state.notif = notif;
+}
 
 const store = new Vuex.Store({
     /**
@@ -108,6 +117,8 @@ const store = new Vuex.Store({
         user: {},
         isLoading: false,
         csrf_token: "",
+        notif: {},
+        enable_notif: true,
 
         // jadwal perakitan
         jadwal: [],
@@ -128,7 +139,8 @@ const store = new Vuex.Store({
         setIsLoading,
         setJadwal,
         setStatus,
-        setUser
+        setUser,
+        setNotif
     }
 })
 

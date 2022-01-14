@@ -15,15 +15,19 @@ class PpicNotif implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $user;
+    public $status;
+    public $state;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user, $status, $state)
     {
         $this->user = $user;
+        $this->status = $status;
+        $this->state = $state;
     }
 
     /**

@@ -238,6 +238,14 @@ export default {
         .then((response) => {
           this.$store.commit("setJadwal", response.data);
           this.resetData();
+        })
+        .catch((err) => {
+          this.$swal({
+            icon: "error",
+            title: "Error",
+            text: "Terdapat kesalahan saat mengirim data, hubungi tim IT",
+          });
+          return;
         });
 
       await axios
@@ -254,6 +262,22 @@ export default {
             text: "Persetujuan berhasil dikirm, namun gagal menambahkan komentar",
           });
         });
+
+      if (this.$store.state.enable_notif) {
+        await axios
+          .post("/api/ppic/send_notification", {
+            user: this.$store.state.user,
+            status: this.$store.state.status,
+            state: this.$store.state.state,
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: "Gagal mengirim notifikasi, namun data telah terkirim pada database",
+            });
+          });
+      }
 
       this.$store.commit("setIsLoading", false);
       this.showModal = false;
@@ -269,6 +293,14 @@ export default {
         .then((response) => {
           this.$store.commit("setJadwal", response.data);
           this.resetData();
+        })
+        .catch((err) => {
+          this.$swal({
+            icon: "error",
+            title: "Error",
+            text: "Terdapat kesalahan saat mengirim data, silahkan coba lagi",
+          });
+          return;
         });
 
       await axios
@@ -286,6 +318,21 @@ export default {
           });
         });
 
+      if (this.$store.state.enable_notif) {
+        await axios
+          .post("/api/ppic/send_notification", {
+            user: this.$store.state.user,
+            status: this.$store.state.status,
+            state: this.$store.state.state,
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: "Gagal mengirim notifikasi, namun data telah terkirim pada database",
+            });
+          });
+      }
       this.$store.commit("setIsLoading", false);
       this.showModal = false;
     },
@@ -300,6 +347,14 @@ export default {
         .then((response) => {
           this.$store.commit("setJadwal", response.data);
           this.resetDate();
+        })
+        .catch((err) => {
+          this.$swal({
+            icon: "error",
+            title: "Error",
+            text: "Terdapat kesalahan saat mengirim data, silahkan coba lagi",
+          });
+          return;
         });
 
       await axios
@@ -316,6 +371,22 @@ export default {
             text: "Persetujuan berhasil dikirm, namun gagal menambahkan komentar",
           });
         });
+
+      if (this.$store.state.enable_notif) {
+        await axios
+          .post("/api/ppic/send_notification", {
+            user: this.$store.state.user,
+            status: this.$store.state.status,
+            state: this.$store.state.state,
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: "Gagal mengirim notifikasi, namun data telah terkirim pada database",
+            });
+          });
+      }
 
       this.$store.commit("setIsLoading", false);
       this.showModal = false;
@@ -333,6 +404,7 @@ export default {
         this.handle_func = this.handleTolak;
         this.hasil = false;
       }
+      this.komentar = "";
     },
   },
 
