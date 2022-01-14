@@ -270,7 +270,7 @@ Route::prefix('/prd')->group(function () {
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
     Route::post('cek-noseri', [ProduksiController::class, 'cekDuplicateNoseri']);
 
-    Route::get('/testing/{id}', [ProduksiController::class, 'test']);
+    Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
 
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);

@@ -1497,9 +1497,30 @@ class ProduksiController extends Controller
 
     function change_jadwal()
     {
-        $data = JadwalPerakitanLog::groupBy()->get();
+        $data = DB::table('prd_dashboard_perubahan_jadwal')->get();
 
-        return $data;
+        return datatables()->of($data)
+            ->addColumn('start', function ($d) {
+                return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
+            })
+            ->addColumn('end', function ($d) {
+                return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY');
+            })
+            ->addColumn('no_bppb', function ($d) {
+                return '-';
+            })
+            ->addColumn('produk', function ($d) {
+                return $d->produk->produk->nama . '-' . $d->produk->nama;
+            })
+            // ->addColumn('jml', function ($d) {
+            //     return $d->jumlah . ' ' . $d->produk->satuan->nama;
+            // })
+            // ->addColumn('button', function ($d) {
+            //     return '<a href="' . url('produksi/jadwal_perakitan') . '" class="btn btn-outline-primary"><i
+            //             class="fas fa-paper-plane">';
+            // })
+            // ->rawColumns(['button', 'end'])
+            ->make(true);
     }
 
     // perakitan

@@ -438,6 +438,7 @@
     $(document).ready(function () {
 
         var gudangbarang = $('#gudang-barang').dataTable({
+            destroy: true,
             processing: true,
             responsive: true,
             autoWidth: false,
@@ -504,6 +505,7 @@
     var userid = $('#authid').val();
     console.log(userid);
     var soTable = $('#gudang-salesorder').DataTable({
+        destroy: true,
         processing: true,
         responsive: true,
         autoWidth: false,

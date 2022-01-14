@@ -30,6 +30,11 @@ class TFProduksiDetail extends Model
         return $this->hasMany(NoseriTGbj::class, 't_gbj_detail_id');
     }
 
+    function paket()
+    {
+        return $this->belongsTo(DetailPesananProduk::class, 'detail_pesanan_produk_id');
+    }
+
     function getseriditerima() {
         $tgl = $this->tgl_masuk;
         $prd = $this->prd;

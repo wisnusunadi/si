@@ -130,7 +130,7 @@ class DcController extends Controller
                       <a href="' . route('dc.seri.coo.pdf', [$data->NoseriDetailLogistik->id, $x, "kosong"]) . '" target="_blank">
                       <button class="dropdown-item" type="button">
                           <i class="fas fa-file"></i>
-                          Coo 
+                          Coo
                       </button>
                   </a>
                       <a href="' . route('dc.seri.coo.pdf', [$data->NoseriDetailLogistik->id, $x, "back"]) . '" target="_blank">
@@ -362,7 +362,7 @@ class DcController extends Controller
                         <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
                         <button class="dropdown-item" type="button">
                         <i class="fas fa-file"></i>
-                        Coo 
+                        Coo
                     </button>
                             </a>
                         <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'back']) . '" target="_blank" class="' . $class . '">
@@ -388,7 +388,7 @@ class DcController extends Controller
                         <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
                                 <button class="dropdown-item" type="button">
                                     <i class="fas fa-file"></i>
-                                    Coo 
+                                    Coo
                                 </button>
                             </a>
                         <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'back']) . '" target="_blank" class="' . $class . '">
@@ -502,7 +502,7 @@ class DcController extends Controller
                         <a href="' . route('dc.coo.semua.pdf', [$data->id, $x, "kosong"]) . '" target="_blank">
                         <button class="dropdown-item" type="button">
                             <i class="fas fa-file"></i>
-                            Coo 
+                            Coo
                         </button>
                     </a>
                         <a href="' . route('dc.coo.semua.pdf', [$data->id, $x, "back"]) . '" target="_blank">
@@ -575,7 +575,7 @@ class DcController extends Controller
                     <a href="' . route('dc.seri.coo.pdf', [$data->id, $x, "kosong"]) . '" target="_blank">
                     <button class="dropdown-item" type="button">
                         <i class="fas fa-file"></i>
-                        Coo 
+                        Coo
                     </button>
                 </a>
                     <a href="' . route('dc.seri.coo.pdf', [$data->id, $x, "back"]) . '" target="_blank">
@@ -942,7 +942,7 @@ class DcController extends Controller
                                 <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
                                 <button class="dropdown-item" type="button">
                                 <i class="fas fa-file"></i>
-                                Coo 
+                                Coo
                             </button>
                                     </a>
                                 <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'back']) . '" target="_blank" class="' . $class . '">
@@ -969,7 +969,7 @@ class DcController extends Controller
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
                             <button class="dropdown-item" type="button">
                             <i class="fas fa-file"></i>
-                            Coo 
+                            Coo
                         </button>
                                 </a>
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'back']) . '" target="_blank" class="' . $class . '">
@@ -1132,7 +1132,7 @@ class DcController extends Controller
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
                             <button class="dropdown-item" type="button">
                             <i class="fas fa-file"></i>
-                            Coo 
+                            Coo
                         </button>
                                 </a>
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'back']) . '" target="_blank" class="' . $class . '">
@@ -1159,7 +1159,7 @@ class DcController extends Controller
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
                             <button class="dropdown-item" type="button">
                             <i class="fas fa-file"></i>
-                            Coo 
+                            Coo
                         </button>
                                 </a>
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'back']) . '" target="_blank" class="' . $class . '">
