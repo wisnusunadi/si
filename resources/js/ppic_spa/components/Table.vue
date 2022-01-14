@@ -577,19 +577,7 @@ export default {
       this.data_produk = response.data;
     });
 
-    await axios
-      .get("/api/ppic/data/komentar", {
-        params: {
-          status: this.status,
-        },
-      })
-      .then((response) => {
-        this.data_komentar = response.data;
-      })
-      .catch((error) => {
-        console.log("error to get data komentar");
-        console.log(error);
-      });
+    this.getDataKomentar();
 
     if (this.status === "pelaksanaan") {
       await axios.get("/api/ppic/data/rencana_perakitan").then((response) => {
@@ -623,6 +611,22 @@ export default {
   },
 
   methods: {
+    async getDataKomentar() {
+      await axios
+        .get("/api/ppic/data/komentar", {
+          params: {
+            status: this.status,
+          },
+        })
+        .then((response) => {
+          this.data_komentar = response.data;
+        })
+        .catch((error) => {
+          console.log("error to get data komentar");
+          console.log(error);
+        });
+    },
+
     isDate(tanggal, i) {
       for (const id in tanggal) {
         let start = new Date(tanggal[id].start);
@@ -900,6 +904,7 @@ export default {
               title: "Error",
               text: "Terdapat kesalahan saat mengirim pembatalan, silakan coba lagi",
             });
+            return;
           });
 
         await axios
@@ -928,6 +933,7 @@ export default {
               title: "Error",
               text: "Terdapat kesalahan saat mengirim permintaan, silakan coba lagi",
             });
+            return;
           });
 
         await axios
@@ -941,6 +947,22 @@ export default {
               icon: "warning",
               title: "Peringatan",
               text: "Terdapat kesalahan saat membuat komentar pada database",
+            });
+          });
+      }
+
+      if (this.$store.state.enable_notif) {
+        await axios
+          .post("/api/ppic/send_notification", {
+            user: this.$store.state.user,
+            status: this.$store.state.status,
+            state: this.$store.state.state,
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: "Gagal mengirim notifikasi, namun data telah terkirim pada database",
             });
           });
       }
@@ -1132,6 +1154,16 @@ export default {
       }
 
       return data;
+    },
+
+    notif() {
+      return this.$store.state.notif;
+    },
+  },
+
+  watch: {
+    notif() {
+      if (this.$store.state.notif.user.divisi_id === 3) this.getDataKomentar();
     },
   },
 };
