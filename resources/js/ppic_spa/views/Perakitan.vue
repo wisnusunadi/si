@@ -26,41 +26,51 @@
 import $ from "jquery";
 import mixins from "../mixins";
 
+/**
+ * @vue-event {Array} loadData - this function initialized datatables with server-side option
+ */
+
 export default {
   name: "Perakitan",
 
-  mounted() {
-    $("#table").DataTable({
-      serverSide: true,
-      ajax: "/api/ppic/datatables/perakitan",
-      columns: [
-        {
-          data: "DT_RowIndex",
-          orderable: false,
-          searchable: false,
-        },
-        {
-          data: "nama",
-        },
-        {
-          data: "jumlah",
-        },
-        {
-          data: "tanggal_mulai",
-        },
-        {
-          data: "tanggal_selesai",
-        },
-        {
-          data: "progres",
-        },
-        {
-          data: function (row) {
-            return mixins.change_status(row["status"]);
+  methods: {
+    loadData() {
+      $("#table").DataTable({
+        serverSide: true,
+        ajax: "/api/ppic/datatables/perakitan",
+        columns: [
+          {
+            data: "DT_RowIndex",
+            orderable: false,
+            searchable: false,
           },
-        },
-      ],
-    });
+          {
+            data: "nama",
+          },
+          {
+            data: "jumlah",
+          },
+          {
+            data: "tanggal_mulai",
+          },
+          {
+            data: "tanggal_selesai",
+          },
+          {
+            data: "progres",
+          },
+          {
+            data: function (row) {
+              return mixins.change_status(row["status"]);
+            },
+          },
+        ],
+      });
+    },
+  },
+
+  mounted() {
+    this.loadData();
   },
 };
 </script>

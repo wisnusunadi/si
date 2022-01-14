@@ -10,21 +10,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SimpleNotifEvent implements ShouldBroadcast
+class PpicNotif implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $user;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public $user;
-    public $data;
-    public function __construct($user, $data)
+    public function __construct($user)
     {
         $this->user = $user;
-        $this->data = $data;
     }
 
     /**
@@ -34,6 +33,6 @@ class SimpleNotifEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('event');
+        return new Channel('notif');
     }
 }

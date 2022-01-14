@@ -30,6 +30,16 @@
           Kirim
         </button>
         <button
+          v-if="
+            this.$store.state.state_ppic === 'menunggu' &&
+            this.$store.state.state === 'persetujuan'
+          "
+          class="button is-warning"
+          @click="sendEvent('pembatalan')"
+        >
+          Batal
+        </button>
+        <button
           v-if="this.$store.state.state_ppic === 'disetujui'"
           class="button is-success"
           :class="{ 'is-loading': this.$store.state.isLoading }"
@@ -44,6 +54,13 @@
         @click="convertToExcel('export_table', 'W3C Example Table')"
       >
         Export
+      </button>
+      <button
+        v-if="data_komentar.length > 0 && $store.state.user.divisi_id === 24"
+        class="button is-circle"
+        @click="komentarModal = true"
+      >
+        <i class="fas fa-envelope"></i>
       </button>
     </div>
     <div class="table-container">
@@ -403,6 +420,38 @@
         </footer>
       </div>
     </div>
+
+    <!-- modal -->
+    <div class="modal" :class="{ 'is-active': komentarModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Komentar</p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="komentarModal = !komentarModal"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <table class="table is-fullwidth has-text-centered">
+            <thead>
+              <tr>
+                <th>hasil</th>
+                <th>komentar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in data_komentar" :key="item.id">
+                <td>{{ item.hasil ? "disetujui" : "ditolak" }}</td>
+                <td>{{ item.komentar }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <footer class="modal-card-foot"></footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -411,6 +460,59 @@ import axios from "axios";
 
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+
+/**
+ * @vue-prop {Array} events - array of schedule data
+ * @vue-prop {String} status - status string
+ *
+ * @vue-data {Number} last_date - variable to store last date of the month
+ * @vue-data {Number} month - variable to store month number
+ * @vue-data {Number} year - variable to store year number
+ * @vue-data {Array} weekend_date - Array of date of weekend
+ *
+ * @vue-data {Boolean} [addProdukModal=false] - flag to show or hide modal to add product to schedule
+ * @vue-data {Boolean} [deleteProdukModal=false] - flag to show or hide modal to delete product from schedule
+ * @vue-data {Boolean} [editProdukModal=false] - flag to show or hide modal to edit product schedule
+ * @vue-data {Boolean} [komentarModal=false] - flag to show or hide komentar modal
+ * @vue-data {Boolean} [hiddenAction=false] - flag to show or hide acttion button from table
+ *
+ * @vue-data {Array} [data_komentar=[]] - Array to store list of komentar getted from API (url = '/api/ppic/data/komentar')
+ * @vue-data {Object} updated_events - Object to store data of product that want to update in schedule
+ * @vue-data {Array} deleted_events - Array of schedule item from product that want to deleted
+ *
+ * @vue-data {String} start_date - string of start date
+ * @vue-data {String} end_date - string of end date
+ * @vue-data {Object} product - object data of selected product when adding product to schedule
+ * @vue-data {Number} jumlah - number of product that want to add to schedule
+ *
+ * @vue-data {String} action - string as flag to decide what action to implement at submit button
+ *
+ * @vue-data {Array} data_produk - array of list products get from API (url = '/api/ppic/data/gbj')
+ * @vue-data {Number} gk_stok - number of selected product in gk
+ * @vue-data {Number} gbj_stok - number of selected product in gbj
+ *
+ * @vue-data {Array} rencana_jadwal - schedule planning from previous planning
+ *
+ * @vue-data {Number} table_header_length - count number of row used for header of table
+ * @vue-data {String} table_header_title - title of table header
+ *
+ * @vue-event {Boolean} isDate - check wheater date in date range given
+ * @vue-event {Number} changeProduk - show gbj and gk stok of produk
+ * @vue-event {Object} handleSubmit - handle submit button for modal
+ * @vue-event {Boolean} showAddProdukModal - show modal to add schedule
+ * @vue-event {Boolean} updateEvent - show modal to change schedule
+ * @vue-event {Boolean} deleteEvent - show modal to delete schedule
+ * @vue-event {Object} deleteSingleEvent - function to delete single event
+ * @vue-event {Object} sendEvent - sending schedule to get acceptable from manager
+ * @vue-event {File} convertToExcel - function to export table to excel file
+ * @vue-event {Object} resetData - function to reset data after submiting form
+ * @vue-event {String} dateFormatter - change date format to string
+ * @vue-event {String} getMonthYear - get current month and year in string form
+ *
+ * @vue-computed {Array} options - computed options for vue-select
+ * @vue-computed {Array} format_events - change structure of schedule to fit table
+ * @vue-computed {Array} format_jadwal_rencana - change structure of schedule planning to fit table
+ */
 
 export default {
   name: "table-component",
@@ -440,8 +542,11 @@ export default {
       addProdukModal: false,
       deleteProdukModal: false,
       editProdukModal: false,
+      komentarModal: false,
 
       hiddenAction: false,
+
+      data_komentar: [],
 
       updated_events: {
         events: [],
@@ -471,6 +576,20 @@ export default {
     await axios.get("/api/ppic/data/gbj").then((response) => {
       this.data_produk = response.data;
     });
+
+    await axios
+      .get("/api/ppic/data/komentar", {
+        params: {
+          status: this.status,
+        },
+      })
+      .then((response) => {
+        this.data_komentar = response.data;
+      })
+      .catch((error) => {
+        console.log("error to get data komentar");
+        console.log(error);
+      });
 
     if (this.status === "pelaksanaan") {
       await axios.get("/api/ppic/data/rencana_perakitan").then((response) => {
@@ -698,7 +817,7 @@ export default {
 
     async updateEvent(events) {
       this.action = "update";
-      this.updated_events = events;
+      this.updated_events = JSON.parse(JSON.stringify(events));
 
       await axios
         .get("/api/ppic/data/gbj", {
@@ -766,32 +885,65 @@ export default {
 
     async sendEvent(state) {
       this.$store.commit("setIsLoading", true);
-      await axios
-        .post("/api/ppic/update/perakitans/" + this.status, {
-          state: state,
-          konfirmasi: 0,
-        })
-        .then((response) => {
-          this.$store.commit("setJadwal", response.data);
-        })
-        .catch((error) => {
-          console.log("error update data perakitan");
-          console.log(error);
-        });
-
-      await axios
-        .post("/api/ppic/create/komentar", {
-          tanggal_permintaan: new Date(),
-          state: this.$store.state.state,
-          status: this.status,
-        })
-        .catch((err) => {
-          this.$swal({
-            icon: "warning",
-            title: "Peringatan",
-            text: "Terdapat kesalahan saat membuat komentar pada database",
+      if (state === "pembatalan") {
+        await axios
+          .post("/api/ppic/update/perakitans/" + this.status, {
+            state: "perencanaan",
+            konfirmasi: 0,
+          })
+          .then((response) => {
+            this.$store.commit("setJadwal", response.data);
+          })
+          .catch((error) => {
+            this.$swal({
+              icon: "error",
+              title: "Error",
+              text: "Terdapat kesalahan saat mengirim pembatalan, silakan coba lagi",
+            });
           });
-        });
+
+        await axios
+          .post("/api/ppic/create/komentar", {
+            status: this.status,
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: "Terdapat kesalahan saat membuat komentar pada database",
+            });
+          });
+      } else {
+        await axios
+          .post("/api/ppic/update/perakitans/" + this.status, {
+            state: state,
+            konfirmasi: 0,
+          })
+          .then((response) => {
+            this.$store.commit("setJadwal", response.data);
+          })
+          .catch((error) => {
+            this.$swal({
+              icon: "error",
+              title: "Error",
+              text: "Terdapat kesalahan saat mengirim permintaan, silakan coba lagi",
+            });
+          });
+
+        await axios
+          .post("/api/ppic/create/komentar", {
+            tanggal_permintaan: new Date(),
+            state: this.$store.state.state,
+            status: this.status,
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: "Terdapat kesalahan saat membuat komentar pada database",
+            });
+          });
+      }
 
       this.$store.commit("setIsLoading", false);
     },

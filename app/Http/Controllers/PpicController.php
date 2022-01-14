@@ -21,11 +21,8 @@ use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
 
-//temp
-use App\Models\TFProduksi;
-use App\Models\TFProduksiDetail;
-
-
+// event
+use App\Events\PpicNotif;
 
 
 class PpicController extends Controller
@@ -324,7 +321,10 @@ class PpicController extends Controller
 
     public function get_komentar_jadwal_perakitan(Request $request)
     {
-        $data = KomentarJadwalPerakitan::where('status', $this->change_status($request->status))->orderBy('tanggal_permintaan', 'desc')->get();
+        $data = KomentarJadwalPerakitan::where('status', $this->change_status($request->status))
+            ->where('tanggal_hasil', '>=', date('Y-m-d'))
+            ->orderBy('tanggal_permintaan', 'desc')
+            ->get();
         return $data;
     }
 
@@ -375,6 +375,13 @@ class PpicController extends Controller
     {
         $state = $this->change_state($request->state);
         $status = $this->change_status($request->status);
+        if (!isset($request->tanggal_permintaan)) {
+            $data = KomentarJadwalPerakitan::where('status', $status)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            $data->delete();
+            return;
+        }
         KomentarJadwalPerakitan::create([
             'tanggal_permintaan' => $request->tanggal_permintaan,
             'tanggal_hasil' => $request->tanggal_hasil,
@@ -492,6 +499,10 @@ class PpicController extends Controller
         return [$penyusunan, $pelaksanaan, $selesai];
     }
 
+    public function send_notification(Request $request)
+    {
+        event(new PpicNotif($request->user));
+    }
 
     // helper function
     public function update_perakitan_status()
@@ -1019,7 +1030,8 @@ class PpicController extends Controller
 
     public function test_query()
     {
-        // $data = TFProduksi::
+        event(new PpicNotif('test name', 'test divisi'));
+        return "success";
     }
 
     public function get_count_selesai_pengiriman_produk($id)

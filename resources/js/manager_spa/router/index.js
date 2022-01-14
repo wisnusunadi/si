@@ -30,12 +30,12 @@ const routes = [
         component: SalesOrder,
     },
     {
-        path: '/ppic/laporan_pesanan',
+        path: '/manager-teknik/laporan_pesanan',
         name: 'LaporanPesanan',
         component: LaporanPesanan,
     },
     {
-        path: '/ppic/proses_pesanan',
+        path: '/manager-teknik/proses_pesanan',
         name: 'ProsesPesanan',
         component: ProsesPesanan,
     },
