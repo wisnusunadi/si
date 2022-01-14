@@ -475,7 +475,7 @@
                 },
                 {
                     data: 'aksi',
-                    visible: role != 15 || jenis == "SPB" ? false : true
+                    visible: role != 15 ? false : true
                 }
             ]
         });

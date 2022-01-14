@@ -2247,6 +2247,7 @@ class PenjualanController extends Controller
         $poid = $e->pesanan_id;
 
         $bool = true;
+
         $cdpp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
             $q->where('pesanan_id', $poid);
         })->get();
@@ -2262,6 +2263,14 @@ class PenjualanController extends Controller
         $cdp = DetailPesanan::where('pesanan_id', $poid)->get();
         if (count($cdp) > 0) {
             $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
+            if (!$dp) {
+                $bool = false;
+            }
+        }
+
+        $cdppt = DetailPesananPart::where('pesanan_id', $poid)->get();
+        if (count($cdppt) > 0) {
+            $dp = DetailPesananPart::where('pesanan_id', $poid)->delete();
             if (!$dp) {
                 $bool = false;
             }
@@ -2293,6 +2302,7 @@ class PenjualanController extends Controller
         $poid = $e->pesanan_id;
 
         $bool = true;
+
         $cdpp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
             $q->where('pesanan_id', $poid);
         })->get();
@@ -2308,6 +2318,14 @@ class PenjualanController extends Controller
         $cdp = DetailPesanan::where('pesanan_id', $poid)->get();
         if (count($cdp) > 0) {
             $dp = DetailPesanan::where('pesanan_id', $poid)->delete();
+            if (!$dp) {
+                $bool = false;
+            }
+        }
+
+        $cdppt = DetailPesananPart::where('pesanan_id', $poid)->get();
+        if (count($cdppt) > 0) {
+            $dp = DetailPesananPart::where('pesanan_id', $poid)->delete();
             if (!$dp) {
                 $bool = false;
             }

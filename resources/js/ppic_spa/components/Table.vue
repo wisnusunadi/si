@@ -30,6 +30,16 @@
           Kirim
         </button>
         <button
+          v-if="
+            this.$store.state.state_ppic === 'menunggu' &&
+            this.$store.state.state === 'persetujuan'
+          "
+          class="button is-warning"
+          @click="sendEvent('pembatalan')"
+        >
+          Batal
+        </button>
+        <button
           v-if="this.$store.state.state_ppic === 'disetujui'"
           class="button is-success"
           :class="{ 'is-loading': this.$store.state.isLoading }"
@@ -875,32 +885,65 @@ export default {
 
     async sendEvent(state) {
       this.$store.commit("setIsLoading", true);
-      await axios
-        .post("/api/ppic/update/perakitans/" + this.status, {
-          state: state,
-          konfirmasi: 0,
-        })
-        .then((response) => {
-          this.$store.commit("setJadwal", response.data);
-        })
-        .catch((error) => {
-          console.log("error update data perakitan");
-          console.log(error);
-        });
-
-      await axios
-        .post("/api/ppic/create/komentar", {
-          tanggal_permintaan: new Date(),
-          state: this.$store.state.state,
-          status: this.status,
-        })
-        .catch((err) => {
-          this.$swal({
-            icon: "warning",
-            title: "Peringatan",
-            text: "Terdapat kesalahan saat membuat komentar pada database",
+      if (state === "pembatalan") {
+        await axios
+          .post("/api/ppic/update/perakitans/" + this.status, {
+            state: "perencanaan",
+            konfirmasi: 0,
+          })
+          .then((response) => {
+            this.$store.commit("setJadwal", response.data);
+          })
+          .catch((error) => {
+            this.$swal({
+              icon: "error",
+              title: "Error",
+              text: "Terdapat kesalahan saat mengirim pembatalan, silakan coba lagi",
+            });
           });
-        });
+
+        await axios
+          .post("/api/ppic/create/komentar", {
+            status: this.status,
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: "Terdapat kesalahan saat membuat komentar pada database",
+            });
+          });
+      } else {
+        await axios
+          .post("/api/ppic/update/perakitans/" + this.status, {
+            state: state,
+            konfirmasi: 0,
+          })
+          .then((response) => {
+            this.$store.commit("setJadwal", response.data);
+          })
+          .catch((error) => {
+            this.$swal({
+              icon: "error",
+              title: "Error",
+              text: "Terdapat kesalahan saat mengirim permintaan, silakan coba lagi",
+            });
+          });
+
+        await axios
+          .post("/api/ppic/create/komentar", {
+            tanggal_permintaan: new Date(),
+            state: this.$store.state.state,
+            status: this.status,
+          })
+          .catch((err) => {
+            this.$swal({
+              icon: "warning",
+              title: "Peringatan",
+              text: "Terdapat kesalahan saat membuat komentar pada database",
+            });
+          });
+      }
 
       this.$store.commit("setIsLoading", false);
     },

@@ -100,16 +100,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>MTB 2 MTR</td>
-                                                    <td>10</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>CENTRAL MONITOR PM-9000+ + PC + INSTALASI</td>
-                                                    <td>1</td>
-                                                </tr> -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -130,7 +120,7 @@
             </div>
         </div>
     </div>
-    {{$prd_array}}
-    {{$part_array}}
+    <!-- {{$prd_array}}
+    {{$part_array}} -->
 
 </form>

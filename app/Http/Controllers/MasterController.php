@@ -911,7 +911,7 @@ class MasterController extends Controller
     }
     public function select_ekspedisi(Request $request, $provinsi)
     {
-        $data = null;
+        $data = "";
         if ($provinsi != "0") {
             $data = Ekspedisi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
                 ->orderby('nama', 'ASC')->whereHas('Provinsi', function ($q) use ($provinsi) {
