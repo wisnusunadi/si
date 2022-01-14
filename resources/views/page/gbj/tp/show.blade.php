@@ -89,7 +89,12 @@
                 <div class="card" style="width: 40rem">
                     <div class="row no-gutters">
                       <div class="col-md-5">
-                        <img src="{{ asset('upload/gbj/'. $d->gambar) }}" alt="...">
+                          @if (isset($d->gambar))
+                          <img src="{{ asset('upload/gbj/'. $d->gambar) }}" alt="">
+                          @else
+                          <img src="{{ asset('assets/image/unknown-icon.png') }}" alt="" height="150" width="150" >
+                          @endif
+
                       </div>
                       <div class="col-md-1"></div>
                       <div class="col-md-6">

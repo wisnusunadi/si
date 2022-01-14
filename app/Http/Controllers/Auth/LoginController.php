@@ -42,8 +42,17 @@ class LoginController extends Controller
         return 'username';
     }
 
+    // protected function validateLogin(Request $request)
+    // {
+    //     $request->validate([
+    //         $this->username() => 'required|string',
+    //         'password' => 'required',
+    //     ]);
+    // }
+
     public function authenticated()
     {
+        
         if (auth()->user()->divisi->id == 24) {
             return redirect('/ppic');
         } else if (auth()->user()->divisi->id == 15) {

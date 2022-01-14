@@ -121,6 +121,7 @@ Route::prefix('/gbj')->group(function () {
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
+    Route::post('data-so', [GudangController::class, 'getSODone']);
 
     Route::get('/test', [App\Http\Controllers\GudangController::class, 'test']);
 
@@ -222,8 +223,8 @@ Route::prefix('/tfp')->group(function () {
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
     Route::get('rakit', [GudangController::class, 'getRakit']);
-    Route::get('rakit-noseri/{id}', [GudangController::class, 'getRakitNoseri']);
-    Route::get('rakit-terima/{id}', [GudangController::class, 'getTerimaRakit']);
+    Route::get('rakit-noseri/{id}/{value}', [GudangController::class, 'getRakitNoseri']);
+    Route::get('rakit-terima/{id}/{value}', [GudangController::class, 'getTerimaRakit']);
     Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
     Route::post('/seri-edit-so', [ProduksiController::class, 'getNoseriSOEdit']);
 
@@ -267,8 +268,9 @@ Route::prefix('/prd')->group(function () {
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
+    Route::post('cek-noseri', [ProduksiController::class, 'cekDuplicateNoseri']);
 
-    Route::get('/testing/{id}', [ProduksiController::class, 'test']);
+    Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
 
     // kirim
     Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
@@ -507,5 +509,7 @@ Route::prefix('/as')->group(function () {
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard']);
 });
+
+Route::get('testingJson', [GudangController::class, 'dataTesting']);
 
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');

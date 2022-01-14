@@ -11,7 +11,7 @@
             FullCalendar
         },
         
-        data: function() {
+        data() {
             return {
                 calendarOptions: {
                     plugins: [dayGridPlugin, interactionPlugin],
@@ -55,7 +55,12 @@
 </script>
 
 <template>
-    <FullCalendar ref="calendar" :options="calendarOptions" />
+    <div v-if="calendarOptions.events.length == 0">
+        Belum ada Perencanaan Perakitan
+    </div>
+    <div v-else>
+        <FullCalendar ref="calendar" :options="calendarOptions" />
+    </div>
 </template>
 
 <style>

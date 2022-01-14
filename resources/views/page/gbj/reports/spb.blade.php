@@ -82,7 +82,6 @@
                         echo '<td><u>'.$h->pesanan->Spb->Customer->nama.'</u></td>';
                     }
                 @endphp
-
             </tr>
             <tr>
                 <td colspan="3">Harap barang-barang yang tertulis di bawah ini diserahkan</td>
@@ -92,7 +91,6 @@
                 <td>:</td>
                 <td class="margin_bottom"><span class="kepada"></span><span class="di"> {{ $h->divisi->nama }}</span></td>
             </tr>
-            @endforeach
         </table>
         <table class="table">
             <thead>
@@ -103,17 +101,31 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $s)
+                @foreach ($data as $produk => $s)
                 @php
                     $no = 1;
                 @endphp
-                    @foreach ($s->seri as $ss)
+                {{-- {{ $s }} --}}
                     <tr>
-                        <td class="td">{{ $s->qty }}</td>
-                        <td class="td">{{ $s->produk->produk->nama }} {{ $s->produk->nama }}</td>
-                        <td class="td">{{ $ss->seri->noseri }}</td>
+                        <td class="td">
+                            {{ $s->qty }}
+                        </td>
+                        <td class="td">
+                            {{ $s->produk->produk->nama }}
+                            <br>
+                            @if (isset($s->paket))
+                            ({{ $s->paket->detailpesanan->penjualanproduk->nama }})
+                            @else
+                            
+                            @endif
+
+                        </td>
+                        <td class="td">
+                            @foreach ($s->seri as $seri)
+                            {{ $seri->seri->noseri }} <br>
+                            @endforeach
+                        </td>
                     </tr>
-                    @endforeach
 
                 @endforeach
             </tbody>
@@ -138,7 +150,8 @@
             </tr>
         </table>
     </div>
-    <p class="text-right">Nomor Dokumen : SPA-FR/GUD-07(Nomor Dokumen) Tanggal Terbit : {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $t->created_at)->isoFormat('D MMMM Y') }}</p>
+    <p class="text-right">Nomor Dokumen : {{ $h->pesanan->so }} Tanggal Terbit : {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $t->created_at)->isoFormat('D MMMM Y') }}</p>
+    @endforeach
     @endforeach
 </body>
 </html>
