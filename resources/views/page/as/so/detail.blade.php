@@ -127,7 +127,7 @@
                     <div class="col-4 align-items-stretch">
                         <div class="card">
                             <div class="card-body">
-                                @if($jenis != "SPB")
+                                @if($jenis == "produk")
                                 <h5>Info Produk</h5>
                                 <div class="row">
                                     <div class="col-12">
@@ -164,7 +164,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5>Info Penjualan</h5>
-                                @if($jenis == "EKAT")
+                                @if(isset($d->Pesanan->Ekatalog))
                                 <div class="row">
 
                                     <div class="col-5">
@@ -209,7 +209,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @elseif($jenis == "SPA")
+                                @elseif(isset($d->Pesanan->Spa))
                                 <div class="row">
                                     <div class="col-5">
                                         <div class="margin">
@@ -244,7 +244,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @elseif($jenis == "SPB")
+                                @elseif(isset($d->Pesanan->Spb))
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="margin">
@@ -349,7 +349,7 @@
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
-                'url': '/api/as/so/detail/' + '{{$d->id}}',
+                'url': '/api/as/so/detail/' + '{{$d->id}}' + '/' + '{{$jenis}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -386,7 +386,7 @@
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false,
-                visible: jenis == "SPB" ? false : true,
+                visible: jenis == "part" ? false : true,
             }]
 
         });
