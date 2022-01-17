@@ -123,6 +123,7 @@
                                         <thead>
                                             <th>No</th>
                                             <th>No SO</th>
+                                            <th>No PO</th>
                                             <th>Batas Pengiriman</th>
                                             <th>Customer</th>
                                             <th>Alamat</th>
@@ -221,6 +222,10 @@
                 },
                 {
                     data: 'so',
+                    className: 'nowrap-text'
+                },
+                {
+                    data: 'no_po',
                     className: 'nowrap-text'
                 },
                 {
