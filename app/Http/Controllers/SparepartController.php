@@ -135,13 +135,14 @@ class SparepartController extends Controller
 
     function history_spr($id)
     {
-        $cek1 = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($id) {
+        $cek1 = collect(GudangKarantinaNoseri::whereHas('detail', function ($q) use ($id) {
             $q->where('sparepart_id', $id)->where('is_draft', 0);
-        })->get();
-        $cek = NoseriKeluarGK::whereHas('detail', function ($q) use ($id) {
-            $q->where('sparepart_id', $id)->where('is_draft', 0);
-        })->get();
-        $data = $cek->merge($cek1);
+        })->get());
+        $cek = collect(NoseriKeluarGK::whereHas('detail', function ($qq) use ($id) {
+            $qq->where('sparepart_id', $id)->where('is_draft', 0);
+        })->get());
+        $data = $cek1->merge($cek);
+        // return $data;
         return datatables()->of($data)
             ->addColumn('inn', function ($d) {
                 if (empty($d->detail->header->date_in)) {
@@ -247,12 +248,12 @@ class SparepartController extends Controller
 
     function history_unit($id)
     {
-        $cek1 = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($id) {
+        $cek1 = collect(GudangKarantinaNoseri::whereHas('detail', function ($q) use ($id) {
             $q->where('gbj_id', $id)->where('is_draft', 0);
-        })->get();
-        $cek = NoseriKeluarGK::whereHas('detail', function ($q) use ($id) {
+        })->get());
+        $cek = collect(NoseriKeluarGK::whereHas('detail', function ($q) use ($id) {
             $q->where('gbj_id', $id)->where('is_draft', 0);
-        })->get();
+        })->get());
         $data = $cek->merge($cek1);
         return datatables()->of($data)
             ->addColumn('inn', function ($d) {

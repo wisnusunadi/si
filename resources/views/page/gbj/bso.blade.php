@@ -567,10 +567,8 @@
                            location.reload();
                         }
                     })
-
                 }
             })
-
     })
 
     $(document).on('click', '#okk', function(e) {
