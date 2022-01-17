@@ -977,14 +977,14 @@ class GudangController extends Controller
                 ->update(['status_cek' => 4, 'checked_by' => $request->userid]);
         }
 
-        $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->where('status_cek', 4)->get()->count();
-        $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->get()->count();
-        if ($cek == $cek_prd) {
+        // $cek = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->where('status_cek', 4)->get()->count();
+        // $cek_prd = DetailPesananProduk::whereIn('detail_pesanan_id', $dt)->get()->count();
+        // if ($cek == $cek_prd) {
             $h->status_cek = 4;
             $h->checked_by = $request->userid;
             $h->log_id = 6;
             $h->save();
-        }
+        // }
 
         return response()->json(['msg' => 'Successfully']);
     }
