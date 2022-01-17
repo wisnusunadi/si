@@ -25,12 +25,6 @@ class NoseriTGbj extends Model
     {
         return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
     }
-
-    //     protected $casts = [
-    //         'noseri_id' => 'array',
-    //         't_gbj_detail_id' => 'array',
-    //         'layout_id' => 'array',
-    //    ];
     function NoseriBarangJadi()
     {
         return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');

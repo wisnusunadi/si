@@ -503,7 +503,7 @@ Route::prefix('/dc')->group(function () {
 
 Route::prefix('/as')->group(function () {
     Route::post('/so/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
-    Route::post('/so/detail/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_pengiriman']);
+    Route::post('/so/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_pengiriman']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
