@@ -58,13 +58,11 @@ class AfterSalesController extends Controller
                     $l = Logistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
                         $q->where('detail_pesanan_id', $id);
                     })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
-
                     return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
                 } else {
                     $l = Logistik::whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
                         $q->where('id', $id);
                     })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
-
                     return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
                 }
                 // $arr = array();
