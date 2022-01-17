@@ -335,7 +335,7 @@
             $('.nosericheck').prop('checked', false);
             $('#cekbrg').prop('disabled', true);
             $('input[name ="check_all"]').prop('checked', false);
-            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
+            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idpesanan).load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
@@ -413,8 +413,7 @@
             }]
         });
 
-        function listnoseri(seri_id, produk_id, tfgbj_id) {
-
+        function listnoseri(seri_id, produk_id, pesanan_id) {
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
@@ -422,7 +421,7 @@
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
-                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + tfgbj_id,
+                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + pesanan_id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -431,16 +430,23 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'seri',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                }, ]
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    }, {
+                        data: 'seri',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'detail_pesanan_produk_id',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
             });
         }
         var checkedAry = [];
@@ -490,7 +496,7 @@
             console.log(idpesanan);
 
             $.ajax({
-                url: "/qc/so/edit/" + checkedAry + "/" + data + "/" + idtrf + "/" + idpesanan,
+                url: "/qc/so/edit/" + checkedAry + "/" + data + "/" + idpesanan,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -499,7 +505,7 @@
 
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    listnoseri(checkedAry, data, idtrf);
+                    listnoseri(checkedAry, data, idpesanan);
                     max_date();
                     // $("#editform").attr("action", href);
                 },

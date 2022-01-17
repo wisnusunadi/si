@@ -25,54 +25,66 @@ use Maatwebsite\Excel\Facades\Excel;
 class QcController extends Controller
 {
     //Get Data
-    public function get_data_select_seri($seri_id, $produk_id, $tfgbj_id)
+    public function get_data_select_seri($seri_id, $produk_id, $pesanan_id)
     {
         $x = explode(',', $seri_id);
+        $data = "";
         if ($seri_id == '0') {
-            $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
-                $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
+            $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id) {
+                $q->where(['gdg_brg_jadi_id' => $produk_id]);
+            })->whereHas('detail.header', function ($q) use ($pesanan_id) {
+                $q->where('pesanan_id', $pesanan_id);
             })->whereDoesntHave('NoseriDetailPesanan', function ($q) {
                 $q->where('status', 'ok');
             })->get();
         } else {
-            $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
-                $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
-            })->whereIN('noseri_id', $x)->get();
+            $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id) {
+                $q->where(['gdg_brg_jadi_id' => $produk_id]);
+            })->whereIN('noseri_id', $x)->whereHas('detail.header.pesanan', function ($q) use ($pesanan_id) {
+                $q->where('id', $pesanan_id);
+            })->get();
         }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('seri', function ($data) {
                 return $data->NoseriBarangJadi->noseri;
+            })->addColumn('noseri_id', function ($data) {
+                return '<input type="text" id="noseri_id" name="noseri_id[]" value="' . $data->id . '">';
+            })->addColumn('detail_pesanan_produk_id', function ($data) {
+                return '<input type="text" id="detail_pesanan_produk_id" name="detail_pesanan_produk_id[]" value="' . $data->detail->paket->id . '">';
             })
+            ->rawColumns(['noseri_id', 'detail_pesanan_produk_id'])
             ->make(true);
     }
-    public function get_data_seri_detail_ekatalog($seri_id, $produk_id, $tfgbj_id, $pesanan_id)
+    public function get_data_seri_detail_ekatalog($produk_id, $pesanan_id)
     {
-        $value2 = array();
-        $x = explode(',', $seri_id);
-        if ($seri_id == '0') {
-            $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
-                $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
-            })->get();
-            foreach ($data as $d) {
-                $value2[] = $d->id;
-            }
-            $id =  json_encode($value2);
-        } else {
-            $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
-                $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
-            })->whereIN('noseri_id', $x)->get();
-            foreach ($data as $d) {
-                $value2[] = $d->id;
-            }
-            $id =  json_encode($value2);
-        }
-        return view('page.qc.so.edit', ['id' => $id, 'tfgbj_id' => $tfgbj_id, 'pesanan_id' => $pesanan_id, 'produk_id' => $produk_id]);
+        // $value2 = array();
+        // $x = explode(',', $seri_id);
+        // if ($seri_id == '0') {
+        //     $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
+        //         $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
+        //     })->get();
+        //     foreach ($data as $d) {
+        //         $value2[] = $d->id;
+        //     }
+        //     $id =  json_encode($value2);
+        // } else {
+        //     $data = NoseriTGbj::whereHas('detail', function ($q) use ($produk_id, $tfgbj_id) {
+        //         $q->where(['gdg_brg_jadi_id' => $produk_id, 't_gbj_id' => $tfgbj_id]);
+        //     })->whereIN('noseri_id', $x)->get();
+        //     foreach ($data as $d) {
+        //         $value2[] = $d->id;
+        //     }
+        //     $id =  json_encode($value2);
+        // }
+        return view('page.qc.so.edit', ['pesanan_id' => $pesanan_id, 'produk_id' => $produk_id]);
     }
-    public function get_data_seri_ekatalog($id, $idtrf)
+    public function get_data_seri_ekatalog($id, $idpesanan)
     {
-        $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $idtrf) {
-            $q->where(['gdg_brg_jadi_id' => $id, 't_gbj_id' => $idtrf]);
+        $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+            $q->where(['gdg_brg_jadi_id' => $id]);
+        })->whereHas('detail.header', function ($q) use ($idpesanan) {
+            $q->where(['pesanan_id' => $idpesanan]);
         });
         return datatables()->of($data)
             ->addIndexColumn()
@@ -128,8 +140,10 @@ class QcController extends Controller
     }
     public function get_data_detail_so($id)
     {
-        $x = explode(',', $id);
-        $data = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->groupby('gudang_barang_jadi_id')->get();
+        // $x = explode(',', $id);
+        $data = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->groupby('gudang_barang_jadi_id')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -509,7 +523,7 @@ class QcController extends Controller
                     $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                 }
             }
-            return view('page.qc.so.detail_ekatalog', ['data' => $data, 'detail_id' => $detail_id, 'param' => $param, 'status' => $status]);
+            return view('page.qc.so.detail_ekatalog', ['id' => $id, 'data' => $data, 'detail_id' => $detail_id, 'param' => $param, 'status' => $status]);
         } elseif ($value == 'spa') {
             $data = Spa::whereHas('Pesanan', function ($q) use ($id) {
                 $q->where('id', $id);
@@ -546,7 +560,7 @@ class QcController extends Controller
                     $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
                 }
             }
-            return view('page.qc.so.detail_spa', ['data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
+            return view('page.qc.so.detail_spa', ['id' => $id, 'data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
         } else {
             $data = Spb::whereHas('Pesanan', function ($q) use ($id) {
                 $q->where('id', $id);
@@ -583,7 +597,7 @@ class QcController extends Controller
                     $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
                 }
             }
-            return view('page.qc.so.detail_spb', ['data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
+            return view('page.qc.so.detail_spb', ['id' => $id, 'data' => $data, 'detail_id' => $detail_id, 'status' => $status]);
         }
     }
 
@@ -594,26 +608,53 @@ class QcController extends Controller
     }
 
     //Tambah
-    public function create_data_qc($seri_id, $tfgbj_id, $pesanan_id, $produk_id, Request $request)
+    public function create_data_qc(/*$seri_id, $tfgbj_id, */$pesanan_id, $produk_id, Request $request)
     {
         // $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
         //     $q->where('Pesanan_id', $pesanan_id);
         // })->where('gudang_barang_jadi_id', $produk_id)->first();
 
-        $replace_array_seri = strtr($seri_id, array('[' => '', ']' => ''));
-        $array_seri = explode(',', $replace_array_seri);
+        // $replace_array_seri = strtr($seri_id, array('[' => '', ']' => ''));
+        // $array_seri = explode(',', $replace_array_seri);
 
         $bool = true;
-        for ($i = 0; $i < count($array_seri); $i++) {
+        // for ($i = 0; $i < count($array_seri); $i++) {
 
-            $data = NoseriTGbj::find($array_seri[$i]);
+        //     $data = NoseriTGbj::find($array_seri[$i]);
 
 
-            $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
+        //     $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
+        //     if ($check == null) {
+        //         $c = NoseriDetailPesanan::create([
+        //             'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
+        //             't_tfbj_noseri_id' => $array_seri[$i],
+        //             'status' => $request->cek,
+        //             'tgl_uji' => $request->tanggal_uji,
+        //         ]);
+        //         if (!$c) {
+        //             $bool = false;
+        //         }
+        //     } else {
+        //         $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
+        //         $NoseriDetailPesanan->status = $request->cek;
+        //         $NoseriDetailPesanan->tgl_uji = $request->tanggal_uji;
+        //         $u = $NoseriDetailPesanan->save();
+        //         if (!$u) {
+        //             $bool = false;
+        //         }
+        //     }
+        // }
+
+        for ($i = 0; $i < count($request->noseri_id); $i++) {
+
+            $data = NoseriTGbj::find($request->noseri_id[$i]);
+
+
+            $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $request->noseri_id[$i])->first();
             if ($check == null) {
                 $c = NoseriDetailPesanan::create([
-                    'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
-                    't_tfbj_noseri_id' => $array_seri[$i],
+                    'detail_pesanan_produk_id' => $request->detail_pesanan_produk_id[$i],
+                    't_tfbj_noseri_id' => $request->noseri_id[$i],
                     'status' => $request->cek,
                     'tgl_uji' => $request->tanggal_uji,
                 ]);

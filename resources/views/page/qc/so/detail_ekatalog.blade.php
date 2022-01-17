@@ -182,55 +182,6 @@
             <div class="col-7">
                 <div class="card">
                     <div class="card-body">
-                        <!-- <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <form id="filter">
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Status</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                                        <label class="form-check-label" for="status1">
-                                                            Selesai Diperiksa
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                                        <label class="form-check-label" for="status2">
-                                                            Sebagian Diperiksa
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                                        <label class="form-check-label" for="status3">
-                                                            Belum Diperiksa
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary">
-                                                            Cari
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </span>
-                            </div>
-                        </div> -->
 
                         <div class="row">
                             <div class="col-12">
@@ -250,30 +201,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                        <td>1</td>
-                                        <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
-                                        <td>2</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td><a type="button" class="noserishow" data-id="1"><i class="fas fa-search"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>ELITECH ULTRASONIC POCKET DOPPLER</td>
-                                        <td>5</td>
-                                        <td>2</td>
-                                        <td>0</td>
-                                        <td><a type="button" class="noserishow" data-id="2"><i class="fas fa-search"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>MTB 2 MTR</td>
-                                        <td>10</td>
-                                        <td>5</td>
-                                        <td>2</td>
-                                        <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
-                                    </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -289,17 +216,6 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
-                                    <!-- <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="cekbrg" disabled>
-                                <i class="fas fa-clipboard-check"></i> Cek Barang
-                            </button>
-                            <div class="dropdown-menu">
-                                <button class="dropdown-item" type="button"><i class="fas fa-check-circle ok"></i> Hasil OK</button>
-                                <button class="dropdown-item" type="button"><i class="fas fa-times-circle nok"></i> Hasil Tidak OK</button>
-                            </div> -->
-                                    <!-- <button class="btn btn-outline-info" id="cekbrg" disabled>
-                                <i class="fas fa-clipboard-check"></i> Cek Barang
-                            </button> -->
-
                                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
                                         <button class="btn btn-warning" id="cekbrg" disabled="true">
                                             <i class="fas fa-pencil-alt"></i> Cek Barang
@@ -329,39 +245,6 @@
                                             <th>Hasil</th>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input ok" type="checkbox" value="" id="" disabled />
-                                            </div>
-                                        </td>
-                                        <td>1</td>
-                                        <td>TD0015012021001</td>
-                                        <td><i class="fas fa-check-circle ok"></i></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input yet nosericheck" id="" type="checkbox" />
-                                            </div>
-                                        </td>
-                                        <td>2</td>
-                                        <td>TD0015012021002</td>
-                                        <td><i class="fas fa-question-circle warning"></i></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input not nosericheck" id="" type="checkbox" />
-                                            </div>
-                                        </td>
-                                        <td>3</td>
-                                        <td>TD0015012021003</td>
-                                        <td><i class="fas fa-times-circle nok"></i></td>
-                                        <td></td>
-                                    </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -461,7 +344,7 @@
             }
             $('#cekbrg').prop('disabled', true);
             $('input[name="check_all"]').prop('checked', false);
-            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
+            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idpesanan).load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
@@ -510,7 +393,7 @@
         var noseritable = $('#noseritable').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
@@ -531,8 +414,8 @@
             }, {
                 data: 'seri',
                 className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
+                orderable: true,
+                searchable: true
             }, {
                 data: 'tgl_uji',
                 className: 'nowrap-text align-center',
@@ -546,7 +429,7 @@
             }]
         });
 
-        function listnoseri(seri_id, produk_id, tfgbj_id) {
+        function listnoseri(seri_id, produk_id, pesanan_id) {
 
             $('#listnoseri').DataTable({
                 destroy: true,
@@ -555,7 +438,7 @@
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
-                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + tfgbj_id,
+                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + pesanan_id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}',
 
@@ -571,6 +454,11 @@
                     searchable: false
                 }, {
                     data: 'seri',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail_pesanan_produk_id',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
@@ -623,7 +511,7 @@
             console.log(idpesanan);
 
             $.ajax({
-                url: "/qc/so/edit/" + checkedAry + "/" + data + "/" + idtrf + "/" + idpesanan,
+                url: "/qc/so/edit/" + checkedAry + "/" + data + "/" + idpesanan,
                 beforeSend: function() {
                     $('#loader').show();
                 },

@@ -161,7 +161,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         Route::view('/detail_spa/{id}', 'page.qc.so.detail_spa')->name('qc.so.detail_spa');
         Route::view('/detail_spb/{id}', 'page.qc.so.detail_spb')->name('qc.so.detail_spb');
         Route::view('/create', 'page.qc.so.create')->name('qc.so.create');
-        Route::get('/edit/{seri_id}/{produk_id}/{tfgbj_id}/{pesanan_id}', [App\Http\Controllers\QcController::class, 'get_data_seri_detail_ekatalog'])->name('qc.so.edit');
+        Route::get('/edit/{produk_id}/{pesanan_id}', [App\Http\Controllers\QcController::class, 'get_data_seri_detail_ekatalog'])->name('qc.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
             Route::view('/show', 'page.qc.so.riwayat.show')->name('qc.so.riwayat.show');
         });

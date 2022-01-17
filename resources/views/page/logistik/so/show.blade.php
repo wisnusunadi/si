@@ -149,6 +149,7 @@
                                                 <thead>
                                                     <th>No</th>
                                                     <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Batas Pengiriman</th>
                                                     <th>Customer</th>
                                                     <th>Alamat</th>
@@ -173,6 +174,7 @@
                                                     <tr>
                                                         <th rowspan="2">No</th>
                                                         <th rowspan="2">No SO</th>
+                                                        <th rowspan="2">No PO</th>
                                                         <th rowspan="2">Tanggal Delivery</th>
                                                         <th colspan="2">Pengiriman</th>
                                                         <th rowspan="2">Customer</th>
@@ -228,6 +230,10 @@
                 },
                 {
                     data: 'so',
+                    className: 'nowrap-text'
+                },
+                {
+                    data: 'po',
                     className: 'nowrap-text'
                 },
                 {
@@ -289,6 +295,10 @@
                 },
                 {
                     data: 'so',
+                    className: 'align-center nowrap-text'
+                },
+                {
+                    data: 'po',
                     className: 'align-center nowrap-text'
                 },
                 {

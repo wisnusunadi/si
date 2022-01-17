@@ -1,4 +1,4 @@
-<form method="POST" action="/api/qc/so/create/{{$id}}/{{$tfgbj_id}}/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
+<form method="POST" action="/api/qc/so/create/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
     @method('PUT')
     @csrf
     <div class="row d-flex justify-content-center">
@@ -45,11 +45,13 @@
                         <h5>No Seri </h5>
                         <div class="form-group row">
                             <div class="table-responsive">
-                                <table class="table table-striped align-center" id="listnoseri">
+                                <table class="table table-striped align-center" id="listnoseri" style="width:100%;">
                                     <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>No Seri</th>
+                                            <th>No Seri ID</th>
+                                            <th>No Detail Produk ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>

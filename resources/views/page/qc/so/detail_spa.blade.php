@@ -436,7 +436,7 @@
 
         $('#showtable').on('click', '.noserishow', function() {
             idtrf = '';
-            idpesanan = '{{$d->pesanan->id}}';
+            idpesanan = '{{$id}}';
             var data = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
             $('.nosericheck').prop('checked', false);
@@ -449,7 +449,7 @@
                 // $('.sericheckbox').removeClass("hide");
                 $('#noseritable').DataTable().column(0).visible(true);
             }
-            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
+            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + '{{$id}}').load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
@@ -465,6 +465,7 @@
                 url: action,
                 data: $('#form-pengujian-update').serialize(),
                 success: function(response) {
+                    console.log(response);
                     if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',
@@ -528,7 +529,7 @@
             }]
         });
 
-        function listnoseri(seri_id, produk_id, tfgbj_id) {
+        function listnoseri(seri_id, produk_id, pesanan_id) {
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
@@ -536,7 +537,7 @@
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
-                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + tfgbj_id,
+                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + pesanan_id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -554,6 +555,16 @@
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
+                }, {
+                    data: 'noseri_id',
+                    className: 'nowrap-text align-center hide',
+                    orderable: false,
+                    searchable: false,
+                }, {
+                    data: 'detail_pesanan_produk_id',
+                    className: 'nowrap-text align-center hide',
+                    orderable: false,
+                    searchable: false,
                 }, ]
             });
         }
@@ -603,7 +614,7 @@
             console.log(idpesanan);
 
             $.ajax({
-                url: "/qc/so/edit/" + checkedAry + "/" + data + "/" + idtrf + "/" + idpesanan,
+                url: "/qc/so/edit/" + data + "/" + '{{$id}}',
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -612,7 +623,7 @@
 
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    listnoseri(checkedAry, data, idtrf);
+                    listnoseri(checkedAry, data, '{{$id}}');
                     max_date();
                     // $("#editform").attr("action", href);
                 },
