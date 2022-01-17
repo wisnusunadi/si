@@ -1,6 +1,5 @@
 <template>
     <div>
-
     <div class="table-responsive">
         <table class="table text-center table-bordered">
             <thead>
@@ -16,6 +15,9 @@
                     </tr>
             </thead>
             <tbody>
+                <tr v-if="event.length == 0">
+                    <td :colspan="last_date + 2">Belum ada Perencanaan Perakitan</td>
+                </tr>
                 <tr v-for="item in event" :key="item.id">
                     <td>{{ item.title }}</td>
                     <td>{{ item.jumlah }}</td>

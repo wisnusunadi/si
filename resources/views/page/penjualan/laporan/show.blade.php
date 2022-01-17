@@ -398,7 +398,7 @@
             rowGroup: {
                 startRender: function(rows, group) {
                     var i = 0;
-                    console.log(group);
+                    console.log(group); 
                     return $('<tr/>')
                         .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
                 },
