@@ -493,7 +493,7 @@
         var noseritable = $('#noseritable').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
@@ -513,8 +513,8 @@
             }, {
                 data: 'seri',
                 className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
+                orderable: true,
+                searchable: true
             }, {
                 data: 'tgl_uji',
                 className: 'nowrap-text align-center',
@@ -552,8 +552,8 @@
                 }, {
                     data: 'seri',
                     className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+                    orderable: true,
+                    searchable: true
                 }, ]
             });
         }

@@ -659,7 +659,6 @@
             }
         }
 
-
         $('#tanggal_pemesanan').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#batas_kontrak").attr("min", $(this).val());
@@ -681,7 +680,6 @@
                 $("#nonakn").addClass("hide");
                 $("#akn").removeClass("hide");
                 $(".os-content-arrange").remove();
-
                 //cek
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").addClass("hide");
