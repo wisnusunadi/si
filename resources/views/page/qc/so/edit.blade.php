@@ -78,5 +78,4 @@
             </div>
         </div>
     </div>
-    {{$id}}/{{$tfgbj_id}}/{{$pesanan_id}}/{{$produk_id}}
 </form>
