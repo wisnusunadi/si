@@ -291,14 +291,14 @@ class MasterController extends Controller
             ->editColumn('nama', function ($data) {
                 return $data->nama;
             })
-            ->editColumn('no_akd', function ($data) {
+            ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->first();
                 return $s->no_akd;
             })
-            ->editColumn('merk', function ($data) {
+            ->addColumn('merk', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
                     $q->where('id', $id);
