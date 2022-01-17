@@ -476,22 +476,23 @@ class DcController extends Controller
                     $value[] = $d->id;
                 }
                 $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
+                $count_trf = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+
+                if ($count_trf == $coo) {
+                    $c = 0;
+                } else {
+                    $c = 1;
+                }
+
                 if ($coo == 0) {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="0">
+                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="' . $c . '">
                             <i class="fas fa-eye"></i>
                             Detail
                         </a>
                     </div>';
                 } else {
-                    $count_trf = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
-
-                    if ($count_trf == $coo) {
-                        $c = 0;
-                    } else {
-                        $c = 1;
-                    }
 
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -529,18 +530,12 @@ class DcController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
-                $get = NoseriCoo::where('noseri_logistik_id', $data->id)->get()->count();
-
-                if ($data->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->coo == '0') {
+                if (isset($data->NoseriCoo)) {
                     return '';
                 } else {
-                    if ($get == 0) {
-                        return '  <div class="form-check">
-                    <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail_logistik_id . '" data-id="' . $data->id . '" />
+                    return '  <div class="form-check">
+                    <input class=" form-check-input  nosericheck" type="checkbox" data-value="' . $data->detail_logistik_id . '" data-id="' . $data->id . '" />
                     </div>';
-                    } else {
-                        return '';
-                    }
                 }
             })
             ->addColumn('noseri', function ($data) {
