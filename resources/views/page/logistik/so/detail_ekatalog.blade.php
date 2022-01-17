@@ -528,9 +528,7 @@
                 orderable: false,
                 searchable: false
             }]
-
         });
-
         var belumkirimtable = $('#belumkirimtable').DataTable({
             destroy: true,
             processing: true,
