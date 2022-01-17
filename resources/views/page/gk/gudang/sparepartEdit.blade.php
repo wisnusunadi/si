@@ -132,8 +132,9 @@
                             <th colspan="2" class="text-center">Tanggal</th>
                             <th colspan="2" class="text-center">Tujuan</th>
                             <th rowspan="2">No Seri</th>
-                            <th rowspan="2">Layout</th>
+                            <th rowspan="2">Posisi Barang</th>
                             <th rowspan="2">Kerusakan</th>
+                            <th rowspan="2">Perbaikan</th>
                             <th rowspan="2">Tingkat Kerusakan</th>
                             <th rowspan="2">Status</th>
                             <th rowspan="2">Aksi</th>
@@ -217,6 +218,10 @@
                           <label for="">Kerusakan</label>
                           <textarea name="remark" id="remark" cols="5" rows="5" class="form-control"></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="">Perbaikan</label>
+                            <textarea name="perbaikan" id="perbaikan" cols="5" rows="5" class="form-control"></textarea>
+                          </div>
                     </div>
                 </div>
             </div>
@@ -264,6 +269,7 @@
             {data: 'noser'},
             {data: 'layout'},
             {data: 'remarks'},
+            {data: 'perbaikan'},
             {data: 'tingkat'},
             {data: 'status'},
             {data: 'action'},
@@ -307,6 +313,7 @@
                 $('#tk_kerusakan').val(res.tingkat);
                 $('#tk_kerusakan').select2().trigger('change');
                 $('#remark').val(res.note);
+                $('#perbaikan').val(res.repair);
             }
         })
 

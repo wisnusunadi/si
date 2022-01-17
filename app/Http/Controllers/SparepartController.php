@@ -203,6 +203,18 @@ class SparepartController extends Controller
                 }
 
             })
+            ->addColumn('perbaikan', function ($d) {
+                if($d->seri) {
+                    return $d->seri->perbaikan;
+                } else {
+                    if (empty($d->perbaikan)) {
+                        return '-';
+                    } else {
+                        return $d->perbaikan;
+                    }
+                }
+
+            })
             ->addColumn('tingkat', function ($d) {
                 if($d->seri) {
                     return 'Level ' . $d->seri->tk_kerusakan;
@@ -312,6 +324,18 @@ class SparepartController extends Controller
                         return '-';
                     } else {
                         return $d->remark;
+                    }
+                }
+
+            })
+            ->addColumn('perbaikan', function ($d) {
+                if($d->seri) {
+                    return $d->seri->perbaikan;
+                } else {
+                    if (empty($d->perbaikan)) {
+                        return '-';
+                    } else {
+                        return $d->perbaikan;
                     }
                 }
 
@@ -570,6 +594,13 @@ class SparepartController extends Controller
                     return $d->remark;
                 }
             })
+            ->addColumn('repair', function ($d) {
+                if($d->seri) {
+                    return $d->seri->perbaikan;
+                } else {
+                    return $d->perbaikan;
+                }
+            })
             ->addColumn('layout', function ($d) {
                 if($d->seri) {
                     return $d->seri->layout->ruang;
@@ -583,7 +614,17 @@ class SparepartController extends Controller
                 }
             })
             ->addColumn('tingkat', function ($d) {
-                return 'Level ' . $d->tk_kerusakan;
+                if($d->seri) {
+                    return 'Level ' . $d->seri->tk_kerusakan;
+                } else {
+                    if (empty($d->layout_id)) {
+                        return '-';
+                    } else {
+                        return 'Level ' . $d->tk_kerusakan;
+                    }
+
+                }
+
             })
             ->make(true);
     }
@@ -685,6 +726,7 @@ class SparepartController extends Controller
             'id' => $d->id,
             'layout' => $d->layout_id,
             'note' => $d->remark,
+            'repair' => $d->perbaikan,
             'tingkat' => $d->tk_kerusakan,
         ]);
     }
@@ -1933,6 +1975,7 @@ class SparepartController extends Controller
         $data->layout_id = $request->layout_id;
         $data->remark = $request->remark;
         $data->tk_kerusakan = $request->tk_kerusakan;
+        $data->perbaikan = $request->perbaikan;
         $data->status = 1;
         $data->updated_at = Carbon::now();
         $data->updated_by = $request->userid;

@@ -450,6 +450,9 @@ class ProduksiController extends Controller
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
+            ->addColumn('po', function ($data) {
+                return $data->no_po;
+            })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
                 for ($i = 1; $i < count($name); $i++) {
