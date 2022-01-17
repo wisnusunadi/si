@@ -202,26 +202,12 @@
                             <th>No</th>
                             <th>Nomor Seri</th>
                             <th>Kerusakan</th>
+                            <th>Perbaikan</th>
                             <th>Tingkat Kerusakan</th>
-                            <th>Layout</th>
+                            <th>Posisi Barang</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td scope="row">1</td>
-                            <td>54131313151</td>
-                            <td>Kerusakan Panel</td>
-                            <td>Level 3</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">2</td>
-                            <td>54131313151</td>
-                            <td>Kerusakan Panel</td>
-                            <td>Level 3</td>
-                            <td>Layout 1</td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -375,6 +361,7 @@
                 {data: 'DT_RowIndex'},
                 {data: 'noser'},
                 {data: 'rusak'},
+                {data: 'repair'},
                 {data: 'tingkat'},
                 {data: 'layout'},
             ],
@@ -423,7 +410,7 @@ $('#tahun').change(function (e) {
         type: "post",
         url: "/api/gk/transaksi/grafik-trf",
         data: {
-            id: id, 
+            id: id,
             tahun: this.value,
         },
         success: function (res) {
