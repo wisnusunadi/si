@@ -246,27 +246,27 @@ class QcController extends Controller
     {
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->orderby('id', 'ASC')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->orderby('id', 'ASC')->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get());
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%ekat%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spa%')->get());
             $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%ekat%')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spb%')->get());
             $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spa%')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spb%')->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%ekat%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%ekat%')->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spa%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spa%')->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->where('so', 'LIKE', '%spb%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spb%')->get();
         } else {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('DetailPesanan')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         }
 
         return datatables()->of($data)
@@ -312,39 +312,42 @@ class QcController extends Controller
                         }
                     }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('status', function ($data) {
                 $z = array();
                 $x = array();
-
-                $jumlah = 0;
-                foreach ($data->detailpesanan as $d) {
-                    $x[] = $d->id;
-                    $z[] = $d->jumlah;
-                    foreach ($d->penjualanproduk->produk as $l) {
-                        $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                if (count($data->DetailPesanan) > 0) {
+                    $jumlah = 0;
+                    foreach ($data->detailpesanan as $d) {
+                        $x[] = $d->id;
+                        $z[] = $d->jumlah;
+                        foreach ($d->penjualanproduk->produk as $l) {
+                            $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                        }
                     }
-                }
-                $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+                    $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
 
-                $y = array();
+                    $y = array();
 
-                foreach ($detail_pesanan_produk as $d) {
-                    $y[] = $d->id;
-                }
+                    foreach ($detail_pesanan_produk as $d) {
+                        $y[] = $d->id;
+                    }
 
-                $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
+                    $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
 
-                if ($jumlah == $jumlah_seri) {
-                    return  '<span class="badge green-text">Selesai</span>';
-                } else {
-                    if ($jumlah_seri == 0) {
-                        return '<span class="badge red-text">Belum diuji</span>';
+                    if ($jumlah == $jumlah_seri) {
+                        return  '<span class="badge green-text">Selesai</span>';
                     } else {
-                        return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                        if ($jumlah_seri == 0) {
+                            return '<span class="badge red-text">Belum diuji</span>';
+                        } else {
+                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                        }
                     }
+                } else {
+                    return '-';
                 }
             })
             ->addColumn('button', function ($data) {

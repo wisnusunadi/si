@@ -446,7 +446,7 @@
         });
 
         $('#showtable').on('click', '.noserishow', function() {
-            idtrf = '{{$d->pesanan->TFProduksi->id}}';
+            idtrf = '';
             idpesanan = '{{$d->pesanan->id}}';
             var data = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');

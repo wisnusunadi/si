@@ -321,7 +321,7 @@
         });
 
         $('#showtable').on('click', '.noserishow', function() {
-            idtrf = '{{$d->pesanan->TFProduksi->id}}';
+            idtrf = '';
             idpesanan = '{{$d->pesanan->id}}';
             var data = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
@@ -378,7 +378,7 @@
         var noseritable = $('#noseritable').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
@@ -398,8 +398,8 @@
             }, {
                 data: 'seri',
                 className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
+                orderable: true,
+                searchable: true
             }, {
                 data: 'tgl_uji',
                 className: 'nowrap-text align-center',
