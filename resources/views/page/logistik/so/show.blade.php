@@ -149,10 +149,9 @@
                                                 <thead>
                                                     <th>No</th>
                                                     <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Batas Pengiriman</th>
                                                     <th>Customer</th>
-                                                    <th>Alamat</th>
-                                                    <th>Telepon</th>
                                                     <th>Keterangan</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -231,6 +230,10 @@
                     className: 'nowrap-text'
                 },
                 {
+                    data: 'no_po',
+                    className: 'nowrap-text'
+                },
+                {
                     data: 'batas',
                     className: 'align-center nowrap-text',
                 },
@@ -239,14 +242,6 @@
                     className: 'align-center nowrap-text minimizechar'
                 },
                 {
-                    data: 'alamat',
-                    className: 'align-center nowrap-text minimizechar'
-                }, {
-                    data: 'telp',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
                     data: 'ket',
                     className: 'align-center nowrap-text',
                     orderable: false,

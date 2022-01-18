@@ -511,6 +511,7 @@
                             'success'
                         );
                         $("#editmodal").modal('hide');
+                        $('#riwayattable').DataTable().ajax.reload();
                         $('#showtable').DataTable().ajax.reload();
                     } else if (response['data'] == "error") {
                         swal.fire(
