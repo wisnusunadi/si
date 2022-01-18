@@ -341,7 +341,7 @@ class PpicController extends Controller
                         }
                     }
                 }
-                return $prd->id;
+                return $jumlah;
             })
             ->rawColumns(['tgl_delivery'])
             ->make(true);
@@ -1214,16 +1214,15 @@ class PpicController extends Controller
         // $s = DetailPesananProduk::where('gudang_barang_jadi_id', $gdg_id)->whereHas('DetailPesanan.Pesanan', function ($q) use ($po_id) {
         //     $q->where('id', $po_id);
         // })->get();
-        $s = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function ($q) use ($gdg_id) {
+        $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($gdg_id) {
             $q->where('gudang_barang_jadi_id', $gdg_id);
-        })->where('id', $po_id)->get();
+        })->where('pesanan_id', $po_id)->get();
 
-        foreach ($s as $z) {
-            foreach ($z->DetailPesanan as $i) {
-                foreach ($i->PenjualanProduk->Produk as $j) {
-                    if ($j->id == $produk_id) {
-                        $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
-                    }
+
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                if ($j->id == $produk_id) {
+                    $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
                 }
             }
         }
