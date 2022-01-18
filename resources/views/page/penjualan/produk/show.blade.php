@@ -546,6 +546,7 @@
         $(document).on('keyup change', '#harga', function() {
             var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             $(this).val(result);
+            console.log(result);
 
             if ($(this).val() != "") {
                 $('#msgharga').text("");
