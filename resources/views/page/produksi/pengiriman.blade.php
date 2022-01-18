@@ -265,12 +265,10 @@
         return parsedDate;
     }
     $(document).ready(function () {
-        let date = new Date().toLocaleString();
-        $('#tgl_perakitan').val(date);
+        let date = new Date();
+        $('#tgl_perakitan').val(date.toISOString().substr(0, 10));
         $('#tgl_perakitan').daterangepicker({
             singleDatePicker: true,
-            minYear: 1901,
-            maxYear: parseInt(moment().format('YYYY'), 10),
             locale: {
                 format: 'YYYY-MM-DD'
             }
@@ -466,9 +464,9 @@
                     });
                     if (seri.length > 0) {
                         let tgl = $('#tgl_perakitan').val();
-                                let today = new Date();
-                                let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                                let datetime = tgl + ' ' + time;
+                        let today = new Date();
+                        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                        let datetime = tgl + ' ' + time;
                         Swal.fire(
                             'Success!',
                             'Data Terkirim ke Gudang Barang Jadi',
