@@ -1818,8 +1818,10 @@ class ProduksiController extends Controller
 
     function kirimseri(Request $request)
     {
+        // dd($request->all());
         $header = new TFProduksi();
         $header->tgl_masuk = $request->tgl_transfer;
+        // return $header;
         $header->dari = 17;
         $header->jenis = 'masuk';
         $header->created_at = Carbon::now();
@@ -1857,7 +1859,7 @@ class ProduksiController extends Controller
                 $serit->created_by = $request->userid;
                 $serit->save();
             }
-            JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->whereIn('noseri', [$request->noseri[$key]])->update(['waktu_tf' => Carbon::now(), 'status' => 14, 'transfer_by' => $request->userid]);
+            JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->whereIn('noseri', [$request->noseri[$key]])->update(['waktu_tf' => $request->tgl_transfer, 'status' => 14, 'transfer_by' => $request->userid]);
         }
 
         // rubah logic
@@ -1884,7 +1886,7 @@ class ProduksiController extends Controller
             $total_rakit->save();
         }
 
-        // return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
+        return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
     }
 
     // riwayat rakit

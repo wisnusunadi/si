@@ -176,7 +176,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Tanggal Pengiriman</label>
-                                    <input type="text" class="form-control" id="tgl_perakitan" name="tgl_perakitan"
+                                    <input type="text" class="form-control" id="tgl_perakitan" name="waktu_tf"
                                         placeholder="Tanggal Perakitan">
                                 </div>
                             </div>
