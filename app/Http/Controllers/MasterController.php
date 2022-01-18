@@ -613,6 +613,7 @@ class MasterController extends Controller
         //     ]
         // );
         $harga_convert =  str_replace('.', "", $request->harga);
+
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
             'harga' => $harga_convert
@@ -751,7 +752,7 @@ class MasterController extends Controller
 
     public function update_penjualan_produk(Request $request, $id)
     {
-        $harga_convert =  str_replace(',', "", $request->harga);
+        $harga_convert =  str_replace(['.', ','], "", $request->harga);
         $PenjualanProduk = PenjualanProduk::find($id);
         $PenjualanProduk->nama = $request->nama_paket;
         $PenjualanProduk->harga = $harga_convert;
