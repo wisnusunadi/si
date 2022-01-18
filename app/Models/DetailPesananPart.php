@@ -22,4 +22,48 @@ class DetailPesananPart extends Model
     {
         return $this->hasOne(DetailLogistikPart::class);
     }
+    public function OutgoingPesananPart()
+    {
+        return $this->hasMany(OutgoingPesananPart::class, 'detail_pesanan_part_id');
+    }
+
+    public function getJumlahCekPart($status)
+    {
+        $id = $this->id;
+        $jumlah = 0;
+        $s = OutgoingPesananPart::where('detail_pesanan_part_id', $id)->get();
+        if ($s) {
+            foreach ($s as $i) {
+                if ($status == 'ok') {
+                    $jumlah = $jumlah + $i->jumlah_ok;
+                } else {
+                    $jumlah = $jumlah + $i->jumlah_nok;
+                }
+            }
+        } else {
+            $jumlah = 0;
+        }
+        return $jumlah;
+    }
+
+    public function getTanggalUji()
+    {
+        $id = $this->id;
+        $date = OutgoingPesananPart::selectRaw('MAX(tanggal_uji) as tgl_selesai, MIN(tanggal_uji) as tgl_mulai')->whereHas('DetailPesananPart', function ($q) use ($id) {
+            $q->where('detail_pesanan_part_id', $id);
+        })->first();
+        return $date;
+    }
+    public function getJumlahPesanan()
+    {
+        $id = $this->id;
+        $s = DetailPesanan::where('id', $id)->Has('DetailPesananProduk.NoSeriDetailPesanan')->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+            }
+        }
+        return $jumlah;
+    }
 }
