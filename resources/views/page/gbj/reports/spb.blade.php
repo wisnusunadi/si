@@ -66,7 +66,7 @@
             <tr>
                 <td>Ref / P.O</td>
                 <td>:</td>
-                <td><u>{{ $h->pesanan->so }}</u></td>
+                <td><u>{{ $h->pesanan->so }} / {{ $h->pesanan->no_po }}</u></td>
             </tr>
 
             <tr>
@@ -116,7 +116,7 @@
                             @if (isset($s->paket))
                             ({{ $s->paket->detailpesanan->penjualanproduk->nama }})
                             @else
-                            
+
                             @endif
 
                         </td>

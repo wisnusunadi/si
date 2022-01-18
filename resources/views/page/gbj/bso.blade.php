@@ -46,6 +46,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nomor SO</th>
+                                    <th>Nomor PO</th>
                                     <th>Customer</th>
                                     <th>Batas Transfer</th>
                                     <th>Status</th>
@@ -324,6 +325,7 @@
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 { data: 'so', name: 'so'},
+                {data: 'no_po'},
                 { data: 'nama_customer', name: 'nama_customer'},
                 { data: 'batas_out', name: 'batas_out'},
                 { data: 'status', name: 'status'},
