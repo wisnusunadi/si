@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="{{ asset('vendor/apexcharts/dist/apexcharts.css') }}">
 <script src="{{ asset('vendor/apexcharts/dist/apexcharts.min.js') }}"></script>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
-
+    
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -116,7 +116,7 @@
 </div>
 
 <!-- Modal Perakitan-->
-<div class="modal fade modalRakit" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modalRakit">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -182,6 +182,14 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Tanggal Perakitan</label>
+                                    <input type="text" class="form-control" id="tgl_perakitan" name="tgl_perakitan" placeholder="Tanggal Perakitan">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-12">
                                 <table class="table table-striped scan-produk" id="scan">
                                     <thead>
@@ -207,6 +215,9 @@
 @stop
 
 @section('adminlte_js')
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
+        </script>
 <script>
     $(document).ready(function () {
         cal_jadwal();
@@ -223,6 +234,8 @@
             var isChecked = $("#head-cb").prop('checked')
             $('.cb-child').prop('checked', isChecked)
         });
+        let date = new Date();
+        $('#tgl_perakitan').val(date.toISOString().substr(0, 10));
     })
 
     // Charts
@@ -359,11 +372,18 @@
         $('#table_produk_perakitan').css("width", "100%");
         var id = '';
         $(document).on('click', '.detailmodal', function () {
+            $('#tgl_perakitan').daterangepicker({
+            singleDatePicker: true,
+            minYear: 1901,
+            maxYear: parseInt(moment().format('YYYY'), 10),
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
             id = $(this).data('id');
             console.log(id);
             var jml = $(this).data('jml');
             console.log(jml);
-
             $.ajax({
                 url: "/api/prd/ongoing/h/" + id,
                 dataType: "json",
@@ -462,7 +482,11 @@
                                     text: res.msg,
                                 });
                             } else {
-                                // console.log('a');
+                                let tgl = $('#tgl_perakitan').val();
+                                let today = new Date();
+                                let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                                let datetime = tgl + ' ' + time;
+                                console.log('a');
                                 $.ajax({
                                     url: "/api/prd/rakit-seri",
                                     type: "post",
@@ -471,6 +495,7 @@
                                         noseri: arr,
                                         userid: $('#userid').val(),
                                         jadwal_id: id,
+                                        tgl_perakitan: datetime,
                                     },
                                     success: function (res) {
                                         console.log(res);

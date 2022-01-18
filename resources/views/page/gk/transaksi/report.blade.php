@@ -8,8 +8,9 @@
         <th rowspan="2"><b>Jumlah</b></th>
         <th rowspan="2"><b>Keterangan</b></th>
         <th rowspan="2"><b>Noseri</b></th>
-        <th rowspan="2"><b>Catatan</b></th>
-        <th rowspan="2"><b>Layout</b></th>
+        <th rowspan="2"><b>Kerusakan</b></th>
+        <th rowspan="2"><b>Perbaikan</b></th>
+        <th rowspan="2"><b>Posisi Barang</b></th>
         <th rowspan="2"><b>Tingkat Kerusakan</b></th>
     </tr>
     <tr>
@@ -29,6 +30,7 @@
             <td>{{ $d['Keterangan'] }}</td>
             <td>{{ $d['Noseri']['seri'] }}</td>
             <td>{{ $d['Noseri']['remark'] }}</td>
+            <td>{{ $d['Noseri']['perbaikan'] }}</td>
             <td>{{ $d['Noseri']['layout'] }}</td>
             <td>{{ $d['Noseri']['tingkat'] }}</td>
         </tr>

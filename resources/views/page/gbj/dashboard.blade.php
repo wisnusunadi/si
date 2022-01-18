@@ -143,6 +143,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nomor SO</th>
+                                                    <th>Nomor PO</th>
                                                     <th>Customer</th>
                                                     <th>Batas Transfer</th>
                                                     <th>Aksi</th>
@@ -158,6 +159,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nomor SO</th>
+                                                    <th>Nomor PO</th>
                                                     <th>Customer</th>
                                                     <th>Batas Transfer</th>
                                                     <th>Aksi</th>
@@ -173,6 +175,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nomor SO</th>
+                                                    <th>Nomor PO</th>
                                                     <th>Customer</th>
                                                     <th>Batas Transfer</th>
                                                     <th>Aksi</th>
@@ -883,6 +886,7 @@
                 columns: [
                     {data: 'DT_RowIndex'},
                     {data: 'so'},
+                    {data: 'no_po'},
                     {data: 'nama_customer'},
                     {data: 'tgl_batas'},
                     {data: 'action'},
@@ -900,6 +904,7 @@
                 columns: [
                     {data: 'DT_RowIndex'},
                     {data: 'so'},
+                    {data: 'no_po'},
                     {data: 'nama_customer'},
                     {data: 'tgl_batas'},
                     {data: 'action'},
@@ -917,6 +922,7 @@
                 columns: [
                     {data: 'DT_RowIndex'},
                     {data: 'so'},
+                    {data: 'no_po'},
                     {data: 'nama_customer'},
                     {data: 'tgl_batas'},
                     {data: 'action'},

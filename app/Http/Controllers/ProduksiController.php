@@ -450,6 +450,9 @@ class ProduksiController extends Controller
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
+            ->addColumn('po', function ($data) {
+                return $data->no_po;
+            })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
                 for ($i = 1; $i < count($name); $i++) {
@@ -1739,7 +1742,7 @@ class ProduksiController extends Controller
             foreach ($request->noseri as $key => $value) {
                 if (isset($value)) {
                     $seri = new JadwalRakitNoseri();
-                    $seri->date_in = Carbon::now();
+                    $seri->date_in = $request->tgl_perakitan;
                     $seri->jadwal_id = $request->jadwal_id;
                     $seri->noseri = strtoupper($value);
                     $seri->status = 11;
@@ -1816,7 +1819,7 @@ class ProduksiController extends Controller
     function kirimseri(Request $request)
     {
         $header = new TFProduksi();
-        $header->tgl_masuk = Carbon::now();
+        $header->tgl_masuk = $request->tgl_transfer;
         $header->dari = 17;
         $header->jenis = 'masuk';
         $header->created_at = Carbon::now();

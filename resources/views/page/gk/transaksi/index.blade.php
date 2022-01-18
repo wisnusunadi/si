@@ -231,12 +231,13 @@
                         <tr>
                             <th>No Seri</th>
                             <th>Kerusakan</th>
+                            <th>Perbaikan</th>
                             <th>Tingkat Kerusakan</th>
-                            <th>Layout</th>
+                            <th>Posisi Barang</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table>
+                </table> 
             </div>
         </div>
     </div>
@@ -396,8 +397,10 @@
                 columns: [
                     {data: 'noser'},
                     {data: 'rusak'},
+                    {data: 'repair'},
                     {data: 'tingkat'},
                     {data: 'layout'},
+                    
                 ],
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
