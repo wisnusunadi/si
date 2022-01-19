@@ -601,7 +601,7 @@
                                         </a>
                                     </span>
                                     <span class="float-right">
-                                        <button type="submit" class="btn btn-info" id="btntambahq">
+                                        <button type="submit" class="btn btn-info" id="btntambah" disabled="true">
                                             Simpan
                                         </button>
                                     </span>
@@ -667,12 +667,21 @@
         }
 
         function checkvalidasi() {
-            if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
-                $('#btntambah').removeAttr("disabled");
+            if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
+                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+                    $('#btntambah').removeAttr("disabled");
+                } else {
+                    $('#btntambah').attr("disabled", true);
+                }
             } else {
-                $('#btntambah').attr("disabled", true);
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "") {
+                    $('#btntambah').removeAttr("disabled");
+                } else {
+                    $('#btntambah').attr("disabled", true);
+                }
             }
         }
+
 
         function checkvalidasinonakn() {
             if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
@@ -840,6 +849,7 @@
 
         $('input[type="radio"][name="status"]').on('change', function() {
             if ($(this).val() != "") {
+                checkvalidasi();
                 if ($(this).val() == "sepakat") {
                     $("#dataproduk").removeClass("hide");
                     $("#batas_kontrak").attr('disabled', false);
@@ -861,7 +871,7 @@
                     $("#provinsi").attr('disabled', true);
                     $("#provinsi").empty().trigger('change')
                 }
-                checkvalidasi();
+
             } else {
                 $("#msgstatus").text("Status Harus dipilih");
                 $("#status").addClass('is-invalid');
