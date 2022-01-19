@@ -272,7 +272,7 @@ class PenjualanController extends Controller
                     } else if ($data->Pesanan->State->nama == "QC") {
                         $datas .= '<span class="yellow-text badge">';
                     } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                        $datas .= '<span class="blue-text badge">';
+                        $datas .= '<span class="red-text badge">';
                     } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                         $datas .= '<span class="blue-text badge">';
                     } else if ($data->Pesanan->State->nama == "Kirim") {
@@ -365,6 +365,8 @@ class PenjualanController extends Controller
                             $datas .= '<span class="orange-text badge">';
                         } else if ($data->Pesanan->State->nama == "QC") {
                             $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
                         } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                             $datas .= '<span class="blue-text badge">';
                         } else if ($data->Pesanan->State->nama == "Kirim") {
@@ -426,6 +428,8 @@ class PenjualanController extends Controller
                             $datas .= '<span class="orange-text badge">';
                         } else if ($data->Pesanan->State->nama == "QC") {
                             $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
                         } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                             $datas .= '<span class="blue-text badge">';
                         } else if ($data->Pesanan->State->nama == "Kirim") {
@@ -524,6 +528,8 @@ class PenjualanController extends Controller
                                 $datas .= '<span class="orange-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "QC") {
                                 $datas .= '<span class="yellow-text badge">';
+                            } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Belum Terkirim") {
+                                $datas .= '<span class="red-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Terkirim Sebagian") {
                                 $datas .= '<span class="blue-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Kirim") {
@@ -614,6 +620,8 @@ class PenjualanController extends Controller
                                 $datas .= '<span class="orange-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "QC") {
                                 $datas .= '<span class="yellow-text badge">';
+                            } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Belum Terkirim") {
+                                $datas .= '<span class="red-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Terkirim Sebagian") {
                                 $datas .= '<span class="blue-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Kirim") {
@@ -703,6 +711,8 @@ class PenjualanController extends Controller
                                 $datas .= '<span class="orange-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "QC") {
                                 $datas .= '<span class="yellow-text badge">';
+                            } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Belum Terkirim") {
+                                $datas .= '<span class="red-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Terkirim Sebagian") {
                                 $datas .= '<span class="blue-text badge">';
                             } else if ($data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->State->nama == "Kirim") {
@@ -781,6 +791,8 @@ class PenjualanController extends Controller
                             $datas .= '<span class="orange-text badge">';
                         } else if ($data->Pesanan->State->nama == "QC") {
                             $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
                         } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                             $datas .= '<span class="blue-text badge">';
                         } else if ($data->Pesanan->State->nama == "Kirim") {
@@ -973,6 +985,8 @@ class PenjualanController extends Controller
                         $datas .= '<span class="orange-text badge">';
                     } else if ($data->Pesanan->State->nama == "QC") {
                         $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                        $datas .= '<span class="red-text badge">';
                     } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                         $datas .= '<span class="blue-text badge">';
                     } else if ($data->Pesanan->State->nama == "Kirim") {
@@ -1300,6 +1314,8 @@ class PenjualanController extends Controller
                         $datas .= '<span class="orange-text badge">';
                     } else if ($data->Pesanan->State->nama == "QC") {
                         $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                        $datas .= '<span class="red-text badge">';
                     } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                         $datas .= '<span class="blue-text badge">';
                     } else if ($data->Pesanan->State->nama == "Kirim") {
@@ -1411,6 +1427,8 @@ class PenjualanController extends Controller
                         $datas .= '<span class="orange-text badge">';
                     } else if ($data->Pesanan->State->nama == "QC") {
                         $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                        $datas .= '<span class="red-text badge">';
                     } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                         $datas .= '<span class="blue-text badge">';
                     } else if ($data->Pesanan->State->nama == "Kirim") {
