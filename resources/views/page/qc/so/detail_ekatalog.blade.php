@@ -182,55 +182,6 @@
             <div class="col-7">
                 <div class="card">
                     <div class="card-body">
-                        <!-- <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <form id="filter">
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="jenis_penjualan">Status</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                                        <label class="form-check-label" for="status1">
-                                                            Selesai Diperiksa
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                                        <label class="form-check-label" for="status2">
-                                                            Sebagian Diperiksa
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                                        <label class="form-check-label" for="status3">
-                                                            Belum Diperiksa
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary">
-                                                            Cari
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </span>
-                            </div>
-                        </div> -->
 
                         <div class="row">
                             <div class="col-12">
@@ -250,30 +201,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                        <td>1</td>
-                                        <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
-                                        <td>2</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td><a type="button" class="noserishow" data-id="1"><i class="fas fa-search"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>ELITECH ULTRASONIC POCKET DOPPLER</td>
-                                        <td>5</td>
-                                        <td>2</td>
-                                        <td>0</td>
-                                        <td><a type="button" class="noserishow" data-id="2"><i class="fas fa-search"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>MTB 2 MTR</td>
-                                        <td>10</td>
-                                        <td>5</td>
-                                        <td>2</td>
-                                        <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
-                                    </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -289,17 +216,6 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
-                                    <!-- <button class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="cekbrg" disabled>
-                                <i class="fas fa-clipboard-check"></i> Cek Barang
-                            </button>
-                            <div class="dropdown-menu">
-                                <button class="dropdown-item" type="button"><i class="fas fa-check-circle ok"></i> Hasil OK</button>
-                                <button class="dropdown-item" type="button"><i class="fas fa-times-circle nok"></i> Hasil Tidak OK</button>
-                            </div> -->
-                                    <!-- <button class="btn btn-outline-info" id="cekbrg" disabled>
-                                <i class="fas fa-clipboard-check"></i> Cek Barang
-                            </button> -->
-
                                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
                                         <button class="btn btn-warning" id="cekbrg" disabled="true">
                                             <i class="fas fa-pencil-alt"></i> Cek Barang
@@ -329,39 +245,6 @@
                                             <th>Hasil</th>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input ok" type="checkbox" value="" id="" disabled />
-                                            </div>
-                                        </td>
-                                        <td>1</td>
-                                        <td>TD0015012021001</td>
-                                        <td><i class="fas fa-check-circle ok"></i></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input yet nosericheck" id="" type="checkbox" />
-                                            </div>
-                                        </td>
-                                        <td>2</td>
-                                        <td>TD0015012021002</td>
-                                        <td><i class="fas fa-question-circle warning"></i></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input not nosericheck" id="" type="checkbox" />
-                                            </div>
-                                        </td>
-                                        <td>3</td>
-                                        <td>TD0015012021003</td>
-                                        <td><i class="fas fa-times-circle nok"></i></td>
-                                        <td></td>
-                                    </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -392,18 +275,14 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        var role = "{{Auth::user()->divisi_id}}"
-        y = [];
-        y = <?php echo json_encode($detail_id); ?>;
-
         var showtable = $('#showtable').DataTable({
             destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/qc/so/detail/' + y,
                 'type': 'POST',
                 'datatype': 'JSON',
+                'url': '/api/qc/so/detail/' + '{{$id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -446,12 +325,12 @@
         });
 
         $('#showtable').on('click', '.noserishow', function() {
-            idtrf = '{{$d->pesanan->TFProduksi->id}}';
-            idpesanan = '{{$d->pesanan->id}}';
+            idpesanan = '{{$id}}';
             var data = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
             $('.nosericheck').prop('checked', false);
-            console.log(datacount);
+            $('#cekbrg').prop('disabled', true);
+            $('input[name ="check_all"]').prop('checked', false);
             if (datacount == 0) {
                 // $('.sericheckbox').addClass("hide");
                 $('#noseritable').DataTable().column(0).visible(false);
@@ -459,13 +338,10 @@
                 // $('.sericheckbox').removeClass("hide");
                 $('#noseritable').DataTable().column(0).visible(true);
             }
-            $('#cekbrg').prop('disabled', true);
-            $('input[name="check_all"]').prop('checked', false);
-            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
+            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + '{{$id}}').load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
-
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
@@ -479,9 +355,8 @@
                 url: action,
                 data: $('#form-pengujian-update').serialize(),
                 success: function(response) {
-                    if (response['data'] != "error") {
-                        // alert(response);
-                        // console.log(response);
+                    console.log(response);
+                    if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',
                             'Berhasil melakukan Penambahan Data Pengujian',
@@ -490,8 +365,8 @@
                         $("#editmodal").modal('hide');
                         $('#noseritable').DataTable().ajax.reload();
                         $('#showtable').DataTable().ajax.reload();
-                        location.reload();
 
+                        location.reload();
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
@@ -501,7 +376,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert($('#form-pengujian-update').serialize());
+                    alert($('#form-customer-update').serialize());
                 }
             });
             return false;
@@ -510,13 +385,13 @@
         var noseritable = $('#noseritable').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
                 'url': '/api/qc/so/seri/0/0',
                 'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}',
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
             },
             language: {
@@ -526,8 +401,7 @@
                 data: 'checkbox',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false,
-                visible: role == 23 ? true : false
+                searchable: false
             }, {
                 data: 'seri',
                 className: 'nowrap-text align-center',
@@ -546,8 +420,7 @@
             }]
         });
 
-        function listnoseri(seri_id, produk_id, tfgbj_id) {
-
+        function listnoseri(seri_id, produk_id, pesanan_id) {
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
@@ -555,10 +428,9 @@
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
-                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + tfgbj_id,
+                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + pesanan_id,
                     'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}',
-
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
                 },
                 language: {
@@ -574,9 +446,20 @@
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
+                }, {
+                    data: 'noseri_id',
+                    className: 'nowrap-text align-center hide',
+                    orderable: false,
+                    searchable: false,
+                }, {
+                    data: 'detail_pesanan_produk_id',
+                    className: 'nowrap-text align-center hide',
+                    orderable: false,
+                    searchable: false,
                 }, ]
             });
         }
+
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
             if ($('input[name="check_all"]:checked').length > 0) {
@@ -623,7 +506,7 @@
             console.log(idpesanan);
 
             $.ajax({
-                url: "/qc/so/edit/" + checkedAry + "/" + data + "/" + idtrf + "/" + idpesanan,
+                url: "/qc/so/edit/" + data + "/" + '{{$id}}',
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -632,10 +515,9 @@
 
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    listnoseri(checkedAry, data, idtrf);
+                    listnoseri(checkedAry, data, '{{$id}}');
                     max_date();
                     // $("#editform").attr("action", href);
-
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -672,45 +554,6 @@
             } else {
                 $('#btnsimpan').attr('disabled', true);
             }
-        });
-
-        // $(document).on('submit', '#edit_qc', function(e) {
-        //     e.preventDefault();
-        //     var action = $(this).attr('data-attr');
-        //     $.ajax({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         type: "POST",
-        //         url: action,
-        //         data: $('#edit_qc').serialize(),
-        //         success: function(response) {
-        //             console.log(response);
-        //             alert(response.data);
-        //         },
-        //         error: function(xhr, status, error) {
-        //             alert($('#edit_qc').serialize());
-        //         }
-        //     });
-        //     return false;
-        // });
-
-        $('#filter').submit(function() {
-            var values_spa = [];
-            $("input:checked").each(function() {
-                values_spa.push($(this).val());
-            });
-            if (values_spa != 0) {
-                var x = values_spa;
-
-            } else {
-                var x = ['semua'];
-            }
-
-            console.log(x);
-            //      $('#ekatalogtable').DataTable().ajax.url('/penjualan/penjualan/ekatalog/data/' + x).load();
-            return false;
-
         });
     })
 </script>

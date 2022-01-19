@@ -143,6 +143,23 @@ class Pesanan extends Model
         return $jumlah;
     }
 
+    public function getJumlahCekPart($status)
+    {
+        $id = $this->id;
+        $s = OutgoingPesananPart::whereHas('DetailPesananPart', function ($q) use ($id) {
+            $q->where('pesanan_id', $id);
+        })->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            if ($status == 'ok') {
+                $jumlah = $jumlah + $i->jumlah_ok;
+            } else if ($status == 'nok') {
+                $jumlah = $jumlah + $i->jumlah_nok;
+            }
+        }
+        return $jumlah;
+    }
+
     public function getJumlahKirimPart()
     {
         $id = $this->id;

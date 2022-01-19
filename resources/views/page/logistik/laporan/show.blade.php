@@ -225,6 +225,10 @@
                         className: 'nowrap-text align-center'
                     },
                     {
+                        data: 'no_po',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
                         data: 'sj'
                     },
                     {

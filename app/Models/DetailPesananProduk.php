@@ -28,7 +28,6 @@ class DetailPesananProduk extends Model
         return $this->hasMany(DetailLogistik::class, 'detail_pesanan_produk_id');
     }
 
-
     public function getJumlahPesanans()
     {
         $id = 1;
@@ -39,6 +38,7 @@ class DetailPesananProduk extends Model
         }
         return $jumlah;
     }
+
     public function getJumlahKirim()
     {
         $id = $this->id;
