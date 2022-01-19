@@ -50,4 +50,13 @@ class DetailPesanan extends Model
         }
         return $jumlah;
     }
+    public function getJumlahCek()
+    {
+        $id = $this->id;
+        $s = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('detail_pesanan_id', $id);
+        })->count();
+
+        return $s;
+    }
 }

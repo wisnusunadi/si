@@ -631,7 +631,19 @@ class LogistikController extends Controller
         $array_id = array();
         foreach ($datas as $d) {
             if ($value == 'semua') {
-                $array_id[] = $d->id;
+                if (count($d->DetailPesanan) > 0 && count($d->DetailPesananPart) <= 0) {
+                    if ($d->getJumlahKirim() == 0 || $d->getJumlahKirim() < $d->getJumlahPesanan()) {
+                        $array_id[] = $d->id;
+                    }
+                } else if (count($d->DetailPesanan) <= 0 && count($d->DetailPesananPart) > 0) {
+                    if ($d->getJumlahKirimPart() == 0 ||  $d->getJumlahKirimPart() < $d->getJumlahPesananPart()) {
+                        $array_id[] = $d->id;
+                    }
+                } else if (count($d->DetailPesanan) > 0 && count($d->DetailPesananPart) > 0) {
+                    if (($d->getJumlahKirim() == 0 || $d->getJumlahKirim() < $d->getJumlahPesanan()) || ($d->getJumlahKirimPart() == 0 || $d->getJumlahKirimPart() < $d->getJumlahPesananPart())) {
+                        $array_id[] = $d->id;
+                    }
+                }
             } else if ($x == ['sebagian_kirim', 'sudah_kirim']) {
                 if (count($d->DetailPesanan) > 0 && count($d->DetailPesananPart) <= 0) {
                     if (($d->getJumlahPesanan() > $d->getJumlahKirim() && $d->getJumlahKirim() >= 0) || ($d->getJumlahPesanan() == $d->getJumlahKirim())) {
@@ -735,7 +747,19 @@ class LogistikController extends Controller
                     }
                 }
             } else {
-                $array_id[] = $d->id;
+                if (count($d->DetailPesanan) > 0 && count($d->DetailPesananPart) <= 0) {
+                    if ($d->getJumlahKirim() == 0 || $d->getJumlahKirim() < $d->getJumlahPesanan()) {
+                        $array_id[] = $d->id;
+                    }
+                } else if (count($d->DetailPesanan) <= 0 && count($d->DetailPesananPart) > 0) {
+                    if ($d->getJumlahKirimPart() == 0 ||  $d->getJumlahKirimPart() < $d->getJumlahPesananPart()) {
+                        $array_id[] = $d->id;
+                    }
+                } else if (count($d->DetailPesanan) > 0 && count($d->DetailPesananPart) > 0) {
+                    if (($d->getJumlahKirim() == 0 || $d->getJumlahKirim() < $d->getJumlahPesanan()) || ($d->getJumlahKirimPart() == 0 || $d->getJumlahKirimPart() < $d->getJumlahPesananPart())) {
+                        $array_id[] = $d->id;
+                    }
+                }
             }
         }
 
@@ -892,6 +916,9 @@ class LogistikController extends Controller
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
+            })
+            ->addColumn('so', function ($data) {
+                return $data->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
@@ -3169,6 +3196,13 @@ class LogistikController extends Controller
                     return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
                 } else {
                     return $data->DetailPesananPart->Pesanan->so;
+                }
+            })
+            ->addColumn('so', function ($data) {
+                if (isset($data->DetailPesananProduk)) {
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
+                } else {
+                    return $data->DetailPesananPart->Pesanan->no_po;
                 }
             })
             ->addColumn('sj', function ($data) {

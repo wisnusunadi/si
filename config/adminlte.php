@@ -1461,7 +1461,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'COO',
-                    'icon' => 'fas fa-circle',
+                    'icon' => 'far fa-circle',
                     'url' => '/dc/coo/show',
                     'auth' => [2],
                 ],
