@@ -248,6 +248,51 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $(document).on('submit', '#form-ekspedisi-update', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('data-attr');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-ekspedisi-update').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan ubah data Ekspedisi',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#showtable').DataTable().ajax.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan ubah data Ekspedisi',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-ekspedisi-update').serialize());
+                }
+            });
+            return false;
+        });
+
+
+
+
+
+
+
+
+
+
+
+
 
         var showtable = $('#showtable').DataTable({
             destroy: true,
@@ -317,6 +362,16 @@
         }
 
 
+        function check_jalur() {
+            $('input[type="checkbox"][name="jalur[]"]').on('change', function() {
+                if ($(":checkbox:checked").length == 0) {
+                    $('#btnsimpan').attr("disabled", true);
+                } else {
+                    $('#btnsimpan').attr("disabled", false);
+                }
+            })
+        }
+
         function checkvalueprovinsi(k) {
             if (k != 35) {
                 $('#provinsi_select').removeClass('hide');
@@ -327,14 +382,16 @@
             }
         }
 
+
         $(document).on('click', '.editmodal', function(event) {
             var k = "provinsi";
             var g = $(this).data().value;
             var h = $(this).data().provinsi;
             var h_str = h.toString();
+            var g_str = g.toString();
             var jurusan_arr = new Array();
             var prov_arr = new Array();
-            jurusan_arr = g.split(",");
+            jurusan_arr = g_str.split(",");
             prov_arr = h_str.split(",");
 
             //console.log(prov_arr);
@@ -355,16 +412,12 @@
                     // $("#editform").attr("action", href);
                     checkvalue(jurusan_arr);
                     checkvalueprovinsi(prov_arr);
-                    provinsi();
+                    check_jalur();
 
-                    // $('.provinsi').val(['1']).trigger('change');
-                    // $(".provinsi").select2().select2('1');
-                    // provinsi_selected(prov_arr);
-                    // $('.provinsi').val([prov_arr]);
-                    // $('.provinsi').trigger('change');
-                    // $('.provinsi').select2().select2('val', prov_arr);
+                    for (i = 0; i < 10; i++) {
+                        provinsi(i);
+                    }
 
-                    // $('.provinsi').select2('val', prov_arr);
 
                 },
                 complete: function() {
@@ -495,10 +548,43 @@
             }
         })
 
-        function provinsi() {
-            $('.provinsi').select2({
+
+
+        function numberRows($t) {
+            var c = 0 - 2;
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.provinsi_id').attr('name', 'provinsi_id[' + j + ']');
+                $(el).find('.provinsi_id').attr('id', j);
+                provinsi(j);
+            });
+        }
+        $(document).on('click', '#addrow', function() {
+            $('#createtable tr:last').after(`<tr>
+            <td></td>
+            <td>
+                <div class="form-group">
+                    <select class="select-info form-control  provinsi_id" name="provinsi_id[]" id="0" style="width:100%" >
+                    </select>
+                </div>
+            </td>
+            <td>
+                <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+            </td>
+            </tr>`);
+            numberRows($("#createtable"));
+        });
+
+        $(document).on('click', '#createtable #removerow', function(e) {
+            $(this).closest('tr').remove();
+            numberRows($("#createtable"));
+        });
+
+        function provinsi(id) {
+            $('#' + id).select2({
                 placeholder: "Pilih Provinsi",
-                multiple: true,
+
                 ajax: {
                     minimumResultsForSearch: 20,
                     dataType: 'json',
@@ -525,7 +611,6 @@
             });
             $('.provinsi').val('1').trigger("change");
         }
-
         $('#filter').submit(function() {
             var jalur = [];
             var jurusan = [];
