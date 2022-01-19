@@ -190,7 +190,7 @@ class MasterController extends Controller
 
                     $return .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="' . $data->id . '" data-value="';
                     foreach ($data->jalurekspedisi as $s) {
-                        $x[] = $s->nama;
+                        $x[] = $s->id;
                     }
                     $return .= implode(',', $x);
                     $return .= '" data-provinsi="';
@@ -222,9 +222,9 @@ class MasterController extends Controller
         $divisi = $divisi_id;
         $x = explode(',', $value);
         if ($value == 0 || $value == 'kosong') {
-            $data = Customer::orderby('nama', 'ASC')->get();
+            $data = Customer::WhereNotIN('id', ['484'])->orderby('nama', 'ASC')->get();
         } else {
-            $data = Customer::whereHas('Provinsi', function ($q) use ($x) {
+            $data = Customer::WhereNotIN('id', ['484'])->whereHas('Provinsi', function ($q) use ($x) {
                 $q->whereIN('status', $x);
             })->get();
         }
@@ -769,6 +769,37 @@ class MasterController extends Controller
             return response()->json(['data' => 'error']);
         }
     }
+    public function update_ekspedisi(Request $request, $id)
+    {
+        $Ekspedisi = Ekspedisi::find($id);
+        $Ekspedisi->nama = $request->nama_ekspedisi;
+        $Ekspedisi->alamat = $request->alamat;
+        $Ekspedisi->email = $request->email;
+        $Ekspedisi->telp = $request->telepon;
+        $Ekspedisi->ket = $request->keterangan;
+        $Ekspedisi->save();
+
+
+        $provinsi_array = [];
+        for ($i = 0; $i < count($request->provinsi_id); $i++) {
+            $provinsi_array[] = $request->provinsi_id[$i];
+        }
+        $p = $Ekspedisi->Provinsi()->sync($provinsi_array);
+
+        if ($p) {
+            $jalur_array = [];
+            for ($i = 0; $i < count($request->jalur); $i++) {
+                $jalur_array[] = $request->jalur[$i];
+            }
+            $q = $Ekspedisi->JalurEkspedisi()->sync($jalur_array);
+        }
+
+        if ($q) {
+            return response()->json(['data' => 'success']);
+        } else if (!$q) {
+            return response()->json(['data' => 'error']);
+        }
+    }
     //Other
 
     //Check
@@ -835,6 +866,7 @@ class MasterController extends Controller
     public function select_customer(Request $request)
     {
         $data = Customer::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->WhereNotIN('id', ['484'])
             ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }

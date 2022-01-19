@@ -1,6 +1,6 @@
 @foreach($ekspedisi as $e)
-<form action="" method="post" data-attr="{{route('logistik.ekspedisi.update', ['id' => $e->id])}}" data-id="{{$e->id}}">
-    {{ csrf_field() }}
+<form action="" method="post" data-attr="{{route('logistik.ekspedisi.update', ['id' => $e->id])}}" data-id="{{$e->id}}" id="form-ekspedisi-update">
+    @method('PUT')
     <div class="row d-flex justify-content-center">
         <div class="col-11">
             <h5>Info Ekspedisi</h5>
@@ -62,19 +62,19 @@
                                 <label for="" class="col-form-label col-4" style="text-align: right">Jalur</label>
                                 <div class="col-8 col-form-label">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input jalur" type="checkbox" id="jalur1" value="darat" name="jalur">
+                                        <input class="form-check-input jalur" type="checkbox" id="jalur1" value="1" name="jalur[]">
                                         <label class="form-check-label" for="jalur1">Darat</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input jalur" type="checkbox" id="jalur2" value="laut" name="jalur">
+                                        <input class="form-check-input jalur" type="checkbox" id="jalur2" value="2" name="jalur[]">
                                         <label class="form-check-label" for="jalur2">Laut</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input jalur" type="checkbox" id="jalur3" value="udara" name="jalur">
+                                        <input class="form-check-input jalur" type="checkbox" id="jalur3" value="3" name="jalur[]">
                                         <label class="form-check-label" for="jalur3">Udara</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input jalur" type="checkbox" id="jalur4" value="lain" name="jalur">
+                                        <input class="form-check-input jalur" type="checkbox" id="jalur4" value="4" name="jalur[]">
                                         <label class="form-check-label" for="jalur4">Lain</label>
                                     </div>
                                     <div class="invalid-feedback" id="msgjalur">
@@ -132,12 +132,64 @@
                             <div class="form-group row">
                                 <label for="keterangan" class="col-4 col-form-label" style="text-align:right;">Keterangan</label>
                                 <div class="col-5">
-                                    <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
+                                    <textarea class="form-control" name="keterangan" id="keterangan">{{$e->ket}}</textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @endforeach
+
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-11">
+                        <h6>Jurusan</h6>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table" style="text-align: center;" id="createtable">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="5">
+                                                            <button type="button" class="btn btn-primary float-right" id="addrow">
+                                                                <i class="fas fa-plus"></i>
+                                                                Tambah
+                                                            </button>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th width="50%">Nama Provinsi</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($e->provinsi as $s)
+                                                    <tr>
+                                                        <td>{{$loop->iteration}}</td>
+                                                        <td>
+                                                            <div class="form-group row">
+                                                                <div class="col-12">
+                                                                    <select class="select-info select2 form-control " name="provinsi_id[]" id="{{$loop->iteration-1}}" style="width:100%">
+                                                                        <option value="{{$s->id}}" selected>{{$s->nama}}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer"><span class="float-right filter"><button type="submit" class="btn btn-warning" id="btnsimpan">
                             Simpan
