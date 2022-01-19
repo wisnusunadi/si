@@ -49,7 +49,8 @@ class GudangBarangJadi extends Model
             ->withPivot('jumlah');
     }
 
-    function TrxProduk() {
+    function TrxProduk()
+    {
         return $this->hasOne(TFProduksiDetail::class, 'gdg_brg_jadi_id');
     }
 
@@ -66,21 +67,18 @@ class GudangBarangJadi extends Model
             // })->get();
             $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                 $q->where('gudang_barang_jadi_id', $id);
-            })->whereHas('pesanan', function($qq) {
-                $qq->whereNotIn('log_id', ['10']);
-            })
-            ->whereHas('Pesanan.Ekatalog', function ($q) use ($status) {
+            })->whereHas('Pesanan', function ($q) {
+                $q->whereNotIn('log_id', ['7', '10']);
+            })->whereHas('Pesanan.Ekatalog', function ($q) use ($status) {
                 $q->where('status', $status);
             })->get();
-            // foreach ($s as $z) {
-                foreach ($s as $i) {
-                    foreach ($i->PenjualanProduk->Produk as $j) {
-                        if ($j->id == $produk_id) {
-                            $jumlah =  $jumlah + ($i->jumlah * $j->pivot->jumlah);
-                        }
+            foreach ($s as $i) {
+                foreach ($i->PenjualanProduk->Produk as $j) {
+                    if ($j->id == $produk_id) {
+                        $jumlah =  $jumlah + ($i->jumlah * $j->pivot->jumlah);
                     }
                 }
-            // }
+            }
         } else if ($jenis == "spa") {
             $id = $this->id;
             $produk_id = $this->produk_id;
@@ -88,24 +86,19 @@ class GudangBarangJadi extends Model
             //     $q->whereNotIn('log_id', ['10']);
             // })->has('DetailPesanan.Pesanan.Spa')->get();
 
-            // $s = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function ($q) use ($id) {
-            //     $q->where('gudang_barang_jadi_id', $id);
-            // })->whereNotIn('log_id', ['10'])->has('Spa')->get();
             $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                 $q->where('gudang_barang_jadi_id', $id);
-            })->whereHas('pesanan', function($qq) {
-                $qq->whereNotIn('log_id', ['10']);
+            })->whereHas('Pesanan', function ($q) {
+                $q->whereNotIn('log_id', ['10']);
             })->has('Pesanan.Spa')->get();
             $jumlah = 0;
-            // foreach ($s as $z) {
-                foreach ($s as $i) {
-                    foreach ($i->PenjualanProduk->Produk as $j) {
-                        if ($j->id == $produk_id) {
-                            $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
-                        }
+            foreach ($s as $i) {
+                foreach ($i->PenjualanProduk->Produk as $j) {
+                    if ($j->id == $produk_id) {
+                        $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
                     }
                 }
-            // }
+            }
         } else if ($jenis == "spb") {
             $id = $this->id;
             $produk_id = $this->produk_id;
@@ -115,18 +108,38 @@ class GudangBarangJadi extends Model
 
             $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                 $q->where('gudang_barang_jadi_id', $id);
-            })->whereHas('pesanan', function($qq) {
+            })->whereHas('Pesanan', function ($q) {
+                $q->whereNotIn('log_id', ['10']);
+            })->has('Pesanan.Spb')->get();
+            $jumlah = 0;
+            foreach ($s as $i) {
+                foreach ($i->PenjualanProduk->Produk as $j) {
+                    if ($j->id == $produk_id) {
+                        $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+                    }
+                }
+            }
+        } else if ($jenis == "spb") {
+            $id = $this->id;
+            $produk_id = $this->produk_id;
+            // $s = DetailPesananProduk::where('gudang_barang_jadi_id', $id)->whereHas('DetailPesanan.Pesanan', function ($q) {
+            //     $q->whereNotIn('log_id', ['10']);
+            // })->has('DetailPesanan.Pesanan.Spa')->get();
+
+            $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                $q->where('gudang_barang_jadi_id', $id);
+            })->whereHas('pesanan', function ($qq) {
                 $qq->whereNotIn('log_id', ['10']);
             })->has('Pesanan.Spb')->get();
             $jumlah = 0;
             // foreach ($s as $z) {
-                foreach ($s as $i) {
-                    foreach ($i->PenjualanProduk->Produk as $j) {
-                        if ($j->id == $produk_id) {
-                            $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
-                        }
+            foreach ($s as $i) {
+                foreach ($i->PenjualanProduk->Produk as $j) {
+                    if ($j->id == $produk_id) {
+                        $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
                     }
                 }
+            }
             // }
         }
         return $jumlah;
@@ -140,7 +153,7 @@ class GudangBarangJadi extends Model
             $jumlah = NoseriTGbj::where('jenis', 'keluar')->whereHas('detail', function ($q) use ($id) {
                 $q->where('gdg_brg_jadi_id', $id);
             })->whereHas('detail.header.pesanan', function ($q) {
-                $q->whereNotIn('log_id', ['10']);
+                $q->whereNotIn('log_id', ['7', '10']);
             })->whereHas('detail.header.pesanan.Ekatalog', function ($q) use ($status) {
                 $q->where('status', $status);
             })->count();
@@ -150,7 +163,7 @@ class GudangBarangJadi extends Model
             })->whereHas('detail.header.pesanan', function ($q) {
                 $q->whereNotIn('log_id', ['10']);
             })->has('detail.header.pesanan.Spa')->count();
-        }  else if ($jenis == "spb") {
+        } else if ($jenis == "spb") {
             $jumlah = NoseriTGbj::where('jenis', 'keluar')->whereHas('detail', function ($q) use ($id) {
                 $q->where('gdg_brg_jadi_id', $id);
             })->whereHas('detail.header.pesanan', function ($q) {

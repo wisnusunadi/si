@@ -1,4 +1,4 @@
-<form method="POST" action="/api/qc/so/create/{{$id}}/{{$tfgbj_id}}/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
+<form method="POST" action="/api/qc/so/create/{{$jenis}}/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
     @method('PUT')
     @csrf
     <div class="row d-flex justify-content-center">
@@ -29,6 +29,7 @@
                                 <input type="date" class="form-control  col-form-label" name="tanggal_uji" id="tanggal_uji">
                             </div>
                         </div>
+                        @if($jenis == "produk")
                         <div class="form-group row">
                             <label for="" class="col-form-label col-5" style="text-align: right">Hasil Cek</label>
                             <div class="col-5 col-form-label">
@@ -45,11 +46,13 @@
                         <h5>No Seri </h5>
                         <div class="form-group row">
                             <div class="table-responsive">
-                                <table class="table table-striped align-center" id="listnoseri">
+                                <table class="table table-striped align-center" id="listnoseri" style="width:100%;">
                                     <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>No Seri</th>
+                                            <th>No Seri ID</th>
+                                            <th>No Detail Produk ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -65,6 +68,20 @@
                                 </table>
                             </div>
                         </div>
+                        @else
+                        <div class="form-group row">
+                            <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
+                            <div class="col-3">
+                                <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
+                            <div class="col-3">
+                                <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-footer">

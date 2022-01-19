@@ -271,6 +271,8 @@ class PenjualanController extends Controller
                         $datas .= '<span class="orange-text badge">';
                     } else if ($data->Pesanan->State->nama == "QC") {
                         $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                        $datas .= '<span class="blue-text badge">';
                     } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                         $datas .= '<span class="blue-text badge">';
                     } else if ($data->Pesanan->State->nama == "Kirim") {
@@ -285,9 +287,11 @@ class PenjualanController extends Controller
             ->addColumn('button', function ($data) {
                 $name =  $data->getTable();
                 if ($name == 'ekatalog') {
-                    return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                    if ($data->status != 'draft') {
+                        return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
                           <i class="fas fa-search"></i>
                     </a>';
+                    }
                 } else if ($name == 'spa') {
                     return  '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
                           <i class="fas fa-search"></i>
@@ -1186,7 +1190,8 @@ class PenjualanController extends Controller
             ->addColumn('button', function ($data) use ($divisi_id) {
 
                 $return = "";
-                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                if ($data->status != 'draft') {
+                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
                 <button class="dropdown-item" type="button">
@@ -1194,6 +1199,10 @@ class PenjualanController extends Controller
                       Details
                     </button>
                 </a>';
+                } else {
+                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                }
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan" || $data->Pesanan->State->nama == "PO" || empty($data->Pesanan->log_id)) {
@@ -1537,9 +1546,14 @@ class PenjualanController extends Controller
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
             $x = $pesanan->id;
+            if ($request->namadistributor == 'belum') {
+                $c_id = '484';
+            } else {
+                $c_id = $request->customer_id;
+            }
 
             $Ekatalog = Ekatalog::create([
-                'customer_id' => $request->customer_id,
+                'customer_id' => $c_id,
                 'provinsi_id' => $request->provinsi,
                 'pesanan_id' => $x,
                 'no_paket' => 'AK1-' . $request->no_paket,
@@ -1900,13 +1914,19 @@ class PenjualanController extends Controller
     public function update_ekatalog(Request $request, $id)
     {
         echo json_encode($request->all());
+        if ($request->namadistributor == 'belum') {
+            $c_id = '484';
+        } else {
+            $c_id = $request->customer_id;
+        }
         $ekatalog = Ekatalog::find($id);
         $poid = $ekatalog->pesanan_id;
-        $ekatalog->customer_id = $request->customer_id;
+        $ekatalog->customer_id = $c_id;
         $ekatalog->provinsi_id = $request->provinsi;
         $ekatalog->deskripsi = $request->deskripsi;
         $ekatalog->instansi = $request->instansi;
         $ekatalog->alamat = $request->alamatinstansi;
+        $ekatalog->tgl_kontrak = $request->batas_kontrak;
         $ekatalog->satuan = $request->satuan_kerja;
         $ekatalog->status = $request->status_akn;
         $ekatalog->ket = $request->keterangan;
@@ -1933,7 +1953,7 @@ class PenjualanController extends Controller
                 }
             }
             if ($bool == true) {
-                if ($request->status != "draft") {
+                if ($request->status_akn != "draft") {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $c = DetailPesanan::create([
                             'pesanan_id' => $poid,

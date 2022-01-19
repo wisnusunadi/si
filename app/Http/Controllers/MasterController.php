@@ -222,9 +222,9 @@ class MasterController extends Controller
         $divisi = $divisi_id;
         $x = explode(',', $value);
         if ($value == 0 || $value == 'kosong') {
-            $data = Customer::orderby('nama', 'ASC')->get();
+            $data = Customer::WhereNotIN('id', ['484'])->orderby('nama', 'ASC')->get();
         } else {
-            $data = Customer::whereHas('Provinsi', function ($q) use ($x) {
+            $data = Customer::WhereNotIN('id', ['484'])->whereHas('Provinsi', function ($q) use ($x) {
                 $q->whereIN('status', $x);
             })->get();
         }
@@ -835,6 +835,7 @@ class MasterController extends Controller
     public function select_customer(Request $request)
     {
         $data = Customer::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->WhereNotIN('id', ['484'])
             ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }

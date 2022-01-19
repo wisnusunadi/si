@@ -18,4 +18,8 @@ class DetailLogistikPart extends Model
     {
         return $this->belongsTo(DetailPesananPart::class, 'detail_pesanan_part_id');
     }
+    public function OutgoingPesananPart()
+    {
+        return $this->hasMany(OutgoingPesananPart::class, 'detail_logistik_part_id');
+    }
 }

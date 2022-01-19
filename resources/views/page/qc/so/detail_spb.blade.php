@@ -218,23 +218,43 @@
                                 </span>
                             </div>
                         </div>
-
-                        <div class="row">
+                        <div class="row hide" id="produk_detail">
                             <div class="col-12">
                                 <div class="table-responsive">
                                     <table class="table" style="text-align:center; width:100%" id="noseritable">
                                         <thead>
-                                            <th>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
-                                                    <label class="form-check-label" for="check_all">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th>No Seri</th>
-                                            <th>Tanggal Uji</th>
-                                            <th>Hasil</th>
-
+                                            <tr>
+                                                <th>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
+                                                        <label class="form-check-label" for="check_all">
+                                                        </label>
+                                                    </div>
+                                                </th>
+                                                <th>No Seri</th>
+                                                <th>Tanggal Uji</th>
+                                                <th>Hasil</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row hide" id="part_detail">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table" style="text-align:center; width:100%" id="parttable">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">Tanggal Uji</th>
+                                                <th colspan="2">Jumlah</th>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="fas fa-check-circle" style="color:green;"></i></th>
+                                                <th><i class="fas fa-times-circle" style="color:red;"></i></th>
+                                            </tr>
                                         </thead>
                                         <tbody>
                                         </tbody>
@@ -267,10 +287,6 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        y = [];
-        y = <?php echo json_encode($detail_id); ?>;
-        var getjumlah = "";
-
         var showtable = $('#showtable').DataTable({
             destroy: true,
             processing: true,
@@ -278,7 +294,7 @@
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
-                'url': '/api/qc/so/detail/' + y,
+                'url': '/api/qc/so/detail/' + '{{$id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -319,23 +335,40 @@
             }]
 
         });
+        var datajenis = "";
+        var dataid = "";
 
         $('#showtable').on('click', '.noserishow', function() {
-            idtrf = '{{$d->pesanan->TFProduksi->id}}';
-            idpesanan = '{{$d->pesanan->id}}';
-            var data = $(this).attr('data-id');
+            idpesanan = '{{$id}}';
+            dataid = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
-            if (datacount == 0) {
-                // $('.sericheckbox').addClass("hide");
-                $('#noseritable').DataTable().column(0).visible(false);
-            } else {
-                // $('.sericheckbox').removeClass("hide");
-                $('#noseritable').DataTable().column(0).visible(true);
-            }
+            datajenis = $(this).attr('data-jenis');
             $('.nosericheck').prop('checked', false);
             $('#cekbrg').prop('disabled', true);
             $('input[name ="check_all"]').prop('checked', false);
-            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + idtrf).load();
+            if (datajenis == "produk") {
+                $('#produk_detail').removeClass('hide');
+                $('#part_detail').addClass('hide');
+                $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + dataid + '/' + '{{$id}}').load();
+                if (datacount == 0) {
+                    // $('.sericheckbox').addClass("hide");
+                    $('#noseritable').DataTable().column(0).visible(false);
+                } else {
+                    // $('.sericheckbox').removeClass("hide");
+                    $('#noseritable').DataTable().column(0).visible(true);
+                }
+
+            } else {
+                $('#produk_detail').addClass('hide');
+                $('#part_detail').removeClass('hide');
+                listcekpart(dataid);
+                if (datacount == 0) {
+                    $('#cekbrg').prop('disabled', true);
+                } else {
+                    $('#cekbrg').prop('disabled', false);
+                }
+            }
+
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
@@ -352,18 +385,23 @@
                 url: action,
                 data: $('#form-pengujian-update').serialize(),
                 success: function(response) {
+                    console.log(response);
                     if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',
-                            'Berhasil melakukan edit data',
+                            'Berhasil melakukan Penambahan Data Pengujian',
                             'success'
                         );
                         $("#editmodal").modal('hide');
+                        $('#noseritable').DataTable().ajax.reload();
+                        $('#parttable').DataTable().ajax.reload();
+                        $('#showtable').DataTable().ajax.reload();
+
                         location.reload();
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
-                            'Gagal melakukan edit data',
+                            'Gagal melakukan Penambahan Data Pengujian',
                             'error'
                         );
                     }
@@ -378,9 +416,9 @@
         var noseritable = $('#noseritable').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
-                'type': 'POST',
+                'type': 'post',
                 'datatype': 'JSON',
                 'url': '/api/qc/so/seri/0/0',
                 'headers': {
@@ -413,16 +451,15 @@
             }]
         });
 
-        function listnoseri(seri_id, produk_id, tfgbj_id) {
-
+        function listnoseri(seri_id, produk_id, pesanan_id) {
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'type': 'POST',
+                    'type': 'post',
                     'datatype': 'JSON',
-                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + tfgbj_id,
+                    'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + pesanan_id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -438,11 +475,57 @@
                 }, {
                     data: 'seri',
                     className: 'nowrap-text align-center',
-                    orderable: true,
-                    searchable: true
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'noseri_id',
+                    className: 'nowrap-text align-center hide',
+                    orderable: false,
+                    searchable: false,
+                }, {
+                    data: 'detail_pesanan_produk_id',
+                    className: 'nowrap-text align-center hide',
+                    orderable: false,
+                    searchable: false,
                 }, ]
             });
         }
+
+        function listcekpart(part_id) {
+            $('#parttable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: false,
+                ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'url': '/api/qc/so/part/' + part_id,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'tanggal_uji',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah_ok',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false,
+                }, {
+                    data: 'jumlah_nok',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false,
+                }, ]
+            });
+        }
+
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
             if ($('input[name="check_all"]:checked').length > 0) {
@@ -457,7 +540,7 @@
             }
         });
 
-        $('#noseritable ').on('click', '.nosericheck', function() {
+        $('#noseritable').on('click', '.nosericheck', function() {
             $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
@@ -470,7 +553,6 @@
             }
         });
 
-
         function max_date() {
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
@@ -482,15 +564,24 @@
         }
 
         $(document).on('click', '.editmodal', function(event) {
+            var href = "";
             event.preventDefault();
-            data = $(".nosericheck").data().value;
+            if (datajenis == "produk") {
+                data = $(".nosericheck").data().value;
+            } else {
+                data = dataid
+            }
             console.log(checkedAry);
             console.log(data);
-            console.log(idtrf);
             console.log(idpesanan);
+            if (datajenis == "produk") {
+                href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
+            } else {
+                href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
+            }
 
             $.ajax({
-                url: "/qc/so/edit/" + checkedAry + "/" + data + "/" + idtrf + "/" + idpesanan,
+                url: href,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -499,7 +590,9 @@
 
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    listnoseri(checkedAry, data, idtrf);
+                    if (datajenis == "produk") {
+                        listnoseri(checkedAry, data, '{{$id}}');
+                    }
                     max_date();
                     // $("#editform").attr("action", href);
                 },
@@ -527,40 +620,125 @@
                 $('#btnsimpan').attr('disabled', true);
             }
         });
-        $(document).on('change', 'input[type="date"][name="tanggal_uji"]', function(event) {
+        $(document).on('keyup change', 'input[type="date"][name="tanggal_uji"]', function(event) {
             if ($(this).val() != "") {
-
-                if ($("input[name=cek][type='radio']").prop("checked")) {
-                    $('#btnsimpan').removeAttr('disabled');
+                if (datajenis == "produk") {
+                    if ($("input[name='cek'][type='radio']").prop("checked")) {
+                        $('#btnsimpan').removeAttr('disabled');
+                    } else {
+                        $('#btnsimpan').attr('disabled', true);
+                    }
                 } else {
-                    $('#btnsimpan').attr('disabled', true);
+                    if ($("input[name='jumlah_ok']").val() != "" && $("input[name='jumlah_nok']").val() != "") {
+                        $('#btnsimpan').removeAttr('disabled');
+                    } else {
+                        $('#btnsimpan').attr('disabled', true);
+                    }
                 }
             } else {
                 $('#btnsimpan').attr('disabled', true);
             }
         });
 
-        // $(document).on('submit', '#edit_qc', function(e) {
-        //     e.preventDefault();
-        //     var action = $(this).attr('data-attr');
-        //     $.ajax({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         type: "POST",
-        //         url: action,
-        //         data: $('#edit_qc').serialize(),
-        //         success: function(response) {
-        //             console.log(response);
-        //             alert(response.data);
-        //         },
-        //         error: function(xhr, status, error) {
-        //             alert($('#edit_qc').serialize());
-        //         }
-        //     });
-        //     return false;
-        // });
+        $(document).on('keyup change', 'input[type="number"][name="jumlah_ok"]', function(event) {
+            if (datajenis == "part") {
+                var valok = $(this).val();
+                if ($(this).val() !== "") {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/qc/so/cek/part/' + dataid,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (valok > data) {
+                                $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
+                                $('#btnsimpan').attr('disabled', true);
+                            } else {
+                                $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                if ($("input[type='number'][name='jumlah_nok']").val() != "") {
+                                    var jumlahnok = $("input[type='number'][name='jumlah_nok']").val();
+                                    var jumlahcurr = jumlahnok + valok;
+                                    if (jumlahcurr > data) {
+                                        $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
+                                        $('#btnsimpan').attr('disabled', true);
+                                    } else {
+                                        if ($("input[name='tanggal_uji']").val() != "") {
+                                            $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                            $('#btnsimpan').removeAttr('disabled');
+                                        } else {
+                                            $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $('#btnsimpan').attr('disabled', true);
+                                        }
+                                    }
+                                } else {
+                                    $("input[type='number'][name='jumlah_nok']").val("0");
+                                    if ($("input[name='tanggal_uji']").val() != "") {
+                                        $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                        $('#btnsimpan').removeAttr('disabled');
+                                    } else {
+                                        $('#btnsimpan').attr('disabled', true);
+                                    }
+                                }
+                            }
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            }
+        });
 
+        $(document).on('keyup change', 'input[type="number"][name="jumlah_nok"]', function(event) {
+            if (datajenis == "part") {
+                var valnok = $(this).val();
+                if ($(this).val() !== "") {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/qc/so/cek/part/' + dataid,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (valnok > data) {
+                                $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
+                                $('#btnsimpan').attr('disabled', true);
+                            } else {
+                                $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                if ($("input[type='number'][name='jumlah_ok']").val() != "") {
+                                    var jumlahok = $("input[type='number'][name='jumlah_ok']").val();
+                                    var jumlahcurr = jumlahok + valnok;
+                                    if (jumlahcurr > data) {
+                                        $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
+                                        $('#btnsimpan').attr('disabled', true);
+                                    } else {
+                                        if ($("input[name='tanggal_uji']").val() != "") {
+                                            $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $('#btnsimpan').removeAttr('disabled');
+                                        } else {
+                                            $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $('#btnsimpan').attr('disabled', true);
+                                        }
+                                    }
+                                } else {
+                                    $("input[type='number'][name='jumlah_ok']").val("0");
+                                    if ($("input[name='tanggal_uji']").val() != "") {
+                                        $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                        $('#btnsimpan').removeAttr('disabled');
+                                    } else {
+                                        $('#btnsimpan').attr('disabled', true);
+                                    }
+                                }
+                            }
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
+                } else {
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            }
+        });
     })
 </script>
 @stop

@@ -122,14 +122,6 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="sudah_kirim" id="defaultCheck2" />
-                                                                <label class="form-check-label" for="defaultCheck2">
-                                                                    Sudah Dikirim
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
                                                             <span class="float-right">
                                                                 <button class="btn btn-primary">
                                                                     Cari
@@ -172,6 +164,7 @@
                                                     <tr>
                                                         <th rowspan="2">No</th>
                                                         <th rowspan="2">No SO</th>
+                                                        <th rowspan="2">No PO</th>
                                                         <th rowspan="2">Tanggal Delivery</th>
                                                         <th colspan="2">Pengiriman</th>
                                                         <th rowspan="2">Customer</th>
@@ -284,6 +277,10 @@
                 },
                 {
                     data: 'so',
+                    className: 'align-center nowrap-text'
+                },
+                {
+                    data: 'no_po',
                     className: 'align-center nowrap-text'
                 },
                 {

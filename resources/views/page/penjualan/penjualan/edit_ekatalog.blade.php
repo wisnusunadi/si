@@ -100,7 +100,11 @@
                                             </div>
                                             <div id="instansi" class="margin"><b>{{$e->instansi}}</b></div>
                                             <div id="satuan_kerja" class="margin"><b>{{$e->satuan}}</b></div>
-                                            <div id="alamat" class="margin"><b>{{$e->Provinsi->nama}}</b></div>
+                                            <div id="alamat" class="margin"><b>
+                                                    @if(!empty($e->Provinsi))
+                                                    {{$e->Provinsi->nama}}
+                                                    @endif
+                                                </b></div>
                                         </div>
                                         <div class="margin-top">
                                             <div class="margin">
@@ -108,7 +112,14 @@
                                             </div>
                                             <div id="nama_distributor" class="margin"><b>{{$e->customer->nama}}</b></div>
                                             <div id="alamat" class="margin"><b>{{$e->customer->alamat}}</b></div>
-                                            <div id="alamat" class="margin"><b>{{$e->Customer->Provinsi->nama}}</b></div>
+                                            <div id="alamat" class="margin"><b>
+                                                    @if(!empty($e->Customer->Provinsi))
+                                                    @if($e->Customer->nama != 'Belum diketahui')
+                                                    {{$e->Customer->Provinsi->nama}}
+                                                    @endif
+                                                    @endif
+
+                                                </b></div>
                                             <div id="alamat" class="margin"><b>{{$e->Customer->telp}}</b></div>
                                         </div>
                                     </div>
@@ -136,7 +147,13 @@
                                         <div class="margin">
                                             <div><small class="text-muted">Tanggal Batas Kontrak</small>
                                             </div>
-                                            <div><b>{{date('d-m-Y', strtotime($e->tgl_kontrak))}}</b></div>
+                                            <div><b>
+                                                    @if(!empty($e->tgl_kontrak))
+                                                    {{date('d-m-Y', strtotime($e->tgl_kontrak))}}
+                                                    @else
+                                                    -
+                                                    @endif
+                                                </b></div>
                                         </div>
                                         <div class="margin">
                                             <div><small class="text-muted">Status</small></div>
@@ -146,7 +163,7 @@
                                             <div class="badge yellow-text">Negosiasi</div>
                                             @elseif($e->status == 'sepakat')
                                             <div class="margin-top"><b><span class="green-text">Sepakat</span></b></div>
-                                            @elseif($e->status == 'negosiasi')
+                                            @elseif($e->status == 'draft')
                                             <div class="badge blue-text">Draft</div>
                                             @endif
                                         </div>
@@ -235,7 +252,25 @@
                                             <div class="card-body">
                                                 <div class="form-horizontal">
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer / Distributor</label>
+                                                        <div class="col-5 col-form-label">
+                                                            <div class="form-check form-check-inline " id="sudah_dsb">
+                                                                <input class="form-check-input" type="radio" name="namadistributor" id="namadistributor1" value="sudah" />
+                                                                <label class="form-check-label" for="namadistributor1">Sudah Diketahui</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline " id="belum_dsb">
+                                                                <input class="form-check-input" type="radio" name="namadistributor" id="namadistributor2" value="belum" />
+                                                                <label class="form-check-label" for="namadistributor2">Belum Diketahui</label>
+                                                            </div>
+                                                            <div class="invalid-feedback" id="msgnamadistributor">
+                                                                @if($errors->has('namadistributor'))
+                                                                {{ $errors->first('namadistributor')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right"></label>
                                                         <div class="col-5">
                                                             <select name="customer_id" id="customer_id" class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
                                                                 <option value="{{$e->customer_id}}" selected>{{$e->customer->nama}}</option>
@@ -291,6 +326,10 @@
                                                                 <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="batal" />
                                                                 <label class="form-check-label" for="status_akn3">Batal</label>
                                                             </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="draft" />
+                                                                <label class="form-check-label" for="status_akn3">Draft</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -319,7 +358,9 @@
                                                         <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
                                                         <div class="col-7">
                                                             <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                                @if(!empty($e->provinsi_id))
                                                                 <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
+                                                                @endif
                                                             </select>
                                                         </div>
                                                     </div>
@@ -330,6 +371,17 @@
                                                             <div class=" invalid-feedback" id="msgsatuan_kerja">
                                                                 @if($errors->has('satuan_kerja'))
                                                                 {{ $errors->first('satuan_kerja')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Delivery</label>
+                                                        <div class="col-4">
+                                                            <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" />
+                                                            <div class="invalid-feedback" id="msgbatas_kontrak">
+                                                                @if($errors->has('batas_kontrak'))
+                                                                {{ $errors->first('batas_kontrak')}}
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -704,7 +756,46 @@
             }
         })
 
+        if ('{{$e->customer->nama}}' == 'Belum diketahui') {
+            var cust_id = 'belum';
+            $("#customer_id").attr('disabled', true);
+            $("#customer_id").empty().trigger('change');
+            $("#provinsi").attr('disabled', true);
+            $("#provinsi").empty().trigger('change');
+            $("#alamat").val("");
+            $("#telepon").val("");
+        } else {
+            var cust_id = 'sudah';
+        }
+        if ('{{$e->status}}' != 'sepakat') {
+            if ('{{$e->status}}' == 'draft') {
+                $("#dataproduk").addClass("hide");
+            }
+            $("#provinsi").attr('disabled', true);
+            $("#provinsi").empty().trigger('change')
+            $("#batas_kontrak").attr('disabled', true);
+        }
+
+        $('input[type="radio"][name="namadistributor"]').on('change', function() {
+            if ($(this).val() != "") {
+                if ($(this).val() == "sudah") {
+                    $("#customer_id").attr('disabled', false);
+                } else {
+                    $("#customer_id").attr('disabled', true);
+                    $("#customer_id").empty().trigger('change')
+                    $("#alamat").val("");
+                    $("#telepon").val("");
+                }
+                checkvalidasi();
+            } else {
+                $("#msgstatus").text("Status Harus dipilih");
+                $("#status").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
+            }
+        });
+
         $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
+        $('input[name="namadistributor"][value=' + cust_id + ']').attr('checked', 'checked');
         $('#customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('#msgcustomer_id').text("");
@@ -717,14 +808,29 @@
 
         $('input[type="radio"][name="status_akn"]').on('change', function() {
             if ($(this).val() != "") {
-                if ($(this).val() == "draft") {
-                    $("#produktable tbody").empty();
-                    $('#produktable tbody').append(trproduktable());
+                if ($(this).val() == "sepakat") {
+                    $("#dataproduk").removeClass("hide");
+                    $("#batas_kontrak").attr('disabled', false);
+                    $("#provinsi").attr('disabled', false);
+                    // $("#produktable tbody").empty();
+                    // $('#produktable tbody').append(trproduktable());
                     numberRowsProduk($("#produktable"));
+                } else if ($(this).val() == "draft") {
+                    $("#produktable tbody").empty();
                     $("#totalhargaprd").text("Rp. 0");
                     $("#dataproduk").addClass("hide");
+                    $("#batas_kontrak").attr('disabled', true);
+                    $("#provinsi").attr('disabled', true);
+                    $("#provinsi").empty().trigger('change')
                 } else {
+                    //$("#produktable tbody").empty();
+                    //$('#produktable tbody').append(trproduktable());
+                    numberRowsProduk($("#produktable"));
+                    $("#batas_kontrak").val("");
+                    $("#batas_kontrak").attr('disabled', true);
                     $("#dataproduk").removeClass("hide");
+                    $("#provinsi").attr('disabled', true);
+                    $("#provinsi").empty().trigger('change')
                 }
             } else {
                 $("#msgstatus").text("Status Harus dipilih");

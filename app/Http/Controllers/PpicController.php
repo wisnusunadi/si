@@ -799,8 +799,8 @@ class PpicController extends Controller
         $arrayid = array();
 
         foreach ($getid as $i) {
-            $jumlahpesan = $i->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $i->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $i->getJumlahPermintaanPesanan("spa", "");
-            $jumlahtf = $i->getJumlahTransferPesanan("ekatalog", "sepakat") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa", "");
+            $jumlahpesan = $i->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $i->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $i->getJumlahPermintaanPesanan("spa", "") + $i->getJumlahPermintaanPesanan("spb", "");
+            $jumlahtf = $i->getJumlahTransferPesanan("ekatalog", "sepakat") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa", "") + $i->getJumlahTransferPesanan("spb", "");
             if ($jumlahtf < $jumlahpesan) {
                 $arrayid[] = $i->id;
             }
@@ -822,8 +822,8 @@ class PpicController extends Controller
             })
             ->addColumn('penjualan', function ($data) {
                 $jumlah_gbj = $data->stok;
-                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "");
-                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "") + $data->getJumlahTransferPesanan("spb", "");
                 $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
                 $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
                 if ($jumlah >= 0) {
@@ -833,8 +833,8 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('total', function ($data) {
-                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "");
-                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "") + $data->getJumlahTransferPesanan("spb", "");
                 $jumlah = $jumlahdiminta - $jumlahtf;
                 return $jumlah;
             })
@@ -850,7 +850,7 @@ class PpicController extends Controller
                 return $data->getJumlahPermintaanPesanan("ekatalog", "batal");
             })
             ->addColumn('po', function ($data) {
-                $jumlah = $data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa", "");
+                $jumlah = ($data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa", "")) + ($data->getJumlahPermintaanPesanan("spb", "") - $data->getJumlahTransferPesanan("spb", ""));
                 return $jumlah;
             })
             ->addColumn('aksi', function ($data) {
@@ -865,8 +865,8 @@ class PpicController extends Controller
     public function master_stok_detail_show($id)
     {
         $data = GudangBarangJadi::find($id);
-        $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "");
-        $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+        $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+        $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "")  + $data->getJumlahTransferPesanan("spb", "");
         $jumlah = $jumlahdiminta - $jumlahtf;
         return view('spa.ppic.master_stok.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah]);
     }
@@ -960,7 +960,7 @@ class PpicController extends Controller
         $arrayid = array();
 
         foreach ($datass as $i) {
-            $jumlah = $i->getJumlahTransferPesanan("ekatalog", "sepakat") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa", "");
+            $jumlah = $i->getJumlahTransferPesanan("ekatalog", "sepakat") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa", "") + $i->getJumlahTransferPesanan("spb", "");
             if ($jumlah > $i->getJumlahKirimPesanan()) {
                 $arrayid[] = $i->id;
             }
@@ -977,7 +977,7 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) {
-                $jumlah = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+                $jumlah = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "") + $data->getJumlahTransferPesanan("spb", "");
                 return $jumlah;
             })
             ->addColumn('jumlah_pengiriman', function ($data) {
@@ -990,7 +990,7 @@ class PpicController extends Controller
             })
 
             ->addColumn('belum_pengiriman', function ($data) {
-                $jumlah = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+                $jumlah = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "") + $data->getJumlahTransferPesanan("spb", "");
                 $jumlahselesai = $data->getJumlahKirimPesanan();
                 $jumlahproses = $jumlah - $jumlahselesai;
                 return $jumlahproses;
@@ -1007,7 +1007,7 @@ class PpicController extends Controller
     public function master_pengiriman_detail_show($id)
     {
         $data = GudangBarangJadi::find($id);
-        $jumlah = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+        $jumlah = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "") + $data->getJumlahTransferPesanan("spb", "");
         $jumlahselesai = $data->getJumlahKirimPesanan();
         $jumlahproses = $jumlah - $jumlahselesai;
         return view('spa.ppic.master_pengiriman.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah, 'jumlahselesai' => $jumlahselesai, 'jumlahproses' => $jumlahproses]);
@@ -1327,7 +1327,6 @@ class PpicController extends Controller
         $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($gdg_id) {
             $q->where('gudang_barang_jadi_id', $gdg_id);
         })->where('pesanan_id', $po_id)->get();
-
 
         foreach ($s as $i) {
             foreach ($i->PenjualanProduk->Produk as $j) {
