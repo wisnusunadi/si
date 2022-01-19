@@ -49,12 +49,8 @@ class GudangController extends Controller
                 return $data->stok . ' ' . $data->satuan->nama;
             })
             ->addColumn('jumlah1', function ($data) {
-                if ($data->id) {
-                    $ss = DetailPesananProduk::with('detailpesanan')->where('gudang_barang_jadi_id', $data->id)->get();
-                    return $data->stok - $ss->sum('detailpesanan.jumlah') . ' ' . $data->satuan->nama;
-                } else {
-                    return '-';
-                }
+                $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                    return $data->stok - $ss . ' ' . $data->satuan->nama;
             })
             ->addColumn('kelompok', function ($data) {
                 return $data->produk->KelompokProduk->nama;

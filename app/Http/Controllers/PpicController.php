@@ -237,16 +237,124 @@ class PpicController extends Controller
      */
     public function get_data_so_detail($id)
     {
-        $datas = DetailPesanan::whereHas('DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
-            $q->where('id', $id);
-        })->whereHas('pesanan', function($q) {
-            $q->whereNotIn('log_id', ['7', '10']);
-        })->get();
-
-        // $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
+        // $datas = DetailPesanan::whereHas('DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
         //     $q->where('id', $id);
-        // })->first();
-        $prd = GudangBarangJadi::where('id', $id)->has('DetailPesananProduk')->first();
+        // })->whereHas('pesanan', function($q) {
+        //     $q->whereNotIn('log_id', ['7', '10']);
+        // })->get();
+
+        // // $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
+        // //     $q->where('id', $id);
+        // // })->first();
+        // $prd = GudangBarangJadi::where('id', $id)->has('DetailPesananProduk')->first();
+
+        // $arrayid = array();
+        // foreach ($datas as $i) {
+        //     if ($this->getJumlahPermintaanPesanan($prd->id, $id, $i->id) > $this->getJumlahTransferPesanan($id, $i->id)) {
+        //         $arrayid[] = $i->id;
+        //     }
+        // }
+
+        // $data = Pesanan::whereIn('id', $arrayid)->get();
+
+        // return datatables()->of($datas)
+        //     ->addIndexColumn()
+        //     ->addColumn('so', function ($data) {
+        //         return $data->pesanan->so ? $data->pesanan->so : "-";
+        //     })
+            // ->addColumn('po', function ($data) {
+            //     return $data->pesanan->no_po ? $data->pesanan->no_po : "-";
+            // })
+            // ->addColumn('akn', function ($data) {
+            //     if (isset($data->pesanan->Ekatalog)) {
+            //         return $data->pesanan->Ekatalog->no_paket;
+            //     } else {
+            //         return "-";
+            //     }
+            // })
+        //     ->addColumn('tgl_order', function ($data) {
+        //         if (isset($data->pesanan->Ekatalog)) {
+        //             return Carbon::createFromFormat('Y-m-d', $data->pesanan->Ekatalog->tgl_buat)->format('d-m-Y');
+        //         } else {
+        //             return Carbon::createFromFormat('Y-m-d', $data->pesanan->tgl_po)->format('d-m-Y');
+        //         }
+        //     })
+        //     ->addColumn('tgl_delivery', function ($data) {
+        //         if (isset($data->pesanan->Ekatalog)) {
+        //             $tanggal_sekarang = Carbon::now()->format('Y-m-d');
+        //             $tanggal_sekarang = Carbon::parse($tanggal_sekarang);
+        //             $tanggal_pengiriman = Carbon::parse($data->pesanan->ekatalog->tgl_kontrak);
+        //             $days = $tanggal_sekarang->diffInDays($tanggal_pengiriman);
+
+        //             $param = "";
+        //             if ($tanggal_sekarang <= $tanggal_pengiriman) {
+        //                 if ($days > 7) {
+        //                     $param = ' <div>' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $days . ' Hari</small>';
+        //                 } else if ($days > 0 && $days <= 7) {
+        //                     $param = ' <div class="has-text-warning">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $days . ' Hari</small>';
+        //                 } else {
+        //                     $param = '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+        //                 }
+        //             } else {
+        //                 $param =  '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $days . ' Hari</small>';
+        //             }
+
+        //             return $param;
+        //         } else {
+        //             return '-';
+        //         }
+        //     })
+        //     ->addColumn('customer', function ($data) {
+        //         if (isset($data->pesanan->Ekatalog)) {
+        //             return $data->pesanan->ekatalog->instansi;
+        //         } else if (isset($data->pesanan->spa)) {
+        //             return $data->pesanan->spa->customer->nama;
+        //         } else if (isset($data->pesanan->spb)) {
+        //             return $data->pesanan->spb->customer->nama;
+        //         }
+        //     })
+        //     ->addColumn('jenis', function ($data) {
+        //         if (isset($data->pesanan->Ekatalog)) {
+        //             return "Ekatalog";
+        //         } else if (isset($data->pesanan->spa)) {
+        //             return "SPA";
+        //         } else if (isset($data->pesanan->spb)) {
+        //             return "SPB";
+        //         }
+        //     })
+        //     ->addColumn('status', function ($data) {
+        //         return $data->pesanan->log->nama;
+        //     })
+        //     ->addColumn('jumlah', function ($data) use ($prd) {
+        //         $id = $data->pesanan->id;
+        //         // $jumlah = $this->getJumlahPermintaanPesanan($prd->id, $id, $data->id) - $this->getJumlahTransferPesanan($id, $data->id);
+        //         $res =
+        //         DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($prd) {
+        //             $q->where('gudang_barang_jadi_id', $prd->id);
+        //         })->whereHas('pesanan', function($qq) use($id) {
+        //             $qq->where('id', $id);
+        //         })->get();
+        //         $jumlah = 0;
+        //         foreach ($res as $a) {
+        //             return $a;
+        //         //     foreach ($a->PenjualanProduk->Produk as $b) {
+        //         //         if ($b->id == $prd->id) {
+        //         //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+        //         //         }
+        //         //     }
+        //         }
+        //         // return $res;
+        //     })
+        //     ->rawColumns(['tgl_delivery'])
+        //     ->make(true);
+
+        $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->whereNotIn('log_id', ['7', '10'])->get();
+
+        $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->first();
 
         $arrayid = array();
         foreach ($datas as $i) {
@@ -257,90 +365,92 @@ class PpicController extends Controller
 
         $data = Pesanan::whereIn('id', $arrayid)->get();
 
-        return datatables()->of($datas)
+        return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->pesanan->so ? $data->pesanan->so : "-";
+                return $data->so;
             })
             ->addColumn('po', function ($data) {
-                return $data->pesanan->no_po ? $data->pesanan->no_po : "-";
+                return $data->no_po ? $data->no_po : "-";
             })
             ->addColumn('akn', function ($data) {
-                if (isset($data->pesanan->Ekatalog)) {
-                    return $data->pesanan->Ekatalog->no_paket;
+                if (isset($data->Ekatalog)) {
+                    return $data->Ekatalog->no_paket;
                 } else {
                     return "-";
                 }
             })
             ->addColumn('tgl_order', function ($data) {
-                if (isset($data->pesanan->Ekatalog)) {
-                    return Carbon::createFromFormat('Y-m-d', $data->pesanan->Ekatalog->tgl_buat)->format('d-m-Y');
+                if (isset($data->Ekatalog)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->Ekatalog->tgl_buat)->format('d-m-Y');
                 } else {
-                    return Carbon::createFromFormat('Y-m-d', $data->pesanan->tgl_po)->format('d-m-Y');
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
                 }
             })
+            ->addColumn('customer', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    return $data->ekatalog->instansi;
+                } else if (isset($data->spa)) {
+                    return $data->spa->customer->nama;
+                } else if (isset($data->spb)) {
+                    return $data->spb->customer->nama;
+                }
+            })
+            ->addColumn('jenis', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    return "Ekatalog";
+                } else if (isset($data->spa)) {
+                    return "SPA";
+                } else if (isset($data->spb)) {
+                    return "SPB";
+                }
+            })
+            ->addColumn('status', function ($data) {
+                return $data->log->nama;
+            })
             ->addColumn('tgl_delivery', function ($data) {
-                if (isset($data->pesanan->Ekatalog)) {
-                    $tanggal_sekarang = Carbon::now()->format('Y-m-d');
-                    $tanggal_sekarang = Carbon::parse($tanggal_sekarang);
-                    $tanggal_pengiriman = Carbon::parse($data->pesanan->ekatalog->tgl_kontrak);
-                    $days = $tanggal_sekarang->diffInDays($tanggal_pengiriman);
-
+                if (isset($data->Ekatalog)) {
+                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                    $tgl_parameter = $data->ekatalog->tgl_kontrak;
                     $param = "";
-                    if ($tanggal_sekarang <= $tanggal_pengiriman) {
-                        if ($days > 7) {
-                            $param = ' <div>' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $days . ' Hari</small>';
-                        } else if ($days > 0 && $days <= 7) {
-                            $param = ' <div class="has-text-warning">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $days . ' Hari</small>';
-                        } else {
-                            $param = '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
-                        }
-                    } else {
-                        $param =  '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $days . ' Hari</small>';
-                    }
 
+                    if ($tgl_sekarang < $tgl_parameter) {
+                        $to = Carbon::now();
+                        $from = $data->ekatalog->tgl_kontrak;
+                        $hari = $to->diffInDays($from);
+
+                        if ($hari > 7) {
+                            $param = ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                        } else if ($hari > 0 && $hari <= 7) {
+                            $param = ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                        } else {
+                            $param = '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                        }
+                    } elseif ($tgl_sekarang == $tgl_parameter) {
+                        $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                    } else {
+                        $to = Carbon::now();
+                        $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                        $hari = $to->diffInDays($from);
+                        $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                    }
                     return $param;
                 } else {
                     return '-';
                 }
             })
-            ->addColumn('customer', function ($data) {
-                if (isset($data->pesanan->Ekatalog)) {
-                    return $data->pesanan->ekatalog->instansi;
-                } else if (isset($data->pesanan->spa)) {
-                    return $data->pesanan->spa->customer->nama;
-                } else if (isset($data->pesanan->spb)) {
-                    return $data->pesanan->spb->customer->nama;
-                }
-            })
-            ->addColumn('jenis', function ($data) {
-                if (isset($data->pesanan->Ekatalog)) {
-                    return "Ekatalog";
-                } else if (isset($data->pesanan->spa)) {
-                    return "SPA";
-                } else if (isset($data->pesanan->spb)) {
-                    return "SPB";
-                }
-            })
-            ->addColumn('status', function ($data) {
-                return $data->pesanan->log->nama;
-            })
-            ->addColumn('jumlah', function ($data) use ($prd) {
-                $id = $data->id;
-                $res =
-                DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($prd) {
-                    $q->where('gudang_barang_jadi_id', $prd->id);
-                })->whereHas('pesanan', function($qq) use($id) {
-                    $qq->where('id', $id);
-                })->get();
-                $jumlah = 0;
-                foreach ($res as $a) {
-                    foreach ($a->PenjualanProduk->Produk as $b) {
-                        if ($b->id == $prd->id) {
-                            $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
-                        }
-                    }
-                }
+            ->addColumn('jumlah', function ($data) use ($prd, $id) {
+                $jumlah = $this->getJumlahPermintaanPesanan($prd->id, $id, $data->id) - $this->getJumlahTransferPesanan($id, $data->id);
+                // $id = $data->id;
+                // $res = DetailPesanan::where('pesanan_id', $id)->get();
+                // $jumlah = 0;
+                // foreach ($res as $a) {
+                //     foreach ($a->PenjualanProduk->Produk as $b) {
+                //         if ($b->id == $prd->id) {
+                //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
+                //         }
+                //     }
+                // }
                 return $jumlah;
             })
             ->rawColumns(['tgl_delivery'])
