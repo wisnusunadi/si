@@ -122,25 +122,6 @@
                                         <div class="card-body">
                                             <div class="form-horizontal">
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
-                                                    <div class="col-5">
-                                                        <select name="customer_id" id="customer_id" class="form-control custom-select customer_id @error('customer_id') is-invalid @enderror">
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
-                                                    <div class="col-7">
-                                                        <input type="text" class="form-control col-form-label" name="alamat" id="alamat" readonly />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
-                                                    <div class="col-5">
-                                                        <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
                                                     <label for="" class="col-form-label col-5" style="text-align: right">Jenis Penjualan</label>
                                                     <div class="col-5 col-form-label">
                                                         <div class="form-check form-check-inline">
@@ -162,6 +143,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group row">
                                                     <label for="" class="col-form-label col-5" style="text-align: right"></label>
                                                     <div class="col-5 col-form-label">
@@ -179,6 +161,44 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer / Distributor</label>
+                                                    <div class="col-5 col-form-label">
+                                                        <div class="form-check form-check-inline " id="sudah_dsb">
+                                                            <input class="form-check-input" type="radio" name="namadistributor" id="namadistributor1" value="sudah" />
+                                                            <label class="form-check-label" for="namadistributor1">Sudah Diketahui</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline " id="belum_dsb">
+                                                            <input class="form-check-input" type="radio" name="namadistributor" id="namadistributor2" value="belum" />
+                                                            <label class="form-check-label" for="namadistributor2">Belum Diketahui</label>
+                                                        </div>
+                                                        <div class="invalid-feedback" id="msgnamadistributor">
+                                                            @if($errors->has('namadistributor'))
+                                                            {{ $errors->first('namadistributor')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right"></label>
+                                                    <div class="col-5 ">
+                                                        <select name="customer_id" id="customer_id" class="form-control custom-select customer_id  @error('customer_id') is-invalid @enderror">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
+                                                    <div class="col-7">
+                                                        <input type="text" class="form-control col-form-label" name="alamat" id="alamat" readonly />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
+                                                    <div class="col-5">
+                                                        <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -264,6 +284,10 @@
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
                                                             <label class="form-check-label" for="satuan3">Batal</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
+                                                            <label class="form-check-label" for="satuan4">Draft</label>
                                                         </div>
                                                         <div class="invalid-feedback" id="msgstatus">
                                                             @if($errors->has('status'))
@@ -577,7 +601,7 @@
                                         </a>
                                     </span>
                                     <span class="float-right">
-                                        <button type="submit" class="btn btn-info" id="btntambah" disabled="true">
+                                        <button type="submit" class="btn btn-info" id="btntambahq">
                                             Simpan
                                         </button>
                                     </span>
@@ -689,9 +713,18 @@
                 $("#akn").removeClass("hide");
                 $(".os-content-arrange").remove();
                 //cek
+                $("#belum_dsb").removeClass("hide");
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").addClass("hide");
                 $("#penj_sem").addClass("hide");
+                //
+                $("#alamat").val("");
+                $("#telepon").val("");
+
+                //
+                $("#customer_id").attr('disabled', true);
+                $("#customer_id").empty().trigger('change')
+                $("input[name=namadistributor][value='belum']").prop("checked", true);
                 $("input[name=jenis_penj][value='produk']").prop("checked", true);
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
             } else if ($(this).val() == "spa") {
@@ -700,11 +733,13 @@
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
                 $(".os-content-arrange").remove();
-
+                $("#customer_id").attr('disabled', false);
                 //cek
+                $("#belum_dsb").addClass("hide");
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").removeClass("hide");
                 $("#penj_sem").removeClass("hide");
+                $("input[name=namadistributor][value='sudah']").prop("checked", true);
                 $("input[name=jenis_penj][value='produk']").prop("checked", true);
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
             } else if ($(this).val() == "spb") {
@@ -713,11 +748,12 @@
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
                 $(".os-content-arrange").remove();
-
+                $("#customer_id").attr('disabled', false);
                 //cek
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").removeClass("hide");
                 $("#penj_sem").removeClass("hide");
+                $("input[name=namadistributor][value='sudah']").prop("checked", true);
                 $("input[name=jenis_penj][value='produk']").prop("checked", false);
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", true);
             }
@@ -784,16 +820,46 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
+        $('input[type="radio"][name="namadistributor"]').on('change', function() {
+            if ($(this).val() != "") {
+                if ($(this).val() == "sudah") {
+                    $("#customer_id").attr('disabled', false);
+                } else {
+                    $("#customer_id").attr('disabled', true);
+                    $("#customer_id").empty().trigger('change')
+                    $("#alamat").val("");
+                    $("#telepon").val("");
+                }
+                checkvalidasi();
+            } else {
+                $("#msgstatus").text("Status Harus dipilih");
+                $("#status").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
+            }
+        });
+
         $('input[type="radio"][name="status"]').on('change', function() {
             if ($(this).val() != "") {
-                if ($(this).val() == "draft") {
+                if ($(this).val() == "sepakat") {
+                    $("#dataproduk").removeClass("hide");
+                    $("#batas_kontrak").attr('disabled', false);
+                    $("#provinsi").attr('disabled', false);
+
+                } else if ($(this).val() == "draft") {
                     $("#produktable tbody").empty();
                     $('#produktable tbody').append(trproduktable());
                     numberRowsProduk($("#produktable"));
                     $("#totalhargaprd").text("Rp. 0");
                     $("#dataproduk").addClass("hide");
+                    $("#batas_kontrak").attr('disabled', true);
+                    $("#provinsi").attr('disabled', true);
+                    $("#provinsi").empty().trigger('change')
                 } else {
+                    $("#batas_kontrak").val("");
+                    $("#batas_kontrak").attr('disabled', true);
                     $("#dataproduk").removeClass("hide");
+                    $("#provinsi").attr('disabled', true);
+                    $("#provinsi").empty().trigger('change')
                 }
                 checkvalidasi();
             } else {
@@ -949,7 +1015,7 @@
                 $("#tanggal_do").addClass('is-invalid');
             }
         });
-
+        $("#customer_id").attr('disabled', true);
         $('.customer_id').select2({
             ajax: {
                 minimumResultsForSearch: 20,
