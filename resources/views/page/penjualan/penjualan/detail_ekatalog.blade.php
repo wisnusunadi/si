@@ -15,7 +15,11 @@
                                 </div>
                                 <div><b>{{$data->satuan}}</b></div>
                                 <div><b>{{$data->alamat}}</b></div>
-                                <div><b>{{$data->Provinsi->nama}}</b></div>
+                                <div><b>
+                                        @if(!empty($data->provinsi))
+                                        {{$data->Provinsi->nama}}
+                                        @endif
+                                    </b></div>
 
                             </div>
                         </div>
