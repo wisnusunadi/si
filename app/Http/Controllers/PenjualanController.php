@@ -271,6 +271,8 @@ class PenjualanController extends Controller
                         $datas .= '<span class="orange-text badge">';
                     } else if ($data->Pesanan->State->nama == "QC") {
                         $datas .= '<span class="yellow-text badge">';
+                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                        $datas .= '<span class="blue-text badge">';
                     } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
                         $datas .= '<span class="blue-text badge">';
                     } else if ($data->Pesanan->State->nama == "Kirim") {
