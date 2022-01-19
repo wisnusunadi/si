@@ -34,6 +34,7 @@ class TransaksiGKExport implements FromView, ShouldAutoSize
                     'Noseri' => [
                         'seri' => $d->seri ? $d->seri->noseri : $d->noseri,
                         'remark' => $d->seri ? $d->seri->remark : $d->remark,
+                        'perbaikan' => $d->seri ? $d->seri->perbaikan : $d->perbaikan,
                         'layout' => $d->seri ? $d->seri->layout->ruang : $d->layout_id == null ? '-' : $d->layout->ruang,
                         'tingkat' => $d->seri ? 'Level '.$d->seri->tk_kerusakan : 'Level '.$d->tk_kerusakan,
                     ]

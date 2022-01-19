@@ -415,6 +415,7 @@
                                                                     <th width="35%">Nama Paket</th>
                                                                     <th width="15%">Jumlah</th>
                                                                     <th width="20%">Harga</th>
+                                                                    {{-- <th width="20%">Ongkir</th> --}}
                                                                     <th width="20%">Subtotal</th>
                                                                     <th width="5%">Aksi</th>
                                                                 </tr>
@@ -443,6 +444,14 @@
                                                                             <small id="produk_ketersediaan"></small>
                                                                         </div>
                                                                     </td>
+                                                                    {{-- <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text">Rp</span>
+                                                                            </div>
+                                                                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;" />
+                                                                        </div>
+                                                                    </td> --}}
                                                                     <td>
                                                                         <div class="form-group d-flex justify-content-center">
                                                                             <div class="input-group-prepend">
@@ -658,8 +667,6 @@
                 $('#btntambah').attr("disabled", true);
             }
         }
-
-
         $('#tanggal_pemesanan').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#batas_kontrak").attr("min", $(this).val());
@@ -681,7 +688,6 @@
                 $("#nonakn").addClass("hide");
                 $("#akn").removeClass("hide");
                 $(".os-content-arrange").remove();
-
                 //cek
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").addClass("hide");
@@ -729,7 +735,6 @@
                 $("#dataproduk").removeClass("hide");
             }
         });
-
         $('input[type="radio"][name="do"]').on('change', function() {
             $('#btntambah').attr("disabled", true);
             $("#no_do").val("");

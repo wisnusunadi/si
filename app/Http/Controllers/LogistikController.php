@@ -747,7 +747,19 @@ class LogistikController extends Controller
                     }
                 }
             } else {
-                $array_id[] = $d->id;
+                if (count($d->DetailPesanan) > 0 && count($d->DetailPesananPart) <= 0) {
+                    if ($d->getJumlahKirim() == 0 || $d->getJumlahKirim() < $d->getJumlahPesanan()) {
+                        $array_id[] = $d->id;
+                    }
+                } else if (count($d->DetailPesanan) <= 0 && count($d->DetailPesananPart) > 0) {
+                    if ($d->getJumlahKirimPart() == 0 ||  $d->getJumlahKirimPart() < $d->getJumlahPesananPart()) {
+                        $array_id[] = $d->id;
+                    }
+                } else if (count($d->DetailPesanan) > 0 && count($d->DetailPesananPart) > 0) {
+                    if (($d->getJumlahKirim() == 0 || $d->getJumlahKirim() < $d->getJumlahPesanan()) || ($d->getJumlahKirimPart() == 0 || $d->getJumlahKirimPart() < $d->getJumlahPesananPart())) {
+                        $array_id[] = $d->id;
+                    }
+                }
             }
         }
 
@@ -757,9 +769,6 @@ class LogistikController extends Controller
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
-            })
-            ->addColumn('po', function ($data) {
-                return $data->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);

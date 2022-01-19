@@ -23,7 +23,7 @@ use App\Models\Produk;
 
 // event
 use App\Events\PpicNotif;
-
+use App\Models\DetailPesananProduk;
 
 class PpicController extends Controller
 {
@@ -31,7 +31,7 @@ class PpicController extends Controller
     /**
      * Change status from string to number
      *
-     * This function used as converter status, so status can be uploaded 
+     * This function used as converter status, so status can be uploaded
      * to database
      *
      * @param string $status status string
@@ -49,7 +49,7 @@ class PpicController extends Controller
     /**
      * Change state from string to number
      *
-     * This function used as converter state, so state can be uploaded 
+     * This function used as converter state, so state can be uploaded
      * to database
      *
      * @param string $state status string
@@ -66,7 +66,7 @@ class PpicController extends Controller
 
     /**
      * Get data perakitan from database
-     * 
+     *
      * @param string $status status string
      * @return array collection of data
      */
@@ -92,7 +92,7 @@ class PpicController extends Controller
 
     /**
      * Change data get from get_data_perakitan function to datatables format
-     * 
+     *
      * @return array datatables formatted data
      */
     public function get_datatables_data_perakitan()
@@ -141,7 +141,7 @@ class PpicController extends Controller
 
     /**
      * Get data perakitan from previous planning from database
-     * 
+     *
      * @return array collections of data
      */
     public function get_data_perakitan_rencana()
@@ -152,7 +152,7 @@ class PpicController extends Controller
 
     /**
      * Get data from GBJ
-     * 
+     *
      * @return array collections of data
      */
     public function get_data_barang_jadi(Request $request)
@@ -167,7 +167,7 @@ class PpicController extends Controller
 
     /**
      * Get data product from sales order
-     * 
+     *
      * @return array datatables formatted data
      */
     public function get_data_so()
@@ -177,17 +177,17 @@ class PpicController extends Controller
         })->get();
         $arrayid = array();
 
-        foreach ($getid as $i) {
-            $jumlahpesan = $i->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $i->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $i->getJumlahPermintaanPesanan("spa", "");
-            $jumlahtf = $i->getJumlahTransferPesanan("ekatalog", "sepakat") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa", "");
-            if ($jumlahtf < $jumlahpesan) {
-                $arrayid[] = $i->id;
-            }
-        }
+        // foreach ($getid as $i) {
+        //     $jumlahpesan = $i->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $i->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $i->getJumlahPermintaanPesanan("spa", "");
+        //     $jumlahtf = $i->getJumlahTransferPesanan("ekatalog", "sepakat") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa", "");
+        //     if ($jumlahtf < $jumlahpesan) {
+        //         $arrayid[] = $i->id;
+        //     }
+        // }
 
         $data = GudangBarangJadi::whereIn('id', $arrayid)->get();
 
-        return DataTables::of($data)
+        return DataTables::of($getid)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
                 if ($data->nama) {
@@ -200,15 +200,15 @@ class PpicController extends Controller
                 return $data->stok;
             })
             ->addColumn('total', function ($data) {
-                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "");
-                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "") + $data->getJumlahTransferPesanan("spb", "");
                 $jumlah = $jumlahdiminta - $jumlahtf;
                 return $jumlah;
             })
             ->addColumn('penjualan', function ($data) {
                 $jumlah_gbj = $data->stok;
-                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "");
-                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "");
+                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog", "sepakat") + $data->getJumlahTransferPesanan("ekatalog", "negosiasi") + $data->getJumlahTransferPesanan("spa", "") + $data->getJumlahTransferPesanan("spb", "");
                 $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
                 $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
                 return $jumlah;
@@ -231,19 +231,22 @@ class PpicController extends Controller
 
     /**
      * Get detail sales order from spesific product
-     * 
+     *
      * @param int $id product id from gdg_barang_jadi table
      * @return array collections of data
      */
     public function get_data_so_detail($id)
     {
-        $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+        $datas = DetailPesanan::whereHas('DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
-        })->whereNotIn('log_id', ['7', '10'])->get();
+        })->whereHas('pesanan', function($q) {
+            $q->whereNotIn('log_id', ['7', '10']);
+        })->get();
 
-        $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
-            $q->where('id', $id);
-        })->first();
+        // $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
+        //     $q->where('id', $id);
+        // })->first();
+        $prd = GudangBarangJadi::where('id', $id)->has('DetailPesananProduk')->first();
 
         $arrayid = array();
         foreach ($datas as $i) {
@@ -254,33 +257,33 @@ class PpicController extends Controller
 
         $data = Pesanan::whereIn('id', $arrayid)->get();
 
-        return datatables()->of($data)
+        return datatables()->of($datas)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->so ? $data->so : "-";
+                return $data->pesanan->so ? $data->pesanan->so : "-";
             })
             ->addColumn('po', function ($data) {
-                return $data->no_po ? $data->no_po : "-";
+                return $data->pesanan->no_po ? $data->pesanan->no_po : "-";
             })
             ->addColumn('akn', function ($data) {
-                if (isset($data->Ekatalog)) {
-                    return $data->Ekatalog->no_paket;
+                if (isset($data->pesanan->Ekatalog)) {
+                    return $data->pesanan->Ekatalog->no_paket;
                 } else {
                     return "-";
                 }
             })
             ->addColumn('tgl_order', function ($data) {
-                if (isset($data->Ekatalog)) {
-                    return Carbon::createFromFormat('Y-m-d', $data->Ekatalog->tgl_buat)->format('d-m-Y');
+                if (isset($data->pesanan->Ekatalog)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->pesanan->Ekatalog->tgl_buat)->format('d-m-Y');
                 } else {
-                    return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+                    return Carbon::createFromFormat('Y-m-d', $data->pesanan->tgl_po)->format('d-m-Y');
                 }
             })
             ->addColumn('tgl_delivery', function ($data) {
-                if (isset($data->Ekatalog)) {
+                if (isset($data->pesanan->Ekatalog)) {
                     $tanggal_sekarang = Carbon::now()->format('Y-m-d');
                     $tanggal_sekarang = Carbon::parse($tanggal_sekarang);
-                    $tanggal_pengiriman = Carbon::parse($data->ekatalog->tgl_kontrak);
+                    $tanggal_pengiriman = Carbon::parse($data->pesanan->ekatalog->tgl_kontrak);
                     $days = $tanggal_sekarang->diffInDays($tanggal_pengiriman);
 
                     $param = "";
@@ -302,29 +305,34 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('customer', function ($data) {
-                if (isset($data->Ekatalog)) {
-                    return $data->ekatalog->instansi;
-                } else if (isset($data->spa)) {
-                    return $data->spa->customer->nama;
-                } else if (isset($data->spb)) {
-                    return $data->spb->customer->nama;
+                if (isset($data->pesanan->Ekatalog)) {
+                    return $data->pesanan->ekatalog->instansi;
+                } else if (isset($data->pesanan->spa)) {
+                    return $data->pesanan->spa->customer->nama;
+                } else if (isset($data->pesanan->spb)) {
+                    return $data->pesanan->spb->customer->nama;
                 }
             })
             ->addColumn('jenis', function ($data) {
-                if (isset($data->Ekatalog)) {
+                if (isset($data->pesanan->Ekatalog)) {
                     return "Ekatalog";
-                } else if (isset($data->spa)) {
+                } else if (isset($data->pesanan->spa)) {
                     return "SPA";
-                } else if (isset($data->spb)) {
+                } else if (isset($data->pesanan->spb)) {
                     return "SPB";
                 }
             })
             ->addColumn('status', function ($data) {
-                return $data->log->nama;
+                return $data->pesanan->log->nama;
             })
             ->addColumn('jumlah', function ($data) use ($prd) {
                 $id = $data->id;
-                $res = DetailPesanan::where('pesanan_id', $id)->get();
+                $res =
+                DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($prd) {
+                    $q->where('gudang_barang_jadi_id', $prd->id);
+                })->whereHas('pesanan', function($qq) use($id) {
+                    $qq->where('id', $id);
+                })->get();
                 $jumlah = 0;
                 foreach ($res as $a) {
                     foreach ($a->PenjualanProduk->Produk as $b) {
@@ -333,7 +341,7 @@ class PpicController extends Controller
                         }
                     }
                 }
-                return $jumlah;
+                return $prd->id;
             })
             ->rawColumns(['tgl_delivery'])
             ->make(true);
@@ -341,7 +349,7 @@ class PpicController extends Controller
 
     /**
      * Get data sparepart from GK
-     * 
+     *
      * @return array collections of data
      */
     public function get_data_sparepart_gk()
@@ -359,7 +367,7 @@ class PpicController extends Controller
 
     /**
      * Get data unit from GK
-     * 
+     *
      * @return array collections of data
      */
     public function get_data_unit_gk(Request $request)
@@ -382,7 +390,7 @@ class PpicController extends Controller
 
     /**
      * Get komentar jadwal perakitan based on status request and current date
-     * 
+     *
      * @return array collections of data
      */
     public function get_komentar_jadwal_perakitan(Request $request)
@@ -397,7 +405,7 @@ class PpicController extends Controller
     /**
      * Function to count number of request and process of schedule change
      * from PPIC
-     * 
+     *
      * @return array array data consist of 2 member which is number of request
      * and number of precess
      */
@@ -422,7 +430,7 @@ class PpicController extends Controller
 
     /**
      * add data peratkitan to database
-     * 
+     *
      * @return array collections of data perakitan after new data added
      */
     public function create_data_perakitan(Request $request)
@@ -451,7 +459,7 @@ class PpicController extends Controller
 
     /**
      * add data to komentar_jadwal_perakitan table
-     * 
+     *
      * @return void
      */
     public function create_komentar_jadwal_perakitan(Request $request)
@@ -477,7 +485,7 @@ class PpicController extends Controller
 
     /**
      * update data from komentar_jadwal_perakitan table
-     * 
+     *
      * @return void
      */
     public function update_komentar_jadwal_perakitan(Request $request)
@@ -491,7 +499,7 @@ class PpicController extends Controller
 
     /**
      * update data from jadwal_perakitan table
-     * 
+     *
      * @param int $id id data jadwal_perakitan
      * @return array collections of data jadwal_perakitan after update
      */
@@ -537,7 +545,7 @@ class PpicController extends Controller
 
     /**
      * update many datas from jadwal_perakitan table based on status
-     * 
+     *
      * @param string $status status string
      * @return array collections of data jadwal_perakitan after update
      */
@@ -586,7 +594,7 @@ class PpicController extends Controller
 
     /**
      * delete data from jadwal_perakitan table
-     * 
+     *
      * @param int $id id data of jadwal_perakitan
      * @return void
      */
@@ -607,7 +615,7 @@ class PpicController extends Controller
 
     /**
      * trigger event for notification
-     * 
+     *
      * @return void
      */
     public function send_notification(Request $request)
@@ -619,7 +627,7 @@ class PpicController extends Controller
     /**
      * update status of data from jadwal_perkaitan based on current month,
      * this function called inside get_data_perakitan()
-     * 
+     *
      * @return void
      */
     public function update_perakitan_status()
@@ -657,7 +665,7 @@ class PpicController extends Controller
             $data->save();
 
             if ($update_rencana_jadwal) {
-                // insert data to jadwal_perakitan_rencana                
+                // insert data to jadwal_perakitan_rencana
                 JadwalPerakitanRencana::create([
                     'jadwal_perakitan_id' => $data->id,
                     'tanggal_mulai' => $data->tanggal_mulai,

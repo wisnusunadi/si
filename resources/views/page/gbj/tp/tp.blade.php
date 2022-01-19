@@ -216,6 +216,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nomor SO</th>
+                                                <th>Nomor PO</th>
                                                 <th>Customer</th>
                                                 <th>Batas Transfer</th>
                                                 <th>Aksi</th>
@@ -521,6 +522,7 @@
         columns:[
             {data: 'DT_RowIndex'},
             {data: 'noso'},
+            {data: 'nopo'},
             {data: 'customer'},
             {data: 'tgl_kontrak'},
             {data: function(data) {

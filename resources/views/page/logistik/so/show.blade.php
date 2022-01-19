@@ -122,14 +122,6 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="sudah_kirim" id="defaultCheck2" />
-                                                                <label class="form-check-label" for="defaultCheck2">
-                                                                    Sudah Dikirim
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
                                                             <span class="float-right">
                                                                 <button class="btn btn-primary">
                                                                     Cari
@@ -152,8 +144,6 @@
                                                     <th>No PO</th>
                                                     <th>Batas Pengiriman</th>
                                                     <th>Customer</th>
-                                                    <th>Alamat</th>
-                                                    <th>Telepon</th>
                                                     <th>Keterangan</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -233,7 +223,7 @@
                     className: 'nowrap-text'
                 },
                 {
-                    data: 'po',
+                    data: 'no_po',
                     className: 'nowrap-text'
                 },
                 {
@@ -245,14 +235,6 @@
                     className: 'align-center nowrap-text minimizechar'
                 },
                 {
-                    data: 'alamat',
-                    className: 'align-center nowrap-text minimizechar'
-                }, {
-                    data: 'telp',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
                     data: 'ket',
                     className: 'align-center nowrap-text',
                     orderable: false,
@@ -298,7 +280,7 @@
                     className: 'align-center nowrap-text'
                 },
                 {
-                    data: 'po',
+                    data: 'no_po',
                     className: 'align-center nowrap-text'
                 },
                 {

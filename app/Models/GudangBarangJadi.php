@@ -119,6 +119,28 @@ class GudangBarangJadi extends Model
                     }
                 }
             }
+        } else if ($jenis == "spb") {
+            $id = $this->id;
+            $produk_id = $this->produk_id;
+            // $s = DetailPesananProduk::where('gudang_barang_jadi_id', $id)->whereHas('DetailPesanan.Pesanan', function ($q) {
+            //     $q->whereNotIn('log_id', ['10']);
+            // })->has('DetailPesanan.Pesanan.Spa')->get();
+
+            $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                $q->where('gudang_barang_jadi_id', $id);
+            })->whereHas('pesanan', function ($qq) {
+                $qq->whereNotIn('log_id', ['10']);
+            })->has('Pesanan.Spb')->get();
+            $jumlah = 0;
+            // foreach ($s as $z) {
+            foreach ($s as $i) {
+                foreach ($i->PenjualanProduk->Produk as $j) {
+                    if ($j->id == $produk_id) {
+                        $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+                    }
+                }
+            }
+            // }
         }
         return $jumlah;
     }

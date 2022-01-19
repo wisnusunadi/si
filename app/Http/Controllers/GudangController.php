@@ -644,6 +644,9 @@ class GudangController extends Controller
             ->addColumn('noso', function ($d) {
                 return $d->pesanan->so;
             })
+            ->addColumn('nopo', function ($d) {
+                return $d->pesanan->no_po;
+            })
             ->addColumn('customer', function ($data) {
                 $name = explode('/', $data->pesanan->so);
                 for ($i = 1; $i < count($name); $i++) {

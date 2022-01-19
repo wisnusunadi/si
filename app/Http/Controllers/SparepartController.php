@@ -135,13 +135,14 @@ class SparepartController extends Controller
 
     function history_spr($id)
     {
-        $cek1 = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($id) {
+        $cek1 = collect(GudangKarantinaNoseri::whereHas('detail', function ($q) use ($id) {
             $q->where('sparepart_id', $id)->where('is_draft', 0);
-        })->get();
-        $cek = NoseriKeluarGK::whereHas('detail', function ($q) use ($id) {
-            $q->where('sparepart_id', $id)->where('is_draft', 0);
-        })->get();
-        $data = $cek->merge($cek1);
+        })->get());
+        $cek = collect(NoseriKeluarGK::whereHas('detail', function ($qq) use ($id) {
+            $qq->where('sparepart_id', $id)->where('is_draft', 0);
+        })->get());
+        $data = $cek1->merge($cek);
+        // return $data;
         return datatables()->of($data)
             ->addColumn('inn', function ($d) {
                 if (empty($d->detail->header->date_in)) {
@@ -198,6 +199,18 @@ class SparepartController extends Controller
                         return '-';
                     } else {
                         return $d->remark;
+                    }
+                }
+
+            })
+            ->addColumn('perbaikan', function ($d) {
+                if($d->seri) {
+                    return $d->seri->perbaikan;
+                } else {
+                    if (empty($d->perbaikan)) {
+                        return '-';
+                    } else {
+                        return $d->perbaikan;
                     }
                 }
 
@@ -247,12 +260,12 @@ class SparepartController extends Controller
 
     function history_unit($id)
     {
-        $cek1 = GudangKarantinaNoseri::whereHas('detail', function ($q) use ($id) {
+        $cek1 = collect(GudangKarantinaNoseri::whereHas('detail', function ($q) use ($id) {
             $q->where('gbj_id', $id)->where('is_draft', 0);
-        })->get();
-        $cek = NoseriKeluarGK::whereHas('detail', function ($q) use ($id) {
+        })->get());
+        $cek = collect(NoseriKeluarGK::whereHas('detail', function ($q) use ($id) {
             $q->where('gbj_id', $id)->where('is_draft', 0);
-        })->get();
+        })->get());
         $data = $cek->merge($cek1);
         return datatables()->of($data)
             ->addColumn('inn', function ($d) {
@@ -311,6 +324,18 @@ class SparepartController extends Controller
                         return '-';
                     } else {
                         return $d->remark;
+                    }
+                }
+
+            })
+            ->addColumn('perbaikan', function ($d) {
+                if($d->seri) {
+                    return $d->seri->perbaikan;
+                } else {
+                    if (empty($d->perbaikan)) {
+                        return '-';
+                    } else {
+                        return $d->perbaikan;
                     }
                 }
 
@@ -569,6 +594,13 @@ class SparepartController extends Controller
                     return $d->remark;
                 }
             })
+            ->addColumn('repair', function ($d) {
+                if($d->seri) {
+                    return $d->seri->perbaikan;
+                } else {
+                    return $d->perbaikan;
+                }
+            })
             ->addColumn('layout', function ($d) {
                 if($d->seri) {
                     return $d->seri->layout->ruang;
@@ -582,7 +614,17 @@ class SparepartController extends Controller
                 }
             })
             ->addColumn('tingkat', function ($d) {
-                return 'Level ' . $d->tk_kerusakan;
+                if($d->seri) {
+                    return 'Level ' . $d->seri->tk_kerusakan;
+                } else {
+                    if (empty($d->layout_id)) {
+                        return '-';
+                    } else {
+                        return 'Level ' . $d->tk_kerusakan;
+                    }
+
+                }
+
             })
             ->make(true);
     }
@@ -684,6 +726,7 @@ class SparepartController extends Controller
             'id' => $d->id,
             'layout' => $d->layout_id,
             'note' => $d->remark,
+            'repair' => $d->perbaikan,
             'tingkat' => $d->tk_kerusakan,
         ]);
     }
@@ -1932,6 +1975,7 @@ class SparepartController extends Controller
         $data->layout_id = $request->layout_id;
         $data->remark = $request->remark;
         $data->tk_kerusakan = $request->tk_kerusakan;
+        $data->perbaikan = $request->perbaikan;
         $data->status = 1;
         $data->updated_at = Carbon::now();
         $data->updated_by = $request->userid;

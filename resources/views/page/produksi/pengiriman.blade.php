@@ -4,7 +4,7 @@
 
 @section('content')
 <style>
-    .belum_diterima{
+    .belum_diterima {
         float: left;
         width: auto;
         padding: 5px;
@@ -15,7 +15,8 @@
         font-size: 14px;
         border-radius: 6px;
     }
-    .sebagian_diterima{
+
+    .sebagian_diterima {
         float: left;
         width: auto;
         padding: 5px;
@@ -26,7 +27,8 @@
         font-size: 14px;
         border-radius: 6px;
     }
-    .sudah_diterima{
+
+    .sudah_diterima {
         float: left;
         width: auto;
         padding: 5px;
@@ -37,20 +39,28 @@
         font-size: 14px;
         border-radius: 6px;
     }
+
     /* .dataTables_filter{
         display: none;
     } */
+    #DataTables_Table_1_filter {
+        display: none;
+    }
+    .calendar-time {
+        display: none;
+    }
+
 </style>
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="content-header">
     <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Transfer Gudang</h1>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Transfer Gudang</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
 <div class="row ml-2">
@@ -101,9 +111,9 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="card">
@@ -111,11 +121,11 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                    <div class="card" style="background-color: #C8E1A7">
-                                        <div class="card-body">
-                                            <span id="no_bppb">89798797856456</span>
-                                        </div>
-                                      </div>
+                                <div class="card" style="background-color: #C8E1A7">
+                                    <div class="card-body">
+                                        <span id="no_bppb">89798797856456</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
@@ -123,7 +133,7 @@
                                     <div class="card-body">
                                         <span id="produk">Produk 1</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Kategori</label>
@@ -131,7 +141,7 @@
                                     <div class="card-body">
                                         <span id="kategori">Kategori 1</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -141,7 +151,7 @@
                                     <div class="card-body">
                                         <span id="jml">100 Unit</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Tanggal Mulai</label>
@@ -149,31 +159,47 @@
                                     <div class="card-body">
                                         <span id="start">10-06-2021</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Tanggal Selesai</label>
                                 <div class="card" style="background-color: #FFECB2">
                                     <div class="card-body">
-                                       <span id="end"> 13-06-2021</span>
+                                        <span id="end"> 13-06-2021</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Tanggal Pengiriman</label>
+                                    <input type="text" class="form-control" id="tgl_perakitan" name="waktu_tf"
+                                        placeholder="Tanggal Perakitan">
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Cari</label>
+                                    <input type="text" class="form-control" id="cari" name="cari" placeholder="Cari">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-12">
                                 <form action="post" id="form-scan">
-                                <table class="table table-striped scan-produk" id>
-                                    <thead>
-                                        <tr>
-                                            <th><input type="checkbox" name="" id="head-cb"></th>
-                                            <th>Nomor Seri</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="scan"></tbody>
-                                </table>
+                                    <table class="table table-striped scan-produk" id>
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" name="" id="head-cb"></th>
+                                                <th>Nomor Seri</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="scan"></tbody>
+                                    </table>
                             </div>
                         </div>
                     </div>
@@ -183,7 +209,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 <button type="submit" class="btn btn-primary" id="">Simpan</button>
             </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>
@@ -211,7 +237,7 @@
     function parseDateValue(rawDate) {
         var dateArray = rawDate.split("-");
         var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
-        0]);
+            0]);
         return parsedDate;
     }
 
@@ -235,34 +261,54 @@
     function parseDateValue2(rawDate) {
         var dateArray = rawDate.split("-");
         var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
-        0]);
+            0]);
         return parsedDate;
     }
-   $(document).ready(function () {
-    var table = $('.table_produk_perakitan').DataTable({
-        processing: true,
-        ajax: "/api/prd/kirim",
-        columns: [
-            {data: "start"},
-            {data: "end"},
-            {data: "no_bppb"},
-            {data: "produk"},
-            {data: "jml"},
-            {data: "status"},
-            {data: "action"},
-        ],
-        "language": {
+    $(document).ready(function () {
+        let date = new Date();
+        $('#tgl_perakitan').val(date.toISOString().substr(0, 10));
+        $('#tgl_perakitan').daterangepicker({
+            singleDatePicker: true,
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
+        var table = $('.table_produk_perakitan').DataTable({
+            processing: true,
+            ajax: "/api/prd/kirim",
+            columns: [{
+                    data: "start"
+                },
+                {
+                    data: "end"
+                },
+                {
+                    data: "no_bppb"
+                },
+                {
+                    data: "produk"
+                },
+                {
+                    data: "jml"
+                },
+                {
+                    data: "status"
+                },
+                {
+                    data: "action"
+                },
+            ],
+            "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
-        "lengthChange": false,
-        "columnDefs": [
-        {
-            "targets": [6],
-            "visible": document.getElementById('auth').value == '2' ? false : true
-        }]
-    });
+            "lengthChange": false,
+            "columnDefs": [{
+                "targets": [6],
+                "visible": document.getElementById('auth').value == '2' ? false : true
+            }]
+        });
 
-    $('#kt_datepicker_1').daterangepicker({
+        $('#kt_datepicker_1').daterangepicker({
             autoUpdateInput: false
         });
 
@@ -283,8 +329,8 @@
             table.draw();
         });
 
-    // Tanggal Keluar
-    $('#kt_datepicker_2').daterangepicker({
+        // Tanggal Keluar
+        $('#kt_datepicker_2').daterangepicker({
             autoUpdateInput: false
         });
 
@@ -306,6 +352,7 @@
         });
 
     })
+
     function transfer() {
         Swal.fire({
             title: "Apakah anda yakin?",
@@ -337,7 +384,7 @@
 
 
 
-    $(document).on('click', '.detailmodal', function() {
+    $(document).on('click', '.detailmodal', function () {
         $('.modalRakit').modal('show');
         $('.scan-produk tbody').empty();
         id = $(this).data('id');
@@ -348,7 +395,7 @@
             url: "/api/prd/headerSeri/" + id,
             type: "get",
             dataType: "json",
-            success: function(res) {
+            success: function (res) {
                 // console.log(res);
                 $('span#no_bppb').text(res.bppb);
                 $('span#produk').text(res.produk);
@@ -372,35 +419,39 @@
             "autoWidth": false,
             ordering: false,
             "lengthChange": false,
-            ajax: "/api/prd/detailSeri1/" + prd +'/'+jadwal,
-            columns: [
-                {data: "no_seri"},
-                {data: "no_seri"}
-            ],
-            columnDefs: [
-                {
-                    targets: [0],
-                    checkboxes: {
-                        selectRow: false,
-                    },
-                    width: "5%"
+            ajax: "/api/prd/detailSeri1/" + prd + '/' + jadwal,
+            columns: [{
+                    data: "no_seri"
                 },
+                {
+                    data: "no_seri"
+                }
             ],
-            select : {
+            columnDefs: [{
+                targets: [0],
+                checkboxes: {
+                    selectRow: false,
+                },
+                width: "5%"
+            }, ],
+            select: {
                 style: 'multi'
             },
         });
+        $('#cari').on('keyup', function () {
+            table.search($(this).val()).draw();
+        });
         $('#form-scan').on('submit', function (e) {
-        e.preventDefault();
+            e.preventDefault();
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Transfer it'
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Transfer it'
             }).then((result) => {
                 if (result.isConfirmed) {
                     var form = $(this);
@@ -412,41 +463,47 @@
                         seri.push(rowId);
                     });
                     if (seri.length > 0) {
+                        let tgl = $('#tgl_perakitan').val();
+                        let today = new Date();
+                        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                        let datetime = tgl + ' ' + time;
                         Swal.fire(
-                        'Success!',
-                        'Data Terkirim ke Gudang Barang Jadi',
-                        'success'
-                    )
-                    $.ajax({
-                        url: "/api/prd/send",
-                        type: "post",
-                        data: {
-                            "_token" : "{{csrf_token() }}",
-                            userid : $('#userid').val(),
-                            qty: jumlah,
-                            gbj_id : prd,
-                            jadwal_id : id,
-                            noseri: seri,
-                        },
-                        success: function(res) {
-                            console.log(res);
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1000);
-                        }
-                    })
-                    }else{
+                            'Success!',
+                            'Data Terkirim ke Gudang Barang Jadi',
+                            'success'
+                        )
+                        $.ajax({
+                            url: "/api/prd/send",
+                            type: "post",
+                            data: {
+                                "_token": "{{csrf_token() }}",
+                                userid: $('#userid').val(),
+                                qty: jumlah,
+                                gbj_id: prd,
+                                jadwal_id: id,
+                                noseri: seri,
+                                tgl_transfer: datetime,
+                            },
+                            success: function (res) {
+                                console.log(res);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        })
+                    } else {
                         Swal.fire(
                             'Error!',
                             'Tidak ada data yang dipilih',
                             'error'
                         )
                     }
-                    
+
                 }
             })
 
-    });
+        });
     }
+
 </script>
 @stop
