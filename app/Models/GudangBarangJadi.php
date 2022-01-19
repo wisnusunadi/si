@@ -68,7 +68,7 @@ class GudangBarangJadi extends Model
             $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                 $q->where('gudang_barang_jadi_id', $id);
             })->whereHas('Pesanan', function ($q) {
-                $q->whereNotIn('log_id', ['10']);
+                $q->whereNotIn('log_id', ['7', '10']);
             })->whereHas('Pesanan.Ekatalog', function ($q) use ($status) {
                 $q->where('status', $status);
             })->get();
@@ -106,11 +106,11 @@ class GudangBarangJadi extends Model
             //     $q->whereNotIn('log_id', ['10']);
             // })->has('DetailPesanan.Pesanan.Spa')->get();
 
-            $s = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function ($q) use ($id) {
+            $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                 $q->where('gudang_barang_jadi_id', $id);
             })->whereHas('Pesanan', function ($q) {
                 $q->whereNotIn('log_id', ['10']);
-            })->has('Spb')->get();
+            })->has('Pesanan.Spb')->get();
             $jumlah = 0;
             foreach ($s as $i) {
                 foreach ($i->PenjualanProduk->Produk as $j) {
@@ -131,7 +131,7 @@ class GudangBarangJadi extends Model
             $jumlah = NoseriTGbj::where('jenis', 'keluar')->whereHas('detail', function ($q) use ($id) {
                 $q->where('gdg_brg_jadi_id', $id);
             })->whereHas('detail.header.pesanan', function ($q) {
-                $q->whereNotIn('log_id', ['10']);
+                $q->whereNotIn('log_id', ['7', '10']);
             })->whereHas('detail.header.pesanan.Ekatalog', function ($q) use ($status) {
                 $q->where('status', $status);
             })->count();

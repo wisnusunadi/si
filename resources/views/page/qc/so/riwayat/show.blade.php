@@ -264,7 +264,7 @@
             ]
         })
 
-        function noseritable(id) {
+        function noseritable(id, jenis) {
             $('#noseritable').DataTable({
                 destroy: true,
                 processing: true,
@@ -272,7 +272,7 @@
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
-                    'url': '/api/qc/so/riwayat/detail/' + id,
+                    'url': '/api/qc/so/riwayat/detail/' + id + '/' + jenis,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -287,16 +287,30 @@
                         searchable: false
                     },
                     {
-                        data: 'no_seri'
+                        data: 'no_seri',
+                        visible: jenis == "produk" ? true : false
                     },
                     {
-                        data: 'hasil'
+                        data: 'hasil',
+                        visible: jenis == "produk" ? true : false
+                    },
+                    {
+                        data: 'tanggal_uji',
+                        visible: jenis == "part" ? true : false
+                    },
+                    {
+                        data: 'jumlah_ok',
+                        visible: jenis == "part" ? true : false
+                    },
+                    {
+                        data: 'jumlah_nok',
+                        visible: jenis == "part" ? true : false
                     }
                 ]
             })
         }
 
-        function select_produk(id) {
+        function select_produk(id, jenis) {
             $('.detail_produk').select2({
                 placeholder: 'Pilih Produk',
                 ajax: {
@@ -325,7 +339,7 @@
                 }
             }).change(function() {
                 var ids = $(this).val();
-                noseritable(ids);
+                noseritable(ids, jenis);
             });
         }
 
@@ -334,9 +348,10 @@
             var penjualan_produk_id = $(this).attr('data-attr');
             var produk_count = $(this).attr('data-count');
             var produk_id = $(this).attr('data-produk');
+            var produk_jenis = $(this).attr('data-jenis');
             var id = $(this).attr('data-id');
             $.ajax({
-                url: "/api/qc/so/riwayat/detail_modal/" + id,
+                url: "/api/qc/so/riwayat/detail_modal/" + id + "/" + produk_jenis,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -346,13 +361,15 @@
                     $('#detail').html(result).show();
                     console.log("data " + id);
                     // $("#editform").attr("action", href);
-                    if (produk_count <= 1) {
-                        noseritable(produk_id);
-                        console.log('/api/qc/so/riwayat/detail/' + produk_id)
+                    if (produk_jenis == "produk") {
+                        if (produk_count <= 1) {
+                            noseritable(produk_id, produk_jenis);
+                        } else {
+                            select_produk(id, produk_jenis);
+                        }
                     } else {
-                        select_produk(id);
+                        noseritable(id, produk_jenis);
                     }
-
                 },
                 complete: function() {
                     $('#loader').hide();

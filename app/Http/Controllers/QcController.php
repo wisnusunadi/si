@@ -500,89 +500,189 @@ class QcController extends Controller
         $s = $prd->merge($part);
         $data = array();
         $c = 0;
-        foreach ($s as $i) {
-            if (count($i->penjualan_produk_id) > 0) {
-                if ($i->getJumlahPesanan() == $i->countNoSeri()) {
-                    //     $data[$c]['x'] = $i->DetailPesananProduk->GudangBarangkadiProduk->nama;
-                    $data[$c]['id'] = $i->id;
-                    $data[$c]['so'] = $i->Pesanan->so;
-                    $data[$c]['nama_produk'] = $i->PenjualanProduk->nama;
-                    $data[$c]['produk_count'] = $i->PenjualanProduk->Produk->count();
-                    if ($i->PenjualanProduk->Produk->count() <= 1) {
-                        $data[$c]['produk_id'] = $i->DetailPesananProduk->first()->id;
-                    }
-                    $data[$c]['tgl_mulai'] = $i->getTanggalUji()->tgl_mulai;
-                    $data[$c]['tgl_selesai'] = $i->getTanggalUji()->tgl_selesai;
-                    $data[$c]['jumlah'] = $i->jumlah;
-                    $data[$c]['penjualan_produk_id'] = $i->penjualan_produk_id;
-                    $data[$c]['jenis'] = "produk";
-                    $c++;
-                }
-            } else {
-                if ($i->getJumlahPesananPart() == $i->getJumlahCekPart('ok')) {
-                    $data[$c]['id'] = $i->id;
-                    $data[$c]['so'] = $i->Pesanan->so;
-                    $data[$c]['nama_produk'] = $i->Sparepart->nama;
-                    $data[$c]['produk_count'] = $i->Sparepart->count();
-                    // if ($i->PenjualanProduk->Produk->count() <= 1) {
-                    //     $data[$c]['produk_id'] = $i->DetailPesananProduk->first()->id;
-                    // }
-                    $data[$c]['tgl_mulai'] = $i->getTanggalUji()->tgl_mulai;
-                    $data[$c]['tgl_selesai'] = $i->getTanggalUji()->tgl_selesai;
-                    $data[$c]['jumlah'] = $i->jumlah;
-                    // $data[$c]['penjualan_produk_id'] = $i->penjualan_produk_id;
-                    $data[$c]['jenis'] = "part";
-                    $c++;
-                }
+        // foreach ($s as $i) {
+        //     if (count($i->penjualan_produk_id) > 0) {
+        //         if ($i->getJumlahPesanan() == $i->countNoSeri()) {
+        //             //     $data[$c]['x'] = $i->DetailPesananProduk->GudangBarangkadiProduk->nama;
+        //             $data[$c]['id'] = $i->id;
+        //             $data[$c]['so'] = $i->Pesanan->so;
+        //             $data[$c]['nama_produk'] = $i->PenjualanProduk->nama;
+        //             $data[$c]['produk_count'] = $i->PenjualanProduk->Produk->count();
+        //             if ($i->PenjualanProduk->Produk->count() <= 1) {
+        //                 $data[$c]['produk_id'] = $i->DetailPesananProduk->first()->id;
+        //             }
+        //             $data[$c]['tgl_mulai'] = $i->getTanggalUji()->tgl_mulai;
+        //             $data[$c]['tgl_selesai'] = $i->getTanggalUji()->tgl_selesai;
+        //             $data[$c]['jumlah'] = $i->jumlah;
+        //             $data[$c]['penjualan_produk_id'] = $i->penjualan_produk_id;
+        //             $data[$c]['jenis'] = "produk";
+        //             $c++;
+        //         }
+        //     } else {
+        //         if ($i->getJumlahPesananPart() == $i->getJumlahCekPart('ok')) {
+        //             $data[$c]['id'] = $i->id;
+        //             $data[$c]['so'] = $i->Pesanan->so;
+        //             $data[$c]['nama_produk'] = $i->Sparepart->nama;
+        //             $data[$c]['produk_count'] = $i->Sparepart->count();
+        //             // if ($i->PenjualanProduk->Produk->count() <= 1) {
+        //             //     $data[$c]['produk_id'] = $i->DetailPesananProduk->first()->id;
+        //             // }
+        //             $data[$c]['tgl_mulai'] = $i->getTanggalUji()->tgl_mulai;
+        //             $data[$c]['tgl_selesai'] = $i->getTanggalUji()->tgl_selesai;
+        //             $data[$c]['jumlah'] = $i->jumlah;
+        //             // $data[$c]['penjualan_produk_id'] = $i->penjualan_produk_id;
+        //             $data[$c]['jenis'] = "part";
+        //             $c++;
+        //         }
+        //     }
+        // }
+        // return datatables()->of($data)
+        //     ->addIndexColumn()
+        //     ->addColumn('so', function ($data) {
+        //         return $data['so'];
+        //     })
+        //     ->addColumn('nama_produk', function ($data) {
+        //         return $data['nama_produk'];
+        //     })
+        //     ->addColumn('tgl_mulai', function ($data) {
+        //         return Carbon::createFromFormat('Y-m-d', $data['tgl_mulai'])->format('d-m-Y');
+        //     })
+        //     ->addColumn('tgl_selesai', function ($data) {
+        //         return Carbon::createFromFormat('Y-m-d', $data['tgl_selesai'])->format('d-m-Y');
+        //     })
+        //     ->addColumn('jumlah', function ($data) {
+        //         return $data['jumlah'];
+        //     })
+        //     ->addColumn('button', function ($data) {
+        //         if ($data['jenis'] == "produk") {
+        //             $produk_id = "";
+        //             if (isset($data['produk_id'])) {
+        //                 $produk_id = $data['produk_id'];
+        //             }
+        //             return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" data-count="' . $data['produk_count'] . '" data-produk="' . $produk_id . '" id="detmodal">
+        //             <div><i class="fas fa-search"></i></div>
+        //         </a>';
+        //         }
+        //     })
+        //     ->rawColumns(['button', 'nama_produk'])
+        //     ->make(true);
+        $prdarr = array();
+        foreach ($prd as $i) {
+            if ($i->getJumlahPesanan() == $i->getJumlahCek()) {
+                $prdarr[] = $i->id;
             }
         }
+
+        $partarr = array();
+        foreach ($part as $i) {
+            if ($i->jumlah == $i->getJumlahCekPart("ok")) {
+                $partarr[] = $i->id;
+            }
+        }
+
+        $prdres = DetailPesanan::whereIn('id', $prdarr)->get();
+        $partres = DetailPesananPart::whereIn('id', $partarr)->get();
+
+        $data = $prdres->merge($partres);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data['so'];
+                return $data->Pesanan->so;
             })
             ->addColumn('nama_produk', function ($data) {
-                return $data['nama_produk'];
+                if (isset($data->penjualan_produk_id)) {
+                    return $data->PenjualanProduk->nama;
+                } else {
+                    return $data->Sparepart->nama;
+                }
             })
             ->addColumn('tgl_mulai', function ($data) {
-                return Carbon::createFromFormat('Y-m-d', $data['tgl_mulai'])->format('d-m-Y');
+                return Carbon::createFromFormat('Y-m-d', $data->getTanggalUji()->tgl_mulai)->format('d-m-Y');
             })
             ->addColumn('tgl_selesai', function ($data) {
-                return Carbon::createFromFormat('Y-m-d', $data['tgl_selesai'])->format('d-m-Y');
+                return Carbon::createFromFormat('Y-m-d', $data->getTanggalUji()->tgl_selesai)->format('d-m-Y');
             })
             ->addColumn('jumlah', function ($data) {
-                return $data['jumlah'];
+                return $data->jumlah;
             })
             ->addColumn('button', function ($data) {
-                if ($data['jenis'] == "produk") {
-                    $produk_id = "";
-                    if (isset($data['produk_id'])) {
-                        $produk_id = $data['produk_id'];
+                if (isset($data->penjualan_produk_id)) {
+                    $produkcount = $data->PenjualanProduk->Produk->count();
+                    $produkid = "";
+                    if ($produkcount <= 1) {
+                        $produkid = $data->DetailPesananProduk->first()->id;
                     }
-                    return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" data-count="' . $data['produk_count'] . '" data-produk="' . $produk_id . '" id="detmodal">
-                    <div><i class="fas fa-search"></i></div>
-                </a>';
+                    return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->penjualan_produk_id . '" data-id="' . $data->id . '" data-count="' . $produkcount . '" data-produk="' . $produkid . '" data-jenis="produk" id="detmodal">
+                        <div><i class="fas fa-search"></i></div>
+                    </a>';
+                } else {
+                    return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->part_id . '" data-id="' . $data->id . '" data-count="1" data-produk="0" data-jenis="part" id="detmodal">
+                        <div><i class="fas fa-search"></i></div>
+                    </a>';
                 }
+                // if ($data['jenis'] == "produk") {
+                //     $produk_id = "";
+                //     if (isset($data['produk_id'])) {
+                //         $produk_id = $data['produk_id'];
+                //     }
+                //     return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" data-count="' . $data['produk_count'] . '" data-produk="' . $produk_id . '" id="detmodal">
+                //     <div><i class="fas fa-search"></i></div>
+                // </a>';
+                // }
             })
             ->rawColumns(['button', 'nama_produk'])
             ->make(true);
     }
 
-    public function get_data_detail_riwayat_pengujian($id)
+    public function get_data_detail_riwayat_pengujian($id, $jenis)
     {
-        $s = NoseriDetailPesanan::where('detail_pesanan_produk_id', $id)->get();
+        $s = "";
+        if ($jenis == "produk") {
+            $s = NoseriDetailPesanan::where('detail_pesanan_produk_id', $id)->get();
+        } else if ($jenis == "part") {
+            $s = OutgoingPesananPart::where('detail_pesanan_part_id', $id)->get();
+        }
 
         return datatables()->of($s)
             ->addIndexColumn()
-            ->addColumn('no_seri', function ($data) {
-                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            ->addColumn('no_seri', function ($data) use ($jenis) {
+                if ($jenis == "produk") {
+                    return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+                } else {
+                    return '-';
+                }
             })
-            ->addColumn('hasil', function ($data) {
-                if ($data->status == "ok") {
-                    return '<div><i class="fas fa-check-circle" style="color:green;"></div>';
-                } else if ($data->status == "nok") {
-                    return '<div><i class="fas fa-times-circle" style="color:red;"></div>';
-                };
+            ->addColumn('hasil', function ($data) use ($jenis) {
+                if ($jenis == "produk") {
+                    if ($data->status == "ok") {
+                        return '<div><i class="fas fa-check-circle" style="color:green;"></div>';
+                    } else if ($data->status == "nok") {
+                        return '<div><i class="fas fa-times-circle" style="color:red;"></div>';
+                    };
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('tanggal_uji', function ($data) use ($jenis) {
+                if ($jenis == "part") {
+                    return Carbon::createFromFormat('Y-m-d', $data->tanggal_uji)->format('d-m-Y');
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('jumlah_ok', function ($data) use ($jenis) {
+                if ($jenis == "part") {
+                    return $data->jumlah_ok;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('jumlah_nok', function ($data) use ($jenis) {
+                if ($jenis == "part") {
+                    return $data->jumlah_nok;
+                } else {
+                    return '-';
+                }
             })
             ->rawColumns(['hasil'])
             ->make(true);
@@ -736,10 +836,15 @@ class QcController extends Controller
         }
     }
 
-    public function detail_modal_riwayat_so($id)
+    public function detail_modal_riwayat_so($id, $jenis)
     {
-        $result = DetailPesanan::find($id);
-        return view('page.qc.so.riwayat.detail', ['id' => $id, 'res' => $result]);
+        $result = "";
+        if ($jenis == "produk") {
+            $result = DetailPesanan::find($id);
+        } else {
+            $result = DetailPesananPart::find($id);
+        }
+        return view('page.qc.so.riwayat.detail', ['id' => $id, 'res' => $result, 'jenis' => $jenis]);
     }
 
     //Tambah
