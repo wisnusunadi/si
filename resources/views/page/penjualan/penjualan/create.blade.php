@@ -759,6 +759,7 @@
                 $(".os-content-arrange").remove();
                 $("#customer_id").attr('disabled', false);
                 //cek
+                $("#belum_dsb").addClass("hide");
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").removeClass("hide");
                 $("#penj_sem").removeClass("hide");
