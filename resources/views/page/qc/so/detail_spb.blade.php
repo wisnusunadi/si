@@ -652,7 +652,7 @@
                             if (valok > data) {
                                 $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
                                 $('#btnsimpan').attr('disabled', true);
-                            } else {
+                            } else if (valok <= data) {
                                 $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
                                 if ($("input[type='number'][name='jumlah_nok']").val() != "") {
                                     var jumlahnok = $("input[type='number'][name='jumlah_nok']").val();
@@ -660,7 +660,7 @@
                                     if (jumlahcurr > data) {
                                         $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
                                         $('#btnsimpan').attr('disabled', true);
-                                    } else {
+                                    } else if (jumlahcurr <= data) {
                                         if ($("input[name='tanggal_uji']").val() != "") {
                                             $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
                                             $('#btnsimpan').removeAttr('disabled');
@@ -702,7 +702,7 @@
                             if (valnok > data) {
                                 $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
                                 $('#btnsimpan').attr('disabled', true);
-                            } else {
+                            } else if (valnok <= data) {
                                 $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
                                 if ($("input[type='number'][name='jumlah_ok']").val() != "") {
                                     var jumlahok = $("input[type='number'][name='jumlah_ok']").val();
@@ -710,7 +710,7 @@
                                     if (jumlahcurr > data) {
                                         $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
                                         $('#btnsimpan').attr('disabled', true);
-                                    } else {
+                                    } else if (jumlahcurr <= data) {
                                         if ($("input[name='tanggal_uji']").val() != "") {
                                             $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
                                             $('#btnsimpan').removeAttr('disabled');

@@ -1015,7 +1015,7 @@
             var hasil = "";
             $.ajax({
                 type: "POST",
-                url: '/api/logistik/cek/no_sj/' + val,
+                url: '/api/logistik/cek/no_sj/0/' + val,
                 dataType: 'json',
                 success: function(data) {
                     hasil = data;
@@ -1031,7 +1031,7 @@
                 var val = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: '/api/logistik/cek/no_sj/' + val,
+                    url: '/api/logistik/cek/no_sj/0/' + val,
                     dataType: 'json',
                     success: function(data) {
                         if (data > 0) {
