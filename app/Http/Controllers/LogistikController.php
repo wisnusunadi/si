@@ -3335,7 +3335,7 @@ class LogistikController extends Controller
     {
         $e = "";
         if ($id != "0") {
-            $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->get();
+            $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->count();
         } else {
             $e = Logistik::where('nosurat', 'SPA-' . $val)->count();
         }
