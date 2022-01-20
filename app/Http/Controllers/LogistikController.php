@@ -2188,6 +2188,7 @@ class LogistikController extends Controller
         $l = Logistik::find($id);
         if ($l->status_id == "11") {
             if ($request->nama_pengirim == NULL) {
+                $l->nosurat = $request->no_invoice;
                 $l->ekspedisi_id = $request->ekspedisi_id;
                 $l->nama_pengirim = NULL;
                 $r = $l->save();
@@ -2195,6 +2196,7 @@ class LogistikController extends Controller
                     $bool = false;
                 }
             } else {
+                $l->nosurat = $request->no_invoice;
                 $l->ekspedisi_id = NULL;
                 $l->nama_pengirim = $request->nama_pengirim;
                 $r = $l->save();
@@ -3331,13 +3333,19 @@ class LogistikController extends Controller
         return $footer;
     }
 
-    public function check_no_sj($id, $val)
+    public function check_no_sj($id, $val, $jenis)
     {
         $e = "";
         if ($id != "0") {
-            $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->get();
+            $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->count();
         } else {
-            $e = Logistik::where('nosurat', 'SPA-' . $val)->count();
+            $vjenis = "";
+            if ($jenis == "SPB") {
+                $vjenis = "B.";
+            } else {
+                $vjenis = "SPA-";
+            }
+            $e = Logistik::where('nosurat', $vjenis . $val)->count();
         }
         return $e;
     }

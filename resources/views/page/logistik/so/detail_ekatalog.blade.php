@@ -1031,7 +1031,7 @@
                 var val = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: '/api/logistik/cek/no_sj/0/' + val,
+                    url: '/api/logistik/cek/no_sj/0/' + val + '/' + jenis_penjualan,
                     dataType: 'json',
                     success: function(data) {
                         if (data > 0) {

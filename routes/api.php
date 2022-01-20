@@ -486,7 +486,7 @@ Route::prefix('/logistik')->group(function () {
     });
 
     Route::group(['prefix' => '/cek'], function () {
-        Route::post('/no_sj/{id}/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_sj']);
+        Route::post('/no_sj/{id}/{val}/{jenis}', [App\Http\Controllers\LogistikController::class, 'check_no_sj']);
         Route::post('/no_resi/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_resi']);
     });
 });
