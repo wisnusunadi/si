@@ -509,14 +509,18 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function () {
-                            $('.scan-produk1 tbody tr').each((index, value) => {
                                 const obj = {
-                                    noseri: value.childNodes[0].firstChild.value,
-                                    kerusakan: value.childNodes[1].firstChild.value,
-                                    tingkat: value.childNodes[2].firstChild.value,
+                                    noseri: $('.scan-produk1').DataTable().column(0).nodes().to$().find('input[type=text]').map(function () {
+                                        return $(this).val();
+                                    }).get(),
+                                    kerusakan: $('.scan-produk1').DataTable().column(1).nodes().to$().find('input[type=text]').map(function () {
+                                        return $(this).val();
+                                    }).get(),
+                                    tingkat: $('.scan-produk1').DataTable().column(2).nodes().to$().find('select').map(function () {
+                                        return $(this).val();
+                                    }).get(),
                                 }
                                 spr_arr.push(obj);
-                            })
                             seri[d] = spr_arr;
                             spr_arr = [];
                             console.log(seri);
@@ -553,7 +557,7 @@
         }
     }
 
-    function addSparepart(x, y, z) { 
+    function addSparepart(x, y, z) {
         // header
         let testing = sparepart.find(element => element[0] == z);
         $('.spr').text(testing[1]);
@@ -716,34 +720,32 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function () {
-                            $('.scan-produk tbody tr').each((index, value) => {
-                                const obj1 = {
-                                    noseri: value.childNodes[0].firstChild.value,
-                                    kerusakan: value.childNodes[1].firstChild.value,
-                                    tingkat: value.childNodes[2].firstChild.value,
-                                }
-                                unit_arr.push(obj1);
-                            })
-                            seri_unit[c] = unit_arr;
-                            unit_arr = [];
-                            console.log(seri_unit)
-                            $('.modalAddUnit').modal('hide');
-                            // let obj1 = {
-                            //     noseri: $('.scan-produk').DataTable().column(0).nodes().to$().find('input.seri').map(function () {
-                            //                 return $(this).val();
-                            //             }),
-                            //     kerusakan: $('.scan-produk').DataTable().column(1).nodes().to$().find('input.kerusakan').map(function () {
-                            //                 return $(this).val();
-                            //             }),
-                            //     tingkat: $('.scan-produk').DataTable().column(2).nodes().to$().find('select.tingkat').map(function () {
-                            //                 return $(this).val();
-                            //             }),
-                            // }
-                            // unit_arr.push(obj1);
+                            // const obj1 = {
+                            //         noseri: value.childNodes[0].firstChild.value,
+                            //         kerusakan: value.childNodes[1].firstChild.value,
+                            //         tingkat: value.childNodes[2].firstChild.value,
+                            //     }
+                            //     unit_arr.push(obj1);
                             // seri_unit[c] = unit_arr;
                             // unit_arr = [];
                             // console.log(seri_unit)
                             // $('.modalAddUnit').modal('hide');
+                            let obj1 = {
+                                noseri: $('.scan-produk').DataTable().column(0).nodes().to$().find('input[type=text]').map(function () {
+                                            return $(this).val();
+                                        }).get(),
+                                kerusakan: $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=text]').map(function () {
+                                            return $(this).val();
+                                        }).get(),
+                                tingkat: $('.scan-produk').DataTable().column(2).nodes().to$().find('select').map(function () {
+                                            return $(this).val();
+                                        }).get(),
+                            }
+                            unit_arr.push(obj1);
+                            seri_unit[c] = unit_arr;
+                            unit_arr = [];
+                            console.log("unit"+ unit_arr);
+                            $('.modalAddUnit').modal('hide');
                         })
                     } else {
                         Swal.fire({
@@ -966,9 +968,9 @@
                             'Data berhasil diterima!',
                             'success'
                         )
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
+                        // setTimeout(() => {
+                        //     location.reload();
+                        // }, 1000);
                     },
                 })
 

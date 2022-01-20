@@ -1151,27 +1151,29 @@ class SparepartController extends Controller
         $header->save();
 
         $spr = $request->sparepart_id;
-        if (isset($spr)) {
-            foreach ($spr as $k => $v) {
-                $sprr = new GudangKarantinaDetail();
-                $sprr->gk_id = $header->id;
-                $sprr->sparepart_id = $request->sparepart_id[$k];
-                $sprr->qty_spr = $request->qty_spr[$k];
-                $sprr->is_draft = 1;
-                $sprr->is_keluar = 0;
-                $sprr->created_at = Carbon::now();
-                $sprr->created_by = $request->userid;
-                $sprr->save();
 
-                $x = $request->noseri;
-                $id = $sprr->id;
+       if (isset($spr)) {
+        foreach ($spr as $k => $v) {
+            $sprr = new GudangKarantinaDetail();
+            $sprr->gk_id = $header->id;
+            $sprr->sparepart_id = $request->sparepart_id[$k];
+            $sprr->qty_spr = $request->qty_spr[$k];
+            $sprr->is_draft = 1;
+            $sprr->is_keluar = 0;
+            $sprr->created_at = Carbon::now();
+            $sprr->created_by = $request->userid;
+            $sprr->save();
 
-                for ($i = 0; $i < count($request->noseri[$v]); $i++) {
+            $x = $request->noseri;
+            $id = $sprr->id;
+
+            foreach($request->noseri[$v] as $kk => $vv) {
+                foreach($vv['noseri'] as $kkk => $vvv) {
                     $noseri = new GudangKarantinaNoseri();
                     $noseri->gk_detail_id = $id;
-                    $noseri->noseri = strtoupper($request->noseri[$v][$i]["noseri"]);
-                    $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
-                    $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
+                    $noseri->noseri = strtoupper($vvv);
+                    $noseri->remark = $vv['kerusakan'][$kkk];
+                    $noseri->tk_kerusakan =  $vv['tingkat'][$kkk];
                     $noseri->is_draft = 1;
                     $noseri->is_keluar = 0;
                     $noseri->created_at = Carbon::now();
@@ -1180,11 +1182,11 @@ class SparepartController extends Controller
                 }
             }
         }
-
+       }
 
         $unit = $request->gbj_id;
         if (isset($unit)) {
-            foreach ($unit as $j => $vv) {
+            foreach ($unit as $j => $vv1) {
                 $unitt = new GudangKarantinaDetail();
                 $unitt->gk_id = $header->id;
                 $unitt->gbj_id = $request->gbj_id[$j];
@@ -1197,18 +1199,19 @@ class SparepartController extends Controller
 
                 $idd = $unitt->id;
 
-                for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
-
-                    $noserii = new GudangKarantinaNoseri();
-                    $noserii->gk_detail_id = $idd;
-                    $noserii->noseri = strtoupper($request->seriunit[$vv][$m]["noseri"]);
-                    $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
-                    $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
-                    $noserii->is_draft = 1;
-                    $noserii->is_keluar = 0;
-                    $noserii->created_at = Carbon::now();
-                    $noserii->created_by = $request->userid;
-                    $noserii->save();
+                foreach($request->seriunit[$vv1] as $kkey => $vvalue) {
+                    foreach($vvalue['noseri'] as $key1 => $value1) {
+                        $noserii = new GudangKarantinaNoseri();
+                        $noserii->gk_detail_id = $idd;
+                        $noserii->noseri = strtoupper($value1);
+                        $noserii->remark = $vvalue['kerusakan'][$key1];
+                        $noserii->tk_kerusakan = $vvalue['tingkat'][$key1];
+                        $noserii->is_draft = 1;
+                        $noserii->is_keluar = 0;
+                        $noserii->created_at = Carbon::now();
+                        $noserii->created_by = $request->userid;
+                        $noserii->save();
+                    }
                 }
             }
         }
@@ -1245,24 +1248,26 @@ class SparepartController extends Controller
             $x = $request->noseri;
             $id = $sprr->id;
 
-            for ($i = 0; $i < count($request->noseri[$v]); $i++) {
-                $noseri = new GudangKarantinaNoseri();
-                $noseri->gk_detail_id = $id;
-                $noseri->noseri = strtoupper($request->noseri[$v][$i]["noseri"]);
-                $noseri->remark = $request->noseri[$v][$i]['kerusakan'];
-                $noseri->tk_kerusakan = $request->noseri[$v][$i]['tingkat'];
-                $noseri->is_draft = 0;
-                $noseri->is_keluar = 0;
-                $noseri->created_at = Carbon::now();
-                $noseri->created_by = $request->userid;
-                $noseri->save();
+            foreach($request->noseri[$v] as $kk => $vv) {
+                foreach($vv['noseri'] as $kkk => $vvv) {
+                    $noseri = new GudangKarantinaNoseri();
+                    $noseri->gk_detail_id = $id;
+                    $noseri->noseri = strtoupper($vvv);
+                    $noseri->remark = $vv['kerusakan'][$kkk];
+                    $noseri->tk_kerusakan =  $vv['tingkat'][$kkk];
+                    $noseri->is_draft = 0;
+                    $noseri->is_keluar = 0;
+                    $noseri->created_at = Carbon::now();
+                    $noseri->created_by = $request->userid;
+                    $noseri->save();
+                }
             }
         }
        }
 
         $unit = $request->gbj_id;
         if (isset($unit)) {
-            foreach ($unit as $j => $vv) {
+            foreach ($unit as $j => $vv1) {
                 $unitt = new GudangKarantinaDetail();
                 $unitt->gk_id = $header->id;
                 $unitt->gbj_id = $request->gbj_id[$j];
@@ -1275,18 +1280,19 @@ class SparepartController extends Controller
 
                 $idd = $unitt->id;
 
-                for ($m = 0; $m < count($request->seriunit[$vv]); $m++) {
-
-                    $noserii = new GudangKarantinaNoseri();
-                    $noserii->gk_detail_id = $idd;
-                    $noserii->noseri = strtoupper($request->seriunit[$vv][$m]["noseri"]);
-                    $noserii->remark = $request->seriunit[$vv][$m]['kerusakan'];
-                    $noserii->tk_kerusakan = $request->seriunit[$vv][$m]['tingkat'];
-                    $noserii->is_draft = 0;
-                    $noserii->is_keluar = 0;
-                    $noserii->created_at = Carbon::now();
-                    $noserii->created_by = $request->userid;
-                    $noserii->save();
+                foreach($request->seriunit[$vv1] as $kkey => $vvalue) {
+                    foreach($vvalue['noseri'] as $key1 => $value1) {
+                        $noserii = new GudangKarantinaNoseri();
+                        $noserii->gk_detail_id = $idd;
+                        $noserii->noseri = strtoupper($value1);
+                        $noserii->remark = $vvalue['kerusakan'][$key1];
+                        $noserii->tk_kerusakan = $vvalue['tingkat'][$key1];
+                        $noserii->is_draft = 0;
+                        $noserii->is_keluar = 0;
+                        $noserii->created_at = Carbon::now();
+                        $noserii->created_by = $request->userid;
+                        $noserii->save();
+                    }
                 }
             }
         }

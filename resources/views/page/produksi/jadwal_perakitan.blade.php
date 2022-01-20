@@ -509,7 +509,7 @@
                                         $('.scan-produk tbody').empty();
                                         $('#table_produk_perakitan').DataTable().ajax
                                             .reload();
-                                        location.reload();
+                                        // location.reload();
                                     }
                                 })
                             }
