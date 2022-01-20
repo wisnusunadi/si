@@ -377,10 +377,10 @@
                                     <thead>
                                         <tr>
                                             <th>Nama Produk</th>
+                                            <th>Paket</th>
                                             <th>Jumlah</th>
-                                            {{-- <th>Tipe</th> --}}
                                             <th>Merk</th>
-                                            <th>Status</th>
+                                            {{-- <th>Status</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -416,12 +416,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        {{-- <tr>
                             <td scope="row">1</td>
                             <td>654654654</td>
                             <td>RS Dr. Soetomo</td>
                             <td>11-12-2021</td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -589,11 +589,34 @@
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
             columns: [
+                {data: 'detail_pesanan_id'},
+                { data: 'paket'},
                 { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
+                { data: 'jumlah', name: 'jumlah'},
                 { data: 'merk', name: 'merk'},
-                { data: 'status_prd', name: 'status_prd'},
+                // { data: 'status_prd', name: 'status_prd'},
             ],
+            "drawCallback": function ( settings ) {
+                var api = this.api();
+                var rows = api.rows( {page:'current'} ).nodes();
+                var last=null;
+
+                api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                    if (last !== group) {
+                        var rowData = api.row(i).data();
+
+                        $(rows).eq(i).before(
+                        '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="3">' + rowData.paket + '</td></tr>'
+                    );
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs":[
+                    {"targets": [0], "visible": false},
+                    {"targets": [1], "visible": false},
+                ],
             "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 }
@@ -658,11 +681,34 @@
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
             columns: [
+                {data: 'detail_pesanan_id'},
+                { data: 'paket'},
                 { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
+                { data: 'jumlah', name: 'jumlah'},
                 { data: 'merk', name: 'merk'},
-                { data: 'status_prd', name: 'status_prd'},
+                // { data: 'status_prd', name: 'status_prd'},
             ],
+            "drawCallback": function ( settings ) {
+                var api = this.api();
+                var rows = api.rows( {page:'current'} ).nodes();
+                var last=null;
+
+                api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                    if (last !== group) {
+                        var rowData = api.row(i).data();
+
+                        $(rows).eq(i).before(
+                        '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="3">' + rowData.paket + '</td></tr>'
+                    );
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs":[
+                    {"targets": [0], "visible": false},
+                    {"targets": [1], "visible": false},
+                ],
             "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 }
@@ -782,11 +828,34 @@
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
             columns: [
+                {data: 'detail_pesanan_id'},
+                { data: 'paket'},
                 { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
+                { data: 'jumlah', name: 'jumlah'},
                 { data: 'merk', name: 'merk'},
-                { data: 'status_prd', name: 'status_prd'},
+                // { data: 'status_prd', name: 'status_prd'},
             ],
+            "drawCallback": function ( settings ) {
+                var api = this.api();
+                var rows = api.rows( {page:'current'} ).nodes();
+                var last=null;
+
+                api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                    if (last !== group) {
+                        var rowData = api.row(i).data();
+
+                        $(rows).eq(i).before(
+                        '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="3">' + rowData.paket + '</td></tr>'
+                    );
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs":[
+                    {"targets": [0], "visible": false},
+                    {"targets": [1], "visible": false},
+                ],
             "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 }
