@@ -1403,6 +1403,12 @@ return [
             'auth' => [2],
             'submenu' => [
                 [
+                    'text' => 'Perakitan Berlangsung',
+                    'url'  => 'produksi/jadwal_perakitan',
+                    'icon' => 'far fa-circle',
+                    'auth' => [2]
+                ],
+                [
                     'text' => 'Riwayat Perakitan',
                     'url'  => 'produksi/riwayat_perakitan',
                     'icon' => 'far fa-circle',

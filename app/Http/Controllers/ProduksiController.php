@@ -888,6 +888,20 @@ class ProduksiController extends Controller
                 }
                 return $x . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $x . '">';
             })
+            ->addColumn('jumlah', function ($data) {
+                $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+                    $q->where('id', $data->id);
+                })->get();
+                $x = 0;
+                foreach ($s as $i) {
+                    foreach ($i->PenjualanProduk->Produk as $j) {
+                        if ($j->id == $data->gudangbarangjadi->produk_id) {
+                            $x = $i->jumlah * $j->pivot->jumlah;
+                        }
+                    }
+                }
+                return $x . ' ' . $data->gudangbarangjadi->satuan->nama;
+            })
             ->addColumn('tipe', function ($data) {
                 if (empty($data->gudangbarangjadi->nama)) {
                     return $data->gudangbarangjadi->produk->nama;
@@ -1108,7 +1122,7 @@ class ProduksiController extends Controller
         if ($value == "ekatalog") {
             $data = Pesanan::with('Ekatalog')->find($id);
             return response()->json([
-                'so' => $data->so,
+                'so' => $data->so == null ? '-' : $data->so,
                 'po' => $data->no_po == null ? '-' : $data->no_po,
                 'akn' => $data->Ekatalog->no_paket,
                 'customer' => $data->Ekatalog->Customer->nama,
@@ -1116,7 +1130,7 @@ class ProduksiController extends Controller
         } else if ($value == "spa") {
             $data = Pesanan::with('spa')->find($id);
             return response()->json([
-                'so' => $data->so,
+                'so' => $data->so == null ? '-' : $data->so,
                 'po' => $data->no_po == null ? '-' : $data->no_po,
                 'akn' => '-',
                 'customer' => $data->spa->Customer->nama,
@@ -1124,7 +1138,7 @@ class ProduksiController extends Controller
         } else if ($value == "spb") {
             $data = Pesanan::with('spb')->find($id);
             return response()->json([
-                'so' => $data->so,
+                'so' => $data->so == null ? '-' : $data->so,
                 'po' => $data->no_po == null ? '-' : $data->no_po,
                 'akn' => '-',
                 'customer' => $data->spb->Customer->nama,
@@ -1218,16 +1232,11 @@ class ProduksiController extends Controller
     // sale
     function h_minus10()
     {
-        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->whereBetween('tgl_kontrak', [Carbon::now()->subDays(10), Carbon::now()])
-            ->get());
-        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+            $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(10));
         })->get());
-        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -1236,16 +1245,11 @@ class ProduksiController extends Controller
 
     function h_minus5()
     {
-        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->whereBetween('tgl_kontrak', [Carbon::now()->subDays(5), Carbon::now()])
-            ->get());
-        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+            $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(5));
         })->get());
-        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -1254,17 +1258,11 @@ class ProduksiController extends Controller
 
     function h_exp()
     {
-        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })
-            ->whereDate('tgl_kontrak', '<', Carbon::now()->format('Y-m-d'))
-            ->get());
-        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+            $q->whereDate('tgl_kontrak', '<', Carbon::now());
         })->get());
-        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -1273,42 +1271,65 @@ class ProduksiController extends Controller
 
     function minus5()
     {
-        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->whereBetween('tgl_kontrak', [Carbon::now()->subDays(5), Carbon::now()])
-            ->get());
-        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+            $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(5));
         })->get());
-        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->Pesanan->so;
+                return $data->so;
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
+                $name = explode('/', $data->so);
+                for ($i = 1; $i < count($name); $i++) {
+                    if ($name[1] == 'EKAT') {
+                        return $data->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } elseif ($name[1] == 'SPB') {
+                        return $data->Spb->Customer->nama;
+                    } else { }
+                }
+
+                if (empty($data->so)) {
+                    return $data->Ekatalog->Customer->nama;
+                }
             })
             ->addColumn('batas_out', function ($d) {
-                if (isset($d->tgl_kontrak)) {
-                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY');
+                if (isset($d->Ekatalog->tgl_kontrak)) {
+                    return Carbon::parse($d->Ekatalog->tgl_kontrak)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('button', function ($data) {
-                $x = $data->getTable();
-
-                return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                            <button class="btn btn-primary" type="button">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </a>';
+                $x = explode('/', $data->so);
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="ekatalog"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    } elseif ($x[1] == 'SPA') {
+                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="spa"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    } elseif ($x[1] == 'SPB') {
+                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="spb"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    }
+                }
             })
             ->rawColumns(['button'])
             ->make(true);
@@ -1316,42 +1337,65 @@ class ProduksiController extends Controller
 
     function minus10()
     {
-        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->whereBetween('tgl_kontrak', [Carbon::now()->subDays(10), Carbon::now()])
-            ->get());
-        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+            $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(10));
         })->get());
-        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->Pesanan->so;
+                return $data->so;
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
+                $name = explode('/', $data->so);
+                for ($i = 1; $i < count($name); $i++) {
+                    if ($name[1] == 'EKAT') {
+                        return $data->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } elseif ($name[1] == 'SPB') {
+                        return $data->Spb->Customer->nama;
+                    } else { }
+                }
+
+                if (empty($data->so)) {
+                    return $data->Ekatalog->Customer->nama;
+                }
             })
             ->addColumn('batas_out', function ($d) {
-                if (isset($d->tgl_kontrak)) {
-                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY');
+                if (isset($d->Ekatalog->tgl_kontrak)) {
+                    return Carbon::parse($d->Ekatalog->tgl_kontrak)->isoFormat('D MMM YYYY');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('button', function ($data) {
-                $x = $data->getTable();
-
-                return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                            <button class="btn btn-primary" type="button">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </a>';
+                $x = explode('/', $data->so);
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="ekatalog"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    } elseif ($x[1] == 'SPA') {
+                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="spa"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    } elseif ($x[1] == 'SPB') {
+                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="spb"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    }
+                }
             })
             ->rawColumns(['button'])
             ->make(true);
@@ -1359,47 +1403,70 @@ class ProduksiController extends Controller
 
     function expired()
     {
-        $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })
-            ->whereDate('tgl_kontrak', '<', Carbon::now()->format('Y-m-d'))
-            ->get());
-        $Spa = collect(Spa::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+            $q->whereDate('tgl_kontrak', '<', Carbon::now());
         })->get());
-        $Spb = collect(Spb::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po');
-        })->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->Pesanan->so;
+                return $data->so;
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer->nama;
+                $name = explode('/', $data->so);
+                for ($i = 1; $i < count($name); $i++) {
+                    if ($name[1] == 'EKAT') {
+                        return $data->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } elseif ($name[1] == 'SPB') {
+                        return $data->Spb->Customer->nama;
+                    } else { }
+                }
+
+                if (empty($data->so)) {
+                    return $data->Ekatalog->Customer->nama;
+                }
             })
             ->addColumn('batas_out', function ($d) {
-                $m = strtotime($d->tgl_kontrak);
-                $a = strtotime(Carbon::now());
-                $s = $a - $m;
-                $x = abs(floor($s / (60 * 60 * 24)));
-                if (isset($d->tgl_kontrak)) {
-                    return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-danger">Lewat ' . $x . ' Hari</span>';
+                // $m = strtotime($d->Ekatalog->tgl_kontrak);
+                // $a = strtotime(Carbon::now());
+                // $s = $a - $m;
+                // $x = abs(floor($s / (60 * 60 * 24)));
+                if (isset($d->Ekatalog->tgl_kontrak)) {
+                    $a = Carbon::now()->diffInDays($d->Ekatalog->tgl_kontrak);
+                    return Carbon::parse($d->Ekatalog->tgl_kontrak)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                 } else {
                     return '-';
                 }
             })
             ->addColumn('button', function ($data) {
-                $x = $data->getTable();
-
-                return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="' . $x . '"  data-id="' . $data->pesanan_id . '">
-                            <button class="btn btn-primary" type="button">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </a>';
+                $x = explode('/', $data->so);
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="ekatalog"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    } elseif ($x[1] == 'SPA') {
+                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="spa"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    } elseif ($x[1] == 'SPB') {
+                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="spb"  data-id="' . $data-> id . '">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </a>';
+                    }
+                }
             })
             ->rawColumns(['button', 'batas_out'])
             ->make(true);

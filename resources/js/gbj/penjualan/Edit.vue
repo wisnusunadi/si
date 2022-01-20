@@ -1,5 +1,0 @@
-<template>
-    <div class="row">
-        <h1>Hi</h1>
-    </div>
-</template>

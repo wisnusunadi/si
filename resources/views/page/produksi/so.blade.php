@@ -124,6 +124,8 @@
                                 <table class="table table-striped" id="view-produk">
                                     <thead>
                                         <tr>
+                                            <th>x</th>
+                                            <th>Paket</th>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             {{-- <th>Tipe</th> --}}
@@ -197,12 +199,35 @@
                 url: "/api/tfp/detail-so/" +id+"/"+x,
             },
             columns: [
+                {data: 'detail_pesanan_id'},
+                { data: 'paket'},
                 { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
+                { data: 'jumlah', name: 'jumlah'},
                 // { data: 'tipe', name: 'tipe'},
                 { data: 'merk', name: 'merk'},
                 { data: 'status_prd', name: 'status_prd'},
             ],
+            "drawCallback": function ( settings ) {
+                var api = this.api();
+                var rows = api.rows( {page:'current'} ).nodes();
+                var last=null;
+
+                api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                    if (last !== group) {
+                        var rowData = api.row(i).data();
+
+                        $(rows).eq(i).before(
+                        '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="4">' + rowData.paket + '</td></tr>'
+                    );
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs":[
+                    {"targets": [0], "visible": false},
+                    {"targets": [1], "visible": false},
+                ],
             "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 }

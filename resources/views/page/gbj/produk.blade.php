@@ -54,6 +54,14 @@
                                                         </label>
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="water" value="Water Treatment" />
+                                                        <label class="form-check-label" for="sp_kelompok">
+                                                            Water Treatment
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </span>
                                     </div>
@@ -547,10 +555,17 @@ var authid = $('#authid').val();
         }
     })
 
+    $('#water').click(function() {
+        if ($(this).prop('checked') == true) {
+            datatable.column(5).search($(this).val()).draw();
+        } else {
+            datatable.column(5).search('').draw();
+        }
+    })
+
     // load data
     var datatable = $('#gudang-barang').DataTable({
         processing: true,
-        serverSide: true,
         ajax: {
             'type': 'POST',
             'datatype': 'JSON',

@@ -146,6 +146,7 @@
                                                     <th>Nomor PO</th>
                                                     <th>Customer</th>
                                                     <th>Batas Transfer</th>
+                                                    <th>Status Penjualan</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -162,6 +163,7 @@
                                                     <th>Nomor PO</th>
                                                     <th>Customer</th>
                                                     <th>Batas Transfer</th>
+                                                    <th>Status Penjualan</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -178,6 +180,7 @@
                                                     <th>Nomor PO</th>
                                                     <th>Customer</th>
                                                     <th>Batas Transfer</th>
+                                                    <th>Status Penjualan</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -641,6 +644,8 @@
                                 <table class="table table-striped" id="view-produk">
                                     <thead>
                                         <tr>
+                                            <th>Paket</th>
+                                            <th>Paket</th>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
                                             <th>Merk</th>
@@ -889,6 +894,7 @@
                     {data: 'no_po'},
                     {data: 'nama_customer'},
                     {data: 'tgl_batas'},
+                    {data: 'status_penjualan'},
                     {data: 'action'},
                 ]
             });
@@ -907,6 +913,7 @@
                     {data: 'no_po'},
                     {data: 'nama_customer'},
                     {data: 'tgl_batas'},
+                    {data: 'status_penjualan'},
                     {data: 'action'},
                 ]
             });
@@ -925,6 +932,7 @@
                     {data: 'no_po'},
                     {data: 'nama_customer'},
                     {data: 'tgl_batas'},
+                    {data: 'status_penjualan'},
                     {data: 'action'},
                 ]
             });
@@ -968,15 +976,39 @@
                     processing: true,
                     serverSide: true,
                     autoWidth: false,
+                    bPaginate: false,
+                    scrollY: 300,
                     ajax: {
-                        url: "/api/dashboard-gbj/list-detail/" + id+"/"+x,
+                        url: "/api/tfp/detail-so/" + id+"/"+x,
                     },
                     columns: [
-                        { data: "nama_produk" },
+                        {data: 'detail_pesanan_id'},
+                        { data: "paket" },
+                        { data: "produk" },
                         { data: "jumlah" },
-                        // { data: "tipe" },
                         { data: "merk" },
                     ],
+                    "drawCallback": function ( settings ) {
+                        var api = this.api();
+                        var rows = api.rows( {page:'current'} ).nodes();
+                        var last=null;
+
+                        api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                            if (last !== group) {
+                                var rowData = api.row(i).data();
+
+                                $(rows).eq(i).before(
+                                '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="3">' + rowData.paket + '</td></tr>'
+                            );
+                                last = group;
+                            }
+                        });
+                    },
+                    "columnDefs":[
+                            {"targets": [0], "visible": false},
+                            {"targets": [1], "visible": false},
+                        ],
                     "language": {
                             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                         }
