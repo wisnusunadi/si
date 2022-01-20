@@ -153,7 +153,7 @@
                                 <h4>Outgoing 2021</h4>
                                 <div class="row">
 
-                                    <div class="col-lg-4 col-6">
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="small-box bg-success">
                                             <div class="inner">
                                                 <h3>{{$terbaru}}</h3>
@@ -165,7 +165,7 @@
                                             <a class="small-box-footer active" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-6">
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="small-box warning-bg">
                                             <div class="inner">
                                                 <h3>{{$hasil}}</h3>
@@ -177,7 +177,7 @@
                                             <a class="small-box-footer" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-6">
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="small-box bg-danger">
                                             <div class="inner">
                                                 <h3>{{$lewat_batas}}</h3>

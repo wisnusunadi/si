@@ -2840,10 +2840,16 @@ class LogistikController extends Controller
     //Dashboard
     public function dashboard()
     {
-        $terbaru = Pesanan::Has('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
+        $terbaruprd = Pesanan::Has('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
             $q->where('tgl_uji', '>=', Carbon::now()->subdays(7));
-        })->get()->count();
-        $belum_dikirim = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananProduk.DetailLogistik')->get()->count();
+        })->orderby('id', 'desc')->get();
+        $terbarupart = Pesanan::whereHas('DetailPesananPart')->where('tgl_po', '>=', Carbon::now()->subdays(7))->orderby('id', 'desc')->get();
+        $terbaru = count($terbaruprd->merge($terbarupart));
+
+        $belum_dikirimprd = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->DoesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik')->get();
+        $belum_dikirimpart = Pesanan::Has('DetailPesananPart')->doesntHave('DetailPesananPart.DetailLogistikPart')->get();
+        $belum_dikirim = count($belum_dikirimprd->merge($belum_dikirimpart));
+
         $lewat_batas_data = Ekatalog::Has('Pesanan.DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->get();
 
         $tgl_sekarang = Carbon::now()->format('Y-m-d');
@@ -2897,9 +2903,11 @@ class LogistikController extends Controller
     public function dashboard_data($value)
     {
         if ($value == 'terbaru') {
-            $data = Pesanan::Has('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
+            $terbaruprd = Pesanan::Has('TFProduksi')->WhereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function ($q) {
                 $q->where('tgl_uji', '>=', Carbon::now()->subdays(7));
-            })->get();
+            })->orderby('id', 'desc')->get();
+            $terbarupart = Pesanan::whereHas('DetailPesananPart')->where('tgl_po', '>=', Carbon::now()->subdays(7))->orderby('id', 'desc')->get();
+            $data = $terbaruprd->merge($terbarupart);
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -2976,36 +2984,33 @@ class LogistikController extends Controller
                     } else {
                         $z = "proses";
                     }
-                    return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    return '
                         <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                            <button class="dropdown-item" type="button">
                                 <i class="fas fa-search"></i>
-                                Detail
-                            </button>
-                        </a>
-                    </div>';
+                        </a>';
                 })
                 ->rawColumns(['batas', 'status', 'button'])
                 ->make(true);
         } else if ($value == 'belum_dikirim') {
-            $data = TFProduksi::Has('Pesanan.DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->DoesntHave('Pesanan.DetailPesanan.DetailPesananProduk.DetailLogistik')->get();
+            $belum_dikirimprd = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->DoesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik')->orderby('id', 'desc')->get();
+            $belum_dikirimpart = Pesanan::Has('DetailPesananPart')->doesntHave('DetailPesananPart.DetailLogistikPart')->orderby('id', 'desc')->get();
+            $data = $belum_dikirimprd->merge($belum_dikirimpart);
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
-                    return $data->pesanan->so;
+                    return $data->so;
                 })
                 ->addColumn('batas', function ($data) {
-                    $name = explode('/', $data->pesanan->so);
+                    $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
                         $x =  'ekatalog';
                         $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                        $tgl_parameter = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+                        $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
 
 
                         if ($tgl_sekarang < $tgl_parameter) {
                             $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
                             $hari = $to->diffInDays($from);
 
                             if ($hari > 7) {
@@ -3019,7 +3024,7 @@ class LogistikController extends Controller
                             return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                         } else {
                             $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->pesanan->ekatalog->tgl_kontrak, $data->pesanan->ekatalog->provinsi->status);
+                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
                             $hari = $to->diffInDays($from);
                             return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
@@ -3028,25 +3033,19 @@ class LogistikController extends Controller
                     }
                 })
                 ->addColumn('button', function ($data) {
-                    $name = explode('/', $data->pesanan->so);
+                    $name = explode('/', $data->so);
                     $x = $name[1];
                     if ($x == 'EKAT') {
-                        $y = $data->pesanan->ekatalog->id;
+                        $y = $data->ekatalog->id;
                     } elseif ($x == 'SPA') {
-                        $y = $data->pesanan->spa->id;
+                        $y = $data->spa->id;
                     } else {
-                        $y = $data->pesanan->spb->id;
+                        $y = $data->spb->id;
                     }
                     $z = "proses";
-                    return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                                <button class="dropdown-item" type="button">
+                    return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
                                     <i class="fas fa-search"></i>
-                                    Detail
-                                </button>
-                            </a>
-                        </div>';
+                            </a>';
                 })
                 ->rawColumns(['batas', 'button'])
                 ->make(true);
@@ -3133,15 +3132,10 @@ class LogistikController extends Controller
                         $y = $data->spb->id;
                     }
                     $z = "proses";
-                    return '    <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    return '
                         <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                            <button class="dropdown-item" type="button">
                                 <i class="fas fa-search"></i>
-                                Detail
-                            </button>
-                        </a>
-                    </div>';
+                        </a>';
                 })
                 ->rawColumns(['batas', 'status', 'button'])
                 ->make(true);
@@ -3337,9 +3331,13 @@ class LogistikController extends Controller
         return $footer;
     }
 
-    public function check_no_sj($val)
+    public function check_no_sj($id, $val)
     {
-        $e = Logistik::where('nosurat', 'SPA-' . $val)->count();
+        if ($id == "0") {
+            $e = Logistik::where('nosurat', 'SPA-' . $val)->count();
+        } else {
+            $e = Logistik::where('nosurat', 'SPA-' . $val)->whereNotIn('id', $id)->count();
+        }
         return $e;
     }
 
