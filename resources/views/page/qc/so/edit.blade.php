@@ -2,7 +2,41 @@
     @method('PUT')
     @csrf
     <div class="row d-flex justify-content-center">
-        <div class="col-11">
+        <div class="col-lg-4 col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Info Produk</h5>
+                </div>
+                @if($jenis == "produk")
+                <div class="card-body">
+                    <div class="margin">
+                        <div><small class="text-muted">Nama Produk</small></div>
+                        <div><b>{{$data->GudangBarangJadi->Produk->nama}} {{$data->GudangBarangJadi->nama}}</b></div>
+                    </div>
+                    <div class="margin">
+                        <div><small class="text-muted">No SO</small></div>
+                        <div><b>{{$data->DetailPesanan->Pesanan->so}}</b></div>
+                    </div>
+                </div>
+                @elseif($jenis == "part")
+                <div class="card-body">
+                    <div class="margin">
+                        <div><small class="text-muted">Nama Part</small></div>
+                        <div><b>{{$data->Sparepart->nama}}</b></div>
+                    </div>
+                    <div class="margin">
+                        <div><small class="text-muted">No SO</small></div>
+                        <div><b>{{$data->Pesanan->so}}</b></div>
+                    </div>
+                    <div class="margin">
+                        <div><small class="text-muted">Jumlah</small></div>
+                        <div><b>{{$data->jumlah}}</b></div>
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-8 col-12">
             <div class="card">
                 <div class="card-body">
                     <div class="form-horizontal">

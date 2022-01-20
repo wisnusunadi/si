@@ -60,6 +60,7 @@ class QcController extends Controller
     }
     public function get_data_seri_detail_ekatalog($jenis, $produk_id, $pesanan_id)
     {
+
         // $value2 = array();
         // $x = explode(',', $seri_id);
         // if ($seri_id == '0') {
@@ -79,7 +80,18 @@ class QcController extends Controller
         //     }
         //     $id =  json_encode($value2);
         // }
-        return view('page.qc.so.edit', ['jenis' => $jenis, 'pesanan_id' => $pesanan_id, 'produk_id' => $produk_id]);
+        $data = "";
+        if ($jenis == "produk") {
+            $data = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
+                $q->where('pesanan_id', $pesanan_id);
+            })->where('gudang_barang_jadi_id', $produk_id)->groupby('gudang_barang_jadi_id')->first();
+        } else {
+            $data = DetailPesananPart::where([
+                ['id', '=', $produk_id],
+                ['pesanan_id', '=', $pesanan_id]
+            ])->first();
+        }
+        return view('page.qc.so.edit', ['jenis' => $jenis, 'pesanan_id' => $pesanan_id, 'produk_id' => $produk_id, 'data' => $data]);
     }
     public function get_data_seri_ekatalog($id, $idpesanan)
     {
@@ -691,7 +703,7 @@ class QcController extends Controller
     //Detail
     public function update_modal_so()
     {
-        return view('page.qc.so.edit');
+        return view('page.qc.so.edit', ['']);
     }
 
     public function detail_so($id, $value)
@@ -705,6 +717,9 @@ class QcController extends Controller
                 $q->where('id', $id);
             })->get();
 
+            $ds = Pesanan::find($id);
+
+
             $jumlah = 0;
             $z = array();
             $detail_id = array();
@@ -716,20 +731,35 @@ class QcController extends Controller
                 }
             }
 
-            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_id)->get();
-            $y = array();
-            foreach ($detail_pesanan_produk as $d) {
-                $y[] = $d->id;
-            }
-            $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
-
-            if ($jumlah == $jumlah_seri) {
-                $status =  '<span class="badge green-text">Selesai</span>';
-            } else {
-                if ($jumlah_seri == 0) {
+            if (count($ds->DetailPesanan) > 0 && count($ds->DetailPesananPart) <= 0) {
+                if ($ds->getJumlahCek() == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    if ($ds->getJumlahCek() >= $ds->getJumlahPesanan()) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
+                }
+            } else if (count($ds->DetailPesanan) <= 0 && count($ds->DetailPesananPart) > 0) {
+                if ($ds->getJumlahCekPart('ok') == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart()) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
+                }
+            } else if (count($ds->DetailPesanan) > 0 && count($ds->DetailPesananPart) > 0) {
+                if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart())) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
                 }
             }
 
@@ -764,6 +794,7 @@ class QcController extends Controller
                 $q->where('id', $id);
             })->get();
 
+            $ds = Pesanan::find($id);
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan', function ($q) use ($id) {
                 $q->where('id', $id);
             })->get();
@@ -779,28 +810,46 @@ class QcController extends Controller
                 }
             }
 
-            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_id)->get();
-            $y = array();
-            foreach ($detail_pesanan_produk as $d) {
-                $y[] = $d->id;
-            }
-            $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
-
-            if ($jumlah == $jumlah_seri) {
-                $status =  '<span class="badge green-text">Selesai</span>';
-            } else {
-                if ($jumlah_seri == 0) {
+            if (isset($ds->DetailPesanan) && !isset($ds->DetailPesananPart)) {
+                if ($ds->getJumlahCek() == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    if ($ds->getJumlahCek() >= $ds->getJumlahPesanan()) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
+                }
+            } else if (!isset($ds->DetailPesanan) && isset($ds->DetailPesananPart)) {
+                if ($ds->getJumlahCekPart('ok') == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart()) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
+                }
+            } else if (isset($ds->DetailPesanan) > 0 && isset($ds->DetailPesananPart) > 0) {
+                if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart())) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
                 }
             }
+
             return view('page.qc.so.detail_spa', ['id' => $id, 'data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
         } else {
             $data = Spb::whereHas('Pesanan', function ($q) use ($id) {
                 $q->where('id', $id);
             })->get();
 
+            $ds = Pesanan::find($id);
+
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan', function ($q) use ($id) {
                 $q->where('id', $id);
             })->get();
@@ -816,22 +865,38 @@ class QcController extends Controller
                 }
             }
 
-            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_id)->get();
-            $y = array();
-            foreach ($detail_pesanan_produk as $d) {
-                $y[] = $d->id;
-            }
-            $jumlah_seri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get()->count();
-
-            if ($jumlah == $jumlah_seri) {
-                $status =  '<span class="badge green-text">Selesai</span>';
-            } else {
-                if ($jumlah_seri == 0) {
+            if (isset($ds->DetailPesanan) && !isset($ds->DetailPesananPart)) {
+                if ($ds->getJumlahCek() == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    $status =   '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    if ($ds->getJumlahCek() >= $ds->getJumlahPesanan()) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
+                }
+            } else if (!isset($ds->DetailPesanan) && isset($ds->DetailPesananPart)) {
+                if ($ds->getJumlahCekPart('ok') == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart()) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
+                }
+            } else if (isset($ds->DetailPesanan) && isset($ds->DetailPesananPart)) {
+                if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
+                    $status = '<span class="badge red-text">Belum diuji</span>';
+                } else {
+                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart())) {
+                        $status =  '<span class="badge green-text">Selesai</span>';
+                    } else {
+                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
                 }
             }
+
             return view('page.qc.so.detail_spb', ['id' => $id, 'data' => $data, 'detail_id' => $detail_id, 'status' => $status]);
         }
     }
@@ -1489,7 +1554,7 @@ class QcController extends Controller
                     return $data->jumlah_ok;
                 }
             })
-            ->addColumn('tgl_uji', function ($data) use ($jenis) {
+            ->addColumn('jumlah_nok', function ($data) use ($jenis) {
                 if ($jenis == "part") {
                     return $data->jumlah_nok;
                 }

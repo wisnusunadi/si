@@ -253,7 +253,6 @@
 
         $('input[type="radio"][name="cari"]').on('change', function() {
             if ($(this).val() != "") {
-                $('#tanggal_mulai').removeAttr('readonly');
                 if ($('input[type="radio"][name="cari"]:checked').val() == "produk") {
                     $('#prt_id').addClass('hide');
                     $('#prd_id').removeClass('hide');
@@ -265,6 +264,7 @@
                         $("#btncetak").attr('disabled', true);
                     }
                 } else if ($('input[type="radio"][name="cari"]:checked').val() == "part") {
+                    $('#tanggal_mulai').removeAttr('readonly');
                     $('#prt_id').removeClass('hide');
                     $('#prd_id').addClass('hide');
                     $('#prd_uji').addClass('hide');
@@ -400,20 +400,16 @@
             var produk = "";
             if ($(".produk_id").val() != "") {
                 produk = $(".produk_id").val();
-                hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
-            } else {
+            } else if ($(".produk_id").val() == "") {
                 produk = "0";
-                hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
+
             }
 
             if ($(".part_id").val() != "") {
                 produk = $(".part_id").val();
-                hasil = "0";
-            } else {
+            } else if ($(".part_id").val() == "") {
                 produk = "0";
-                hasil = "0";
             }
-
             var so = "";
             if ($(".no_so").val() != "") {
                 var sos = $(".no_so").val();
@@ -422,6 +418,11 @@
                 so = "0";
             }
             var jenis = $('input[type="radio"][name="cari"]:checked').val();
+            if (jenis == "produk") {
+                hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
+            } else {
+                hasil = "0";
+            }
 
             var tgl_awal = $('#tanggal_mulai').val();
             var tgl_akhir = $('#tanggal_akhir').val();
