@@ -941,9 +941,11 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#tabledetailpesan').DataTable({
-            "scrollX": false
-        });
+        function tbldetailpesanan() {
+            $('#tabledetailpesan').DataTable({
+                "scrollX": false
+            });
+        }
         var divisi_id = "{{Auth::user()->divisi->id}}";
         var penjualantable = $('#penjualantable').DataTable({
             destroy: true,
@@ -1142,7 +1144,9 @@
                 success: function(result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
+
                     if (label == 'ekatalog') {
+
                         $('#detailmodal').find(".modal-header").attr('id', '');
                         $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
                         $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');

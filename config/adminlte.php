@@ -1229,7 +1229,7 @@ return [
             'text' => 'Customer',
             'icon' => 'fas fa-users',
             'url' => '/penjualan/customer/show',
-            'auth' => [8],
+            'auth' => [8, 15],
         ],
         [
             'text' => 'Sales Order',
