@@ -407,11 +407,10 @@ class QcController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 if (!empty($data->so)) {
                     $name = explode('/', $data->so);
-                    return $name[1];
                     if ($name[1] == 'EKAT') {
-                        // return $data->Ekatalog->satuan_kerja;
+                        return $data->Ekatalog->satuan_kerja;
                     } elseif ($name[1] == 'SPA') {
-                        // return $data->Spa->Customer->nama;
+                        return $data->Spa->Customer->nama;
                     } else {
                         return $data->spb->Customer->nama;
                     }
