@@ -266,7 +266,7 @@
                 </div>
             </div>
             <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-warning">
                             <h4 class="modal-title">Edit</h4>
@@ -393,9 +393,9 @@
                             'success'
                         );
                         $("#editmodal").modal('hide');
-                        $('#noseritable').DataTable().ajax.reload();
-                        $('#parttable').DataTable().ajax.reload();
-                        $('#showtable').DataTable().ajax.reload();
+                        // $('#noseritable').DataTable().ajax.reload();
+                        // $('#parttable').DataTable().ajax.reload();
+                        // $('#showtable').DataTable().ajax.reload();
 
                         location.reload();
                     } else if (response['data'] == "error") {

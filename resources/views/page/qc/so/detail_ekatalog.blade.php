@@ -512,7 +512,6 @@
                 },
                 // return the result
                 success: function(result) {
-
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     listnoseri(checkedAry, data, '{{$id}}');
