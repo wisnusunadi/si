@@ -269,7 +269,7 @@
                 </div>
             </div>
             <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-warning">
                             <h4 class="modal-title">Edit</h4>
@@ -340,6 +340,7 @@
         });
         var datajenis = "";
         var dataid = "";
+
         $('#showtable').on('click', '.noserishow', function() {
             idpesanan = '{{$id}}';
             dataid = $(this).attr('data-id');
@@ -364,7 +365,6 @@
                 $('#produk_detail').addClass('hide');
                 $('#part_detail').removeClass('hide');
                 listcekpart(dataid);
-                console.log('/api/qc/so/part/' + dataid + '/' + idpesanan);
                 if (datacount == 0) {
                     $('#cekbrg').prop('disabled', true);
                 } else {
@@ -396,9 +396,9 @@
                             'success'
                         );
                         $("#editmodal").modal('hide');
-                        $('#noseritable').DataTable().ajax.reload();
-                        $('#parttable').DataTable().ajax.reload();
-                        $('#showtable').DataTable().ajax.reload();
+                        // $('#noseritable').DataTable().ajax.reload();
+                        // $('#parttable').DataTable().ajax.reload();
+                        // $('#showtable').DataTable().ajax.reload();
 
                         location.reload();
                     } else if (response['data'] == "error") {
@@ -632,7 +632,7 @@
                         $('#btnsimpan').attr('disabled', true);
                     }
                 } else {
-                    if ($("input[name='jumlah_ok']").val() != "" && $("input[name='jumlah_nok']").val() != "") {
+                    if (($("input[name='jumlah_ok']").val() != "" && !$("input[name='jumlah_ok']").hasClass('is-invalid')) && ($("input[name='jumlah_nok']").val() != "" && !$("input[name='jumlah_nok']").hasClass('is-invalid'))) {
                         $('#btnsimpan').removeAttr('disabled');
                     } else {
                         $('#btnsimpan').attr('disabled', true);
@@ -645,12 +645,48 @@
 
         $(document).on('keyup change', 'input[type="number"][name="jumlah_ok"]', function(event) {
             if (datajenis == "part") {
-                if ($(this).val() != "") {
-                    if ($("input[name='jumlah_nok']").val() != "" && $("input[name='tanggal_uji']").val() != "") {
-                        $('#btnsimpan').removeAttr('disabled');
-                    } else {
-                        $('#btnsimpan').attr('disabled', true);
-                    }
+                var valok = $(this).val();
+                if ($(this).val() !== "") {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/qc/so/cek/part/' + dataid,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (valok > data) {
+                                $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
+                                $('#btnsimpan').attr('disabled', true);
+                            } else {
+                                $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                if ($("input[type='number'][name='jumlah_nok']").val() != "") {
+                                    var jumlahnok = $("input[type='number'][name='jumlah_nok']").val();
+                                    var jumlahcurr = jumlahnok + valok;
+                                    if (jumlahcurr > data) {
+                                        $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
+                                        $('#btnsimpan').attr('disabled', true);
+                                    } else {
+                                        if ($("input[name='tanggal_uji']").val() != "") {
+                                            $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                            $('#btnsimpan').removeAttr('disabled');
+                                        } else {
+                                            $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $('#btnsimpan').attr('disabled', true);
+                                        }
+                                    }
+                                } else {
+                                    $("input[type='number'][name='jumlah_nok']").val("0");
+                                    if ($("input[name='tanggal_uji']").val() != "") {
+                                        $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                        $('#btnsimpan').removeAttr('disabled');
+                                    } else {
+                                        $('#btnsimpan').attr('disabled', true);
+                                    }
+                                }
+                            }
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
                 } else {
                     $('#btnsimpan').attr('disabled', true);
                 }
@@ -659,13 +695,48 @@
 
         $(document).on('keyup change', 'input[type="number"][name="jumlah_nok"]', function(event) {
             if (datajenis == "part") {
-                if ($(this).val() != "") {
-                    if ($("input[type='number'][name='jumlah_ok']").val() != "" && $("input[name='tanggal_uji']").val() != "") {
-                        $('#btnsimpan').removeAttr('disabled');
-                    } else {
-                        $('#btnsimpan').attr('disabled', true);
-                    }
-
+                var valnok = $(this).val();
+                if ($(this).val() !== "") {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/qc/so/cek/part/' + dataid,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (valnok > data) {
+                                $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
+                                $('#btnsimpan').attr('disabled', true);
+                            } else {
+                                $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                if ($("input[type='number'][name='jumlah_ok']").val() != "") {
+                                    var jumlahok = $("input[type='number'][name='jumlah_ok']").val();
+                                    var jumlahcurr = jumlahok + valnok;
+                                    if (jumlahcurr > data) {
+                                        $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
+                                        $('#btnsimpan').attr('disabled', true);
+                                    } else {
+                                        if ($("input[name='tanggal_uji']").val() != "") {
+                                            $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $('#btnsimpan').removeAttr('disabled');
+                                        } else {
+                                            $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $('#btnsimpan').attr('disabled', true);
+                                        }
+                                    }
+                                } else {
+                                    $("input[type='number'][name='jumlah_ok']").val("0");
+                                    if ($("input[name='tanggal_uji']").val() != "") {
+                                        $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                        $('#btnsimpan').removeAttr('disabled');
+                                    } else {
+                                        $('#btnsimpan').attr('disabled', true);
+                                    }
+                                }
+                            }
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
                 } else {
                     $('#btnsimpan').attr('disabled', true);
                 }

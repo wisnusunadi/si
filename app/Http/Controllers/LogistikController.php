@@ -3345,7 +3345,8 @@ class LogistikController extends Controller
 
     public function check_no_resi($val)
     {
-        $e = Logistik::where('noresi', $val)->count();
+        $vals = str_replace("_", "/", $val);
+        $e = Logistik::where('noresi', $vals)->count();
         return $e;
     }
 }

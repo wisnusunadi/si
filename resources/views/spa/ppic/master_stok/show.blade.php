@@ -6,13 +6,13 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0  text-dark">Master Stok</h1>
+            <h1 class="m-0  text-dark">Permintaan Barang</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 @if(Auth::user()->divisi_id == "2")
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
-                <li class="breadcrumb-item active">Master Stok</li>
+                <li class="breadcrumb-item active">Permintaan Barang</li>
                 @endif
             </ol>
         </div><!-- /.col -->

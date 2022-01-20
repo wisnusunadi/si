@@ -1372,13 +1372,13 @@ return [
             'auth' => [2, 26],
             'submenu' => [
                 [
-                    'text' => 'Master Stok',
+                    'text' => 'Permintaan Barang',
                     'icon' => 'far fa-circle',
                     'url' => '/ppic/master_stok/show',
                     'auth' => [2, 26],
                 ],
                 [
-                    'text' => 'Master Pengiriman',
+                    'text' => 'Permintaan Pengiriman',
                     'icon' => 'far fa-circle',
                     'url' => '/ppic/master_pengiriman/show',
                     'auth' => [2, 26],
